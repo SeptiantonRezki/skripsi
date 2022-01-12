@@ -73,12 +73,6 @@ export class ConfirmDialogTsmComponent implements OnInit {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.jumlahMisi = this.data.task_need_verify;
-
-      // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
-      // let body = { template_id: this.data.task_sequencing_management_template_id };
-      // if (this.data.submission_id) {
-      //   body['submission_id'] = this.data.submission_id;
-      // }
       
       this.taskVerificationService.listReasonTsm({ template_id: this.data.task_sequencing_management_template_id }).subscribe(res => {
         this.onLoad = false;
@@ -201,12 +195,6 @@ export class ConfirmDialogTsmComponent implements OnInit {
     }
     this.dataService.showLoading(true);
 
-    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
-    // let body = {};
-    // if (this.data.submission_id) {
-    //   body['submission_id'] = this.data.submission_id;
-    // }
-
     this.taskVerificationService.verificationAllTsm({
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       verification: this.isDisagree ? 'rejected' : 'approved',
@@ -223,17 +211,13 @@ export class ConfirmDialogTsmComponent implements OnInit {
   releaseCoinOnTsmIndex() {
     this.dataService.showLoading(true);
 
-    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
-    // let body = {};
-    // if (this.data.submission_id) {
-    //   body['submission_id'] = this.data.submission_id;
-    // }
-    
-    this.taskVerificationService.releaseCoinAllTsm({
+    let body = {
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
-      trade_creator_group_id: this.data.trade_creator_group_id
-    }).subscribe(res => {
+      trade_creator_group_id: this.data.trade_creator_group_id,
+    };
+    
+    this.taskVerificationService.releaseCoinAllTsm(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogRef.close('data');
     }, err => {
@@ -246,18 +230,16 @@ export class ConfirmDialogTsmComponent implements OnInit {
     this.dataService.showLoading(true);
     console.log('data', this.data);
 
-    // TODO: UNTUK MENANDAKAN PERSONALIZED ATAU TIDAK
-    // let body = {};
-    // if (this.data.submission_id) {
-    //   body['submission_id'] = this.data.submission_id;
-    // }
-
-    this.taskVerificationService.releaseCoinTsm({
+    let body = {
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
       trade_creator_group_id: this.data.trade_creator_group_id,
       retailer_id: this.data.retailer_id,
-    }).subscribe(res => {
+      task_sequencing_management_type: this.data.task_sequencing_management_type,
+      audience_group_id: this.data.audience_group_id,
+    };
+
+    this.taskVerificationService.releaseCoinTsm(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogRef.close('data');
     }, err => {
