@@ -21,7 +21,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
 
   uploading: Boolean;
   rows: any[];
-  validData: any[];
+  invalidData: boolean = false;
   pagination: Page = new Page();
   selected: any[];
   id: any;
@@ -64,6 +64,8 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   requestingPreview:boolean = false;
   requestingImport: boolean = false;
   importing: boolean = false;
+  allData: Array<any> = [];
+  numError: number = 1;
 
   constructor(
     public dialogRef: MatDialogRef<ImportAudiencePersonalizeComponent>,
@@ -119,20 +121,23 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
           this.dataService.showLoading(false);
           this.pagination['per_page'] = 250;
           this.audienceService.showImport(this.pagination).subscribe(response => {
+            const {data} = response.data;
+            this.allData = [...data];
+            this.invalidData = this.allData.some(item => item.is_valid === false);
+
+            // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
+            data.map((item, idx) => {
+              if (item.id === '') {
+                data[idx].id = 'error'+this.numError;
+                this.numError += 1;
+              } 
+            });
+
             this.currPage += 1;
             this.lastPage = response.data.last_page;
             this.totalData = response.data.total;
 
-            // TODO: untuk ngeliat yg di import
-            // const list_audience_imported = {
-            //   data : response.data.data,
-            //   last_page: this.lastPage,
-            //   total: this.totalData
-            // }
-            
-            // this.dataService.setToStorage('detail_audience_imported', list_audience_imported);
-
-            this.idbService.bulkUpdate(response.data.data).then(res => {
+            this.idbService.bulkUpdate(data).then(res => {
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
@@ -168,7 +173,21 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     if (this.currPage <= this.lastPage) {
       this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
         if (response && response.data) {
-          this.idbService.bulkUpdate(response.data.data).then(res => {
+          const {data} = response.data;
+          this.allData = [...this.allData, ...data];
+          if (!this.invalidData) {
+            this.invalidData = this.allData.some(item => item.is_valid === false);
+          }
+          
+          // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
+          data.map((item, idx) => {
+            if (item.id === '') {
+              data[idx].id = 'error'+this.numError;
+              this.numError += 1;
+            } 
+          })
+
+          this.idbService.bulkUpdate(data).then(res => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
             this.recursiveImport();
@@ -224,13 +243,21 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
           this.dialogRef.close([]);
         });
       } else {
+        if (this.invalidData) {
+          this.dialogService.openSnackBar({
+            message: "Ada kesalahan pada data. Periksa kembali data Anda"
+          });
+        }
+        
         this.pagination['per_page'] = 15;
-        this.idbService.paginate(this.pagination).then(res => {
-          this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
-          Page.renderPagination(this.pagination, this.p_pagination);
-          this.rows = res && res[0] ? res[0] : [];
-          this.dataService.showLoading(false);
-        })
+        this.idbService.paginate(this.pagination)
+          .then(res => {
+            this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+            Page.renderPagination(this.pagination, this.p_pagination);
+            this.rows = res && res[0] ? res[0] : [];
+            this.dataService.showLoading(false);
+          })
+          .then(() => this.setPage({offset: 0}));
       }
     }
   }
@@ -257,7 +284,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     }
     else {
       if (this.totalData > 0) {
-        this.dialogRef.close(this.rows);
+        this.dialogRef.close(this.allData);
       } else {
         this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
       }
@@ -302,9 +329,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     this.offsetPagination = offset;
     this.pagination.page = offset + 1;
     this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
-      
       this.setPreview(data);
-
     }, err => {
 
       this.dataService.showLoading(false);
@@ -320,10 +345,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     this.offsetPagination = 0;
 
     this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
-      
       this.setPreview(data);
-
-
     }, err => {
       this.dataService.showLoading(false);
     });
@@ -364,6 +386,11 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
       ...newStatus
     }
     this.dataService.setToStorage('detail_audience', newDetailAudience);
+  }
 
+  getRowClass = (row) => {
+    return {
+      'row-invalid': row.is_valid === false,
+    };
   }
 }
