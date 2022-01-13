@@ -393,6 +393,8 @@ export class AudienceCreateComponent {
       console.log({err});
     });
     this.clearImportStatus();
+
+    window.localStorage.setItem('isImport', 'false');
   }
   clearImportStatus() {
     this.dataService.setToStorage('create_audience_import_status', null);

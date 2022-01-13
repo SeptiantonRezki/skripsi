@@ -1,11 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <div class="content">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table" style="padding: 15px;">
-      <h1 class="pl-20">Daftar Riwayat</h1>
+      <h1 class="pl-20">{{ ls.locale.manajemen_konten.daftar_laporan.text12 }}</h1>
       <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
-          <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          <input matInput placeholder="{{ ls.locale.global.label.search }}" (keyup)="keyUp.next($event.target.value)"
+            autocomplete="off">
         </mat-form-field>
       </div>
     </div>
@@ -25,13 +26,15 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Nama Promo" prop="image_url" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text4 }}" prop="image_url"
+        [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-name" (click)="directDetail(row)">{{ row.banner.name }}</span>
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Total Laporan" prop="report_users_count"> [sortable]="false"
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text5 }}" prop="report_users_count">
+        [sortable]="false"
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.report_users_count}}
         </ng-template>
@@ -49,25 +52,28 @@
         </ng-template>
       </ngx-datatable-column> -->
 
-      <ngx-datatable-column name="Kode Toko" prop="business_code" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text6 }}" prop="business_code"
+        [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.banner.business_code}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Pengguna" prop="banner.pembuat" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text7 }}" prop="banner.pembuat"
+        [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <p class="text-capital">{{row.banner.pembuat}}</p>
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Tanggal Akhir Promo" prop="expiredDate" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.manajemen_konten.daftar_laporan.text8 }}" prop="expiredDate"
+        [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.banner.to | date:'dd/MM/yyyy'}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Action" prop="action" [sortable]="false">
+      <ngx-datatable-column name="{{ ls.locale.global.label.action }}" prop="action" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <div class="name-container">
             <p class="status text-truncate h6 p-4"

@@ -7,6 +7,7 @@ import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ReasonDialogComponent } from '../reason-dialog/reason-dialog.component';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-detail-pengajuan-src',
@@ -33,7 +34,8 @@ export class DetailPengajuanSrcComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private pengajuanSrcService: PengajuanSrcService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.permission = this.roles.getRoles("principal.pengajuansrc");

@@ -1,56 +1,59 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Tambah Kurir'">
+  <page-content-header [contentTitle]="ls.locale.delivery_management.daftar_kurir.text26">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formCourier">
         <div class="ayo-middle" fxLayout="column">
-          <h2 style="font-weight: bold;">Informasi Kurir</h2>
+          <h2 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text4 }}</h2>
           <mat-form-field fxFlex="100" class="is-light form-primary">
-            <input matInput type="text" formControlName="name" placeholder="Nama Kurir">
+            <input matInput type="text" formControlName="name"
+              placeholder="{{ ls.locale.delivery_management.daftar_kurir.text9 }}">
             <mat-error
               *ngIf="formCourier.controls['name'].hasError('required') && formCourier.controls['name'].touched">
-              Nama Kurir harus diisi
+              {{ ls.locale.delivery_management.daftar_kurir.text9 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <div fxLayout="row" fxFlex="100">
             <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light form-primary">
-              <input matInput value="+62" readonly>
+              <input matInput value="{{ ls.locale.global.country_calling_code }}" readonly>
             </mat-form-field>
             <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light form-primary">
-              <input matInput type="tel" min="0" formControlName="contact" placeholder="Nomor Kontak"
+              <input matInput type="tel" min="0" formControlName="contact"
+                placeholder="{{ ls.locale.delivery_management.daftar_kurir.text10 }}"
                 (keypress)="numbersOnlyValidation($event)">
             </mat-form-field>
           </div>
           <mat-error
             *ngIf="formCourier.controls['contact'].hasError('required') && formCourier.controls['contact'].touched">
-            Nomor Kontak harus diisi
+            {{ ls.locale.delivery_management.daftar_kurir.text10 }} {{ ls.locale.global.messages.mandatory_text }}
           </mat-error>
           <mat-error
             *ngIf="formCourier.controls['contact'].hasError('pattern') && formCourier.controls['contact'].touched">
-            Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka
+            {{ ls.locale.delivery_management.daftar_kurir.text24 }}
           </mat-error>
           <mat-form-field fxFlex="100" class="is-light form-primary">
             <input matInput type="text" formControlName="email" placeholder="Email">
             <mat-error
               *ngIf="formCourier.controls['email'].hasError('required') && formCourier.controls['email'].touched">
-              Email harus diisi
+              Email {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
             <mat-error *ngIf="formCourier.controls['email'].hasError('email') && formCourier.controls['email'].touched">
-              Email tidak valid
+              {{ ls.locale.global.messages.invalid_email }}
             </mat-error>
           </mat-form-field>
         </div>
-        <h2 style="font-weight: bold;">Daftar Layanan</h2>
+        <h2 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text5 }}</h2>
         <mat-accordion formArrayName="services"
           *ngFor="let service of formCourier.get('services')['controls']; let i = index;">
           <mat-expansion-panel [formGroupName]="i">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <span
-                  style="margin-top: 8px;font-weight: bold;">{{ service.get('name').value || 'Nama Layanan' }}</span>
+                <span style="margin-top: 8px;font-weight: bold;">{{ service.get('name').value ||
+                  ls.locale.delivery_management.daftar_kurir.text11
+                  }}</span>
               </mat-panel-title>
               <mat-panel-description>
                 <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" *ngIf="!isDetail">
@@ -63,54 +66,59 @@
             </mat-expansion-panel-header>
             <div fxLayout="row">
               <mat-form-field fxFlex="40" class="is-light form-primary">
-                <input matInput type="text" formControlName="name" placeholder="Nama Layanan">
+                <input matInput type="text" formControlName="name"
+                  placeholder="{{ ls.locale.delivery_management.daftar_kurir.text11 }}">
                 <mat-error *ngIf="service.controls['name'].hasError('required') && service.controls['name'].touched">
-                  Nama Layanan harus diisi
+                  {{ ls.locale.delivery_management.daftar_kurir.text11 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
-            <h3 style="font-weight: bold;">Durasi Pengiriman</h3>
+            <h3 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text12 }}</h3>
             <div fxLayout="row" fxFlex="62">
               <div fxLayout="column" fxFlex="30">
-                <h4 style="font-weight: bold;">Estimasi Paling Cepat</h4>
+                <h4 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text13 }}</h4>
                 <div fxLayout="row" fxLayoutAlign="space-between">
                   <mat-form-field fxFlex="40" class="is-light form-primary">
-                    <mat-select name="est_fastest_duration" formControlName="est_fastest_duration" placeholder="Durasi">
+                    <mat-select name="est_fastest_duration" formControlName="est_fastest_duration"
+                      placeholder="{{ ls.locale.delivery_management.daftar_kurir.text14 }}">
                       <mat-option *ngFor="let dayTime of filterDayDuration(i, 'fastest', dayDurationList)"
                         [value]="dayTime">
                         {{ dayTime }}</mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="service.controls['est_fastest_duration'].hasError('required') && service.controls['est_fastest_duration'].touched">
-                      Estimasi Paling Cepat Harus diisi
+                      {{ ls.locale.delivery_management.daftar_kurir.text13 }} {{
+                      ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="40" class="is-light form-primary">
                     <mat-select name="est_fastest_duration" formControlName="est_fastest_duration_time">
-                      <mat-option value="days">Hari</mat-option>
-                      <mat-option value="hours">Jam</mat-option>
+                      <mat-option value="days">{{ ls.locale.delivery_management.daftar_kurir.text16 }}</mat-option>
+                      <mat-option value="hours">{{ ls.locale.delivery_management.daftar_kurir.text17 }}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
               </div>
               <div fxLayout="column" fxFlex="30" style="margin-left: 5%;">
-                <h4 style="font-weight: bold;">Estimasi Paling Lama</h4>
+                <h4 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text15 }}</h4>
                 <div fxLayout="row" fxLayoutAlign="space-between">
                   <mat-form-field fxFlex="40" class="is-light form-primary">
-                    <mat-select name="est_longest_duration" formControlName="est_longest_duration" placeholder="Durasi">
+                    <mat-select name="est_longest_duration" formControlName="est_longest_duration"
+                      placeholder="{{ ls.locale.delivery_management.daftar_kurir.text14 }}">
                       <mat-option *ngFor="let dayTime of filterDayDuration(i, 'longest', dayDurationList)"
                         [value]="dayTime">
                         {{ dayTime }}</mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="service.controls['est_longest_duration'].hasError('required') && service.controls['est_longest_duration'].touched">
-                      Estimasi Paling Lama Harus diisi
+                      {{ ls.locale.delivery_management.daftar_kurir.text15 }} {{
+                      ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="40" class="is-light form-primary">
                     <mat-select name="est_longest_duration" formControlName="est_longest_duration_time">
-                      <mat-option value="days">Hari</mat-option>
-                      <mat-option value="hours">Jam</mat-option>
+                      <mat-option value="days">{{ ls.locale.delivery_management.daftar_kurir.text16 }}</mat-option>
+                      <mat-option value="hours">{{ ls.locale.delivery_management.daftar_kurir.text17 }}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -127,30 +135,32 @@
               <h3 style="font-weight: bold;">Status</h3>
               <mat-form-field fxFlex="40" class="is-light form-primary">
                 <mat-select name="status" formControlName="service_status">
-                  <mat-option value="active">Aktif</mat-option>
-                  <mat-option value="inactive">Tidak Aktif</mat-option>
+                  <mat-option value="active">{{ ls.locale.global.label.active }}</mat-option>
+                  <mat-option value="inactive">{{ ls.locale.global.label.inactive }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
             <div fxLayout="column" fxFlex="40">
-              <h3 style="font-weight: bold;">Pengaturan Tarif Standard</h3>
+              <h3 style="font-weight: bold;">{{ ls.locale.delivery_management.daftar_kurir.text18 }}</h3>
               <mat-form-field fxFlex="40" class="is-light form-primary">
                 <input matInput type="tel" currencyMask min="0" type="text" formControlName="flat_cost"
-                  placeholder="Harga Flat" numericOnly>
+                  placeholder="{{ ls.locale.delivery_management.daftar_kurir.text19 }}" numericOnly>
                 <mat-error
                   *ngIf="service.controls['flat_cost'].hasError('required') && service.controls['flat_cost'].touched">
-                  Harga Flat harus diisi
+                  {{ ls.locale.delivery_management.daftar_kurir.text19 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
-              <mat-checkbox formControlName="max_distance_config">Tentukan Jarak Maksimum</mat-checkbox>
+              <mat-checkbox formControlName="max_distance_config">{{ ls.locale.delivery_management.daftar_kurir.text20
+                }}</mat-checkbox>
               <div fxLayout="row" style="margin-left: 25px;margin-top: 5px;">
                 <mat-form-field fxFlex="43" class="is-light form-primary">
                   <input matInput type="number" min="0" type="text" formControlName="max_distance"
-                    placeholder="Jarak Maksimum" numericOnly>
+                    placeholder="{{ ls.locale.delivery_management.daftar_kurir.text21 }}" numericOnly>
                   <mat-error
                     *ngIf="service.controls['max_distance'].hasError('required') && service.controls['max_distance'].touched">
-                    Jarak Maksimum harus diisi
+                    {{ ls.locale.delivery_management.daftar_kurir.text21 }} {{ ls.locale.global.messages.mandatory_text
+                    }}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
@@ -158,15 +168,16 @@
                 </mat-form-field>
               </div>
 
-              <mat-checkbox formControlName="max_received_time_config">Tentukan Batas Waktu Menerima Pesanan
+              <mat-checkbox formControlName="max_received_time_config">{{
+                ls.locale.delivery_management.daftar_kurir.text22 }}
               </mat-checkbox>
               <div fxLayout="row" style="margin-left: 25px;margin-top: 5px;">
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput type="text" mask="Hh:m0" type="text" formControlName="max_received_time"
-                    placeholder="Batas Waktu Menerima Pesanan (HH:MM)">
+                    placeholder="{{ ls.locale.delivery_management.daftar_kurir.text25 }}">
                   <mat-error
                     *ngIf="service.controls['max_received_time'].hasError('minLength') && service.controls['max_received_time'].touched">
-                    Batas Waktu Menerima Pesan Tidak Valid Gunakan Format HH:MM (ex: 17:00)
+                    {{ ls.locale.delivery_management.daftar_kurir.text23 }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -183,12 +194,12 @@
         </div> -->
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
           <button mat-raised-button type="button" fxFlex="20" (click)="addNewService()">
-            <mat-icon>add</mat-icon>TAMBAH LAYANAN
+            <mat-icon>add</mat-icon>{{ ls.locale.delivery_management.daftar_kurir.text6 }}
           </button>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>

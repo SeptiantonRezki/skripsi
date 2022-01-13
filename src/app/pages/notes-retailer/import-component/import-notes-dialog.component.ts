@@ -27,7 +27,7 @@ export class ImportNotesDialogComponent {
 
   loadingIndicator = false;
   reorderable = true;
-  onLoad: boolean;
+  onLoad: boolean = false;
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -70,6 +70,10 @@ export class ImportNotesDialogComponent {
   preview(event) {
     this.files = undefined;
     this.files = event;
+    this.rows = [];
+    this.totalData = 0;
+    this.currPage = 1;
+    this.lastPage = 1;
 
     let fd = new FormData();
     this.idbService.reset();
@@ -83,9 +87,8 @@ export class ImportNotesDialogComponent {
           this.audienceService.showImport(this.pagination).subscribe(response => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
-            this.totalData = response.data.total;
+            this.totalData = this.totalData + response.data.data.length;
             this.idbService.bulkUpdate(response.data.data).then(res => {
-              console.log('page', this.currPage - 1, res);
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
@@ -123,9 +126,9 @@ export class ImportNotesDialogComponent {
       this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
         if (response && response.data) {
           this.idbService.bulkUpdate(response.data.data).then(res => {
-            console.log('page', this.currPage - 1, res);
             this.currPage += 1;
             this.lastPage = response.data.last_page;
+            this.totalData = this.totalData + response.data.data.length;
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({
@@ -160,6 +163,7 @@ export class ImportNotesDialogComponent {
 
           this.idbService.bulkUpdate(bowls).then(resUpdate => {
             this.pagination['per_page'] = 15;
+            this.offsetPagination = this.p_page ? this.p_page - 1 : 0;
             this.idbService.paginate(this.pagination).then(resPaginate => {
               this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
               Page.renderPagination(this.pagination, this.p_pagination);
@@ -180,11 +184,13 @@ export class ImportNotesDialogComponent {
         });
       } else {
         this.pagination['per_page'] = 15;
+        this.offsetPagination = this.p_page ? this.p_page - 1 : 0;
         this.idbService.paginate(this.pagination).then(res => {
           this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
           Page.renderPagination(this.pagination, this.p_pagination);
           this.rows = res && res[0] ? res[0] : [];
           this.dataService.showLoading(false);
+          this.onLoad = true;
         })
       }
     }
@@ -201,7 +207,6 @@ export class ImportNotesDialogComponent {
   }
 
   setPage(pageInfo) {
-    this.dataService.showLoading(true);
     this.offsetPagination = pageInfo.offset;
     this.p_pagination['page'] = pageInfo.offset + 1;
 
@@ -209,7 +214,6 @@ export class ImportNotesDialogComponent {
       this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
       Page.renderPagination(this.pagination, this.p_pagination);
       this.rows = res && res[0] ? res[0] : [];
-      this.dataService.showLoading(false);
     });
   }
 

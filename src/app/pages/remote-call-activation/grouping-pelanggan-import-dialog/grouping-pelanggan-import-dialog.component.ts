@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { RcaAgentService } from 'app/services/rca-agent.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class GroupingPelangganImportDialogComponent implements OnInit {
     public dialog: MatDialog,
     private rcaAgentService: RcaAgentService,
     private dataService: DataService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private ls: LanguagesService
   ) {
     this.scopedData = data;
   }
@@ -48,7 +50,7 @@ export class GroupingPelangganImportDialogComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 + this.ls.locale.global.messages.export_option })
       })
     } else {
       this.rcaAgentService.importRoutePlan(fd).subscribe(res => {
@@ -59,7 +61,7 @@ export class GroupingPelangganImportDialogComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 + this.ls.locale.global.messages.export_option })
       })
     }
 

@@ -7,6 +7,7 @@ import { DataService } from '../../../../services/data.service';
 import { PrivacyService } from 'app/services/content-management/privacy.service';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-privacy-edit',
@@ -37,7 +38,8 @@ export class PrivacyEditComponent {
     private dialogService: DialogService,
     private privacyService: PrivacyService,
     private dataService: DataService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private ls: LanguagesService
   ) {
     this.formPrivacyError = {
       title: {},
@@ -91,7 +93,7 @@ export class PrivacyEditComponent {
     );
   }
 
-  getCountryList(){
+  getCountryList() {
     this.helpService.getCountry().subscribe(
       res => {
         this.countryList = res.data;

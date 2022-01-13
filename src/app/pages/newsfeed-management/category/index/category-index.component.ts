@@ -10,13 +10,14 @@ import moment from 'moment';
 import { Router } from '../../../../../../node_modules/@angular/router';
 import { DataService } from '../../../../services/data.service';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-category-index',
   templateUrl: './category-index.component.html',
   styleUrls: ['./category-index.component.scss']
 })
-export class CategoryIndexComponent{
+export class CategoryIndexComponent {
 
   rows: any[];
   minDate: any;
@@ -43,7 +44,8 @@ export class CategoryIndexComponent{
     private CategoryService: CategoryService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale("id");
     this.rows = [];

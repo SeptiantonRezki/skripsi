@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { StoreTemplateLayoutService } from 'app/services/src-catalogue/store-template-layout.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-store-layout-template',
@@ -34,7 +35,8 @@ export class StoreLayoutTemplateComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private storeTemplateLayoutService: StoreTemplateLayoutService
+    private storeTemplateLayoutService: StoreTemplateLayoutService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

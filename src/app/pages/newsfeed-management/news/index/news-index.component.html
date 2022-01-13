@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Berita'">
+  <page-content-header [contentTitle]="ls.locale.manajemen_newsfeed.daftar_berita.text1">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
@@ -10,23 +10,26 @@
           <div class="p-8">
             <mat-form-field class="is-light form-primary category">
               <mat-select formControlName="category_id">
-                <mat-option value="all">Semua Kategori</mat-option>
-                <mat-option *ngFor="let item of listCategory" [value]="item.id">Kategori {{item.name}}</mat-option>
+                <mat-option value="all">{{ ls.locale.global.label.all_category }}</mat-option>
+                <mat-option *ngFor="let item of listCategory" [value]="item.id">{{ ls.locale.global.label.category }}
+                  {{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
             <mat-form-field autoComplete="off" class="is-light tab-search">
-              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+              <input matInput placeholder="{{ ls.locale.global.label.search }}"
+                (keyup)="keyUp.next($event.target.value)">
             </mat-form-field>
           </div>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           class="top-table p-8">
           <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
-            <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
-              formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
+            <input matInput #from [matDatepicker]="dari" (focus)="dari.open()"
+              placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text5 }}" formControlName="start_date"
+              (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
             <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('start_date').setValue('')">
               <mat-icon>close</mat-icon>
@@ -38,7 +41,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="40" floatLabel="never" class="orders datepicker is-light">
             <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-              placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+              placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text6 }}" formControlName="end_date" readonly>
             <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('end_date').setValue('')">
               <mat-icon>close</mat-icon>
@@ -69,7 +72,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Judul Berita" [width]="240" prop="title">
+        <ngx-datatable-column name="{{ ls.locale.manajemen_newsfeed.daftar_berita.text2 }}" [width]="240" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <span class="row-name" (click)="directDetail(row)">{{row.title}}</span>
@@ -77,9 +80,9 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kategori" prop="category_id"></ngx-datatable-column>
+        <ngx-datatable-column name="{{ ls.locale.global.label.category }}" prop="category_id"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibuat" prop="date">
+        <ngx-datatable-column name="{{ ls.locale.global.label.created_at }}" prop="date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.date | date:'dd/MM/yyyy'}}
           </ng-template>

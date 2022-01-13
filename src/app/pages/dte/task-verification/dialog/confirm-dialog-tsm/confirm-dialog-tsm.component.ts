@@ -73,6 +73,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.jumlahMisi = this.data.task_need_verify;
+      
       this.taskVerificationService.listReasonTsm({ template_id: this.data.task_sequencing_management_template_id }).subscribe(res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
@@ -102,11 +103,18 @@ export class ConfirmDialogTsmComponent implements OnInit {
     } else if (this.data.popupType === 'Verifikasi Misi TSM') {
       this.onLoad = true;
       this.dataService.showLoading(true);
-      await this.taskVerificationService.submissionTsm({
+
+      let body = {
         task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
         task_sequencing_management_id: this.data.task_sequencing_management_id,
         retailer_id: this.data.retailer_id,
-      }).subscribe(async res => {
+      };
+
+      if (this.data.submission_id) {
+        body['submission_id'] = this.data.submission_id;
+      }
+
+      await this.taskVerificationService.submissionTsm(body).subscribe(async res => {
         this.onLoad = false;
         this.dataService.showLoading(false);
         const dataSubmission_ = res;
@@ -141,6 +149,27 @@ export class ConfirmDialogTsmComponent implements OnInit {
           }
         }
 
+        dataSubmission_.data.submissions.forEach(item => {
+          if (item.type === 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea') {
+            const answer = this.isArray(item.answer);
+
+            let newAdditional = [...item.additional];
+            if (answer) {
+              if (!item.additional.includes(item.answer[0])) {
+                newAdditional[newAdditional.length - 1] = item.answer[0];
+                item.additional = newAdditional;
+              } else {
+                const newLastAdditional = newAdditional[newAdditional.length - 1].replace('Lainnya, ', '');
+                newAdditional[newAdditional.length - 1] = newLastAdditional;
+                item.additional = newAdditional;
+              }
+            } else {
+              newAdditional[newAdditional.length - 1] = item.answer;
+              item.additional = newAdditional;
+            }
+          }
+        });
+
         this.dataSubmission = dataSubmission_;
         console.log('dataSub => ', this.dataSubmission);
       }, err => {
@@ -165,6 +194,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
       return;
     }
     this.dataService.showLoading(true);
+
     this.taskVerificationService.verificationAllTsm({
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       verification: this.isDisagree ? 'rejected' : 'approved',
@@ -180,11 +210,14 @@ export class ConfirmDialogTsmComponent implements OnInit {
 
   releaseCoinOnTsmIndex() {
     this.dataService.showLoading(true);
-    this.taskVerificationService.releaseCoinAllTsm({
+
+    let body = {
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
-      trade_creator_group_id: this.data.trade_creator_group_id
-    }).subscribe(res => {
+      trade_creator_group_id: this.data.trade_creator_group_id,
+    };
+    
+    this.taskVerificationService.releaseCoinAllTsm(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogRef.close('data');
     }, err => {
@@ -196,12 +229,17 @@ export class ConfirmDialogTsmComponent implements OnInit {
   releaseCoinTsm() {
     this.dataService.showLoading(true);
     console.log('data', this.data);
-    this.taskVerificationService.releaseCoinTsm({
+
+    let body = {
       task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
       trade_creator_id: this.data.trade_creator_id,
       trade_creator_group_id: this.data.trade_creator_group_id,
       retailer_id: this.data.retailer_id,
-    }).subscribe(res => {
+      task_sequencing_management_type: this.data.task_sequencing_management_type,
+      audience_group_id: this.data.audience_group_id,
+    };
+
+    this.taskVerificationService.releaseCoinTsm(body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogRef.close('data');
     }, err => {
@@ -236,15 +274,27 @@ export class ConfirmDialogTsmComponent implements OnInit {
   }
 
   confirmVerifikasiMisi(reason: string) {
+    let body = {
+      task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
+      retailer_id: this.data.retailer_id,
+    };
+
+    if (reason) {
+      body['verification'] = 'rejected';
+      body['reason'] = reason;
+    } else {
+      body['verification'] = 'approved';
+      body['reason'] = null;
+    }
+
+    if (this.data.submission_id) {
+      body['submission_id'] = this.data.submission_id;
+    }
+
     if (reason) {
       console.log('TOLAK')
       this.dataService.showLoading(true);
-      this.taskVerificationService.verificationTsm({
-        task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
-        verification: 'rejected',
-        reason: reason,
-        retailer_id: this.data.retailer_id,
-      }).subscribe(res => {
+      this.taskVerificationService.verificationTsm(body).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
         this.dialogRef.close('data');
@@ -254,12 +304,7 @@ export class ConfirmDialogTsmComponent implements OnInit {
     } else {
       console.log('SETUJU');
       this.dataService.showLoading(true);
-      this.taskVerificationService.verificationTsm({
-        task_sequencing_management_template_id: this.data.task_sequencing_management_template_id,
-        verification: 'approved',
-        reason: null,
-        retailer_id: this.data.retailer_id,
-      }).subscribe(res => {
+      this.taskVerificationService.verificationTsm(body).subscribe(res => {
         // this.dataService.showLoading(false);
         this.dialogService.closeModalEmitter.emit(true);
         this.dialogRef.close('data');
@@ -279,4 +324,5 @@ export class ConfirmDialogTsmComponent implements OnInit {
     this._lightbox.open([album], 0);
   }
 
+  isArray(val): boolean { return typeof val === 'object'; }
 }

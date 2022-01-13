@@ -1,6 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="isDetail ? 'Detail Tingkatan Akses' : 'Ubah Tingkatan Akses'">
+  <page-content-header
+    [contentTitle]="isDetail ? ls.locale.pengaturan.akses_karyawan.text12 : ls.locale.pengaturan.akses_karyawan.text11">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -8,9 +9,10 @@
       <form autocomplete="off" [formGroup]="formRolesGroup">
         <div fxLayout="row" class="px-16 pt-24 pb-8" fxLayoutAlign="start center">
           <mat-form-field class="is-light form-primary" fxFlex="50">
-            <input matInput type="text" formControlName="name" placeholder="Nama Tingkatan Akses">
+            <input matInput type="text" formControlName="name"
+              placeholder="{{ ls.locale.pengaturan.akses_karyawan.text8 }}">
             <mat-error *ngIf="formRolesError.name.required">
-              Nama Tingkatan Akses harus diisi
+              {{ ls.locale.pengaturan.akses_karyawan.text8 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -151,6 +153,11 @@
                     <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[1].status"
                       [disabled]="isDetail"></mat-slide-toggle>
                   </div>
+                  <div fxFlex="25">
+                    <div class="access-name">{{items.value[4].nama | toCapitalize}}</div>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="items.value[4].status"
+                      [disabled]="isDetail"></mat-slide-toggle>
+                  </div>
                 </div>
               </div>
               <div class="question" *ngIf="items.nama == 'task verification'">{{'Verifikasi Misi - All' | toCapitalize}}
@@ -182,7 +189,7 @@
       <div *ngIf="!isDetail" class="confirm pl-16 pt-8 pb-24" fxLayout="row">
         <button mat-raised-button type="password" type="button" class="confirmation-button" fxFlex="25"
           (click)="submit()">
-          SIMPAN
+          {{ ls.locale.global.button.save }}
         </button>
       </div>
     </div>

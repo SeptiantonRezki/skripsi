@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from 'app/services/user-management/customer.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-customer-detail',
@@ -16,9 +17,9 @@ export class CustomerDetailComponent {
   customer_id: any;
   detailCustomer: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Belum Terdaftar", value: "not-registered" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" },
+    { name: this.ls.locale.global.label.unregistered_status, value: "not-registered" }
   ];
 
   listLevelArea: any[];
@@ -33,7 +34,8 @@ export class CustomerDetailComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private ls: LanguagesService
   ) {
     this.activatedRoute.url.subscribe(param => {
       this.customer_id = param[2].path;

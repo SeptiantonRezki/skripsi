@@ -1,26 +1,27 @@
 <div class="dialog-container">
     <h1 mat-dialog-title style="text-align: center;">
-        <b>Estimasi Durasi Pengiriman</b><br />
+        <b>{{ ls.locale.katalog_src.lihat_pesanan.text25 }}</b><br />
     </h1>
     <div mat-dialog-content fxLayoutAlign="center center" style="min-height: 50px;min-width: 300px;">
         <div fxLayout="row" style="width: 300px;">
             <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="number" [formControl]="est_shipping" min="0" max="31">
                 <mat-error *ngIf="est_shipping.hasError('required') && est_shipping.touched ">
-                    Estimasi Pengiriman harus Diisi
+                    {{ ls.locale.katalog_src.lihat_pesanan.text26 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
                 <mat-error *ngIf="est_shipping.hasError('min') && est_shipping.touched ">
-                    Estimasi Pengiriman Minimal 0 Hari
+                    {{ ls.locale.katalog_src.lihat_pesanan.text27 }}
                 </mat-error>
                 <mat-error *ngIf="est_shipping.hasError('max') && est_shipping.touched ">
-                    Estimasi Pengiriman Maksimal 31 Hari
+                    {{ ls.locale.katalog_src.lihat_pesanan.text28 }}
                 </mat-error>
             </mat-form-field>
         </div>
-        <p>Hari</p>
+        <p>{{ ls.locale.katalog_src.lihat_pesanan.day }}</p>
     </div>
     <div mat-dialog-actions class="actions" fxLayoutAlign="center center">
-        <button mat-raised-button color="primary" (click)="submit()">Simpan</button>
-        <button mat-raised-button color="primary" (click)="dialogRef.close()">Kembali</button>
+        <button mat-raised-button color="primary" (click)="submit()">{{ ls.locale.global.button.save }}</button>
+        <button mat-raised-button color="primary" (click)="dialogRef.close()">{{ ls.locale.global.button.back
+            }}</button>
     </div>
 </div>

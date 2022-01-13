@@ -1317,6 +1317,7 @@ export class CreateNotesRetailerComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe((response) => {
       if (response) {
+        this.dataService.showLoading(true);
         let rows = this.rows.map((row) => row.id);
         this.idbService
           .getAll((dt) => dt.is_valid)
@@ -1326,6 +1327,7 @@ export class CreateNotesRetailerComponent implements OnInit {
             this.dialogService.openSnackBar({
               message: "File berhasil diimport",
             });
+            this.dataService.showLoading(false);
           });
       }
     });

@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { Observable } from 'rxjs';
 import { ProductCatalogueService } from 'app/services/src-catalogue/product-catalogue.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-file-dialog.component.html',
@@ -39,6 +40,7 @@ export class CatalogueProductImportFileDialogComponent {
     private dataService: DataService,
     private vendorService: VendorsService,
     @Inject(MAT_DIALOG_DATA) data,
+    private ls: LanguagesService
   ) {
     this.payload = data;
     this.rows = [];

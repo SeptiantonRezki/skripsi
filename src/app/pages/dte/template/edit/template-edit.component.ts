@@ -686,7 +686,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
     this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
     this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
-    this.frmIsBranching.setValue(this.detailTask.is_branching === 1 ? true : false);
+    this.frmIsBranching.setValue(this.detailTask.is_branching == 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
     this.frmQuiz.setValue(this.detailTask.is_quiz === 1 ? 'quiz' : 'non-quiz');
@@ -802,6 +802,7 @@ export class TemplateEditComponent {
         stock_check_ir_name: item.stock_check_ir_name,
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0' ? false : true,
+        encryption: item.encryption == 1 ? true : false,
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -1142,6 +1143,7 @@ export class TemplateEditComponent {
       coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
       question_image: [''],
       question_video: [''],
+      encryption: false,
       // others: false,
       // required: false
     }))
@@ -1396,6 +1398,7 @@ export class TemplateEditComponent {
             })) : [],
             required: item.type === 'stock_check' ? 1 : null,
             question_image_detail: item.question_image_detail ? 1 : 0,
+            encryption: item.encryption ? 1 : 0,
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',
@@ -1615,8 +1618,8 @@ export class TemplateEditComponent {
           },
           err => {
             console.log(err.error);
-            this.dialogService.openSnackBar({ message: err.error.message });
             this.dataService.showLoading(false);
+            // this.dialogService.openSnackBar({ message: err.error.message });
           }
         )
       }

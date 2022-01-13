@@ -28,8 +28,8 @@ export class CategoryEditComponent implements OnInit {
   rssIndex: any;
   linkValue = [];
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" }
   ];
 
   constructor(
@@ -63,7 +63,7 @@ export class CategoryEditComponent implements OnInit {
     this.setDetailCategoryNews();
   }
 
-  setDetailCategoryNews(){
+  setDetailCategoryNews() {
     this.formCategoryGroup.controls["name"].setValue(this.detailNewsCategory.name);
     this.formCategoryGroup.controls["status"].setValue(this.detailNewsCategory.status);
 
@@ -72,11 +72,11 @@ export class CategoryEditComponent implements OnInit {
     console.log(this.detailNewsCategory.links);
     this.detailNewsCategory.links.map((item, index) => {
       console.log('rss link: ' + item);
-      if(item !== ''){
+      if (item !== '') {
         return linkItem.push(this.formBuilder.group({
           url: [item, [Validators.required, Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]]
         }));
-      }else{
+      } else {
         console.log('empty');
       }
 
@@ -97,7 +97,7 @@ export class CategoryEditComponent implements OnInit {
     });
   }
 
-  addNewRSS(){
+  addNewRSS() {
     console.log('add new row');
     let linkItem = this.formCategoryGroup.get("link") as FormArray;
     linkItem.push(this.addItemLink());
@@ -146,7 +146,7 @@ export class CategoryEditComponent implements OnInit {
       };
 
       this.categoryService
-        .put(body, {category_id: this.detailNewsCategory.id })
+        .put(body, { category_id: this.detailNewsCategory.id })
         .subscribe(
           res => {
             this.dialogService.openSnackBar({
@@ -154,7 +154,7 @@ export class CategoryEditComponent implements OnInit {
             });
             this.router.navigate(["newsfeed-management", "category"]);
           },
-          err => {}
+          err => { }
         );
     } else {
       this.dialogService.openSnackBar({

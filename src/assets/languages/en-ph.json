@@ -1,10 +1,10 @@
 {
   "global": {
     "app_name": "AYO SRC SAMPOERNA",
-    "country_calling_code": "+62",
-    "currency": "$",
-    "currency_name": "US Dollar",
-    "currency_code": "USD",
+    "country_calling_code": "+63",
+    "currency": "₱",
+    "currency_name": "Philippine Peso",
+    "currency_code": "PHP",
     "input_mask": "separator.2",
     "input_mask_b2b": "separator.5",
     "input_separator": ",",
@@ -32,6 +32,8 @@
       "address": "Address",
       "city": "City",
       "Province": "Province",
+      "city_county": "County / City",
+      "district": "District",
       "bank_account_number": "Bank Account Number",
       "bank_account_name": "Bank Account Beneficiary Name",
       "bank_name": "Bank Name",
@@ -64,7 +66,49 @@
       "invoice_redeem": "Redemption Invoice",
       "edit_status_voucher": "Change Voucher Status",
       "delete_salestree": "Delete Sales tree",
-      "all_status": "All Status"
+      "all_status": "All Status",
+      "active_status": "Status Active",
+      "inactive_status": "Status Inactive",
+      "unregistered_status": "Unregistered",
+      "country": "Country",
+      "ktp_number": "ID card number",
+      "tax_number": "Tax/TIN Number",
+      "confirm_password": "Password Confirmation",
+      "date": "Date",
+      "note": "Note",
+      "order_status": "Order Status",
+      "updated_at_2": "Updated at",
+      "updated_by_staff": "Updated by Staff",
+      "payment_status": "Payment Status",
+      "category": "Category",
+      "price": "Price",
+      "amount": "amount",
+      "shopping_note": "Shopping Note",
+      "print": "Print",
+      "cash_bill": "Cash Bill",
+      "all_category": "All Category",
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "all_province": "All Province",
+      "all_cities": "All City",
+      "all_district": "All District",
+      "owner_information": "Owner Information",
+      "upload_image": "Upload Image",
+      "updated_by": "Updated By"
+    },
+    "order_status": {
+      "new_order": "New Order",
+      "canceled_order": "Order Canceled",
+      "process_order": "Order Processed",
+      "send_order": "Order Sent",
+      "received_order": "Order Received",
+      "completed_order": "Order Complete",
+      "change_confirmation": "Confirm Change",
+      "change_agreed": "Change Approved",
+      "delivery_ready": "Ready to Ship",
+      "pickup_ready": "Ready To Pick Up",
+      "on_delivery": "In Delivery",
+      "not_paid_off": "Not yet paid off"
     },
     "button": {
       "save": "Save",
@@ -80,7 +124,11 @@
       "next": "Next",
       "previous": "Previous",
       "import": "Import",
-      "export": "Export"
+      "export": "Export",
+      "deactivate": "Deactivate",
+      "update_status": "UPDATE STATUS",
+			"yes_continue": "Yes, continue",
+			"no_cancel": "No, cancel"
     },
     "area": {
       "national": "National",
@@ -125,7 +173,10 @@
       "text26": "Complete the required fields!",
       "text27": "Select the audience to export!",
       "text28": "There is a duplicate sales tree, please check again your data!",
-      "text29": "Are you sure you want to delete Sales tree {{ index }}?"
+      "text29": "Are you sure you want to delete Sales tree {{ index }}?",
+      "text30": "Password must be 8 characters long, and contain both uppercase and lowercase letters",
+      "export_option": "or select Export File as your File reference.",
+      "invalid_email": "Invalid Email"
     }
   },
   "login": {
@@ -142,6 +193,16 @@
     "text11": "Forgot Password?",
     "text12": "Your account is disabled! Please contact Admin!"
   },
+  "reset_password": {
+    "text1": "Reset Password",
+    "text2": "New Password",
+    "text3": "Password is required",
+    "text4": "New Password Confirmation",
+    "text5": "New Password Confirmation is required",
+    "text6": "This application already uses Single Sign On. You can reset the password in Password Manager.",
+    "text7": "Password reset was successful, please login again",
+    "text8": "Password with password confirmation does not match"
+  },
   "dashboard": {
     "dashboard1": "Welcome to Dashboard"
   },
@@ -153,6 +214,16 @@
   "top_navigation": {
     "topnav1": "My Profile",
     "topnav2": "Sign out"
+  },
+  "device_authentication": {
+    "text1": "Account Verification",
+    "text2": "Enter the 6 Digit Verification Code sent via",
+    "text3": "Remaining Time to Use Verification Code",
+    "text4": "Device Verification",
+    "text5": "Sending...",
+    "text6": "Resend Verification Code",
+    "text7": "Your account is inactive! Please contact Admin!",
+    "text8": "Failed to authorize OTP please try again"
   },
   "bantuan": {
     "text1": "Help",
@@ -178,17 +249,38 @@
     "text16": "Send New Problem",
     "text17": "Problem Category",
     "text18": "Your Problem Details",
-    "text19": "Write your Problem Details here"
+    "text19": "Write your Problem Details here",
+    "text20": "Was this information useful?",
+    "text21": "Need more help on this?",
+    "text22": "AYOSRC Digital Care Team is ready to help you",
+    "text23": "Reply",
+    "text24": "Write Message",
+    "text25": "The Discussion Session Has Ended"
   },
   "admin_principal": {
     "text1": "Basic Information",
     "text2": "Roles Access Level",
     "text3": "Roles",
     "text4": "Are You Sure to Complete This?",
-    "text5": "Delete Main Admin",
-    "text6": "Are you sure you want to delete this Main Admin?"
+    "text5": "Delete Principal Admin",
+    "text6": "Are you sure you want to delete this Principal Admin?",
+    "text7": "Principal Admin List",
+    "text8": "Name",
+    "text9": "Email",
+    "text10": "Last Login",
+    "text11": "Last Updated",
+    "text12": "Status",
+    "text13": "Action",
+    "text14": "Deactivate Admin Principal",
+    "text15": "Are you sure you want to deactivate the selected data?",
+    "text16": "No principal admin selected",
+    "text17": "Admin Details",
+    "text18": "Username",
+    "text19": "Admin Detail"
   },
   "field_force": {
+    "page_title": "Field Force List",
+    "app_version": "Apps Version",
     "text1": "Change New Password",
     "text2": "New Password",
     "text3": "Confirm New Password",
@@ -196,13 +288,26 @@
     "text5": " Are you sure you want to delete this Field Force?"
   },
   "wholesaler": {
+    "page_title": "Wholesaler List",
     "text1": "Wholesaler Id",
     "text2": "Wholesaler Code",
     "text3": "Branch Store",
     "text4": "See Documents",
     "text5": "See Access Grant",
     "text6": "Have a Branch Store",
-    "text7": "Number of Branch Stores"
+    "text7": "Number of Branch Stores",
+    "agent_code": "Agent Code",
+    "feature_role": "Feature Level",
+    "create_wholesaler": "Create Wholesaler",
+    "ws_code": "WS Code",
+    "store_information": "Store Information",
+    "owner_data": "Owner Data",
+    "detail_wholesaler": "Detail Wholesaler",
+    "search_bank_name": "Search Bank Name ...",
+    "view_document": "View Documents",
+    "grant_access": "View Grant Access",
+    "has_branch": "Has a Branch Store",
+    "total_branch": "Number of Branch Stores"
   },
   "retailer": {
     "list": {
@@ -228,11 +333,15 @@
     }
   },
   "paguyuban": {
-    "text1": "community",
-    "text2": "Community Name",
+    "page_title": "Paguyuban List",
+    "paguyuban_name": "Paguyuban Name",
+    "create": "Create Paguyuban",
+    "text1": "Paguyuban",
+    "text2": "Paguyuban Name",
     "text3": "Mismatch Password Confirmation",
     "text4": "Password must be 8 characters long, and contains both uppercase and lowercase letters",
-    "text5": "Are you sure to complete this field?"
+    "text5": "Are you sure to complete this field?",
+    "detail": "Paguyuban Detail"
   },
   "customer": {
     "text1": "Customer",
@@ -241,12 +350,15 @@
     "text4": "Store Reference Name",
     "text5": "Store Reference Code",
     "text6": "Smoking?",
-    "text7": "Total Coupons"
+    "text7": "Total Coupons",
+    "text8": "Date of birth",
+    "text9": "Store Retailer"
   },
   "principal_partnership": {
     "text1": "Main Partnership",
     "text2": "Register YBKS Lottery",
-    "text3": "Group Name"
+    "text3": "Group Name",
+    "principal_name": "Principal Name"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -336,7 +448,8 @@
       "text7": "Upload Store Layout Image",
       "text8": "Drag an Image Here or Select a File",
       "text9": "Layout Description",
-      "text10": "Create a Store Layout Template"
+      "text10": "Create a Store Layout Template",
+      "image_dimension": "Dimensions 410px410p, Maximum file size 2mb"
     },
     "vendor": {
       "text1": "Vendors List",
@@ -350,16 +463,39 @@
     "pengguna": {
       "text1": "Users",
       "text2": "Users List",
-      "text3": "User‘s Name"
+      "text3": "User‘s Name",
+      "text4": "Access Tiers"
     },
     "lihat_pesanan": {
-      "text1": "See Orders",
+      "text1": "View Orders",
       "text2": "Orders List",
       "text3": "SRC Catalog Orders List",
       "text4": "Total payment",
       "text5": "Total Redeemed Coins",
       "text6": "Trade Program Group",
-      "text7": "Grand Total Redeem Coin"
+      "text7": "Grand Total Redeem Coin",
+      "text8": "Invoice Number",
+      "text9": "Order Details",
+      "text10": "Order Details",
+      "text11": "Phone Number / Mobile Number",
+      "text12": "Customer Type",
+      "text13": "Shipping Address",
+      "text14": "Select Order Status",
+      "text15": "Invoice Number",
+      "text16": "Total Payment",
+      "text17": "Payment Date",
+      "text18": "Shipping Type",
+      "text19": "Shipping costs",
+      "text20": "Estimated Order Will Arrive on Date",
+      "text21": "Purchased Product",
+      "text22": "SHIPPING DETAILS",
+      "text23": "TOTAL SAVE SHOPPING",
+      "text24": "ORDER PREPARED AT:",
+      "text25": "Estimated Delivery Time",
+      "text26": "Estimated Delivery",
+      "text27": "Estimated Delivery Minimum 0 Days",
+      "text28": "Estimated Delivery Maximum 31 Days",
+      "day": "Day's"
     },
     "produk": {
       "text1": "SRC Catalog Products",
@@ -373,7 +509,18 @@
       "text9": "Gram",
       "text10": "Meter",
       "text11": "Product Price",
-      "text12": "Stock"
+      "text12": "Availability",
+      "text13": "Stock",
+      "text14": "Create Product",
+      "text15": "Product Name",
+      "text16": "Product Description",
+      "text17": "Product Category",
+      "text18": "Enter Stages?",
+      "text19": "Upload Layout Image",
+      "text20": "Product Status",
+      "text21": "Just joined the SRC?",
+      "text22": "Want to increase store sales?",
+      "text23": "Want to develop a bigger business?"
     }
   },
   "iklan_dalam_aplikasi": {
@@ -418,7 +565,27 @@
       "text4": "Courier Information",
       "text5": "Services List",
       "text6": "Add Service",
-      "text7": "Courier Service"
+      "text7": "Courier Service",
+      "text8": "Change Courier Status",
+      "text9": "Courier Name",
+      "text10": "Contact Number",
+      "text11": "Service Name",
+      "text12": "Shipping Duration",
+      "text13": "Fastest Estimate",
+      "text14": "Duration",
+      "text15": "Lowest Estimate",
+      "text16": "Days",
+      "text17": "Hours",
+      "text18": "Standard Rate Setting",
+      "text19": "Flat Price",
+      "text20": "Determine Maximum Distance",
+      "text21": "Max Distance",
+      "text22": "Determine the Deadline for Receiving Orders",
+      "text23": "Deadline for Receiving Invalid Orders Use Format HH:MM (ex: 17:00)",
+      "text24": "Invalid Contact Number, Contact Number must be a number",
+      "text25": "Deadline for Receiving Orders (HH:MM)",
+      "text26": "Change Courier",
+      "text27": "Are you sure you want to change this Courier status?"
     },
     "panel_mitra": {
       "text1": "Partner Panel ",
@@ -948,7 +1115,7 @@
       "text17": "See Popup Notification Image",
       "text18": "Transfer Credential Token",
       "text19": "Change Popup Notification",
-      "text20": "Remove Popup Notification", 
+      "text20": "Remove Popup Notification",
       "text21": "Journey Builder Notification",
       "text22": "Data Saved Successfully",
       "text23": " Are you sure you want to remove this popup notification?"
@@ -965,7 +1132,8 @@
       "text6": "Send Push Notification?",
       "text7": "Change Terms & Conditions",
       "text8": "Remove Terms & Conditions",
-      "text9": "Are you sure you want to remove these terms & conditions data?"
+      "text9": "Are you sure you want to remove these terms & conditions data?",
+      "text10": "Select Company"
     },
     "kebijakan_privasi": {
       "text1": "Privacy Policy",
@@ -988,7 +1156,19 @@
       "text12": "Create Help Topic",
       "text13": "Change Help Topic",
       "text14": "Liked",
-      "text15": "Shared"
+      "text15": "Shared",
+      "text16": "Dislikes",
+      "text17": "JPG, PNG, Maximum size 500KB.",
+      "text18": "Image size cannot exceed 500KB!",
+      "text19": "Image format not supported! delete",
+      "text20": "Help Topic Title",
+      "text21": "Video URL",
+      "text22": "Help Content",
+      "text23": "Help Topic",
+      "text24": "VIEW VIDEO",
+      "text25": "INFORMATION",
+      "text26": "CONTACT",
+      "text27": "HELP MESSAGE"
     },
     "daftar_laporan": {
       "text1": "Report",
@@ -1001,7 +1181,13 @@
       "text8": "Promo End Date",
       "text9": "Reject",
       "text10": " Are you sure you want to reject this report?",
-      "text11": " Are you sure you want to remove this report?"
+      "text11": " Are you sure you want to remove this report?",
+      "text12": "History List",
+      "text13": "Reporter",
+      "text14": "Reporter List",
+      "text15": "Reporter Name",
+      "text16": "Report Type",
+      "text17": "Report Date"
     }
   },
   "manajemen_newsfeed": {
@@ -1014,10 +1200,11 @@
       "text5": "RSS Link",
       "text6": "Add RSS Link",
       "text7": "URL Link",
-      "text8": "Invalid"
+      "text8": "Invalid",
+      "text9": "Category Name"
     },
     "daftar_berita": {
-      "text1": "Register News",
+      "text1": "News List",
       "text2": "News Title",
       "text3": "News Details",
       "text4": "Published",
@@ -1038,7 +1225,7 @@
     "text": "Settings",
     "akses_karyawan": {
       "text1": "Employee Access",
-      "text2": "Register Role",
+      "text2": "Registered Role",
       "text3": "Role Name",
       "text4": "Access Type",
       "text5": "Create Role",
@@ -1046,7 +1233,9 @@
       "text7": "Create Access Tiers",
       "text8": "Access Tier Name",
       "text9": "Remove Role Access",
-      "text10": "Are you sure you want to delete this role?"
+      "text10": "Are you sure you want to delete this role?",
+      "text11": "Edit Access Tiers",
+      "text12": "Detail Access Tiers"
     },
     "ubah_kata_sandi": {
       "text1": "Change Password",
@@ -1069,7 +1258,7 @@
     },
     "force_update_apps": {
       "text1": "Force Update Apps",
-      "text2": "App Update Notification =",
+      "text2": "App Update Notification",
       "text3": "Application",
       "text4": "System Operation",
       "text5": "Application Version",
@@ -1079,13 +1268,54 @@
       "text9": "Lastest Consumer App Version",
       "text10": "Latest Retailer App Version",
       "text11": "Latest Cashier App Version",
-      "text12": "No data"
+      "text12": "No data",
+      "text13": "Application Name",
+      "text14": "can not be less than the application version",
+      "text15": "last version"
     },
     "pengaturan_otp": {
       "text1": "OTP Settings",
       "text2": "Change OTP Settings",
       "text3": "Data Saved Successfully"
     }
+  },
+  "rca_agent": {
+    "page_title": "RCA Agent",
+    "index_title": "RCA Agent List",
+    "email_validation": "Make sure the Email and username match your SSO Account."
+  },
+  "rca_grouping": {
+    "page_title": "Customer Grouping",
+    "customer": "Customer",
+    "summary": "Summary",
+    "unset": "Not set yet",
+    "empty_position": "Empty, Click to change"
+  },
+  "route_plan": {
+    "page_title": "Visiting Route",
+    "route": "Route",
+    "find_position": "Find Position Code...",
+    "position_not_found": "No Position Code found",
+    "day_visit": "Visit Day"
+  },
+  "pengajuan_src": {
+    "page_title": "SRC Submission",
+    "index_title": "SRC Submission List",
+    "date_in": "Date of entry",
+    "tnc": "T&C",
+    "gps_coor": "GPS Coordinate",
+    "owner_phone": "Store Owner's Mobile Number That Can Be Contacted",
+    "selling_product": "What products are sold in your Store",
+    "src_information": "Where do you know SRC from?",
+    "source": "Source",
+    "upload_store_image": "Drag Your Store Image here / Select File",
+    "max_image": "Maximum file size 2mb",
+    "submission_info": "Information of SRC Submission",
+    "store_image": "Store Image",
+    "approval_tnc": "Agreement Terms & Conditions",
+    "approval_pp": "Privacy Policy Agreement",
+    "detail_submission": "Submission Detail",
+    "application_status": "Application Status",
+    "choose_submission_status": "Select Submission Status"
   }
-
 }

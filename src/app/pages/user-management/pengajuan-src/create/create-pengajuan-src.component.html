@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Pengajuan SRC'">
+  <page-content-header [contentTitle]="ls.locale.global.button.add + ' ' + ls.locale.pengajuan_src.page_title">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -13,68 +13,72 @@
 
           <form [formGroup]="verticalStepperStep1">
 
-            <ng-template matStepLabel>Informasi Toko</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.wholesaler.store_information }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Toko" formControlName="name">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.store_name }}"
+                  formControlName="name">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
-                  Nama Toko harus diisi.
+                  {{ ls.locale.global.label.store_name }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Alamat" formControlName="address">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.address }}"
+                  formControlName="address">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['address'].hasError('required') && verticalStepperStep1.controls['address'].touched ">
-                  Alamat harus diisi.
+                  {{ ls.locale.global.label.address }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Provinsi" formControlName="province_id">
+                <mat-select placeholder="{{ ls.locale.global.label.Province }}" formControlName="province_id">
                   <mat-option *ngFor="let item of listProvinces" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['province_id'].hasError('required') && verticalStepperStep1.controls['province_id'].touched ">
-                  Provinsi harus diisi.
+                  {{ ls.locale.global.label.Province }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Kabupaten / Kota" formControlName="city_id">
+                <mat-select placeholder="{{ ls.locale.global.label.city_county }}" formControlName="city_id">
                   <mat-option *ngFor="let item of listCities" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['city_id'].hasError('required') && verticalStepperStep1.controls['city_id'].touched ">
-                  Kabupaten / Kota harus diisi.
+                  {{ ls.locale.global.label.city_county }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Kecamatan" formControlName="district_id">
+                <mat-select placeholder="{{ ls.locale.global.label.district }}" formControlName="district_id">
                   <mat-option *ngFor="let item of listDistricts" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['district_id'].hasError('required') && verticalStepperStep1.controls['district_id'].touched ">
-                  Kecamatan harus diisi.
+                  {{ ls.locale.global.label.district }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Koordinat GPS (Latitude)" formControlName="lat">
+                <input matInput type="text" placeholder="{{ ls.locale.pengajuan_src.gps_coor }} (Latitude)"
+                  formControlName="lat">
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Koordinat GPS (Longitude)" formControlName="lng">
+                <input matInput type="text" placeholder="{{ ls.locale.pengajuan_src.gps_coor }} (Longitude)"
+                  formControlName="lng">
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -84,32 +88,33 @@
 
         <mat-step [stepControl]="verticalStepperStep2">
           <form [formGroup]="verticalStepperStep2">
-            <ng-template matStepLabel>Informasi Pemilik</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.global.label.owner_information }}</ng-template>
 
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Pemilik Toko" formControlName="owner">
+                <input matInput type="text" placeholder="{{ ls.locale.global.label.owner_name }}"
+                  formControlName="owner">
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['owner'].hasError('required') && verticalStepperStep2.controls['owner'].touched ">
-                  Nama Pemilik Toko harus diisi.
+                  {{ ls.locale.global.label.owner_name }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <div fxLayout="row">
                 <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
-                  <input matInput value="+62" readonly>
+                  <input matInput value="{{ ls.locale.global.country_calling_code }}" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="93" class="is-light">
-                  <input matInput placeholder="Nomor Ponsel Pemilik Toko Yang Bisa Dihubungi" formControlName="phone"
+                  <input matInput placeholder="{{ ls.locale.pengajuan_src.owner_phone }}" formControlName="phone"
                     type="tel" min="0">
                   <mat-error
                     *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
-                    Nomor Ponsel harus diisi.
+                    {{ ls.locale.global.label.phone }} {{ ls.locale.global.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Produk apa saja yang dijual di Toko Anda" readonly
+                <input matInput type="text" placeholder="{{ ls.locale.pengajuan_src.selling_product }}" readonly
                   (click)="showList()">
               </mat-form-field>
               <div fxLayout="column" *ngIf="showListProduct">
@@ -118,13 +123,13 @@
                 </mat-checkbox>
               </div>
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Tahu SRC darimana ?" formControlName="source">
+                <mat-select placeholder="{{ ls.locale.pengajuan_src.src_information }}" formControlName="source">
                   <mat-option *ngFor="let item of listSources" [value]="item">{{item}}
                   </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['source'].hasError('required') && verticalStepperStep2.controls['source'].touched ">
-                  Sumber harus diisi.
+                  {{ ls.locale.pengajuan_src.source }} {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
@@ -133,14 +138,14 @@
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['channel'].hasError('required') && verticalStepperStep2.controls['channel'].touched ">
-                  Channel harus diisi.
+                  Channel {{ ls.locale.global.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
           </form>
@@ -150,7 +155,7 @@
 
           <form [formGroup]="verticalStepperStep3">
 
-            <ng-template matStepLabel>Upload Foto</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.global.label.upload_image }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <div class="px-24">
@@ -160,9 +165,8 @@
                   <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                     <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                     <br>
-                    <span matPrefix>Tarik Gambar Toko Anda kesini /
-                      <strong>Pilih File</strong></span>
-                    <span matPrefix>Besar file maksimal 2mb</span>
+                    <span matPrefix>{{ ls.locale.pengajuan_src.upload_store_image }}</span>
+                    <span matPrefix>{{ ls.locale.pengajuan_src.max_image }}</span>
                   </div>
                 </div>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" *ngIf="image" ngfDrop selectable="1"
@@ -176,7 +180,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
-                Lanjut
+                {{ ls.locale.global.button.next }}
               </button>
             </div>
 
@@ -186,19 +190,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ ls.locale.global.button.finish }}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ ls.locale.admin_principal.text4 }}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ ls.locale.global.button.back }}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Selesai
+                {{ ls.locale.global.button.finish }}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

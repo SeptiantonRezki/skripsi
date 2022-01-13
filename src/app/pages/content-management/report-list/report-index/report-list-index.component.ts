@@ -10,6 +10,7 @@ import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { PagesName } from "app/classes/pages-name";
 import { ReportListService } from "app/services/content-management/report-list.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-report-list-index',
@@ -42,7 +43,8 @@ export class ReportListIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private reportListService: ReportListService
+    private reportListService: ReportListService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -156,9 +158,9 @@ export class ReportListIndexComponent implements OnInit {
     this.id = id;
     let data = {
       titleDialog: "Apakah anda yakin ?",
-      captionDialog: "Anda akan menolak laporan ini",
+      captionDialog: this.ls.locale.manajemen_konten.daftar_laporan.text10,
       confirmCallback: this.confirmReject.bind(this),
-      buttonText: ["YA", "TIDAK"]
+      buttonText: [this.ls.locale.dte.pengatur_jadwal_program.text32, this.ls.locale.dte.pengatur_jadwal_program.text33]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -167,9 +169,9 @@ export class ReportListIndexComponent implements OnInit {
     this.id = id;
     let data = {
       titleDialog: "Apakah anda yakin ?",
-      captionDialog: "Anda akan menghapus laporan ini",
+      captionDialog: this.ls.locale.manajemen_konten.daftar_laporan.text11,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["YA", "TIDAK"]
+      buttonText: [this.ls.locale.dte.pengatur_jadwal_program.text32, this.ls.locale.dte.pengatur_jadwal_program.text33]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

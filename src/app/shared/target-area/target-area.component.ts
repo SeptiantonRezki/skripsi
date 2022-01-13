@@ -29,6 +29,7 @@ export class TargetAreaComponent implements OnInit {
   @Output() selectedAll: EventEmitter<boolean> = new EventEmitter();
   @Output() selectedAllId: EventEmitter<any[]> = new EventEmitter();
   @Input() areas: any[] = [];
+  @Input() isNotifValidation: boolean = false;
 
   geoLevel: string[] = ["national", "division", "region", "area"];
   geoList: any = {
@@ -258,7 +259,9 @@ export class TargetAreaComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = {
+      isNotifValidation: this.isNotifValidation
+    };
 
     this.dialogRef = this.dialog.open(DialogImportComponent, dialogConfig);
 

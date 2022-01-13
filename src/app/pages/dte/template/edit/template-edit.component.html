@@ -1,22 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header [contentTitle]="isDetail ? 'Detail Tugas' : 'Ubah Tugas'">
-    <button id="btn-simpan-tugas" *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
-      type="button">SIMPAN</button>
+    <!-- <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+      type="button">SIMPAN</button> -->
   </page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div fxLayout="row">
-
-      <!-- REACTIVE FORM EXAMPLE -->
-      <!-- <div class="fuse-widget-front mat-white-bg">
-
-          <div class="px-16 border-bottom" fxLayout="row wrap" fxLayoutAlign="space-between center">
-
-            <div fxFlex class="py-16 h3">Daftar Pesanan Terbaru</div>
-
-          </div> -->
 
       <form class="form" [ngClass]="{'form--edit': !isDetail}" [formGroup]="templateTaskForm" name="form" (keydown.enter)="$event.preventDefault();">
         <div class="form__content mat-elevation-z4 mb-24" fxLayout="column" fxLayoutAlign="start">
@@ -323,8 +314,7 @@
               <video class="template-task-video" [src]="templateTaskForm.get('video').value" controls> </video>
             </div>
 
-            <div formArrayName="questions"
-              *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
+            <div formArrayName="questions" *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
               <div [formGroupName]="i" class="py-24">
                 <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
 
@@ -354,24 +344,29 @@
                     </button>
                   </div>
 
-                  <mat-form-field class="chooice is-light" fxFlex="30">
-                    <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
-                      <mat-select-trigger>
-                        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
-                          <div fxFlex="10">
-                            <mat-icon class="secondary-text">{{item.get('typeSelection').value['icon']}}</mat-icon>
+                  <div fxLayout="column" fxLayoutGap="24px">
+                    <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
+                      <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
+                        <mat-select-trigger>
+                          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
+                            <div fxFlex="10">
+                              <mat-icon class="secondary-text">{{item.get('typeSelection').value['icon']}}</mat-icon>
+                            </div>
+                            <div fxFlex="90">
+                              <span style="padding-left: 34px">{{item.get('typeSelection').value['name']}}</span>
+                            </div>
                           </div>
-                          <div fxFlex="90">
-                            <span style="padding-left: 34px">{{item.get('typeSelection').value['name']}}</span>
-                          </div>
-                        </div>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let selection of listChoose" [value]="selection.value">
-                        <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let selection of listChoose" [value]="selection.value">
+                          <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
+                  </div>
                 </div>
+
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                   <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                   <mat-form-field fxFlex="100" class="question is-light"
@@ -379,6 +374,7 @@
                     <textarea matInput [froalaEditor]="options" formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', 'Pertanyaan', i)" [attr.data-froala-id]="'question-'+(i+1)"></textarea>
                   </mat-form-field>
                 </div>
+
                 <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
                   *ngIf="item.get('question_image').value && item.get('typeSelection').value['value'] !== 'stock_check'">
                   <div fxLayout="row" fxLayoutAlign="start start" *ngIf="!isDetail">
@@ -716,6 +712,7 @@
                 </div>
               </div>
             </div>
+
             <div class="footer pt-48">
               <div class="note">Alasan Menolak Pilihan</div>
               <div formArrayName="rejected_reason_choices"
@@ -771,7 +768,6 @@
           ></app-background-misi>
         </div>
       </form>
-      <!-- </div> -->
 
       <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column" *ngIf="!isDetail">
         <button id="add-question" mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
@@ -793,5 +789,9 @@
       </div>
 
     </div>
+
+    <button *ngIf="!isDetail" id="btn-simpan-tugas" class="mt-24" color="primary" style="width: 100%; max-width: 250px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">
+      SIMPAN
+    </button>
   </div>
 </div>

@@ -1,47 +1,48 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Ubah Template Layout Toko'">
+  <page-content-header [contentTitle]="ls.locale.katalog_src.template_layout_toko.text6">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formStoreTemplate">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
-          <h2 class="">Ubah Template Layout Toko</h2>
+          <h2 class="">{{ ls.locale.katalog_src.template_layout_toko.text6 }}</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div fxLayout="row">
             <mat-form-field fxFlex="30" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Layout Toko">
+              <input matInput type="text" formControlName="name"
+                placeholder="{{ ls.locale.katalog_src.template_layout_toko.text3 }}">
               <mat-error
                 *ngIf="formStoreTemplate.controls['name'].hasError('required') && formStoreTemplate.controls['name'].touched">
-                Nama Template Layout Toko harus diisi
+                {{ ls.locale.katalog_src.template_layout_toko.text3 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <div fxLayout="row" fxFlex="45"></div>
             <mat-form-field fxFlex="10" class="is-light form-primary">
-              <mat-select formControlName="length" placeholder="Panjang Toko">
+              <mat-select formControlName="length" placeholder="{{ ls.locale.katalog_src.template_layout_toko.text4 }}">
                 <mat-option *ngFor="let item of listStoreLength" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formStoreTemplate.controls['length'].hasError('required') && formStoreTemplate.controls['length'].touched">
-                Panjang Toko harus diisi
+                {{ ls.locale.katalog_src.template_layout_toko.text4 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <div fxLayout="row" fxFlex="5"></div>
             <mat-form-field fxFlex="10" class="is-light form-primary">
-              <mat-select formControlName="width" placeholder="Lebar Toko">
+              <mat-select formControlName="width" placeholder="{{ ls.locale.katalog_src.template_layout_toko.text5 }}">
                 <mat-option *ngFor="let item of listStoreLength" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formStoreTemplate.controls['width'].hasError('required') && formStoreTemplate.controls['width'].touched">
-                Lebar Toko harus diisi
+                {{ ls.locale.katalog_src.template_layout_toko.text5 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="column">
-            <h3>Unggah Gambar Layout</h3>
-            <small>Dimensi 410px410p, Besar file maksimal 2mb</small>
+            <h3>{{ ls.locale.katalog_src.template_layout_toko.text7 }}</h3>
+            <small>{{ ls.locale.katalog_src.template_layout_toko.image_dimension }}</small>
             <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
               <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
                 [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
@@ -49,8 +50,7 @@
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <!-- <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon> -->
                   <!-- <br> -->
-                  <span matPrefix>Tarik Gambar Kesini atau
-                    <strong>Pilih File</strong>
+                  <span matPrefix>{{ ls.locale.katalog_src.template_layout_toko.text8 }}
                   </span>
                   <!-- <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span> -->
                 </div>
@@ -70,19 +70,19 @@
           </div>
           <div fxLayout="column">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">Deskripsi Layout</h3>
+              <h3 class="">{{ ls.locale.katalog_src.template_layout_toko.text9 }}</h3>
             </div>
             <textarea [froalaEditor]="options" formControlName="description" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formStoreTemplate.controls['description'].hasError('required') && formStoreTemplate.controls['description'].touched">
-              Isi Halaman harus diisi
+              {{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text24 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </div>
         </div>
 
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-            SIMPAN
+            {{ ls.locale.global.button.save }}
           </button>
         </div>
       </form>

@@ -100,5 +100,19 @@ export class SequencingService extends BaseService {
     return this.postApi(url, body);
   }
 
+  downloadEncryption(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'download_encryption');
+    return this.postBlobApi(url, body);
+  }
 
+  // Personalize
+  getPersonalize(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_post_personalize');
+    return this.getApi(url, queryParams);
+  }
+
+  deletePersonalize(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
+    return this.deleteApi(url);
+  }
 }

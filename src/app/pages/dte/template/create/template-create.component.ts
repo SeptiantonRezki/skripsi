@@ -610,10 +610,6 @@ export class TemplateCreateComponent {
     }
   }
 
-  onChangeListChoose(selection) {
-    console.log('selection', selection);
-  }
-
   getProductObj(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     console.log('event', event, index);
@@ -658,6 +654,7 @@ export class TemplateCreateComponent {
         type: item.type,
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         image_detail: false,
+        encryption: false,
         // required: item.required,
         question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
           return this.formBuilder.group({
@@ -909,6 +906,7 @@ export class TemplateCreateComponent {
       })]),
       question_image: [''],
       question_video: [''],
+      encryption: false,
     });
   }
 
@@ -1017,6 +1015,7 @@ export class TemplateCreateComponent {
       coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
       question_image: [''],
       question_video: [''],
+      encryption: false,
       // others: false,
       // required: false
     }));
@@ -1270,6 +1269,7 @@ export class TemplateCreateComponent {
             // required: item.required,
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
+            encryption: item.encryption ? 1 : 0,
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
@@ -1467,6 +1467,7 @@ export class TemplateCreateComponent {
           err => {
             console.log(err.error);
             this.dataService.showLoading(false);
+            // this.dialogService.openSnackBar({ message: err.error.message });
           }
         )
       }

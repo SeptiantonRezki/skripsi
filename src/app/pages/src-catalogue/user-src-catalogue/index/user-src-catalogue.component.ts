@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { UserCatalogueService } from "app/services/src-catalogue/user-catalogue.service";
 import { Observable, Subject } from 'rxjs';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-src-catalogue',
@@ -34,7 +35,8 @@ export class UserSrcCatalogueComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private userCatalogueService: UserCatalogueService
+    private userCatalogueService: UserCatalogueService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

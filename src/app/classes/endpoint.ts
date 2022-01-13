@@ -261,6 +261,8 @@ export class Endpoint {
         upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`,
         planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
         stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
+        get_create_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.template_id}`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
@@ -313,7 +315,11 @@ export class Endpoint {
         show_preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/show-preview`,
         request_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/request-import`,
         show_status: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-status`,
-        
+        get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized`,
+        put_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/${context.audience_id}`,
+        check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/check-audience`,
+        preview_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/preview-audience`,
+        export_preview_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience-personalized/export`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -682,8 +688,7 @@ export class Endpoint {
       TaskVerification: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/list`,
         detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail/${context.id}/${context.template_id}`,
-        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/
-          ${context.audience_id}/${context.template_id}`,
+        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/${context.audience_id}/${context.template_id}`,
         listReason: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/rejectedreason/${context.template_id}`,
         totalSRC: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
         verificationAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/verifikasi/all`,
@@ -694,8 +699,7 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
         getTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/list`,
         detailTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/detail/${context.id}/${context.template_id}`,
-        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/
-          ${context.audience_id}/${context.template_id}`,
+        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/${context.audience_id}/${context.template_id}`,
         listReasonTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/rejectedreason/${context.template_id}`,
         // totalSRCTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
         verificationAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi/all`,
@@ -767,7 +771,10 @@ export class Endpoint {
         get_import_preview_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/preview-import-coin`,
         // import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
         import_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/request-import-coin`,
-        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer` //ini yang di coin mangement
+        adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`, //ini yang di coin mangement
+        download_encryption: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/tsm/export`,
+        get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission/${context.sequencing_id}`,
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
@@ -792,6 +799,8 @@ export class Endpoint {
         delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
         get_post_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark`,
         put_delete_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark/${context.id}`,
+        get_post_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite`,
+        put_delete_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite/${context.id}`,
       },
       paylater_activate: {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
