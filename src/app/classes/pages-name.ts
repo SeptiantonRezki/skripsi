@@ -82,6 +82,7 @@ export class PagesName {
       "/newsfeed-management/category/detail": "principal.kategorinewsfeed.lihat",
       "/newsfeed-management/news": "principal.daftarberita.lihat",
       "/newsfeed-management/news/detail": "principal.daftarberita.ubah",
+      "/dte/pengaturan-attribute-misi": "principal.pengaturanattributemisi.lihat",
       "/dte/template-task": "principal.tugas.lihat",
       "/dte/template-task/create": "principal.tugas.buat",
       "/dte/template-task/edit": "principal.tugas.ubah",
