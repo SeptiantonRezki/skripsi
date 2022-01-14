@@ -1204,6 +1204,8 @@ export class RetailerIndexComponent {
       this.retailerService.requestExportCashier({ area: area_id, retailer_id: this.selectedRetailer }).subscribe(res => {
         console.log('Data Request Export', res);
       });
+      this.exportAccessCashier = false;
+      this.dataService.showLoading(false);
     } catch (error) {
       this.exportAccessCashier = false;
       this.handleError(error);
