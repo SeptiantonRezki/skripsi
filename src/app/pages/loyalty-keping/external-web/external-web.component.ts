@@ -19,8 +19,8 @@ export class ExternalWebComponent implements OnInit {
   permission: any;
   permissionId: any = {
     catalogues: "katalog_keping",
-    redeems: "penukaran_keping",
-    sources: "riwayat_keping",
+    redeems: "riwayat_penukaran_keping",
+    sources: "riwayat_pendapatan_keping",
     settings: {
       stars: "pengaturan_keping_bintang_ke_keping",
       coo: "pengaturan_keping_pesan_antar",
