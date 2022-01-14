@@ -90,7 +90,7 @@
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
-                    <input matInput type="text" formControlName="total_required_panel" placeholder="Total Required Panel" />
+                    <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="Total Required Panel" />
                     <mat-error>
                       Total Required Panel harus diisi
                     </mat-error>
