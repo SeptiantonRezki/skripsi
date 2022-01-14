@@ -21,8 +21,14 @@
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
-      <button (click)="export()" mat-raised-button type="button" class="is-danger">
-        <mat-icon>arrow_upward</mat-icon> Export XLS
+      <button *ngIf="canRequestExport == true" (click)="export()" mat-raised-button type="button" class="is-danger">
+        <mat-icon>arrow_upward</mat-icon> Request Export XLS
+      </button>
+      <button *ngIf="canRequestExport == false" mat-raised-button type="button" class="is-danger" disabled>
+        <mat-icon>arrow_upward</mat-icon> Requesting Export
+      </button>
+      <button *ngIf="resultExport != null" (click)="download()" mat-raised-button type="button" class="is-danger">
+        <mat-icon>arrow_downward</mat-icon> Download XLS
       </button>
     </div>
     <div class="table-wrapper">
