@@ -24,8 +24,8 @@
       <button *ngIf="canRequestExport == true" (click)="export()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_upward</mat-icon> Request Export XLS
       </button>
-      <button *ngIf="canRequestExport == false" mat-raised-button type="button" class="is-danger" disabled>
-        <mat-icon>arrow_upward</mat-icon> Requesting Export
+      <button *ngIf="canRequestExport == false" mat-raised-button type="button" class="is-disabled">
+        <mat-spinner [diameter]="24" style="float: left; margin-top: 6px; margin-right: 6px"></mat-spinner> Requesting Export
       </button>
       <button *ngIf="resultExport != null" (click)="download()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_downward</mat-icon> Download XLS
