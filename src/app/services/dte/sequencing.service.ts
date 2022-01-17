@@ -100,5 +100,8 @@ export class SequencingService extends BaseService {
     return this.postApi(url, body);
   }
 
-
+  downloadEncryption(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'download_encryption');
+    return this.postBlobApi(url, body);
+  }
 }
