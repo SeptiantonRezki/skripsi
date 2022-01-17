@@ -1210,6 +1210,8 @@ export class RetailerIndexComponent {
         retailer_id: this.selectedRetailer,
         classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
       }).subscribe(res => {
+        this.canRequestExport = false;
+        this.dialogService.openSnackBar({ message: res.data });
         console.log('Data Request Export', res);
       });
       this.exportAccessCashier = false;
