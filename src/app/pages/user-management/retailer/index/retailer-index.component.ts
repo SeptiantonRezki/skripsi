@@ -1053,7 +1053,11 @@ export class RetailerIndexComponent {
           area_id = 1;
         }
 
-        this.retailerService.statusExportCashier({ area: area_id, retailer_id: this.selectedRetailer }).subscribe(res => {
+        this.retailerService.statusExportCashier({
+          area: area_id,
+          retailer_id: this.selectedRetailer,
+          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+        }).subscribe(res => {
           console.log('Status Export :', res);
           this.resultExport = res.data.result;
           this.canRequestExport = res.data.can_request;
@@ -1201,7 +1205,11 @@ export class RetailerIndexComponent {
 
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
-      this.retailerService.requestExportCashier({ area: area_id, retailer_id: this.selectedRetailer }).subscribe(res => {
+      this.retailerService.requestExportCashier({
+        area: area_id,
+        retailer_id: this.selectedRetailer,
+        classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+      }).subscribe(res => {
         console.log('Data Request Export', res);
       });
       this.exportAccessCashier = false;
