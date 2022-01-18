@@ -45,6 +45,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'loyalty-keping',
+    loadChildren: './pages/loyalty-keping/loyalty-keping.module#LoyaltyKepingModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'dte',
     loadChildren: './pages/dte/dte.module#DteModule',
     canActivate: [AuthGuard]
