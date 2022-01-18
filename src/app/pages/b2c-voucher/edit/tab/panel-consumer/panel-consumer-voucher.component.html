@@ -27,7 +27,7 @@
               Jumlah Total Alokasi Voucher harus diisi.
             </mat-error>
           </mat-form-field>
-          <mat-form-field fxFlex="50" class="is-light form-primary">
+          <mat-form-field fxFlex="50" class="is-light form-primary" *ngIf="!isLoyaltySelected()">
             <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
               <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="pb-16 px-12">
+        <div class="pb-16 px-12" *ngIf="!isLoyaltySelected()">
           <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
             <span class="font-size-16">Batasan Umur</span>
           </div>
@@ -149,7 +149,7 @@
           </div>
         </div>
 
-        <div class="pb-16 px-12">
+        <div class="pb-16 px-12" *ngIf="!isLoyaltySelected()">
           <div class="" fxLayout="row" fxLayoutAlign="start center">
             <span class="font-size-16">Jenis Kelamin</span>
           </div>
@@ -184,7 +184,7 @@
           formControlName="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_customer">Target Audience</mat-checkbox>
       </div>
 
-      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false">
+      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false && !isLoyaltySelected()">
         <div class="" formArrayName="areas" *ngFor="let wil of formConsumerGroup.get('areas')['controls']; let i = index;">
           <div [formGroupName]="i">
             <div class="mb-16" style="background: #3a3a3a;color: white;padding: 0 24px;" fxLayout="row" fxLayoutAlign="space-between center">
