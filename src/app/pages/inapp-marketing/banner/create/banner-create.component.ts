@@ -1084,6 +1084,33 @@ export class BannerCreateComponent {
     return invalid;
   }
 
+  openReminder() {
+    if(this.formBannerGroup.valid && this.bannerSelected) {
+      let data = {
+        htmlContent: true,
+        captionDialog: 'Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material Brand HM Sampoerna atau materi promosi tembakau lainnya hanya diperuntukkan untuk Tipe Consumer <b>"Merokok"</b>. Apakah anda yakin untuk simpan dan kirim ?',
+        confirmCallback: this.submitReminder.bind(this),
+        buttonText: ["Ya", "Cek kembali"],
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    } else {
+      let msg;
+      if (this.formBannerGroup.invalid) {
+        msg = "Silakan lengkapi data terlebih dahulu!";
+      } else if (!this.bannerSelected) {
+        msg = "Gambar spanduk belum dipilih!";
+      } else {
+        msg = "Silakan lengkapi data terlebih dahulu!";
+      }
+      this.dialogService.openSnackBar({ message: msg });
+      commonFormValidator.validateAllFields(this.formBannerGroup);
+    };
+  }
+
+  submitReminder() {
+    this.submit('publish');
+  }
+
   async submit(status?: string) {
     console.log(this.formBannerGroup);
     let invalids = this.findInvalidControls();
@@ -1091,6 +1118,7 @@ export class BannerCreateComponent {
     if (this.formBannerGroup.valid && this.bannerSelected) {
 
       this.dataService.showLoading(true);
+      this.dialogService.brodcastCloseConfirmation();
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
         this.dataService.showLoading(false);
