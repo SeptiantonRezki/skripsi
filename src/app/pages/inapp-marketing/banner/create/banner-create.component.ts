@@ -1088,7 +1088,7 @@ export class BannerCreateComponent {
     if(this.formBannerGroup.valid && this.bannerSelected) {
       let data = {
         htmlContent: true,
-        captionDialog: 'Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material <i>Brand HM Sampoerna</i> atau materi <i>promosi tembakau lainnya</i> hanya diperuntukkan untuk Tipe Consumer "<b>Merokok</b>". Apakah anda yakin untuk simpan dan kirim ?',
+        captionDialog: 'Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material Brand HM Sampoerna atau materi promosi tembakau lainnya hanya diperuntukkan untuk Tipe Consumer "<b>Merokok</b>". Apakah anda yakin untuk simpan dan kirim ?',
         confirmCallback: this.submitReminder.bind(this),
         buttonText: ["Ya", "Cek kembali"],
       };
