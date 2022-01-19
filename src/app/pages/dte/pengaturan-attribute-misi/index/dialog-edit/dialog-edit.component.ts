@@ -31,6 +31,8 @@ export class DialogEditComponent implements OnInit {
 
   nameChange = false;
   statusChange = false;
+  isColor: boolean = false;
+  colorCopywriting: string;
 
   constructor(
     private router: Router,
@@ -47,26 +49,37 @@ export class DialogEditComponent implements OnInit {
     this.name = data.name;
     this.id = data.id;
     this.status = data.status;
+    
+    if (data.color) {
+      this.colorCopywriting = data.color;
+      this.isColor = true;
+    }
+    if (data.color === null) {
+      this.colorCopywriting = '#000000';
+      this.isColor = true;
+    }
    }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       name: this.name,
       id: this.id,
-      status: this.status
+      status: this.status,
+      color: this.colorCopywriting
     });
     this.form.patchValue({
       name: this.name,
       status: this.status,
       // id: this.id
     });
-    console.log(this.form.value);
+    
     this.form.get('name').valueChanges.subscribe(x => {
       this.nameChange = true;
     })
     this.form.get('status').valueChanges.subscribe(x => {
       this.statusChange = true;
-    })
+    });
+    this.form.get('color').disable();
   }
 
   submit(form) {
@@ -76,9 +89,9 @@ export class DialogEditComponent implements OnInit {
     if (this.statusChange) {
       this.form.removeControl('name');
     }
+
     this.dialogRef.close(`${form.value}`);
-    console.log(form.value);
-    
+
     this.pengaturanAttributeMisiService[this.data.methodPut](form.value, { [this.data.paramsId]: this.id }).subscribe(res => {
       this.dataService.showLoading(false);
       if (res.success) {
@@ -94,7 +107,8 @@ export class DialogEditComponent implements OnInit {
     }, err => {
       console.log('err', err);
       this.dataService.showLoading(false);
-    })
+      // this.dialogService.openSnackBar({ message: err.error.message })
+    });
   }
 
 }

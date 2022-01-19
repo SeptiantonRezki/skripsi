@@ -10,6 +10,16 @@
         required
       />
     </mat-form-field>
+
+    <div class="mb-16" fxLayout="column" fxLayoutGap="8px" *ngIf="isColor">
+      <span style="font-size: 12px; font-weight: bold;">Warna copywriting</span>
+      <input
+        id="colorCopywriting"
+        type="color"
+        formControlName="color"
+      />
+    </div>
+    
     <mat-form-field style="width: 100%;">
       <mat-select placeholder="Pilih Status" formControlName="status">
         <mat-option value="active">Aktif</mat-option>

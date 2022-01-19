@@ -1,0 +1,121 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah File XLS</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+        <br>
+        <span matPrefix>Tarik File Kesini atau
+          <strong>Pilih File</strong>
+        </span>
+      </div>
+    </div>
+    <br>
+    <div class="">
+      <!-- <small>Total Row Valid : {{rows ? validData : '-'}}</small> -->
+    </div>
+    
+    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
+      <div fxFlex>
+        <span for="" style="font-weight: bolder;">Requesting Preview</span>
+        <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+      </div>
+    </div>
+
+    <div class="responsive" *ngIf="!requestingPreview">
+      <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
+
+        <ngx-datatable-column name="Penjual" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
+            {{ row.name }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column name="No. Ponsel" prop="phone">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.phone }}
+          </ng-template>
+        </ngx-datatable-column> -->
+
+        <ngx-datatable-column name="Kode" prop="code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.code }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tipe" prop="tipe">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.tipe }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Field Force" prop="ff_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.ff_name }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Daftar Ayo" prop="registered">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.registered }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column name="Divisi" prop="division_code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.division_code }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Wilayah" prop="region_code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.region_code }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Area" prop="area_code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.area_code }}
+          </ng-template>
+        </ngx-datatable-column> -->
+
+        <ngx-datatable-column name="Alasan Tidak Valid" prop="reason">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.reason ? row.reason : '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport || invalidData">Kirim</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
