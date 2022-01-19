@@ -1,0 +1,176 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Audience Personalize'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="column" fxLayoutGap="24px">
+        <form [formGroup]="formAudience" autocomplete="off">
+          <div fxLayout="row">
+            <div class="p-24" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+              <div fxLayout="column">
+                <mat-form-field class="is-light form-primary">
+                  <input matInput type="text" formControlName="name" placeholder="Nama Grup" />
+                  <mat-error>
+                    Nama Grup harus diisi
+                  </mat-error>
+                </mat-form-field>
+  
+                <mat-form-field class="is-light form-primary">
+                  <mat-select
+                    formControlName="mission_publication_id"
+                    placeholder="Pilih Publish Misi"
+                    #singleSelect
+                  >
+                    <ngx-mat-select-search
+                      [formControl]="filterPublishMisi"
+                      [placeholderLabel]="'Cari Publish Misi...'"
+                      [noEntriesFoundLabel]="'Tidak ada Publish Misi yang ditemukan'"
+                    ></ngx-mat-select-search>
+                    <mat-option
+                      *ngFor="let item of filteredPublishMisi | async"
+                      [value]="item.id"
+                    >
+                      {{ item.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formAudience.controls['mission_publication_id'].hasError('required') && formAudience.controls['mission_publication_id'].touched">
+                    Publish Misi harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="column">
+                <mat-radio-group class="mb-16" formControlName="audience_filter" (change)="handleAudienceFilter($event.value)">
+                  <mat-radio-button class="mr-24" *ngFor="let item of audienceFilter" [value]="item.value">
+                    {{ item.name }}
+                  </mat-radio-button>
+                </mat-radio-group>
+
+                <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Zone" formControlName="zone" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Zona" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Regional" formControlName="region" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Regional" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Area" formControlName="area" multiple>
+                      <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">
+                        {{ item.name === "all" ? "Semua Area" : item.code }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </form>
+                <form [formGroup]="formFilterRetailer" fxLayout="column">
+                  <mat-form-field class="is-light form-primary">
+                    <mat-select placeholder="Retail Classification" formControlName="retail_classification" multiple>
+                      <mat-option *ngFor="let item of retailClassification" [value]="item.value" (onSelectionChange)="handleClassification($event)">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
+                    <mat-select placeholder="B2B Active" formControlName="b2b_active">
+                      <mat-option *ngFor="let item of b2bActiveList" [value]="item.value">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error>
+                      B2B Active harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
+                    <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="Total Required Panel" />
+                    <mat-error>
+                      Total Required Panel harus diisi
+                    </mat-error>
+                  </mat-form-field>
+                </form>
+              </div>
+
+              <div fxLayout="column">
+                <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)" [disabled]="isDetail">
+                  <mat-radio-button value="fixed-panel">
+                    Fixed Panel
+                  </mat-radio-button>
+                </mat-radio-group>
+                <div fxLayout="row" fxLayoutGap="16px" *ngIf="formAudience.get('audience_filter').value === 'fixed-panel'">
+                  <div fxLayout="column">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      class="is-danger"
+                      (click)="exportAudience()"
+                    >
+                      <mat-icon>arrow_upward</mat-icon> Export Template
+                    </button>
+                    <label *ngIf="exportTemplate" style="color: white;">Downloading Template</label>
+                  </div>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    class="is-danger"
+                    (click)="importAudience()"
+                    [disabled]="isDetail"
+                  >
+                    <mat-icon>arrow_downward</mat-icon> Import XLSX
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
+              <mat-card class="text-center cards" [ngClass]="{clickable: isDetail}" (click)="showPanelBlast()">
+                <mat-card-title class="cards__title">
+                  {{ formAudience.get("panel_count").value }}
+                </mat-card-title>
+                <mat-card-subtitle style="color: white;">Panel Blast</mat-card-subtitle>
+              </mat-card>
+              <mat-card class="text-center cards">
+                <mat-card-title class="cards__title">
+                  {{ handleEstimate(formAudience.get("est_task_compliance").value) }}
+                </mat-card-title>
+                <mat-card-subtitle style="color: white;">Estimated Task Success</mat-card-subtitle>
+              </mat-card>
+            </div>
+          </div>
+        </form>
+
+        <div class="p-24" fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+          <button
+            id="btn-check"
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="checkAudience()"
+            fxFlex="20"
+          >
+            CHECK
+          </button>
+          <button
+            id="btn-simpan"
+            mat-raised-button
+            type="button"
+            class="confirmation-button"
+            (click)="submit()"
+            fxFlex="20"
+            [disabled]="!isChecked"
+          >
+            SIMPAN
+          </button>
+        </div>
+      </div>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>

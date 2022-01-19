@@ -8,18 +8,28 @@
         placeholder="Nama {{ dataProps.title }}"
         required
       />
-      <mat-error *ngIf="form.invalid">
-        Nama harus diisi
-      </mat-error>
+      <mat-error *ngIf="form.invalid">Nama harus diisi</mat-error>
     </mat-form-field>
     <div *ngIf="condition === true">
       <small class="form-text text-danger" *ngIf="condition === true">
-        <p style="color:red"> Nama {{ dataProps.title }} sudah ada, silahkan input nama lain</p>
+        <p style="color: red">
+          Nama {{ dataProps.title }} sudah ada, silahkan input nama lain
+        </p>
       </small>
     </div>
   </mat-dialog-content>
+
+  <div class="my-12" fxLayout="column" fxLayoutGap="4px" *ngIf="isColor">
+    <span><strong>Warna copywriting</strong></span>
+    <input
+      id="colorCopywriting"
+      type="color"
+      formControlName="color"
+    />
+  </div>
+
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit" >Simpan</button>
+    <button mat-raised-button color="success" type="submit">Simpan</button>
     <button
       mat-raised-button
       color="warn"
