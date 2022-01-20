@@ -290,6 +290,11 @@
             <ngx-datatable-column name="Region" prop="region_code" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="Division" prop="division_code" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="IR Check" prop="ir_verification" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="Reblast Type" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <span>{{ row.type + ' ' + (row.increment ? row.increment : '') }}</span>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Status Misi" prop="status_misi" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="Status Coin" prop="status_coin" [sortable]="false"></ngx-datatable-column>
             <ngx-datatable-column name="Tanggal Submit Misi" [sortable]="false" [width]="180">
@@ -303,12 +308,12 @@
                 <div class="button-row" style="margin-left: -10px">
                   <button type="button" mat-icon-button matTooltip="Verifikasi Misi"
                     (click)="openConfirmDialog(row, 'Verifikasi Misi TSM')"
-                    [disabled]="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
+                    [disabled]="row.status_misi !== 'submitted' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
                     <mat-icon
-                      *ngIf="row.status_misi == 'submitted' && row.status_coin !== 'sudah dikirim' && permissionVerifikasiMisi?.ubah || row.status_misi !== 'not-submitted' && row.status_coin == 'belum dikirim' && permissionVerifikasiMisi?.ubah"
+                      *ngIf="row.status_misi == 'submitted' && permissionVerifikasiMisi?.ubah"
                       class="orange-500-fg">assignment_turned_in</mat-icon>
                     <mat-icon
-                      *ngIf="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah"
+                      *ngIf="row.status_misi !== 'submitted' || !permissionVerifikasiMisi?.ubah"
                       class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
 

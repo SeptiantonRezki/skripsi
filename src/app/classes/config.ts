@@ -105,6 +105,51 @@ export class Config {
     }
   };
 
+  public static FROALA_CONFIG_PERSONALIZE: Object = {
+    key: 'mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==',
+    placeholderText: 'Isi Halaman',
+    height: 150,
+    quickInsertTags: [''],
+    quickInsertButtons: [''],
+    imageUpload: false,
+    pasteImage: false,
+    enter: 'ENTER_BR',
+    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote', 'insertLink'],
+    htmlSimpleAmpersand: true,
+    entities: '',
+    events: {
+      // untuk menambahkan id pada froala
+      'froalaEditor.initialized': function(e, editor){
+        setTimeout(() => {
+          editor.el.id = e.currentTarget.getAttribute("data-froala-id");
+        }, 500);
+      },
+      'froalaEditor.keyup': function (e, editor, event) {
+        if (event.keyCode === 32) {
+          var value = event.target.textContent;
+          value = value.replace(
+            /(##[0-9]+)/g,
+            (match: any) => { return `<strong>${match}</strong>`}
+          );
+    
+          if (value !== event.target.textContent) {
+            const el = event.target;
+            el.innerHTML = value;
+      
+            const selection = window.getSelection();
+            const range = document.createRange();
+      
+            selection.removeAllRanges();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            selection.addRange(range);
+            el.focus();
+          }
+        }
+      }
+    }
+  };
+
   public static FROALA_CUSTOM_TITLE_CONFIG = (title?) => ({
     key: 'mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==',
     placeholderText: title ? title : 'Isi Halaman',
