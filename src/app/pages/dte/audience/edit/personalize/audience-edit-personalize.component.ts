@@ -510,7 +510,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
           if (!this.initDetailGeoTree.zone) {
             if (this.detailAudience.hasOwnProperty('zones')) {
-              this.formFilter.get('zone').setValue(this.detailAudience.zones);
+              const zones = this.detailAudience.zones[0];
+              const detailZones = zones > 1 ? this.detailAudience.zones : [];
+              this.formFilter.get('zone').setValue(detailZones);
               this.initDetailGeoTree.zone = true
             }
           }
@@ -553,7 +555,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
               
               if (!this.initDetailGeoTree.region) {
                 if (this.detailAudience.hasOwnProperty('regions')) {
-                  this.formFilter.get('region').setValue(this.detailAudience.regions);
+                  const regions = this.detailAudience.regions[0];
+                  const detailRegions = regions > 1 ? this.detailAudience.regions : [];
+                  this.formFilter.get('region').setValue(detailRegions);
                   this.initDetailGeoTree.region = true
                 }
               }
@@ -596,7 +600,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
               
               if (!this.initDetailGeoTree.area) {
                 if (this.detailAudience.hasOwnProperty('areas')) {
-                  this.formFilter.get('area').setValue(this.detailAudience.areas);
+                  const areas = this.detailAudience.areas[0];
+                  const detailAreas = areas > 1 ? this.detailAudience.areas : [];
+                  this.formFilter.get('area').setValue(detailAreas);
                   this.initDetailGeoTree.area = true
                 }
               }
