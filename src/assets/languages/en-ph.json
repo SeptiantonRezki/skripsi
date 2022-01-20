@@ -1314,5 +1314,15 @@
     "detail_submission": "Submission Detail",
     "application_status": "Application Status",
     "choose_submission_status": "Select Submission Status"
+  },
+  "country_setup": {
+    "page_title_create": "Tambah Country",
+    "page_title_edit": "Ubah Country",
+    "name": "Nama",
+    "phone_code": "Phone Code",
+    "currency": "Currency",
+    "language": "Language",
+    "status": "Status",
+    "action": "Tindakan"
   }
 }

@@ -1,0 +1,112 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>Unggah File JSON</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".json" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
+      
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">{{(!files) ? 'attach_file' : 'file_present'}}</mat-icon>
+        <br>
+        <span matPrefix *ngIf="!files; else elseExists">Tarik File Kesini atau <strong>Pilih File</strong></span>
+        <ng-template #elseExists>
+          <span matPrefix>{{files.name}}</span>
+        </ng-template>
+
+        <div fxFlex *ngIf="validating">
+          <span for="" style="font-weight: bolder;">Validating</span>
+          <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+        </div>
+
+      </div>
+
+
+    </div>
+    <br>
+    <div class="mb-8">
+      <span *ngIf="!files && !validated">Belum ada file JSON yang dipilih</span>
+      <span *ngIf="files && !validated">File JSON belum divalidasi</span>
+      
+      <span *ngIf="validated && !isValid && !validating" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+        <mat-icon style="color: white; background-color: #ff3838; border-radius: 100%;">close</mat-icon>
+        <span>Validasi Gagal, ulangi dan pastikan file anda sudah benar</span>
+      </span>
+      
+      <span *ngIf="validating">File JSON sedang dalam proses validasi</span>
+      
+      <span *ngIf="validated && isValid && !validating" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+        <mat-icon style="color: white; background-color: #3BAB14; border-radius: 100%;">done</mat-icon>
+        <span>Validasi Berhasil, silahkan Upload data</span>
+      </span>
+    </div>
+
+    <div class="responsive" *ngIf="validated && !isValid && !validating">
+      <table class="table">
+        <thead>
+          <tr>
+            <th nowrap style="min-width: 200px;">Attribut</th>
+            <th nowrap style="min-width: 200px;">Value</th>
+            <th nowrap style="min-width: 200px;">Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rows">
+            <td nowrap>
+              {{ item.key }}
+            </td>
+            <td nowrap>
+              {{ item.value }}
+            </td>
+            <td nowrap>
+              {{ item.reason }}
+            </td>
+          </tr>
+          <!-- <tr *ngIf="rows.length === 0">
+            <td style="text-align:center" colspan="6">
+              Tidak ada file yang dipilih
+            </td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+    
+    
+  </div>
+
+  <div class="border-top">
+    <div class="p-8">
+      <div fxFlexLayout="row wrap" fxLayoutAlign="space-between">
+
+        <div fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+          
+          <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">BATAL</button>
+          <button type="button" mat-raised-button class="btn-validate" (click)="validate()"
+            [disabled]="!files || validating || uploading">VALIDATE</button>
+
+        </div>
+        <div fxFlex fxLayoutAlign="end center">
+          <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="uploading || !isValid">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1032,7 +1032,20 @@ export class Endpoint {
         detail_used: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/used`,
         detail_notused: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/notused`,
         redeem_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/redeem`,
-      }
+      },
+      country_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        get_menus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/retailer/menu`,
+      },
+      language_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/${context.id}`,
+        validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

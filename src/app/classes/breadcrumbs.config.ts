@@ -3082,5 +3082,23 @@ export const brConfig = {
         name: "Rute Kunjungan"
       }
     ],
+  },
+  country_setup: {
+    index: [
+      {
+        type: "current",
+        url: "/user-management/country-setup",
+        name: "Country Setup"
+      }
+    ]
+  },
+  language_setup: {
+    index: [
+      {
+        type: "current",
+        url: "/user-management/language-setup",
+        name: "Language Setup"
+      }
+    ]
   }
 };

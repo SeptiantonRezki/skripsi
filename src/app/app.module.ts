@@ -41,6 +41,9 @@ import { KPISettingService } from './services/kpi-setting/kpi-setting.service';
 import { MasterKPIService } from './services/kpi-setting/master-kpi.service';
 import { DialogService } from './services/dialog.service';
 import { AdminPrincipalService } from './services/user-management/admin-principal.service';
+import { CountrySetupService } from './services/user-management/country-setup.service';
+import { LanguageSetupService } from './services/user-management/language-setup.service';
+
 import { VendorsService } from './services/src-catalogue/vendors.service';
 import { FieldForceService } from './services/user-management/field-force.service';
 import { PaguyubanService } from './services/user-management/paguyuban.service';
@@ -267,6 +270,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LanguagesService,
     VoucherPrivateLabelService,
     OrderToMitraHubService,
+    CountrySetupService,
+    LanguageSetupService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

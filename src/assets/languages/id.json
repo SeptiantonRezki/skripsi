@@ -1321,5 +1321,15 @@
     "detail_submission": "Detil Pengajuan",
     "application_status": "Status Aplikasi",
     "choose_submission_status": "Pilih Status Pengajuan"
+  },
+  "country_setup": {
+    "page_title_create": "Tambah Country",
+    "page_title_edit": "Ubah Country",
+    "name": "Nama",
+    "phone_code": "Phone Code",
+    "currency": "Currency",
+    "language": "Language",
+    "status": "Status",
+    "action": "Tindakan"
   }
 }
