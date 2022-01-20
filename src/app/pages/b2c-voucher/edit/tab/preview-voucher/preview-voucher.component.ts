@@ -24,6 +24,8 @@ export class PreviewVoucherComponent implements OnInit {
   isDetail: boolean;
   detailVoucher: any;
   confirmationPublishDialogReference: any;
+  coba: any = 1;
+  disabled: boolean = false;
 
   _data: any = null;
   @Input()
@@ -66,25 +68,71 @@ export class PreviewVoucherComponent implements OnInit {
     }
   }
 
-  confirmUpdateStatusVoucher() {
-    if (this.detailVoucher) {
-      const status = this.detailVoucher.status === 'draft' ? 'Publish' : 'Unpublish';
-      const data = {
-        titleDialog: 'Apakah anda yakin untuk melakukan ' + status + ' B2C Voucher berikut ?',
-        captionDialog: null,
-        confirmCallback: this.updateStatusVoucher.bind(this),
-        dataSubmit: this.detailVoucher.preview_submit,
-        listRadio: this.detailVoucher.preview_submit,
-        buttonText: [status, 'Batal']
+  closePopUp() {
+    this.coba = 0;
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  save() {
+    alert('SAVE SETTING');
+    this.coba = 2;
+  }
+
+  processApproval() {
+    alert('PROCESS TO APPROVAL');
+    this.coba = 3;
+  }
+
+  approve() {
+    if(this.disabled) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      let data = {
+        titleDialog: "Ubah Status Voucher",
+        captionDialog: "Apakah anda yakin untuk merubah status voucher ini menjadi Approve?",
+        confirmCallback: this.closePopUp.bind(this),
+        buttonText: ["Ya, Lanjutkan", "Batal"]
       };
-      this.confirmationPublishDialogReference = this.dialog.open(
-        ConfirmationPublishDialogComponent,
-        {
-          panelClass: 'popup-panel',
-          data: data
-        }
-      );
-    }
+      this.dialogService.openCustomConfirmationDialog(data);
+    };
+  }
+
+  reject() {
+    if(this.disabled) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      let data = {
+        titleDialog: "Ubah Status Voucher",
+        captionDialog: "Apakah anda yakin untuk merubah status voucher ini menjadi Reject?",
+        confirmCallback: this.closePopUp.bind(this),
+        buttonText: ["Ya, Lanjutkan", "Batal"]
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    };
+  }
+
+  confirmUpdateStatusVoucher() {
+    if(this.disabled) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      if (this.detailVoucher) {
+        const data = {
+          titleDialog: 'Apakah anda yakin untuk melakukan Publish B2C Voucher berikut ?',
+          captionDialog: null,
+          confirmCallback: this.updateStatusVoucher.bind(this),
+          dataSubmit: this.detailVoucher.preview_submit,
+          listRadio: this.detailVoucher.preview_submit,
+          buttonText: ['Publish', 'Batal']
+        };
+        this.confirmationPublishDialogReference = this.dialog.open(
+          ConfirmationPublishDialogComponent,
+          {
+            panelClass: 'popup-panel',
+            data: data
+          }
+        );
+      };
+    };
   }
 
   updateStatusVoucher() {
