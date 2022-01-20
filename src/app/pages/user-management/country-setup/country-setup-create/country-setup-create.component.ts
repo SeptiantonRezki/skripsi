@@ -203,7 +203,7 @@ export class CountrySetupCreateComponent implements OnInit {
 
     if (!field) return;
 
-    // commonFormValidator.validateAllFields(field);
+    commonFormValidator.validateAllFields(field);
   }
 
   onToggle({checked, item, depth}) {
@@ -275,7 +275,7 @@ export class CountrySetupCreateComponent implements OnInit {
       
       console.log({ res })
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.router.navigate(["user-management", "country-setup"]);
+      this.router.navigate(["user-management", "countries"]);
 
     }, err => {
 

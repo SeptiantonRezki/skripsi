@@ -295,7 +295,7 @@ export class CountrySetupEditComponent implements OnInit {
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.router.navigate(["user-management", "country-setup"]);
+      this.router.navigate(["user-management", "countries"]);
 
     }, err => {
       

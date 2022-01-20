@@ -593,14 +593,14 @@ const routes: Routes = [
     component: PembayaranBenefitProgramComponent,
   },
   {
-    path: "country-setup",
+    path: "countries",
     component: CountrySetupComponent,
     data: {
       breadcrumbs: brConfig.country_setup.index
     }
   },
   {
-    path: "country-setup/create",
+    path: "countries/create",
     component: CountrySetupCreateComponent,
     data: {
       breadcrumbs: brConfig.country_setup.index
@@ -611,7 +611,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "country-setup/edit/:id",
+    path: "countries/edit/:id",
     component: CountrySetupEditComponent,
     data: {
       breadcrumbs: brConfig.country_setup.index
@@ -622,21 +622,21 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "language-setup",
+    path: "languages",
     component: LanguageSetupComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index
     }
   },
   {
-    path: "language-setup/create",
+    path: "languages/create",
     component: LanguageSetupCreateComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index
     }
   },
   {
-    path: "language-setup/edit/:id",
+    path: "languages/edit/:id",
     component: LanguageSetupEditComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index

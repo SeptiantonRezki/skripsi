@@ -110,7 +110,7 @@ export class LanguageSetupCreateComponent implements OnInit {
 
       this.submiting = false;
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.router.navigate(["user-management", "language-setup"]);
+      this.router.navigate(["user-management", "languages"]);
 
     }, err => {
       

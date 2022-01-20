@@ -132,7 +132,7 @@ export class LanguageSetupComponent implements OnInit {
   directEdit(row?: any): void {
     // this.dataService.setToStorage("detail_admin_principal", param);
     this.dataService.setToStorage("language_setup_data", row);
-    this.router.navigate(["user-management", "language-setup", "edit", row.id]);
+    this.router.navigate(["user-management", "languages", "edit", row.id]);
   }
   delete(row, confirmed = false) {
     

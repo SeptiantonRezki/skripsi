@@ -131,7 +131,7 @@ export class CountrySetupComponent implements OnInit {
   directEdit(row?: any): void {
     // this.dataService.setToStorage("detail_admin_principal", param);
     this.dataService.setToStorage("country_setup_data", row);
-    this.router.navigate(["user-management", "country-setup", "edit", row.id]);
+    this.router.navigate(["user-management", "countries", "edit", row.id]);
   }
   delete(row, confirmed = false) {
     
