@@ -1335,7 +1335,8 @@
     "status": "Status",
     "action": "Action",
     "delete_country": "Delete Country",
-    "delete_country_confirm": "Are you sure you delete the Country"
+    "delete_country_confirm": "Are you sure you delete the Country",
+    "point": "Point"
   },
   "language_setup": {
     "page_title_index": "Language",

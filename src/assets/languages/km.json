@@ -1147,7 +1147,8 @@
 		"ស្ថានភាព": "ស្ថានភាព",
 		"action": "សកម្មភាព",
 		"delete_country": "លុបប្រទេស",
-		"delete_country_confirm": "អ្នក​ប្រាកដ​ថា​អ្នក​លុប​ប្រទេស"
+		"delete_country_confirm": "អ្នក​ប្រាកដ​ថា​អ្នក​លុប​ប្រទេស",
+		"point": "Point"
 	},
 	"language_setup": {
 		"page_title_index": "ភាសា",

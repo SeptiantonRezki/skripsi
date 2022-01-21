@@ -21,6 +21,7 @@ export class CountrySetupCreateComponent implements OnInit {
   step4: FormGroup;
   step5: FormGroup;
   step6: FormGroup;
+  step7: FormGroup;
 
   languages = [];
 
@@ -64,22 +65,27 @@ export class CountrySetupCreateComponent implements OnInit {
 
     });
 
+    
     this.step4 = formBuilder.group({
+      point_valuation: ['', Validators.required]
+    })
+
+    this.step5 = formBuilder.group({
       language_id: ['', Validators.required],
     });
 
-    this.step5 = formBuilder.group({
+    this.step6 = formBuilder.group({
       telepon: ['', Validators.required],
       email: [''],
       whatsapp: [false, Validators.required],
       bude: [false, Validators.required],
     })
 
-    this.step6 = formBuilder.group({
+    this.step7 = formBuilder.group({
       abilities: formBuilder.array([])
     });
     
-    this.step6.get('abilities').valueChanges.subscribe(menus => {
+    this.step7.get('abilities').valueChanges.subscribe(menus => {
       this.onAccessMenuChange(menus);
     });
 
@@ -91,7 +97,7 @@ export class CountrySetupCreateComponent implements OnInit {
       
       // console.log({data});
       
-      const abilities = this.step6.controls['abilities'] as FormArray;
+      const abilities = this.step7.controls['abilities'] as FormArray;
       
       abilities.push(this.buildFullAccessTogle());
       
@@ -115,12 +121,12 @@ export class CountrySetupCreateComponent implements OnInit {
   }
 
   onFullAccessChange({checked, value}) {
-    let menus = this.step6.get('abilities') as FormArray;
+    let menus = this.step7.get('abilities') as FormArray;
     this.recurseCheck(menus.controls, checked);
   }
 
   toggleFullAccess(checked) {
-    const abilities = this.step6.get('abilities') as FormArray;
+    const abilities = this.step7.get('abilities') as FormArray;
     abilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
 
@@ -188,6 +194,7 @@ export class CountrySetupCreateComponent implements OnInit {
       case 4: this.step4; break;
       case 5: this.step5; break;
       case 6: this.step6; break;
+      case 7: this.step7; break;
     }
 
     if (!field) return;
@@ -231,6 +238,7 @@ export class CountrySetupCreateComponent implements OnInit {
         thousand_separator: body.currency_thousand_separator,
         decimal_separator: body.currency_decimal_separator
       },
+      point_valuation: body.point_valuation,
       customer_service: body.customer_service,
       access_menu: [
         {
@@ -253,8 +261,9 @@ export class CountrySetupCreateComponent implements OnInit {
     Object.assign(rawValues, this.step2.getRawValue());
     Object.assign(rawValues, this.step3.getRawValue());
     Object.assign(rawValues, this.step4.getRawValue());
-    Object.assign(rawValues, {customer_service: [this.step5.getRawValue()] });
-    Object.assign(rawValues, this.step6.getRawValue());
+    Object.assign(rawValues, this.step5.getRawValue());
+    Object.assign(rawValues, {customer_service: [this.step6.getRawValue()] });
+    Object.assign(rawValues, this.step7.getRawValue());
     
     let body = this.mapingBody(rawValues);
 

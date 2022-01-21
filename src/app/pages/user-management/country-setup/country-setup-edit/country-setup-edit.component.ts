@@ -55,6 +55,7 @@ export class CountrySetupEditComponent implements OnInit {
         decimal_separator: [this.country.currencies.decimal_separator, Validators.required],
         thousand_separator: [this.country.currencies.thousand_separator, Validators.required],
       }),
+      point_valuation: [this.country.point_valuation, Validators.required],
       phone_code: [this.country.phone_code.replace('+', ''), Validators.required],
       phone_min_length: [this.country.phone_min_length, Validators.required],
       phone_max_length: [this.country.phone_max_length, Validators.required],

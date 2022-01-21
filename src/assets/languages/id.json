@@ -1342,7 +1342,8 @@
     "status": "Status",
     "action": "Tindakan",
     "delete_country": "Hapus Country",
-    "delete_country_confirm": "Apa Anda yakin menghapus Country"
+    "delete_country_confirm": "Apa Anda yakin menghapus Country",
+    "point": "Poin"
   },
   "language_setup": {
     "page_title_index": "Language",

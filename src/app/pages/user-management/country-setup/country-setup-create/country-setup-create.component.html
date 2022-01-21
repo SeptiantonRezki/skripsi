@@ -57,7 +57,7 @@
 
               <div fxFlex fxLayout="row" fxLayoutGap="32px">
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="ls.locale.country_setup.min_length" formControlName="phone_code_min_length">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.min_length}}" formControlName="phone_code_min_length">
                   <mat-error *ngIf="step2.controls['phone_code_min_length'].hasError('required') && step2.controls['phone_code_min_length'].touched ">
                     {{ls.locale.country_setup.min_length}} {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
@@ -149,18 +149,18 @@
 
           <form [formGroup]="step4">
 
-            <ng-template matStepLabel>{{ls.locale.country_setup.language}}</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.point}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
+              
+              
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="{{ls.locale.country_setup.language}}" formControlName="language_id">
-                  <mat-option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</mat-option>
-                </mat-select>
-                <mat-error class="mt-8 px-24"
-                  *ngIf="step4.controls['language_id'].hasError('required') && step4.controls['language_id'].touched">
-                  {{ls.locale.country_setup.language}} {{ls.locale.global.messages.mandatory_text}}.
+                <input matInput type="number" placeholder="{{ls.locale.country_setup.point}}" formControlName="point_valuation">
+                <mat-error *ngIf="step4.controls['point_valuation'].hasError('required') && step4.controls['point_valuation'].touched ">
+                  {{ls.locale.country_setup.point}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
+
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
@@ -177,18 +177,46 @@
 
           <form [formGroup]="step5">
 
+            <ng-template matStepLabel>{{ls.locale.country_setup.language}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="{{ls.locale.country_setup.language}}" formControlName="language_id">
+                  <mat-option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</mat-option>
+                </mat-select>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="step5.controls['language_id'].hasError('required') && step5.controls['language_id'].touched">
+                  {{ls.locale.country_setup.language}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(5)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step6">
+
+          <form [formGroup]="step6">
+
             <ng-template matStepLabel>{{ls.locale.country_setup.customer_service}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ls.locale.bantuan.text10}}" formControlName="telepon">
-                <mat-error *ngIf="step5.controls['telepon'].hasError('required') && step5.controls['telepon'].touched ">
+                <mat-error *ngIf="step6.controls['telepon'].hasError('required') && step6.controls['telepon'].touched ">
                   {{ls.locale.bantuan.text10}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ls.locale.global.label.email}}" formControlName="email">
-                <mat-error *ngIf="step5.controls['email'].hasError('required') && step5.controls['email'].touched ">
+                <mat-error *ngIf="step6.controls['email'].hasError('required') && step6.controls['email'].touched ">
                   {{ls.locale.global.label.email}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
@@ -205,7 +233,7 @@
 
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext (click)="validateStep(5)" type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="validateStep(6)" type="button" class="confirmation-button">
                 {{ls.locale.global.button.next}}
               </button>
             </div>
@@ -214,19 +242,19 @@
 
         </mat-step>
 
-        <mat-step [stepControl]="step6">
+        <mat-step [stepControl]="step7">
 
-          <form [formGroup]="step6">
+          <form [formGroup]="step7">
 
             <ng-template matStepLabel>{{ls.locale.country_setup.access_retailer}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
-              <recursive-slide-toggle [items]="step6.get('abilities').controls" [depth]="0"></recursive-slide-toggle>
+              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0"></recursive-slide-toggle>
             </div>
 
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext (click)="validateStep(6)" type="button" class="confirmation-button">
+              <button mat-raised-button matStepperNext (click)="validateStep(7)" type="button" class="confirmation-button">
                 {{ls.locale.global.button.next}}
               </button>
             </div>

@@ -97,6 +97,14 @@
                 </mat-form-field>
 
               </div>
+              
+              <h2>{{ls.locale.country_setup.point}}</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="number" placeholder="{{ls.locale.country_setup.point}}" formControlName="point_valuation">
+                <mat-error *ngIf="formCountry.controls['point_valuation'].hasError('required') && formCountry.controls['point_valuation'].touched ">
+                  {{ls.locale.country_setup.point}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
 
               <h2>{{ls.locale.country_setup.language}}</h2>
               <mat-form-field fxFlex="100" class="is-light">
