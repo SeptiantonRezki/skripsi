@@ -89,7 +89,7 @@
     </div>
 
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="end center">
-      <button type="button" class="publish-button mat-raised-button{{disabled ? ' disabled-1': ''}}" fxFlex="30" fxFlex.gt-xs="20" (click)="confirmUpdateStatusVoucher()" *ngIf="detailVoucher?.status == 'draft' && coba == 0">
+      <button mat-raised-button type="button" [ngClass]="{'disabled-1': disabled}" class="publish-button" fxFlex="30" fxFlex.gt-xs="20" (click)="confirmUpdateStatusVoucher()" *ngIf="detailVoucher?.status == 'draft' && coba == 0">
         PUBLISH
       </button>
       <button mat-raised-button type="button" class="save-button" fxFlex="30" fxFlex.gt-xs="20" (click)="save()" *ngIf="coba == 1">
@@ -98,10 +98,10 @@
       <button mat-raised-button type="button" class="publish-button" fxFlex="30" fxFlex.gt-xs="20" (click)="processApproval()" *ngIf="coba == 2">
         PROCESS TO APPROVAL
       </button>
-      <button type="button" class="publish-button mat-raised-button{{disabled ? ' disabled-1': ''}}" fxFlex="30" fxFlex.gt-xs="20" (click)="approve()" *ngIf="coba == 3">
+      <button mat-raised-button type="button" [ngClass]="{'disabled-1': disabled}" class="publish-button"  fxFlex="30" fxFlex.gt-xs="20" (click)="approveReject('Approve')" *ngIf="coba == 3">
         APPROVE
       </button>
-      <button type="button" class="reject-button mat-raised-button{{disabled ? ' disabled-2': ''}}" fxFlex="30" fxFlex.gt-xs="20" (click)="reject()" *ngIf="coba == 3">
+      <button mat-raised-button type="button" [ngClass]="{'disabled-2': disabled}" class="reject-button"  fxFlex="30" fxFlex.gt-xs="20" (click)="approveReject('Reject')" *ngIf="coba == 3">
         REJECT
       </button>
     </div>

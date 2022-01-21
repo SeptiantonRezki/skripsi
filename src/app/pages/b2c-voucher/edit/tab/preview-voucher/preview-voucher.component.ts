@@ -68,11 +68,6 @@ export class PreviewVoucherComponent implements OnInit {
     }
   }
 
-  closePopUp() {
-    this.coba = 0;
-    this.dialogService.brodcastCloseConfirmation();
-  }
-
   save() {
     alert('SAVE SETTING');
     this.coba = 2;
@@ -83,32 +78,30 @@ export class PreviewVoucherComponent implements OnInit {
     this.coba = 3;
   }
 
-  approve() {
+  approveReject(str='Approve') {
     if(this.disabled) {
       this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
     } else {
       let data = {
         titleDialog: "Ubah Status Voucher",
-        captionDialog: "Apakah anda yakin untuk merubah status voucher ini menjadi Approve?",
-        confirmCallback: this.closePopUp.bind(this),
+        captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${str}?`,
+        confirmCallback: str === 'Approve' ? this.approveVoucher.bind(this) : this.rejectVoucher.bind(this),
         buttonText: ["Ya, Lanjutkan", "Batal"]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     };
   }
 
-  reject() {
-    if(this.disabled) {
-      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
-    } else {
-      let data = {
-        titleDialog: "Ubah Status Voucher",
-        captionDialog: "Apakah anda yakin untuk merubah status voucher ini menjadi Reject?",
-        confirmCallback: this.closePopUp.bind(this),
-        buttonText: ["Ya, Lanjutkan", "Batal"]
-      };
-      this.dialogService.openCustomConfirmationDialog(data);
-    };
+  approveVoucher() {
+    alert('APPROVE');
+    this.coba = 0;
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  rejectVoucher() {
+    alert('REJECT');
+    this.coba = 2;
+    this.dialogService.brodcastCloseConfirmation();
   }
 
   confirmUpdateStatusVoucher() {
