@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Tambah Country'">
+  <page-content-header [contentTitle]="ls.locale.country_setup.page_title_create">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -17,22 +17,22 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="name">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.name}}" formControlName="name">
                 <mat-error *ngIf="step1.controls['name'].hasError('required') && step1.controls['name'].touched ">
-                  Nama Country harus diisi.
+                  {{ls.locale.country_setup.country_name}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Country ID" formControlName="country_id">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.country_id}}" formControlName="country_id">
                 <mat-error *ngIf="step1.controls['country_id'].hasError('required') && step1.controls['country_id'].touched ">
-                  Country ID harus diisi.
+                  {{ls.locale.country_setup.country_id}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(1)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -44,28 +44,28 @@
 
           <form [formGroup]="step2">
 
-            <ng-template matStepLabel>Phone Code</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.phone_code}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="number" placeholder="Code" formControlName="phone_code">
                 <mat-error *ngIf="step2.controls['phone_code'].hasError('required') && step2.controls['phone_code'].touched ">
-                  Phone Code harus diisi.
+                  {{ls.locale.country_setup.phone_code}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
 
               <div fxFlex fxLayout="row" fxLayoutGap="32px">
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="Min Length" formControlName="phone_code_min_length">
+                  <input matInput type="text" placeholder="ls.locale.country_setup.min_length" formControlName="phone_code_min_length">
                   <mat-error *ngIf="step2.controls['phone_code_min_length'].hasError('required') && step2.controls['phone_code_min_length'].touched ">
-                    Min Length harus diisi.
+                    {{ls.locale.country_setup.min_length}} {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="Max Length" formControlName="phone_code_max_length">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.max_length}}" formControlName="phone_code_max_length">
                   <mat-error *ngIf="step2.controls['phone_code_max_length'].hasError('required') && step2.controls['phone_code_max_length'].touched ">
-                    Min Length harus diisi.
+                    {{ls.locale.country_setup.max_length}} {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -74,7 +74,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(2)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -86,20 +86,20 @@
 
           <form [formGroup]="step3">
 
-            <ng-template matStepLabel>Currency</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.currency}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Code" formControlName="symbol">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.symbol}}" formControlName="symbol">
                 <mat-error *ngIf="step3.controls['symbol'].hasError('required') && step3.controls['symbol'].touched ">
-                  Symbol harus diisi.
+                  {{ls.locale.country_setup.symbol}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
               
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="number" placeholder="Decimal Length" formControlName="decimal">
                 <mat-error *ngIf="step3.controls['decimal'].hasError('required') && step3.controls['decimal'].touched ">
-                  Decimal harus diisi.
+                  Decimal {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
 
@@ -107,28 +107,28 @@
                 <mat-form-field fxFlex="100" class="is-light">
                   <input matInput type="text" placeholder="Min Length" formControlName="currency_min_length">
                   <mat-error *ngIf="step3.controls['currency_min_length'].hasError('required') && step3.controls['currency_min_length'].touched ">
-                    Min Length harus diisi.
+                    Min Length {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
                   <input matInput type="text" placeholder="Max Length" formControlName="currency_max_length">
                   <mat-error *ngIf="step3.controls['currency_max_length'].hasError('required') && step3.controls['currency_max_length'].touched ">
-                    Min Length harus diisi.
+                    Min Length {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
               </div> -->
 
               <div fxFlex fxLayout="row" fxLayoutGap="32px">
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="Decimal Separator" formControlName="currency_decimal_separator">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.decimal_separator}}" formControlName="currency_decimal_separator">
                   <mat-error *ngIf="step3.controls['currency_decimal_separator'].hasError('required') && step3.controls['currency_decimal_separator'].touched ">
-                    Decimal Separator harus diisi.
+                    {{ls.locale.country_setup.decimal_separator}} {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light">
-                  <input matInput type="text" placeholder="Thousand Separator" formControlName="currency_thousand_separator">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.thousand_separator}}" formControlName="currency_thousand_separator">
                   <mat-error *ngIf="step3.controls['currency_thousand_separator'].hasError('required') && step3.controls['currency_thousand_separator'].touched ">
-                    Thousand Separator harus diisi.
+                    {{ls.locale.country_setup.thousand_separator}} {{ls.locale.global.messages.mandatory_text}}.
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -137,7 +137,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(3)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -149,23 +149,23 @@
 
           <form [formGroup]="step4">
 
-            <ng-template matStepLabel>Language</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.language}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Language" formControlName="language_id">
+                <mat-select placeholder="{{ls.locale.country_setup.language}}" formControlName="language_id">
                   <mat-option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</mat-option>
                 </mat-select>
                 <mat-error class="mt-8 px-24"
                   *ngIf="step4.controls['language_id'].hasError('required') && step4.controls['language_id'].touched">
-                  Language harus diisi.
+                  {{ls.locale.country_setup.language}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(4)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -177,7 +177,7 @@
 
           <form [formGroup]="step5">
 
-            <ng-template matStepLabel>Customer Service</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.customer_service}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
@@ -206,7 +206,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(5)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -218,7 +218,7 @@
 
           <form [formGroup]="step6">
 
-            <ng-template matStepLabel>Akses Ayo Toko</ng-template>
+            <ng-template matStepLabel>{{ls.locale.country_setup.access_retailer}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <recursive-slide-toggle [items]="step6.get('abilities').controls" [depth]="0"></recursive-slide-toggle>
@@ -227,7 +227,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="validateStep(6)" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -237,19 +237,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>
 
           <div class="h4" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ls.locale.admin_principal.text4}}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ls.locale.global.button.back}}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" [disabled]="submiting">
               <ng-container *ngIf="submiting == false">
-                Selesai
+                {{ls.locale.global.button.finish}}
               </ng-container>
               <ng-container *ngIf="submiting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

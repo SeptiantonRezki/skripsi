@@ -75,21 +75,10 @@ export class CountrySetupCreateComponent implements OnInit {
       bude: [false, Validators.required],
     })
 
-
-    let items = [
-      { value: 'Full Access', checked: false },
-      { value: 'Belanja', checked: false },
-      { value: 'Langganan', checked: false },
-      { value: 'Misi', checked: false },
-      { value: 'Promosi', checked: false },
-      { value: 'Pojok Bayar', checked: false },
-      { value: 'Katalog SRC', checked: false },
-      { value: 'Pojok Modal', checked: false },
-      { value: 'Info Board', checked: false },
-    ]
     this.step6 = formBuilder.group({
       abilities: formBuilder.array([])
     });
+    
     this.step6.get('abilities').valueChanges.subscribe(menus => {
       this.onAccessMenuChange(menus);
     });
@@ -269,11 +258,8 @@ export class CountrySetupCreateComponent implements OnInit {
     
     let body = this.mapingBody(rawValues);
 
-    console.log({body});
-
     this.countrySetupService.create(body).subscribe(res => {
       
-      console.log({ res })
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.router.navigate(["user-management", "countries"]);
 

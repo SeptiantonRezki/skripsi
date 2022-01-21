@@ -153,10 +153,10 @@ export class CountrySetupComponent implements OnInit {
     }
     else {
       let dialogData = {
-        titleDialog: 'Hapus Country',
-        captionDialog: `Apa Anda yakin menghapus Country ${row.name}?`,
+        titleDialog: this.ls.locale.country_setup.delete_country,
+        captionDialog: `${this.ls.locale.country_setup.delete_country} ${row.name}?`,
         confirmCallback: this.delete.bind(this, row, true),
-        buttonText: ['Hapus', 'Batal']
+        buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
       }
       this.dialogService.openCustomConfirmationDialog(dialogData);
     }

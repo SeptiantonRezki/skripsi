@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File JSON</span>
+        <span>{{ls.locale.language_setup.upload_json_file}}</span>
       </div>
 
     </div>
@@ -25,7 +25,7 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">{{(!files) ? 'attach_file' : 'file_present'}}</mat-icon>
         <br>
-        <span matPrefix *ngIf="!files; else elseExists">Tarik File Kesini atau <strong>Pilih File</strong></span>
+        <span matPrefix *ngIf="!files; else elseExists">{{ls.locale.global.messages.file_browse_label}}</span>
         <ng-template #elseExists>
           <span matPrefix>{{files.name}}</span>
         </ng-template>
@@ -41,19 +41,19 @@
     </div>
     <br>
     <div class="mb-8">
-      <span *ngIf="!files && !validated">Belum ada file JSON yang dipilih</span>
-      <span *ngIf="files && !validated">File JSON belum divalidasi</span>
+      <span *ngIf="!files && !validated">{{ls.locale.language_setup.no_selected_file}}</span>
+      <span *ngIf="files && !validated">{{ls.locale.language_setup.not_validate}}</span>
       
       <span *ngIf="validated && !isValid && !validating" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
         <mat-icon style="color: white; background-color: #ff3838; border-radius: 100%;">close</mat-icon>
-        <span>Validasi Gagal, ulangi dan pastikan file anda sudah benar</span>
+        <span>{{ls.locale.language_setup.validation_error}}</span>
       </span>
       
-      <span *ngIf="validating">File JSON sedang dalam proses validasi</span>
+      <span *ngIf="validating">{{ls.locale.language_setup.on_validation}}</span>
       
       <span *ngIf="validated && isValid && !validating" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
         <mat-icon style="color: white; background-color: #3BAB14; border-radius: 100%;">done</mat-icon>
-        <span>Validasi Berhasil, silahkan Upload data</span>
+        <span>{{ls.locale.language_setup.validation_success}}</span>
       </span>
     </div>
 
@@ -97,14 +97,14 @@
         <div fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
           
           <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">BATAL</button>
+          [disabled]="uploading">{{ls.locale.global.button.cancel}}</button>
           <button type="button" mat-raised-button class="btn-validate" (click)="validate()"
-            [disabled]="!files || validating || uploading">VALIDATE</button>
+            [disabled]="!files || validating || uploading">{{ls.locale.language_setup.validate}}</button>
 
         </div>
         <div fxFlex fxLayoutAlign="end center">
           <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="uploading || !isValid">SUBMIT</button>
+          [disabled]="uploading || !isValid">{{ls.locale.global.button.send}}</button>
         </div>
       </div>
     </div>
