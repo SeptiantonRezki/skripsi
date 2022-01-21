@@ -182,8 +182,6 @@ export class PopupNotificationCreateComponent {
       time: ["00:00", Validators.required],
       enddate: [moment(), Validators.required],
       endtime: ["00:00", Validators.required],
-      date_ws_downline: [moment(), Validators.required],
-      time_ws_downline: ["00:00", Validators.required],
       positive_button: ["", Validators.required],
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
@@ -253,14 +251,12 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['landing_page'].setValue('');
         this.formPopupGroup.controls['url_iframe'].setValue('');
         this.formPopupGroup.controls['body'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
 
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
         this.formPopupGroup.controls['landing_page'].disable();
         this.formPopupGroup.controls['url_iframe'].disable();
         this.formPopupGroup.controls['body'].disable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -281,14 +277,12 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.controls['landing_page'].setValue('');
         this.formPopupGroup.controls['url_iframe'].setValue('');
         this.formPopupGroup.controls['body'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
 
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
         this.formPopupGroup.controls['landing_page'].disable();
         this.formPopupGroup.controls['url_iframe'].disable();
         this.formPopupGroup.controls['body'].disable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -321,7 +315,6 @@ export class PopupNotificationCreateComponent {
         ];
         this.formPopupGroup.controls['age_consumer_from'].enable();
         this.formPopupGroup.controls['age_consumer_to'].enable();
-        this.formPopupGroup.controls['date_ws_downline'].disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -362,10 +355,6 @@ export class PopupNotificationCreateComponent {
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
-        }
-
-        if (this.formPopupGroup.controls['group_type'].value === 'downline') {
-          this.formPopupGroup.controls['date_ws_downline'].enable();
         }
       }
       if (this.formPopupGroup.get("is_target_audience").value === true) {
@@ -415,12 +404,6 @@ export class PopupNotificationCreateComponent {
     })
 
     this.formPopupGroup.controls['group_type'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'downline') {
-        this.formPopupGroup.controls['date_ws_downline'].enable();
-      } else {
-        this.formPopupGroup.controls['date_ws_downline'].setValue('');
-        this.formPopupGroup.controls['date_ws_downline'].disable();
-      }
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
         this.selected.splice(0, this.selected.length);
@@ -1386,19 +1369,10 @@ export class PopupNotificationCreateComponent {
 
       if (body.type === 'retailer') {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
-
-        if (body['retailer_type'] === 'downline') {
-          body['date_ws_downline'] = `${moment(this.formPopupGroup.get('date_ws_downline').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time_ws_downline').value}:00`;
-          body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-          body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
-        } else {
-          body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-          body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
-        }
-      } else {
-        body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-        body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
       }
+
+      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
 
       if (body.type === 'customer') {
         let smoker_type = '';

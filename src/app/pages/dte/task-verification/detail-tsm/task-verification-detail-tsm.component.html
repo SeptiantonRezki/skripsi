@@ -308,12 +308,12 @@
                 <div class="button-row" style="margin-left: -10px">
                   <button type="button" mat-icon-button matTooltip="Verifikasi Misi"
                     (click)="openConfirmDialog(row, 'Verifikasi Misi TSM')"
-                    [disabled]="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
+                    [disabled]="row.status_misi !== 'submitted' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
                     <mat-icon
-                      *ngIf="row.status_misi == 'submitted' && row.status_coin !== 'sudah dikirim' && permissionVerifikasiMisi?.ubah || row.status_misi !== 'not-submitted' && row.status_coin == 'belum dikirim' && permissionVerifikasiMisi?.ubah"
+                      *ngIf="row.status_misi == 'submitted' && permissionVerifikasiMisi?.ubah"
                       class="orange-500-fg">assignment_turned_in</mat-icon>
                     <mat-icon
-                      *ngIf="row.status_misi == 'not-submitted' || row.status_misi !== 'submitted' && row.status_coin !== 'belum dikirim' || row.status_coin == 'sudah dikirim' || !permissionVerifikasiMisi?.ubah"
+                      *ngIf="row.status_misi !== 'submitted' || !permissionVerifikasiMisi?.ubah"
                       class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
 

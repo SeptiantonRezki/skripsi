@@ -74,6 +74,20 @@ export class BaseInterceptor implements HttpInterceptor {
             reader.readAsText(err.error);
           }
         }
+        if (req.method === "PUT") {
+          if (err.error.errors) {
+            if (err.error.errors['status']) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+            } else if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
+        }
         return Observable.throw(err);
       } else if (err.status == 400) {
         if (req.method == "POST") {
@@ -148,6 +162,20 @@ export class BaseInterceptor implements HttpInterceptor {
       } else if (err.status == 500) {
         if (req.method == "POST") {
           this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+        }
+        if (req.method === "PUT") {
+          if (err.error.errors) {
+            if (err.error.errors['status']) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+            } else if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
         }
         return Observable.throw(err);
       } else {

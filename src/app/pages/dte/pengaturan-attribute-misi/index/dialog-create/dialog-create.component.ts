@@ -99,7 +99,7 @@ export class DialogCreateComponent implements OnInit {
             console.log(err.error.message);
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
-            this.dialogService.openSnackBar({ message: err.error.message })
+            // this.dialogService.openSnackBar({ message: err.error.message })
           }
         );
       }

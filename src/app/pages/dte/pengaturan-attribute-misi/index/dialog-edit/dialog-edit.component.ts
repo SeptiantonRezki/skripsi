@@ -107,7 +107,7 @@ export class DialogEditComponent implements OnInit {
     }, err => {
       console.log('err', err);
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: err.error.message })
+      // this.dialogService.openSnackBar({ message: err.error.message })
     });
   }
 

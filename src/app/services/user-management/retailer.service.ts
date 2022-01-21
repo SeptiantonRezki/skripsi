@@ -71,6 +71,16 @@ export class RetailerService extends BaseService {
     return this.postApiTest(url, body);
   }
 
+  requestExportCashier(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "request_export_cashier");
+    return this.postApi(url, body);
+  }
+
+  statusExportCashier(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "status_export_cashier");
+    return this.postApi(url, body);
+  }
+
   importExcel(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "import_access_cashier");
     return this.multipartPost(url, body);
