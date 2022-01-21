@@ -56,6 +56,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   isDetail: Boolean;
   areaType: any[] = [];
   isArea: boolean;
+  disableForm: boolean = false;
 
   isTargetAudience: FormControl = new FormControl(false);
 
@@ -318,6 +319,9 @@ export class PanelRetailerVoucherComponent implements OnInit {
             this.onLoad = false;
           }
         }
+        // disable form
+        this.formFilter.disable();
+        this.disableForm = true;
       } else {
         this.onLoad = false;
       }

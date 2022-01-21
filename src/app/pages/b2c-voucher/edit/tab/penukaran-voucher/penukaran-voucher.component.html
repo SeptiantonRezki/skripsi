@@ -2,7 +2,7 @@
 <div class="ayo-middle p-24" #containerScroll fxLayout="column">
   <div>
     <div fxLayout="row" class="pb-24 px-12">
-      <mat-checkbox class="mt-4 ml-4 mb-8"
+      <mat-checkbox class="mt-4 ml-4 mb-8" [disabled]="disableForm"
         [formControl]="isVoucherAutomation">
         Reimbursement</mat-checkbox>
     </div>
@@ -122,7 +122,7 @@
 
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_reimburse">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
-        (click)="onUpdate()">
+        (click)="onUpdate()" [disabled]="disableForm">
         SIMPAN
       </button>
     </div>

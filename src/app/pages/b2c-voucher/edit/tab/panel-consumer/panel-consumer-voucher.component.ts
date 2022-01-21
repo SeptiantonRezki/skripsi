@@ -62,6 +62,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   indexDelete: any;
   areaType: any[] = [];
   isArea: boolean;
+  disableForm: boolean = false;
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
@@ -605,8 +606,10 @@ export class PanelConsumerVoucherComponent implements OnInit {
       } else {
         this.onLoad = false;
       }
-
-      
+      // disable form
+      this.formConsumerGroup.disable();
+      this.formFilter.disable();
+      this.disableForm = true;
     } else {
       setTimeout(() => {
         this.getDetail();

@@ -28,6 +28,7 @@ export class PenukaranVoucherComponent implements OnInit {
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formPenukaranVoucher: FormGroup;
+  disableForm: boolean = false;
 
   nominalList: any[];
 
@@ -129,6 +130,9 @@ export class PenukaranVoucherComponent implements OnInit {
         this.formPenukaranVoucher.get('isTransferBank').setValue(this.detailVoucher.reimburse_transfer_bank !== null ? this.detailVoucher.reimburse_transfer_bank.length > 0 ? true : false : false);
         this.formPenukaranVoucher.get('isSaldoPojokBayar').setValue(this.detailVoucher.reimburse_pojok_bayar !== null ? this.detailVoucher.reimburse_pojok_bayar.length > 0 ? true : false : false);
       this.getNominal(this.detailVoucher.reimburse_transfer_bank, this.detailVoucher.reimburse_pojok_bayar);
+      // disable form
+      this.disableForm = true;
+      this.formPenukaranVoucher.disable();
     } else {
       setTimeout(() => {
         this.getDetail();

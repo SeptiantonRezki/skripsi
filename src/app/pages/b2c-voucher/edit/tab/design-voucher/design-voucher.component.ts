@@ -28,7 +28,14 @@ export class DesignVoucherComponent implements OnInit {
   isPushNearbyPromotion: FormControl = new FormControl(false);
   @ViewChild('containerScroll') private myScrollContainer: ElementRef;
 
+  private froalaControl: any;
   public options: Object = Config.FROALA_CONFIG;
+  public initialize(initControls) {
+    this.froalaControl = initControls;
+    if (this.froalaControl) {
+      this.froalaControl.initialize();
+    }
+  }
 
   formDesignVoucher: FormGroup;
 
@@ -42,6 +49,7 @@ export class DesignVoucherComponent implements OnInit {
   image: any;
   imageConverted: any;
   validComboDrag: boolean;
+  disableForm: boolean = false;
 
   _data: any = null;
   @Input()
@@ -105,6 +113,24 @@ export class DesignVoucherComponent implements OnInit {
     if (this.detailVoucher) {
       this.isPushNearbyPromotion.setValue(this.detailVoucher.is_push_nearby ? true : false);
       this.formDesignVoucher.get('body').setValue(this.detailVoucher.body);
+      // disable form
+      this.formDesignVoucher.disable();
+      this.disableForm = true;
+      this.froalaControl.destroy();
+      this.options = {
+        ...this.options,
+        events: {
+          'froalaEditor.initialized': function(e, editor){
+            setTimeout(() => {
+              editor.el.id = e.currentTarget.getAttribute("data-froala-id");
+              editor.edit.off();
+            }, 500);
+          },
+        }
+      }
+      setTimeout(() => {
+        this.initialize(this.froalaControl);
+      }, 100);
     } else {
       setTimeout(() => {
         this.initDetail();
@@ -113,8 +139,10 @@ export class DesignVoucherComponent implements OnInit {
   }
 
   selectBannerTemplate(item: any) {
-    this.bannerSelected = item;
-    this.formDesignVoucher.get('banner_selected').setValue(item);
+    if(!this.disableForm) {
+      this.bannerSelected = item;
+      this.formDesignVoucher.get('banner_selected').setValue(item);
+    };
   }
 
   changeImage(event) {
