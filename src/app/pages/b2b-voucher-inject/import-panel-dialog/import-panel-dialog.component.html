@@ -43,10 +43,11 @@
             <th nowrap>Klasifikasi</th>
             <th nowrap>Nominal</th>
             <th nowrap>Amount</th>
+            <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows" [ngStyle]="{ 'background-color': setRedIfDuplicate(item)}">
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#df5d52'}">
             <td nowrap>
               {{ item.name ? item.name : '-' }}
             </td>
@@ -68,6 +69,9 @@
             <td nowrap>
               {{ item.amount ? item.amount : '-' }}
             </td>
+            <td nowrap>
+              {{ item.reason ? item.reason : '-' }}
+            </td>
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
@@ -88,10 +92,11 @@
             <th nowrap>Klasifikasi</th>
             <th nowrap>Nominal</th>
             <th nowrap>Amount</th>
+            <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows" [ngStyle]="{ 'background-color': setRedIfDuplicate(item)}">
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#df5d52'}">
             <td nowrap>
               {{ item.name ? item.name : '-' }}
             </td>
@@ -113,6 +118,9 @@
             <td nowrap>
               {{ item.amount ? item.amount : '-' }}
             </td>
+            <td nowrap>
+              {{ item.reason ? item.reason : '-' }}
+            </td>
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
@@ -129,7 +137,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="(rows.length === 0)">Kirim</button>
+          [disabled]="isValid == false">Kirim</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>

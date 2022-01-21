@@ -44,4 +44,10 @@ export class DialogService {
       data: data.message
     });
   }
+  openRedSnackBar(data?) {
+    this.snackBar.openFromComponent(ToastInformationComponent, {
+      data: data.message,
+      panelClass: ['red-snackbar']
+    });
+  }
 }

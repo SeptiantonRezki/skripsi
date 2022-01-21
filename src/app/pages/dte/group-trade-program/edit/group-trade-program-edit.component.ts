@@ -54,10 +54,11 @@ export class GroupTradeProgramEditComponent implements OnInit {
       principal: [""]
     });
 
+
     this.formGroupTradeProgram.setValue({
       name: this.detailGroupTradeProgram.name,
       user_group: this.detailGroupTradeProgram.type == 'HMS' ? false : true,
-      principal: this.detailGroupTradeProgram.principal
+      principal: this.detailGroupTradeProgram.principal ? this.detailGroupTradeProgram.principal : null
     });
     this.formStatus.setValue(this.detailGroupTradeProgram.status);
 

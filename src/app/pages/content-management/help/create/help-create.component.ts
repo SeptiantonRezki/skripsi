@@ -92,6 +92,16 @@ export class HelpCreateComponent {
     // this.getListCategory();
     this.getListUser();
     this.getCountryList();
+    if(this.ls.selectedLanguages == 'id'){
+      this.formHelp.get('country').setValue('ID');
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.formHelp.get('country').setValue('KH');
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.formHelp.get('country').setValue('PH');
+    }
+    this.formHelp.controls['country'].disable();
   }
 
   add(event: MatChipInputEvent): void {

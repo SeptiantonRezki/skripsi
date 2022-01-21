@@ -307,7 +307,8 @@
     "view_document": "View Documents",
     "grant_access": "View Grant Access",
     "has_branch": "Has a Branch Store",
-    "total_branch": "Number of Branch Stores"
+    "total_branch": "Number of Branch Stores",
+    "area": "Area"
   },
   "retailer": {
     "list": {

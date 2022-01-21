@@ -84,4 +84,10 @@ export class AccessService extends BaseService {
     const url = this.getUrl(this.namespace, 'force_update_v2');
     return this.postApi(url, body);
   }
+
+  getCountry(): Observable<any> {
+    const url = this.getUrl("help", "getCountry");
+    return this.getApi(url);
+  }
+
 }

@@ -310,7 +310,8 @@
     "view_document": "មើលឯកសារ",
     "grant_access": "មើលការផ្តល់សិទ្ធិចូលប្រើ",
     "has_branch": "មានសាខាហាង",
-    "total_branch": "ចំនួនហាងសាខា"
+    "total_branch": "ចំនួនហាងសាខា",
+	"area": "តំបន់"
 	},
 	"retailer": {
 		"list": {
