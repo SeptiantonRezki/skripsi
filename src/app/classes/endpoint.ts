@@ -379,7 +379,7 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
         delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
-        getListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/list-categories`,
+        getListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-categories`,
         getListUser: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-user`,
         getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
         getCountry: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/countries`,
