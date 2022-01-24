@@ -278,6 +278,8 @@ export class LoginComponent implements OnInit {
         }
       }
       this.dataService.setToStorage('bodyLogin', { username: res.email, base_auth: "login" });
+      localStorage.setItem('user_country', res.locale);
+      this.ls.setLanguage(res.locale);
       this.router.navigate(['device/authentication']);
       return;
     }

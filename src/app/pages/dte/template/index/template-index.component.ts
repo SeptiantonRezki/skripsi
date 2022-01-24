@@ -106,12 +106,28 @@ export class TemplateIndexComponent implements OnInit {
           this.getTemplateTask();
         } else {
           Page.renderPagination(this.pagination, res.data);
+
+
           this.rows = res.data ? res.data.data.map(item => {
             return {
               ...item,
               image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
             }
           }) : [];
+          for (let index = 0; index < this.rows.length; index++) {
+            // let numberRow = index + 1;
+            if(this.rows[index].country == 'ID' ){
+              this.rows[index].country = "Indonesia";
+            }
+            else if(this.rows[index].country == 'KH'){
+              this.rows[index].country = "Cambodia";
+            }
+            else if(this.rows[index].country == 'PH'){
+              this.rows[index].country = "Philippines";
+            }
+          }
+          
+          
           this.onLoad = false;
           this.loadingIndicator = false;
         }
@@ -173,6 +189,19 @@ export class TemplateIndexComponent implements OnInit {
               image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
             }
           }) : [];
+          for (let index = 0; index < this.rows.length; index++) {
+            // let numberRow = index + 1;
+            if(this.rows[index].country == 'ID' ){
+              this.rows[index].country = "Indonesia";
+            }
+            else if(this.rows[index].country == 'KH'){
+              this.rows[index].country = "Cambodia";
+            }
+            else if(this.rows[index].country == 'PH'){
+              this.rows[index].country = "Philippines";
+            }
+          }
+          
           this.onLoad = false;
           this.loadingIndicator = false;
         }
@@ -206,6 +235,8 @@ export class TemplateIndexComponent implements OnInit {
       (res) => {
         // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
+
+
         // this.listTipeMisi = res.data;
       },
       (err) => {
@@ -226,6 +257,8 @@ export class TemplateIndexComponent implements OnInit {
     this.pengaturanAttributeMisiService.getInternalMisi(this.pagination).subscribe(
       (res) => {
         this.listTingkatinternalMisi = res.data.data;
+
+
       },
       (err) => {
         console.log("err List Internal Misi", err);
@@ -240,6 +273,8 @@ export class TemplateIndexComponent implements OnInit {
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
+
+
         // this.listKategoriMisi = res.data;
       },
       (err) => {
@@ -255,6 +290,8 @@ export class TemplateIndexComponent implements OnInit {
       (res) => {
         // console.log("res Kategori Misi", res);
         this.listProjectMisi = res.data.data;
+
+
         // this.listKategoriMisi = res.data;
       },
       (err) => {
@@ -279,6 +316,8 @@ export class TemplateIndexComponent implements OnInit {
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
       this.pagination.page = this.dataService.getFromStorage("page");
+
+
     }
 
     this.templateTaskService.get(this.pagination).subscribe(res => {
@@ -289,7 +328,21 @@ export class TemplateIndexComponent implements OnInit {
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
       }) : [];
+      for (let index = 0; index < this.rows.length; index++) {
+        // let numberRow = index + 1;
+        if(this.rows[index].country == 'ID' ){
+          this.rows[index].country = "Indonesia";
+        }
+        else if(this.rows[index].country == 'KH'){
+          this.rows[index].country = "Cambodia";
+        }
+        else if(this.rows[index].country == 'PH'){
+          this.rows[index].country = "Philippines";
+        }
+      }
+      
 
+      
       this.loadingIndicator = false;
     });
   }
@@ -312,6 +365,19 @@ export class TemplateIndexComponent implements OnInit {
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
       }) : [];
+      for (let index = 0; index < this.rows.length; index++) {
+        // let numberRow = index + 1;
+        if(this.rows[index].country == 'ID' ){
+          this.rows[index].country = "Indonesia";
+        }
+        else if(this.rows[index].country == 'KH'){
+          this.rows[index].country = "Cambodia";
+        }
+        else if(this.rows[index].country == 'PH'){
+          this.rows[index].country = "Philippines";
+        }
+      }
+      
 
       this.loadingIndicator = false;
     });
@@ -338,6 +404,19 @@ export class TemplateIndexComponent implements OnInit {
           image: item['image'] ? `${this.endPoint.getEndPoint()}/storage/${item.image}` : null
         }
       }) : [];
+      for (let index = 0; index < this.rows.length; index++) {
+        // let numberRow = index + 1;
+        if(this.rows[index].country == 'ID' ){
+          this.rows[index].country = "Indonesia";
+        }
+        else if(this.rows[index].country == 'KH'){
+          this.rows[index].country = "Cambodia";
+        }
+        else if(this.rows[index].country == 'PH'){
+          this.rows[index].country = "Philippines";
+        }
+      }
+      console.log("this.rowstest", this.rows);
 
       this.loadingIndicator = false;
     });

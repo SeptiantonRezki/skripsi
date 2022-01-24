@@ -59,10 +59,10 @@
     <h2>Pemulihan Perangkat dengan Unique Device ID: {{ unique_device_id }}</h2>
     <form [formGroup]="formRecovery">
       <div fxLayout="row" fxFlex="50">
-        <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light">
-          <input matInput value="+62" readonly>
+        <mat-form-field fxFlex="9" fxFlex.xs="30" class="is-light">
+          <input matInput [value]="country_phone_number_value" readonly>
         </mat-form-field>
-        <mat-form-field fxFlex="95" fxFlex.xs="70" class="is-light">
+        <mat-form-field fxFlex="91" fxFlex.xs="70" class="is-light">
           <input matInput type="tel" min="0" formControlName="applicant_phone" placeholder="Nomor Ponsel Pemohon"
             (keypress)="numbersOnlyValidation($event)">
           <mat-error

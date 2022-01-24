@@ -189,7 +189,7 @@ export class HelpEditComponent {
           body: res.data.body,
           country: res.data.country_code
         });
-
+        this.formHelp.controls['country'].disable()
         this.keywords = res.data.keyword ? JSON.parse(res.data.keyword) : [];
       },
       err => {

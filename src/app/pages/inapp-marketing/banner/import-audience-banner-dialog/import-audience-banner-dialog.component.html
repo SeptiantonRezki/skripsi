@@ -41,10 +41,11 @@
             <th nowrap>Kode</th>
             <th nowrap>Owner</th>
             <th nowrap>Tipe</th>
+            <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows">
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#df5d52'}">
             <td nowrap>
               {{ item.id }}
             </td>
@@ -59,6 +60,9 @@
             </td>
             <td nowrap>
               {{ item.type }}
+            </td>
+            <td nowrap>
+              {{ item.reason }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">

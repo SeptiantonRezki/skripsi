@@ -15,6 +15,14 @@
               {{ ls.locale.pengaturan.akses_karyawan.text8 }} {{ ls.locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
+          <mat-form-field class="is-light form-primary" fxFlex="50" style="padding-left: 10px;">
+            <mat-select formControlName="country" placeholder="Negara">
+                <!-- <mat-option value="en">
+                    <div>English</div>
+                </mat-option> -->
+                <mat-option *ngFor="let item of Country" [value]="item.code">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-16 px-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 

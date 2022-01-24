@@ -13,14 +13,24 @@
         <mat-tab label="Wholesaler">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <div class="header">
-              <span class="header-text">{{ ls.locale.manajemen_template_pesan.template_pesan.text2 }}</span>
+              <span class="header-text">{{ PageVariable.template_pesan.text2 }}</span>
             </div>
             <div class="content mt-20" fxLayout="column">
+              <form [formGroup]="formTemplate">
+              <mat-form-field fxFlex="100" class="is-light" style= "width: 13%;"> 
+                <mat-select placeholder="{{ PageVariable.country }}" formControlName="country">
+                    <!-- <mat-option value="en">
+                        <div>English</div>
+                    </mat-option> -->
+                    <mat-option *ngFor="let item of WsCountry" [value]="item.code" (click)="AddWholsalerCountry(item.code)" >{{item.name}}</mat-option>>
+                </mat-select>
+              </mat-form-field>
+            </form>
               <div class="mb-20" *ngFor="let item of wholesalerTemplates; let i = index">
                 <div class="content-title" fxLayout="row" fxLayoutAlign="start start">
-                  <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}:</label>
+                  <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">{{ PageVariable.template_pesan.text1 }} {{i+1}}:</label>
                   <!-- <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}: <span *ngIf="indexOnEdit !== i && item.title" class="ml-8" >{{item.title}}</span></label> -->
-                  <input matInput class="title-text ml-8" placeholder="Judul Template Pesan" value=""
+                  <input matInput class="title-text ml-8" placeholder="{{ PageVariable.template_pesan.text5 }}" value=""
                     [(ngModel)]="item.title" (blur)="onBlur(item, i, 'wholesaler')">
                   <div class="title-edit" (click)="onEdit(item, i, 'wholesaler')">
                     <mat-icon>edit</mat-icon>
@@ -30,7 +40,7 @@
                 </div>
                 <div class="content-body" fxLayout="row" fxLayoutAlign="start start">
                   <div class="body-layout">
-                    <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body"
+                    <textarea matInput class="body-text" placeholder="{{ PageVariable.template_pesan.text6 }}" [(ngModel)]="item.body"
                       wrap="soft" (blur)="onBlur(item, i, 'wholesaler')"></textarea>
                   </div>
                   <!-- <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
@@ -38,21 +48,20 @@
                       </div> -->
                   <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon (click)="resetToDefault(i, 'wholesaler')">refresh</mat-icon>
-                    Reset to default
+                    {{ PageVariable.template_pesan.text3 }}
                   </div>
                 </div>
-                <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan
-                  harus diisi!</mat-error>
+                <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">{{ PageVariable.template_pesan.text7 }}</mat-error>
               </div>
             </div>
             <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
               <button mat-button class="add" (click)="resetToDefaultAll('wholesaler')">
                 <mat-icon class="secondary-text">refresh</mat-icon>
-                Reset All to Default
+                {{ PageVariable.template_pesan.text4 }}
               </button>
               <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('wholesaler')"
                 *ngIf="wholesalerTemplates.length > 0 || deleteListWholesaler.length > 0">
-                {{ ls.locale.global.button.save }}
+                {{ PageVariable.template_pesan.text8 }}
               </button>
               <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success">
                 </span>
@@ -64,14 +73,25 @@
         <mat-tab label="Retailer">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <div class="header">
-              <span class="header-text">{{ ls.locale.manajemen_template_pesan.template_pesan.text2 }}</span>
+              <span class="header-text">{{ RPageVariable.template_pesan.text2 }}</span>
             </div>
             <div class="content mt-20" fxLayout="column">
+              
+              <form [formGroup]="formTemplateR">
+                <mat-form-field fxFlex="100" class="is-light" style= "width: 13%;"> 
+                  <mat-select placeholder="{{ RPageVariable.country }}" formControlName="country">
+                      <!-- <mat-option value="en">
+                          <div>English</div>
+                      </mat-option> -->
+                      <mat-option *ngFor="let item of RtCountry" [value]="item.code" (click)="AddRetailerCountry(item.code)" >{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
               <div class="mb-20" *ngFor="let item of retailerTemplates; let i = index">
                 <div class="content-title" fxLayout="row" fxLayoutAlign="start start">
-                  <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">Template Pesan {{i+1}}:</label>
+                  <label class="title-label" (click)="onEdit(item, i, 'wholesaler')">{{ RPageVariable.template_pesan.text1 }} {{i+1}}:</label>
                   <!-- <label class="title-label" (click)="onEdit(item, i)">Template Pesan {{i+1}}: <span *ngIf="indexOnEdit !== i && item.title" class="ml-8" >{{item.title}}</span></label> -->
-                  <input matInput class="title-text ml-8" placeholder="Judul Template Pesan" value=""
+                  <input matInput class="title-text ml-8" placeholder="{{ RPageVariable.template_pesan.text5 }}" value=""
                     [(ngModel)]="item.title" (blur)="onBlur(item, i, 'retailer')">
                   <div class="title-edit" (click)="onEdit(item, i, 'retailer')">
                     <mat-icon>edit</mat-icon>
@@ -81,7 +101,7 @@
                 </div>
                 <div class="content-body" fxLayout="row" fxLayoutAlign="start start">
                   <div class="body-layout">
-                    <textarea matInput class="body-text" placeholder="Detail Template Pesan" [(ngModel)]="item.body"
+                    <textarea matInput class="body-text" placeholder="{{ RPageVariable.template_pesan.text6 }}" [(ngModel)]="item.body"
                       wrap="soft" (blur)="onBlur(item, i, 'retailer')"></textarea>
                   </div>
                   <!-- <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
@@ -89,11 +109,10 @@
                         </div> -->
                   <div class="body-delete pl-8" fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon (click)="resetToDefault(i, 'retailer')">refresh</mat-icon>
-                    Reset to default
+                    {{ RPageVariable.template_pesan.text3 }}
                   </div>
                 </div>
-                <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">Judul atau Detail Template Pesan
-                  harus diisi!</mat-error>
+                <mat-error *ngIf="item.title == '' || item.body == ''" class="mt-4">{{ RPageVariable.template_pesan.text7 }}</mat-error>
               </div>
             </div>
             <div class="footer mt-20" fxLayout="row" fxLayoutAlign="start center">
@@ -103,11 +122,11 @@
                     </button> -->
               <button mat-button class="add" (click)="resetToDefaultAll('retailer')">
                 <mat-icon class="secondary-text">refresh</mat-icon>
-                Reset All to Default
+                {{ RPageVariable.template_pesan.text4 }}
               </button>
               <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate('retailer')"
                 *ngIf="retailerTemplates.length > 0 || deleteListRetailer.length > 0">
-                {{ ls.locale.global.button.save }}
+                {{ RPageVariable.template_pesan.text8 }}
               </button>
               <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success">
                 </span>

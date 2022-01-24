@@ -121,6 +121,7 @@
           class="answer-img mb-8" (click)="previewImage(dataSubmission.data.questions[i].question_image)"/>
           <!-- <span style="text-align: left;">{{item.question}}</span> -->
           <div style="text-align: left;" [innerHtml]="item.question | safeHtml"></div>
+
           <div *ngIf="item.type == 'radio'" fxLayout="column" fxLayoutAlign="start start">
             <div *ngFor="let answer of item.additional;" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer !== item.answer[0]">
@@ -146,6 +147,20 @@
                 <div>
                   {{answer}}
                 </div>
+            </div>
+          </div>
+
+          <div *ngIf="item.type == 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea'" fxLayout="column" fxLayoutAlign="start start">
+            <div *ngFor="let answer of item.additional;" fxFlex="100" fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer === item.answer[0]">
+                radio_button_checked
+              </mat-icon>
+              <mat-icon class="secondary-text" fxFlex="5" *ngIf="answer !== item.answer[0]">
+                radio_button_unchecked
+              </mat-icon>
+              <div>
+                {{answer}}
+              </div>
             </div>
           </div>
 

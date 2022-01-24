@@ -133,11 +133,6 @@ export class AudienceService extends BaseService {
     return this.postApi(url, body);
   }
 
-  // delete(context): Observable<any> {
-  //   const url = this.getUrl(this.namespace, 'delete', context);
-  //   return this.deleteApi(url);
-  // }
-
   checkAudience(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'check_audience');
     return this.postApi(url, body);

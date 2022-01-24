@@ -225,6 +225,7 @@ export class Endpoint {
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
         import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
+        export2: `https://export.api.dev.src.id/api/v1/export/principal/product/export/report`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
           }&status=active`,
         generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
@@ -690,8 +691,7 @@ export class Endpoint {
       TaskVerification: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/list`,
         detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/detail/${context.id}/${context.template_id}`,
-        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/
-          ${context.audience_id}/${context.template_id}`,
+        listAudience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/audience/${context.audience_id}/${context.template_id}`,
         listReason: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/rejectedreason/${context.template_id}`,
         totalSRC: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
         verificationAll: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/verifikasi/all`,
@@ -702,8 +702,7 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/export`,
         getTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/list`,
         detailTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/detail/${context.id}/${context.template_id}`,
-        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/
-          ${context.audience_id}/${context.template_id}`,
+        listAudienceTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/audience/${context.audience_id}/${context.template_id}`,
         listReasonTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/rejectedreason/${context.template_id}`,
         // totalSRCTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-verification/view-coin/${context.template_id}`,
         verificationAllTsm: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/tsm-task-verification/verifikasi/all`,

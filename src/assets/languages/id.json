@@ -126,7 +126,9 @@
       "import": "Import",
       "export": "Export",
       "deactivate": "Non Aktifkan",
-      "update_status": "PERBARUI STATUS"
+      "update_status": "PERBARUI STATUS",
+			"yes_continue": "Ya, lanjutkan",
+			"no_cancel": "Tidak, batalkan"
     },
     "area": {
       "national": "National",
@@ -311,7 +313,8 @@
     "view_document": "Lihat Dokumen",
     "grant_access": "Lihat Pemberian Akses",
     "has_branch": "Mempunyai Toko Cabang",
-    "total_branch": "Jumlah Toko Cabang"
+    "total_branch": "Jumlah Toko Cabang",
+    "area": "Area"
   },
   "retailer": {
     "list": {
@@ -589,7 +592,8 @@
       "text23": "Batas Waktu Menerima Pesan Tidak Valid Gunakan Format HH:MM (ex: 17:00)",
       "text24": "Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka",
       "text25": "Batas Waktu Menerima Pesanan (HH:MM)",
-      "text26": "Ubah Kurir"
+      "text26": "Ubah Kurir",
+      "text27": "Apakah kamu yakin ingin mengubah status Kurir ini ?"
     },
     "panel_mitra": {
       "text1": "Panel Mitra",

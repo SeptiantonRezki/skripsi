@@ -161,36 +161,36 @@ export class WholesalerCreateComponent {
         case 'national':
           level_desc = 'zone';
           this.verticalStepperStep3.get('national').setValue(item.id);
-          this.verticalStepperStep3.get('national').disable();
+          // this.verticalStepperStep3.get('national').disable();
           break
         case 'division':
           level_desc = 'region';
           this.verticalStepperStep3.get('zone').setValue(item.id);
-          this.verticalStepperStep3.get('zone').disable();
+          // this.verticalStepperStep3.get('zone').disable();
           break;
         case 'region':
           level_desc = 'area';
           this.verticalStepperStep3.get('region').setValue(item.id);
-          this.verticalStepperStep3.get('region').disable();
+          // this.verticalStepperStep3.get('region').disable();
           break;
         case 'area':
           level_desc = 'salespoint';
           this.verticalStepperStep3.get('area').setValue(item.id);
-          this.verticalStepperStep3.get('area').disable();
+          // this.verticalStepperStep3.get('area').disable();
           break;
         case 'salespoint':
           level_desc = 'district';
           this.verticalStepperStep3.get('salespoint').setValue(item.id);
-          this.verticalStepperStep3.get('salespoint').disable();
+          // this.verticalStepperStep3.get('salespoint').disable();
           break;
         case 'district':
           level_desc = 'territory';
           this.verticalStepperStep3.get('district').setValue(item.id);
-          this.verticalStepperStep3.get('district').disable();
+          // this.verticalStepperStep3.get('district').disable();
           break;
         case 'territory':
           this.verticalStepperStep3.get('territory').setValue(item.id);
-          this.verticalStepperStep3.get('territory').disable();
+          // this.verticalStepperStep3.get('territory').disable();
           break;
       }
       this.getAudienceArea(level_desc, item.id);

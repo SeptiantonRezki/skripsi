@@ -1,4 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
     selector     : 'fuse-navigation',
@@ -11,7 +12,7 @@ export class FuseNavigationComponent
     @Input() layout = 'vertical';
     @Input() navigation: any;
 
-    constructor()
+    constructor(private ls: LanguagesService)
     {
 
     }

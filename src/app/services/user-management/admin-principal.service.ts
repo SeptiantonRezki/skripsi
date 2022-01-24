@@ -46,6 +46,11 @@ export class AdminPrincipalService extends BaseService {
     return this.getApi(url);
   }
 
+  getListRoleCountry(country): Observable<any> {
+    const url = this.getUrl(this.namespace, "list_role_nolimit");
+    return this.getApi(url, country);
+  }
+
   getListLevel(): Observable<any> {
     const url = this.getUrl("general", "list_level");
     return this.getApi(url);
@@ -61,8 +66,18 @@ export class AdminPrincipalService extends BaseService {
     return this.getApi(url);
   }
 
+  getListOtherChildrens(context, country): Observable<any> {
+    const url = this.getUrl("general", "list_other_children", context);
+    return this.getApi(url, country);
+  }
+
   getParentArea(context?): Observable<any> {
     const url = this.getUrl("general", "parent", context);
+    return this.getApi(url);
+  }
+
+  getCountry(): Observable<any> {
+    const url = this.getUrl("help", "getCountry");
     return this.getApi(url);
   }
 }
