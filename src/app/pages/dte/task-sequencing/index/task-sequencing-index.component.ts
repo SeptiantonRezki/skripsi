@@ -312,11 +312,34 @@ export class TaskSequencingIndexComponent implements OnInit {
 
   async downloadFile(item) {
     this.dataService.showLoading(true);
-    setTimeout(() => {
-      this.downloadLink.nativeElement.href = item.download_url;
-      this.downloadLink.nativeElement.click();
+    const body = {
+      task_sequencing_management_id: item.id
+    };
+
+    try {
+      if (item.download_url) {
+        this.dataService.showLoading(false);
+        
+        const response = await this.sequencingService.downloadEncryption(body).toPromise();
+        const newBlob = new Blob([response], { type: 'application/zip' });
+        const url= window.URL.createObjectURL(newBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Export_${item.name}_${new Date().toLocaleString()}.zip`;
+        // this is necessary as link.click() does not work on the latest firefox
+        link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  
+        setTimeout(function () {
+          // For Firefox it is necessary to delay revoking the ObjectURL
+          window.URL.revokeObjectURL(url);
+          link.remove();
+        }, 100);
+      }
+    } catch (error) {
+      console.log("err", error);
       this.dataService.showLoading(false);
-    }, 1000);
+      throw error;
+    }
   }
 
   pastDate(lastDate) {
