@@ -356,23 +356,23 @@ export class RetailerIndexComponent {
             this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
           }
 
-          if (this.dataService.getFromStorage('region').length > 0) {
+          if (this.dataService.getFromStorage('region') && this.dataService.getFromStorage('region').length > 0) {
             this.getAudienceAreaV2('region', this.dataService.getFromStorage('region'));
           }
 
-          if (this.dataService.getFromStorage('area').length > 0) {
+          if (this.dataService.getFromStorage('area') && this.dataService.getFromStorage('area').length > 0) {
             this.getAudienceAreaV2('area', this.dataService.getFromStorage('area'));
           }
 
-          if (this.dataService.getFromStorage('salespoint').length > 0) {
+          if (this.dataService.getFromStorage('salespoint') && this.dataService.getFromStorage('salespoint').length > 0) {
             this.getAudienceAreaV2('salespoint', this.dataService.getFromStorage('salespoint'));
           }
 
-          if (this.dataService.getFromStorage('district').length > 0) {
+          if (this.dataService.getFromStorage('district') && this.dataService.getFromStorage('district').length > 0) {
             this.getAudienceAreaV2('district', this.dataService.getFromStorage('district'));
           }
 
-          if (this.dataService.getFromStorage('territory').length > 0) {
+          if (this.dataService.getFromStorage('territory') && this.dataService.getFromStorage('territory').length > 0) {
             this.getAudienceAreaV2('territory', this.dataService.getFromStorage('territory'));
           }
 
@@ -480,7 +480,7 @@ export class RetailerIndexComponent {
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('zone').length > 0) {
+        if (this.dataService.getFromStorage('zone') && this.dataService.getFromStorage('zone').length > 0) {
           this.list[this.parseArea(selection)] = this.dataService.getFromStorage('zone');
           this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
         } else {
@@ -507,7 +507,7 @@ export class RetailerIndexComponent {
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('region').length > 0) {
+        if (this.dataService.getFromStorage('region') && this.dataService.getFromStorage('region').length > 0) {
           this.list[selection] = this.dataService.getFromStorage('region');
           this.formFilter.get('region').setValue(this.dataService.getFromStorage('selected_region'));
         } else {
@@ -543,7 +543,7 @@ export class RetailerIndexComponent {
         break;
       case 'area':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('area').length > 0) {
+        if (this.dataService.getFromStorage('area') && this.dataService.getFromStorage('area').length > 0) {
           this.list[selection] = this.dataService.getFromStorage('area');
           this.formFilter.get('area').setValue(this.dataService.getFromStorage('selected_area'));
         } else {
@@ -577,7 +577,7 @@ export class RetailerIndexComponent {
         break;
       case 'salespoint':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('salespoint').length > 0) {
+        if (this.dataService.getFromStorage('salespoint') && this.dataService.getFromStorage('salespoint').length > 0) {
           this.list[selection] = this.dataService.getFromStorage('salespoint');
           this.formFilter.get('salespoint').setValue(this.dataService.getFromStorage('selected_salespoint'));
         } else {
@@ -609,7 +609,7 @@ export class RetailerIndexComponent {
         break;
       case 'district':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('district').length > 0) {
+        if (this.dataService.getFromStorage('district') && this.dataService.getFromStorage('district').length > 0) {
           this.list[selection] = this.dataService.getFromStorage('district');
           this.formFilter.get('district').setValue(this.dataService.getFromStorage('selected_district'));
         } else {
@@ -637,7 +637,7 @@ export class RetailerIndexComponent {
         break;
       case 'territory':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('territory').length > 0) {
+        if (this.dataService.getFromStorage('territory') && this.dataService.getFromStorage('territory').length > 0) {
           this.list[selection] = this.dataService.getFromStorage('territory');
           this.formFilter.get('territory').setValue(this.dataService.getFromStorage('selected_territory'));
         } else {
