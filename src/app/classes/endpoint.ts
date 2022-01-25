@@ -18,6 +18,7 @@ const AYO_API = environment.server;
 // const AYO_API_SERVICE = environment.server_service;
 const AYO_API_SERVICE = serviceServer;
 const type_api = "principal";
+// dummy comment
 
 export class Endpoint {
   getUrl(namespace, key, context) {
