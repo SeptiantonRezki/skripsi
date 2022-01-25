@@ -108,6 +108,7 @@
           type="button"
           class="is-danger"
           (click)="importRetailer()"
+          [disabled]="disableForm"
         >
           <mat-icon>vertical_align_bottom</mat-icon> Import XLS
         </button>
@@ -162,7 +163,7 @@
             <mat-checkbox 
               [checked]="isSelected" 
               (change)="onCheckboxChangeFn($event)" 
-              [disabled]="allRowsSelected" 
+              [disabled]="allRowsSelected || disableForm" 
               *ngIf="!allRowsSelected"
             >
             </mat-checkbox>

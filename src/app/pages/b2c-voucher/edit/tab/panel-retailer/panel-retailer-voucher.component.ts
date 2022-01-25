@@ -319,12 +319,14 @@ export class PanelRetailerVoucherComponent implements OnInit {
             this.onLoad = false;
           }
         }
-        // disable form
-        this.formFilter.disable();
-        this.disableForm = true;
       } else {
         this.onLoad = false;
       }
+      // disable form
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_voucher') {
+        this.formFilter.disable();
+        this.disableForm = true;
+      };
     } else {
       setTimeout(() => {
         this.getDetail();

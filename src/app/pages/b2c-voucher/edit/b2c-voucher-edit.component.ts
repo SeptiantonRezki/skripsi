@@ -472,8 +472,10 @@ export class B2CVoucherEditComponent implements OnInit {
         usage: [],
       });
       // disable form
-      this.formDetailVoucher.disable();
-      this.disableForm = true;
+      if(res.data.status !== 'draft' && res.data.status !== 'draft_saved') {
+        this.formDetailVoucher.disable();
+        this.disableForm = true;
+      };
       if (res.data.usage.length) {
         const usage: FormArray = this.formDetailVoucher.get('usage') as FormArray;
         while (usage.length) usage.removeAt(0);

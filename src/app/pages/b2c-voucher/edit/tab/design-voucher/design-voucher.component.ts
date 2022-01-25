@@ -114,20 +114,22 @@ export class DesignVoucherComponent implements OnInit {
       this.isPushNearbyPromotion.setValue(this.detailVoucher.is_push_nearby ? true : false);
       this.formDesignVoucher.get('body').setValue(this.detailVoucher.body);
       // disable form
-      this.formDesignVoucher.disable();
-      this.disableForm = true;
-      this.froalaControl.destroy();
-      this.options = {
-        ...this.options,
-        events: {
-          'froalaEditor.initialized': function(e, editor){
-            setTimeout(() => {
-              editor.el.id = e.currentTarget.getAttribute("data-froala-id");
-              editor.edit.off();
-            }, 500);
-          },
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved') {
+        this.formDesignVoucher.disable();
+        this.disableForm = true;
+        this.froalaControl.destroy();
+        this.options = {
+          ...this.options,
+          events: {
+            'froalaEditor.initialized': function(e, editor){
+              setTimeout(() => {
+                editor.el.id = e.currentTarget.getAttribute("data-froala-id");
+                editor.edit.off();
+              }, 500);
+            },
+          }
         }
-      }
+      };
       setTimeout(() => {
         this.initialize(this.froalaControl);
       }, 100);
