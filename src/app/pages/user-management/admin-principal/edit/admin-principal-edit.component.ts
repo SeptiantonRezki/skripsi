@@ -309,7 +309,7 @@ export class AdminPrincipalEditComponent {
     try {
       const response = await this.adminPrincipalService.getDetailById({ principal_id: this.principal_id }).toPromise();
       this.detailAdminPrincipal = response;
-
+      this.getRole();
 
       const parent = await this.adminPrincipalService.getParentArea({ parent: this.detailAdminPrincipal.area_id[0] }).toPromise();
       this.detailAreaSelected = parent.data;
@@ -718,6 +718,7 @@ export class AdminPrincipalEditComponent {
     this.formAdmin.controls['email'].setValue(this.detailAdminPrincipal.email);
     this.formAdmin.controls['role'].setValue(this.detailAdminPrincipal.role_id);
     this.formAdmin.controls['country'].setValue(this.detailAdminPrincipal.country);
+    
     if(this.detailAdminPrincipal.country == 'ID' ){
       this.formAdmin.controls['countryname'].setValue("Indonesia");
     }
@@ -2805,6 +2806,19 @@ export class AdminPrincipalEditComponent {
       }
     );
    
+
+  }
+
+  getRole() {
+
+    this.adminPrincipalService.getListRoleCountry({country: this.detailAdminPrincipal.country }).subscribe(
+      res => {
+        this.listRole = res.data;
+      },
+      err => {
+        console.error(err);
+      }
+    );
 
   }
 }
