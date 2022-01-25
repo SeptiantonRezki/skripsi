@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Tambah Country'">
+  <page-content-header [contentTitle]="(!isDetail) ? ls.locale.language_setup.page_title_edit : ls.locale.language_setup.page_title_index">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -43,7 +43,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step2.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('retailer', 2)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button *ngIf="!isDetail" (click)="openFile('retailer', 2)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
@@ -68,7 +68,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step3.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('mitra', 3)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button *ngIf="!isDetail" (click)="openFile('mitra', 3)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
@@ -93,14 +93,14 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step4.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('principal', 4)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button *ngIf="!isDetail" (click)="openFile('principal', 4)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
               </mat-form-field>
             </div>
 
-            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center" *ngIf="!isDetail">
               <button mat-raised-button matStepperNext (click)="validateStep(4)" type="button" class="confirmation-button">
                 {{ls.locale.global.button.next}}
               </button>
@@ -111,7 +111,7 @@
         </mat-step>
 
 
-        <mat-step>
+        <mat-step *ngIf="!isDetail">
 
           <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
@@ -24,6 +24,7 @@ export class CountrySetupEditComponent implements OnInit {
   country;
   languages = [];
   submiting = false;
+  isDetail = false;
 
   constructor(
     private router: Router,
@@ -33,9 +34,15 @@ export class CountrySetupEditComponent implements OnInit {
     private dialogService: DialogService,
     private languageSetupService: LanguageSetupService,
     private countrySetupService: CountrySetupService,
+    private activatedRoute: ActivatedRoute,
   ) {
-
+    
     this.country = dataService.getFromStorage("country_setup_data");
+    
+    activatedRoute.url.subscribe(params => {
+      console.log({params});
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    });
 
     this.formCountry = formBuilder.group({
       status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
@@ -104,6 +111,10 @@ export class CountrySetupEditComponent implements OnInit {
     }, err => {
 
     })
+
+    if(this.isDetail) {
+      this.formCountry.disable();
+    }
 
   }
 

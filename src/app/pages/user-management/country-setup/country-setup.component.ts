@@ -46,7 +46,7 @@ export class CountrySetupComponent implements OnInit {
     this.onLoad = true;
     this.selected = [];
 
-    // this.permission = this.roles.getRoles('country.adminprincipal');
+    this.permission = this.roles.getRoles('principal.countries');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
@@ -160,6 +160,10 @@ export class CountrySetupComponent implements OnInit {
       }
       this.dialogService.openCustomConfirmationDialog(dialogData);
     }
+  }
+  directDetail(row) {
+    this.dataService.setToStorage("country_setup_data", row);
+    this.router.navigate(["user-management", "countries", "detail", row.id]);
   }
 
 }

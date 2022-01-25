@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
@@ -29,6 +29,7 @@ export class LanguageSetupEditComponent implements OnInit {
     WHOLESALER: 'wholesaler',
     PRINCIPAL: 'principal',
   }
+  isDetail = false;
 
   constructor(
     private ls: LanguagesService,
@@ -38,8 +39,14 @@ export class LanguageSetupEditComponent implements OnInit {
     private dialogService: DialogService,
     private languageSetupService: LanguageSetupService,
     private dataService: DataService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.language = dataService.getFromStorage("language_setup_data");
+    
+    activatedRoute.url.subscribe(params => {
+      console.log({params});
+      this.isDetail = params[1].path === 'detail' ? true : false;
+    });
 
     this.step1 = formBuilder.group({
       name: [this.language.name, Validators.required]

@@ -597,7 +597,8 @@ const routes: Routes = [
     component: CountrySetupComponent,
     data: {
       breadcrumbs: brConfig.country_setup.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "countries/create",
@@ -605,10 +606,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.country_setup.index
     },
-    // resolve: {
-    //   listRole: ListRoleAdminResolver
-    // },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "countries/edit/:id",
@@ -616,31 +614,47 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.country_setup.index
     },
-    // resolve: {
-    //   listRole: ListRoleAdminResolver
-    // },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
+  },
+  {
+    path: "countries/detail/:id",
+    component: CountrySetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.country_setup.index
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "languages",
     component: LanguageSetupComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "languages/create",
     component: LanguageSetupCreateComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index
-    }
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "languages/edit/:id",
     component: LanguageSetupEditComponent,
     data: {
       breadcrumbs: brConfig.language_setup.index
-    }
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "languages/detail/:id",
+    component: LanguageSetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.language_setup.index
+    },
+    canActivate: [PageGuard]
   },
 ];
 

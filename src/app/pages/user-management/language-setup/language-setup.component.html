@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.language_setup.page_title_index">
     <div class="button-row" fxLayout="row">
-      <button *ngIf="true" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','languages','create']">
         <mat-icon>add</mat-icon>{{ ls.locale.global.button.add }}
       </button>
@@ -29,7 +29,7 @@
 
         <ngx-datatable-column [name]="ls.locale.country_setup.name" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.name}}
+            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>
         </ngx-datatable-column>
 
@@ -72,7 +72,7 @@
                 <mat-icon class="secondary-text">delete</mat-icon>
               </button> -->
 
-              <button mat-icon-button fxFlex *ngIf="true" color="" (click)="directEdit(row)">
+              <button mat-icon-button fxFlex *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
 

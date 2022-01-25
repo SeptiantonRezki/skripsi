@@ -35,6 +35,11 @@ export class LanguageSetupService extends BaseService {
     return this.postApi(url, body);
   }
 
+  export(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postApi(url, body);
+  }
+
 //   getDetail(context?): Observable<any> {
 //     const url = this.getUrl(this.namespace, "detail", context);
 //     return this.getApi(url);

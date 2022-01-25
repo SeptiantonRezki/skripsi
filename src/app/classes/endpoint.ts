@@ -1044,7 +1044,8 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
         update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/${context.id}`,
-        validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`
+        validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`,
+        export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

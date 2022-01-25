@@ -47,7 +47,7 @@ export class LanguageSetupComponent implements OnInit {
     this.onLoad = true;
     this.selected = [];
 
-    // this.permission = this.roles.getRoles('country.adminprincipal');
+    this.permission = this.roles.getRoles('principal.languages');
     console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
@@ -171,6 +171,16 @@ export class LanguageSetupComponent implements OnInit {
     } catch (error) {
       return '';
     }
+  }
+
+  export(row) {
+    this.languageSetupService.export({countries_id: row.id}).subscribe(res => {
+      console.log({res});
+    })
+  }
+  directDetail(row) {
+    this.dataService.setToStorage("language_setup_data", row);
+    this.router.navigate(["user-management", "languages", "detail", row.id]);
   }
 
 }
