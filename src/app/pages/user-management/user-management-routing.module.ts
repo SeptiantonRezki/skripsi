@@ -60,7 +60,7 @@ import { PanelPartnershipEditComponent } from "./private-label/panel-partnership
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 import { PembayaranBenefitProgramComponent } from "./private-label/pembayaran-benefit-program/pembayaran-benefit-program.component";
 import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
-
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
 
 const routes: Routes = [
   {
@@ -585,6 +585,11 @@ const routes: Routes = [
   {
     path: "partnership-benefit",
     component: PembayaranBenefitProgramComponent,
+  },
+  {
+    path: "call-to-action",
+    component: CTAExternalWebComponent,
+    canActivate: [PageGuard]
   }
 ];
 
