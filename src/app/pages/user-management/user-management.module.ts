@@ -127,6 +127,7 @@ import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/ord
 import { PembayaranBenefitProgramComponent } from './private-label/pembayaran-benefit-program/pembayaran-benefit-program.component';
 import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
 import { PopUpImageBlobComponent } from "../../components/popup-image-blob/popup-image-blob.component";
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -282,6 +283,7 @@ export const MY_FORMATS = {
     SupplierVouchersComponent,
 
     PopUpImageBlobComponent,
+    CTAExternalWebComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
