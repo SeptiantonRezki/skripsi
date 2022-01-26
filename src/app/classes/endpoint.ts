@@ -346,7 +346,7 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         list_menu: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/available_permissions`,
         force_update: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
-        force_update_v2: `${AYO_API}/api/principal/force-update`,
+        force_update_v2: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update`,
         force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update-user`,
         list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
         revert_version: `${AYO_API}/api/v2/content/principal/force-update/${context.version_id}`,
