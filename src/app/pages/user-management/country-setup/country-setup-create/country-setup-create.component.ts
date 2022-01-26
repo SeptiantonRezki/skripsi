@@ -28,6 +28,7 @@ export class CountrySetupCreateComponent implements OnInit {
   submiting = false;
 
   ACCESS_MENU_MAX_DEPTH = 0;
+  horizontal = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,7 +43,8 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step1 = formBuilder.group({
 
       name: ['', Validators.required],
-      country_id: ['', Validators.required]
+      country_id: ['', Validators.required],
+      locale: ['', Validators.required]
 
     });
 
@@ -228,7 +230,7 @@ export class CountrySetupCreateComponent implements OnInit {
 
     let _body = {
       code: body.country_id,
-      locale: "en",
+      locale: body.locale,
       name: body.name,
       language_id: body.language_id,
       phone_code: body.phone_code,

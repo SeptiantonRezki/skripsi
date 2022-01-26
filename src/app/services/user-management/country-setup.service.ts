@@ -34,6 +34,11 @@ export class CountrySetupService extends BaseService {
       return this.getApi(url, queryParams);
   }
 
+  getOptionCountry(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_option_country");
+      return this.getApi(url, queryParams);
+  }
+
 //   getDetail(context?): Observable<any> {
 //     const url = this.getUrl(this.namespace, "detail", context);
 //     return this.getApi(url);

@@ -121,8 +121,8 @@
             <!-- <mat-option value="en">
                   <div>English</div>
               </mat-option> -->
-            <mat-option *ngFor="let country of COUNTRIES" [value]="country.lang">
-              <div>{{country.label}}</div>
+            <mat-option *ngFor="let country of COUNTRIES" [value]="country.locale">
+              <div>{{country.name}}</div>
             </mat-option>
             <!-- <mat-option value="id">
                 <div>Bahasa Indonesia</div>

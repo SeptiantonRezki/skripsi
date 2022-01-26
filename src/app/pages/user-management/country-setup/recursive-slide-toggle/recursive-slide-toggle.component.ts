@@ -10,6 +10,7 @@ export class RecursiveSlideToggleComponent implements OnInit {
   
   @Input() items: FormArray;
   @Input() depth: number;
+  @Input() horizontal: boolean;
 
   constructor() { }
 

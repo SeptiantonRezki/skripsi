@@ -124,6 +124,7 @@ import { LanguagesService } from './services/languages/languages.service';
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
 import { VoucherPrivateLabelService } from "./services/voucher-private-label.service";
 import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
+import { Observable } from 'rxjs';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -144,8 +145,23 @@ const config = {
   appId: '1:651041534914:web:be573accf451ec608e1c5b'
 };
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../assets/languages/', '.json');
+export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService) {
+  // return new TranslateHttpLoader(http, '../assets/languages/', '.json');
+
+  return new CustomLoader(languageSetupService, http);
+
+}
+
+class CustomLoader implements TranslateLoader {
+
+  constructor(private service: LanguageSetupService, private http: HttpClient) {}
+
+  getTranslation(lang: string): Observable<any> {
+    return this.service.getTranslation({type: 'principal'}).map(({data}) => {
+      return data.json_format;
+    })
+
+  }
 }
 
 @NgModule({
@@ -165,7 +181,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        deps: [HttpClient, LanguageSetupService]
       }
     }),
     // Fuse Main and Shared modules

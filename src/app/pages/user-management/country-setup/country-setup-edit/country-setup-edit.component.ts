@@ -25,6 +25,7 @@ export class CountrySetupEditComponent implements OnInit {
   languages = [];
   submiting = false;
   isDetail = false;
+  horizontal = false;
 
   constructor(
     private router: Router,
@@ -48,19 +49,20 @@ export class CountrySetupEditComponent implements OnInit {
       status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
       name: [this.country.name, Validators.required],
       code: [this.country.country_code, Validators.required],
+      locale: [this.country.locale_code, Validators.required],
       customer_service: formBuilder.array([
         formBuilder.group({
-          telepon: [this.country.customer_services.telepon, Validators.required],
-          email: [this.country.customer_services.email, Validators.required],
-          whatsapp: [this.country.customer_services.whatsapp, Validators.required],
-          bude: [this.country.customer_services.bude, Validators.required]
+          telepon: [(this.country.customer_services) ? this.country.customer_services.telepon : '', Validators.required],
+          email: [(this.country.customer_services) ? this.country.customer_services.email : '', Validators.required],
+          whatsapp: [(this.country.customer_services) ? this.country.customer_services.whatsapp : false, Validators.required],
+          bude: [(this.country.customer_services) ? this.country.customer_services.bude : false, Validators.required]
         })
       ]),
       currencies: formBuilder.group({
-        symbol: [this.country.currencies.symbol, Validators.required],
-        decimal: [this.country.currencies.decimal, Validators.required],
-        decimal_separator: [this.country.currencies.decimal_separator, Validators.required],
-        thousand_separator: [this.country.currencies.thousand_separator, Validators.required],
+        symbol: [(this.country.currencies) ? this.country.currencies.symbol : '', Validators.required],
+        decimal: [(this.country.currencies) ? this.country.currencies.decimal : '', Validators.required],
+        decimal_separator: [(this.country.currencies) ? this.country.currencies.decimal_separator : '', Validators.required],
+        thousand_separator: [(this.country.currencies) ? this.country.currencies.thousand_separator : '', Validators.required],
       }),
       point_valuation: [this.country.point_valuation, Validators.required],
       phone_code: [this.country.phone_code.replace('+', ''), Validators.required],
@@ -229,7 +231,10 @@ export class CountrySetupEditComponent implements OnInit {
   getAbilitiesByType(menus, type) {
     
     const data = _.find(menus, (item) => item.type === type);
-    return data.abilities || [];
+    if(data && data.abilities) {
+      return data.abilities;
+    }
+    return [];
 
   }
 

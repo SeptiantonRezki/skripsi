@@ -1332,6 +1332,7 @@
     "currency": "Currency",
     "language": "Language",
     "country_id": "Country ID",
+    "locale": "Locale Code",
     "min_length": "Min Length",
     "max_length": "Max Length",
     "symbol": "Symbol",

@@ -16,12 +16,13 @@ export class LanguagesService {
     private generalService: GeneralService
   ) {
     const lang = localStorage.getItem('user_country');
+    this.locale = id;
     if (lang) {
-      this.setLanguage(lang);
+      // this.setLanguage(lang);
     } else {
       // DEFAULT LANGUAGES
-      this.setLanguage('id');
-      localStorage.setItem('user_country', 'id');
+      // this.setLanguage('id');
+      // localStorage.setItem('user_country', 'id');
     }
   }
 
@@ -36,6 +37,7 @@ export class LanguagesService {
           (res) => {
             let code = res.data.country_code.toLowerCase();
             localStorage.setItem('user_country', code);
+            this.translate.use(code);
             resolve();
           },
           (error) => {

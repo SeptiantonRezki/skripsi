@@ -35,6 +35,12 @@
                   {{ ls.locale.country_setup.country_id }} {{ ls.locale.global.messages.mandatory_text }}.
                 </mat-error>
               </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="{{ls.locale.country_setup.locale}}" type="text" formControlName="locale">
+                <mat-error *ngIf="formCountry.controls['locale'].hasError('required') && formCountry.controls['locale'].touched ">
+                  {{ ls.locale.country_setup.locale }} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
 
               <h2>Phone Code</h2>
               <mat-form-field fxFlex="100" class="is-light">
@@ -122,7 +128,7 @@
           <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.access_retailer}}</h2>
-              <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0"></recursive-slide-toggle>
+              <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal"></recursive-slide-toggle>
             </div>
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.customer_service}}</h2>

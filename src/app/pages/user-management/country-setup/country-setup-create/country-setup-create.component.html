@@ -28,6 +28,12 @@
                   {{ls.locale.country_setup.country_id}} {{ls.locale.global.messages.mandatory_text}}.
                 </mat-error>
               </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.locale}}" formControlName="locale">
+                <mat-error *ngIf="step1.controls['locale'].hasError('required') && step1.controls['locale'].touched ">
+                  {{ls.locale.country_setup.locale}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
@@ -249,7 +255,7 @@
             <ng-template matStepLabel>{{ls.locale.country_setup.access_retailer}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
-              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0"></recursive-slide-toggle>
+              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0" [horizontal]="horizontal"></recursive-slide-toggle>
             </div>
 
 

@@ -90,22 +90,26 @@ export class DialogUploadLanguageComponent implements OnInit {
     const invalids = [];
 
     const recurse = (items, parent = '') => {
-      items.map(item => {
-        let _parent = (parent) ? parent + '.' + item.parameter : item.parameter;
-        
-        if(!item.status) {
-          invalids.push({
-            key: _parent,
-            value: (typeof item.data === 'string') ? item.data : '',
-            reason: this.ls.locale.language_setup.attribute_not_found
-          });
-        }
-        
-        if(typeof item.data === 'object') {
-          recurse(item.data, _parent)
-        }
-
-      })
+      if(items && items.length) {
+        items.map(item => {
+          let _parent = (parent) ? parent + '.' + item.parameter : item.parameter;
+          
+          if(!item.status) {
+            invalids.push({
+              key: _parent,
+              value: (typeof item.data === 'string') ? item.data : '',
+              reason: this.ls.locale.language_setup.attribute_not_found
+            });
+          }
+          
+          if(typeof item.data === 'object') {
+            recurse(item.data, _parent)
+          }
+  
+        })
+      } else {
+        // console.log({items});
+      }
     }
     recurse(data);
     console.log({data, invalids});

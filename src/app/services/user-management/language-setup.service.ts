@@ -40,6 +40,12 @@ export class LanguageSetupService extends BaseService {
     return this.postApi(url, body);
   }
 
+  getTranslation(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_translation");
+    return this.getApi(url, queryParams);
+    // return this.getBlobAsJsonApi(url);
+  }
+
 //   getDetail(context?): Observable<any> {
 //     const url = this.getUrl(this.namespace, "detail", context);
 //     return this.getApi(url);
