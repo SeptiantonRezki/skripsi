@@ -43,7 +43,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step2.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('retailer', 2)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button (click)="openFile(step2.get('type').value, 2)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
@@ -68,7 +68,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step3.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('mitra', 3)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button (click)="openFile(step3.get('type').value, 3)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
@@ -93,7 +93,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="{{ (!step4.get('filename').value) ? ls.locale.language_setup.no_selected_file : ''}}" formControlName="filename" readonly>
-                <button matSuffix mat-raised-button (click)="openFile('principal', 4)" [attr.aria-label]="'Upload'" class="mb-4">
+                <button matSuffix mat-raised-button (click)="openFile(step4.get('type').value, 4)" [attr.aria-label]="'Upload'" class="mb-4">
                   <mat-icon>attach_file</mat-icon>
                   <span>{{ls.locale.language_setup.select_file}}</span>
                 </button>
