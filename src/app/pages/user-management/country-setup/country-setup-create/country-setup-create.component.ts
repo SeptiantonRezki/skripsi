@@ -80,11 +80,27 @@ export class CountrySetupCreateComponent implements OnInit {
       telepon: ['', Validators.required],
       email: [''],
       whatsapp: [false, Validators.required],
+      whatsapp_number: [null],
       bude: [false, Validators.required],
     })
 
     this.step7 = formBuilder.group({
       abilities: formBuilder.array([])
+    });
+
+    this.step6.get('whatsapp').valueChanges.subscribe(val => {
+
+      if(val) {
+        
+        this.step6.get('whatsapp_number').setValidators(Validators.required);
+
+      } else {
+
+        this.step6.get('whatsapp_number').setValue(null);
+        this.step6.get('whatsapp_number').setValidators([]);
+        
+      }
+      this.step6.get('whatsapp_number').updateValueAndValidity();
     });
     
     this.step7.get('abilities').valueChanges.subscribe(menus => {

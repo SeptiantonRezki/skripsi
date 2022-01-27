@@ -33,7 +33,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="{{ls.locale.language_setup.file_name}}" prop="file_name">
+        <!-- <ngx-datatable-column [width]="200" name="{{ls.locale.language_setup.file_name}}" prop="file_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div fxFlex="100" fxLayout="column">
               <span fxFlex="100" *ngFor="let file of row.files" fxLayout="row" fxLayoutAlign="space-between">
@@ -42,7 +42,7 @@
             </div>
 
           </ng-template>
-        </ngx-datatable-column>
+        </ngx-datatable-column> -->
 
         <ngx-datatable-column name="{{ls.locale.language_setup.updated}}" prop="updated_at" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

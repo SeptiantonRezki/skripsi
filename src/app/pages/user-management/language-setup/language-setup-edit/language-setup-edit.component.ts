@@ -132,6 +132,8 @@ export class LanguageSetupEditComponent implements OnInit {
     this.submiting = true;
 
     const fd = new FormData();
+    
+    fd.append('id', this.language.id);
     fd.append('name', this.step1.get('name').value);
     fd.append("json_files[0][type]", this.step2.get('type').value);
     fd.append("json_files[0][file]", this.step2.get('file').value);
@@ -140,7 +142,7 @@ export class LanguageSetupEditComponent implements OnInit {
     fd.append("json_files[2][type]", this.step4.get('type').value);
     fd.append("json_files[2][file]", this.step4.get('file').value);
 
-    this.languageSetupService.update(fd, {id: this.language.id}).subscribe(res => {
+    this.languageSetupService.update(fd).subscribe(res => {
 
       this.submiting = false;
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });

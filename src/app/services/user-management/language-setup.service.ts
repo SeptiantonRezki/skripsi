@@ -21,9 +21,9 @@ export class LanguageSetupService extends BaseService {
       return this.postApi(url, body);
   }
 
-  update(body?, context?): Observable<any> {
-      const url = this.getUrl(this.namespace, "update", context);
-      return this.putApi(url, body);
+  update(body?): Observable<any> {
+      const url = this.getUrl(this.namespace, "update");
+      return this.postApi(url, body);
   }
   delete(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "delete", context);

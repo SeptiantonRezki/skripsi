@@ -1044,7 +1044,7 @@ export class Endpoint {
       language_setup: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
-        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/${context.id}`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/update-json`,
         validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`,
         export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
         get_translation: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/json-language-format`

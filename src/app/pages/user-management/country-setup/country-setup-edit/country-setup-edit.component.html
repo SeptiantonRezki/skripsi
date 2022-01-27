@@ -150,6 +150,12 @@
                     <label for="">Whatsapp</label>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="whatsapp"></mat-slide-toggle>
                   </div>
+                  <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('whatsapp').value">
+                    <input matInput placeholder="Whatsapp Number" type="text" formControlName="whatsapp_number">
+                    <mat-error *ngIf="item.controls['whatsapp_number'].hasError('required') && item.controls['whatsapp_number'].touched ">
+                      Whatsapp {{ ls.locale.global.messages.mandatory_text }}.
+                    </mat-error>
+                  </mat-form-field>
                   <div fxFlex="100" fxLayoutAlign="space-between">
                     <label for="">Bude</label>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="bude"></mat-slide-toggle>

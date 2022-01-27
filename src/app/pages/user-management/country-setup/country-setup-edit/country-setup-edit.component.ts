@@ -55,6 +55,7 @@ export class CountrySetupEditComponent implements OnInit {
           telepon: [(this.country.customer_services) ? this.country.customer_services.telepon : '', Validators.required],
           email: [(this.country.customer_services) ? this.country.customer_services.email : '', Validators.required],
           whatsapp: [(this.country.customer_services) ? this.country.customer_services.whatsapp : false, Validators.required],
+          whatsapp_number: [(this.country.customer_services) ? this.country.customer_services.whatsapp_number : null],
           bude: [(this.country.customer_services) ? this.country.customer_services.bude : false, Validators.required]
         })
       ]),
@@ -75,6 +76,19 @@ export class CountrySetupEditComponent implements OnInit {
         abilities: formBuilder.array([])
       })
     })
+
+    const customerService = this.formCountry.get('customer_service') as FormArray;
+    customerService.at(0).get('whatsapp').valueChanges.subscribe(val => {
+
+      if(val) {
+        customerService.at(0).get('whatsapp_number').setValidators(Validators.required);
+      } else {
+        customerService.at(0).get('whatsapp_number').setValue(null);
+        customerService.at(0).get('whatsapp_number').setValidators([]);
+      }
+      customerService.at(0).get('whatsapp_number').updateValueAndValidity();
+      
+    });
 
     this.formCountry.get('access_menu').get('abilities').valueChanges.debounceTime(500).subscribe(menus => {
       this.onAccessMenuChange(menus);

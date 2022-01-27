@@ -51,7 +51,7 @@ export class BaseInterceptor implements HttpInterceptor {
       return duplicate;
     }
     const duplicateReq = request.clone({
-      headers: request.headers.set('App-Locale', country_code)
+      headers: request.headers.set('App-Locale', (country_code) ? country_code : 'id')
     });
     return duplicateReq;
   }

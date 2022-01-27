@@ -174,7 +174,7 @@ export class LanguageSetupComponent implements OnInit {
   }
 
   export(row) {
-    this.languageSetupService.export({countries_id: row.id}).subscribe(res => {
+    this.languageSetupService.export({language_id: row.id}).subscribe(res => {
       console.log({res});
     })
   }
