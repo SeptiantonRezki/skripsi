@@ -24,8 +24,6 @@ export class PreviewVoucherComponent implements OnInit {
   isDetail: boolean;
   detailVoucher: any;
   confirmationPublishDialogReference: any;
-  coba: any = 1;
-  disabled: boolean = false;
 
   _data: any = null;
   @Input()
@@ -68,18 +66,12 @@ export class PreviewVoucherComponent implements OnInit {
     }
   }
 
-  save() {
-    alert('SAVE SETTING');
-    this.coba = 2;
-  }
-
-  processApproval() {
-    alert('PROCESS TO APPROVAL');
-    this.coba = 3;
+  saveAndApproval(msg='') {
+    this.updateStatusVoucher('', msg);
   }
 
   approveReject(str='Approve') {
-    if(this.disabled) {
+    if(!this.detailVoucher.action.is_allowed) {
       this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
     } else {
       let data = {
@@ -93,19 +85,17 @@ export class PreviewVoucherComponent implements OnInit {
   }
 
   approveVoucher() {
-    alert('APPROVE');
-    this.coba = 0;
+    this.updateStatusVoucher('accept', 'approve');
     this.dialogService.brodcastCloseConfirmation();
   }
 
   rejectVoucher() {
-    alert('REJECT');
-    this.coba = 2;
+    this.updateStatusVoucher('reject', 'reject');
     this.dialogService.brodcastCloseConfirmation();
   }
 
   confirmUpdateStatusVoucher() {
-    if(this.disabled) {
+    if(!this.detailVoucher.action.is_allowed) {
       this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
     } else {
       if (this.detailVoucher) {
@@ -128,12 +118,12 @@ export class PreviewVoucherComponent implements OnInit {
     };
   }
 
-  updateStatusVoucher() {
+  updateStatusVoucher(stat='', msg='') {
     this.dataService.showLoading(true);
-    const status = this.detailVoucher.status === 'draft' ? 'publish' : 'unpublish';
+    const status = this.detailVoucher.status !== 'need_approval' ? this.detailVoucher.action.next_status[0] : stat;
     this.b2cVoucherService.updateStatus({ voucher_id: this.detailVoucher.id }, { status: status }).subscribe((res: any) => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: status + ' berhasil!' });
+      this.dialogService.openSnackBar({ message: `${msg || status} berhasil!` });
       this.onRefresh.emit();
       this.confirmationPublishDialogReference.close();
     }, (err: any) => {
