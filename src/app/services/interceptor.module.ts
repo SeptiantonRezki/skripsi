@@ -43,14 +43,17 @@ export class BaseInterceptor implements HttpInterceptor {
 
   authenticateRequest(request: HttpRequest<any>) {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
+    const country_code = localStorage.getItem('user_country');
     if (token) {
-      const country_code = localStorage.getItem('user_country');
       const duplicate = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', country_code)
       });
       return duplicate;
     }
-    return request;
+    const duplicateReq = request.clone({
+      headers: request.headers.set('App-Locale', (country_code) ? country_code : 'id')
+    });
+    return duplicateReq;
   }
 
   throwIntercept(err, req) {

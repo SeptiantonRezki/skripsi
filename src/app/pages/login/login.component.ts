@@ -19,6 +19,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Config } from "app/classes/config";
 import { LanguagesService } from "app/services/languages/languages.service";
 import { TranslateService } from "@ngx-translate/core";
+import { CountrySetupService } from "app/services/user-management/country-setup.service";
 
 @Component({
   selector: "login",
@@ -43,20 +44,10 @@ export class LoginComponent implements OnInit {
   language: string;
   COUNTRIES: any = [
     {
-      code: 'id',
-      label: 'Indonesia',
-      lang: 'id'
-    },
-    {
-      code: 'km',
-      label: 'Cambodia',
-      lang: 'km'
-    },
-    {
-      code: 'ph',
-      label: 'Philippines',
-      lang: 'en-ph'
-    },
+      country: "ID",
+      locale: "id",
+      name: "Indonesia"
+    }
   ];
 
   constructor(
@@ -72,8 +63,10 @@ export class LoginComponent implements OnInit {
     private qs: QiscusService,
     private route: ActivatedRoute,
     private ls: LanguagesService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private countrySetupService: CountrySetupService
   ) {
+    console.log('ok');
     this.fuseConfig.setConfig({
       layout: {
         navigation: "none",
@@ -136,6 +129,10 @@ export class LoginComponent implements OnInit {
       );
     });
 
+    this.countrySetupService.getOptionCountry().subscribe(({data}) => {
+      // console.log({res});
+      this.COUNTRIES = data;
+    });
     this.getInitLocale();
   }
 
