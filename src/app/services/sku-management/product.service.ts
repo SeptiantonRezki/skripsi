@@ -80,7 +80,7 @@ export class ProductService extends BaseService {
     const url = this.getUrl(this.namespace, "export2");
     console.log(url);
     
-    return this.getApi(url, queryParams);
+    return this.postApi(url, queryParams);
   }
 
   import(context?, body?): Observable<any> {
