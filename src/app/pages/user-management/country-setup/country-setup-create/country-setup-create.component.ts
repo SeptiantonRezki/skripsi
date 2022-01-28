@@ -132,7 +132,6 @@ export class CountrySetupCreateComponent implements OnInit {
 
     });
     this.languageSetupService.get().subscribe(({data}) => {
-      console.log({data});
       this.languages = data
     }, err => {
 
@@ -150,7 +149,6 @@ export class CountrySetupCreateComponent implements OnInit {
   }
 
   recurseCheck(items, checked) {
-    console.log({items});
     items.map( (item: FormGroup) => {
         
       if(item.get('value').value !== 'full_access') {
@@ -246,7 +244,6 @@ export class CountrySetupCreateComponent implements OnInit {
   }
 
   onToggle({checked, item, depth}) {
-    console.log({checked, item, depth});
   }
 
   getAbilities(menus, child) {
