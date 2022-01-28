@@ -82,7 +82,6 @@ export class RecursiveSlideToggleComponent implements OnInit {
   }
 
   isCheckedParent(menus) {
-    console.log({menus});
     if(menus && menus.length) {
       const menusWithoutFullaccess = menus.filter(item => item.title !== 'Full Access');
       const allChecked = _.pluck(menusWithoutFullaccess, 'checked');

@@ -41,7 +41,6 @@ export class CountrySetupEditComponent implements OnInit {
     this.country = dataService.getFromStorage("country_setup_data");
     
     activatedRoute.url.subscribe(params => {
-      console.log({params});
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
 
@@ -149,7 +148,6 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   toggleFullAccess(checked) {
-    console.log({checked});
     const abilities = this.formCountry.get('access_menu').get('abilities') as FormArray;
     abilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
@@ -162,7 +160,7 @@ export class CountrySetupEditComponent implements OnInit {
         const childs = item.get('children') as FormArray;
 
         if(childs && childs.length) {
-          this.recurseCheck(childs, checked);
+          this.recurseCheck(childs.controls, checked);
         }
       }
 
