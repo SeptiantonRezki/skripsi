@@ -125,6 +125,7 @@ import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification
 import { VoucherPrivateLabelService } from "./services/voucher-private-label.service";
 import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
 import { Observable } from 'rxjs';
+import { GeneralBackendService } from './services/general-backend.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -251,6 +252,7 @@ class CustomLoader implements TranslateLoader {
     NonAuthGuard,
     NavigationService,
     GeneralService,
+    GeneralBackendService,
     IdleService,
     SupportService,
     GeotreeService,
