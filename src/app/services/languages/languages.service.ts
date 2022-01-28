@@ -4,6 +4,7 @@ import km from '../../../assets/languages/km.json';
 import en_ph from '../../../assets/languages/en-ph.json';
 import { TranslateService } from '@ngx-translate/core';
 import { GeneralService } from "../general.service";
+import { GeneralBackendService } from '../general-backend.service';
 
 @Injectable()
 export class LanguagesService {
@@ -13,7 +14,7 @@ export class LanguagesService {
 
   constructor(
     private translate: TranslateService,
-    private generalService: GeneralService
+    private generalBackendService: GeneralBackendService,
   ) {
     const lang = localStorage.getItem('user_country');
     this.locale = id;
@@ -29,13 +30,17 @@ export class LanguagesService {
   initLang() {
     return new Promise<void>((resolve, reject) => {
       const localCode = localStorage.getItem("user_country");
-      if (localCode !== null) {
+      if (localCode) {
+        this.selectedLanguages = localCode;
+        this.setLangHTML(localCode);
         this.translate.use(localCode);
         resolve();
       } else {
-        this.generalService.getCountry().subscribe(
+        this.generalBackendService.getCountry().subscribe(
           (res) => {
-            let code = res.data.country_code.toLowerCase();
+            let code = res.data.locale_code.toLowerCase();
+            this.selectedLanguages = code;
+            this.setLangHTML(code);
             localStorage.setItem('user_country', code);
             this.translate.use(code);
             resolve();
