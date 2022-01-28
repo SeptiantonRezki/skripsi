@@ -108,6 +108,7 @@ export class PopupNotificationCreateComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+  Country: any = '';
 
   listContentWallet: any[] = [];
 
@@ -220,6 +221,16 @@ export class PopupNotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    if(this.ls.selectedLanguages == 'id'){
+      this.Country ='ID';
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.Country = 'KH';
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.Country ='PH';
+    }
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
@@ -1364,6 +1375,7 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        country: this.Country,
         is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
       }
 

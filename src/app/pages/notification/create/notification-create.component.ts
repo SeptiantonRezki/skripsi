@@ -162,6 +162,7 @@ export class NotificationCreateComponent {
   lastLevel: any;
   actionType: string = 'create';
   idNotif: any = '';
+  Country: any = '';
 
   _typeOfRecurrence: string;
   _recurrenceType: string;
@@ -314,6 +315,16 @@ export class NotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    if(this.ls.selectedLanguages == 'id'){
+      this.Country ='ID';
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.Country = 'KH';
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.Country ='PH';
+    }
 
     this.isCreateOrEditNotification = this.router.url;
     if (this.isCreateOrEditNotification !== '/notifications/push-notification/create') {
@@ -1429,6 +1440,7 @@ export class NotificationCreateComponent {
       area_ids: areas[0].value.toString(),
       type_of_recurrence: this.typeOfRecurrence,
       send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
+      country: this.Country,
       status: this.formNotification.get('status').value
     };
 
