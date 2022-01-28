@@ -128,7 +128,7 @@
           <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.access_retailer}}</h2>
-              <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal"></recursive-slide-toggle>
+              <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
             </div>
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.customer_service}}</h2>

@@ -261,7 +261,7 @@
             <ng-template matStepLabel>{{ls.locale.country_setup.access_retailer}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
-              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0" [horizontal]="horizontal"></recursive-slide-toggle>
+              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0" [horizontal]="horizontal" [parent]="step7.get('abilities')" [fullAccess]="step7.get('abilities').at(0)"></recursive-slide-toggle>
             </div>
 
 

@@ -15,7 +15,7 @@ import * as _ from 'underscore';
 })
 export class CountrySetupEditComponent implements OnInit {
 
-  ACCESS_MENU_MAX_DEPTH = 0;
+  ACCESS_MENU_MAX_DEPTH = 1;
   formCountry: FormGroup;
   statuses: any[] = [
     { name: this.ls.locale.global.label.status + " " + this.ls.locale.global.label.active, value: "active" },
@@ -25,7 +25,7 @@ export class CountrySetupEditComponent implements OnInit {
   languages = [];
   submiting = false;
   isDetail = false;
-  horizontal = false;
+  horizontal = true;
 
   constructor(
     private router: Router,
@@ -37,7 +37,7 @@ export class CountrySetupEditComponent implements OnInit {
     private countrySetupService: CountrySetupService,
     private activatedRoute: ActivatedRoute,
   ) {
-    
+    this.toggleFullAccess = this.toggleFullAccess.bind(this);
     this.country = dataService.getFromStorage("country_setup_data");
     
     activatedRoute.url.subscribe(params => {
@@ -149,6 +149,7 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   toggleFullAccess(checked) {
+    console.log({checked});
     const abilities = this.formCountry.get('access_menu').get('abilities') as FormArray;
     abilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
@@ -169,12 +170,35 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   onAccessMenuChange(menus) {
-
     const menusWithoutFullaccess = menus.filter(item => item.title !== 'Full Access');
-    const allChecked = _.pluck(menusWithoutFullaccess, 'checked');
     
-    if(allChecked.includes(false)) this.toggleFullAccess(false);
-    else this.toggleFullAccess(true);
+    const allChecked = [];
+    const debounceChecked = _.debounce(this.toggleFullAccess, 100);
+
+    const recurseChecked = function(_menus: Array<any>, _checked) {
+
+      if(_menus && _menus.length) {
+
+        _menus.map(i => {
+
+          _checked.push(i.checked);
+
+          if(_checked.includes(false)) {
+            debounceChecked(false);
+          } else {
+            debounceChecked(true);
+          }
+
+          if(i.children && i.children.length) {
+            recurseChecked(i.children, _checked);
+          }
+        });  
+      }
+
+    };
+
+    recurseChecked(menusWithoutFullaccess, allChecked);
+    
   }
 
   setAbilities(values, form: FormArray, depth = 0) {

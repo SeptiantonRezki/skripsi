@@ -27,8 +27,8 @@ export class CountrySetupCreateComponent implements OnInit {
 
   submiting = false;
 
-  ACCESS_MENU_MAX_DEPTH = 0;
-  horizontal = false;
+  ACCESS_MENU_MAX_DEPTH = 1;
+  horizontal = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,6 +40,7 @@ export class CountrySetupCreateComponent implements OnInit {
     private countrySetupService: CountrySetupService,
     private languageSetupService: LanguageSetupService,
   ) {
+    this.toggleFullAccess = this.toggleFullAccess.bind(this);
     this.step1 = formBuilder.group({
 
       name: ['', Validators.required],
@@ -149,6 +150,7 @@ export class CountrySetupCreateComponent implements OnInit {
   }
 
   recurseCheck(items, checked) {
+    console.log({items});
     items.map( (item: FormGroup) => {
         
       if(item.get('value').value !== 'full_access') {
@@ -156,7 +158,7 @@ export class CountrySetupCreateComponent implements OnInit {
         const childs = item.get('children') as FormArray;
 
         if(childs && childs.length) {
-          this.recurseCheck(childs, checked);
+          this.recurseCheck(childs.controls, checked);
         }
       }
 
@@ -165,11 +167,34 @@ export class CountrySetupCreateComponent implements OnInit {
 
   onAccessMenuChange(menus) {
 
-    const menusWithoutFullaccess = menus.filter(item => item.value !== 'full_access');
-    const allChecked = _.pluck(menusWithoutFullaccess, 'checked');
+    const menusWithoutFullaccess = menus.filter(item => item.title !== 'Full Access');
     
-    if(allChecked.includes(false)) this.toggleFullAccess(false);
-    else this.toggleFullAccess(true);
+    const allChecked = [];
+    const debounceChecked = _.debounce(this.toggleFullAccess, 100);
+
+    const recurseChecked = function(_menus: Array<any>, _checked) {
+
+      if(_menus && _menus.length) {
+
+        _menus.map(i => {
+
+          _checked.push(i.checked);
+
+          if(_checked.includes(false)) {
+            debounceChecked(false);
+          } else {
+            debounceChecked(true);
+          }
+
+          if(i.children && i.children.length) {
+            recurseChecked(i.children, _checked);
+          }
+        });  
+      }
+
+    };
+
+    recurseChecked(menusWithoutFullaccess, allChecked);
   }
 
   buildFullAccessTogle() {
@@ -250,6 +275,8 @@ export class CountrySetupCreateComponent implements OnInit {
       name: body.name,
       language_id: body.language_id,
       phone_code: body.phone_code,
+      phone_min_length: body.phone_code_min_length,
+      phone_max_length: body.phone_code_max_length,
       currencies: {
         symbol: body.symbol,
         decimal: body.decimal,
