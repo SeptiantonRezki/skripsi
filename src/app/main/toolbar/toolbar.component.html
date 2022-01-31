@@ -49,7 +49,7 @@
 
         <button mat-menu-item class="" [routerLink]="['/my-profile']">
           <mat-icon>person</mat-icon>
-          <span>{{ ls.locale.top_navigation.topnav1 }}</span>
+          <span>{{ ls.locale?.top_navigation.topnav1 }}</span>
         </button>
 
         <!-- <button mat-menu-item id="onetrust-pc-btn-handler">
@@ -59,7 +59,7 @@
 
         <button mat-menu-item (click)="logout()">
           <mat-icon>exit_to_app</mat-icon>
-          <span>{{ ls.locale.top_navigation.topnav2 }}</span>
+          <span>{{ ls.locale?.top_navigation.topnav2 }}</span>
         </button>
 
       </mat-menu>
