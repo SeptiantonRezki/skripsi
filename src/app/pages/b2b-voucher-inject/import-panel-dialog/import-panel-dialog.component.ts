@@ -88,7 +88,7 @@ export class ImportPanelDialogComponent implements OnInit {
   submit() {
     if (this.rows.length > 0) {
       let filteredRows = this.rows.filter(item => item.is_valid);
-      this.dialogRef.close(filteredRows);
+      this.dialogRef.close(this.rows);
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }
