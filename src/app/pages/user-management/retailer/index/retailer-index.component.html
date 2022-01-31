@@ -21,10 +21,10 @@
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
-      <button *ngIf="canRequestExport == true && permission.export" (click)="export()" mat-raised-button type="button" class="is-danger">
+      <button *ngIf="canRequestExport == true && resultExport == null && permission.export" (click)="export()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_upward</mat-icon> Request Export XLS
       </button>
-      <button *ngIf="canRequestExport == false" mat-raised-button type="button" class="is-disabled">
+      <button *ngIf="canRequestExport == false && permission.export" mat-raised-button type="button" class="is-disabled">
         <mat-spinner [diameter]="22" style="float: left; margin-top: 8px; margin-right: 8px"></mat-spinner> Requesting Export
       </button>
       <button *ngIf="resultExport != null && permission.export" (click)="download()" mat-raised-button type="button" class="is-danger">
