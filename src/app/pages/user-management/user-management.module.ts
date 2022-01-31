@@ -135,6 +135,7 @@ import { RecursiveSlideToggleComponent } from './country-setup/recursive-slide-t
 import { LanguageSetupCreateComponent } from './language-setup/language-setup-create/language-setup-create.component';
 import { LanguageSetupEditComponent } from './language-setup/language-setup-edit/language-setup-edit.component';
 import { DialogUploadLanguageComponent } from './language-setup/dialog-upload-language/dialog-upload-language.component';
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -306,6 +307,7 @@ export const MY_FORMATS = {
     LanguageSetupEditComponent,
 
     DialogUploadLanguageComponent,
+    CTAExternalWebComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
