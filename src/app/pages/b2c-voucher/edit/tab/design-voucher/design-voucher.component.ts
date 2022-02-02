@@ -114,7 +114,7 @@ export class DesignVoucherComponent implements OnInit {
       this.isPushNearbyPromotion.setValue(this.detailVoucher.is_push_nearby ? true : false);
       this.formDesignVoucher.get('body').setValue(this.detailVoucher.body);
       // disable form
-      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved') {
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved' && this.detailVoucher.status !== 'reject') {
         this.formDesignVoucher.disable();
         this.disableForm = true;
         this.froalaControl.destroy();

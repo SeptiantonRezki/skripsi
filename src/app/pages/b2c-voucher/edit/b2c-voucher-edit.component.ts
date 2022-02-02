@@ -472,7 +472,7 @@ export class B2CVoucherEditComponent implements OnInit {
         usage: [],
       });
       // disable form
-      if(res.data.status !== 'draft' && res.data.status !== 'draft_saved') {
+      if(res.data.status !== 'draft' && res.data.status !== 'draft_saved' && res.data.status !== 'reject') {
         this.formDetailVoucher.disable();
         this.disableForm = true;
       };

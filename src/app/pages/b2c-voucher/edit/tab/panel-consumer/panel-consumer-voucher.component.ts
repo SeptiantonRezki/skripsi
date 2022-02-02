@@ -607,7 +607,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.onLoad = false;
       }
       // disable form
-      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved') {
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved' && this.detailVoucher.status !== 'reject') {
         this.formConsumerGroup.disable();
         this.formFilter.disable();
         this.disableForm = true;

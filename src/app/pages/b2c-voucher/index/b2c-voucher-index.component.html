@@ -93,12 +93,12 @@
             <ngx-datatable-column name="{{ ls.locale.global.label.action }}" [sortable]="false" [frozenRight]="true">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row">
-                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)" [disabled]="row.status !== 'draft' && row.status !== 'draft_saved'" 
-                  [ngStyle]="{'cursor': row.status !== 'draft' && row.status !== 'draft_saved' ? 'no-drop' : ''}" title='Ubah'>
+                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)" [disabled]="row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject'" 
+                  [ngStyle]="{'cursor': row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' ? 'no-drop' : ''}" title='Ubah'>
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button color="primary" (click)="deleteVoucher(row.id)" title="Hapus"
-                    [ngStyle]="{'cursor': !permission?.hapus || row.status !== 'draft' && row.status !== 'draft_saved' ? 'no-drop' : ''}" [disabled]="!permission?.hapus && row.status !== 'draft' && row.status !== 'draft_saved' || row.status !== 'draft' && row.status !== 'draft_saved'">
+                    [ngStyle]="{'cursor': !permission?.hapus || row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' ? 'no-drop' : ''}" [disabled]="!permission?.hapus && row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' || row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject'">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>

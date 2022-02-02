@@ -131,7 +131,7 @@ export class PenukaranVoucherComponent implements OnInit {
         this.formPenukaranVoucher.get('isSaldoPojokBayar').setValue(this.detailVoucher.reimburse_pojok_bayar !== null ? this.detailVoucher.reimburse_pojok_bayar.length > 0 ? true : false : false);
       this.getNominal(this.detailVoucher.reimburse_transfer_bank, this.detailVoucher.reimburse_pojok_bayar);
       // disable form
-      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved') {
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved' && this.detailVoucher.status !== 'reject') {
         this.formPenukaranVoucher.disable();
         this.disableForm = true;
       };

@@ -323,7 +323,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
         this.onLoad = false;
       }
       // disable form
-      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_voucher') {
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_voucher' && this.detailVoucher.status !== 'reject') {
         this.formFilter.disable();
         this.disableForm = true;
       };
