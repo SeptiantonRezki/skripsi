@@ -239,6 +239,8 @@ export class LoginComponent implements OnInit {
       this.authenticationService.login(body).subscribe(
         res => {
           this.authorize(res);
+          localStorage.setItem('user_country', res.locale);
+          this.ls.setLanguage(res.locale);
         },
         err => {
           this.submitting = false;

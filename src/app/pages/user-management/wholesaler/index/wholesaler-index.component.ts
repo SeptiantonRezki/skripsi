@@ -934,7 +934,7 @@ export class WholesalerIndexComponent {
     this.dataService.showLoading(true);
     const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`;
     try {
-      const response = await this.wholesalerService.exportWholesalerlist(context).toPromise();
+      const response = await this.wholesalerService.exportWholesalerNew(this.pagination,context).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       // this.downloadLink.nativeElement.href = response;
