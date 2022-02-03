@@ -9,9 +9,18 @@
       </mat-radio-button>
     </mat-radio-group>
   </div>
+
+  <div *ngIf="data.isRemark" class="pt-16" fxLayout="column" fxLayoutAlign="start start">
+    <span class="mb-8">Remark (optional)</span>
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Isi Catatan</mat-label>
+      <textarea matInput [formControl]="formRemark"></textarea>
+    </mat-form-field>
+  </div>
+
   <div mat-dialog-actions class="actions">
     <button id="btn-confirm-import" *ngIf="!data.isDisagree" mat-button class="confirm" style="cursor: pointer;"
-      (click)="data.confirmCallback()">{{data.buttonText[0]}}</button>
+      (click)="submit()">{{data.buttonText[0]}}</button>
     <button id="btn-confirm-import" *ngIf="data.isDisagree && valueRadio" mat-button class="confirm" style="cursor: pointer;"
       (click)="data.confirmCallback(valueRadio)">{{data.buttonText[0]}}</button>
     <button id="btn-confirm-import" *ngIf="data.isDisagree && !valueRadio" mat-button class="disable" style="cursor: no-drop;"

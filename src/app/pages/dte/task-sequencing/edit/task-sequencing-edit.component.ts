@@ -308,11 +308,39 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     // }
   }
 
-  import() {
+  checkReminder() {
+    const body = {
+      task_sequencing_management_id : this.data.id,
+      trade_creator_id : this.data.trade_creator_id,
+      per_page : 15,
+    };
+    
+    this.sequencingService.getImportPreviewAdjustmentCoin(body).subscribe(res => {
+      if (res.data.last_request) {
+        const date = String(moment(res.data.last_request).format('DD MMMM YYYY'));
+    
+        let data = {
+          titleDialog: `Coin adjustment terakhir sudah pernah dilakukan untuk Task Sequencing ini pada tanggal ${date}. Apakah mau melanjutkan proses pengajuan ini?`,
+          captionDialog: "",
+          confirmCallback: this.import.bind(this, true),
+          buttonText: ["Lanjutkan", "Batal"]
+        };
+        this.dialogService.openCustomConfirmationDialog(data);
+      } else {
+        this.import(false);
+      }
+    }, err => {
+      console.log(err);
+      this.import(false);
+    });
+  }
 
+  import(isReminder: any) {
+    if (isReminder) {
+      this.dialogService.brodcastCloseConfirmation();
+    }
 
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'adjustment-coin-dialog';

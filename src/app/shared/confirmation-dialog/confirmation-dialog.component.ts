@@ -11,8 +11,10 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ConfirmationDialogComponent implements OnInit {
   formRadio: FormControl = new FormControl();
+  formRemark: FormControl = new FormControl();
   private _onDestroy = new Subject<void>();
   valueRadio: any;
+  payload: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,5 +33,13 @@ export class ConfirmationDialogComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  submit(){
+    if (this.data.isRemark) {
+      this.data.confirmCallback(this.formRemark.value);
+    } else {
+      this.data.confirmCallback();
+    }
   }
 }

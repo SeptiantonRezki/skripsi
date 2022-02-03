@@ -104,4 +104,9 @@ export class SequencingService extends BaseService {
     const url = this.getUrl(this.namespace, 'download_encryption');
     return this.postBlobApi(url, body);
   }
+
+  importCoinMultipleApproval(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import_coin_multiple_approval');
+    return this.postApi(url, body);
+  }
 }
