@@ -84,7 +84,7 @@
 
         <ngx-datatable-column name="Last Request Data" prop="last_request">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span *ngIf="row.last_request">{{ renderStatusRequest(row.status_export) }} : {{row.last_request |
+            <span *ngIf="row.last_request">{{ renderStatusRequest(row.status_export, row.last_status_export) }} : {{row.last_request |
               date:'dd/MM/yyyy HH:mm'}}</span>
           </ng-template>
         </ngx-datatable-column>

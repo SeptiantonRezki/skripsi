@@ -353,10 +353,19 @@ export class TaskSequencingIndexComponent implements OnInit {
     return false;
   }
 
-  renderStatusRequest(status_export) {
+  renderStatusRequest(status_export?, last_status_export?) {
     switch (status_export) {
       case "unprocessed":
-        return "Failed";
+        switch (last_status_export) {
+          case "unprocessed":
+            return "Failed";
+          case "running":
+            return "Processing";
+          case "done":
+            return "Success";
+          default:
+            return "No Status"
+        }
       case "running":
         return "Processing";
       case "done":
@@ -365,5 +374,4 @@ export class TaskSequencingIndexComponent implements OnInit {
         return "No Status"
     }
   }
-
 }
