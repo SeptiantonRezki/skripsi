@@ -66,7 +66,7 @@ import { CountrySetupCreateComponent } from "./country-setup/country-setup-creat
 import { LanguageSetupComponent } from "./language-setup/language-setup.component";
 import { LanguageSetupCreateComponent } from "./language-setup/language-setup-create/language-setup-create.component";
 import { LanguageSetupEditComponent } from "./language-setup/language-setup-edit/language-setup-edit.component";
-
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
 
 const routes: Routes = [
   {
@@ -656,6 +656,11 @@ const routes: Routes = [
     },
     canActivate: [PageGuard]
   },
+  {
+    path: "call-to-action",
+    component: CTAExternalWebComponent,
+    canActivate: [PageGuard]
+  }
 ];
 
 @NgModule({
