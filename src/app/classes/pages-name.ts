@@ -136,6 +136,14 @@ export class PagesName {
       "/settings/feature-level/edit": "principal.feature_level.ubah",
       "/settings/feature-level/detail": "principal.feature_level.lihat",
       "/paylater/distribution": "principal.paylater_distribution.lihat",
+      "/user-management/languages": "principal.languages.lihat",
+      "/user-management/languages/create": "principal.languages.buat",
+      "/user-management/languages/edit/": "principal.languages.ubah",
+      "/user-management/languages/detail/": "principal.languages.lihat",
+      "/user-management/countries": "principal.countries.lihat",
+      "/user-management/countries/create": "principal.countries.buat",
+      "/user-management/countries/edit/": "principal.countries.ubah",
+      "/user-management/countries/detail/": "principal.countries.lihat",
     }
     return PAGES[name];
   }
