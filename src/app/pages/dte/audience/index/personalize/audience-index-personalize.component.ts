@@ -207,4 +207,55 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
       }
     });
   }
+
+  classStatus(status, job_status){
+    let classes = `text-boxed `;
+
+    if (job_status === 'failed') {
+      classes += `mat-red-700-bg`;
+    }
+    else if (job_status === 'requesting') {
+      classes += `mat-yellow-700-bg`;
+    }
+    else if (job_status === 'running') {
+      classes += `mat-orange-700-bg`;
+    }
+    else if (job_status === 'done') {
+      if (status === 'rejected') {
+        classes += `mat-red-700-bg`;
+      }
+      else if (status === 'pending') {
+        classes += `mat-yellow-700-bg`;
+      }
+      else if (status === 'approved') {
+        classes += `mat-green-700-bg`;
+      }
+    }
+
+    return classes;
+  }
+
+  renderStatus(status, real_status, job_status) {
+    switch (job_status) {
+      case "failed":
+        return "Failed";
+      case "requesting":
+        return "Requesting";
+      case "running":
+        return "Processing";
+      case "done":
+        switch (status) {
+          case "rejected":
+            return real_status;
+          case "pending":
+            return real_status;
+          case "approved":
+            return real_status;
+          default:
+            return "No Status"
+        }
+      default:
+        return "No Status"
+    }
+  }
 }

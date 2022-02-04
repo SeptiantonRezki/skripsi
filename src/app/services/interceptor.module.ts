@@ -93,8 +93,17 @@ export class BaseInterceptor implements HttpInterceptor {
         }
         return Observable.throw(err);
       } else if (err.status == 400) {
-        if (req.method == "POST") {
-          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
+        if (req.method === "POST") {
+          if (err.error.errors) {
+            if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
