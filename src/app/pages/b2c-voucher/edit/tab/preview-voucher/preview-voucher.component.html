@@ -92,10 +92,10 @@
       <button mat-raised-button type="button" [ngClass]="{'disabled-1': !detailVoucher?.action.is_allowed}" class="publish-button" fxFlex="30" fxFlex.gt-xs="20" (click)="confirmUpdateStatusVoucher()" *ngIf="detailVoucher?.status == 'accept'">
         PUBLISH
       </button>
-      <button mat-raised-button type="button" class="save-button" fxFlex="30" fxFlex.gt-xs="20" (click)="saveAndApproval('save setting')" *ngIf="detailVoucher?.status == 'draft'">
+      <button mat-raised-button type="button" [ngClass]="{'disabled-1': !detailVoucher?.action.is_allowed}" class="save-button" fxFlex="30" fxFlex.gt-xs="20" (click)="saveAndApproval('save setting')" *ngIf="detailVoucher?.status == 'draft'">
         SAVE SETTING
       </button>
-      <button mat-raised-button type="button" class="publish-button" fxFlex="30" fxFlex.gt-xs="20" (click)="saveAndApproval('process to approval')" *ngIf="detailVoucher?.status == 'draft_saved' || detailVoucher?.status == 'reject'">
+      <button mat-raised-button type="button" [ngClass]="{'disabled-1': !detailVoucher?.action.is_allowed}" class="publish-button" fxFlex="30" fxFlex.gt-xs="20" (click)="saveAndApproval('process to approval')" *ngIf="detailVoucher?.status == 'draft_saved' || detailVoucher?.status == 'reject'">
         PROCESS TO APPROVAL
       </button>
       <button mat-raised-button type="button" [ngClass]="{'disabled-1': !detailVoucher?.action.is_allowed}" class="publish-button"  fxFlex="30" fxFlex.gt-xs="20" (click)="approveReject('Approve')" *ngIf="detailVoucher?.status == 'need_approval'">

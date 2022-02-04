@@ -67,7 +67,11 @@ export class PreviewVoucherComponent implements OnInit {
   }
 
   saveAndApproval(msg='') {
-    this.updateStatusVoucher('', msg);
+    if(!this.detailVoucher.action.is_allowed) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      this.updateStatusVoucher('', msg);
+    };
   }
 
   approveReject(str='Approve') {
