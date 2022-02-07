@@ -45,6 +45,11 @@ import { CoinDisburstmentComponent } from "./coin-disburstment/index/coin-disbur
 import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin-disburstment-create.component";
 import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
 import { DynamicPricingComponent } from "./dynamic-pricing/dynamic-pricing.component";
+import { TemplateCreatePersonalizeComponent } from "./template/create/personalize/template-create-personalize.component";
+import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/template-edit-personalize.component";
+import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
+import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
+import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
 
 const routes: Routes = [
   {
@@ -83,6 +88,33 @@ const routes: Routes = [
     component: TemplateEditComponent,
     data: {
       breadcrumbs: brConfig.dte.template.detail
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/create-personalize",
+    component: TemplateCreatePersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.createPersonalize
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/edit-personalize",
+    component: TemplateEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.editPersonalize
+    },
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-task/detail-personalize",
+    component: TemplateEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.template.detailPersonalize
     },
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
@@ -216,6 +248,30 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "audience/create-personalize",
+    component: AudienceCreatePersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.create_personalize
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/edit-personalize",
+    component: AudienceEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.edit_personalize
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "audience/detail-personalize",
+    component: AudienceEditPersonalizeComponent,
+    data: {
+      breadcrumbs: brConfig.dte.audience.detail_personalize
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "automation",
     component: AudienceTradeProgramIndexComponent,
     data: {
@@ -340,7 +396,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.pengaturanAttributeMisi.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "task-sequencing",
@@ -473,6 +529,21 @@ const routes: Routes = [
   {
     path: 'dynamic-pricing',
     component: DynamicPricingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "publish-mission",
+    component: PublishMisiComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "publish-mission/edit/:id",
+    component: PublishMisiComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "publish-mission/detail/:id",
+    component: PublishMisiComponent,
     canActivate: [PageGuard]
   },
 ];
