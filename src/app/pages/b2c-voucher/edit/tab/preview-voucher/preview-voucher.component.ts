@@ -66,33 +66,68 @@ export class PreviewVoucherComponent implements OnInit {
     }
   }
 
-  confirmUpdateStatusVoucher() {
-    if (this.detailVoucher) {
-      const status = this.detailVoucher.status === 'draft' ? 'Publish' : 'Unpublish';
-      const data = {
-        titleDialog: 'Apakah anda yakin untuk melakukan ' + status + ' B2C Voucher berikut ?',
-        captionDialog: null,
-        confirmCallback: this.updateStatusVoucher.bind(this),
-        dataSubmit: this.detailVoucher.preview_submit,
-        listRadio: this.detailVoucher.preview_submit,
-        buttonText: [status, 'Batal']
-      };
-      this.confirmationPublishDialogReference = this.dialog.open(
-        ConfirmationPublishDialogComponent,
-        {
-          panelClass: 'popup-panel',
-          data: data
-        }
-      );
-    }
+  saveAndApproval(msg='') {
+    if(!this.detailVoucher.action.is_allowed) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      this.updateStatusVoucher('', msg);
+    };
   }
 
-  updateStatusVoucher() {
+  approveReject(str='Approve') {
+    if(!this.detailVoucher.action.is_allowed) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      let data = {
+        titleDialog: "Ubah Status Voucher",
+        captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${str}?`,
+        confirmCallback: str === 'Approve' ? this.approveVoucher.bind(this) : this.rejectVoucher.bind(this),
+        buttonText: ["Ya, Lanjutkan", "Batal"]
+      };
+      this.dialogService.openCustomConfirmationDialog(data);
+    };
+  }
+
+  approveVoucher() {
+    this.updateStatusVoucher('accept', 'approve');
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  rejectVoucher() {
+    this.updateStatusVoucher('reject', 'reject');
+    this.dialogService.brodcastCloseConfirmation();
+  }
+
+  confirmUpdateStatusVoucher() {
+    if(!this.detailVoucher.action.is_allowed) {
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+    } else {
+      if (this.detailVoucher) {
+        const data = {
+          titleDialog: 'Apakah anda yakin untuk melakukan Publish B2C Voucher berikut ?',
+          captionDialog: null,
+          confirmCallback: this.updateStatusVoucher.bind(this),
+          dataSubmit: this.detailVoucher.preview_submit,
+          listRadio: this.detailVoucher.preview_submit,
+          buttonText: ['Publish', 'Batal']
+        };
+        this.confirmationPublishDialogReference = this.dialog.open(
+          ConfirmationPublishDialogComponent,
+          {
+            panelClass: 'popup-panel',
+            data: data
+          }
+        );
+      };
+    };
+  }
+
+  updateStatusVoucher(stat='', msg='') {
     this.dataService.showLoading(true);
-    const status = this.detailVoucher.status === 'draft' ? 'publish' : 'unpublish';
+    const status = this.detailVoucher.status !== 'need_approval' ? this.detailVoucher.action.next_status[0] : stat;
     this.b2cVoucherService.updateStatus({ voucher_id: this.detailVoucher.id }, { status: status }).subscribe((res: any) => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: status + ' berhasil!' });
+      this.dialogService.openSnackBar({ message: `${msg || status} berhasil!` });
       this.onRefresh.emit();
       this.confirmationPublishDialogReference.close();
     }, (err: any) => {

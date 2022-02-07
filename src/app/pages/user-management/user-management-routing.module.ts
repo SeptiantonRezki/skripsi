@@ -60,7 +60,13 @@ import { PanelPartnershipEditComponent } from "./private-label/panel-partnership
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 import { PembayaranBenefitProgramComponent } from "./private-label/pembayaran-benefit-program/pembayaran-benefit-program.component";
 import { SupplierVouchersComponent } from "./supplier-vouchers/supplier-vouchers.component";
-
+import { CountrySetupComponent } from "./country-setup/country-setup.component";
+import { CountrySetupEditComponent } from "./country-setup/country-setup-edit/country-setup-edit.component";
+import { CountrySetupCreateComponent } from "./country-setup/country-setup-create/country-setup-create.component";
+import { LanguageSetupComponent } from "./language-setup/language-setup.component";
+import { LanguageSetupCreateComponent } from "./language-setup/language-setup-create/language-setup-create.component";
+import { LanguageSetupEditComponent } from "./language-setup/language-setup-edit/language-setup-edit.component";
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
 
 const routes: Routes = [
   {
@@ -585,6 +591,75 @@ const routes: Routes = [
   {
     path: "partnership-benefit",
     component: PembayaranBenefitProgramComponent,
+  },
+  {
+    path: "countries",
+    component: CountrySetupComponent,
+    data: {
+      breadcrumbs: brConfig.country_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "countries/create",
+    component: CountrySetupCreateComponent,
+    data: {
+      breadcrumbs: brConfig.country_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "countries/edit/:id",
+    component: CountrySetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.country_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "countries/detail/:id",
+    component: CountrySetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.country_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "languages",
+    component: LanguageSetupComponent,
+    data: {
+      breadcrumbs: brConfig.language_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "languages/create",
+    component: LanguageSetupCreateComponent,
+    data: {
+      breadcrumbs: brConfig.language_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "languages/edit/:id",
+    component: LanguageSetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.language_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "languages/detail/:id",
+    component: LanguageSetupEditComponent,
+    data: {
+      breadcrumbs: brConfig.language_setup.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "call-to-action",
+    component: CTAExternalWebComponent,
+    canActivate: [PageGuard]
   }
 ];
 

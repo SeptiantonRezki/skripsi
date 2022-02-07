@@ -95,7 +95,7 @@
                   <div fxFlex="25" *ngFor="let item of items.value">
                     <div class="access-name">{{item.nama | toCapitalize}}</div>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
-                      (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
+                    [disabled]="item.disabled" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
                   </div>
                 </div>
               </div>

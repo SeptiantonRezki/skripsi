@@ -5,7 +5,7 @@
   <div class="ayo-middle p-24">
     <div fxLayout="row" class="pb-24 px-12" *ngIf="!formConsumerGroup.get('isTargetAudience').value">
       <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeVoucherAutomation($event)"
-        [formControl]="isVoucherAutomation" [disabled]="!detailVoucher?.is_enable_panel_customer">
+        [formControl]="isVoucherAutomation" [disabled]="!detailVoucher?.is_enable_panel_customer || disableForm">
         Voucher Automation</mat-checkbox>
     </div>
 
@@ -27,7 +27,7 @@
               Jumlah Total Alokasi Voucher harus diisi.
             </mat-error>
           </mat-form-field>
-          <mat-form-field fxFlex="50" class="is-light form-primary">
+          <mat-form-field fxFlex="50" class="is-light form-primary" *ngIf="!isLoyaltySelected()">
             <mat-select formControlName="is_smoker" placeholder="Tipe Consumer">
               <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="pb-16 px-12">
+        <div class="pb-16 px-12" *ngIf="!isLoyaltySelected()">
           <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
             <span class="font-size-16">Batasan Umur</span>
           </div>
@@ -149,7 +149,7 @@
           </div>
         </div>
 
-        <div class="pb-16 px-12">
+        <div class="pb-16 px-12" *ngIf="!isLoyaltySelected()">
           <div class="" fxLayout="row" fxLayoutAlign="start center">
             <span class="font-size-16">Jenis Kelamin</span>
           </div>
@@ -184,7 +184,7 @@
           formControlName="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_customer">Target Audience</mat-checkbox>
       </div>
 
-      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false">
+      <div *ngIf="formConsumerGroup.get('isTargetAudience').value === false && !isLoyaltySelected()">
         <div class="" formArrayName="areas" *ngFor="let wil of formConsumerGroup.get('areas')['controls']; let i = index;">
           <div [formGroupName]="i">
             <div class="mb-16" style="background: #3a3a3a;color: white;padding: 0 24px;" fxLayout="row" fxLayoutAlign="space-between center">
@@ -192,17 +192,17 @@
                 <h3 class="">&nbsp;</h3>
               </div>
               <div *ngIf="!isDetail && detailVoucher?.is_enable_panel_customer" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                <button *ngIf="formConsumerGroup.get('areas').value.length === 1 || i === (formConsumerGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea()">
+                <button *ngIf="formConsumerGroup.get('areas').value.length === 1 || i === (formConsumerGroup.get('areas').value.length - 1)" mat-raised-button type="button" (click)="addArea()" [disabled]="disableForm">
                   <mat-icon>add</mat-icon>
                 </button>
-                <button *ngIf="formConsumerGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)">
+                <button *ngIf="formConsumerGroup.get('areas').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteArea(i)" [disabled]="disableForm">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
             <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch" *ngIf="detailVoucher?.is_enable_panel_customer">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="National" formControlName="national" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
@@ -212,7 +212,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="generateList('region', wil.get('zone').value, i, 'selection')">
+                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="generateList('region', wil.get('zone').value, i, 'selection')" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -221,7 +221,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="generateList('area', wil.get('region').value, i, 'selection')">
+                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="generateList('area', wil.get('region').value, i, 'selection')" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -230,7 +230,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" (selectionChange)="generateList('salespoint', wil.get('area').value, i, 'selection')">
+                <mat-select placeholder="Area" formControlName="area" (selectionChange)="generateList('salespoint', wil.get('area').value, i, 'selection')" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
                   </mat-option>
                 </mat-select>
@@ -239,7 +239,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="generateList('district', wil.get('salespoint').value, i, 'selection')">
+                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="generateList('district', wil.get('salespoint').value, i, 'selection')" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
@@ -249,7 +249,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" (selectionChange)="generateList('territory', wil.get('district').value, i, 'selection')">
+                <mat-select placeholder="District" formControlName="district" (selectionChange)="generateList('territory', wil.get('district').value, i, 'selection')" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
@@ -259,7 +259,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory">
+                <mat-select placeholder="Territory" formControlName="territory" [disabled]="disableForm">
                   <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
                     {{item.name}}
                   </mat-option>
@@ -418,7 +418,7 @@
 
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_panel_customer">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
-        (click)="onSave()">
+        (click)="onSave()" [disabled]="disableForm">
         {{ ls.locale.global.button.save }}
       </button>
     </div>

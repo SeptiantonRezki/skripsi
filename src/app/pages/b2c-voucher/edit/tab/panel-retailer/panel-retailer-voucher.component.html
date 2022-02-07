@@ -5,7 +5,7 @@
   <div class="ayo-middle p-24">
     <div fxLayout="row" class="pb-24 px-12">
       <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isChangeTargetAudience($event)"
-        [formControl]="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_retailer">
+        [formControl]="isTargetAudience" [disabled]="!detailVoucher?.is_enable_panel_retailer || disableForm">
         Target Audience</mat-checkbox>
     </div>
 
@@ -108,6 +108,7 @@
           type="button"
           class="is-danger"
           (click)="importRetailer()"
+          [disabled]="disableForm"
         >
           <mat-icon>vertical_align_bottom</mat-icon> Import XLS
         </button>
@@ -162,7 +163,7 @@
             <mat-checkbox 
               [checked]="isSelected" 
               (change)="onCheckboxChangeFn($event)" 
-              [disabled]="allRowsSelected" 
+              [disabled]="allRowsSelected || disableForm" 
               *ngIf="!allRowsSelected"
             >
             </mat-checkbox>
@@ -215,7 +216,7 @@
     </div>
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_panel_retailer">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
-        (click)="onSave()">
+        (click)="onSave()" [disabled]="disableForm">
         SIMPAN
       </button>
     </div>

@@ -63,6 +63,7 @@ export class B2CVoucherEditComponent implements OnInit {
   totalData: number = 0;
   wholesalerIds: any = [];
   isSort: boolean = false;
+  disableForm: boolean = false;
 
   listCategories: any[] = [];
   listProduct: any[] = [];
@@ -470,6 +471,11 @@ export class B2CVoucherEditComponent implements OnInit {
         limit_only_purchase: res.data.limit_only_purchase || 0,
         usage: [],
       });
+      // disable form
+      if(res.data.status !== 'draft' && res.data.status !== 'draft_saved' && res.data.status !== 'reject') {
+        this.formDetailVoucher.disable();
+        this.disableForm = true;
+      };
       if (res.data.usage.length) {
         const usage: FormArray = this.formDetailVoucher.get('usage') as FormArray;
         while (usage.length) usage.removeAt(0);

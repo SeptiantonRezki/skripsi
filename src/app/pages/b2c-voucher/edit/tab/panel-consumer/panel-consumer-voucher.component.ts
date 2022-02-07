@@ -62,6 +62,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   indexDelete: any;
   areaType: any[] = [];
   isArea: boolean;
+  disableForm: boolean = false;
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
@@ -98,6 +99,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral and Verified', value: 'referral-and-verified' },
     { name: 'Referral or Verified', value: 'referral-or-verified' },
     { name: 'Pesan Antar', value: 'coo'},
+    { name: 'Keping Langganan', value: 'loyalty'}
   ];
 
   _data: any = null;
@@ -311,6 +313,26 @@ export class PanelConsumerVoucherComponent implements OnInit {
         this.getCustomerSelected();
       }
     });
+
+    this.formConsumerGroup.get("va").valueChanges.subscribe(res => {
+      if (res === "loyalty") {
+        this.updateValidator("is_smoker", false);
+        this.updateValidator("age_consumer_from", false);
+        this.updateValidator("age_consumer_to", false);
+        this.updateValidator("gender", false);
+      } else {
+        this.updateValidator("is_smoker", true);
+        this.updateValidator("age_consumer_from", true);
+        this.updateValidator("age_consumer_to", true);
+        this.updateValidator("gender", true);
+      }
+    })
+  }
+
+  updateValidator(name: string, isRequired: boolean) {
+    if (isRequired) this.formConsumerGroup.get(name).setValidators(Validators.required);
+    else this.formConsumerGroup.get(name).clearValidators();
+    this.formConsumerGroup.get(name).updateValueAndValidity();
   }
 
   _filterSku(value): any[] {
@@ -605,8 +627,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
       } else {
         this.onLoad = false;
       }
-
-      
+      // disable form
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved' && this.detailVoucher.status !== 'reject') {
+        this.formConsumerGroup.disable();
+        this.formFilter.disable();
+        this.disableForm = true;
+      };
     } else {
       setTimeout(() => {
         this.getDetail();
@@ -1067,59 +1093,64 @@ export class PanelConsumerVoucherComponent implements OnInit {
     }
   }
 
+  isLoyaltySelected() {
+    return this.isVoucherAutomation.value &&
+      this.formConsumerGroup.get('va').value === 'loyalty';
+  }
+
   onSave() {
     if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
-    let body = null;
-    const bodyArea = {
-      'type': 'customer',
-      'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
-      'user_id': this.selected.map(aud => aud.id),
-      'area_id': [1],
-      'automation': this.formConsumerGroup.get('va').value,
-      'smoker': this.formConsumerGroup.get('is_smoker').value,
-      'age_from': this.formConsumerGroup.get('age_consumer_from').value,
-      'age_to': this.formConsumerGroup.get('age_consumer_to').value,
-      'gender': this.formConsumerGroup.get('gender').value,
-      'allocation_voucher': this.formConsumerGroup.get('allocationVoucher').value
-    };
-    if (this.formConsumerGroup.get('isTargetAudience').value) {
-      body = {
+      let body = null;
+      const bodyArea = {
         'type': 'customer',
         'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
         'user_id': this.selected.map(aud => aud.id),
+        'area_id': [1],
+        'automation': this.formConsumerGroup.get('va').value,
+        'smoker': this.formConsumerGroup.get('is_smoker').value,
+        'age_from': this.formConsumerGroup.get('age_consumer_from').value,
+        'age_to': this.formConsumerGroup.get('age_consumer_to').value,
+        'gender': this.formConsumerGroup.get('gender').value,
+        'allocation_voucher': this.formConsumerGroup.get('allocationVoucher').value
       };
-    } else {
-      if (this.isVoucherAutomation.value) {
-        if (!this.formConsumerGroup.get('allocationVoucher').value || this.formConsumerGroup.get('allocationVoucher').value < 1) {
-          commonFormValidator.validateAllFields(this.formConsumerGroup);
-          this.scrollToTop.emit();
-          alert('Jumlah Alokasi Voucher harus diisi');
-          return;
-        }
-        if (!this.formConsumerGroup.get('va').value) {
-          commonFormValidator.validateAllFields(this.formConsumerGroup);
-          this.scrollToTop.emit();
-          return;
-        }
-        if (this.formConsumerGroup.get('va').value === 'coo') {
-          const indicators: any = {
-            operator: this.formConsumerGroup.get('operator').value,
-            limit_purchase: this.formConsumerGroup.get('limit_purchase').value ? this.formConsumerGroup.get('minimumPurchase').value : null,
-            is_subscription: this.formConsumerGroup.get('customer_indicator').value ? this.formConsumerGroup.get('is_subscription').value ? 1 : 0 : null,
-            limit_by: this.formConsumerGroup.get('limit_by_product').value ? 'product' :
-            this.formConsumerGroup.get('limit_by_category').value ? 'category' : null,
-            limit_only: []
-          };
-          if (indicators['limit_by'] !== null) {
-            indicators['limit_only'] = indicators['limit_by'] === 'product' ?
-              this.productList.map(prd => prd.sku_id) : this.formConsumerGroup.get('category').value;
+      if (this.formConsumerGroup.get('isTargetAudience').value) {
+        body = {
+          'type': 'customer',
+          'is_target_audience': this.formConsumerGroup.get('isTargetAudience').value ? 1 : 0,
+          'user_id': this.selected.map(aud => aud.id),
+        };
+      } else {
+        if (this.isVoucherAutomation.value) {
+          if (!this.formConsumerGroup.get('allocationVoucher').value || this.formConsumerGroup.get('allocationVoucher').value < 1) {
+            commonFormValidator.validateAllFields(this.formConsumerGroup);
+            this.scrollToTop.emit();
+            alert('Jumlah Alokasi Voucher harus diisi');
+            return;
           }
-          bodyArea['automation_indicators'] = indicators;
+          if (!this.formConsumerGroup.get('va').value) {
+            commonFormValidator.validateAllFields(this.formConsumerGroup);
+            this.scrollToTop.emit();
+            return;
+          }
+          if (this.formConsumerGroup.get('va').value === 'coo') {
+            const indicators: any = {
+              operator: this.formConsumerGroup.get('operator').value,
+              limit_purchase: this.formConsumerGroup.get('limit_purchase').value ? this.formConsumerGroup.get('minimumPurchase').value : null,
+              is_subscription: this.formConsumerGroup.get('customer_indicator').value ? this.formConsumerGroup.get('is_subscription').value ? 1 : 0 : null,
+              limit_by: this.formConsumerGroup.get('limit_by_product').value ? 'product' :
+              this.formConsumerGroup.get('limit_by_category').value ? 'category' : null,
+              limit_only: []
+            };
+            if (indicators['limit_by'] !== null) {
+              indicators['limit_only'] = indicators['limit_by'] === 'product' ?
+                this.productList.map(prd => prd.sku_id) : this.formConsumerGroup.get('category').value;
+            }
+            bodyArea['automation_indicators'] = indicators;
+          }
         }
       }
-    }
 
-    let _areas = [];
+      let _areas = [];
       let areas = [];
       let value = this.formConsumerGroup.getRawValue();
 
@@ -1144,19 +1175,29 @@ export class PanelConsumerVoucherComponent implements OnInit {
         bodyArea['area_id'].push(item.value);
       });
 
-    this.dataService.showLoading(true);
-    this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body ? body : bodyArea).subscribe(res => {
-      // this.router.navigate(['b2c-voucher']);
-      this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.onRefresh.emit();
-      this.setSelectedTab.emit(3);
-      setTimeout(() => {
-        this.getIsArea();
-      }, 1000);
-    }, err => {
-      this.dataService.showLoading(false);
-    });
+      if (
+        this.isVoucherAutomation.value &&
+        this.formConsumerGroup.get('va').value === 'loyalty'
+      ) {
+        const allowedFields = ['type', 'is_target_audience', 'automation', 'allocation_voucher'];
+        for (let field in bodyArea) {
+          if (!allowedFields.includes(field)) delete bodyArea[field];
+        }
+      }
+
+      this.dataService.showLoading(true);
+      this.b2cVoucherService.updatePanel({ voucher_id: this.detailVoucher.id }, body ? body : bodyArea).subscribe(res => {
+        // this.router.navigate(['b2c-voucher']);
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.onRefresh.emit();
+        this.setSelectedTab.emit(3);
+        setTimeout(() => {
+          this.getIsArea();
+        }, 1000);
+      }, err => {
+        this.dataService.showLoading(false);
+      });
     } else {
       commonFormValidator.validateAllFields(this.formConsumerGroup);
       this.scrollToTop.emit();
