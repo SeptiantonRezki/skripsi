@@ -351,7 +351,7 @@ export class Endpoint {
         force_update_v2: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update`,
         force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update-user`,
         list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
-        revert_version: `${AYO_API}/api/v2/content/principal/force-update/${context.version_id}`,
+        revert_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update/${context.version_id}`,
         device_os: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/device-os`
       },
       tnc: {
@@ -1053,7 +1053,7 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
         get_translation: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/json-language-format`
         // get_translation: `https://d1fcivyo6xvcac.cloudfront.net/lang/bahasa-indonesia/principal/languages.json`,
-        
+
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
