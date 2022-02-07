@@ -40,6 +40,7 @@ export class PagesName {
       "/user-management/panel-partnership/create": "principal.partnership.buat",
       "/user-management/panel-partnership/edit/": "principal.partnership.ubah",
       "/user-management/panel-partnership/detail/": "principal.partnership.lihat",
+      "/user-management/call-to-action": "principal.call-to-action.lihat",
       "/advertisement/banner": "principal.spanduk.lihat",
       "/advertisement/banner/create": "principal.spanduk.buat",
       "/advertisement/banner/edit": "principal.spanduk.ubah",
@@ -136,6 +137,14 @@ export class PagesName {
       "/settings/feature-level/edit": "principal.feature_level.ubah",
       "/settings/feature-level/detail": "principal.feature_level.lihat",
       "/paylater/distribution": "principal.paylater_distribution.lihat",
+      "/user-management/languages": "principal.languages.lihat",
+      "/user-management/languages/create": "principal.languages.buat",
+      "/user-management/languages/edit/": "principal.languages.ubah",
+      "/user-management/languages/detail/": "principal.languages.lihat",
+      "/user-management/countries": "principal.countries.lihat",
+      "/user-management/countries/create": "principal.countries.buat",
+      "/user-management/countries/edit/": "principal.countries.ubah",
+      "/user-management/countries/detail/": "principal.countries.lihat",
     }
     return PAGES[name];
   }

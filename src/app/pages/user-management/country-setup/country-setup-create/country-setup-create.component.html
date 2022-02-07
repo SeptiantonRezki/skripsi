@@ -1,0 +1,307 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="ls.locale.country_setup.page_title_create">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="vertical-stepper-wrapper" fxFlex="60">
+
+      <!-- VERTICAL STEPPER EXAMPLE -->
+      <mat-vertical-stepper class="mat-elevation-z4" [linear]="true">
+
+        <mat-step [stepControl]="step1">
+
+          <form [formGroup]="step1">
+
+            <ng-template matStepLabel>Country</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.name}}" formControlName="name">
+                <mat-error *ngIf="step1.controls['name'].hasError('required') && step1.controls['name'].touched ">
+                  {{ls.locale.country_setup.country_name}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.country_id}}" formControlName="country_id">
+                <mat-error *ngIf="step1.controls['country_id'].hasError('required') && step1.controls['country_id'].touched ">
+                  {{ls.locale.country_setup.country_id}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.locale}}" formControlName="locale">
+                <mat-error *ngIf="step1.controls['locale'].hasError('required') && step1.controls['locale'].touched ">
+                  {{ls.locale.country_setup.locale}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(1)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step2">
+
+          <form [formGroup]="step2">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.phone_code}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="number" placeholder="Code" formControlName="phone_code">
+                <mat-error *ngIf="step2.controls['phone_code'].hasError('required') && step2.controls['phone_code'].touched ">
+                  {{ls.locale.country_setup.phone_code}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+
+              <div fxFlex fxLayout="row" fxLayoutGap="32px">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.min_length}}" formControlName="phone_code_min_length">
+                  <mat-error *ngIf="step2.controls['phone_code_min_length'].hasError('required') && step2.controls['phone_code_min_length'].touched ">
+                    {{ls.locale.country_setup.min_length}} {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.max_length}}" formControlName="phone_code_max_length">
+                  <mat-error *ngIf="step2.controls['phone_code_max_length'].hasError('required') && step2.controls['phone_code_max_length'].touched ">
+                    {{ls.locale.country_setup.max_length}} {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(2)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step3">
+
+          <form [formGroup]="step3">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.currency}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.country_setup.symbol}}" formControlName="symbol">
+                <mat-error *ngIf="step3.controls['symbol'].hasError('required') && step3.controls['symbol'].touched ">
+                  {{ls.locale.country_setup.symbol}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="number" placeholder="Decimal Length" formControlName="decimal">
+                <mat-error *ngIf="step3.controls['decimal'].hasError('required') && step3.controls['decimal'].touched ">
+                  Decimal {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+
+              <!-- <div fxFlex fxLayout="row" fxLayoutGap="32px">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="Min Length" formControlName="currency_min_length">
+                  <mat-error *ngIf="step3.controls['currency_min_length'].hasError('required') && step3.controls['currency_min_length'].touched ">
+                    Min Length {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="Max Length" formControlName="currency_max_length">
+                  <mat-error *ngIf="step3.controls['currency_max_length'].hasError('required') && step3.controls['currency_max_length'].touched ">
+                    Min Length {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+              </div> -->
+
+              <div fxFlex fxLayout="row" fxLayoutGap="32px">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.decimal_separator}}" formControlName="currency_decimal_separator">
+                  <mat-error *ngIf="step3.controls['currency_decimal_separator'].hasError('required') && step3.controls['currency_decimal_separator'].touched ">
+                    {{ls.locale.country_setup.decimal_separator}} {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput type="text" placeholder="{{ls.locale.country_setup.thousand_separator}}" formControlName="currency_thousand_separator">
+                  <mat-error *ngIf="step3.controls['currency_thousand_separator'].hasError('required') && step3.controls['currency_thousand_separator'].touched ">
+                    {{ls.locale.country_setup.thousand_separator}} {{ls.locale.global.messages.mandatory_text}}.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(3)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step4">
+
+          <form [formGroup]="step4">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.point}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              
+              
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="number" placeholder="{{ls.locale.country_setup.point}}" formControlName="point_valuation">
+                <mat-error *ngIf="step4.controls['point_valuation'].hasError('required') && step4.controls['point_valuation'].touched ">
+                  {{ls.locale.country_setup.point}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(4)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step5">
+
+          <form [formGroup]="step5">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.language}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="{{ls.locale.country_setup.language}}" formControlName="language_id">
+                  <mat-option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</mat-option>
+                </mat-select>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="step5.controls['language_id'].hasError('required') && step5.controls['language_id'].touched">
+                  {{ls.locale.country_setup.language}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(5)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step6">
+
+          <form [formGroup]="step6">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.customer_service}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.bantuan.text10}}" formControlName="telepon">
+                <mat-error *ngIf="step6.controls['telepon'].hasError('required') && step6.controls['telepon'].touched ">
+                  {{ls.locale.bantuan.text10}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.email}}" formControlName="email">
+                <mat-error *ngIf="step6.controls['email'].hasError('required') && step6.controls['email'].touched ">
+                  {{ls.locale.global.label.email}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+
+              <div fxFlex="100" fxLayoutAlign="space-between">
+                <label for="">Whatsapp</label>
+                <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="whatsapp"></mat-slide-toggle>
+              </div>
+              <mat-form-field fxFlex="100" class="is-light" *ngIf="step6.get('whatsapp').value">
+                <input matInput type="number" placeholder="Whatsapp Number" formControlName="whatsapp_number">
+                <mat-error *ngIf="step6.controls['whatsapp_number'].hasError('required') && step6.controls['whatsapp_number'].touched ">
+                  Whatsapp {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <div fxFlex="100" fxLayoutAlign="space-between">
+                <label for="">Bude</label>
+                <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="bude"></mat-slide-toggle>
+              </div>
+            </div>
+
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(6)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step [stepControl]="step7">
+
+          <form [formGroup]="step7">
+
+            <ng-template matStepLabel>{{ls.locale.country_setup.access_retailer}}</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <recursive-slide-toggle [items]="step7.get('abilities').controls" [depth]="0" [horizontal]="horizontal" [parent]="step7.get('abilities')" [fullAccess]="step7.get('abilities').at(0)"></recursive-slide-toggle>
+            </div>
+
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(7)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
+
+        <mat-step>
+
+          <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>
+
+          <div class="h4" fxLayout="row" fxLayoutAlign="center center">
+            {{ls.locale.admin_principal.text4}}
+          </div>
+
+          <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+            <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
+              {{ls.locale.global.button.back}}
+            </button>
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" [disabled]="submiting">
+              <ng-container *ngIf="submiting == false">
+                {{ls.locale.global.button.finish}}
+              </ng-container>
+              <ng-container *ngIf="submiting == true">
+                <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+              </ng-container>
+            </button>
+          </div>
+
+        </mat-step>
+
+      </mat-vertical-stepper>
+      <!-- / VERTICAL STEPPER EXAMPLE -->
+
+    </div>
+  </div>
+</div>

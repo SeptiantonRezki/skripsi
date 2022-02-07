@@ -1036,7 +1036,25 @@ export class Endpoint {
         detail_used: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/used`,
         detail_notused: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/notused`,
         redeem_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/redeem`,
-      }
+      },
+      country_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        get_menus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/retailer/menu`,
+        get_option_country: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-country`,
+      },
+      language_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/update-json`,
+        validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`,
+        export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
+        get_translation: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/json-language-format`
+        // get_translation: `https://d1fcivyo6xvcac.cloudfront.net/lang/bahasa-indonesia/principal/languages.json`,
+        
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

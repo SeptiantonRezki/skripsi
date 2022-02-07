@@ -127,6 +127,18 @@ import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/ord
 import { PembayaranBenefitProgramComponent } from './private-label/pembayaran-benefit-program/pembayaran-benefit-program.component';
 import { SupplierVouchersComponent } from './supplier-vouchers/supplier-vouchers.component';
 import { PopUpImageBlobComponent } from "../../components/popup-image-blob/popup-image-blob.component";
+<<<<<<< HEAD
+import { CountrySetupComponent } from './country-setup/country-setup.component';
+import { LanguageSetupComponent } from './language-setup/language-setup.component';
+import { CountrySetupEditComponent } from './country-setup/country-setup-edit/country-setup-edit.component';
+import { CountrySetupCreateComponent } from './country-setup/country-setup-create/country-setup-create.component';
+import { RecursiveSlideToggleComponent } from './country-setup/recursive-slide-toggle/recursive-slide-toggle.component';
+import { LanguageSetupCreateComponent } from './language-setup/language-setup-create/language-setup-create.component';
+import { LanguageSetupEditComponent } from './language-setup/language-setup-edit/language-setup-edit.component';
+import { DialogUploadLanguageComponent } from './language-setup/dialog-upload-language/dialog-upload-language.component';
+=======
+import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
+>>>>>>> CDE-4446#PBO_Mass_Upload_CTA
 
 export const MY_FORMATS = {
   parse: {
@@ -282,6 +294,26 @@ export const MY_FORMATS = {
     SupplierVouchersComponent,
 
     PopUpImageBlobComponent,
+<<<<<<< HEAD
+
+    CountrySetupComponent,
+
+    LanguageSetupComponent,
+
+    CountrySetupEditComponent,
+
+    CountrySetupCreateComponent,
+
+    RecursiveSlideToggleComponent,
+
+    LanguageSetupCreateComponent,
+
+    LanguageSetupEditComponent,
+
+    DialogUploadLanguageComponent,
+=======
+    CTAExternalWebComponent,
+>>>>>>> CDE-4446#PBO_Mass_Upload_CTA
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -297,6 +329,7 @@ export const MY_FORMATS = {
     PayMethodIndexComponent,
     ImportListWholesalerComponent,
     PopUpImageBlobComponent,
+    DialogUploadLanguageComponent,
   ],
   providers: [
     // PendingChangesGuard,
