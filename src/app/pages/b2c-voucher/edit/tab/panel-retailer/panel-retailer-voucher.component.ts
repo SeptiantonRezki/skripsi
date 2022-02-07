@@ -56,6 +56,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
   isDetail: Boolean;
   areaType: any[] = [];
   isArea: boolean;
+  disableForm: boolean = false;
 
   isTargetAudience: FormControl = new FormControl(false);
 
@@ -321,6 +322,11 @@ export class PanelRetailerVoucherComponent implements OnInit {
       } else {
         this.onLoad = false;
       }
+      // disable form
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_voucher' && this.detailVoucher.status !== 'reject') {
+        this.formFilter.disable();
+        this.disableForm = true;
+      };
     } else {
       setTimeout(() => {
         this.getDetail();

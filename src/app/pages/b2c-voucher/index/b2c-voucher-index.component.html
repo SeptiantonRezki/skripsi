@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="ls.locale.cn_reward.b2c_voucher.text1">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/b2c-voucher','create']">
+        [routerLink]="['/b2c-voucher','create']" *ngIf="permission?.buat">
         <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
       </button>
     </div>
@@ -86,19 +86,19 @@
 
             <ngx-datatable-column name="{{ ls.locale.global.label.status }}" prop="status" >
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <span [ngStyle]="{'background-color': row.status == 'draft' ? '#ff7722' : row.status == 'publish' ? '#388E3C' : '#e90000', 'padding': '5px', 'border-radius': '5px', color: '#fff' }">{{row.status}}</span>
+                <span [ngStyle]="{'background-color': row.status == 'draft' ? '#ff7722' : row.status == 'draft_saved' ? '#FFC000' : row.status == 'need_approval' ? '#808080' : row.status == 'publish' ? '#388E3C' : row.status == 'reject' ? '#e90000' : '#3FAFFF', 'padding': '5px', 'border-radius': '5px', color: '#fff' }">{{row.status == 'accept' ? 'Approve' : row.status == 'publish' ? 'Published' : row.status | underscoreToCapitalize}}</span>
               </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="{{ ls.locale.global.label.action }}" [sortable]="false" [frozenRight]="true">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row">
-                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)" [disabled]="row.status !== 'draft'" 
-                  [ngStyle]="{'cursor': row.status !== 'draft' ? 'no-drop' : ''}">
+                  <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="editVoucher(row)" [disabled]="row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject'" 
+                  [ngStyle]="{'cursor': row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' ? 'no-drop' : ''}" title='Ubah'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button mat-icon-button color="primary" (click)="deleteVoucher(row.id)"
-                    [ngStyle]="{'cursor': !permission?.hapus || row.status !== 'draft' ? 'no-drop' : ''}" [disabled]="!permission?.hapus && row.status !== 'draft' || row.status !== 'draft'">
+                  <button mat-icon-button color="primary" (click)="deleteVoucher(row.id)" title="Hapus"
+                    [ngStyle]="{'cursor': !permission?.hapus || row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' ? 'no-drop' : ''}" [disabled]="!permission?.hapus && row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject' || row.status !== 'draft' && row.status !== 'draft_saved' && row.status !== 'reject'">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
