@@ -263,6 +263,8 @@ export class Endpoint {
         upload_video: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/upload-video`,
         planogram_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/planogram`,
         stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
+        get_create_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.template_id}`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
@@ -315,7 +317,11 @@ export class Endpoint {
         show_preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/show-preview`,
         request_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/request-import`,
         show_status: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-status`,
-
+        get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized`,
+        put_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/${context.audience_id}`,
+        check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/check-audience`,
+        preview_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/preview-audience`,
+        export_preview_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience-personalized/export`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
@@ -351,7 +357,7 @@ export class Endpoint {
         force_update_v2: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update`,
         force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update-user`,
         list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
-        revert_version: `${AYO_API}/api/v2/content/principal/force-update/${context.version_id}`,
+        revert_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update/${context.version_id}`,
         device_os: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/device-os`
       },
       tnc: {
@@ -770,8 +776,9 @@ export class Endpoint {
         // import_adjustment: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/import`,
         import_adjustment: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/request-import-coin`,
         adjust_retailer: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/adjustment/coin/retailer`, //ini yang di coin mangement
-
         download_encryption: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/tsm/export`,
+        get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission`,
+        put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission/${context.sequencing_id}`,
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
@@ -796,6 +803,8 @@ export class Endpoint {
         delete_kategori_misi: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox_kategori_misi/${context.kategori_misi_id}`,
         get_post_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark`,
         put_delete_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark/${context.id}`,
+        get_post_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite`,
+        put_delete_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite/${context.id}`,
       },
       paylater_activate: {
         activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/activation/mitra`,
@@ -1053,7 +1062,7 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
         get_translation: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/json-language-format`
         // get_translation: `https://d1fcivyo6xvcac.cloudfront.net/lang/bahasa-indonesia/principal/languages.json`,
-        
+
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
