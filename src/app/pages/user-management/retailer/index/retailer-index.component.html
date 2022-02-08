@@ -30,7 +30,7 @@
       <button *ngIf="resultExport != null && permission.export" (click)="download()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_downward</mat-icon> Download XLS
       </button>
-      <mat-icon *ngIf="canRequestExport == false && permission.export" matTooltip="Sistem sedang membuat file excel untuk anda download. Jika file excel sudah dibuat akan segera kami infokan via email." class="info-icon"></mat-icon>
+      <mat-icon *ngIf="canRequestExport == false && permission.export" matTooltip="Sistem sedang membuat file excel untuk anda download. Jika file excel sudah dibuat akan segera kami infokan via email." class="info-icon">info</mat-icon>
     </div>
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
