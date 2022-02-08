@@ -21,6 +21,8 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { TargetAreaComponent } from './target-area/target-area.component';
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { DialogImportComponent } from './target-area/dialog-import/dialog-import.component';
+import { SalestreeComponent } from './salestree/salestree.component';
+import { SelectSearchComponent } from "./select-search/select-search.component";
 import { ngfModule } from "angular-file";
 
 @NgModule({
@@ -44,6 +46,8 @@ import { ngfModule } from "angular-file";
     DropdownTreeComponent,
     NotificationCoinAdjustmentDialogComponent,
     TargetAreaComponent,
+    SalestreeComponent,
+    SelectSearchComponent,
     DialogImportComponent,
   ],
   exports: [

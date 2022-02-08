@@ -1,0 +1,27 @@
+<mat-form-field fxLayout="row wrap" class="select-search is-light form-primary">
+  <mat-select
+    (selectionChange)="handleSelectionChange($event)"
+    [placeholder]="placeholder"
+    [value]="value"
+    [isScrolledBottom]="isScroll"
+    (onScrolledBottom)="handleScroll($event)"
+    selectSearch
+  >
+    <ngx-mat-select-search
+      [formControl]="search"
+      [placeholderLabel]="searchLabel"
+      [noEntriesFoundLabel]="'Data tidak ditemukan'"
+      [disableScrollToActiveOnOptionsChanged]="true"
+      [hidden]="disableSearch"
+    ></ngx-mat-select-search>
+    <mat-option *ngFor="let item of filteredOptions | async" [value]="item.id">
+      {{ item.name | titlecase }}
+    </mat-option>
+    <mat-option *ngIf="isLoading()" disabled>
+      <div class="spinner">
+        <mat-spinner diameter="18" color="primary"></mat-spinner>
+      </div>
+    </mat-option>
+  </mat-select>
+  <ng-content></ng-content>
+</mat-form-field>
