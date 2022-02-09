@@ -189,3 +189,20 @@
     border: 1px solid #ddd;
   }
 }
+
+.approval{
+  .approval__title{
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .approval__content{
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+  }
+
+  .approval__button{
+    color: #dc1e2d;
+  }
+}
