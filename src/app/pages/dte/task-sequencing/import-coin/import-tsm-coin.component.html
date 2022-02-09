@@ -106,23 +106,58 @@
         <textarea id="alasanAdjustmentCoin" matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
       </mat-form-field>
     </div>
-    <div fxLayout="column" fxFlex="50"
-      style="margin-left: 16px;margin-top: 5px;border: 1px solid #ddd; position: relative;" class="p-8">
-      <span class="opsi-type">Notifikasi</span>
+    <div fxLayout="column" fxFlex="80" style="border: 1px solid #ddd;" class="approval p-8 m-16">
+      <span class="approval__title">Approval</span>
       <form [formGroup]="formNotifikasi">
-        <mat-form-field fxLayout="column" fxFlex="100">
-          <mat-select formControlName="name" placeholder="Nama User Penerima" id="name" (click)="selectForm('UserPenerima')" (selectionChange)="selectChangeReceiver($event)" #singleSelect>
-            <ngx-mat-select-search id="selectSearchUserPenerima" [formControl]="filterUserNames" [placeholderLabel]="'Cari Nama User ...'"
-              [noEntriesFoundLabel]="'User Tidak ditemukan!'" [clearSearchInput]="false">
-            </ngx-mat-select-search>
-            <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id">
-              {{item.fullname}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field fxLayout="column" fxFlex="100">
-          <input id="emailPenerima" matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
-        </mat-form-field>
+        <div formArrayName="approval" *ngFor="let item of formNotifikasi.get('approval')['controls']; let idx=index;">
+          <div [formGroupName]="idx" class="approval__content">
+            <span class="approval__number" fxFlex="25px">{{ idx+1 }}.</span>
+            <mat-form-field fxFlex="200px" id="contoh-id">
+              <mat-select
+                formControlName="name"
+                placeholder="Nama User Penerima"
+                id="name"
+                (click)="selectForm('UserPenerima')"
+                (selectionChange)="selectChangeReceiver($event, idx)"
+                (openedChange)="onOpenedChange($event, 'select_approval', idx)"
+                #select_approval
+              >
+                <ngx-mat-select-search
+                  id="selectSearchUserPenerima"
+                  [formControl]="filterUserNames"
+                  [placeholderLabel]="'Cari Nama User ...'"
+                  [noEntriesFoundLabel]="'User Tidak ditemukan!'"
+                >
+                </ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id" [disabled]="isApprovalUsed(item.id)">
+                  {{item.fullname}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="200px">
+              <input id="emailPenerima" matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
+            </mat-form-field>
+            <div>
+              <button
+                mat-icon-button
+                matTooltip="Tambah"
+                matTooltipPosition="below"
+                (click)="addApproval(idx)"
+              >
+                <mat-icon class="approval__button">add</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Hapus"
+                matTooltipPosition="below"
+                (click)="removeApproval(idx)"
+                *ngIf="formNotifikasi.get('approval').length > 1"
+              >
+                <mat-icon class="approval__button">remove</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
     <div class="p-8">

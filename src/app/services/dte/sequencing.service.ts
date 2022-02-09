@@ -130,4 +130,9 @@ export class SequencingService extends BaseService {
     const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
     return this.deleteApi(url);
   }
+
+  importCoinMultipleApproval(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'import_coin_multiple_approval');
+    return this.postApi(url, body);
+  }
 }
