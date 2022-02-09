@@ -45,7 +45,7 @@ export class CountrySetupEditComponent implements OnInit {
     });
 
     this.formCountry = formBuilder.group({
-      status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
+      // status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
       name: [this.country.name, Validators.required],
       code: [this.country.country_code, Validators.required],
       locale: [this.country.locale_code, Validators.required],
