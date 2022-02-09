@@ -10,7 +10,8 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatFormFieldModule,
   MatSelectModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
 import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.component";
 import { PageContentComponent } from "./page-content-header/page-content-header.component";
@@ -23,6 +24,7 @@ import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { DialogImportComponent } from './target-area/dialog-import/dialog-import.component';
 import { SalestreeComponent } from './salestree/salestree.component';
 import { SelectSearchComponent } from "./select-search/select-search.component";
+import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ngfModule } from "angular-file";
 
 @NgModule({
@@ -38,6 +40,7 @@ import { ngfModule } from "angular-file";
     NgxDatatableModule,
     MatCheckboxModule,
     MatToolbarModule,
+    MatProgressSpinnerModule,
     ngfModule,
   ],
   declarations: [
@@ -48,6 +51,7 @@ import { ngfModule } from "angular-file";
     TargetAreaComponent,
     SalestreeComponent,
     SelectSearchComponent,
+    SelectSearchDirective,
     DialogImportComponent,
   ],
   exports: [
@@ -56,6 +60,8 @@ import { ngfModule } from "angular-file";
     DropdownTreeComponent,
     NotificationCoinAdjustmentDialogComponent,
     TargetAreaComponent,
+    SalestreeComponent,
+    SelectSearchComponent,
     DialogImportComponent,
   ],
   entryComponents: [

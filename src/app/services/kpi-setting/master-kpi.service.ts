@@ -22,8 +22,16 @@ export class MasterKPIService extends BaseService {
     const url = this.getUrl(this.namespace, 'brand_parameters');
     return this.getApi(url);
   }
-  getTradeProgramObjectives(): Observable<any> {
-    const url = this.getUrl(this.namespace, 'trade_program_objectives');
+  getTradeProgramObjectives(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'trade_program_objectives', context);
     return this.getApi(url);
+  }
+  getEcosystemParams(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'ecosystem_params');
+    return this.getApi(url, queryParams);
+  }
+  getEcosystemBrands(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'ecosystem_brands');
+    return this.getApi(url, queryParams);
   }
 }

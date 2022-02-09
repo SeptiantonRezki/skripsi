@@ -119,11 +119,11 @@ export class SalestreeComponent implements OnInit {
 
     if (index + 1 <= this.geoLevel.length) {
       if (onClick) {
+        this.resetLevel(value);
         const [areaIds, lastAreaKey]: any[] = this.getSelectedAllId();
         this.area.emit(areaIds);
-        this.areaWithKey.emit([areaIds, lastAreaKey]);
         this.areas.emit(this.form.getRawValue());
-        this.resetLevel(value);
+        this.areaWithKey.emit([areaIds, lastAreaKey]);
       }
 
       const fd = new FormData();
