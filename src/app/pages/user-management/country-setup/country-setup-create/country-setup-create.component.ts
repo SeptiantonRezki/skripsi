@@ -151,7 +151,7 @@ export class CountrySetupCreateComponent implements OnInit {
   recurseCheck(items, checked) {
     items.map( (item: FormGroup) => {
         
-      if(item.get('value').value !== 'full_access') {
+      if(item.get('title').value !== 'full_access') {
         item.get('checked').setValue(checked, {emitEvent: false});
         const childs = item.get('children') as FormArray;
 
@@ -165,7 +165,7 @@ export class CountrySetupCreateComponent implements OnInit {
 
   onAccessMenuChange(menus) {
 
-    const menusWithoutFullaccess = menus.filter(item => item.title !== 'Full Access');
+    const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
     
     const allChecked = [];
     const debounceChecked = _.debounce(this.toggleFullAccess, 100);
@@ -197,7 +197,8 @@ export class CountrySetupCreateComponent implements OnInit {
 
   buildFullAccessTogle() {
     return this.formBuilder.group({
-      title: 'Full Access',
+      title: 'full_access',
+      name: 'Full Access',
       value: 'full_access',
       children: this.formBuilder.array([]),
       checked: false,
@@ -209,7 +210,8 @@ export class CountrySetupCreateComponent implements OnInit {
     menus.map(item => {
       
       let menu = this.formBuilder.group({
-        title: item.name,
+        title: item.value,
+        name: item.name,
         value: item.value,
         children: this.formBuilder.array([]),
         checked: false,
