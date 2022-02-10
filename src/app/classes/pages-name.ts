@@ -168,6 +168,7 @@ export class PagesName {
 
     if (name.indexOf('supplierorder') > -1) {
       roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
+      roles['document'] = filterPermission.filter(item => item.indexOf('document') >= 0)[0];
     }
     if (name.indexOf("src_katalog_coin") > -1) {
       roles['approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]

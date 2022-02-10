@@ -54,6 +54,7 @@ export class WholesalerEditComponent {
   bankAccountLength: number = 0;
 
   permission: any;
+  permissionSupplierOrder: any;
   roles: PagesName = new PagesName();
   seeStatus: boolean = true;
   seeProfile: boolean = true;
@@ -81,6 +82,7 @@ export class WholesalerEditComponent {
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
+    this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {
       name: {},
       address: {},
