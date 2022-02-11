@@ -106,7 +106,7 @@
                   <!-- select category -->
                   <select-search placeholder="Kategori KPI" searchLabel="Cari Kategori KPI..." [options]="categories" [value]="kpi.get('category').value" (onChange)="resetKPIDetail(i, $event)">
                     <mat-error *ngIf="kpi.controls['category'].hasError('required') && kpi.controls['category'].touched">
-                      Kategori KPI harus diisi
+                      Kategori KPI harus dipilih
                     </mat-error>
                   </select-search>
 
@@ -114,12 +114,12 @@
                   <ng-container *ngIf="kpi.get('category').value == 'brand'">
                     <select-search placeholder="Brand" searchLabel="Cari Brand..." [options]="brands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
                       <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
-                        Brand harus diisi
+                        Brand harus dipilih
                       </mat-error>
                     </select-search>
                     <select-search placeholder="Parameter" searchLabel="Cari Parameter..." [options]="brand_parameters" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)">
                       <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
-                        Parameter harus diisi
+                        Parameter harus dipilih
                       </mat-error>
                     </select-search>
                   </ng-container>
@@ -127,8 +127,11 @@
                   <!-- if category = trade program -->
                   <ng-container *ngIf="kpi.get('category').value == 'trade program'">
                     <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="KPIListTradeProgram[i]" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)">
-                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched || !KPIListTradeProgram[i].length">
-                        Trade Program harus diisi
+                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && KPIListTradeProgram[i].length">
+                        Trade Program harus dipilih
+                      </mat-error>
+                      <mat-error *ngIf="!KPIListTradeProgram[i].length">
+                        Trade Program tidak tersedia
                       </mat-error>
                     </select-search>
                   </ng-container>
@@ -137,12 +140,12 @@
                   <ng-container *ngIf="kpi.get('category').value == 'ecosystem'">
                     <select-search placeholder="Parameter" searchLabel="Cari Parameter..." [options]="ecosystemParams" [value]="kpi.get('parameter').value" (onChange)="ecosystemParamsChange(i, $event)">
                       <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
-                        Parameter harus diisi
+                        Parameter harus dipilih
                       </mat-error>
                     </select-search>
                     <select-search *ngIf="kpi.get('parameter').value === 'Private Label'" placeholder="Brand" searchLabel="Cari Brand..." [options]="ecosystemBrands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
                       <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
-                        Brand harus diisi
+                        Brand harus dipilih
                       </mat-error>
                     </select-search>
                   </ng-container>

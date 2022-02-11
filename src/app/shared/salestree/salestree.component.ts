@@ -107,7 +107,7 @@ export class SalestreeComponent implements OnInit {
 
     const [areaIds, lastAreaKey]: any[] = this.getSelectedAllId();
     this.area.emit(areaIds);
-    this.areaWithKey.emit([areaIds, lastAreaKey]);
+    this.areaWithKey.emit([areaIds, lastAreaKey, false]);
     this.areas.emit(this.form.getRawValue());
 
     this.updateForm();
@@ -123,7 +123,7 @@ export class SalestreeComponent implements OnInit {
         const [areaIds, lastAreaKey]: any[] = this.getSelectedAllId();
         this.area.emit(areaIds);
         this.areas.emit(this.form.getRawValue());
-        this.areaWithKey.emit([areaIds, lastAreaKey]);
+        this.areaWithKey.emit([areaIds, lastAreaKey, onClick]);
       }
 
       const fd = new FormData();

@@ -232,13 +232,9 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   getKPIAreaIds(pos: number, lastSelected: any) {
-    const [id] = lastSelected;
+    const [id, _, isClick] = lastSelected;
     this.masterKPIService.getTradeProgramObjectives({ id: id.join(",") }).subscribe((res) =>{
       this.KPIListTradeProgram[pos] = res.data || [];
-      // if (pos === 0) this.KPIListTradeProgram[pos] = [{ id: 1, name: "Test 1"}];
-      // if (pos === 1) this.KPIListTradeProgram[pos] = [{ id: 1, name: "Test 1"}, { id: 2, name: "Test 2"}];
-      // if (pos === 2) this.KPIListTradeProgram[pos] = [{ id: 1, name: "Test 3"}];
-      // if (pos === 3) this.KPIListTradeProgram[pos] = [{ id: 1, name: "Test 4"}];
     })
   }
 
@@ -294,21 +290,27 @@ export class EditKPISettingComponent implements OnInit {
     })
   }
 
-  moveUp(pos) {
+  moveUp(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
+    let tradeProgram = this.KPIListTradeProgram[pos];
     kpis.removeAt(pos);
+    this.KPIListTradeProgram.splice(pos, 1);
     kpis.insert(pos-1, kpi);
+    this.KPIListTradeProgram.splice(pos-1, 0, tradeProgram);
   }
 
-  moveDown(pos) {
+  moveDown(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
+    let tradeProgram = this.KPIListTradeProgram[pos];
     kpis.removeAt(pos);
+    this.KPIListTradeProgram.splice(pos, 1);
     kpis.insert(pos+1, kpi);
+    this.KPIListTradeProgram.splice(pos+1, 0, tradeProgram);
   }
 
-  deleteKPI(pos) {
+  deleteKPI(pos: number) {
     let dialogData = {
       titleDialog: 'Hapus KPI',
       captionDialog: `Apa Anda yakin menghapus KPI ${pos+1}?`,
@@ -319,9 +321,14 @@ export class EditKPISettingComponent implements OnInit {
     this.dialogService.openCustomConfirmationDialog(dialogData);
   }
 
+  deleteArea(id: number) {
+    this.existingAreas = this.existingAreas.filter(area => area.id !== id);
+  }
+
   confirmDelete() {
     let kpis = this.formKPI.controls.kpis as FormArray;
     kpis.removeAt(this.indexDelete);
+    this.KPIListTradeProgram.splice(this.indexDelete, 1);
     this.dialogService.brodcastCloseConfirmation();
   }
 
@@ -338,10 +345,12 @@ export class EditKPISettingComponent implements OnInit {
       case "brand":
         this.validator(kpi, "brand", false, required);
         this.validator(kpi, "parameter", false, required);
+        return;
       case "ecosystem":
       case "trade program":
         this.validator(kpi, "brand", true);
         this.validator(kpi, "parameter", false, required);
+        return;
       default:
         return;
     }
@@ -395,27 +404,24 @@ export class EditKPISettingComponent implements OnInit {
         area_level: level,
         areas: newAreaIDs
       };
+      let res;
+      if(!this.paramEdit) {
+        res = await this.kpiSettingService.create(body).toPromise();
+      }
+      else {
+        body.id = this.paramEdit;
+        res = await this.kpiSettingService.update(body).toPromise();
+      }
 
-      console.log(body);
-
-      // let res;
-      // if(!this.paramEdit) {
-      //   res = await this.kpiSettingService.create(body).toPromise();
-      // }
-      // else {
-      //   body.id = this.paramEdit;
-      //   res = await this.kpiSettingService.update(body).toPromise();
-      // }
-
-      // if(res.status == 'success') {
-      //   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      //   this.router.navigate(["kpisetting", "kpi-groups-list"]);
-      //   window.localStorage.removeItem("kps");
-      // }
-      // else {
-      //   this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      //   commonFormValidator.validateAllFields(this.formKPI);
-      // }
+      if(res.status == 'success') {
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.router.navigate(["kpisetting", "kpi-groups-list"]);
+        window.localStorage.removeItem("kps");
+      }
+      else {
+        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        commonFormValidator.validateAllFields(this.formKPI);
+      }
     } else {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formKPI);
