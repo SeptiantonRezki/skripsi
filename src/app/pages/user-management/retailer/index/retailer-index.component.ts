@@ -480,18 +480,24 @@ export class RetailerIndexComponent {
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
-        if (this.dataService.getFromStorage('zone') && this.dataService.getFromStorage('zone').length > 0) {
-          this.list[this.parseArea(selection)] = this.dataService.getFromStorage('zone');
-          this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
-        } else {
+        // if (this.dataService.getFromStorage('zone') && this.dataService.getFromStorage('zone').length > 0) {
+        //   this.list[this.parseArea(selection)] = this.dataService.getFromStorage('zone');
+        //   this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
+        // } else {
+          this.loadingIndicator = true;
+          this.dataService.showLoading(true);
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+            this.dataService.showLoading(true);
             this.list[this.parseArea(selection)] = res.data;
             // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
+            if(res.data.length > 0){
+              
+              this.dataService.showLoading(false);
+            }
             // fd = null
           });
-        }
+        // }
 
         this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
@@ -516,9 +522,11 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
+                this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -553,9 +561,11 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('area hitted', selection, item, this.list['region']);
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
+                this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -587,9 +597,11 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('item', item);
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
+                this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -618,9 +630,11 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
+                this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -647,9 +661,11 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
+                this.dataService.showLoading(true);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
                 // fd = null
@@ -1027,7 +1043,7 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
-    this.dataService.showLoading(true);
+    
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";

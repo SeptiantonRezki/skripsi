@@ -323,9 +323,14 @@ export class WholesalerIndexComponent {
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
+        this.dataService.showLoading(true);
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
+          this.dataService.showLoading(true);
           this.list[this.parseArea(selection)] = res.data;
+          if(res.data.length > 0){
+            this.dataService.showLoading(false);
+          }
           // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
@@ -350,9 +355,11 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -380,9 +387,11 @@ export class WholesalerIndexComponent {
           })[0] : {};
           console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -409,9 +418,11 @@ export class WholesalerIndexComponent {
           })[0] : {};
           console.log('item', item);
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -435,9 +446,11 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
@@ -459,9 +472,11 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] = res.data;
+              this.dataService.showLoading(false);
               // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
