@@ -121,21 +121,7 @@ export class EditKPISettingComponent implements OnInit {
       category: {}
     };
 
-    // this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
-    this.areaFromLogin = [
-        [
-            {
-                "id": 1,
-                "parent_id": null,
-                "code": "SLSNTL      ",
-                "name": "SLSNTL",
-                "level_desc": "national",
-                "country": "KH",
-                "deleted_at": null,
-                "type": "national"
-            },
-        ]
-    ]
+    this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
     this.area_id_list = this.dataService.getDecryptedProfile()["area_id"];
 
     this.levels = {
