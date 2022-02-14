@@ -17,7 +17,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
-import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { InappMarketingValidator } from '../../InappMarketing.validator';
 
 @Component({
@@ -1852,9 +1852,9 @@ export class BannerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get('user_group').value };
+    dialogConfig.data = { audience: this.formBannerGroup.get('user_group').value, api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd) };
 
-    this.dialogRef = this.dialog.open(ImportAudienceBannerDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
