@@ -96,7 +96,7 @@
                     <div class="access-name" *ngIf="item.nama == 'gsw'">{{item.nama | uppercase}}</div>
                     <div class="access-name" *ngIf="item.nama !== 'gsw'">{{item.nama | toCapitalize}}</div>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
-                      [disabled]="isDetail" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
+                      [disabled]="isDetail || item.disabled" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle>
                     <!-- <div class="access-name">{{item.nama | toCapitalize}}</div>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
                       [disabled]="isDetail" (change)="onToggleChange(item, items, role, $event)"></mat-slide-toggle> -->

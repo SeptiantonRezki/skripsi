@@ -53,7 +53,7 @@ export class Endpoint {
         logout: `${AYO_API_SERVICE(SERVER.auth)}/api/v1/auth/remove-token`,
         check_token: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/token`,
         fcm_token: `${AYO_API}/api/general/user_notif`,
-        get_syarat_ketentuan: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=terms-conditions&user=principal`,
+        get_syarat_ketentuan: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content?type=terms-conditions&user=principal`,
         check_user_status: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/user-status`,
         get_user_cognito_ad: `${AYO_API_SERVICE(SERVER.user)}/oauth/cognito/get-user`,
         encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`,
@@ -206,10 +206,10 @@ export class Endpoint {
         list_banner_customer: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/principal/banner/customer-last-three-month?page=all`,
       },
       landingPage: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
-        create: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page`,
-        put: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page/${context.page_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.content)}/api/${type_api}/content/static-page/${context.page_id}`
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/static-page`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/static-page`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/static-page/${context.page_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/static-page/${context.page_id}`
       },
       product: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/product`,
@@ -353,34 +353,34 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/${context.role_id}`,
         list_menu: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/role/available_permissions`,
-        force_update: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
-        force_update_v2: `${AYO_API}/api/principal/force-update`,
-        force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update-user`,
-        list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/force-update`,
-        revert_version: `${AYO_API}/api/${type_api}/force-update/${context.version_id}`,
+        force_update: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
+        force_update_v2: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update`,
+        force_update_user: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update-user`,
+        list_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/force-update`,
+        revert_version: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/force-update/${context.version_id}`,
         device_os: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/device-os`
       },
       tnc: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=terms-conditions`,
-        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
-        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content?type=terms-conditions`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
         company_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/group`
       },
       privacy: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content?type=privacy-policy`,
-        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
-        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content?type=privacy-policy`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
       },
       help: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
-        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content`,
-        put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
-        getListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-categories`,
-        getListUser: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/list-user`,
-        getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/${context.content_id}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content`,
+        put: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
+        getListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/list-categories`,
+        getListUser: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/list-user`,
+        getShow: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/${type_api}/content/${context.content_id}`,
         getCountry: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/${type_api}/content/countries`,
       },
       coin: {
@@ -427,10 +427,10 @@ export class Endpoint {
         update: `${AYO_API}/api/general/user_notif/${context.id_notif}`,
         popup: `${AYO_API}/api/wholesaler/pop-up-notification`,
         update_notif: `${AYO_API}/api/wholesaler/pop-up-notification`,
-        content: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/page/${context.slug}`,
+        content: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/page/${context.slug}`,
       },
       general: {
-        support: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user_id}`,
+        support: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content?type=${context.type}&user=${context.user_id}`,
         permissions: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/permission`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent ? context.parent : 1}`,
         parent_by_code: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
@@ -517,19 +517,19 @@ export class Endpoint {
         detail: `${AYO_API_SERVICE(server.banner)}/api/v1/banner/principal/report/detail/${context.report_id}`
       },
       support: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content?type=${context.type}&user=${context.user}`,
-        getBantuanListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-categories?user=${context.user}`,
-        getBantuanListCategoryDetails: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/list-help?content_category_id=${context.id}&user=${context.user}`,
-        getBantuanShowDetail: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/${context.id}`,
-        like: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/like?content_id=${context.id}`,
-        unlike: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/unlike?content_id=${context.id}`,
-        search: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/general/content/search?keyword=${context.keyword}&user=${context.user}`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content?type=${context.type}&user=${context.user}`,
+        getBantuanListCategory: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/list-categories?user=${context.user}`,
+        getBantuanListCategoryDetails: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/list-help?content_category_id=${context.id}&user=${context.user}`,
+        getBantuanShowDetail: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/${context.id}`,
+        like: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/like?content_id=${context.id}`,
+        unlike: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/unlike?content_id=${context.id}`,
+        search: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/general/content/search?keyword=${context.keyword}&user=${context.user}`,
       },
       template_message: {
-        get: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
-        create: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template`,
+        get: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/chat-template`,
+        create: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/chat-template`,
         put: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-update`,
-        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/chat-template-delete`,
+        delete: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/chat-template-delete`,
       },
       otp_settings: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/settings/otp`,
@@ -539,7 +539,7 @@ export class Endpoint {
         updateRoomIdTransaksi: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/wholesaler/order/update/${context.orderId}`,
         createUpdateRoomOrderId: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/create-qiscus-room`,
         createUpdateRoomOrderPL: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/private-label/create-qiscus-room/${context.orderId}`,
-        getMessageTemplates: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
+        getMessageTemplates: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/vendor/chat-template`,
         loginMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/get-multi-channel`, // DEPRECATED
         createRoomMultichannel: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/initiate-chat`,
         createJWT: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/qiscus/create-jwt`,
@@ -650,8 +650,8 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}`,
         address_map: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/company/${context.vendor_id}/address-map`,
         operational_time: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/vendor/operational-time`,
-        chat_template: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template`,
-        chat_template_operational: `${AYO_API_SERVICE(SERVER.content)}/api/v1/content/principal/vendor/chat-template-operational`,
+        chat_template: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/vendor/chat-template`,
+        chat_template_operational: `${AYO_API_SERVICE(SERVER.content)}/api/v2/content/principal/vendor/chat-template-operational`,
         list_province: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/province?sort=name`,
         list_city: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/city/by-province/${context.province_id}?sort=name`,
         list_district: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/master/district/by-city/${context.city_id}?sort=name`,
@@ -722,7 +722,9 @@ export class Endpoint {
         send_notification: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/send-notification-approval`,
         download_list_approval: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/download-list-approval/${context.approval_id}`,
         approver_data: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/approver`,
-        requestor_data: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/requestor`
+        requestor_data: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/requestor`,
+        get_approval_history: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/approval-history/${context.id}`,
+        respond_multiple_approval: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/respond-multiple-approval`,
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
@@ -777,6 +779,7 @@ export class Endpoint {
         download_encryption: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/tsm/export`,
         get_post_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission`,
         put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/publish-mission/${context.sequencing_id}`,
+        import_coin_multiple_approval: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/tsm/request-import-coin-multiple-approval`,
       },
       pengaturan_attribute_misi: {
         get_toolbox: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori_toolbox${context.status ? '?status=active' : ''}`,
@@ -1043,7 +1046,25 @@ export class Endpoint {
         detail_used: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/used`,
         detail_notused: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/notused`,
         redeem_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/supplier/${context.voucher_id}/redeem`,
-      }
+      },
+      country_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
+        get_menus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/retailer/menu`,
+        get_option_country: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-country`,
+      },
+      language_setup: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
+        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/update-json`,
+        validate: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages/validate-json`,
+        export: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/download-language`,
+        get_translation: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/json-language-format`
+        // get_translation: `https://d1fcivyo6xvcac.cloudfront.net/lang/bahasa-indonesia/principal/languages.json`,
+
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

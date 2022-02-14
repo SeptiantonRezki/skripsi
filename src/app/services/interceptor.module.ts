@@ -43,14 +43,17 @@ export class BaseInterceptor implements HttpInterceptor {
 
   authenticateRequest(request: HttpRequest<any>) {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
+    const country_code = localStorage.getItem('user_country');
     if (token) {
-      const country_code = localStorage.getItem('user_country');
       const duplicate = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', country_code)
       });
       return duplicate;
     }
-    return request;
+    const duplicateReq = request.clone({
+      headers: request.headers.set('App-Locale', country_code)
+    });
+    return duplicateReq;
   }
 
   throwIntercept(err, req) {
@@ -74,10 +77,33 @@ export class BaseInterceptor implements HttpInterceptor {
             reader.readAsText(err.error);
           }
         }
+        if (req.method === "PUT") {
+          if (err.error.errors) {
+            if (err.error.errors['status']) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+            } else if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
+        }
         return Observable.throw(err);
       } else if (err.status == 400) {
-        if (req.method == "POST") {
-          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
+        if (req.method === "POST") {
+          if (err.error.errors) {
+            if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
         }
         return Observable.throw(err);
       } else if (err.status == 401) {
@@ -148,6 +174,20 @@ export class BaseInterceptor implements HttpInterceptor {
       } else if (err.status == 500) {
         if (req.method == "POST") {
           this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+        }
+        if (req.method === "PUT") {
+          if (err.error.errors) {
+            if (err.error.errors['status']) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
+            } else if (err.error.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+            } else {
+              let errorArray = Object.values(err.error.errors);
+              this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
+            }
+          } else {
+            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+          }
         }
         return Observable.throw(err);
       } else {

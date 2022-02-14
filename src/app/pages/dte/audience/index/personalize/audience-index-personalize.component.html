@@ -59,9 +59,7 @@
 
   <ngx-datatable-column name="{{ ls.locale.dte.audience.text3 }}" prop="status">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <span id="status" *ngIf="row.status === 'rejected'" class="text-boxed mat-red-700-bg">{{row.real_status}}</span>
-      <span id="status" *ngIf="row.status === 'pending'" class="text-boxed mat-yellow-700-bg">{{row.real_status}}</span>
-      <span id="status" *ngIf="row.status === 'approved'" class="text-boxed mat-green-700-bg">{{row.real_status}}</span>
+      <span id="status" [ngClass]="classStatus(row.status, row.job_status)">{{ renderStatus(row.status, row.real_status, row.job_status) }}</span>
     </ng-template>
   </ngx-datatable-column>
 

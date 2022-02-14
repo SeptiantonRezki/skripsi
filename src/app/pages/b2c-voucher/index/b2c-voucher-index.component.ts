@@ -263,8 +263,8 @@ export class B2CVoucherIndexComponent implements OnInit {
     this.b2cVoucherService.deleteVoucher({ voucher_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
+        this.onLoad = true;
         this.getB2CVoucherList();
-
         this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
       }
     });

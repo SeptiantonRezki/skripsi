@@ -396,7 +396,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.dte.pengaturanAttributeMisi.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "task-sequencing",

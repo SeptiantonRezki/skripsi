@@ -1,0 +1,181 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="(!isDetail) ? ls.locale.country_setup.page_title_edit : ls.locale.country_setup.page_title_index">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+      <div class="mat-white-bg p-24" fxLayout="column">
+        
+        <form [formGroup]="formCountry">
+
+          <!-- <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <h1>{{ (!isDetail) ? ls.locale.country_setup.page_title_edit : ls.locale.country_setup.page_title_index }}</h1>
+            <mat-form-field
+              [class]="formCountry.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
+              <mat-select formControlName="status">
+                <mat-option [value]="status.value" *ngFor="let status of statuses">{{status.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+
+          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="45">
+              <h2>Country</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="{{ls.locale.country_setup.name}}" type="text" formControlName="name">
+                <mat-error *ngIf="formCountry.controls['name'].hasError('required') && formCountry.controls['name'].touched ">
+                  {{ ls.locale.country_setup.name }} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="{{ls.locale.country_setup.country_id}}" type="text" formControlName="code">
+                <mat-error *ngIf="formCountry.controls['code'].hasError('required') && formCountry.controls['code'].touched ">
+                  {{ ls.locale.country_setup.country_id }} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="{{ls.locale.country_setup.locale}}" type="text" formControlName="locale">
+                <mat-error *ngIf="formCountry.controls['locale'].hasError('required') && formCountry.controls['locale'].touched ">
+                  {{ ls.locale.country_setup.locale }} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
+
+              <h2>Phone Code</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput placeholder="{{ls.locale.country_setup.phone_code}}" type="text" formControlName="phone_code">
+                <mat-error *ngIf="formCountry.controls['phone_code'].hasError('required') && formCountry.controls['phone_code'].touched ">
+                  {{ ls.locale.country_setup.phone_code }} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
+              <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
+
+                <mat-form-field fxFlex="45" class="is-light">
+                  <input matInput placeholder="{{ls.locale.country_setup.min_length}}" type="text" formControlName="phone_min_length">
+                  <mat-error *ngIf="formCountry.controls['phone_min_length'].hasError('required') && formCountry.controls['phone_min_length'].touched ">
+                    {{ ls.locale.country_setup.min_length }} {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="45" class="is-light">
+                  <input matInput placeholder="{{ls.locale.country_setup.max_length}}" type="text" formControlName="phone_max_length">
+                  <mat-error *ngIf="formCountry.controls['phone_max_length'].hasError('required') && formCountry.controls['phone_max_length'].touched ">
+                    {{ ls.locale.country_setup.max_length }} {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+
+            </div>
+
+            <div fxLayout="column" fxFlex="45">
+              <h2>Currency</h2>
+              <div fxFlex="100" fxLayout="column" formGroupName="currencies">
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput placeholder="{{ls.locale.country_setup.symbol}}" type="text" formControlName="symbol">
+                  <mat-error *ngIf="formCountry.get('currencies').controls['symbol'].hasError('required') && formCountry.get('currencies').controls['symbol'].touched ">
+                    {{ ls.locale.country_setup.symbol }} {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light">
+                  <input matInput placeholder="Decimal" type="text" formControlName="decimal">
+                  <mat-error *ngIf="formCountry.get('currencies').controls['decimal'].hasError('required') && formCountry.get('currencies').controls['decimal'].touched ">
+                    Decimal {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between" [formGroup]="formCountry.get('currencies')">
+                
+                <mat-form-field fxFlex="45" class="is-light">
+                  <input matInput placeholder="{{ls.locale.country_setup.decimal_separator}}" type="text" formControlName="decimal_separator">
+                  <mat-error *ngIf="formCountry.get('currencies').controls['decimal_separator'].hasError('required') && formCountry.get('currencies').controls['decimal_separator'].touched ">
+                    {{ ls.locale.country_setup.decimal_separator }} {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="45" class="is-light">
+                  <input matInput placeholder="{{ls.locale.country_setup.thousand_separator}}" type="text" formControlName="thousand_separator">
+                  <mat-error *ngIf="formCountry.get('currencies').controls['thousand_separator'].hasError('required') && formCountry.get('currencies').controls['thousand_separator'].touched ">
+                    {{ ls.locale.country_setup.thousand_separator }} {{ ls.locale.global.messages.mandatory_text }}.
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              
+              <h2>{{ls.locale.country_setup.point}}</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="number" placeholder="{{ls.locale.country_setup.point}}" formControlName="point_valuation">
+                <mat-error *ngIf="formCountry.controls['point_valuation'].hasError('required') && formCountry.controls['point_valuation'].touched ">
+                  {{ls.locale.country_setup.point}} {{ls.locale.global.messages.mandatory_text}}.
+                </mat-error>
+              </mat-form-field>
+
+              <h2>{{ls.locale.country_setup.language}}</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="{{ls.locale.country_setup.language}}" formControlName="language_id">
+                  <mat-option *ngFor="let lang of languages" [value]="lang.id">{{ lang.name }}</mat-option>
+                </mat-select>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="formCountry.controls['language_id'].hasError('required') && formCountry.controls['language_id'].touched">
+                  {{ls.locale.country_setup.language}} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="45">
+              <h2>{{ls.locale.country_setup.access_retailer}}</h2>
+              <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
+            </div>
+            <div fxLayout="column" fxFlex="45">
+              <h2>{{ls.locale.country_setup.customer_service}}</h2>
+              <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
+                <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                  <mat-form-field fxFlex="100" class="is-light">
+                    <input matInput placeholder="{{ls.locale.bantuan.text10}}" type="text" formControlName="telepon">
+                    <mat-error *ngIf="item.controls['telepon'].hasError('required') && item.controls['telepon'].touched ">
+                      {{ls.locale.bantuan.text10}} {{ ls.locale.global.messages.mandatory_text }}.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="100" class="is-light">
+                    <input matInput placeholder="{{ls.locale.global.label.email}}" type="text" formControlName="email">
+                    <mat-error *ngIf="item.controls['email'].hasError('required') && item.controls['email'].touched ">
+                      {{ls.locale.global.label.email}} {{ ls.locale.global.messages.mandatory_text }}.
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="100" fxLayoutAlign="space-between">
+                    <label for="">Whatsapp</label>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="whatsapp"></mat-slide-toggle>
+                  </div>
+                  <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('whatsapp').value">
+                    <input matInput placeholder="Whatsapp Number" type="text" formControlName="whatsapp_number">
+                    <mat-error *ngIf="item.controls['whatsapp_number'].hasError('required') && item.controls['whatsapp_number'].touched ">
+                      Whatsapp {{ ls.locale.global.messages.mandatory_text }}.
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="100" fxLayoutAlign="space-between">
+                    <label for="">Bude</label>
+                    <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="bude"></mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+              {{ ls.locale.global.button.save }}
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

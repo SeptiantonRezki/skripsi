@@ -4,7 +4,13 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MatDialogModule, MatSnackBarModule, MatRadioModule } from '@angular/material';
+import {
+  MatDialogModule,
+  MatSnackBarModule,
+  MatRadioModule,
+  MatInputModule,
+  MatFormFieldModule,
+} from '@angular/material';
 import 'hammerjs';
 
 import { FuseModule } from '@fuse/fuse.module';
@@ -41,6 +47,9 @@ import { KPISettingService } from './services/kpi-setting/kpi-setting.service';
 import { MasterKPIService } from './services/kpi-setting/master-kpi.service';
 import { DialogService } from './services/dialog.service';
 import { AdminPrincipalService } from './services/user-management/admin-principal.service';
+import { CountrySetupService } from './services/user-management/country-setup.service';
+import { LanguageSetupService } from './services/user-management/language-setup.service';
+
 import { VendorsService } from './services/src-catalogue/vendors.service';
 import { FieldForceService } from './services/user-management/field-force.service';
 import { PaguyubanService } from './services/user-management/paguyuban.service';
@@ -121,6 +130,8 @@ import { LanguagesService } from './services/languages/languages.service';
 import { NotificationCoinAdjustmentDialogComponent } from "./shared/notification-coin-adjustment-dialog/notification-coin-adjustment-dialog.component";
 import { VoucherPrivateLabelService } from "./services/voucher-private-label.service";
 import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
+import { Observable } from 'rxjs';
+import { GeneralBackendService } from './services/general-backend.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -141,8 +152,23 @@ const config = {
   appId: '1:651041534914:web:be573accf451ec608e1c5b'
 };
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '../assets/languages/', '.json');
+export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService) {
+  // return new TranslateHttpLoader(http, '../assets/languages/', '.json');
+
+  return new CustomLoader(languageSetupService, http);
+
+}
+
+class CustomLoader implements TranslateLoader {
+
+  constructor(private service: LanguageSetupService, private http: HttpClient) {}
+
+  getTranslation(lang: string): Observable<any> {
+    return this.service.getTranslation({type: 'principal'}).map(({data}) => {
+      return data.json_format;
+    })
+
+  }
 }
 
 @NgModule({
@@ -162,7 +188,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        deps: [HttpClient, LanguageSetupService]
       }
     }),
     // Fuse Main and Shared modules
@@ -174,6 +200,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       passThruUnknownUrl: true,
     }),
     MatRadioModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatDialogModule,
     MatSnackBarModule,
     UserIdleModule.forRoot({ idle: 1140, timeout: 60, ping: 60 }),
@@ -232,6 +260,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NonAuthGuard,
     NavigationService,
     GeneralService,
+    GeneralBackendService,
     IdleService,
     SupportService,
     GeotreeService,
@@ -267,6 +296,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LanguagesService,
     VoucherPrivateLabelService,
     OrderToMitraHubService,
+    CountrySetupService,
+    LanguageSetupService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

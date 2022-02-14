@@ -1,0 +1,29 @@
+<div class="p-24">
+  <ngx-datatable id="datatable" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator"
+    [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+    [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
+    [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true">
+
+    <ngx-datatable-column name="Date" [width]="25" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span class="row-name">{{ row.responded_at }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Status" [width]="25" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span class="row-name">{{ row.status ? row.status : '-' }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Person" [width]="100" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span class="row-name">{{ row.user_name }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Note" [width]="200" [sortable]="false">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span class="row-name">{{ row.reason }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</div>

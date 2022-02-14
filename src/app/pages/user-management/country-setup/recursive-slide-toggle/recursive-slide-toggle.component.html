@@ -1,0 +1,30 @@
+<div fxLayout="column" class="mb-4" *ngIf="horizontal; else alignVertical;">
+
+  <div *ngFor="let item of items; let i = index;">
+
+    <div fxLayout="column">
+      <div fxFlex="100" [formGroup]="item" fxLayoutAlign="space-between" [ngStyle]="{'padding-left': (10 * depth)+'px'}">
+        <label for="">{{ item.get('name').value }}</label>
+        <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="checked" (change)="onChange($event, item, depth)"></mat-slide-toggle>
+      </div>
+      <ng-container *ngIf="item.get('children')?.length">
+        <recursive-slide-toggle [items]="item.get('children').controls" [depth]="depth+1" [horizontal]="horizontal" [parent]="item" [fullAccess]="fullAccess"></recursive-slide-toggle>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</div>
+<ng-template #alignVertical>
+  <div fxLayout="row wrap" class="mb-4" fxLayoutAlign="space-between">
+
+    <div *ngFor="let item of items; let i=index;" fxFlex="45" fxLayout="column">
+      <div fxFlex="100" fxLayout="row wrap" fxLayoutAlign="space-between center" [formGroup]="item">
+        <label for="">{{ item.get('name').value }}</label>
+        <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="checked" (change)="onChange($event, item, depth)"></mat-slide-toggle>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
