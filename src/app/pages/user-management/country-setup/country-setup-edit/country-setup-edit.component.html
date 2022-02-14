@@ -10,7 +10,7 @@
         
         <form [formGroup]="formCountry">
 
-          <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+          <!-- <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
             <h1>{{ (!isDetail) ? ls.locale.country_setup.page_title_edit : ls.locale.country_setup.page_title_index }}</h1>
             <mat-form-field
               [class]="formCountry.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
@@ -18,7 +18,7 @@
                 <mat-option [value]="status.value" *ngFor="let status of statuses">{{status.name}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          </div> -->
 
           <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
             <div fxLayout="column" fxFlex="45">

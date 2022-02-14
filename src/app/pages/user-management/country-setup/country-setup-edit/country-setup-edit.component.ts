@@ -45,7 +45,7 @@ export class CountrySetupEditComponent implements OnInit {
     });
 
     this.formCountry = formBuilder.group({
-      status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
+      // status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
       name: [this.country.name, Validators.required],
       code: [this.country.country_code, Validators.required],
       locale: [this.country.locale_code, Validators.required],
@@ -105,13 +105,11 @@ export class CountrySetupEditComponent implements OnInit {
 
     })
 
-    this.countrySetupService.getRetailerMenus().subscribe(({data}) => {
+    this.countrySetupService.getRetailerMenus().subscribe( ({data}) => {
       
       const abilities = this.getAbilitiesByType(this.country.access_menus, "retailer");
-
-      const flatMasterAbilities = this.flatenedAbilities(data, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
-      const flatabilities = this.flatenedAbilities(abilities, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
-
+      const flatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
+      const flatabilities = this.flatenedAbilities(abilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
       const filtered = this.assignTrueIfExists(flatMasterAbilities, flatabilities, (left, right) => left.title === right.title);
       const access_menus = this.formCountry.get('access_menu').get('abilities') as FormArray;
 
@@ -120,7 +118,6 @@ export class CountrySetupEditComponent implements OnInit {
       access_menus.at(0).valueChanges.subscribe(fullaccess => {
         this.onFullAccessChange(fullaccess);
       })
-
       this.setAbilities(this.nested(filtered), access_menus);
 
     }, err => {
@@ -135,7 +132,8 @@ export class CountrySetupEditComponent implements OnInit {
 
   buildFullAccessTogle() {
     return this.formBuilder.group({
-      title: 'Full Access',
+      title: 'full_access',
+      name: 'Full Access',
       children: this.formBuilder.array([]),
       checked: false,
       depth: 0
@@ -155,7 +153,7 @@ export class CountrySetupEditComponent implements OnInit {
   recurseCheck(items, checked) {
     items.map( (item: FormGroup) => {
         
-      if(item.get('title').value !== 'Full Access') {
+      if(item.get('title').value !== 'full_access') {
         item.get('checked').setValue(checked, {emitEvent: false});
         const childs = item.get('children') as FormArray;
 
@@ -168,8 +166,7 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   onAccessMenuChange(menus) {
-    const menusWithoutFullaccess = menus.filter(item => item.title !== 'Full Access');
-    
+    const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
     const allChecked = [];
     const debounceChecked = _.debounce(this.toggleFullAccess, 100);
 
@@ -200,10 +197,10 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   setAbilities(values, form: FormArray, depth = 0) {
-
     values.map(item => {
       let menu = this.formBuilder.group({
         title: item.title,
+        name: item.name,
         children: this.formBuilder.array([]),
         checked: item.checked,
         depth: depth,
@@ -274,17 +271,16 @@ export class CountrySetupEditComponent implements OnInit {
 
   }
 
-  flatenedAbilities(abilities, parseName: Function, maxDepth = 0) {
-    
+  flatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0) {
+
     const flatitems = [];
     let id = 0;
 
     const recurse = (items, depth = 0, parentId = null) => {
-      
       items.map((item, i) => {
         
         id += 1;
-        const menu = {title: parseName(item), depth: depth, id: id, parent_id: parentId};
+        const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: id, parent_id: parentId};
         
         flatitems.push(menu);
 
@@ -336,8 +332,8 @@ export class CountrySetupEditComponent implements OnInit {
 
     let body = this.formCountry.getRawValue();
 
-    let fullaccess = _.find(body.access_menu.abilities, item => item.title === 'Full Access');
-    let abilitiesWithoutFullAccess = body.access_menu.abilities.filter(item => item.title !== 'Full Access');
+    let fullaccess = _.find(body.access_menu.abilities, item => item.title === 'full_access');
+    let abilitiesWithoutFullAccess = body.access_menu.abilities.filter(item => item.title !== 'full_access');
 
     body.access_menu = [{
       ...body.access_menu,

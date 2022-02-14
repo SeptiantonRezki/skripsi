@@ -21,7 +21,7 @@
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
-      <button (click)="exportwholesaler()" mat-raised-button type="button" class="is-danger">
+      <button *ngIf="permission.export" (click)="exportwholesaler()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_upward</mat-icon> Export XLS
       </button>
     </div>

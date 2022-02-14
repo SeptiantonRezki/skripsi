@@ -657,17 +657,24 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     const data = {
       titleDialog: `${status === 'approved' ? 'Setujui Request Adjustment Coin' : 'Tolak Request Adjustment Coin'}`,
       captionDialog: `Apakah anda yakin untuk ${status === 'approved' ? 'menyetujui' : 'menolak'} request adjustment coin ini ?`,
-      confirmCallback: () => this.confirmAction(status),
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      confirmCallback: (remark) => this.confirmAction(status, remark),
+      buttonText: ['Ya, Lanjutkan', 'Batal'],
+      isRemark: true,
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmAction(status: string) {
+  confirmAction(status: string, reason?: string) {
+    const body = {
+      id: this.dataApproval['id'],
+      status,
+      reason
+    };
+    
     this.dataService.showLoading(true);
-    this.coinAdjustmentApprovalService.respondApproval({ id: this.dataApproval['id'], status }, { is_tsm: this.isTSM }).subscribe(res => {
+    this.coinAdjustmentApprovalService.respondMultipleApproval(body, { is_tsm: this.isTSM }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: "Data Berhaasil Disimpan!" });
+      this.dialogService.openSnackBar({ message: "Data Berhasil Disimpan!" });
       this.dataService.showLoading(false);
       this.getDetail();
     }, err => {

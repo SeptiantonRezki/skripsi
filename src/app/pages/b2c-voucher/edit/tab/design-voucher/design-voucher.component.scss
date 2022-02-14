@@ -22,6 +22,17 @@
     }
   }
 
+  .banner-image-template-disabled {
+    height: 210px;
+    width: 410px;
+    border-radius: 6px;
+    background-color: #ffffff;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.35);
+    cursor: default;
+    opacity: 0.5;
+  }
+
   .banner-image-template-selected {
     height: 210px;
     width: 410px;

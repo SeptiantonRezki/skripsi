@@ -37,6 +37,7 @@ export class RoleCreateComponent {
     private ls: LanguagesService
   ) {
     this.roles = this.activatedRoute.snapshot.data['menu'];
+    console.log(this.roles);
     // this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
 
     this.formRolesError = {
@@ -74,6 +75,26 @@ export class RoleCreateComponent {
       // district: [""],
       // territory: [""]
     })
+
+    let wholesalerRole = _.find(this.roles, {nama: 'management pengguna'}),
+          wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, {nama: 'wholesaler'}),
+          wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, {value: 'principal.wholesaler.button.export'}),
+          wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, {value: 'principal.wholesaler.lihat'}),
+
+          retailerRole = _.find(this.roles, {nama: 'retailer'}),
+          retailerMenu = retailerRole && _.find(retailerRole.menu, {nama: 'Daftar Retailer'}),
+          retailerExportToggle = retailerMenu && _.find(retailerMenu.value, {value: 'principal.retailer.button.export'}),
+          retailerViewToggle = retailerMenu && _.find(retailerMenu.value, {value: 'principal.retailer.lihat'});
+
+      if (wholesalerExportToggle && wholesalerViewToggle && wholesalerViewToggle.status == false) {
+        wholesalerExportToggle.disabled = true;
+        wholesalerExportToggle.status = false;
+      }
+
+      if (retailerExportToggle && retailerViewToggle && retailerViewToggle.status == false) {
+        retailerExportToggle.disabled = true;
+        retailerExportToggle.status = false;
+      }
 
     this.formRolesGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRolesGroup, this.formRolesError);
@@ -339,6 +360,42 @@ export class RoleCreateComponent {
       }
 
       
+    }
+
+    if (targetItem.value == 'principal.wholesaler.lihat') {
+      let exportWholesalerToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.button.export';
+      });
+
+      if (!exportWholesalerToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        exportWholesalerToggle.disabled = false;
+      }
+      if (!event.checked) {
+        exportWholesalerToggle.disabled = true;
+        exportWholesalerToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.lihat') {
+      let exportRetailerToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.button.export';
+      });
+
+      if (!exportRetailerToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        exportRetailerToggle.disabled = false;
+      }
+      if (!event.checked) {
+        exportRetailerToggle.disabled = true;
+        exportRetailerToggle.status = false;
+      }
     }
 
   }

@@ -159,6 +159,7 @@ import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
+import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -334,6 +335,7 @@ export const MY_FORMATS = {
     DialogProcessComponent,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
+    ApprovalHistoryComponent,
   ],
   exports: [
     TemplateIndexComponent,

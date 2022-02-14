@@ -62,6 +62,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   indexDelete: any;
   areaType: any[] = [];
   isArea: boolean;
+  disableForm: boolean = false;
 
   isVoucherAutomation: FormControl = new FormControl(false);
   formConsumerGroup: FormGroup;
@@ -98,7 +99,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral and Verified', value: 'referral-and-verified' },
     { name: 'Referral or Verified', value: 'referral-or-verified' },
     { name: 'Pesan Antar', value: 'coo'},
-    { name: 'Keping Langganan', value: 'loyalty'}
+    // { name: 'Keping Langganan', value: 'loyalty'}
   ];
 
   _data: any = null;
@@ -626,8 +627,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
       } else {
         this.onLoad = false;
       }
-
-      
+      // disable form
+      if(this.detailVoucher.status !== 'draft' && this.detailVoucher.status !== 'draft_saved' && this.detailVoucher.status !== 'reject') {
+        this.formConsumerGroup.disable();
+        this.formFilter.disable();
+        this.disableForm = true;
+      };
     } else {
       setTimeout(() => {
         this.getDetail();

@@ -2,7 +2,7 @@
 <div class="ayo-middle p-24" #containerScroll fxLayout="column">
   <div>
     <div fxLayout="row" class="pb-24 px-12">
-      <mat-checkbox class="mt-4 ml-4 mb-8"
+      <mat-checkbox class="mt-4 ml-4 mb-8" [disabled]="disableForm"
         [formControl]="isVoucherAutomation">
         Reimbursement</mat-checkbox>
     </div>
@@ -75,7 +75,7 @@
                 <span class="nominal-label">Nominal Penukaran (Rupiah)</span>
                 <div formArrayName="transferBankArray" *ngFor="let item of formPenukaranVoucher.get('transferBankArray')['controls']; let i = index;">
                   <div [formGroupName]="i">
-                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck">
+                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck" [disabled]="disableForm">
                       {{item.get('nominal').value | rupiahFormaterWithoutRp}}
                     </mat-checkbox>
                   </div>
@@ -83,7 +83,7 @@
                 <mat-form-field class="is-light">
                   <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahTransferBank">
                 </mat-form-field>
-                <button mat-icon-button (click)="addNominal('transfer-bank')">
+                <button mat-icon-button (click)="addNominal('transfer-bank')" [disabled]="disableForm">
                   <mat-icon class="secondary-text">add</mat-icon>
                 </button>
               </div>
@@ -100,7 +100,7 @@
                 <span class="nominal-label">Nominal Penukaran (Rupiah)</span>
                 <div formArrayName="saldoPojokBayarArray" *ngFor="let item of formPenukaranVoucher.get('saldoPojokBayarArray')['controls']; let i = index;">
                   <div [formGroupName]="i">
-                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck">
+                    <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck" [disabled]="disableForm">
                       {{item.get('nominal').value | rupiahFormaterWithoutRp}}
                     </mat-checkbox>
                   </div>
@@ -108,7 +108,7 @@
                 <mat-form-field class="is-light">
                   <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahSaldoPojokBayar">
                 </mat-form-field>
-                <button mat-icon-button (click)="addNominal('pojok-bayar')">
+                <button mat-icon-button (click)="addNominal('pojok-bayar')" [disabled]="disableForm">
                   <mat-icon class="secondary-text">add</mat-icon>
                 </button>
               </div>
@@ -122,7 +122,7 @@
 
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_reimburse">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
-        (click)="onUpdate()">
+        (click)="onUpdate()" [disabled]="disableForm">
         SIMPAN
       </button>
     </div>

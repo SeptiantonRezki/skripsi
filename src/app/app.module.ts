@@ -4,7 +4,13 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MatDialogModule, MatSnackBarModule, MatRadioModule } from '@angular/material';
+import {
+  MatDialogModule,
+  MatSnackBarModule,
+  MatRadioModule,
+  MatInputModule,
+  MatFormFieldModule,
+} from '@angular/material';
 import 'hammerjs';
 
 import { FuseModule } from '@fuse/fuse.module';
@@ -194,6 +200,8 @@ class CustomLoader implements TranslateLoader {
       passThruUnknownUrl: true,
     }),
     MatRadioModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatDialogModule,
     MatSnackBarModule,
     UserIdleModule.forRoot({ idle: 1140, timeout: 60, ping: 60 }),
