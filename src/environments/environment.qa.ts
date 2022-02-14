@@ -13,7 +13,7 @@ export const environment = {
   show_gtm: true,
   SRC_KATALOG_KOIN_BASE_IFRAME_URL: 'https://hms-react.qa.src.id',
   STREAMLIT: 'https://dynamicpricing.api.qa.src.id',
-  REACT_BASE_URL: 'https://hms-react.qa.src.id'
+  REACT_BASE_URL: 'https://hms-react.qa.src.id',
 };
 
 export const serviceServer = (server) => {

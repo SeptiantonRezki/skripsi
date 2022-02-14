@@ -313,7 +313,8 @@
     "view_document": "Lihat Dokumen",
     "grant_access": "Lihat Pemberian Akses",
     "has_branch": "Mempunyai Toko Cabang",
-    "total_branch": "Jumlah Toko Cabang"
+    "total_branch": "Jumlah Toko Cabang",
+    "area": "Area"
   },
   "retailer": {
     "list": {

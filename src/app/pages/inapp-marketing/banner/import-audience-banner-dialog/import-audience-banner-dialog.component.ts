@@ -62,7 +62,7 @@ export class ImportAudienceBannerDialogComponent implements OnInit {
     this.dataService.showLoading(true);
     this.bannerService[keyAudience](fd).subscribe(
       res => {
-        if (res && res.data.is_valid) {
+        if (res) {
           this.rows = res.data && res.data.audiences ? res.data.audiences : [];
           this.validData = res.data && res.data.is_valid ? res.data.is_valid : false;
           // this.validData = (res.data.audiences || []).filter(item => item.is_valid).length;

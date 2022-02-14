@@ -255,32 +255,32 @@ export class WholesalerEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          this.formWs.get('national').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('national').disable();
+          this.formWs.get('national').setValue(item.id);
           break
         case 'division':
-          this.formWs.get('zone').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('zone').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'region':
-          this.formWs.get('region').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('region').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'area':
-          this.formWs.get('area').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('area').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'salespoint':
-          this.formWs.get('salespoint').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('salespoint').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'district':
-          this.formWs.get('district').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('district').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'territory':
-          this.formWs.get('territory').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('territory').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
       }
     })

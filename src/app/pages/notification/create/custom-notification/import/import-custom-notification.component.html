@@ -43,6 +43,7 @@
             <th nowrap>Content Notification</th>
             <th nowrap>Nama Halaman</th>
             <th nowrap>Isi Halaman</th>
+            <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
         <tbody>
@@ -64,6 +65,9 @@
             </td>
             <td nowrap>
               {{ item.static_page_body }}
+            </td>
+            <td nowrap>
+              {{ item.reason }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">

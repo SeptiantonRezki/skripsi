@@ -30,6 +30,7 @@ export class DeviceRecoverComponent implements OnInit {
 
   formRecovery: FormGroup;
   onRecoverDevice: boolean = false;
+  country_phone_number_value : string;
 
   constructor(
     private customerCareService: CustomerCareService,
@@ -38,7 +39,7 @@ export class DeviceRecoverComponent implements OnInit {
     private dialogService: DialogService,
     private ls: LanguagesService
   ) {
-
+    this.country_phone_number_value = this.ls.locale.global.country_calling_code;
   }
 
   ngOnInit() {

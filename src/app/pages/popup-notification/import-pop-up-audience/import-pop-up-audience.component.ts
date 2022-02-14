@@ -18,6 +18,7 @@ export class ImportPopUpAudienceComponent {
   rows: any[];
   validData: any[];
   dialogData: any;
+  isValid: any;
 
   typeTargeted: string;
 
@@ -61,8 +62,11 @@ export class ImportPopUpAudienceComponent {
     this.dataService.showLoading(true);
     this.notificationService[this.typeTargeted](fd).subscribe(
       res => {
-        if (res && res.is_valid) {
+        if (res) {
           this.rows = res.data;
+
+          if(res.is_valid == false)
+          this.isValid = false;
           this.validData = (res.data || []).filter(item => item.is_valid).length;
           this.dataService.showLoading(false);
         } else {

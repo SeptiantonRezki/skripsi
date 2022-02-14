@@ -90,7 +90,7 @@ export class CreatetsmComponent implements OnInit {
       extra_coin: [0],
       brand_combination: ["or"],
       notif: [""],
-      skus: this.formBuilder.array([this.createFormSku()])
+      skus: this.formBuilder.array([this.createFormSkusd()])
     });
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
@@ -138,6 +138,7 @@ export class CreatetsmComponent implements OnInit {
       ).subscribe(res => {
         this.filteredSku.next(res.data);
       });
+      this.createFormSkusd();
   }
   changeValue() {
     if (this.is_notif.value === 0) {
@@ -160,6 +161,51 @@ export class CreatetsmComponent implements OnInit {
     });
     let value = new ReplaySubject<any[]>(1);
 
+    formItem
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.searching = true),
+        switchMap(value => {
+          console.log('val', value);
+          if (value.formFilterSku == null || value.formFilterSku == "") {
+            this.searching = false;
+            return [];
+          }
+          console.log('after', value);
+          return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+            .pipe(
+              finalize(() => this.searching = false)
+            )
+        })
+      ).subscribe(res => {
+        console.log('res', res, formItem.controls['filteredSku'].value);
+        // this.filteredSku.next(res.data);
+        formItem.controls['filteredSku'].value.next(res.data);
+        // value.next(res.data);
+        // this.litSkus.push(value);
+        // this.filteredSku.next(this.litSkus);
+      });
+    return formItem;
+  }
+  createFormSkusd() {
+    const formItem = this.formBuilder.group({
+      formSku: [""],
+      formFilterSku: [""],
+      filteredSku: [new ReplaySubject<any[]>(1)]
+    });
+    let value = new ReplaySubject<any[]>(1);
+    this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
+      // console.log('resnew', res, formItem.controls['filteredSku'].value);
+      // console.log('resnew345', this.formFilterSku);
+       this.formFilterSku.setValue('1');
+        // this.filteredSku.next(res.data);.setValue('');
+        // console.log('resnew35', this.formAutomation.get('skus').value);
+        formItem.controls['filteredSku'].value.next(res.data);
+    }, error => {
+      
+      alert(error);
+    })
     formItem
       .valueChanges
       .pipe(

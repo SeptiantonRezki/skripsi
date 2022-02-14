@@ -92,7 +92,7 @@
               <!-- GRUP PENGGUNA -->
 
               <div fxLayout="row">
-                <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-form-field fxFlex="100" class="is-light form-primary" disabled>
                   <mat-select formControlName="country" placeholder="{{ ls.locale.global.label.country }}">
                     <mat-option *ngFor="let item of countryList" [value]="item.code"
                       style="text-transform: capitalize;">

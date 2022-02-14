@@ -157,6 +157,8 @@ export class DeviceAuthenticationComponent implements OnInit, OnDestroy {
         if (res.token.access_token) {
           this.dataService.setAuthorization(res.token);
           this.authenticationService.getProfileDetail().subscribe(async profile => {
+            localStorage.setItem('user_country', profile.locale);
+            this.ls.setLanguage(profile.locale);
             if (profile.status == "active") {
               this.userIdle.startWatching();
               const area_id = profile['area_id'];

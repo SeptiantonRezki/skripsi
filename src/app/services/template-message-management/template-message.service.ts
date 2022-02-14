@@ -46,4 +46,9 @@ export class TemplateMessageService extends BaseService {
     const url = this.getUrl(this.namespace, "getShow", context);
     return this.getApi(url, queryParams);
   }
+
+  getCountry(): Observable<any> {
+    const url = this.getUrl("help", "getCountry");
+    return this.getApi(url);
+  }
 }

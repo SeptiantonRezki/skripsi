@@ -19,6 +19,7 @@ export class ImportPanelDialogComponent implements OnInit {
   rows: any[];
   validData: any[];
   dialogData: any;
+  isValid: any;
 
   typeTargeted: string;
 
@@ -60,12 +61,18 @@ export class ImportPanelDialogComponent implements OnInit {
         this.b2bService.previewImport({ voucher_id: this.dialogData.voucher_id, type: this.dialogData.type }).subscribe(preview => {
           console.log('preview res', preview);
           this.rows = preview.data;
+          if(preview.is_valid == false)
+          this.isValid = false;
           this.dataService.showLoading(false);
+          
         }, err => {
           this.dataService.showLoading(false);
         })
       },
       err => {
+        // if(err.error.status == false ){
+        //   this.dialogService.openRedSnackBar({ message: err.error.message })
+        // }
         this.dataService.showLoading(false);
         this.files = undefined;
 

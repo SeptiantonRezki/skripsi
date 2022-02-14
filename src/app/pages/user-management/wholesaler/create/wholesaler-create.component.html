@@ -74,10 +74,10 @@
               <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
                 <div class="label">{{ ls.locale.global.label.phone }}</div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                  <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
+                  <mat-form-field fxFlex="9" fxFlex.xs="30" class="form-primary">
                     <input matInput [value]="country_phone" readonly>
                   </mat-form-field>
-                  <mat-form-field fxFlex="93" fxFlex.xs="70" class="form-primary">
+                  <mat-form-field fxFlex="91" fxFlex.xs="70" class="form-primary">
                     <input matInput formControlName="phone" type="tel" min="0">
                   </mat-form-field>
                 </div>
@@ -103,7 +103,7 @@
 
           <form [formGroup]="verticalStepperStep3">
 
-            <ng-template matStepLabel>Area</ng-template>
+            <ng-template matStepLabel>{{ ls.locale.wholesaler.area }}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
@@ -143,27 +143,27 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area"
+                <mat-select placeholder="{{ ls.locale.global.area.area }}" formControlName="area"
                   (selectionChange)="getAudienceArea('salespoint', verticalStepperStep3.get('area').value)">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched">
-                  Area {{ ls.locale.global.messages.mandatory_text }}
+                  {{ ls.locale.global.area.area }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                <mat-select placeholder="{{ ls.locale.global.area.salespoint }}" formControlName="salespoint"
                   (selectionChange)="getAudienceArea('district', verticalStepperStep3.get('salespoint').value)">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep3.controls['salespoint'].hasError('required') && verticalStepperStep3.controls['salespoint'].touched">
-                  Salespoint {{ ls.locale.global.messages.mandatory_text }}
+                  {{ ls.locale.global.area.salespoint }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district"
+                <mat-select placeholder="{{ ls.locale.global.area.district }}" formControlName="district"
                   (selectionChange)="getAudienceArea('territory', verticalStepperStep3.get('district').value)">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
@@ -173,7 +173,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory">
+                <mat-select placeholder="{{ ls.locale.global.area.territory }}" formControlName="territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
