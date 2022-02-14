@@ -33,6 +33,8 @@ export class RetailerIndexComponent {
   onLoad: boolean;
   dialogRef: any;
   exportAccessCashier: boolean;
+  canRequestExport = true;
+  resultExport = null;
 
   keyUp = new Subject<string>();
 
@@ -1044,6 +1046,23 @@ export class RetailerIndexComponent {
         this.rows = res.data;
         this.onLoad = false;
 
+        let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== '');
+        let area_id: any = areaSelected[areaSelected.length - 1].value;
+
+        if (!area_id || area_id === 'null' || area_id.length === 0) {
+          area_id = 1;
+        }
+
+        this.retailerService.statusExportCashier({
+          area: area_id,
+          retailer_id: this.selectedRetailer,
+          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+        }).subscribe(res => {
+          console.log('Status Export :', res);
+          this.resultExport = res.data.result;
+          this.canRequestExport = res.data.can_request;
+        });
+
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       },
@@ -1186,39 +1205,28 @@ export class RetailerIndexComponent {
 
     console.log('area you selected', area_id, areaSelected[areaSelected.length - 1], area_id);
     try {
-      let response:any;
-      if (!this.permission.idnumber) {
-        response = await this.retailerService.getAccessCashier({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
-      } else {
-        response = await this.retailerService.getIdNumber({ area: area_id, retailer_id: this.selectedRetailer }).toPromise();
-      }
-
-      console.log('he', response);
-      const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const url= window.URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Export_Retailer_${new Date().toLocaleString()}.xlsx`;
-
-      // this is necessary as link.click() does not work on the latest firefox
-      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-      setTimeout(function () {
-        // For Firefox it is necessary to delay revoking the ObjectURL
-        window.URL.revokeObjectURL(url);
-        link.remove();
-      }, 100);
-
+      this.retailerService.requestExportCashier({
+        area: area_id,
+        retailer_id: this.selectedRetailer,
+        classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+      }).subscribe(res => {
+        this.canRequestExport = false;
+        this.dialogService.openSnackBar({ message: res.data });
+        console.log('Data Request Export', res);
+      });
       this.exportAccessCashier = false;
       this.dataService.showLoading(false);
-
     } catch (error) {
       this.exportAccessCashier = false;
       this.handleError(error);
       this.dataService.showLoading(false);
       // throw error;
     }
+  }
+
+  download() {
+    this.downloadLink.nativeElement.href = this.resultExport;
+    this.downloadLink.nativeElement.click();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {
