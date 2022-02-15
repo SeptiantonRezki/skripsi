@@ -129,6 +129,10 @@ export class PagesName {
       "/settings/feature-level/edit": "principal.feature_level.ubah",
       "/settings/feature-level/detail": "principal.feature_level.lihat",
       "/paylater/distribution": "principal.paylater_distribution.lihat",
+      "/dte/task-verification": "principal.dtenewtaskverification.lihat",
+      "/dte/assignment-cart": "principal.dteassignmentcart.lihat",
+      "/dte/verification-assignment": "principal.dteverificationassignment.lihat",
+      "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
     }
     return PAGES[name];
   }

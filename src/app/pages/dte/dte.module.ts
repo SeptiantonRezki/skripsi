@@ -147,6 +147,9 @@ import { BackgroundMisiComponent } from './template/dialog/background-misi/backg
 import { NgxMaskModule } from "ngx-mask";
 import { VerificationRemarkComponent } from './pengaturan-attribute-misi/index/verification-remark/verification-remark.component';
 import { DynamicPricingComponent } from './dynamic-pricing/dynamic-pricing.component';
+import { TaskVerificationComponent } from './task-verification-2/task-verification/task-verification.component';
+import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
+import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -310,6 +313,9 @@ export const MY_FORMATS = {
     BackgroundMisiComponent,
     VerificationRemarkComponent,
     DynamicPricingComponent,
+    TaskVerificationComponent,
+    AssignmentCartComponent,
+    TaskVerificationAssignmentComponent,
   ],
   exports: [
     TemplateIndexComponent,

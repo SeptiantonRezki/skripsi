@@ -45,6 +45,9 @@ import { CoinDisburstmentComponent } from "./coin-disburstment/index/coin-disbur
 import { CoinDisburstmentCreateComponent } from "./coin-disburstment/create/coin-disburstment-create.component";
 import { CoinDisburstmentEditComponent } from "./coin-disburstment/edit/coin-disburstment-edit.component";
 import { DynamicPricingComponent } from "./dynamic-pricing/dynamic-pricing.component";
+import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
+import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
+import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
 
 const routes: Routes = [
   {
@@ -473,6 +476,26 @@ const routes: Routes = [
   {
     path: 'dynamic-pricing',
     component: DynamicPricingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'task-verification',
+    component: TaskVerificationComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'assignment-cart',
+    component: AssignmentCartComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment/detail/:id',
+    component: TaskVerificationAssignmentComponent,
     canActivate: [PageGuard]
   },
 ];
