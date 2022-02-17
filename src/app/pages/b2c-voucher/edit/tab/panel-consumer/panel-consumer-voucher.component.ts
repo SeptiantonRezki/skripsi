@@ -98,7 +98,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral and Verified', value: 'referral-and-verified' },
     { name: 'Referral or Verified', value: 'referral-or-verified' },
     { name: 'Pesan Antar', value: 'coo'},
-    // { name: 'Keping Langganan', value: 'loyalty'}
+    { name: 'Keping Langganan', value: 'loyalty'}
   ];
 
   _data: any = null;
