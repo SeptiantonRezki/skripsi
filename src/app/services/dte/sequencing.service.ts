@@ -111,21 +111,6 @@ export class SequencingService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  // show(context): Observable<any> {
-  //   const url = this.getUrl(this.namespace, "show", context);
-  //   return this.getApi(url);
-  // }
-
-  // createPersonalize(body): Observable<any> {
-  //   const url = this.getUrl(this.namespace, 'get_post_personalize');
-  //   return this.postApi(url, body);
-  // }
-
-  // putPersonalize(body, context): Observable<any> {
-  //   const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
-  //   return this.postApi(url, body);
-  // }
-
   deletePersonalize(context): Observable<any> {
     const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
     return this.deleteApi(url);

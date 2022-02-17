@@ -372,32 +372,32 @@ export class RetailerEditComponent {
       console.log('item', item);
       switch (item.type.trim()) {
         case 'national':
-          this.formRetailer.get('national').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('national').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break
         case 'division':
-          this.formRetailer.get('zone').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('zone').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
         case 'region':
-          this.formRetailer.get('region').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('region').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
         case 'area':
-          this.formRetailer.get('area').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('area').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
         case 'salespoint':
-          this.formRetailer.get('salespoint').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('salespoint').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
         case 'district':
-          this.formRetailer.get('district').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('district').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
         case 'territory':
-          this.formRetailer.get('territory').disable();
-          // this.formRetailer.get('national').setValue(item.id);
+          // this.formRetailer.get('territory').disable();
+          this.formRetailer.get('national').setValue(item.id);
           break;
       }
     })
@@ -706,7 +706,7 @@ export class RetailerEditComponent {
         business_code: this.formRetailer.get('business_code').value,
         owner: this.formRetailer.get('owner').value,
         country: this.formRetailer.get('country').value,
-        phone: this.formRetailer.getRawValue()['phone'] ? this.country_phone + this.formRetailer.getRawValue()['phone'] : '',
+        phone: this.formRetailer.getRawValue()['phone'] ? this.formRetailer.getRawValue()['phone'] : '',
         status: this.formRetailer.get('status').value,
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,

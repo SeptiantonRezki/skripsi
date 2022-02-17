@@ -18,6 +18,7 @@ const AYO_API = environment.server;
 // const AYO_API_SERVICE = environment.server_service;
 const AYO_API_SERVICE = serviceServer;
 const type_api = "principal";
+// dummy comment
 
 export class Endpoint {
   getUrl(namespace, key, context) {
@@ -225,6 +226,7 @@ export class Endpoint {
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
         import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
+        export2: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/export/report`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
           }&status=active`,
         generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`

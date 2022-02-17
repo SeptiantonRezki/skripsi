@@ -186,11 +186,11 @@ export class CourierManagementComponent implements OnInit {
     this.id = row.id;
     this.statusRow = status;
     let data = {
-      titleDialog: "Ubah Status Kurir",
-      captionDialog: "Apakah kamu yakin ingin mengubah status Kurir ini ?",
+      titleDialog: this.ls.locale.delivery_management.daftar_kurir.text8,
+      captionDialog: this.ls.locale.delivery_management.daftar_kurir.text27,
       confirmCallback: this.confirmUpdateStats.bind(this),
       orderDetail: true,
-      buttonText: ["Ya, Lanjutkan", "Tidak, Batalkan"]
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.no_cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

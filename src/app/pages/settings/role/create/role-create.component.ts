@@ -22,6 +22,7 @@ export class RoleCreateComponent {
 
   listLevelArea: any[];
   list: any;
+  Country: any[];
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -65,6 +66,7 @@ export class RoleCreateComponent {
   ngOnInit() {
     this.formRolesGroup = this.formBuilder.group({
       name: ['', Validators.required],
+      country: [""]
       // national: ["", Validators.required],
       // zone: [""],
       // region: [""],
@@ -97,7 +99,7 @@ export class RoleCreateComponent {
     this.formRolesGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRolesGroup, this.formRolesError);
     })
-
+    this.getCountry();
     // this.initArea();
   }
 
@@ -275,7 +277,8 @@ export class RoleCreateComponent {
       let body = {
         name: this.formRolesGroup.get('name').value,
         // area_id: _.last(areas),
-        permissions: role
+        permissions: role,
+        country: this.formRolesGroup.get('country').value
       }
 
 
@@ -394,6 +397,20 @@ export class RoleCreateComponent {
         exportRetailerToggle.status = false;
       }
     }
+
+  }
+
+  getCountry() {
+
+    this.accessService.getCountry().subscribe(
+      res => {
+        this.Country = res.data;
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    console.log("COUNTRY2", this.Country);
 
   }
 

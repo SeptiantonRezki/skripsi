@@ -255,32 +255,32 @@ export class WholesalerEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          this.formWs.get('national').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('national').disable();
+          this.formWs.get('national').setValue(item.id);
           break
         case 'division':
-          this.formWs.get('zone').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('zone').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'region':
-          this.formWs.get('region').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('region').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'area':
-          this.formWs.get('area').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('area').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'salespoint':
-          this.formWs.get('salespoint').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('salespoint').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'district':
-          this.formWs.get('district').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('district').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'territory':
-          this.formWs.get('territory').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('territory').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
       }
     })
@@ -656,7 +656,7 @@ export class WholesalerEditComponent {
         address: this.formWs.get("address").value,
         business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
-        phone: this.country_phone + this.formWs.get("phone").value,
+        phone: this.formWs.get("phone").value,
         areas: this.list['territory'].filter(item => item.id === this.formWs.get('territory').value).map(item => item.id),
         status: this.formWs.get("status").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,

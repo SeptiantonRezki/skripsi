@@ -18,8 +18,12 @@
         <button (click)="import()" mat-raised-button type="button" class="is-danger">
           <mat-icon>arrow_downward</mat-icon> Import XLS
         </button>
-        <a #downloadLink></a>
+        <!-- <a #downloadLink></a>
         <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export XLS
+        </button> -->
+        <a #downloadLink></a>
+        <button (click)="exportn()" mat-raised-button type="button" class="is-danger">
           <mat-icon>arrow_upward</mat-icon> Export XLS
         </button>
       </div>

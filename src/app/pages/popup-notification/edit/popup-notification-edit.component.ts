@@ -718,8 +718,8 @@ export class PopupNotificationEditComponent {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -745,8 +745,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -775,8 +775,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -804,8 +804,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -830,7 +830,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -853,8 +854,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });

@@ -644,7 +644,9 @@ export class AudienceCreateComponent {
     switch (this.parseArea(selection)) {
       case "zone":
         // area = this.formFilter.get(selection).value;
+        this.dataService.showLoading(true);
         this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
+          this.dataService.showLoading(true);
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] =
@@ -653,6 +655,11 @@ export class AudienceCreateComponent {
                   expectedArea.map((eArea) => eArea.id).includes(dt.id)
                 )
               : res.data;
+              if(res.data.length > 0){
+                console.log("Success");
+                
+                this.dataService.showLoading(false);
+              }
 
           // fd = null
         });
@@ -684,6 +691,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -693,6 +701,7 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
@@ -722,6 +731,7 @@ export class AudienceCreateComponent {
               : {};
           console.log("area hitted", selection, item, this.list["region"]);
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -731,6 +741,7 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
@@ -759,6 +770,7 @@ export class AudienceCreateComponent {
               : {};
           console.log("item", item);
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -768,6 +780,7 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
@@ -793,6 +806,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] =
@@ -801,6 +815,7 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
@@ -824,6 +839,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -833,6 +849,7 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
 
               // fd = null
             });
@@ -928,7 +945,7 @@ export class AudienceCreateComponent {
   }
 
   getRetailer() {
-    this.dataService.showLoading(true);
+    
     this.pagination.per_page = 25;
     this.pagination.sort = "name";
     this.pagination.sort_type = "asc";
@@ -1046,7 +1063,7 @@ export class AudienceCreateComponent {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        // this.dataService.showLoading(false);
       },
       (err) => {
         this.dataService.showLoading(false);

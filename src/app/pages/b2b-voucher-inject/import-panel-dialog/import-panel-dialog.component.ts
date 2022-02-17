@@ -18,6 +18,7 @@ export class ImportPanelDialogComponent implements OnInit {
   rows: any[];
   validData: any[];
   dialogData: any;
+  isValid: any;
 
   typeTargeted: string;
 
@@ -60,7 +61,12 @@ export class ImportPanelDialogComponent implements OnInit {
         this.b2bVoucherInjectService.previewImport({ voucher_id: this.dialogData.voucher_id, type: this.dialogData.type }).subscribe(preview => {
           console.log('preview res', preview);
           this.rows = preview.data;
+          if(preview.is_valid == false)
+          this.isValid = false;
           this.dataService.showLoading(false);
+          // if(preview.status == false ){
+          //   this.dialogService.openRedSnackBar({ message: preview.message })
+          // }
         }, err => {
           this.dataService.showLoading(false);
         })
@@ -82,7 +88,7 @@ export class ImportPanelDialogComponent implements OnInit {
   submit() {
     if (this.rows.length > 0) {
       let filteredRows = this.rows.filter(item => item.is_valid);
-      this.dialogRef.close(filteredRows);
+      this.dialogRef.close(this.rows);
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }

@@ -108,6 +108,7 @@ export class PopupNotificationCreateComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+  Country: any = '';
 
   listContentWallet: any[] = [];
 
@@ -220,6 +221,16 @@ export class PopupNotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    if(this.ls.selectedLanguages == 'id'){
+      this.Country ='ID';
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.Country = 'KH';
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.Country ='PH';
+    }
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
@@ -694,8 +705,8 @@ export class PopupNotificationCreateComponent {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -721,8 +732,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -751,8 +762,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -780,8 +791,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -806,7 +817,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -829,8 +841,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -1042,29 +1054,29 @@ export class PopupNotificationCreateComponent {
   initArea(index) {
     let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
     this.areaType.map(item => {
-      switch (item.type.trim()) {
-        case 'national':
-          wilayah.at(index).get('national').disable();
-          break
-        case 'division':
-          wilayah.at(index).get('zone').disable();
-          break;
-        case 'region':
-          wilayah.at(index).get('region').disable();
-          break;
-        case 'area':
-          wilayah.at(index).get('area').disable();
-          break;
-        case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
-          break;
-        case 'district':
-          wilayah.at(index).get('district').disable();
-          break;
-        case 'territory':
-          wilayah.at(index).get('territory').disable();
-          break;
-      }
+      // switch (item.type.trim()) {
+      //   case 'national':
+      //     wilayah.at(index).get('national').disable();
+      //     break
+      //   case 'division':
+      //     wilayah.at(index).get('zone').disable();
+      //     break;
+      //   case 'region':
+      //     wilayah.at(index).get('region').disable();
+      //     break;
+      //   case 'area':
+      //     wilayah.at(index).get('area').disable();
+      //     break;
+      //   case 'salespoint':
+      //     wilayah.at(index).get('salespoint').disable();
+      //     break;
+      //   case 'district':
+      //     wilayah.at(index).get('district').disable();
+      //     break;
+      //   case 'territory':
+      //     wilayah.at(index).get('territory').disable();
+      //     break;
+      // }
     })
   }
 
@@ -1363,6 +1375,7 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        country: this.Country,
         is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
       }
 

@@ -50,7 +50,7 @@
                 matTooltip="{{ ls.locale.delivery_management.daftar_kurir.text8 }}"
                 style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                {{ row.status == 'active' ? ls.locale.global.label.active : ls.locale.global.label.inactive }}
               </p>
               <mat-menu #appMenu="matMenu">
                 <button mat-menu-item (click)="updateStatus(row, 'active')">{{ ls.locale.global.label.active }}</button>

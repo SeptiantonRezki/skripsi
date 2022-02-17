@@ -22,6 +22,7 @@ export class RoleEditComponent {
   formRolesError: any;
   roleId: any;
   onLoad: boolean;
+  Country: any[];
 
   listLevelArea: any[];
   list: any;
@@ -82,13 +83,15 @@ export class RoleEditComponent {
       region: [""],
       area: [""],
       district: [""],
-      territory: [""]
+      territory: [""],
+      country: [""]
     })
 
     this.formRolesGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formRolesGroup, this.formRolesError);
     })
 
+    this.getCountry();
     this.getDetailRole();
   }
 
@@ -186,6 +189,7 @@ export class RoleEditComponent {
 
     this.formRolesGroup.get('name').setValue(this.detailRoles.nama_akses);
     this.formRolesGroup.get('national').setValue(this.getArea('national'));
+    this.formRolesGroup.get('country').setValue(this.detailRoles.country);
     this.formRolesGroup.get('zone').setValue(this.getArea('division'));
     this.formRolesGroup.get('region').setValue(this.getArea('region'));
     this.formRolesGroup.get('area').setValue(this.getArea('area'));
@@ -331,6 +335,7 @@ export class RoleEditComponent {
       let body = {
         _method: 'PUT',
         name: this.formRolesGroup.get('name').value,
+        country: this.formRolesGroup.get('country').value, 
         area_id: _.last(areas),
         permissions: role
       }
@@ -484,6 +489,20 @@ export class RoleEditComponent {
         exportRetailerToggle.status = false;
       }
     }
+  }
+
+  getCountry() {
+
+    this.accessService.getCountry().subscribe(
+      res => {
+        this.Country = res.data;
+      },
+      err => {
+        console.error(err);
+      }
+    );
+    console.log("COUNTRY2", this.Country);
+
   }
 
 }
