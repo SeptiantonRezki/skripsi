@@ -665,7 +665,7 @@ export class RetailerIndexComponent {
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(true);
+                this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
                 // fd = null
@@ -1202,7 +1202,7 @@ export class RetailerIndexComponent {
         });
 
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        
       },
       err => {
         console.error(err);

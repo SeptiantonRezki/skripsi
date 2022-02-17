@@ -1063,7 +1063,7 @@ export class AudienceCreateComponent {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        // this.dataService.showLoading(false);
       },
       (err) => {
         this.dataService.showLoading(false);
