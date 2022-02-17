@@ -537,10 +537,12 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['region'] = [];
+          this.dataService.showLoading(false);
         }
         this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
@@ -569,10 +571,12 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['area'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('area').setValue('');
@@ -600,10 +604,12 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['salespoint'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('salespoint').setValue('');
@@ -627,10 +633,12 @@ export class AudienceEditComponent {
               this.dataService.showLoading(false);
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['district'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('district').setValue('');
@@ -653,10 +661,12 @@ export class AudienceEditComponent {
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['territory'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('territory').setValue('');
