@@ -345,6 +345,17 @@ export class CreateNotesRetailerComponent implements OnInit {
     this.notesMdl.retailer_id = this.selected.map((map) => map.id);
     this.notesMdl.start_date = this.convertDate(this.notesMdl.start_date);
     this.notesMdl.end_date =  this.convertDate(this.notesMdl.end_date);
+    this.notesMdl.target_audience = this.formAudience.get("target_audience")
+    .value
+    ? 1
+    : 0;
+    this.notesMdl.classification = this.formFilterRetailer.get(
+      "retail_classification"
+    ).value;
+    this.notesMdl.src_classification =
+      this.formFilterRetailer.get("src_classification").value;
+    this.notesMdl.src_type = this.formFilterRetailer.get("src_type").value;
+    this.notesMdl.area_id = this.lastLevel.id;
     this.notesRetailerService.create(this.notesMdl).subscribe((res) => {
       this.selected = [];
       this.loadingIndicator = false;
@@ -359,6 +370,17 @@ export class CreateNotesRetailerComponent implements OnInit {
     this.notesMdl.retailer_id = this.selected.map((map) => map.id);
     this.notesMdl.start_date = this.convertDate(this.notesMdl.start_date);
     this.notesMdl.end_date =  this.convertDate(this.notesMdl.end_date);
+    this.notesMdl.target_audience = this.formAudience.get("target_audience")
+      .value
+      ? 1
+      : 0;
+    this.notesMdl.classification = this.formFilterRetailer.get(
+      "retail_classification"
+    ).value;
+    this.notesMdl.src_classification =
+      this.formFilterRetailer.get("src_classification").value;
+    this.notesMdl.src_type = this.formFilterRetailer.get("src_type").value;
+    this.notesMdl.area_id = this.lastLevel.id;
     this.notesRetailerService.put(this.notesMdl, this.paramEdit).subscribe((res) => {
       window.localStorage.removeItem('detail_audience');
       this.selected = [];
@@ -472,8 +494,9 @@ export class CreateNotesRetailerComponent implements OnInit {
   }
 
   getAreaIds(lastSelected: any) {
-    const [id, key] = lastSelected;
+    const [id, key, onClick] = lastSelected;
     this.lastLevel = { id, key };
+    if (onClick) this.selected = [];
     if (this.formAudience.get("target_audience").value) this.getRetailer();
   }
 

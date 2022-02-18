@@ -183,7 +183,11 @@ export class SalestreeComponent implements OnInit {
   setDefaultValue() {
     if (!this.value) return;
     this.geoLevel.forEach((level) => {
-      if (this.value.hasOwnProperty(level) && this.value[level].length) {
+      if (
+        this.value.hasOwnProperty(level) &&
+        !this.limitArea.hasOwnProperty(level) &&
+        this.value[level].length
+      ) {
         this.getLevel(level);
       }
     });

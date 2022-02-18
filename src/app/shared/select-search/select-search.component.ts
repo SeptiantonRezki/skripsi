@@ -32,7 +32,7 @@ export class SelectSearchComponent implements OnInit {
   filteredOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filterDestroy = new Subject();
   isScroll: boolean = false;
-  scrollCount: number = 0;
+  scrollCount: number = 1;
 
   ngOnInit() {
     this.initOptions();
@@ -43,8 +43,10 @@ export class SelectSearchComponent implements OnInit {
         this.filtering();
       });
     this.optionList.valueChanges.subscribe(() => {
-      this.isScroll = false;
-      this.scrollCount = this.scrollCount + 1;
+      if (this.isScroll) {
+        this.scrollCount = this.scrollCount + 1;
+        this.isScroll = false;
+      }
     });
   }
 
@@ -70,9 +72,8 @@ export class SelectSearchComponent implements OnInit {
       return;
     }
     const list = this.optionList.value.filter(
-      (item: any) =>
-        item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
-    )
+      (item: any) => item.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
+    );
     this.filteredOptions.next(list);
     if (this.searchApi && !list.length) {
       this.isFetching = true;
