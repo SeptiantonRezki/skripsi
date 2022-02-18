@@ -1086,7 +1086,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1108,7 +1108,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1132,7 +1132,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1154,7 +1154,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1174,7 +1174,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1192,7 +1192,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1215,7 +1215,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1237,7 +1237,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list2['zone'].length > 0 ? this.list2['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1261,7 +1261,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list2['region'].length > 0 ? this.list2['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1283,7 +1283,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list2['area'].length > 0 ? this.list2['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1303,7 +1303,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list2['salespoint'].length > 0 ? this.list2['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1321,7 +1321,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list2['district'].length > 0 ? this.list2['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1344,7 +1344,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1366,7 +1366,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list3['zone'].length > 0 ? this.list3['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1390,7 +1390,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list3['region'].length > 0 ? this.list3['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1412,7 +1412,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list3['area'].length > 0 ? this.list3['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1432,7 +1432,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list3['salespoint'].length > 0 ? this.list3['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1450,7 +1450,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list3['district'].length > 0 ? this.list3['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1473,7 +1473,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1495,7 +1495,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list4['zone'].length > 0 ? this.list4['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1519,7 +1519,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list4['region'].length > 0 ? this.list4['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1541,7 +1541,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list4['area'].length > 0 ? this.list4['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1561,7 +1561,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list4['salespoint'].length > 0 ? this.list4['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1579,7 +1579,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list4['district'].length > 0 ? this.list4['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1602,7 +1602,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1624,7 +1624,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list5['zone'].length > 0 ? this.list5['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1648,7 +1648,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list5['region'].length > 0 ? this.list5['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1670,7 +1670,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list5['area'].length > 0 ? this.list5['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1690,7 +1690,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list5['salespoint'].length > 0 ? this.list5['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1708,7 +1708,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list5['district'].length > 0 ? this.list5['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1730,7 +1730,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1752,7 +1752,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list6['zone'].length > 0 ? this.list6['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1776,7 +1776,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list6['region'].length > 0 ? this.list6['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1798,7 +1798,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list6['area'].length > 0 ? this.list6['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1818,7 +1818,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list6['salespoint'].length > 0 ? this.list6['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1836,7 +1836,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list6['district'].length > 0 ? this.list6['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1859,7 +1859,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -1881,7 +1881,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list7['zone'].length > 0 ? this.list7['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1905,7 +1905,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list7['region'].length > 0 ? this.list7['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1927,7 +1927,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list7['area'].length > 0 ? this.list7['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1947,7 +1947,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list7['salespoint'].length > 0 ? this.list7['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1965,7 +1965,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list7['district'].length > 0 ? this.list7['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -1988,7 +1988,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -2010,7 +2010,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list8['zone'].length > 0 ? this.list8['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2034,7 +2034,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list8['region'].length > 0 ? this.list8['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2056,7 +2056,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list8['area'].length > 0 ? this.list8['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2076,7 +2076,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list8['salespoint'].length > 0 ? this.list8['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2094,7 +2094,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list8['district'].length > 0 ? this.list8['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2117,7 +2117,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -2139,7 +2139,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list9['zone'].length > 0 ? this.list9['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2163,7 +2163,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list9['region'].length > 0 ? this.list9['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2185,7 +2185,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list9['area'].length > 0 ? this.list9['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2205,7 +2205,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list9['salespoint'].length > 0 ? this.list9['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2223,7 +2223,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list9['district'].length > 0 ? this.list9['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2246,7 +2246,7 @@ export class AdminPrincipalEditComponent {
     let item: any;
     switch (selection) {
       case 'zone':
-        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+        this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
           if(res.status == false)
             {}
             else{
@@ -2268,7 +2268,7 @@ export class AdminPrincipalEditComponent {
       case 'region':
         item = this.list10['zone'].length > 0 ? this.list10['zone'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2292,7 +2292,7 @@ export class AdminPrincipalEditComponent {
       case 'area':
         item = this.list10['region'].length > 0 ? this.list10['region'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2314,7 +2314,7 @@ export class AdminPrincipalEditComponent {
       case 'salespoint':
         item = this.list10['area'].length > 0 ? this.list10['area'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2334,7 +2334,7 @@ export class AdminPrincipalEditComponent {
       case 'district':
         item = this.list10['salespoint'].length > 0 ? this.list10['salespoint'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
@@ -2352,7 +2352,7 @@ export class AdminPrincipalEditComponent {
       case 'territory':
         item = this.list10['district'].length > 0 ? this.list10['district'].filter(item => item.id === id)[0] : {};
         if (item.name !== 'all') {
-          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.formAdmin.get("country").value }).subscribe(res => {
+          this.adminPrincipalService.getListOtherChildrens({ parent_id: id},{country: this.detailAdminPrincipal.country }).subscribe(res => {
             if(res.status == false)
             {}
             else{
