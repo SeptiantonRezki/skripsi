@@ -138,6 +138,7 @@ export class BannerCreateComponent {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.customAge = false;
+    this.onLoad =false;
     // this.validComboDrag = true;
 
     this.listLandingPage = [
@@ -1116,8 +1117,9 @@ export class BannerCreateComponent {
     console.log(this.formBannerGroup);
     let invalids = this.findInvalidControls();
     console.log('invalid form', invalids);
+    if(this.onLoad == false)
     if (this.formBannerGroup.valid && this.bannerSelected) {
-
+      this.onLoad = true;
       this.dataService.showLoading(true);
       this.dialogService.brodcastCloseConfirmation();
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
@@ -1273,12 +1275,14 @@ export class BannerCreateComponent {
       this.bannerService.create(fd).subscribe(
         res => {
           this.loadingIndicator = false;
+          this.onLoad = true;
           this.router.navigate(["advertisement", "banner"]);
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         }
       );
 
     } else {
+      this.onLoad = true;
       let msg;
       if (this.formBannerGroup.invalid) {
         msg = "Silakan lengkapi data terlebih dahulu!";
