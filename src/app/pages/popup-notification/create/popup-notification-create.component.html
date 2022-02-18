@@ -16,7 +16,7 @@
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div class="mt-16 pt-24 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px"
-            fxLayoutGap.lt-md="0px">
+            fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Popup Notifikasi">
               <mat-error
@@ -24,9 +24,9 @@
                 Judul Popup Notifikasi harus diisi
               </mat-error>
             </mat-form-field>
-            <div fxFlex="45%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+            <div fxFlex="48%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               *ngIf="formPopupGroup.value.is_mission_builder === false">
-              <mat-form-field fxFlex="32%" class="is-light form-primary">
+              <mat-form-field fxFlex="48" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
                   placeholder="Tanggal Terbit">
                 <mat-error
@@ -38,7 +38,7 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #tanggal_terbit></mat-datepicker>
               </mat-form-field>
-              <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
+              <!-- <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
                 <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime" [format]="24"
                   readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
@@ -47,8 +47,8 @@
                   *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
                   Waktu harus diisi
                 </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="32%" class="is-light form-primary">
+              </mat-form-field> -->
+              <mat-form-field fxFlex="48" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
                   formControlName="enddate" placeholder="Tanggal Berakhir">
                 <mat-error
@@ -60,7 +60,7 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #tanggal_berakhir></mat-datepicker>
               </mat-form-field>
-              <mat-form-field fxFlex="15%" class="is-light form-primary" id="time1">
+              <!-- <mat-form-field fxFlex="15%" class="is-light form-primary" id="time1">
                 <input matInput formControlName="endtime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1"
                   [format]="24" readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
@@ -69,10 +69,10 @@
                   *ngIf="formPopupGroup.controls['endtime'].hasError('required') && formPopupGroup.controls['endtime'].touched">
                   Waktu harus diisi
                 </mat-error>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
           </div>
-          <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="positive_button" placeholder="Positif Button">
               <mat-error
@@ -87,6 +87,83 @@
                 Negatif Button harus diisi
               </mat-error>
             </mat-form-field>
+          </div>
+          <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
+            <h3><strong>Frekuensi Pengiriman</strong></h3>
+          </div>
+          <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence">
+                <mat-option *ngFor="let item of listTypeOfRecurrence" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" class="px-24" *ngIf="formPopupGroup.get('type_of_recurrence').value == 'Recurring'" fxLayout.lt-md="column">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_type">
+                <mat-option *ngFor="let item of listRecurrenceTypes" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="px-24" *ngIf="formPopupGroup.get('type_of_recurrence').value == 'Recurring' && formPopupGroup.get('recurrence_type').value === 'Weekly'" [formGroup]="formWeeklyRecurrence">
+            <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" class="pb-16" fxLayoutGap="10px">
+              <ng-container *ngFor="let item of listWeekDays">
+                <mat-checkbox [formControlName]="item.id" [value]="item.id"></mat-checkbox> {{item.name}} &nbsp;
+              </ng-container>
+            </div>
+          </div>
+          <div fxLayout="row" class="px-24" *ngIf="formPopupGroup.get('type_of_recurrence').value == 'Recurring' && formPopupGroup.get('recurrence_type').value === 'Monthly'" [formGroup]="formMonthlyRecurrence" fxLayout.lt-md="column">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Tanggal" formControlName="recurrence_date" multiple>
+                <mat-option *ngFor="let item of listDates" [value]="item">{{item}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formMonthlyRecurrence.controls['recurrence_date'].hasError('required') && formMonthlyRecurrence.controls['recurrence_date'].touched">
+                Tanggal harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="px-24" *ngIf="formPopupGroup.get('type_of_recurrence').value == 'Recurring' && formPopupGroup.get('recurrence_type').value === 'Yearly'">
+            <div fxLayout="row">
+              <div style="font-weight:600;margin-right:20px;min-height:30px;">Tanggal & Bulan Terpilih : </div>
+              <div>
+                <mat-chip-list>
+                  <mat-chip *ngFor="let item of listDateChosen.value" style="position:unset;margin:0 5px 0 0" [removable]="true" (removed)="removeDateChosen(item)">
+                    <span>{{item}}</span>
+                    <mat-icon style="padding:0;" matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+              <mat-error style="font-size:75%;"
+                *ngIf="listDateChosen.hasError('required') && listDateChosen.touched">
+                Tanggal & bulan pengulangan harus diisi
+              </mat-error>
+            </div>
+            <div fxLayout="row" [formGroup]="formYearlyRecurrence">
+              <div fxFlex="45" fxFlex.lt-md="90" fxLayoutAlign="space-between stretch">
+                <mat-form-field fxFlex="48" class="is-light form-primary">
+                  <mat-select placeholder="Tanggal" formControlName="recurrence_date">
+                    <mat-option *ngFor="let item of listDates" [value]="item">{{item}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formYearlyRecurrence.controls['recurrence_date'].hasError('required') && formYearlyRecurrence.controls['recurrence_date'].touched">
+                    Tanggal pengulangan harus diisi.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="48"  class="is-light form-primary">
+                  <mat-select placeholder="Bulan" formControlName="recurrence_month">
+                    <mat-option *ngFor="let item of listMonths" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formYearlyRecurrence.controls['recurrence_month'].hasError('required') && formYearlyRecurrence.controls['recurrence_month'].touched">
+                    Bulan pengulangan harus diisi.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div style="padding-bottom:1.25em;font-size:16px;margin-left:15px;">
+                <button mat-raised-button type="button" (click)="addRecurrenceDate()" style="height:100%;min-width:0;">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">

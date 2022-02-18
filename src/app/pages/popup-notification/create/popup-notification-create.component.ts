@@ -57,6 +57,40 @@ export class PopupNotificationCreateComponent {
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listTypeOfRecurrence: Object[] = [
+    { id: 'OneTime', name: 'Aktivasi notifikasi sekali kirim' },
+    { id: 'Recurring', name: 'Aktivasi notifikasi berulang' },
+  ];
+  listRecurrenceTypes: Object[] = [
+    { id: 'Daily', name: 'Harian' },
+    { id: 'Weekly', name: 'Mingguan' },
+    { id: 'Monthly', name: 'Bulanan' },
+    { id: 'Yearly', name: 'Tahunan' }
+  ];
+  listWeekDays: any[] = [
+    { id: 'Monday', name: 'Senin' },
+    { id: 'Tuesday', name: 'Selasa' },
+    { id: 'Wednesday', name: 'Rabu' },
+    { id: 'Thursday', name: 'Kamis' },
+    { id: 'Friday', name: 'Jumat' },
+    { id: 'Saturday', name: 'Sabtu' },
+    { id: 'Sunday', name: 'Minggu' }
+  ];
+  listDates: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+  listMonths: Object[] = [
+    { id: 'Jan', name: 'Januari' },
+    { id: 'Feb', name: 'Februari' },
+    { id: 'Mar', name: 'Maret' },
+    { id: 'Apr', name: 'April' },
+    { id: 'May', name: 'Mei' },
+    { id: 'Jun', name: 'Juni' },
+    { id: 'Jul', name: 'Juli' },
+    { id: 'Aug', name: 'Agustus' },
+    { id: 'Sep', name: 'September' },
+    { id: 'Oct', name: 'Oktober' },
+    { id: 'Nov', name: 'November' },
+    { id: 'Dec', name: 'Desember' },
+  ]
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -78,6 +112,10 @@ export class PopupNotificationCreateComponent {
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
+  formWeeklyRecurrence: FormGroup;
+  formMonthlyRecurrence: FormGroup;
+  formYearlyRecurrence: FormGroup;
+  listDateChosen: FormControl = new FormControl([], Validators.required);
   formPopupErrors: any;
   audienceSelected: any[] = [];
 
@@ -179,9 +217,11 @@ export class PopupNotificationCreateComponent {
 
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
-      time: ["00:00", Validators.required],
+      // time: ["00:00", Validators.required],
       enddate: [moment(), Validators.required],
-      endtime: ["00:00", Validators.required],
+      // endtime: ["00:00", Validators.required],
+      type_of_recurrence: ["OneTime", Validators.required],
+      recurrence_type: ["Daily", Validators.required],
       positive_button: ["", Validators.required],
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
@@ -210,6 +250,18 @@ export class PopupNotificationCreateComponent {
       product: [""],
       subscription: ["all"],
     })
+
+    this.formWeeklyRecurrence = this.formBuilder.group({});
+    this.listWeekDays.forEach(day => this.formWeeklyRecurrence.addControl(day.id, new FormControl(false)));
+
+    this.formMonthlyRecurrence = this.formBuilder.group({
+      recurrence_date: [[], Validators.required]
+    });
+
+    this.formYearlyRecurrence = this.formBuilder.group({
+      recurrence_date: [null, Validators.required],
+      recurrence_month: [null, Validators.required]
+    });
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -1350,7 +1402,7 @@ export class PopupNotificationCreateComponent {
         return;
       }
 
-      this.dataService.showLoading(true);
+      // this.dataService.showLoading(true);
 
       this.formPopupGroup.get('is_mission_builder').patchValue(
         this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
@@ -1363,15 +1415,51 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        type_of_recurrence: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
       if (body.type === 'retailer') {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
       }
 
-      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
+      // body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+      // body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
+      body['date'] = moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD');
+      body['end_date'] = moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD');
+      
+      if(body.type_of_recurrence === 'Recurring') {
+        body['recurrence_type'] = this.formPopupGroup.get('recurrence_type').value;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'Weekly') {
+        let selectedWeekDays = [];
+        let recurrenceDayValues = this.formWeeklyRecurrence.value;
+        selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]);
+        if(selectedWeekDays.length == 0) {
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+          return;
+        }
+        body['recurrence_day'] = selectedWeekDays;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'Monthly') {
+        body['recurrence_date'] = this.formMonthlyRecurrence.get('recurrence_date').value;
+        if(this.formMonthlyRecurrence.get('recurrence_date').value.length == 0) {
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal terbit!" });
+          commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+          return;
+        }
+      }
+      
+      if(this.formPopupGroup.get('recurrence_type').value === 'Yearly') {
+        body['recurrence_date'] = this.listDateChosen.value;
+        if(this.listDateChosen.value.length == 0) {
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal & bulan terbit!" });
+          commonFormValidator.validateFormControl(this.listDateChosen);
+          return;
+        }
+      }
 
       if (body.type === 'customer') {
         let smoker_type = '';
@@ -1478,16 +1566,17 @@ export class PopupNotificationCreateComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
-      this.notificationService.createPopup(body).subscribe(
-        res => {
-          this.dataService.showLoading(false);
-          this.router.navigate(["notifications", "popup-notification"]);
-          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        },
-        err => {
-          this.dataService.showLoading(false);
-        }
-      );
+      // this.notificationService.createPopup(body).subscribe(
+      //   res => {
+      //     this.dataService.showLoading(false);
+      //     this.router.navigate(["notifications", "popup-notification"]);
+      //     this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //   },
+      //   err => {
+      //     this.dataService.showLoading(false);
+      //   }
+      // );
+      console.log('LOOK BODY', body);
 
     } else {
       let msg;
@@ -1501,6 +1590,12 @@ export class PopupNotificationCreateComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
+      if(this.formPopupGroup.get('recurrence_type').value === 'Monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+        commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+      }
+      if(this.formPopupGroup.get('recurrence_type').value === 'Yearly' && this.listDateChosen.value.length == 0) {
+        commonFormValidator.validateFormControl(this.listDateChosen);
+      }
     }
   }
 
@@ -2055,5 +2150,25 @@ export class PopupNotificationCreateComponent {
 
   getSelectedAllId(value: any) {
     this.selectedAllId = value;
+  }
+
+  removeDateChosen(value: any) {
+    this.listDateChosen.setValue(this.listDateChosen.value.filter(item => item !== value));
+  }
+
+  addRecurrenceDate() {
+    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+      const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${this.formYearlyRecurrence.get('recurrence_month').value}`;
+      if(this.listDateChosen.value.includes(chosenValue)) {
+        this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
+      } else {
+        let dateChosen = this.listDateChosen.value;
+        dateChosen.push(chosenValue);
+        this.listDateChosen.setValue(dateChosen);
+      };
+    } else {
+      this.dialogService.openSnackBar({ message: 'Harap pilih tanggal dan bulan pengulangan!' });
+      commonFormValidator.validateAllFields(this.formYearlyRecurrence);
+    };
   }
 }
