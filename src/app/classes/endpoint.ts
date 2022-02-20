@@ -89,7 +89,7 @@ export class Endpoint {
       masterKPI: {
         brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
         brand_parameters: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brand_parameters`,
-        trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives?area_id=[${context.id}]`,
+        trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives`,
         ecosystem_params: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_parameters`,
         ecosystem_brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_brands`,
       },

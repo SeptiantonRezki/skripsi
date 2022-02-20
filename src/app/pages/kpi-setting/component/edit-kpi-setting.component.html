@@ -66,7 +66,7 @@
             </div>
             <h3 *ngIf="existingAreas && existingAreas.length > 0">Add Areas:</h3>
             <div class="pb-16">
-              <salestree [limit]="areaFromLogin" (areaWithKey)="getAreaIds($event)"></salestree>
+              <salestree [limit]="areaFromLogin" (areas)="getAreas($event)" (areaWithKey)="getAreaIds($event)"></salestree>
             </div>
             <div class="" formArrayName="kpis" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
               <div class="table-wrapper" [formGroupName]="i">
@@ -97,11 +97,6 @@
                     </button>
                   </div>
                 </div>
-                <!-- if category = trade program -->
-                <div class="px-24 pt-16" *ngIf="kpi.get('category').value == 'trade program'">
-                  <salestree [limit]="areaFromLogin" (areaWithKey)="getKPIAreaIds(i, $event)"></salestree>
-                </div>
-
                 <div class="p-24" fxLayout="column" style="width:100%;max-width:400px;">
                   <!-- select category -->
                   <select-search placeholder="Kategori KPI" searchLabel="Cari Kategori KPI..." [options]="categories" [value]="kpi.get('category').value" (onChange)="resetKPIDetail(i, $event)">
@@ -126,11 +121,11 @@
 
                   <!-- if category = trade program -->
                   <ng-container *ngIf="kpi.get('category').value == 'trade program'">
-                    <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="KPIListTradeProgram[i]" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)">
-                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && KPIListTradeProgram[i].length">
+                    <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="KPIListTradeProgram" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)" [scrollApi]="scrollTradeProgram" (onScrollApi)="getScrollTradeProgram($event, i, 'scroll')">
+                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && KPIListTradeProgram.length">
                         Trade Program harus dipilih
                       </mat-error>
-                      <mat-error *ngIf="!KPIListTradeProgram[i].length">
+                      <mat-error *ngIf="!KPIListTradeProgram.length">
                         Trade Program tidak tersedia
                       </mat-error>
                     </select-search>
@@ -163,4 +158,3 @@
       </div>
     </div>
   </div>
-  

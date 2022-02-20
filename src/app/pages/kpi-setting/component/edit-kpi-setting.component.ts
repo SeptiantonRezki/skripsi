@@ -102,6 +102,10 @@ export class EditKPISettingComponent implements OnInit {
 
   KPIListTradeProgram: any = [];
 
+  areas: any;
+
+  scrollTradeProgram: boolean = true;
+
   // enableEdit: Boolean = true;
 
   constructor(
@@ -213,20 +217,41 @@ export class EditKPISettingComponent implements OnInit {
   };
 
   getAreaIds(lastSelected: any) {
-    const [id, key] = lastSelected;
+    const [id, key, onClick] = lastSelected;
     this.lastLevel = { id, key };
+
+    if (onClick) this.areaIdsChange(id);
   }
 
-  getKPIAreaIds(pos: number, lastSelected: any) {
-    const [id, _, isClick] = lastSelected;
-    this.masterKPIService.getTradeProgramObjectives({ id: id.join(",") }).subscribe((res) =>{
-      this.KPIListTradeProgram[pos] = res.data || [];
+  areaIdsChange(ids: any) {
+    const kpis: any = this.getKpis();
+    for (let control of kpis) control.get("parameter").setValue("");
+    this.getTradeProgramList({ area_id: ids.join(",") })
+  }
+
+  getAreas(areas: any) {
+    this.areas = areas;
+  }
+
+  getKpis(pos?: number) {
+    const kpis = this.formKPI.controls.kpis as FormArray;
+    return pos >= 0 ? kpis.at(pos) : kpis.controls;
+  }
+
+  getScrollTradeProgram(current_page: number) {
+    this.getTradeProgramList({ area_id: this.lastLevel.id.join(","), per_page: 10, page: current_page + 1 })
+  }
+
+  getTradeProgramList(params: any) {
+    this.masterKPIService.getTradeProgramObjectives(params).subscribe((res) =>{
+      const data = res.data.map(({ trade_program_name }) => ({ id: trade_program_name, name: trade_program_name}));
+      this.KPIListTradeProgram = params.page && params.page > 1 ? [...this.KPIListTradeProgram, ...data] : data;
+      this.scrollTradeProgram = res.data.length > 0;
     })
   }
 
   ecosystemParamsChange(pos: any, parameter: any) {
-    const kpis = this.formKPI.controls.kpis as FormArray;
-    const kpi = kpis.at(pos);
+    const kpi: any = this.getKpis(pos);
 
     kpi.get("parameter").setValue(parameter);
     kpi.get("brand").setValue("");
@@ -245,20 +270,20 @@ export class EditKPISettingComponent implements OnInit {
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     for(let kpi_setting of this.KPIGroup.kpi_settings){
-      let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
-      let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
+      const brandRequired = kpi_setting.category == 'brand';
       kpis.push(this.formBuilder.group({
         category: [kpi_setting.category, Validators.required],
         brand: [kpi_setting.brand_code, ...(brandRequired && [Validators.required])],
-        parameter: [kpi_setting.parameter, ...(parameterRequired && [Validators.required])]
+        parameter: [kpi_setting.parameter, [Validators.required]],
       }))
-      this.KPIListTradeProgram.push([]);
     }
 
     if(this.KPIGroup.status == 'active') {
       this.formKPI.controls['status'].setValue(true);
       // this.enableEdit = false;
     }
+
+    this.getTradeProgramList({ area_id: this.KPIGroup.areas.map(({id}) => id).join(",") });
   }
 
   addKPI() {
@@ -309,6 +334,8 @@ export class EditKPISettingComponent implements OnInit {
 
   deleteArea(id: number) {
     this.existingAreas = this.existingAreas.filter(area => area.id !== id);
+    const existingAreaIds = this.existingAreas.map(({ id }) => id);
+    this.areaIdsChange(existingAreaIds);
   }
 
   confirmDelete() {
