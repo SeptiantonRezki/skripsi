@@ -56,11 +56,11 @@ export class ImportAudienceComponent {
           if (res) {
             const data = res.data.audiences || res.data;
             this.rows = data;
-            this.invalidData = (data || []).filter(item => !item.is_valid).length;
+            this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
             if(this.invalidData > 0) {
               const filterData = () => {
-                this.rows = this.rows.filter(item => item.is_valid);
+                this.rows = this.rows.filter(item => item.flag || item.is_valid);
                 this.invalidData = 0;
                 this.dialogService.brodcastCloseConfirmation();
               };

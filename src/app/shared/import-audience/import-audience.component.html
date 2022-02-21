@@ -46,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.is_valid ? '#fff' : '#efaea8'}">
+          <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag || item.is_valid ? '#fff' : '#efaea8'}">
             <td nowrap>
               {{ item.id }}
             </td>
@@ -63,7 +63,7 @@
               {{ item.type }}
             </td>
             <td nowrap>
-              {{ item.is_valid ? 'VALID' : 'TIDAK VALID' }}
+              {{ item.flag || item.is_valid ? 'VALID' : 'TIDAK VALID' }}
             </td>
             <td nowrap>
               {{ item.reason }}
