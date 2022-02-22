@@ -100,11 +100,15 @@ export class EditKPISettingComponent implements OnInit {
 
   existingAreas = [];
 
-  KPIListTradeProgram: any = [];
+  tradeProgramList: any = [];
+
+  tradeProgramListReserved: any = [];
 
   areas: any;
 
   scrollTradeProgram: boolean = true;
+
+  init: boolean = true;
 
   // enableEdit: Boolean = true;
 
@@ -220,13 +224,7 @@ export class EditKPISettingComponent implements OnInit {
     const [id, key, onClick] = lastSelected;
     this.lastLevel = { id, key };
 
-    if (onClick) this.areaIdsChange(id);
-  }
-
-  areaIdsChange(ids: any) {
-    const kpis: any = this.getKpis();
-    for (let control of kpis) control.get("parameter").setValue("");
-    this.getTradeProgramList({ area_id: ids.join(",") })
+    if (onClick) this.getTradeProgramList();
   }
 
   getAreas(areas: any) {
@@ -239,13 +237,25 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   getScrollTradeProgram(current_page: number) {
-    this.getTradeProgramList({ area_id: this.lastLevel.id.join(","), per_page: 10, page: current_page + 1 })
+    this.getTradeProgramList({ per_page: 10, page: current_page + 1 });
   }
 
-  getTradeProgramList(params: any) {
-    this.masterKPIService.getTradeProgramObjectives(params).subscribe((res) =>{
+  getTradeProgramList(params: any = {}) {
+    const kpis: any = this.getKpis();
+    const areaIds = this.getCombineAreas();
+    this.masterKPIService.getTradeProgramObjectives({ area_id: areaIds.join(","), ...params }).subscribe((res) =>{
       const data = res.data.map(({ trade_program_name }) => ({ id: trade_program_name, name: trade_program_name}));
-      this.KPIListTradeProgram = params.page && params.page > 1 ? [...this.KPIListTradeProgram, ...data] : data;
+      this.tradeProgramList = params.hasOwnProperty("page") && params.page > 1 ? [...this.tradeProgramList, ...data] : data;
+      if (this.init) {
+        this.tradeProgramList = [...this.tradeProgramListReserved, ...this.tradeProgramList];
+        this.init = false;
+      }
+      for (let kpi of kpis) {
+        if (kpi.get("category").value === "trade program") {
+          const exists = this.tradeProgramList.find(({ id }) => id == kpi.get("parameter").value);
+          if (!exists) kpi.get("parameter").setValue("");
+        }
+      }
       this.scrollTradeProgram = res.data.length > 0;
     })
   }
@@ -257,7 +267,7 @@ export class EditKPISettingComponent implements OnInit {
     kpi.get("brand").setValue("");
 
     if (parameter.toLowerCase() === "private label") {
-      this.validator(kpi, "brand", false, [Validators.required])
+      this.validator(kpi, "brand", false, [Validators.required]);
     } else {
       this.validator(kpi, "brand", true);
     }
@@ -276,6 +286,7 @@ export class EditKPISettingComponent implements OnInit {
         brand: [kpi_setting.brand_code, ...(brandRequired && [Validators.required])],
         parameter: [kpi_setting.parameter, [Validators.required]],
       }))
+      if (kpi_setting.category == 'trade program') this.tradeProgramListReserved.push({ id: kpi_setting.parameter, name: kpi_setting.parameter });
     }
 
     if(this.KPIGroup.status == 'active') {
@@ -292,8 +303,6 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   createKPI(): FormGroup {
-    this.KPIListTradeProgram.push([]);
-
     return this.formBuilder.group({
       category: ['', Validators.required],
       brand: [''],
@@ -304,21 +313,15 @@ export class EditKPISettingComponent implements OnInit {
   moveUp(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
-    let tradeProgram = this.KPIListTradeProgram[pos];
     kpis.removeAt(pos);
-    this.KPIListTradeProgram.splice(pos, 1);
     kpis.insert(pos-1, kpi);
-    this.KPIListTradeProgram.splice(pos-1, 0, tradeProgram);
   }
 
   moveDown(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
-    let tradeProgram = this.KPIListTradeProgram[pos];
     kpis.removeAt(pos);
-    this.KPIListTradeProgram.splice(pos, 1);
     kpis.insert(pos+1, kpi);
-    this.KPIListTradeProgram.splice(pos+1, 0, tradeProgram);
   }
 
   deleteKPI(pos: number) {
@@ -334,14 +337,12 @@ export class EditKPISettingComponent implements OnInit {
 
   deleteArea(id: number) {
     this.existingAreas = this.existingAreas.filter(area => area.id !== id);
-    const existingAreaIds = this.existingAreas.map(({ id }) => id);
-    this.areaIdsChange(existingAreaIds);
+    this.getTradeProgramList();
   }
 
   confirmDelete() {
     let kpis = this.formKPI.controls.kpis as FormArray;
     kpis.removeAt(this.indexDelete);
-    this.KPIListTradeProgram.splice(this.indexDelete, 1);
     this.dialogService.brodcastCloseConfirmation();
   }
 
@@ -375,23 +376,28 @@ export class EditKPISettingComponent implements OnInit {
     form.get(name).updateValueAndValidity();
   }
 
+  getCombineAreas() {
+    let existingAreaIds = this.existingAreas.map(area => area.id);
+    let areaIDs = this.lastLevel.id;
+
+    const accountAreaIds = Array.from(new Set([...this.limitArea[this.levelAreas[this.limitAreaIndex]]]));
+
+    let newAreaIDs = 
+      existingAreaIds.length ? 
+        this.isArrayDiffer(areaIDs, accountAreaIds) ? 
+          [...existingAreaIds, ...areaIDs] :
+          [...existingAreaIds] :
+        this.isArrayDiffer(areaIDs, accountAreaIds) ?
+          [...areaIDs] :
+          [...accountAreaIds];
+    newAreaIDs = Array.from(new Set<number>(newAreaIDs));
+    return newAreaIDs;
+  }
+
   async submit() {
     if(this.formKPI.valid) {
-      let existingAreaIds = this.existingAreas.map(area => area.id);
-      let areaIDs = this.lastLevel.id;
+      let newAreaIDs = this.getCombineAreas();
       let level = this.levels[this.lastLevel.key];
-
-      const accountAreaIds = Array.from(new Set([...this.limitArea[this.levelAreas[this.limitAreaIndex]]]));
-
-      let newAreaIDs = 
-        existingAreaIds.length ? 
-          this.isArrayDiffer(areaIDs, accountAreaIds) ? 
-            [...existingAreaIds, ...areaIDs] :
-            [...existingAreaIds] :
-          this.isArrayDiffer(areaIDs, accountAreaIds) ?
-            [...areaIDs] :
-            [...accountAreaIds];
-      newAreaIDs = Array.from(new Set<number>(newAreaIDs));
 
       if(newAreaIDs.length == 0) {
         this.dialogService.openSnackBar({ message: "Silakan pilih minimal satu area!" });

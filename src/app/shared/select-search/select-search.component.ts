@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
+import { uniqBy } from "lodash";
 
 @Component({
   selector: "select-search",
@@ -61,7 +62,7 @@ export class SelectSearchComponent implements OnInit {
         })
       );
     }
-    this.filteredOptions.next(this.optionList.value.slice());
+    this.filteredOptions.next(uniqBy(this.optionList.value, "id").slice());
   }
 
   filtering() {
@@ -95,6 +96,9 @@ export class SelectSearchComponent implements OnInit {
   }
 
   isLoading() {
+    if (this.disableSearch) {
+      return false;
+    }
     if (this.search.value) {
       if (this.isFetching) {
         return true;

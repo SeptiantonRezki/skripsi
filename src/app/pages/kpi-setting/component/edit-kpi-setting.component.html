@@ -121,11 +121,11 @@
 
                   <!-- if category = trade program -->
                   <ng-container *ngIf="kpi.get('category').value == 'trade program'">
-                    <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="KPIListTradeProgram" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)" [scrollApi]="scrollTradeProgram" (onScrollApi)="getScrollTradeProgram($event, i, 'scroll')">
-                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && KPIListTradeProgram.length">
+                    <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="tradeProgramList" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)" [scrollApi]="scrollTradeProgram" (onScrollApi)="getScrollTradeProgram($event, i, 'scroll')">
+                      <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && tradeProgramList.length">
                         Trade Program harus dipilih
                       </mat-error>
-                      <mat-error *ngIf="!KPIListTradeProgram.length">
+                      <mat-error *ngIf="!tradeProgramList.length">
                         Trade Program tidak tersedia
                       </mat-error>
                     </select-search>
