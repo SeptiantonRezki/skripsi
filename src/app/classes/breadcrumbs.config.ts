@@ -3067,6 +3067,72 @@ export const brConfig = {
       }
     ],
   },
+  kpi: {
+    list: [
+      {
+        type: "current",
+        url: "",
+        name: "Daftar KPI Group"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/kpisetting/kpi-groups-list",
+        name: "Daftar KPI Group"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Create KPI Setting"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/kpisetting/kpi-groups-list",
+        name: "Daftar KPI Group"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit KPI Setting"
+      }
+    ]
+  },
+  notes_retailer: {
+    list: [
+      {
+        type: "current",
+        url: "",
+        name: "Notes Retailer"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/notesretailer/notes-retailer-list",
+        name: "Notes Retailer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Create Notes"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/notesretailer/notes-retailer-list",
+        name: "Notes Retailer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit Notes"
+      }
+    ]
+  },
   remote_call_activation: {
     grouping_pelanggan: [
       {
