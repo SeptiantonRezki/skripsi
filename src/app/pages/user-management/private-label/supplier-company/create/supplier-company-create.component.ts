@@ -46,6 +46,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
   isProductFound: boolean;
   isLoadingSave: boolean;
   catatan: String;
+  initialUnique: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -147,6 +148,17 @@ export class SupplierCompanyCreateComponent implements OnInit {
     }
   }
 
+  keyPressAlphaNumeric(event) { // Only AlphaNumeric
+    var inp = String.fromCharCode(event.keyCode);
+
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
   checkError() {
     console.log('statusError', this.createForm.status)
     if (!this.createForm.get('namasupplier').valid) {
@@ -214,9 +226,13 @@ export class SupplierCompanyCreateComponent implements OnInit {
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
+          if(err.error.errors.initial[0] === "Isian initial sudah ada sebelumnya.") {
+            this.initialUnique = true;
+          }
           this.dialogService.openSnackBar({
-            message: err.error.message
+            message: (this.initialUnique)?  err.error.errors.initial[0] : err.error.message
           });
+          commonFormValidator.validateAllFields(this.createForm);
         }
       );
     } else {

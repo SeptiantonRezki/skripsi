@@ -55,6 +55,7 @@ export class SupplierCompanyEditComponent implements OnInit {
   isDetail: boolean;
   supplierId: any;
   detailSupplier: any;
+  initialUnique: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -213,6 +214,17 @@ export class SupplierCompanyEditComponent implements OnInit {
     }
   }
 
+  keyPressAlphaNumeric(event) { // Only AlphaNumeric
+    var inp = String.fromCharCode(event.keyCode);
+
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
   checkError() {
     if (this.createForm.controls['namasupplier'].hasError('required')) {
       this.createForm.get('namasupplier').markAsTouched({ onlySelf: true });
@@ -291,8 +303,11 @@ export class SupplierCompanyEditComponent implements OnInit {
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
+          if(err.error.errors.initial[0] === "Isian initial sudah ada sebelumnya.") {
+            this.initialUnique = true;
+          }
           this.dialogService.openSnackBar({
-            message: err.error.message
+            message: (this.initialUnique)?  err.error.errors.initial[0] : err.error.message
           });
         }
       );
