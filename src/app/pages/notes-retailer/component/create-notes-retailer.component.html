@@ -50,8 +50,8 @@
             <div *ngIf="notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === ''" class="mat-error mat-error-block">Tanggal mulai & Tanggal berakhir harus diisi</div>
             <div fxLayout="row" *ngIf = "paramEdit !== null" class="pb-24">
               <h3>
-                <mat-slide-toggle [(ngModel)]="swithchBool" name="swithchBool"  (change)="onChangeInputSlide($event, i)">
-                  {{swithchBool ? "Active": "Inactive"}}</mat-slide-toggle>
+                <mat-slide-toggle [(ngModel)]="status" name="status" (change)="onChangeInputSlide($event, i)">
+                  {{status ? "Active": "Inactive"}}</mat-slide-toggle>
                 </h3>
             </div>
           </form>
@@ -114,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="p-0">
+      <div *ngIf="formAudience.get('target_audience').value" class="p-0">
         <div
           fxLayout="row wrap"
           fxLayout.lt-md="column"
