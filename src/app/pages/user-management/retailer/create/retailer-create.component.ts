@@ -373,7 +373,7 @@ export class RetailerCreateComponent {
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: this.verticalStepperStep2.get("phone").value,
+        phone: this.country_phone + this.verticalStepperStep2.get("phone").value,
         areas: [this.verticalStepperStep3.get("territory").value],
         latitude: this.verticalStepperStep3.get("latitude").value ? this.verticalStepperStep3.get("latitude").value : null,
         longitude: this.verticalStepperStep3.get("longitude").value ? this.verticalStepperStep3.get("longitude").value : null,

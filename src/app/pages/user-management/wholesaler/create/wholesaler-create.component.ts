@@ -332,7 +332,7 @@ export class WholesalerCreateComponent {
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
-        phone: this.verticalStepperStep2.get("phone").value,
+        phone: this.country_phone + this.verticalStepperStep2.get("phone").value,
         // areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.code)
         areas: this.list['territory'].filter(item => item.id === this.verticalStepperStep3.get('territory').value).map(item => item.id),
         type: "wholesaler",
