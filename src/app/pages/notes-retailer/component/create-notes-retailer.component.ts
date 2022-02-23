@@ -98,7 +98,7 @@ export class CreateNotesRetailerComponent implements OnInit {
   saveData: Boolean;
   exportTemplate: Boolean;
   allRowsSelected: boolean;
-  swithchBool:  Boolean = true;
+  status:  Boolean = true;
   isSelectedAll: boolean = false;
 
   public filterScheduler: FormControl = new FormControl();
@@ -210,6 +210,7 @@ export class CreateNotesRetailerComponent implements OnInit {
         this.paramEdit = params['id'];
         this.notesMdl =  this.dataService.getFromStorage('detail_notes');
         this.selected = this.notesMdl.audiences.map((item: any) => ({id: item }));
+        this.status = this.notesMdl.status === "active";
       }
     });
 
@@ -224,7 +225,7 @@ export class CreateNotesRetailerComponent implements OnInit {
       geotree_checkbox: true,
       trade_scheduler_id: [""],
       trade_creator_id: [""],
-      target_audience: true,
+      target_audience: this.paramEdit ? this.notesMdl.target_audience : false,
     });
 
     this.formFilter = this.formBuilder.group({
@@ -327,14 +328,19 @@ export class CreateNotesRetailerComponent implements OnInit {
       }
     });
 
+    this.formAudience.get("target_audience").valueChanges.subscribe((value) => {
+      if (value) this.getRetailer();
+      else this.selected = [];
+    });
+
     if (this.notesMdl.geotree) this.selectedIds = this.notesMdl.geotree;
   }
 
   onChangeInputSlide(event: any, i: number) {
     if (event.checked == true) {
-      this.notesMdl.status = 'Active';
+      this.notesMdl.status = 'active';
     } else {
-      this.notesMdl.status = 'Not Active';
+      this.notesMdl.status = 'inactive';
     }
   }
 
