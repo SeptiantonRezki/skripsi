@@ -11,18 +11,21 @@ const routes: Routes = [
     path: 'notes-retailer-create',
     component: CreateNotesRetailerComponent,
     data: {
+      breadcrumbs: brConfig.notes_retailer.create,
     }
   },
   {
     path: 'notes-retailer-list',
     component: NotesRetailerListComponent,
     data: {
+      breadcrumbs: brConfig.notes_retailer.list,
     }
   },
   {
     path: 'notes-retailer-edit/:id',
     component: CreateNotesRetailerComponent,
     data: {
+      breadcrumbs: brConfig.notes_retailer.edit
     }
   }
 ];
