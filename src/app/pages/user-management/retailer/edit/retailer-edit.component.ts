@@ -706,7 +706,7 @@ export class RetailerEditComponent {
         business_code: this.formRetailer.get('business_code').value,
         owner: this.formRetailer.get('owner').value,
         country: this.formRetailer.get('country').value,
-        phone: this.formRetailer.getRawValue()['phone'] ? this.formRetailer.getRawValue()['phone'] : '',
+        phone: this.formRetailer.getRawValue()['phone'] ? this.country_phone + this.formRetailer.getRawValue()['phone'] : '',
         status: this.formRetailer.get('status').value,
         areas: [this.formRetailer.get('territory').value],
         latitude: this.formRetailer.get('latitude').value ? this.formRetailer.get('latitude').value : null,
