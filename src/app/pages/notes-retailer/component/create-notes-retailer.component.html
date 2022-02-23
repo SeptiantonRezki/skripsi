@@ -5,16 +5,10 @@
   
     <div class="content p-24">
       <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Create Notes</h2>
-        </div>
         <div class="ayo-middle py-24" fxLayout="column">
           <form>
-            <div fxLayout="row" *ngIf = "notesMdl.name === undefined || notesMdl.name === null || notesMdl.name === ''">
-              <p style="color:red">*Nama harus diisi</p>
-            </div>
-            <div fxLayout="row">
-              <mat-form-field fxFlex="45" class="is-light form-primary" appearance="fill">
+            <div fxLayout="row" fxLayoutGap="24px">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input
                   minlength="3"
                   #nameInput="ngModel"
@@ -25,8 +19,7 @@
                   placeholder="Nama Note"
                 />
               </mat-form-field>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <mat-form-field fxFlex="45" class="is-light form-primary" appearance="fill">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input
                   matInput
                   [(ngModel)] = "notesMdl.description"
@@ -36,23 +29,17 @@
                 />
               </mat-form-field>
             </div>
-            <div *ngIf="nameInput.dirty && nameInput.invalid">
-              <small class="form-text text-danger"
-                           *ngIf="nameInput.errors.minlength"
-                           translateValues="{min: 3}">
-                           <p style="color:red"> Nama harus lebih dari 2 karakter</p>
-              </small>
-              </div>
-            <div fxLayout="row">
-                <mat-form-field fxFlex="45%" class="is-light form-primary">
+            <div *ngIf="notesMdl.name === undefined || notesMdl.name === null || notesMdl.name === ''" class="mat-error mat-error-block">Nama harus diisi</div>
+            <div *ngIf="nameInput.dirty && nameInput.invalid && nameInput.errors.minlength" class="mat-error mat-error-block">Nama harus lebih dari 2 karakter</div>
+            <div fxLayout="row" fxLayoutGap="24px">
+                <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="startPicker" #strDtInput="ngModel"
                       placeholder="Tanggal Mulai" [(ngModel)] = "notesMdl.start_date"
                       name = "notesMdl.start_date">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
                 </mat-form-field>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="endDate" #endDtInput="ngModel"
                       placeholder="Tanggal Berakhir" [(ngModel)] = "notesMdl.end_date"
                       name = "notesMdl.end_date">
@@ -60,172 +47,27 @@
                 <mat-datepicker #endDate></mat-datepicker>
                 </mat-form-field>
             </div>
-            <div fxLayout="row">
-              <div fxFlex="45%" class="is-light form-primary" *ngIf = "notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === ''">
-              <small class="form-text text-danger">
-                <p style="color:red"> Tanggal mulai & Tanggal berakhir harus diisi</p>
-              </small>
-              </div>
-            </div>
-            <div fxLayout="row" *ngIf = "paramEdit !== null" >
+            <div *ngIf="notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === ''" class="mat-error mat-error-block">Tanggal mulai & Tanggal berakhir harus diisi</div>
+            <div fxLayout="row" *ngIf = "paramEdit !== null" class="pb-24">
               <h3>
                 <mat-slide-toggle [(ngModel)]="swithchBool" name="swithchBool"  (change)="onChangeInputSlide($event, i)">
-                  Status</mat-slide-toggle>
+                  {{swithchBool ? "Active": "Inactive"}}</mat-slide-toggle>
                 </h3>
             </div>
-            <br>
           </form>
-          <br>
           <!-- wilayah -->
-      <div
-        fxLayout="row wrap"
-        fxLayoutAlign="end stretch"
-        fxLayout.lt-md="column"
-        class="pt-16"
-        fxLayoutGap="20px"
-        fxLayoutGap.lt-md="0px"
-        *ngIf="formAudience.controls['geotree_checkbox'].value === true"
-      >
-        <button
-          mat-raised-button
-          type="button"
-          class="confirmation-button"
-          (click)="loadFormFilter()"
-          fxFlex="20"
-        >
-          Load Data
-        </button>
-      </div>
-      <form [formGroup]="formFilter" autoComplete="off">
-        <div
-          fxLayout="row wrap"
-          fxLayoutAlign="space-between stretch"
-          fxLayout.lt-md="column"
-          class="pt-16"
-          fxLayoutGap="20px"
-          fxLayoutGap.lt-md="0px"
-          *ngIf="formAudience.controls['geotree_checkbox'].value === true"
-        >
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
-              <mat-option
-                *ngFor="let item of listLevelArea"
-                [value]="item.id"
-                >{{ item.name }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" multiple>
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['zone'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all" ? "Semua
-                Zona" : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select
-              placeholder="Regional"
-              formControlName="region"
-              multiple
-            >
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['region'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Regional"
-                    : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['area'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all" ? "Semua
-                Area" : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select
-              placeholder="Salespoint"
-              formControlName="salespoint"
-              multiple
-            >
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['salespoint'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Salespoint"
-                    : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select
-              placeholder="District"
-              formControlName="district"
-              multiple
-            >
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['district'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                District"
-                    : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select
-              placeholder="Territory"
-              formControlName="territory"
-              multiple
-            >
-              <mat-option
-                *ngFor="let item of filteringGeotree(list['territory'])"
-                [value]="item.id"
-                >{{
-                  item.name === "all"
-                    ? "Semua
-                Territori"
-                    : item.code
-                }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          
-        </div>
-      </form>
+          <div>
+            <salestree [value]="selectedIds" [limit]="areaFromLogin" (areaWithKey)="getAreaIds($event)" (areas)="getRawAreaIds($event)"></salestree>
+          </div>
           <form [formGroup]="formFilterRetailer">
             <div
               fxLayout="row wrap"
-              fxLayoutAlign="space-between stretch"
-              fxLayout.lt-md="column"
+              fxLayoutGap="24px grid"
               class="pt-16"
-              fxLayoutGap="20px"
-              fxLayoutGap.lt-md="0px"
               *ngIf="formAudience.controls['geotree_checkbox'].value === true"
             >
               <!--[R]-->
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-form-field fxFlex="25" class="is-light form-primary">
                 <mat-select
                   placeholder="Retail Classification"
                   formControlName="retail_classification"
@@ -238,7 +80,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-form-field fxFlex="25" class="is-light form-primary">
                 <mat-select
                   placeholder="SRC Classification"
                   formControlName="src_classification"
@@ -251,7 +93,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field fxFlex="31%" class="is-light form-primary">
+              <mat-form-field fxFlex="25" class="is-light form-primary">
                 <mat-select
                   placeholder="SRC Type"
                   formControlName="src_type"
@@ -267,6 +109,9 @@
               <!--[R]-->
             </div>
           </form>
+          <div [formGroup]="formAudience" fxLayout="row" class="pt-16">
+            <mat-checkbox formControlName="target_audience">Target Audience</mat-checkbox>
+          </div>
         </div>
       </div>
       <div class="p-0">
@@ -277,6 +122,7 @@
           fxLayoutGap.lt-md="10px"
           fxLayoutAlign="end center"
           class="p-16 export"
+          style="background:#3a3a3a;"
         >
           <button
             mat-raised-button
@@ -295,71 +141,57 @@
             <mat-icon>arrow_upward</mat-icon> Export Template
           </button>
         </div>
-        <mat-progress-bar
-          [color]="'primary'"
-          [mode]="'indeterminate'"
-          *ngIf="loadingIndicator"
-        ></mat-progress-bar>
         <ngx-datatable
           class="material"
           [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
           [columnMode]="'force'"
           [headerHeight]="48"
           [footerHeight]="56"
           [rowHeight]="'auto'"
-          [reorderable]="reorderable"
-          [selected]="selected"
-          [selectionType]="
-            formAudience.get('limit').value !== 'pick-all' ? 'checkbox' : ''
-          "
+          [scrollbarH]="true"
+          [reorderable]="true"
           [count]="pagination.total"
           [limit]="pagination.per_page"
           [externalPaging]="true"
-          [selectAllRowsOnPage]="false"
           [externalSorting]="true"
+          [selected]="selected"
+          [selectionType]="'checkbox'"
+          [selectAllRowsOnPage]="false"
+          [rowIdentity]="getRowId"
           (page)="setPage($event)"
-          [sorts]="[{ prop: 'name', dir: 'asc' }]"
           (select)="onSelect($event)"
-          [rowIdentity]="getId"
-          (sort)="onSort($event)"
-          fusePerfectScrollbar
         >
           <ngx-datatable-column
-            [width]="68"
-            *ngIf="formAudience.get('limit').value !== 'pick-all'"
+            [width]="30"
+            [sortable]="false"
             [canAutoResize]="false"
-            [sortable]="true"
             [draggable]="false"
             [resizeable]="false"
-            [headerCheckboxable]="true"
+            [sortable]="false"
           >
-            <!-- <ng-template ngx-datatable-header-template >
-              <mat-checkbox 
-                [checked]="allRowsSelected" 
-                (change)="selectFn(!allRowsSelected);"
-              >
-              </mat-checkbox>
+            <!-- <ng-template
+              ngx-datatable-header-template
+              let-value="value"
+              let-allRowsSelected="allRowsSelected"
+              let-selectFn="selectFn"
+            >
+              <mat-checkbox
+                [checked]="setAllSelected(allRowsSelected)"
+                (change)="selectFn(!allRowsSelected)"
+              ></mat-checkbox>
             </ng-template> -->
-  
             <ng-template
               ngx-datatable-cell-template
+              let-row="row"
               let-value="value"
               let-isSelected="isSelected"
               let-onCheckboxChangeFn="onCheckboxChangeFn"
             >
-              <mat-checkbox 
-                [checked]="isSelected" 
-                (change)="onCheckboxChangeFn($event)" 
-                [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
-                *ngIf="!allRowsSelected"
-              >
-              </mat-checkbox>
-              <!-- <mat-checkbox 
-                [checked]="true" 
-                [disabled]="allRowsSelected || formAudience.get('limit').value === 'pick-all'" 
-                *ngIf="allRowsSelected" class="mat-checkbox-all"
-              >
-              </mat-checkbox> -->
+              <mat-checkbox
+                [checked]="isSelected"
+                (change)="onCheckboxChangeFn($event)"
+              ></mat-checkbox>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
@@ -405,6 +237,30 @@
               <span *ngIf="row.status === 'not-registered'">No</span>
             </ng-template>
           </ngx-datatable-column>
+          <ngx-datatable-footer>
+            <ng-template
+              ngx-datatable-footer-template
+              let-rowCount="rowCount"
+              let-pageSize="pageSize"
+              let-selectedCount="selectedCount"
+              let-curPage="curPage"
+              let-offset="offset"
+            >
+              <div>{{ isSelectedAll ? rowCount : selectedCount }} selected / {{ rowCount }} total</div>
+              <datatable-pager
+                [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'"
+                [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'"
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [hidden]="!(rowCount / pageSize > 1)"
+                (change)="table.onFooterPage($event)"
+              >
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
         </ngx-datatable>
       </div>
       <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="paramEdit == null">
