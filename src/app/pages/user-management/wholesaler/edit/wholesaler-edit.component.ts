@@ -656,7 +656,7 @@ export class WholesalerEditComponent {
         address: this.formWs.get("address").value,
         business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
-        phone: this.formWs.get("phone").value,
+        phone: this.country_phone + this.formWs.get("phone").value,
         areas: this.list['territory'].filter(item => item.id === this.formWs.get('territory').value).map(item => item.id),
         status: this.formWs.get("status").value,
         bank_account_name: this.formBankAccount.get("account_name").value === "" ? null : this.formBankAccount.get("account_name").value,
