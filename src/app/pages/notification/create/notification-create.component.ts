@@ -16,7 +16,7 @@ import { Observable, Subject } from 'rxjs';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
-import { ImportPopUpAudienceComponent } from 'app/pages/popup-notification/import-pop-up-audience/import-pop-up-audience.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
@@ -2312,9 +2312,9 @@ export class NotificationCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formNotification.get("user_group").value, type: 'push_notification' };
+    dialogConfig.data = { audience: this.formNotification.get("user_group").value, api: fd => this.notificationService['importPushNotifAudience'](fd) };
 
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {

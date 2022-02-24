@@ -14,7 +14,7 @@ import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { ReplaySubject, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { isThisSecond } from 'date-fns';
@@ -2006,9 +2006,9 @@ export class PopupNotificationEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value, api: fd => this.notificationService['importAudience'](fd) };
 
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
