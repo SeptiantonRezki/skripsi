@@ -160,6 +160,9 @@ import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
+import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
+import { SkuComponent } from './image-recognition/sku/sku.component';
+import { StockCheckTemplateComponent } from './image-recognition/stock-check-template/stock-check-template.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -336,6 +339,9 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
+    GroupSkuComponent,
+    SkuComponent,
+    StockCheckTemplateComponent,
   ],
   exports: [
     TemplateIndexComponent,

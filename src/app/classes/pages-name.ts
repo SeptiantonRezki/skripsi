@@ -125,6 +125,10 @@ export class PagesName {
       "/dte/publish-mission": "principal.dtepublishmission.buat",
       "/dte/publish-mission/edit/": "principal.dtepublishmission.ubah",
       "/dte/publish-mission/detail/": "principal.dtepublishmission.lihat",
+
+      "/dte/master-brand-group": "principal.dte_image_recognition_master_brand_group.lihat",
+      "/dte/master-brand": "principal.dte_image_recognition_master_brand.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
