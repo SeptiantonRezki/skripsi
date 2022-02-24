@@ -139,7 +139,7 @@
                   URL harus diisi
                 </mat-error>
                 <mat-error
-                  *ngIf="formNotification.controls['url_link'].invalid && formNotification.get('url_link').value !== ''">
+                  *ngIf="formNotification.controls['url_link'].hasError('pattern') && formNotification.get('url_link').value !== ''">
                   URL tidak valid
                 </mat-error>
               </mat-form-field>
