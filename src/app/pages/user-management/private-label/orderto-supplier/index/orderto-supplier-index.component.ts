@@ -78,6 +78,7 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");
+    this.permission = this.roles.getRoles('principal.supplierorder');
   }
 
   ngOnInit() {
