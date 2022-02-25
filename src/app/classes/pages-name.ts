@@ -159,6 +159,7 @@ export class PagesName {
       "/user-management/countries/create": "principal.countries.buat",
       "/user-management/countries/edit/": "principal.countries.ubah",
       "/user-management/countries/detail/": "principal.countries.lihat",
+      "/advertisement/promo-mandiri": "principal.promomandiri.lihat",
     }
     return PAGES[name];
   }
