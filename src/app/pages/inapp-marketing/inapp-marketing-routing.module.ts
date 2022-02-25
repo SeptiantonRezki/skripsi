@@ -10,6 +10,7 @@ import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.
 import { ListLevelAreaResolver } from "app/resolver/inapp-marketing.resolver";
 import { PageGuard } from "app/classes/auth.guard";
 import { BannerSortingComponent } from "./banner-sorting/banner-sorting.component";
+import { PromoMandiriComponent } from "./promo-mandiri/promo-mandiri.component";
 
 const routes: Routes = [
   {
@@ -88,6 +89,11 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.inappMarketing.landingPage.edit
     },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "promo-mandiri",
+    component: PromoMandiriComponent,
     canActivate: [PageGuard]
   }
 ];

@@ -8,6 +8,7 @@ import { BannerEditComponent } from "./banner/edit/banner-edit.component";
 import { LandingPageIndexComponent } from "./landing-page/index/landing-page-index.component";
 import { LandingPageCreateComponent } from "./landing-page/create/landing-page-create.component";
 import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.component";
+import { PromoMandiriComponent } from "./promo-mandiri/promo-mandiri.component";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
@@ -95,7 +96,8 @@ export const MY_FORMATS = {
     LandingPageCreateComponent,
     LandingPageEditComponent,
     ImportAudienceBannerDialogComponent,
-    BannerSortingComponent
+    BannerSortingComponent,
+    PromoMandiriComponent,
   ],
   exports: [
     BannerIndexComponent,
