@@ -157,7 +157,7 @@
           </div>
 
           <div [formGroup]="formDoc" class="ayo-middle pt-24" fxLayout="column">
-            <div fxLayout="row" fxFlex="100">
+            <div *ngIf="permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
                 <input matInput placeholder="{{ ls.locale.wholesaler.ktp_number }}" type="text" formControlName="ktp">
               </mat-form-field>
@@ -174,7 +174,7 @@
                 </button>
               </div>
             </div>
-            <div fxLayout="row" fxFlex="100">
+            <div *ngIf="permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
                 <input matInput placeholder="{{ ls.locale.wholesaler.tax_number }}" type="text" formControlName="npwp">
               </mat-form-field>
@@ -187,6 +187,17 @@
                 <div fxFlex="2"></div>
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
                   (click)="cekDokumenAkses('npwp')">
+                  {{ ls.locale.wholesaler.grant_access }}
+                </button>
+              </div>
+            </div>
+            <div *ngIf="!permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
+              <div class="is-light py-24" fxFlex="30"><strong>KTP / NPWP</strong></div>
+              <div fxFlex="2"></div>
+              <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
+                <div fxFlex="2"></div>
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
+                  (click)="cekDokumenAkses()">
                   {{ ls.locale.wholesaler.grant_access }}
                 </button>
               </div>

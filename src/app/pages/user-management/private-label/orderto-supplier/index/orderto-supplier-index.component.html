@@ -122,7 +122,7 @@
                   <button mat-stroked-button color="" (click)="getDetailOrder(row.id)">
                     CETAK PO
                   </button>
-                  <button mat-stroked-button color="" (click)="openDocumentOrder(row)" style="margin-top: 2px;">
+                  <button *ngIf="permission.document" mat-stroked-button color="" (click)="openDocumentOrder(row)" style="margin-top: 2px;">
                     DOKUMEN
                   </button>
                 </div>
