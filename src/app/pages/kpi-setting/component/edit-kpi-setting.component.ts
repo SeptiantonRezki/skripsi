@@ -12,6 +12,7 @@ import {
   Validators,
   FormArray,
   FormControl,
+  AbstractControl,
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from '../../../services/data.service';
@@ -48,17 +49,21 @@ export class EditKPISettingComponent implements OnInit {
   saveData: Boolean;
 
   KPSList: any;
+  KPSListStart: any[] = [];
+  KPSListEnd: any[] = [];
 
   categories = [
-    // 'visit',
-    'brand',
-    // 'trade program',
-    'ecosystem'
+    // { id: "visit", name: "Visit" },
+    { id: "brand", name: "Brand" },
+    { id: "trade program", name: "Trade Program" },
+    { id: "ecosystem", name: "Ecosystem" },
   ];
 
-  brands: Array<any>;
-  brand_parameters: Array<any>;
-  trade_program_objectives: Array<any>;
+  brands: Array<any> = [];
+  brand_parameters: Array<any> = [];
+  trade_program_objectives: Array<any> = [];
+  ecosystemParams: Array<any> = [];
+  ecosystemBrands: Array<any> = [];
 
   selected = [];
   area: Array<any>;
@@ -72,8 +77,7 @@ export class EditKPISettingComponent implements OnInit {
 
   listLevelArea: any[];
   list: any;
-  areaFromLogin;
-  formFilter: FormGroup;
+  areaFromLogin: any;
 
   levelAreas = [
     "national",
@@ -96,6 +100,16 @@ export class EditKPISettingComponent implements OnInit {
 
   existingAreas = [];
 
+  tradeProgramList: any = [];
+
+  tradeProgramListReserved: any = [];
+
+  areas: any;
+
+  scrollTradeProgram: boolean = true;
+
+  init: boolean = true;
+
   // enableEdit: Boolean = true;
 
   constructor(
@@ -117,27 +131,10 @@ export class EditKPISettingComponent implements OnInit {
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
     this.area_id_list = this.dataService.getDecryptedProfile()["area_id"];
-    this.listLevelArea = [
-      {
-        id: 1,
-        parent_id: null,
-        code: "SLSNTL      ",
-        name: "SSLSNTL",
-      },
-    ];
-
-    this.list = {
-      zone: [],
-      region: [],
-      area: [],
-      salespoint: [],
-      district: [],
-      territory: [],
-    };
 
     this.levels = {
       national: 1,
-      zone: 2,
+      division: 2,
       region: 3,
       area: 4,
       salespoint: 5,
@@ -158,14 +155,11 @@ export class EditKPISettingComponent implements OnInit {
     });
 
     this.masterKPIService.getBrands().subscribe((res) => {
-      this.brands = res
+      this.brands = res.map(({ code }) => ({ id: code, name: code }))
     })
 
     this.masterKPIService.getBrandParameters().subscribe((res) => {
-      this.brand_parameters = res
-    })
-    this.masterKPIService.getTradeProgramObjectives().subscribe((res) =>{
-      this.trade_program_objectives = res
+      this.brand_parameters = res.map(({ parameter }) => ({ id: parameter, name: parameter }))
     })
 
     this.formKPI = this.formBuilder.group({
@@ -175,59 +169,31 @@ export class EditKPISettingComponent implements OnInit {
       kpis: this.formBuilder.array([], Validators.required)
     });
 
-    this.formFilter = this.formBuilder.group({
-      national: [""],
-      zone: [""],
-      region: [""],
-      area: [""],
-      salespoint: [""],
-      district: [""],
-      territory: [""],
-    });
-
-    this.initAreaV2();
-
-    this.formFilter.get("zone").valueChanges.subscribe((res) => {
-      console.log("zone", res);
-      if (res) {
-        this.getAudienceAreaV2("region", res);
-      }
-    });
-    this.formFilter.get("region").valueChanges.subscribe((res) => {
-      console.log("region", res);
-      if (res) {
-        this.getAudienceAreaV2("area", res);
-      }
-    });
-    this.formFilter.get("area").valueChanges.subscribe((res) => {
-      console.log("area", res, this.formFilter.value["area"]);
-      if (res) {
-        this.getAudienceAreaV2("salespoint", res);
-      }
-    });
-    this.formFilter.get("salespoint").valueChanges.subscribe((res) => {
-      console.log("salespoint", res);
-      if (res) {
-        this.getAudienceAreaV2("district", res);
-      }
-    });
-    this.formFilter.get("district").valueChanges.subscribe((res) => {
-      console.log("district", res);
-      if (res) {
-        this.getAudienceAreaV2("territory", res);
-      }
-    });
-
     this.formKPI.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formKPI, this.formdataErrors);
     });
 
-    this.KPSList = await this.kpiSettingService.getKPS(this.paramEdit).toPromise();
-    
+    this.kpiSettingService.getKPS(this.paramEdit).subscribe((res) => {
+      this.KPSListStart = res.map((item: any) => ({ id: item.id, name: this.getKPSLabel(item, "start_date")}))
+      this.KPSListEnd = res.map((item: any) => ({ id: item.id, name: this.getKPSLabel(item, "end_date")}))
+    })
+
+    this.masterKPIService.getEcosystemParams().subscribe(res => {
+      this.ecosystemParams = res.map(({ parameter }) => ({ id: parameter, name: parameter }));
+    });
+
+    this.masterKPIService.getEcosystemBrands().subscribe(res => {
+      this.ecosystemBrands = res.map(({ brand }) => ({ id: brand, name: brand }));
+    });
+
     if(this.paramEdit) {
       this.KPIGroup = await this.kpiSettingService.getById(this.paramEdit).toPromise();
       this.setDetail();
     }
+  }
+
+  getKPSLabel(data: any, date: string) {
+    return `${data["kps_number"]} - ${moment(data[date], "YYYY-MM-DD").format('DD/MM/YYYY')}`
   }
 
   setLimitArea(data: any) {
@@ -254,6 +220,59 @@ export class EditKPISettingComponent implements OnInit {
     return differ.length > 0;
   };
 
+  getAreaIds(lastSelected: any) {
+    const [id, key, onClick] = lastSelected;
+    this.lastLevel = { id, key };
+
+    if (onClick) this.getTradeProgramList();
+  }
+
+  getAreas(areas: any) {
+    this.areas = areas;
+  }
+
+  getKpis(pos?: number) {
+    const kpis = this.formKPI.controls.kpis as FormArray;
+    return pos >= 0 ? kpis.at(pos) : kpis.controls;
+  }
+
+  getScrollTradeProgram(current_page: number) {
+    this.getTradeProgramList({ per_page: 10, page: current_page + 1 });
+  }
+
+  getTradeProgramList(params: any = {}) {
+    const kpis: any = this.getKpis();
+    const areaIds = this.getCombineAreas();
+    this.masterKPIService.getTradeProgramObjectives({ area_id: areaIds.join(","), ...params }).subscribe((res) =>{
+      const data = res.data.map(({ trade_program_name }) => ({ id: trade_program_name, name: trade_program_name}));
+      this.tradeProgramList = params.hasOwnProperty("page") && params.page > 1 ? [...this.tradeProgramList, ...data] : data;
+      if (this.init) {
+        this.tradeProgramList = [...this.tradeProgramListReserved, ...this.tradeProgramList];
+        this.init = false;
+      }
+      for (let kpi of kpis) {
+        if (kpi.get("category").value === "trade program") {
+          const exists = this.tradeProgramList.find(({ id }) => id == kpi.get("parameter").value);
+          if (!exists) kpi.get("parameter").setValue("");
+        }
+      }
+      this.scrollTradeProgram = res.data.length > 0;
+    })
+  }
+
+  ecosystemParamsChange(pos: any, parameter: any) {
+    const kpi: any = this.getKpis(pos);
+
+    kpi.get("parameter").setValue(parameter);
+    kpi.get("brand").setValue("");
+
+    if (parameter.toLowerCase() === "private label") {
+      this.validator(kpi, "brand", false, [Validators.required]);
+    } else {
+      this.validator(kpi, "brand", true);
+    }
+  }
+
   setDetail() {
     this.formKPI.controls['start_kps'].setValue(this.KPIGroup.start_kps);
     this.formKPI.controls['end_kps'].setValue(this.KPIGroup.end_kps);
@@ -261,19 +280,21 @@ export class EditKPISettingComponent implements OnInit {
 
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     for(let kpi_setting of this.KPIGroup.kpi_settings){
-      let brandRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
-      let parameterRequired = kpi_setting.category == 'brand' || kpi_setting.category == 'trade program';
+      const brandRequired = kpi_setting.category == 'brand';
       kpis.push(this.formBuilder.group({
         category: [kpi_setting.category, Validators.required],
         brand: [kpi_setting.brand_code, ...(brandRequired && [Validators.required])],
-        parameter: [kpi_setting.parameter, ...(parameterRequired && [Validators.required])]
+        parameter: [kpi_setting.parameter, [Validators.required]],
       }))
+      if (kpi_setting.category == 'trade program') this.tradeProgramListReserved.push({ id: kpi_setting.parameter, name: kpi_setting.parameter });
     }
 
     if(this.KPIGroup.status == 'active') {
       this.formKPI.controls['status'].setValue(true);
       // this.enableEdit = false;
     }
+
+    this.getTradeProgramList({ area_id: this.KPIGroup.areas.map(({id}) => id).join(",") });
   }
 
   addKPI() {
@@ -285,422 +306,25 @@ export class EditKPISettingComponent implements OnInit {
     return this.formBuilder.group({
       category: ['', Validators.required],
       brand: [''],
-      parameter: ['']
+      parameter: [''],
     })
   }
 
-  moveUp(pos) {
+  moveUp(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
     kpis.removeAt(pos);
     kpis.insert(pos-1, kpi);
   }
 
-  moveDown(pos) {
+  moveDown(pos: number) {
     let kpis = this.formKPI.controls['kpis'] as FormArray;
     let kpi = kpis.at(pos);
     kpis.removeAt(pos);
     kpis.insert(pos+1, kpi);
   }
 
-  initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()["areas"] || [];
-    console.log('initArea', areas);
-    this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
-    this.lastLevel = areasDisabled;
-    let lastLevelDisabled = null;
-    let lastDiffLevelIndex = this.levelAreas.findIndex(
-      (level) =>
-        level === (sameArea.type === "teritory" ? "territory" : sameArea.type)
-    );
-
-    if (
-      !this.formFilter.get("national") ||
-      this.formFilter.get("national").value === ""
-    ) {
-      this.formFilter.get("national").setValue(1);
-      this.formFilter.get("national").disable();
-      lastLevelDisabled = "national";
-    }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = this.levelAreas.findIndex((lvl) => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (
-            !this.formFilter.controls[this.parseArea(level.type)] ||
-            !this.formFilter.controls[this.parseArea(level.type)].value ||
-            this.formFilter.controls[this.parseArea(level.type)].value === ""
-          ) {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([
-              level.id,
-            ]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
-
-              this.formFilter.get(this.parseArea(level.type)).disable();
-            }
-
-            if (areasDisabled.indexOf(level.type) > -1)
-              this.formFilter.get(this.parseArea(level.type)).disable();
-          }
-
-          let isExist = this.list[this.parseArea(level.type)].find(
-            (ls) => ls.id === level.id
-          );
-          level["area_type"] = `area_${index + 1}`;
-
-          if(isExist) {
-            this.list[this.parseArea(level.type)] = [...this.list[this.parseArea(level.type)]];
-          } else {
-            this.list[this.parseArea(level.type)] = [...this.list[this.parseArea(level.type)], level];
-          }
-          
-           if (!this.formFilter.controls[this.parseArea(level.type)].disabled)
-            this.getAudienceAreaV2(
-              this.geotreeService.getNextLevel(this.parseArea(level.type)),
-              level.id
-            );
-
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(
-              this.geotreeService.getNextLevel(this.parseArea(level.type)),
-              level.id
-            );
-          }
-        }
-      });
-    });
-  }
-
-  parseArea(type) {
-    switch (type) {
-      case "division":
-        return "zone";
-      case "teritory":
-      case "territory":
-        return "territory";
-      default:
-        return type;
-    }
-  }
-
-  getAudienceAreaV2(selection, id, event?) {
-    let item: any;
-    let fd = new FormData();
-    let lastLevel = this.geotreeService.getBeforeLevel(
-      this.parseArea(selection)
-    );
-    let areaSelected: any = Object.entries(this.formFilter.getRawValue())
-      .map(([key, value]) => ({ key, value }))
-      .filter((item) => item.key === this.parseArea(lastLevel));
-    console.log(
-      "audienceareav2",
-      this.formFilter.getRawValue(),
-      areaSelected[0]
-    );
-    if (areaSelected && areaSelected[0] && areaSelected[0].key === "national") {
-      fd.append("area_id[]", areaSelected[0].value);
-    } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
-        areaSelected[0].value.map((ar) => {
-          fd.append("area_id[]", ar);
-        });
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
-        if (areaSelected[0].value.length === 0) {
-          let beforeLevel = this.geotreeService.getBeforeLevel(
-            areaSelected[0].key
-          );
-          let newAreaSelected: any = Object.entries(
-            this.formFilter.getRawValue()
-          )
-            .map(([key, value]) => ({ key, value }))
-            .filter((item) => item.key === this.parseArea(beforeLevel));
-          console.log(
-            "the selection",
-            this.parseArea(selection),
-            newAreaSelected
-          );
-          if (newAreaSelected[0].key !== "national") {
-            newAreaSelected[0].value.map((ar) => {
-              fd.append("area_id[]", ar);
-            });
-          } else {
-            fd.append("area_id[]", newAreaSelected[0].value);
-          }
-        }
-      }
-    } else {
-      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      areaSelected = Object.entries(this.formFilter.getRawValue())
-        .map(([key, value]) => ({ key, value }))
-        .filter((item) => item.key === this.parseArea(beforeLastLevel));
-      if (
-        areaSelected &&
-        areaSelected[0] &&
-        areaSelected[0].key === "national"
-      ) {
-        fd.append("area_id[]", areaSelected[0].value);
-      } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
-          areaSelected[0].value.map((ar) => {
-            fd.append("area_id[]", ar);
-          });
-          if (areaSelected[0].value.length === 0) {
-            let beforeLevel = this.geotreeService.getBeforeLevel(
-              areaSelected[0].key
-            );
-            let newAreaSelected: any = Object.entries(
-              this.formFilter.getRawValue()
-            )
-              .map(([key, value]) => ({ key, value }))
-              .filter((item) => item.key === this.parseArea(beforeLevel));
-            console.log(
-              "the selection",
-              this.parseArea(selection),
-              newAreaSelected
-            );
-            if (newAreaSelected[0].key !== "national") {
-              newAreaSelected[0].value.map((ar) => {
-                fd.append("area_id[]", ar);
-              });
-            } else {
-              fd.append("area_id[]", newAreaSelected[0].value);
-            }
-          }
-        }
-      }
-    }
-
-    fd.append("area_type", selection === "territory" ? "teritory" : selection);
-    let thisAreaOnSet = [];
-    let areaNumber = 0;
-    let expectedArea = [];
-    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
-      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1])
-        thisAreaOnSet = [...thisAreaOnSet, ...this.areaFromLogin[1]];
-
-      thisAreaOnSet = thisAreaOnSet.filter(
-        (ar) =>
-          (ar.level_desc === "teritory" ? "territory" : ar.level_desc) ===
-          selection
-      );
-      if (id && id.length > 1) {
-        areaNumber = 1;
-      }
-
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== "national")
-        expectedArea = thisAreaOnSet.filter((ar) =>
-          areaSelected[0].value.includes(ar.parent_id)
-        );
-    }
-
-    switch (this.parseArea(selection)) {
-      case "zone":
-        this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-          this.list[this.parseArea(selection)] =
-            expectedArea.length > 0
-              ? res.data.filter((dt) =>
-                  expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                )
-              : res.data;
-
-          // fd = null
-        });
-
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["region"] = [];
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        console.log(
-          "zone selected",
-          selection,
-          this.list["region"],
-          this.formFilter.get("region").value
-        );
-        break;
-      case "region":
-        if (id && id.length !== 0) {
-          item =
-            this.list["zone"].length > 0
-              ? this.list["zone"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["region"] = [];
-        }
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "area":
-        if (id && id.length !== 0) {
-          item =
-            this.list["region"].length > 0
-              ? this.list["region"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          console.log("area hitted", selection, item, this.list["region"]);
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["area"] = [];
-        }
-
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "salespoint":
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item =
-            this.list["area"].length > 0
-              ? this.list["area"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          console.log("item", item);
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["salespoint"] = [];
-        }
-
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "district":
-        if (id && id.length !== 0) {
-          item =
-            this.list["salespoint"].length > 0
-              ? this.list["salespoint"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["district"] = [];
-        }
-
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["territory"] = [];
-        break;
-      case "territory":
-        if (id && id.length !== 0) {
-          item =
-            this.list["district"].length > 0
-              ? this.list["district"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["territory"] = [];
-        }
-
-        this.formFilter.get("territory").setValue("");
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  filteringGeotree(areaList) {
-    return areaList;
-  }
-
-  deleteArea(id) {
-    this.existingAreas = this.existingAreas.filter(area => area.id !== id);
-  }
-
-  deleteKPI(pos) {
+  deleteKPI(pos: number) {
     let dialogData = {
       titleDialog: 'Hapus KPI',
       captionDialog: `Apa Anda yakin menghapus KPI ${pos+1}?`,
@@ -711,69 +335,69 @@ export class EditKPISettingComponent implements OnInit {
     this.dialogService.openCustomConfirmationDialog(dialogData);
   }
 
+  deleteArea(id: number) {
+    this.existingAreas = this.existingAreas.filter(area => area.id !== id);
+    this.getTradeProgramList();
+  }
+
   confirmDelete() {
     let kpis = this.formKPI.controls.kpis as FormArray;
     kpis.removeAt(this.indexDelete);
     this.dialogService.brodcastCloseConfirmation();
   }
 
-  resetKPIDetail(pos) {
-    let kpis = this.formKPI.controls.kpis as FormArray;
-    let kpi = kpis.at(pos);
-    
-    let category = kpi.get('category').value
-    
-    kpi.get('brand').setValue('');
-    kpi.get('parameter').setValue('');
+  resetKPIDetail(pos: number, category: string) {
+    const kpis = this.formKPI.controls.kpis as FormArray;
+    const kpi = kpis.at(pos);
+    const required = [Validators.required];
 
-    let brandRequired = category == 'brand' || category == 'trade program';
-    let parameterRequired = category == 'brand' || category == 'trade program';
+    kpi.get("category").setValue(category);
+    kpi.get("brand").setValue("");
+    kpi.get("parameter").setValue("");
 
-    if(brandRequired) {
-      kpi.get('brand').setValidators([Validators.required]);
-    } else {
-      kpi.get('brand').setValidators(null);
+    switch (category) {
+      case "brand":
+        this.validator(kpi, "brand", false, required);
+        this.validator(kpi, "parameter", false, required);
+        return;
+      case "ecosystem":
+      case "trade program":
+        this.validator(kpi, "brand", true);
+        this.validator(kpi, "parameter", false, required);
+        return;
+      default:
+        return;
     }
-    if(parameterRequired) {
-      kpi.get('parameter').setValidators([Validators.required]);
-    } else {
-      kpi.get('parameter').setValidators(null);
-    }
-    this.formKPI.updateValueAndValidity();
+  }
+
+  validator(form: AbstractControl, name: string, clear: boolean, rules?: any) {
+    if (rules) form.get(name).setValidators(rules);
+    if (clear) form.get(name).clearValidators();
+    form.get(name).updateValueAndValidity();
+  }
+
+  getCombineAreas() {
+    let existingAreaIds = this.existingAreas.map(area => area.id);
+    let areaIDs = this.lastLevel.id;
+
+    const accountAreaIds = Array.from(new Set([...this.limitArea[this.levelAreas[this.limitAreaIndex]]]));
+
+    let newAreaIDs = 
+      existingAreaIds.length ? 
+        this.isArrayDiffer(areaIDs, accountAreaIds) ? 
+          [...existingAreaIds, ...areaIDs] :
+          [...existingAreaIds] :
+        this.isArrayDiffer(areaIDs, accountAreaIds) ?
+          [...areaIDs] :
+          [...accountAreaIds];
+    newAreaIDs = Array.from(new Set<number>(newAreaIDs));
+    return newAreaIDs;
   }
 
   async submit() {
     if(this.formKPI.valid) {
-      let areaSelected = Object.entries(this.formFilter.getRawValue())
-        .map(([key, value]) => ({ key, value }))
-        .filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-
-      let existingAreaIds = this.existingAreas.map(area => area.id);
-      let lastAreaSelected = areaSelected[areaSelected.length - 1];
-      let areaIDs: any;
-      if(typeof lastAreaSelected.value == 'number') {
-        if(lastAreaSelected.value == 1 && existingAreaIds.length > 0) {
-          areaIDs = [];
-        } else {
-          areaIDs = [lastAreaSelected.value];
-        }
-      } else {
-        areaIDs = lastAreaSelected.value;
-      }
-
-      const accountAreaIds = Array.from(new Set([...this.limitArea[this.levelAreas[this.limitAreaIndex]]]));
-
-      let newAreaIDs = 
-        existingAreaIds.length ? 
-          this.isArrayDiffer(areaIDs, accountAreaIds) ? 
-            [...existingAreaIds, ...areaIDs] :
-            [...existingAreaIds] :
-          this.isArrayDiffer(areaIDs, accountAreaIds) ?
-            [...areaIDs] :
-            [...accountAreaIds];
-      newAreaIDs = Array.from(new Set<number>(newAreaIDs));
-
-      let level = this.levels[lastAreaSelected.key];
+      let newAreaIDs = this.getCombineAreas();
+      let level = this.levels[this.lastLevel.key];
 
       if(newAreaIDs.length == 0) {
         this.dialogService.openSnackBar({ message: "Silakan pilih minimal satu area!" });

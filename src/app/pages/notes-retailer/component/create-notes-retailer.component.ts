@@ -32,6 +32,7 @@ import {NotesRetailerModel} from 'app/pages/notes-retailer/notes-retailer.model'
 import { NotesRetailerService } from '../../../services/notes-retailer/notes-retailer.service';
 import { ImportNotesDialogComponent } from '../import-component/import-notes-dialog.component';
 import moment from 'moment';
+import { DatatableComponent } from "@swimlane/ngx-datatable";
 
 @Component({
   selector: 'app-create-notes-retailer.component',
@@ -97,7 +98,8 @@ export class CreateNotesRetailerComponent implements OnInit {
   saveData: Boolean;
   exportTemplate: Boolean;
   allRowsSelected: boolean;
-  swithchBool:  Boolean = true;
+  status:  Boolean = true;
+  isSelectedAll: boolean = false;
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -114,6 +116,13 @@ export class CreateNotesRetailerComponent implements OnInit {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+
+  areaIds: any;
+  rawAreaIds: any;
+  selectedIds: any = {};
+
+  @ViewChild(DatatableComponent)
+  table: DatatableComponent;
 
   @HostListener("window:beforeunload")
   canDeactivate(): Observable<boolean> | boolean {
@@ -195,14 +204,15 @@ export class CreateNotesRetailerComponent implements OnInit {
 
   ngOnInit() {
     this.idbService.reset();
-    console.log('ini ob', this.notesMdl);
 
     this.subscription = this.route.params.subscribe((params) => {
       if (params['id']) {
         this.paramEdit = params['id'];
         this.notesMdl =  this.dataService.getFromStorage('detail_notes');
-        }
-      });
+        this.selected = this.notesMdl.audiences.map((item: any) => ({id: item }));
+        this.status = this.notesMdl.status === "active";
+      }
+    });
 
     this.formAudience = this.formBuilder.group({
       name: ["", Validators.required],
@@ -215,6 +225,7 @@ export class CreateNotesRetailerComponent implements OnInit {
       geotree_checkbox: true,
       trade_scheduler_id: [""],
       trade_creator_id: [""],
+      target_audience: this.paramEdit ? this.notesMdl.target_audience : false,
     });
 
     this.formFilter = this.formBuilder.group({
@@ -232,10 +243,6 @@ export class CreateNotesRetailerComponent implements OnInit {
       src_classification: [''],
       src_type: ['']
     });
-
-    // this.initArea();
-    this.initAreaV2();
-    this.getRetailer();
 
     this.formAudience.controls["limit"].valueChanges.subscribe((res) => {
       if (res === "pick-all") {
@@ -268,7 +275,7 @@ export class CreateNotesRetailerComponent implements OnInit {
       }
     })
     this.formAudience.get("type").valueChanges.subscribe((data) => {
-      console.log("type", data);
+      // console.log("type", data);
       if (data === "mission") {
         if (this.formAudience.get("audience_type").value === 'scheduler') {
           this.getListScheduler();
@@ -309,37 +316,6 @@ export class CreateNotesRetailerComponent implements OnInit {
         this.filteringTradeProgram();
       });
 
-    this.formFilter.get("zone").valueChanges.subscribe((res) => {
-      console.log("zone", res);
-      if (res) {
-        this.getAudienceAreaV2("region", res);
-      }
-    });
-    this.formFilter.get("region").valueChanges.subscribe((res) => {
-      console.log("region", res);
-      if (res) {
-        this.getAudienceAreaV2("area", res);
-      }
-    });
-    this.formFilter.get("area").valueChanges.subscribe((res) => {
-      console.log("area", res, this.formFilter.value["area"]);
-      if (res) {
-        this.getAudienceAreaV2("salespoint", res);
-      }
-    });
-    this.formFilter.get("salespoint").valueChanges.subscribe((res) => {
-      console.log("salespoint", res);
-      if (res) {
-        this.getAudienceAreaV2("district", res);
-      }
-    });
-    this.formFilter.get("district").valueChanges.subscribe((res) => {
-      console.log("district", res);
-      if (res) {
-        this.getAudienceAreaV2("territory", res);
-      }
-    });
-
     this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
       this.getRetailer();
     });
@@ -351,14 +327,23 @@ export class CreateNotesRetailerComponent implements OnInit {
         delete this.pagination['classification'];
       }
     });
+
+    this.formAudience.get("target_audience").valueChanges.subscribe((value) => {
+      if (value) this.getRetailer();
+      else this.selected = [];
+    });
+
+    if (this.notesMdl.geotree) this.selectedIds = this.notesMdl.geotree;
   }
+
   onChangeInputSlide(event: any, i: number) {
     if (event.checked == true) {
-      this.notesMdl.status = 'Active';
+      this.notesMdl.status = 'active';
     } else {
-      this.notesMdl.status = 'Not Active';
+      this.notesMdl.status = 'inactive';
     }
   }
+
   klikCreate() {
     this.dataService.showLoading(true);
     this.loadingIndicator = true;
@@ -366,6 +351,17 @@ export class CreateNotesRetailerComponent implements OnInit {
     this.notesMdl.retailer_id = this.selected.map((map) => map.id);
     this.notesMdl.start_date = this.convertDate(this.notesMdl.start_date);
     this.notesMdl.end_date =  this.convertDate(this.notesMdl.end_date);
+    this.notesMdl.target_audience = this.formAudience.get("target_audience")
+    .value
+    ? 1
+    : 0;
+    this.notesMdl.classification = this.formFilterRetailer.get(
+      "retail_classification"
+    ).value;
+    this.notesMdl.src_classification =
+      this.formFilterRetailer.get("src_classification").value;
+    this.notesMdl.src_type = this.formFilterRetailer.get("src_type").value;
+    this.notesMdl.area_id = this.lastLevel.id;
     this.notesRetailerService.create(this.notesMdl).subscribe((res) => {
       this.selected = [];
       this.loadingIndicator = false;
@@ -373,12 +369,24 @@ export class CreateNotesRetailerComponent implements OnInit {
       this.router.navigate(["notesretailer", "notes-retailer-list"]);
     });
   }
+
   klikUpdate() {
     this.loadingIndicator = true;
     this.dataService.showLoading(true);
     this.notesMdl.retailer_id = this.selected.map((map) => map.id);
     this.notesMdl.start_date = this.convertDate(this.notesMdl.start_date);
     this.notesMdl.end_date =  this.convertDate(this.notesMdl.end_date);
+    this.notesMdl.target_audience = this.formAudience.get("target_audience")
+      .value
+      ? 1
+      : 0;
+    this.notesMdl.classification = this.formFilterRetailer.get(
+      "retail_classification"
+    ).value;
+    this.notesMdl.src_classification =
+      this.formFilterRetailer.get("src_classification").value;
+    this.notesMdl.src_type = this.formFilterRetailer.get("src_type").value;
+    this.notesMdl.area_id = this.lastLevel.id;
     this.notesRetailerService.put(this.notesMdl, this.paramEdit).subscribe((res) => {
       window.localStorage.removeItem('detail_audience');
       this.selected = [];
@@ -387,6 +395,7 @@ export class CreateNotesRetailerComponent implements OnInit {
       this.dataService.showLoading(false);
     });
   }
+
   loadFormFilter() {
     this.getRetailer();
   }
@@ -397,6 +406,7 @@ export class CreateNotesRetailerComponent implements OnInit {
       input.value = "";
     }
   }
+
   convertDate(param: Date) {
     if (param) {
       return moment(param).format('YYYY-MM-DD');
@@ -410,90 +420,6 @@ export class CreateNotesRetailerComponent implements OnInit {
     if (index >= 0) this.parameters.splice(index, 1);
   }
 
-  initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()["areas"] || [];
-    this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
-    this.lastLevel = areasDisabled;
-    let lastLevelDisabled = null;
-    let levelAreas = [
-      "national",
-      "division",
-      "region",
-      "area",
-      "salespoint",
-      "district",
-      "territory",
-    ];
-    let lastDiffLevelIndex = levelAreas.findIndex(
-      (level) =>
-        level === (sameArea.type === "teritory" ? "territory" : sameArea.type)
-    );
-
-    if (
-      !this.formFilter.get("national") ||
-      this.formFilter.get("national").value === ""
-    ) {
-      this.formFilter.get("national").setValue(1);
-      this.formFilter.get("national").disable();
-      lastLevelDisabled = "national";
-    }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex((lvl) => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (
-            !this.formFilter.controls[this.parseArea(level.type)] ||
-            !this.formFilter.controls[this.parseArea(level.type)].value ||
-            this.formFilter.controls[this.parseArea(level.type)].value === ""
-          ) {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([
-              level.id,
-            ]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
-
-              this.formFilter.get(this.parseArea(level.type)).disable();
-            }
-
-            if (areasDisabled.indexOf(level.type) > -1)
-              this.formFilter.get(this.parseArea(level.type)).disable();
-          }
-
-          let isExist = this.list[this.parseArea(level.type)].find(
-            (ls) => ls.id === level.id
-          );
-          level["area_type"] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist
-            ? [...this.list[this.parseArea(level.type)]]
-            : [...this.list[this.parseArea(level.type)], level];
-          console.log(
-            "area you choose",
-            level.type,
-            this.parseArea(level.type),
-            this.geotreeService.getNextLevel(this.parseArea(level.type))
-          );
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled)
-            this.getAudienceAreaV2(
-              this.geotreeService.getNextLevel(this.parseArea(level.type)),
-              level.id
-            );
-
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(
-              this.geotreeService.getNextLevel(this.parseArea(level.type)),
-              level.id
-            );
-          }
-        }
-      });
-    });
-  }
-
   parseArea(type) {
     switch (type) {
       case "division":
@@ -505,309 +431,6 @@ export class CreateNotesRetailerComponent implements OnInit {
         return type;
     }
   }
-  
-  getAudienceAreaV2(selection, id, event?) {
-    let item: any;
-    let fd = new FormData();
-    let lastLevel = this.geotreeService.getBeforeLevel(
-      this.parseArea(selection)
-    );
-    let areaSelected: any = Object.entries(this.formFilter.getRawValue())
-      .map(([key, value]) => ({ key, value }))
-      .filter((item) => item.key === this.parseArea(lastLevel));
-    console.log(
-      "audienceareav2",
-      this.formFilter.getRawValue(),
-      areaSelected[0]
-    );
-    if (areaSelected && areaSelected[0] && areaSelected[0].key === "national") {
-      fd.append("area_id[]", areaSelected[0].value);
-    } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
-        areaSelected[0].value.map((ar) => {
-          fd.append("area_id[]", ar);
-        });
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
-        if (areaSelected[0].value.length === 0) {
-          let beforeLevel = this.geotreeService.getBeforeLevel(
-            areaSelected[0].key
-          );
-          let newAreaSelected: any = Object.entries(
-            this.formFilter.getRawValue()
-          )
-            .map(([key, value]) => ({ key, value }))
-            .filter((item) => item.key === this.parseArea(beforeLevel));
-          console.log(
-            "the selection",
-            this.parseArea(selection),
-            newAreaSelected
-          );
-          if (newAreaSelected[0].key !== "national") {
-            newAreaSelected[0].value.map((ar) => {
-              fd.append("area_id[]", ar);
-            });
-          } else {
-            fd.append("area_id[]", newAreaSelected[0].value);
-          }
-        }
-      }
-    } else {
-      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      areaSelected = Object.entries(this.formFilter.getRawValue())
-        .map(([key, value]) => ({ key, value }))
-        .filter((item) => item.key === this.parseArea(beforeLastLevel));
-      if (
-        areaSelected &&
-        areaSelected[0] &&
-        areaSelected[0].key === "national"
-      ) {
-        fd.append("area_id[]", areaSelected[0].value);
-      } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
-          areaSelected[0].value.map((ar) => {
-            fd.append("area_id[]", ar);
-          });
-          if (areaSelected[0].value.length === 0) {
-            let beforeLevel = this.geotreeService.getBeforeLevel(
-              areaSelected[0].key
-            );
-            let newAreaSelected: any = Object.entries(
-              this.formFilter.getRawValue()
-            )
-              .map(([key, value]) => ({ key, value }))
-              .filter((item) => item.key === this.parseArea(beforeLevel));
-            console.log(
-              "the selection",
-              this.parseArea(selection),
-              newAreaSelected
-            );
-            if (newAreaSelected[0].key !== "national") {
-              newAreaSelected[0].value.map((ar) => {
-                fd.append("area_id[]", ar);
-              });
-            } else {
-              fd.append("area_id[]", newAreaSelected[0].value);
-            }
-          }
-        }
-      }
-    }
-
-    fd.append("area_type", selection === "territory" ? "teritory" : selection);
-    let thisAreaOnSet = [];
-    let areaNumber = 0;
-    let expectedArea = [];
-    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
-      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1])
-        thisAreaOnSet = [...thisAreaOnSet, ...this.areaFromLogin[1]];
-
-      thisAreaOnSet = thisAreaOnSet.filter(
-        (ar) =>
-          (ar.level_desc === "teritory" ? "territory" : ar.level_desc) ===
-          selection
-      );
-      if (id && id.length > 1) {
-        areaNumber = 1;
-      }
-
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== "national")
-        expectedArea = thisAreaOnSet.filter((ar) =>
-          areaSelected[0].value.includes(ar.parent_id)
-        );
-    }
-
-    switch (this.parseArea(selection)) {
-      case "zone":
-        this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-          this.list[this.parseArea(selection)] =
-            expectedArea.length > 0
-              ? res.data.filter((dt) =>
-                  expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                )
-              : res.data;
-
-          // fd = null
-        });
-
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["region"] = [];
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        console.log(
-          "zone selected",
-          selection,
-          this.list["region"],
-          this.formFilter.get("region").value
-        );
-        break;
-      case "region":
-        if (id && id.length !== 0) {
-          item =
-            this.list["zone"].length > 0
-              ? this.list["zone"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["region"] = [];
-        }
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "area":
-        if (id && id.length !== 0) {
-          item =
-            this.list["region"].length > 0
-              ? this.list["region"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          console.log("area hitted", selection, item, this.list["region"]);
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["area"] = [];
-        }
-
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "salespoint":
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item =
-            this.list["area"].length > 0
-              ? this.list["area"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          console.log("item", item);
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["salespoint"] = [];
-        }
-
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "district":
-        if (id && id.length !== 0) {
-          item =
-            this.list["salespoint"].length > 0
-              ? this.list["salespoint"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["district"] = [];
-        }
-
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["territory"] = [];
-        break;
-      case "territory":
-        if (id && id.length !== 0) {
-          item =
-            this.list["district"].length > 0
-              ? this.list["district"].filter((item) => {
-                  return id && id.length > 0 ? id[0] : id;
-                })[0]
-              : {};
-          if (item && item.name && item.name !== "all") {
-            this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
-              this.list[selection] =
-                expectedArea.length > 0
-                  ? res.data.filter((dt) =>
-                      expectedArea.map((eArea) => eArea.id).includes(dt.id)
-                    )
-                  : res.data;
-            });
-          } else {
-            this.list[selection] = [];
-          }
-        } else {
-          this.list["territory"] = [];
-        }
-
-        this.formFilter.get("territory").setValue("");
-        break;
-
-      default:
-        break;
-    }
-  }
 
   filteringGeotree(areaList) {
     return areaList;
@@ -816,7 +439,7 @@ export class CreateNotesRetailerComponent implements OnInit {
   getTradePrograms() {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
-        console.log("res trade programs", res);
+        // console.log("res trade programs", res);
         this.listTradePrograms = res.data;
         this.filteredTradeProgram.next(res.data);
       },
@@ -829,7 +452,7 @@ export class CreateNotesRetailerComponent implements OnInit {
   getListScheduler() {
     this.audienceService.getListScheduler().subscribe(
       (res) => {
-        console.log("res scheduler new", res);
+        // console.log("res scheduler new", res);
         this.listScheduler = res.data;
         this.filteredScheduler.next(res.data);
       },
@@ -876,9 +499,19 @@ export class CreateNotesRetailerComponent implements OnInit {
     return newLastSelfArea;
   }
 
+  getAreaIds(lastSelected: any) {
+    const [id, key, onClick] = lastSelected;
+    this.lastLevel = { id, key };
+    if (onClick) this.selected = [];
+    if (this.formAudience.get("target_audience").value) this.getRetailer();
+  }
+
+  getRawAreaIds(data: any) {
+    this.rawAreaIds = data;
+  }
+
   getRetailer() {
-    this.dataService.showLoading(true);
-    this.pagination.per_page = 25;
+    this.pagination.per_page = 10;
     this.pagination.sort = "name";
     this.pagination.sort_type = "asc";
     let areaSelected = Object.entries(this.formFilter.getRawValue())
@@ -887,7 +520,8 @@ export class CreateNotesRetailerComponent implements OnInit {
         (item: any) =>
           item.value !== null && item.value !== "" && item.value.length !== 0
       );
-    let area_id = areaSelected[areaSelected.length - 1].value;
+    let area_id = this.lastLevel.id;
+    console.log("area_id", area_id);
     let areaList = [
       "national",
       "division",
@@ -907,10 +541,13 @@ export class CreateNotesRetailerComponent implements OnInit {
       this.pagination["after_level"] = true;
     } else {
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      console.log("lastSelectedArea", lastSelectedArea)
       let indexAreaAfterEndLevel = areaList.indexOf(
         this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type
       );
+      console.log("indexAreaAfterEndLevel", indexAreaAfterEndLevel);
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      console.log("indexAreaSelected", indexAreaSelected);
       let is_area_2 = false;
 
       let self_area = this.areaFromLogin[0]
@@ -940,6 +577,8 @@ export class CreateNotesRetailerComponent implements OnInit {
         last_self_area
       );
 
+      console.log("newLastSelfArea", newLastSelfArea);
+
       if (this.pagination["after_level"]) delete this.pagination["after_level"];
       this.pagination["self_area"] = self_area;
       this.pagination["last_self_area"] = last_self_area;
@@ -959,14 +598,6 @@ export class CreateNotesRetailerComponent implements OnInit {
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log(
-          "last self area",
-          last_self_area,
-          is_area_2,
-          levelCovered,
-          levelCovered.indexOf(lastSelectedArea.key) !== -1,
-          lastSelectedArea
-        );
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           if (is_area_2)
             this.pagination["last_self_area"] = [last_self_area[1]];
@@ -982,17 +613,19 @@ export class CreateNotesRetailerComponent implements OnInit {
         }
       }
     }
-    this.loadingIndicator = true;
 
+    this.loadingIndicator = true;
     this.audienceService.getListRetailer(this.pagination).subscribe(
       (res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        if (this.isSelectedAll) {
+          this.onSelect({ selected: res.data });
+        }
       },
       (err) => {
-        this.dataService.showLoading(false);
+        this.loadingIndicator = false;
       }
     );
   }
@@ -1005,6 +638,9 @@ export class CreateNotesRetailerComponent implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       let rows = this.rows.map((row) => row.id);
+      if (this.isSelectedAll) {
+        this.onSelect({ selected: res.data });
+      }
 
       this.loadingIndicator = false;
     });
@@ -1025,15 +661,32 @@ export class CreateNotesRetailerComponent implements OnInit {
     });
   }
 
-  selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
-    this.allRowsSelected = allRowsSelected;
-    if (allRowsSelected) {
-      this.formAudience.get('limit').setValue('pick-all');
-    } else {
-      this.formAudience.get('limit').setValue('limit');
+  setAllSelected(state: boolean) {
+    if (this.isSelectedAll !== state) {
+      this.isSelectedAll = state;
     }
+    return state;
   }
+
+  onSelect({ selected }) {
+    let items = [...selected];
+    this.selected.splice(0, items.length);
+    this.selected = items;
+  }
+
+  getRowId(row: any) {
+    return row.id;
+  }
+
+  // selectFn(allRowsSelected: boolean) {
+  //   // console.log('allRowsSelected_', allRowsSelected);
+  //   this.allRowsSelected = allRowsSelected;
+  //   if (allRowsSelected) {
+  //     this.formAudience.get('limit').setValue('pick-all');
+  //   } else {
+  //     this.formAudience.get('limit').setValue('limit');
+  //   }
+  // }
 
   appendRows(rows, next) {
     (rows || []).map((item) => {
@@ -1101,207 +754,6 @@ export class CreateNotesRetailerComponent implements OnInit {
     );
   }
 
-  initArea() {
-    console.log("areaform login", this.areaFromLogin);
-    this.areaFromLogin.map((item) => {
-      let level_desc = "";
-      switch (item.type.trim()) {
-        case "national":
-          level_desc = "zone";
-          this.formFilter.get("national").setValue(item.id);
-          this.formFilter.get("national").disable();
-          break;
-        case "division":
-          level_desc = "region";
-          this.formFilter.get("zone").setValue(item.id);
-          this.formFilter.get("zone").disable();
-          break;
-        case "region":
-          level_desc = "area";
-          this.formFilter.get("region").setValue(item.id);
-          this.formFilter.get("region").disable();
-          break;
-        case "area":
-          level_desc = "salespoint";
-          this.formFilter.get("area").setValue(item.id);
-          this.formFilter.get("area").disable();
-          break;
-        case "salespoint":
-          level_desc = "district";
-          this.formFilter.get("salespoint").setValue(item.id);
-          this.formFilter.get("salespoint").disable();
-          break;
-        case "district":
-          level_desc = "territory";
-          this.formFilter.get("district").setValue(item.id);
-          this.formFilter.get("district").disable();
-          break;
-        case "territory":
-          this.formFilter.get("territory").setValue(item.id);
-          this.formFilter.get("territory").disable();
-          break;
-      }
-      this.getAudienceArea(level_desc, item.id);
-    });
-  }
-
-  getAudienceArea(selection, id) {
-    let item: any;
-    switch (selection) {
-      case "zone":
-        this.audienceService
-          .getListOtherChildren({ parent_id: id })
-          .subscribe((res) => {
-            this.list[selection] = res;
-          });
-
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["region"] = [];
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "region":
-        item =
-          this.list["zone"].length > 0
-            ? this.list["zone"].filter((item) => item.id === id)[0]
-            : {};
-        if (item.name !== "all") {
-          this.audienceService
-            .getListOtherChildren({ parent_id: id })
-            .subscribe((res) => {
-              this.list[selection] = res;
-            });
-        } else {
-          this.list[selection] = [];
-        }
-
-        this.formFilter.get("region").setValue("");
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["area"] = [];
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "area":
-        item =
-          this.list["region"].length > 0
-            ? this.list["region"].filter((item) => item.id === id)[0]
-            : {};
-        if (item.name !== "all") {
-          this.audienceService
-            .getListOtherChildren({ parent_id: id })
-            .subscribe((res) => {
-              this.list[selection] = res;
-            });
-        } else {
-          this.list[selection] = [];
-        }
-
-        this.formFilter.get("area").setValue("");
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["salespoint"] = [];
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "salespoint":
-        item =
-          this.list["area"].length > 0
-            ? this.list["area"].filter((item) => item.id === id)[0]
-            : {};
-        if (item.name !== "all") {
-          this.audienceService
-            .getListOtherChildren({ parent_id: id })
-            .subscribe((res) => {
-              this.list[selection] = res;
-            });
-        } else {
-          this.list[selection] = [];
-        }
-
-        this.formFilter.get("salespoint").setValue("");
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["district"] = [];
-        this.list["territory"] = [];
-        break;
-      case "district":
-        item =
-          this.list["salespoint"].length > 0
-            ? this.list["salespoint"].filter((item) => item.id === id)[0]
-            : {};
-        if (item.name !== "all") {
-          this.audienceService
-            .getListOtherChildren({ parent_id: id })
-            .subscribe((res) => {
-              this.list[selection] = res;
-            });
-        } else {
-          this.list[selection] = [];
-        }
-
-        this.formFilter.get("district").setValue("");
-        this.formFilter.get("territory").setValue("");
-        this.list["territory"] = [];
-        break;
-      case "territory":
-        item =
-          this.list["district"].length > 0
-            ? this.list["district"].filter((item) => item.id === id)[0]
-            : {};
-        if (item.name !== "all") {
-          this.audienceService
-            .getListOtherChildren({ parent_id: id })
-            .subscribe((res) => {
-              this.list[selection] = res;
-            });
-        } else {
-          this.list[selection] = [];
-        }
-
-        this.formFilter.get("territory").setValue("");
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  // initArea() {
-  //   let national = this.area.filter(item => { return item.type === 'national' });
-  //   let division = this.area.filter(item => item.type === 'division');
-  //   let region = this.area.filter(item => item.type === 'region');
-  //   let area = this.area.filter(item => item.type === 'area');
-
-  //   if (national.length > 0) {
-  //     this.formAudience.get('national').setValue(national[0].code.trim());
-  //     this.formAudience.get('national').disable();
-  //   }
-
-  //   if (division.length > 0) {
-  //     this.formAudience.get('division').setValue(division[0].code.trim(), {disable: true});
-  //     this.formAudience.get('division').disable();
-  //   }
-  //   if (region.length > 0) {
-  //     this.formAudience.get('region').setValue(region[0].code.trim(), {disable: true});
-  //     this.formAudience.get('region').disable();
-  //   }
-
-  //   if (area.length > 0) {
-  //     this.formAudience.get('area').setValue(area[0].code.trim(), {disable: true});
-  //     this.formAudience.get('area').disable();
-  //   }
-  // }
   importAudience() {
     const dialogConfig = new MatDialogConfig();
 
@@ -1322,7 +774,7 @@ export class CreateNotesRetailerComponent implements OnInit {
         this.idbService
           .getAll((dt) => dt.is_valid)
           .then((result) => {
-            console.log("result", result);
+            // console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
               message: "File berhasil diimport",
@@ -1410,14 +862,14 @@ export class CreateNotesRetailerComponent implements OnInit {
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        console.log(
-          "last self area",
-          last_self_area,
-          is_area_2,
-          levelCovered,
-          levelCovered.indexOf(lastSelectedArea.key) !== -1,
-          lastSelectedArea
-        );
+        // console.log(
+        //   "last self area",
+        //   last_self_area,
+        //   is_area_2,
+        //   levelCovered,
+        //   levelCovered.indexOf(lastSelectedArea.key) !== -1,
+        //   lastSelectedArea
+        // );
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
           // console.log('its hitted [levelCovered > -1]');
           if (is_area_2)
@@ -1457,22 +909,9 @@ export class CreateNotesRetailerComponent implements OnInit {
     }
   }
 
-  tsmOrScheduler() {
-    console.log('');
-  }
-
-  onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
-  }
-
   getRows(id) {
     let index = this.rows.map((item) => item.id).indexOf(id);
     return this.rows[index];
-  }
-
-  getId(row) {
-    return row.id;
   }
 
   findInvalidControls() {
