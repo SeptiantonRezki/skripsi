@@ -11,16 +11,21 @@ const routes: Routes = [
     path: 'kpi-groups-list',
     component: KPIGroupsList,
     data: {
+      breadcrumbs: brConfig.kpi.list,
     }
   },
   {
     path: 'kpi-setting-create',
-    component: EditKPISettingComponent
+    component: EditKPISettingComponent,
+    data: {
+      breadcrumbs: brConfig.kpi.create,
+    }
   },
   {
     path: 'kpi-setting-edit/:id',
     component: EditKPISettingComponent,
     data: {
+      breadcrumbs: brConfig.kpi.edit,
     }
   }
 ];

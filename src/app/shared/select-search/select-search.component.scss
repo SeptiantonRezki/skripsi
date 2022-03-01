@@ -1,0 +1,22 @@
+.select-search {
+  ::ng-deep .mat-form-field-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  ::ng-deep .mat-error {
+    position: absolute;
+    top: 100%;
+    margin-top: 8px;
+    font-size: 12px;
+  }
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myPanelClass{
+  margin-top: 30px !important; 
+}
