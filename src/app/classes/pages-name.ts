@@ -160,6 +160,10 @@ export class PagesName {
       "/user-management/countries/edit/": "principal.countries.ubah",
       "/user-management/countries/detail/": "principal.countries.lihat",
       "/advertisement/promo-mandiri": "principal.promomandiri.lihat",
+      "/dte/task-verification": "principal.dtenewtaskverification.lihat",
+      "/dte/assignment-cart": "principal.dteassignmentcart.lihat",
+      "/dte/verification-assignment": "principal.dteverificationassignment.lihat",
+      "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
     }
     return PAGES[name];
   }

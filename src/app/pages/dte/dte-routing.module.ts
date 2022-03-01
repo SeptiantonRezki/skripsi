@@ -53,6 +53,9 @@ import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/au
 import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
 import { SkuComponent } from "./image-recognition/sku/sku.component";
 import { StockCheckTemplateComponent } from "./image-recognition/stock-check-template/stock-check-template.component";
+import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
+import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
+import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
 
 const routes: Routes = [
   {
@@ -564,6 +567,26 @@ const routes: Routes = [
   //   component: StockCheckTemplateComponent,
   //   canActivate: [PageGuard]
   // },
+  {
+    path: 'task-verification',
+    component: TaskVerificationComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'assignment-cart',
+    component: AssignmentCartComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment/detail/:id',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
