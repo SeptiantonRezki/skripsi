@@ -817,32 +817,7 @@ export class AdminPrincipalCreateComponent {
       var newArray = [];
       var lookupObject  = {};
 
-//       for(let i=0; i<value.length; i++){
-//         for(let j=i+1; j<value.length; j++){
-//             if(value[i].national == value[j].national && value[i].zone == value[j].zone && value[i].territory == value[j].territory && value[i].salespoint == value[j].salespoint && value[i].region == value[j].region && value[i].district == value[j].district && value[i].area == value[j].area){
-//               newArray.push(i+1);
-//               newArray.push(j+1);
-//             }
-//             console.log("value[i].national == value[j].national && value[i].zone == value[j].zone && value[i].territory == value[j].territory && value[i].salespoint == value[j].salespoint && value[i].region == value[j].region && value[i].district == value[j].district && value[i].area == value[j].area",value[i].national == value[j].national && value[i].zone == value[j].zone && value[i].territory == value[j].territory && value[i].salespoint == value[j].salespoint && value[i].region == value[j].region && value[i].district == value[j].district && value[i].area == value[j].area);
-            
-//         }
-//       }
-//       var uniqueArray = newArray.filter(function(item, pos, self) {
-//         return self.indexOf(item) == pos;
-//     })
-//  console.log("NEWARRAY", uniqueArray);
-//  if(uniqueArray.length > 0){
-//    if(this.ls.selectedLanguages == 'id'){
-//   this.dialogService.openSnackBar({ message: "Area " + uniqueArray +" adalah duplikat, silakan periksa" });
-//    }
-//    else if(this.ls.selectedLanguages == 'km'){
-//     this.dialogService.openSnackBar({ message: "តំបន់ " + uniqueArray +" គឺស្ទួន សូមពិនិត្យមើល" });
-//    }
-//    else if(this.ls.selectedLanguages == 'en-ph'){
-//     this.dialogService.openSnackBar({ message: "Area " + uniqueArray +" are duplicate, please check" });
-//   }
-//  }
-//  else{
+
       let area2Value = this.wilayah_2.getRawValue();
       
       for(let i=0; i<value.length; i++){
