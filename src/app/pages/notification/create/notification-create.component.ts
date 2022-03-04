@@ -2312,7 +2312,7 @@ export class NotificationCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formNotification.get("user_group").value, api: fd => this.notificationService['importPushNotifAudience'](fd) };
+    dialogConfig.data = { audience: this.formNotification.get("user_group").value, api: fd => this.notificationService['importAudience'](fd) };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
