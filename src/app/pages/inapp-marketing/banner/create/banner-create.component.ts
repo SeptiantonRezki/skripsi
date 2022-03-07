@@ -20,7 +20,7 @@ import { CustomerService } from 'app/services/user-management/customer.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { InappMarketingValidator } from '../../InappMarketing.validator';
 import { LanguagesService } from 'app/services/languages/languages.service';
 
@@ -1848,9 +1848,9 @@ export class BannerCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get("user_group").value };
+    dialogConfig.data = { audience: this.formBannerGroup.get("user_group").value, api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd) };
 
-    this.dialogRef = this.dialog.open(ImportAudienceBannerDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {

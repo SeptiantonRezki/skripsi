@@ -25,6 +25,7 @@ import { DialogImportComponent } from './target-area/dialog-import/dialog-import
 import { SalestreeComponent } from './salestree/salestree.component';
 import { SelectSearchComponent } from "./select-search/select-search.component";
 import { SelectSearchDirective } from "./select-search/select-search.directive";
+import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
 
 @NgModule({
@@ -53,6 +54,7 @@ import { ngfModule } from "angular-file";
     SelectSearchComponent,
     SelectSearchDirective,
     DialogImportComponent,
+    ImportAudienceComponent,
   ],
   exports: [
     ToolbarSearchComponent,
@@ -63,10 +65,12 @@ import { ngfModule } from "angular-file";
     SalestreeComponent,
     SelectSearchComponent,
     DialogImportComponent,
+    ImportAudienceComponent,
   ],
   entryComponents: [
     NotificationCoinAdjustmentDialogComponent,
     DialogImportComponent,
+    ImportAudienceComponent,
   ],
   providers: [
     {
