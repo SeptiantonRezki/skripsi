@@ -13,6 +13,7 @@ import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
+import { FormGroup, FormBuilder } from "@angular/forms";
 
 @Component({
   selector: "db-product-submission",
@@ -20,6 +21,7 @@ import { ProductSubmissionService } from "app/services/sku-management/product-su
   styleUrls: ["./index.component.scss"],
 })
 export class DbProductSubmissionComponent implements OnInit {
+  init: boolean = true;
   onLoad: boolean = true;
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
@@ -48,6 +50,18 @@ export class DbProductSubmissionComponent implements OnInit {
       name: "Approver Produk DB",
     },
   ];
+  listCategories: any[] = [
+    {id: 1, name: 'AIR MINERAL'},
+    {id: 2, name: 'MAKANAN'},
+    {id: 3, name: 'BUMBU MASAKAN'},
+    {id: 4, name: 'OBAT2AN'},
+    {id: 5, name: 'LAIN LAIN'},
+  ];
+  listStatus: any[] = [
+    {id: 1, name: 'Approver Produk DB'},
+    {id: 2, name: 'Approver 1'},
+  ];
+  formFilter: FormGroup;
 
   keyUp = new Subject<string>();
 
@@ -58,26 +72,23 @@ export class DbProductSubmissionComponent implements OnInit {
   activeCellTemp: TemplateRef<any>;
 
   constructor(
+    private formBuilder: FormBuilder,
     private dataService: DataService,
     private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
     this.permission = this.roles.getRoles("principal.pengajuan_produk_db");
-    this.keyUp
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .flatMap((search) => {
-        return Observable.of(search).delay(300);
-      })
-      .subscribe((data) => {
-        this.updateFilter(data);
-      });
   }
 
   ngOnInit() {
     this.resetPagination();
-    this.getProducts();
+
+    this.formFilter = this.formBuilder.group({
+      category: [[]],
+      status: [[]],
+      search: ['']
+    });
   }
 
   updateFilter(string) {
@@ -237,5 +248,15 @@ export class DbProductSubmissionComponent implements OnInit {
   submitError(err: any) {
     this.onLoad = false;
     this.dataService.showLoading(false);
+  }
+
+  applyFilter() {
+    console.log('LOOK FILTER', this.formFilter.value);
+    if(this.formFilter.get('category').value.length > 0 || this.formFilter.get('status').value.length > 0 || this.formFilter.get('search').value) {
+      this.getProducts();
+      this.init = false;
+    } else {
+      this.dialogService.openSnackBar({ message: "Silahkan isi filter terlebih dahulu!" });
+    };
   }
 }
