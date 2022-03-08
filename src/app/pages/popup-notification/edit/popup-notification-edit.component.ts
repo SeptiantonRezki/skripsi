@@ -14,7 +14,7 @@ import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { ReplaySubject, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { isThisSecond } from 'date-fns';
@@ -56,6 +56,40 @@ export class PopupNotificationEditComponent {
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listTypeOfRecurrence: Object[] = [
+    { id: 'once', name: 'Aktivasi notifikasi sekali kirim' },
+    { id: 'recurring', name: 'Aktivasi notifikasi berulang' },
+  ];
+  listRecurrenceTypes: Object[] = [
+    { id: 'daily', name: 'Harian' },
+    { id: 'weekly', name: 'Mingguan' },
+    { id: 'monthly', name: 'Bulanan' },
+    { id: 'yearly', name: 'Tahunan' }
+  ];
+  listWeekDays: any[] = [
+    { id: 1, name: 'Senin' },
+    { id: 2, name: 'Selasa' },
+    { id: 3, name: 'Rabu' },
+    { id: 4, name: 'Kamis' },
+    { id: 5, name: 'Jumat' },
+    { id: 6, name: 'Sabtu' },
+    { id: 0, name: 'Minggu' }
+  ];
+  listDates: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+  listMonths: Object[] = [
+    { id: 1, name: 'Januari' },
+    { id: 2, name: 'Februari' },
+    { id: 3, name: 'Maret' },
+    { id: 4, name: 'April' },
+    { id: 5, name: 'Mei' },
+    { id: 6, name: 'Juni' },
+    { id: 7, name: 'Juli' },
+    { id: 8, name: 'Agustus' },
+    { id: 9, name: 'September' },
+    { id: 10, name: 'Oktober' },
+    { id: 11, name: 'November' },
+    { id: 12, name: 'Desember' },
+  ]
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -77,6 +111,10 @@ export class PopupNotificationEditComponent {
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
+  formWeeklyRecurrence: FormGroup;
+  formMonthlyRecurrence: FormGroup;
+  formYearlyRecurrence: FormGroup;
+  listDateChosen: FormControl = new FormControl([], Validators.required);
   formPopupErrors: any;
 
   public options: Object = Config.FROALA_CONFIG;
@@ -186,8 +224,8 @@ export class PopupNotificationEditComponent {
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
       enddate: [moment(), Validators.required],
-      time: ["00:00", Validators.required],
-      endtime: ["00:00", Validators.required],
+      // time: ["00:00", Validators.required],
+      // endtime: ["00:00", Validators.required],
       positive_button: ["", Validators.required],
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
@@ -214,6 +252,20 @@ export class PopupNotificationEditComponent {
       is_mission_builder: this.is_mission_builder,
       product: [""],
       subscription: ["all"],
+      type_of_recurrence: ["once", Validators.required],
+      recurrence_type: ["daily", Validators.required],
+    });
+
+    this.formWeeklyRecurrence = this.formBuilder.group({});
+    this.listWeekDays.forEach(day => this.formWeeklyRecurrence.addControl(day.id, new FormControl(false)));
+
+    this.formMonthlyRecurrence = this.formBuilder.group({
+      recurrence_date: [[], Validators.required]
+    });
+
+    this.formYearlyRecurrence = this.formBuilder.group({
+      recurrence_date: [null, Validators.required],
+      recurrence_month: [null, Validators.required]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -1047,6 +1099,28 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['user_group'].setValue(response.type);
       this.formPopupGroup.controls['content_type'].setValue(response.action);
 
+      if(response.recurring.length > 0) {
+        this.formPopupGroup.controls['type_of_recurrence'].setValue('recurring');
+        let frequency = response.recurring.map(item => item.frequency);
+        this.formPopupGroup.controls['recurrence_type'].setValue(frequency[0]);
+        if(frequency[0] == 'weekly') {
+          response.recurring.map(item => this.formWeeklyRecurrence.controls[item.day_of_week].setValue(true));
+        } else if(frequency[0] == 'monthly') {
+          this.formMonthlyRecurrence.controls['recurrence_date'].setValue(response.recurring.map(item => item.day));
+        } else if(frequency[0] == 'yearly') {
+          let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+          let chosen = response.recurring.map(item => ({
+            name: `${item.day} ${months[item.month - 1]}`,
+            date: item.day,
+            month: item.month
+          }));
+          this.listDateChosen.setValue(chosen);
+        };
+      } else {
+        this.formPopupGroup.controls['type_of_recurrence'].setValue('once');
+      };
+      
+
       if (this.detailPopup.target_audience && this.detailPopup.target_audience === 1) {
         this.formPopupGroup.controls["is_target_audience"].setValue(true);
         this.audienceSelected = this.detailPopup.audience.map(id => ({ id: id.audience_id }));
@@ -1056,12 +1130,12 @@ export class PopupNotificationEditComponent {
       if (response.date) {
         const date = moment(response.date);
         this.formPopupGroup.get('date').setValue(date);
-        this.formPopupGroup.get('time').setValue(date.format('HH:mm'));
+        // this.formPopupGroup.get('time').setValue(date.format('HH:mm'));
       }
       if (response.end_date) {
         const date = moment(response.end_date);
         this.formPopupGroup.get('enddate').setValue(date);
-        this.formPopupGroup.get('endtime').setValue(date.format('HH:mm'));
+        // this.formPopupGroup.get('endtime').setValue(date.format('HH:mm'));
       }
 
       if (response.type === 'retailer') {
@@ -1531,7 +1605,8 @@ export class PopupNotificationEditComponent {
         action: this.formPopupGroup.get('content_type').value,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
       if (this.imageConverted) {
@@ -1542,8 +1617,46 @@ export class PopupNotificationEditComponent {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
       }
 
-      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
-      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
+      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} 00:00:00`;
+      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} 00:00:00`;
+
+      if(body.recurring_type === 'recurring') {
+        body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'weekly') {
+        let recurrenceDayValues = this.formWeeklyRecurrence.value;
+        let selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]).map(item => parseInt(item));
+        if(selectedWeekDays.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+          return;
+        }
+        body['recurring_day_of_week'] = selectedWeekDays;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly') {
+        let monthlyRecurrence = this.formMonthlyRecurrence.get('recurrence_date').value;
+        if(monthlyRecurrence.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal terbit!" });
+          commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+          return;
+        }
+        body['recurring_day'] = monthlyRecurrence;
+      }
+      
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly') {
+        let yearlyRecurrence = this.listDateChosen.value;
+        if(yearlyRecurrence.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal & bulan terbit!" });
+          commonFormValidator.validateFormControl(this.listDateChosen);
+          return;
+        }
+        body['recurring_day'] = yearlyRecurrence.map(item => item.date);
+        body['recurring_month'] = yearlyRecurrence.map(item => item.month);
+      }
 
       if (body.type === 'customer') {
         let smoker_type = '';
@@ -1674,6 +1787,12 @@ export class PopupNotificationEditComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+        commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+      }
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
+        commonFormValidator.validateFormControl(this.listDateChosen);
+      }
     }
   }
 
@@ -2006,9 +2125,9 @@ export class PopupNotificationEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value, api: fd => this.notificationService['importAudience'](fd) };
 
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
@@ -2033,4 +2152,28 @@ export class PopupNotificationEditComponent {
     this.selectedAllId = value;
   }
 
+  removeDateChosen(value: any) {
+    this.listDateChosen.setValue(this.listDateChosen.value.filter(item => item.name !== value.name));
+  }
+
+  addRecurrenceDate() {
+    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+      let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
+      if(this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
+        this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
+      } else {
+        let dateChosen = this.listDateChosen.value;
+        dateChosen.push({
+          name: chosenValue,
+          date: this.formYearlyRecurrence.get('recurrence_date').value,
+          month: this.formYearlyRecurrence.get('recurrence_month').value
+        });
+        this.listDateChosen.setValue(dateChosen);
+      };
+    } else {
+      this.dialogService.openSnackBar({ message: 'Harap pilih tanggal dan bulan pengulangan!' });
+      commonFormValidator.validateAllFields(this.formYearlyRecurrence);
+    };
+  }
 }
