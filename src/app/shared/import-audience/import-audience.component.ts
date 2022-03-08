@@ -17,6 +17,7 @@ export class ImportAudienceComponent {
   rows: any[];
   invalidData: any;
   dialogData: any;
+  counter: any = false;
 
   typeTargeted: string;
 
@@ -58,10 +59,20 @@ export class ImportAudienceComponent {
             this.rows = data;
             this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
+            this.counter = {
+              total: data.length,
+              invalid: this.invalidData,
+              valid: data.length - this.invalidData
+            };
             if(this.invalidData > 0) {
               const filterData = () => {
                 this.rows = this.rows.filter(item => item.flag || item.is_valid);
                 this.invalidData = 0;
+                this.counter = {
+                  total: this.rows.length,
+                  invalid: 0,
+                  valid: this.rows.length
+                };
                 this.dialogService.brodcastCloseConfirmation();
               };
               const data = {
