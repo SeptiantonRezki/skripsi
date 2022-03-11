@@ -43,7 +43,7 @@ export class BaseInterceptor implements HttpInterceptor {
 
   authenticateRequest(request: HttpRequest<any>) {
     const token = this.injector.get(DataService).getDecryptedAuth() ? this.injector.get(DataService).getDecryptedAuth()["access_token"] : null;
-    const country_code = localStorage.getItem('user_country');
+    const country_code = localStorage.getItem('user_country') ? localStorage.getItem('user_country') : 'id';
     if (token) {
       const duplicate = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token).set('App-Locale', country_code)
@@ -66,7 +66,7 @@ export class BaseInterceptor implements HttpInterceptor {
       if (err.status == 404) {
         if (err.error.status == false) {
           this.injector.get(DialogService).openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
-        } else if (err.error instanceof Blob) { 
+        } else if (err.error instanceof Blob) {
           // handle 404 Error response from postBlobAsJsonApi
           const reader = new FileReader();
           reader.addEventListener('load', () => {
@@ -150,7 +150,7 @@ export class BaseInterceptor implements HttpInterceptor {
           } else {
             this.injector.get(DialogService).openSnackBar({ message: err.error.message });
           }
-          
+
         } else if (req.method === "DELETE") {
           let errorArray = Object.values(err.error.errors);
           this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
