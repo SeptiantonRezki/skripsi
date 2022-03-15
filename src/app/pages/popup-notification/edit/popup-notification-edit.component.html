@@ -16,7 +16,7 @@
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div class="mt-16 pt-24 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px"
-            fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+            fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="title" placeholder="Judul Popup Notifikasi">
               <mat-error
@@ -24,9 +24,9 @@
                 Judul Popup Notifikasi harus diisi
               </mat-error>
             </mat-form-field>
-            <div fxFlex="48%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+            <div fxFlex="45" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               *ngIf="formPopupGroup.value.is_mission_builder === false">
-              <mat-form-field fxFlex="48" class="is-light form-primary">
+              <mat-form-field fxFlex="32" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()" formControlName="date"
                   placeholder="Tanggal Terbit">
                 <mat-error
@@ -38,7 +38,7 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #tanggal_terbit></mat-datepicker>
               </mat-form-field>
-              <!-- <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
+              <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
                 <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime" [format]="24"
                   readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
@@ -47,8 +47,8 @@
                   *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
                   Waktu harus diisi
                 </mat-error>
-              </mat-form-field> -->
-              <mat-form-field fxFlex="48" class="is-light form-primary">
+              </mat-form-field>
+              <mat-form-field fxFlex="32" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
                   formControlName="enddate" placeholder="Tanggal Berakhir">
                 <mat-error
@@ -60,7 +60,7 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #tanggal_berakhir></mat-datepicker>
               </mat-form-field>
-              <!-- <mat-form-field fxFlex="15%" class="is-light form-primary" id="time1">
+              <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
                 <input matInput formControlName="endtime" placeholder="Jam Berakhir" [ngxTimepicker]="fullTime1"
                   [format]="24" readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
@@ -69,10 +69,10 @@
                   *ngIf="formPopupGroup.controls['endtime'].hasError('required') && formPopupGroup.controls['endtime'].touched">
                   Waktu harus diisi
                 </mat-error>
-              </mat-form-field> -->
+              </mat-form-field>
             </div>
           </div>
-          <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
+          <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" formControlName="positive_button" placeholder="Positif Button">
               <mat-error
