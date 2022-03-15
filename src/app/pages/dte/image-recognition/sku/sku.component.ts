@@ -1,11 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-sku',
@@ -17,6 +18,28 @@ export class SkuComponent implements OnInit {
   loading = true;
   permission: any;
   roles: PagesName = new PagesName();
+  isChange: boolean = false;
+
+  @HostListener("window:beforeunload")
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.isChange) return false;
+
+    return true;
+  }
+
+  @HostListener("window:message", ["$event"])
+  onMessage({ data: resData }) {
+    this.isChange = resData.value ? resData.value.isChange : false;
+
+    if (this.isChange) {
+      window.localStorage.setItem("isReactChanged", 'true');
+    } else {
+      window.localStorage.setItem("isReactChanged", 'false');
+    }
+  }
 
   constructor(
     private sanitizer: DomSanitizer,

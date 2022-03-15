@@ -127,7 +127,13 @@ export class PagesName {
       "/dte/publish-mission/detail/": "principal.dtepublishmission.lihat",
 
       "/dte/master-brand-group": "principal.dte_image_recognition_master_brand_group.lihat",
+      "/dte/master-brand-group/create": "principal.dte_image_recognition_master_brand_group.buat",
+      "/dte/master-brand-group/edit/": "principal.dte_image_recognition_master_brand_group.ubah",
+      "/dte/master-brand-group/detail/": "principal.dte_image_recognition_master_brand_group.lihat",
       "/dte/master-brand": "principal.dte_image_recognition_master_brand.lihat",
+      "/dte/master-brand/create": "principal.dte_image_recognition_master_brand.buat",
+      "/dte/master-brand/edit/": "principal.dte_image_recognition_master_brand.ubah",
+      "/dte/master-brand/detail/": "principal.dte_image_recognition_master_brand.lihat",
 
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",

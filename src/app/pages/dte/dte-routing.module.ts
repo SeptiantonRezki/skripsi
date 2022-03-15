@@ -555,11 +555,49 @@ const routes: Routes = [
   {
     path: "master-brand-group",
     component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/create",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/edit/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/detail/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   {
     path: "master-brand",
     component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/create",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/edit/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/detail/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   // {
