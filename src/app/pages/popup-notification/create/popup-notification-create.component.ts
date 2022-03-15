@@ -218,9 +218,9 @@ export class PopupNotificationCreateComponent {
 
     this.formPopupGroup = this.formBuilder.group({
       date: [moment(), Validators.required],
-      // time: ["00:00", Validators.required],
+      time: ["00:00", Validators.required],
       enddate: [moment(), Validators.required],
-      // endtime: ["00:00", Validators.required],
+      endtime: ["00:00", Validators.required],
       positive_button: ["", Validators.required],
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
@@ -1435,8 +1435,8 @@ export class PopupNotificationCreateComponent {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
       }
 
-      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} 00:00:00`;
-      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} 00:00:00`;
+      body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
+      body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
       
       if(body.recurring_type === 'recurring') {
         body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
