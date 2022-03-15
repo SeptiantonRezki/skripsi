@@ -251,7 +251,6 @@ export class DbProductSubmissionComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log('LOOK FILTER', this.formFilter.value);
     if(this.formFilter.get('category').value.length > 0 || this.formFilter.get('status').value.length > 0 || this.formFilter.get('search').value) {
       this.getProducts();
       this.init = false;

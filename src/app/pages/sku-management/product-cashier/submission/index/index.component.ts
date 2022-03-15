@@ -14,6 +14,7 @@ import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { FormGroup, FormBuilder } from "@angular/forms";
 
 @Component({
   selector: "cashier-submission",
@@ -32,6 +33,26 @@ export class CashierSubmissionComponent implements OnInit {
   id: any[];
   selectedItem: any;
   dialogRef: any;
+  listCompanies: any[] = [
+    {id: 1, name: 'PT.Tempo Scan Pasific Tbk.'},
+    {id: 2, name: 'PT.HM Sampoerna'},
+    {id: 3, name: 'PT.Heinz ABC Indonesia'},
+    {id: 4, name: 'PT.Konimex'},
+    {id: 5, name: 'Others'},
+  ];
+  listCategories: any[] = [
+    {id: 1, name: 'AIR MINERAL'},
+    {id: 2, name: 'MAKANAN'},
+    {id: 3, name: 'BUMBU MASAKAN'},
+    {id: 4, name: 'OBAT2AN'},
+    {id: 5, name: 'LAIN LAIN'},
+  ];
+  listStatus: any[] = [
+    {id: 1, name: 'YA'},
+    {id: 2, name: 'TIDAK'},
+  ];
+  formFilter: FormGroup;
+  init: boolean = true;
 
   keyUp = new Subject<string>();
 
@@ -42,6 +63,7 @@ export class CashierSubmissionComponent implements OnInit {
   activeCellTemp: TemplateRef<any>;
 
   constructor(
+    private formBuilder: FormBuilder,
     private dataService: DataService,
     private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
@@ -49,20 +71,19 @@ export class CashierSubmissionComponent implements OnInit {
     private ls: LanguagesService
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
-    this.keyUp
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .flatMap((search) => {
-        return Observable.of(search).delay(300);
-      })
-      .subscribe((data) => {
-        if (data.length === 0 || data.length >= 3) this.updateFilter(data);
-      });
   }
 
   ngOnInit() {
     this.resetPagination();
-    this.getProducts();
+
+    this.formFilter = this.formBuilder.group({
+      company: [[]],
+      category: [[]],
+      status: [null],
+      date: [null],
+      end_date: [null],
+      search: ['']
+    });
   }
 
   updateFilter(string) {
@@ -196,4 +217,13 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   onSelect(event: any) {}
+
+  applyFilter() {
+    if(this.formFilter.get('company').value.length > 0 || this.formFilter.get('category').value.length > 0 || this.formFilter.get('status').value || this.formFilter.get('date').value && this.formFilter.get('end_date').value || this.formFilter.get('search').value) {
+      this.getProducts();
+      this.init = false;
+    } else {
+      this.dialogService.openSnackBar({ message: "Silahkan isi filter terlebih dahulu!" });
+    };
+  }
 }

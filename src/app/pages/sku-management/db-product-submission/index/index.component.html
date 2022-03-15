@@ -20,18 +20,18 @@
     <div class="table-wrapper">
       <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="p-20">
         <h2 style="margin: unset">Daftar Produk</h2>
-        <div [formGroup]="formFilter" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="15px" fxLayoutGap.lt-md="0px" fxFlex="75" fxFlex.lt-md="100" style="width: 100%;">
-          <mat-form-field class="is-light" fxFlex="100">
+        <div [formGroup]="formFilter" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="15px grid" fxLayoutGap.lt-md="0px" fxFlex="75" fxFlex.lt-md="100" style="width: 100%;">
+          <mat-form-field class="is-light" fxFlex="28">
             <mat-select placeholder="Kategori" formControlName="category" multiple>
               <mat-option *ngFor="let item of listCategories" [value]="item.id">{{ item.name }}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="is-light" fxFlex="100">
+          <mat-form-field class="is-light" fxFlex="28">
             <mat-select placeholder="Status" formControlName="status" multiple>
               <mat-option *ngFor="let item of listStatus" [value]="item.id">{{ item.name }}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="is-light" fxFlex="100">
+          <mat-form-field class="is-light" fxFlex="28">
             <input
               matInput
               placeholder="Cari"
@@ -40,8 +40,8 @@
             />
             <mat-icon style="font-size: 20px; position: absolute; margin-left: -24px;">search</mat-icon>
           </mat-form-field>
-          <div fxLayout="row" fxLayoutAlign="center center">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="applyFilter()">
+          <div fxLayout="row" fxLayoutAlign="center center" fxFlex="16">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="applyFilter()" style="width: 100%;">
               Apply
             </button>
           </div>

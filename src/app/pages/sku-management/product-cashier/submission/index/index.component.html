@@ -14,18 +14,62 @@
           >Daftar Produk Kasir</a
         >
         <a mat-tab-link [active]="true" class="tab-link">Produk Diajukan</a>
-        <div class="search-field">
+      </nav>
+      <div [formGroup]="formFilter" class="p-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="15px grid" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="is-light" fxFlex="15">
+          <mat-select placeholder="Perusahaan" formControlName="company" multiple>
+            <mat-option *ngFor="let item of listCompanies" [value]="item.id">{{ item.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="is-light" fxFlex="15">
+          <mat-select placeholder="Kategori" formControlName="category" multiple>
+            <mat-option *ngFor="let item of listCategories" [value]="item.id">{{ item.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="is-light" fxFlex="15">
+          <mat-select placeholder="Status" formControlName="status">
+            <mat-option *ngFor="let item of listStatus" [value]="item.id">{{ item.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="is-light" fxFlex="15">
+          <input matInput [matDatepicker]="dari_tanggal" (focus)="dari_tanggal.open()" formControlName="date"
+            placeholder="Dari Tanggal">
+          <mat-datepicker-toggle matSuffix [for]="dari_tanggal">
+            <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #dari_tanggal></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="is-light" fxFlex="15">
+          <input matInput [matDatepicker]="hingga_tanggal" (focus)="hingga_tanggal.open()" formControlName="end_date"
+            placeholder="Hingga Tanggal">
+          <mat-datepicker-toggle matSuffix [for]="hingga_tanggal">
+            <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #hingga_tanggal></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="is-light" fxFlex="15">
           <input
             matInput
             placeholder="Cari"
-            (keyup)="keyUp.next($event.target.value)"
             autocomplete="off"
+            formControlName="search"
           />
-          <mat-icon style="font-size: 20px">search</mat-icon>
+          <mat-icon style="font-size: 20px; position: absolute; margin-left: -24px;">search</mat-icon>
+        </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="center center" fxFlex="10">
+          <button mat-raised-button type="button" class="confirmation-button" (click)="applyFilter()" style="width: 100%;">
+            Apply
+          </button>
         </div>
-      </nav>
+      </div>
       <div
-        *ngIf="onLoad"
+        *ngIf="init"
+        class="p-20 h3 text-center"
+      >
+        Silahkan isi filter terlebih dahulu!
+      </div>
+      <div
+        *ngIf="onLoad && !init"
         fxLayout="row"
         fxLayoutAlign="center center"
         class="py-48"
@@ -36,7 +80,7 @@
           color="accent"
         ></mat-spinner>
       </div>
-      <div *ngIf="!onLoad">
+      <div *ngIf="!onLoad && !init">
         <ngx-datatable
           class="material"
           [rows]="rows"
