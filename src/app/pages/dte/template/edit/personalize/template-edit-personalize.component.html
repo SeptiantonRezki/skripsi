@@ -436,7 +436,7 @@
                         </mat-autocomplete>
                       </mat-form-field>
     
-                      <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
+                      <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto" *ngIf="!checkWording(item.get('type').value)">
                         <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below" class="add-image secondary-text" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">videocam</mat-icon>
                         </button>
@@ -741,21 +741,30 @@
                           </div>
                         </div>
                       </div>
-                      <div fxFlex="45" *ngIf="item.get('type').value === 'stock_check_ir'">
-                        <div class="responsive">
+                      <div fxFlex *ngIf="item.get('type').value === 'stock_check_ir'">
+                        <div class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
+                          <div id="banner">
+                            <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
+                          </div>
+                        </div>
+                        <div class="responsive" *ngIf="!templateListImageIR[i].image">
                           <table class="table">
                             <thead>
                               <tr>
+                                <th nowrap>Image</th>
                                 <th nowrap>Product Name</th>
                                 <th nowrap>QTY</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr *ngFor="let lst of templateListImageIR[i]['check_list']">
-                                <td nowrap>
+                                <td style="max-width: 150px;">
+                                  <img [src]="lst.IMAGE_BRAND" alt="Stock Check IR" width="100%">
+                                </td>
+                                <td>
                                   {{ lst.PRODUCT_NAME }}
                                 </td>
-                                <td nowrap>
+                                <td>
                                   {{ lst.QUANTITY }}
                                 </td>
                               </tr>
