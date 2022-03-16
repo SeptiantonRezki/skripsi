@@ -52,7 +52,6 @@ import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
 import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
 import { SkuComponent } from "./image-recognition/sku/sku.component";
-import { StockCheckTemplateComponent } from "./image-recognition/stock-check-template/stock-check-template.component";
 
 const routes: Routes = [
   {
@@ -597,11 +596,6 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
-  // {
-  //   path: "stock-check",
-  //   component: StockCheckTemplateComponent,
-  //   canActivate: [PageGuard]
-  // },
 ];
 
 @NgModule({
