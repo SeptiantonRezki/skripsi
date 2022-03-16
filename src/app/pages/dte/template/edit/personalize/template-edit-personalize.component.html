@@ -436,7 +436,7 @@
                         </mat-autocomplete>
                       </mat-form-field>
     
-                      <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto" *ngIf="!checkWording(item.get('type').value)">
+                      <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
                         <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below" class="add-image secondary-text" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">videocam</mat-icon>
                         </button>
