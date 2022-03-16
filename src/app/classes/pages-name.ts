@@ -125,6 +125,12 @@ export class PagesName {
       "/dte/publish-mission": "principal.dtepublishmission.buat",
       "/dte/publish-mission/edit/": "principal.dtepublishmission.ubah",
       "/dte/publish-mission/detail/": "principal.dtepublishmission.lihat",
+
+      "/dte/template-stock-check": "principal.dte_image_recognition_stock_check.lihat",
+      "/dte/template-stock-check/create": "principal.dte_image_recognition_stock_check.buat",
+      "/dte/template-stock-check/edit/": "principal.dte_image_recognition_stock_check.ubah",
+      "/dte/template-stock-check/detail/": "principal.dte_image_recognition_stock_check.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",

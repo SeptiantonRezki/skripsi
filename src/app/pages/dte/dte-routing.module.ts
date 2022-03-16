@@ -50,6 +50,7 @@ import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/te
 import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
 import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
+import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
 
 const routes: Routes = [
   {
@@ -544,6 +545,30 @@ const routes: Routes = [
   {
     path: "publish-mission/detail/:id",
     component: PublishMisiComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/create",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/edit/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/detail/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
 ];
