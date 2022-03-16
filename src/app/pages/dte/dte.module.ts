@@ -162,7 +162,7 @@ import { ImportAudiencePersonalizeComponent } from './audience/import/personaliz
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
 import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
 import { SkuComponent } from './image-recognition/sku/sku.component';
-import { StockCheckTemplateComponent } from './image-recognition/stock-check-template/stock-check-template.component';
+import { TemplateStockCheckComponent } from './image-recognition/template-stock-check/template-stock-check.component';
 import { TaskVerificationComponent } from './task-verification-2/task-verification/task-verification.component';
 import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
@@ -344,7 +344,7 @@ export const MY_FORMATS = {
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
-    StockCheckTemplateComponent,
+    TemplateStockCheckComponent,
     TaskVerificationComponent,
     AssignmentCartComponent,
     TaskVerificationAssignmentComponent,

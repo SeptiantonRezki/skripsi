@@ -11,7 +11,7 @@ pipeline{
         AWSCRED="ayo-ws"
         scannerHome = tool 'Sonar-Scanner-4.0.0.1744'
         BUILDID = "${env.BUILD_ID}"
-        APPROVER="dputra4@pmintl.net, elorenz@pmintl.net, azimah@pmintl.net, badityat@pmintl.net, mtjen1@pmintl.net, fsujito1@pmintl.net, awibawa2@pmintl.net, rrinaldo1@pmintl.net, mchandra@pmintl.net, mpuspita1@pmintl.net, mmelissa1@pmintl.net, shadiasa@pmintl.net, aandyant@pmintl.net"   
+        APPROVER="dputra4@pmintl.net, fkheir@pmintl.net, wardians@pmintl.net, EPerdana@pmintl.net, shadiasa@pmintl.net, aandyant@pmintl.net, LPurnomo3@pmintl.net, nannasta2@pmintl.net"   
         GIT_AUTH = credentials('s-ayodevops') 
     }
     stages {

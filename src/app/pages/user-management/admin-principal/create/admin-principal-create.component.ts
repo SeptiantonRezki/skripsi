@@ -847,7 +847,6 @@ export class AdminPrincipalCreateComponent {
       area_id = area_id.filter(function( element ) {
         return element !== undefined;
      });
-
      for(let i=0; i<area_id.length; i++){
       for(let j=i+1; j<area_id.length; j++){
           if(area_id[i] == area_id[j]){
@@ -873,7 +872,6 @@ this.dialogService.openSnackBar({ message: "Area " + uniqueArray +" adalah dupli
 }
 }
 else{
-
       let body = {
         name: this.verticalStepperStep1.get("nama").value,
         username: this.verticalStepperStep1.get("username").value,

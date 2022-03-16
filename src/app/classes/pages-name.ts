@@ -134,6 +134,10 @@ export class PagesName {
       "/dte/master-brand/create": "principal.dte_image_recognition_master_brand.buat",
       "/dte/master-brand/edit/": "principal.dte_image_recognition_master_brand.ubah",
       "/dte/master-brand/detail/": "principal.dte_image_recognition_master_brand.lihat",
+      "/dte/template-stock-check": "principal.dte_image_recognition_stock_check.lihat",
+      "/dte/template-stock-check/create": "principal.dte_image_recognition_stock_check.buat",
+      "/dte/template-stock-check/edit/": "principal.dte_image_recognition_stock_check.ubah",
+      "/dte/template-stock-check/detail/": "principal.dte_image_recognition_stock_check.lihat",
 
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",

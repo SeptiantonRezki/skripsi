@@ -1427,6 +1427,7 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
+        country: this.Country,
         is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }

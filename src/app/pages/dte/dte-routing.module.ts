@@ -52,7 +52,7 @@ import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
 import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
 import { SkuComponent } from "./image-recognition/sku/sku.component";
-import { StockCheckTemplateComponent } from "./image-recognition/stock-check-template/stock-check-template.component";
+import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
@@ -600,11 +600,30 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
-  // {
-  //   path: "stock-check",
-  //   component: StockCheckTemplateComponent,
-  //   canActivate: [PageGuard]
-  // },
+  {
+    path: "template-stock-check",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/create",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/edit/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/detail/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
   {
     path: 'task-verification',
     component: TaskVerificationComponent,
