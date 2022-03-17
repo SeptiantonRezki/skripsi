@@ -31,7 +31,9 @@ export class GroupSkuComponent implements OnInit {
   }
 
   @HostListener("window:message", ["$event"])
-  onMessage({ data: resData }) {
+  onPostMessage({ data: resData }) {
+    console.log('resData =>', resData);
+    
     this.isChange = resData.value ? resData.value.isChange : false;
 
     if (this.isChange) {
