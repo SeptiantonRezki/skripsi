@@ -32,7 +32,7 @@ export class SkuComponent implements OnInit {
 
   @HostListener("window:message", ["$event"])
   onPostMessage({ data: resData }) {
-    this.isChange = resData.value ? resData.value.isChange : false;
+    this.isChange = resData.isChange ? resData.isChange : false;
 
     if (this.isChange) {
       window.localStorage.setItem("isReactChanged", 'true');

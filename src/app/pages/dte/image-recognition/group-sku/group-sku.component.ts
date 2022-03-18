@@ -34,7 +34,7 @@ export class GroupSkuComponent implements OnInit {
   onPostMessage({ data: resData }) {
     console.log('resData =>', resData);
     
-    this.isChange = resData.value ? resData.value.isChange : false;
+    this.isChange = resData.isChange ? resData.isChange : false;
 
     if (this.isChange) {
       window.localStorage.setItem("isReactChanged", 'true');
