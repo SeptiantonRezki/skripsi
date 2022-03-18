@@ -30,6 +30,7 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
   }
 
   leavePage() {
+    window.localStorage.removeItem('isReactChanged');
     window.localStorage.removeItem('duplicate_template_task');
     return true;
   }
