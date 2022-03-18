@@ -31,8 +31,8 @@ export class TemplateStockCheckComponent implements OnInit {
   }
 
   @HostListener("window:message", ["$event"])
-  onMessage({ data: resData }) {
-    this.isChange = resData.value ? resData.value.isChange : false;
+  onPostMessage({ data: resData }) {
+    this.isChange = resData.isChange ? resData.isChange : false;
 
     if (this.isChange) {
       window.localStorage.setItem("isReactChanged", 'true');
