@@ -30,6 +30,7 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
   }
 
   leavePage() {
+    window.localStorage.removeItem('isReactChanged');
     window.localStorage.removeItem('duplicate_template_task');
     return true;
   }
@@ -40,9 +41,10 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
       return true;
     }
 
-    if (window.localStorage.getItem('isImport') == 'false' || !window.localStorage.getItem('isImport')){
+    if (window.localStorage.getItem('isImport') == 'false' || !window.localStorage.getItem('isImport') || window.localStorage.getItem("isReactChanged") === "true"){
       const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
       if (leave) {
+        window.localStorage.removeItem('isReactChanged');
         window.localStorage.removeItem('duplicate_template_task');
         return true;
       }
