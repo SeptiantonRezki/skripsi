@@ -8,7 +8,6 @@ import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CashierImportDialogComponent } from "./import-dialog/import-dialog.component";
-import { FormGroup, FormBuilder } from "@angular/forms";
 
 @Component({
   selector: "app-cashier-index",
@@ -26,22 +25,6 @@ export class CashierIndexComponent implements OnInit {
   permission: any;
   id: any[];
   dialogRef: any;
-  listCompanies: any[] = [
-    {id: 1, name: 'PT.Tempo Scan Pasific Tbk.'},
-    {id: 2, name: 'PT.HM Sampoerna'},
-    {id: 3, name: 'PT.Heinz ABC Indonesia'},
-    {id: 4, name: 'PT.Konimex'},
-    {id: 5, name: 'Others'},
-  ];
-  listCategories: any[] = [
-    {id: 1, name: 'AIR MINERAL'},
-    {id: 2, name: 'MAKANAN'},
-    {id: 3, name: 'BUMBU MASAKAN'},
-    {id: 4, name: 'OBAT2AN'},
-    {id: 5, name: 'LAIN LAIN'},
-  ];
-  formFilter: FormGroup;
-  init: boolean = true;
 
   keyUp = new Subject<string>();
 
@@ -54,25 +37,26 @@ export class CashierIndexComponent implements OnInit {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   constructor(
-    private formBuilder: FormBuilder,
     private dataService: DataService,
     private productCashierService: ProductCashierService,
     private dialogService: DialogService,
     private dialog: MatDialog
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
+    this.keyUp
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .flatMap((search) => {
+        return Observable.of(search).delay(300);
+      })
+      .subscribe((data) => {
+        this.updateFilter(data);
+      });
   }
 
   ngOnInit() {
     this.resetPagination();
-    
-    this.formFilter = this.formBuilder.group({
-      company: [[]],
-      category: [[]],
-      date: [null],
-      end_date: [null],
-      search: ['']
-    });
+    this.getProducts();
   }
 
   updateFilter(string) {
@@ -219,14 +203,5 @@ export class CashierIndexComponent implements OnInit {
         this.getProducts();
       }
     });
-  }
-
-  applyFilter() {
-    if(this.formFilter.get('company').value.length > 0 || this.formFilter.get('category').value.length > 0 || this.formFilter.get('date').value && this.formFilter.get('end_date').value || this.formFilter.get('search').value) {
-      this.getProducts();
-      this.init = false;
-    } else {
-      this.dialogService.openSnackBar({ message: "Silahkan isi filter terlebih dahulu!" });
-    };
   }
 }

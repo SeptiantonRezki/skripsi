@@ -21,8 +21,9 @@ import { FormGroup, FormBuilder } from "@angular/forms";
   styleUrls: ["./index.component.scss"],
 })
 export class DbProductSubmissionComponent implements OnInit {
-  init: boolean = true;
+  initTable: boolean = false;
   onLoad: boolean = true;
+  onLoadInitial: boolean = true;
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
   pagination: Page = new Page();
@@ -34,8 +35,6 @@ export class DbProductSubmissionComponent implements OnInit {
   id: any[];
   selectedItem: any;
   dialogRef: any;
-  approverType: string;
-  approvalStatusActive: any;
   approvalStatus: any[] = [
     {
       id: null,
@@ -50,17 +49,9 @@ export class DbProductSubmissionComponent implements OnInit {
       name: "Approver Produk DB",
     },
   ];
-  listCategories: any[] = [
-    {id: 1, name: 'AIR MINERAL'},
-    {id: 2, name: 'MAKANAN'},
-    {id: 3, name: 'BUMBU MASAKAN'},
-    {id: 4, name: 'OBAT2AN'},
-    {id: 5, name: 'LAIN LAIN'},
-  ];
-  listStatus: any[] = [
-    {id: 1, name: 'Approver Produk DB'},
-    {id: 2, name: 'Approver 1'},
-  ];
+  listBrands: any;
+  listCategories: any;
+  listStatus: any;
   formFilter: FormGroup;
 
   keyUp = new Subject<string>();
@@ -85,50 +76,36 @@ export class DbProductSubmissionComponent implements OnInit {
     this.resetPagination();
 
     this.formFilter = this.formBuilder.group({
-      category: [[]],
-      status: [[]],
+      brand: [null],
+      category: [null],
+      status: [null],
+      start_date: [null],
+      end_date: [null],
       search: ['']
     });
-  }
 
-  updateFilter(string) {
-    this.loadingIndicator = true;
-    this.pagination.search = string;
+    const promises = ['getDbBrands', 'getDbCategories', 'getDbApprovers'].map(item => new Promise((resolve, reject) => this.submissionService[item]().subscribe(response => resolve(response.data), err => reject(err))));
 
-    if (string) {
-      this.pagination.page = 1;
-      this.offsetPagination = 0;
-    } else {
-      const page = this.dataService.getFromStorage("page");
-      this.pagination.page = page;
-      this.offsetPagination = page ? page - 1 : 0;
-    }
-
-    this.submissionService.getDb(this.pagination).subscribe((response) => {
-      const res = response.data ? response.data : {};
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
+    Promise.all(promises).then(res => {
+      this.listBrands = res[0];
+      this.listCategories = res[1];
+      this.listStatus = res[2];
+      this.onLoadInitial = false
+    })
+      .catch(err => {
+        this.dialogService.openSnackBar({ message: err.error.message });
+        this.onLoadInitial = false;
+      });
   }
 
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
-    if (this.pagination["search"]) {
-      this.pagination.page = pageInfo.offset + 1;
-    } else {
-      this.dataService.setToStorage("page", pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage("page");
-    }
+    this.dataService.setToStorage("page", pageInfo.offset + 1);
+    this.pagination.page = this.dataService.getFromStorage("page");
 
-    this.submissionService.getDb(this.pagination).subscribe((response) => {
-      const res = response.data ? response.data : {};
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
+    this.getProducts(true);
   }
 
   resetPagination() {
@@ -141,58 +118,49 @@ export class DbProductSubmissionComponent implements OnInit {
     const sortName = event.column.prop.split(".")[0];
     this.pagination.sort = sortName;
     this.pagination.sort_type = event.newValue;
-    this.pagination.page = 1;
-    this.loadingIndicator = true;
 
-    this.dataService.setToStorage("page", this.pagination.page);
     this.dataService.setToStorage("sort", sortName);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.submissionService.getDb(this.pagination).subscribe((response) => {
-      const res = response.data ? response.data : {};
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
+    this.getProducts();
   }
 
-  approvalStatusChange(value) {
-    this.approvalStatusActive = value.name;
-    this.pagination.status = value.id;
-    this.pagination.page = 1;
+  getProducts(page = false) {
     this.loadingIndicator = true;
-
-    this.dataService.setToStorage("page", this.pagination.page);
-    this.dataService.setToStorage("sort", "");
-    this.dataService.setToStorage("sort_type", this.pagination.sort_type);
-
-    this.submissionService.getDb(this.pagination).subscribe((response) => {
-      const res = response.data ? response.data : {};
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
-  }
-
-  getProducts() {
-    const page = this.dataService.getFromStorage("page");
+    
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
-
-    this.pagination.page = page;
+    
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 
-    this.offsetPagination = page ? page - 1 : 0;
+    if(!page) {
+      this.dataService.setToStorage("page", 1);
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    };
 
-    this.submissionService.getDb(this.pagination).subscribe(
+    let filter = this.formFilter.getRawValue(); 
+
+    // mapping brand, category, status filter to correct request
+    ['brand', 'category', 'status'].map(str => {
+      if(filter[str]) {
+        filter[str].map((item,i) => filter[`filter[${str}][${i}]`] = item);
+        delete filter[str];
+      };
+    });
+    // mapping date filter to correct request
+    ['start_date', 'end_date'].map(str => {
+      if(filter[str]) {
+        filter[`filter[created_period][${str}]`] = filter[str].format('YYYY-MM-DD');
+        delete filter[str];
+      };
+    });
+
+    this.submissionService.getDb({...this.pagination, ...filter}).subscribe(
       (response) => {
         const res = response.data ? response.data : {};
         Page.renderPagination(this.pagination, res);
-        const approverType = this.approvalStatus.filter(
-          (item) => item.id === res.approver.type
-        );
-        this.approverType = approverType.length ? approverType[0]["name"] : "";
         this.rows = res.data ? res.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -251,11 +219,7 @@ export class DbProductSubmissionComponent implements OnInit {
   }
 
   applyFilter() {
-    if(this.formFilter.get('category').value.length > 0 || this.formFilter.get('status').value.length > 0 || this.formFilter.get('search').value) {
-      this.getProducts();
-      this.init = false;
-    } else {
-      this.dialogService.openSnackBar({ message: "Silahkan isi filter terlebih dahulu!" });
-    };
+    this.initTable = true;
+    this.getProducts();
   }
 }
