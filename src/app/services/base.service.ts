@@ -55,6 +55,11 @@ export class BaseService {
     return this.http.get(url, { headers: headers, params: query });
   }
 
+  protected getWithBasicAuthApi(url, body, creds) {
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json').set('Authorization', `btoa(${creds.username}:${creds.password})`);
+    return this.http.post(url, body, { headers: headers });
+  }
+
   protected getBlobApi(url, params: any = null) {
     let headers = new HttpHeaders();
     let query = this.loopParams(params);
@@ -96,8 +101,8 @@ export class BaseService {
     let query = this.loopParams(params);
     this.clean(request);
     let headers = new HttpHeaders().set('Accept', 'application/json');
-    headers.set('Content-Type','application/json')
-    return this.http.post(url, request, {  responseType: 'blob', headers, params: query });
+    headers.set('Content-Type', 'application/json')
+    return this.http.post(url, request, { responseType: 'blob', headers, params: query });
   }
 
   protected multipartPost(url, request) {
