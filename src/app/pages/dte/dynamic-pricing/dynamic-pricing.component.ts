@@ -27,19 +27,30 @@ export class DynamicPricingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getDynamicPricingEncryptedToken().subscribe(res => {
+    // this.authService.getDynamicPricingEncryptedToken().subscribe(res => {
+    //   const baseurl = environment.STREAMLIT;
+
+    //   const encodedToken = encodeURI(res.data);
+    //   this.authService.getDynamicPricingDecryptedToken({ token: encodedToken }, { username: 'ayodecrypt', password: '3mUAOH9dS4' }).subscribe(resDecrypt => {
+    //     const newEncodedToken = encodeURI(resDecrypt.data);
+    //     const httpParams = new HttpParams().set('token', newEncodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
+    //     const fullUrl = `${baseurl}?${httpParams.toString()}`;
+    //     // console.log({fullUrl});
+
+    //     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
+    //     this.loading = false;
+    //   })
+    // })
+    this.authService.getEncryptedToken().subscribe(res => {
       const baseurl = environment.STREAMLIT;
 
       const encodedToken = encodeURI(res.data);
-      this.authService.getDynamicPricingDecryptedToken({ token: encodedToken }, { username: 'ayodecrypt', password: '3mUAOH9dS4' }).subscribe(resDecrypt => {
-        const newEncodedToken = encodeURI(resDecrypt.data);
-        const httpParams = new HttpParams().set('token', newEncodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
-        const fullUrl = `${baseurl}?${httpParams.toString()}`;
-        // console.log({fullUrl});
+      const httpParams = new HttpParams().set('token', encodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
+      const fullUrl = `${baseurl}?${httpParams.toString()}`;
+      // console.log({fullUrl});
 
-        this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
-        this.loading = false;
-      })
+      this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
+      this.loading = false;
     })
   }
 }
