@@ -56,7 +56,7 @@ export class BaseService {
   }
 
   protected getWithBasicAuthApi(url, body, creds) {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json').set('Authorization', `btoa(${creds.username}:${creds.password})`);
+    let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Accept', 'application/json').set('Authorization', btoa(`${creds.username}:${creds.password}`));
     return this.http.post(url, body, { headers: headers });
   }
 
