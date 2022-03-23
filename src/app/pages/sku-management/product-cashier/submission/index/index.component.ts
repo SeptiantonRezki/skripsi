@@ -14,6 +14,7 @@ import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { FormGroup, FormBuilder } from "@angular/forms";
 
 @Component({
   selector: "cashier-submission",
@@ -21,7 +22,9 @@ import { LanguagesService } from "app/services/languages/languages.service";
   styleUrls: ["./index.component.scss"],
 })
 export class CashierSubmissionComponent implements OnInit {
+  initTable: boolean = false;
   onLoad: boolean = true;
+  onLoadInitial: boolean = true;
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
   pagination: Page = new Page();
@@ -32,6 +35,14 @@ export class CashierSubmissionComponent implements OnInit {
   id: any[];
   selectedItem: any;
   dialogRef: any;
+  listBrands: any;
+  listCategories: any;
+  listStatus: any[] = [
+    {id: 'all', name: 'SEMUA'},
+    {id: '1', name: 'YA'},
+    {id: '0', name: 'TIDAK'},
+  ];
+  formFilter: FormGroup;
 
   keyUp = new Subject<string>();
 
@@ -42,6 +53,7 @@ export class CashierSubmissionComponent implements OnInit {
   activeCellTemp: TemplateRef<any>;
 
   constructor(
+    private formBuilder: FormBuilder,
     private dataService: DataService,
     private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
@@ -49,58 +61,41 @@ export class CashierSubmissionComponent implements OnInit {
     private ls: LanguagesService
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
-    this.keyUp
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .flatMap((search) => {
-        return Observable.of(search).delay(300);
-      })
-      .subscribe((data) => {
-        if (data.length === 0 || data.length >= 3) this.updateFilter(data);
-      });
   }
 
   ngOnInit() {
     this.resetPagination();
-    this.getProducts();
-  }
 
-  updateFilter(string) {
-    this.loadingIndicator = true;
-    this.pagination.search = string;
-
-    if (string) {
-      this.pagination.page = 1;
-      this.offsetPagination = 0;
-    } else {
-      const page = this.dataService.getFromStorage("page");
-      this.pagination.page = page;
-      this.offsetPagination = page ? page - 1 : 0;
-    }
-
-    this.submissionService.get(this.pagination).subscribe((res) => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
+    this.formFilter = this.formBuilder.group({
+      brand: [null],
+      category: [null],
+      in_databank: ['all'],
+      start_date: [null],
+      end_date: [null],
+      search: ['']
     });
+
+    const promises = ['getDbBrands', 'getDbCategories'].map(item => new Promise((resolve, reject) => this.submissionService[item]().subscribe(response => resolve(response.data), err => reject(err))));
+
+    Promise.all(promises).then(res => {
+      this.listBrands = res[0];
+      this.listCategories = res[1];
+      this.onLoadInitial = false
+    })
+      .catch(err => {
+        this.dialogService.openSnackBar({ message: err.error.message });
+        this.onLoadInitial = false;
+      });
   }
 
   setPage(pageInfo) {
     this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
 
-    if (this.pagination["search"]) {
-      this.pagination.page = pageInfo.offset + 1;
-    } else {
-      this.dataService.setToStorage("page", pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage("page");
-    }
+    this.dataService.setToStorage("page", pageInfo.offset + 1);
+    this.pagination.page = this.dataService.getFromStorage("page");
 
-    this.submissionService.get(this.pagination).subscribe((res) => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
+    this.getProducts(true);
   }
 
   resetPagination() {
@@ -110,36 +105,63 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   onSort(event) {
-    const sortName = event.column.prop.split(".")[0];
+    let sortName = event.column.prop.split(".")[0];
+
+    // special case if table header prop name has different name than request
+    if(sortName == 'brand' || sortName == 'category') {
+      sortName = `${sortName}_id`;
+    } else if(sortName == 'price') {
+      let priceType = event.column.prop.split(".")[1];
+      sortName = `${priceType}_${sortName}`
+    };
+
     this.pagination.sort = sortName;
     this.pagination.sort_type = event.newValue.toUpperCase();
-    this.pagination.page = 1;
-    this.loadingIndicator = true;
 
-    this.dataService.setToStorage("page", this.pagination.page);
     this.dataService.setToStorage("sort", sortName);
     this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
 
-    this.submissionService.get(this.pagination).subscribe((res) => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data ? res.data : [];
-      this.loadingIndicator = false;
-    });
+    this.getProducts();
   }
 
-  getProducts() {
-    const page = this.dataService.getFromStorage("page");
+  getProducts(page = false) {
+    this.loadingIndicator = true;
+
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
 
-    this.pagination.page = page;
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
-    this.offsetPagination = page ? page - 1 : 0;
-    this.loadingIndicator = true;
 
-    this.submissionService.get(this.pagination).subscribe(
-      (res) => {
+    if(!page) {
+      this.dataService.setToStorage("page", 1);
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    };
+
+    let filter = this.formFilter.getRawValue();
+
+    // mapping brand & category filter to correct request
+    ['brand', 'category'].map(str => {
+      if(filter[str]) {
+        filter[str].map((item,i) => filter[`filter[${str}][${i}]`] = item);
+        delete filter[str];
+      };
+    });
+    // change in_databank to correct request
+    if(this.formFilter.value.in_databank !== 'all') filter['filter[in_databank]'] = this.formFilter.value.in_databank;
+    delete filter.in_databank;
+    // mapping date filter to correct request
+    ['start_date', 'end_date'].map(str => {
+      if(filter[str]) {
+        filter[`filter[created_period][${str}]`] = filter[str].format('YYYY-MM-DD');
+        delete filter[str];
+      };
+    });
+
+    this.submissionService.get({...this.pagination, ...filter}).subscribe(
+      (response) => {
+        const res = response.data ? response.data : {};
         Page.renderPagination(this.pagination, res);
         this.rows = res.data ? res.data : [];
         this.onLoad = false;
@@ -154,12 +176,13 @@ export class CashierSubmissionComponent implements OnInit {
 
   approveProduct(item) {
     const body = {
-      purchase_price: item.purchase_price.raw,
-      selling_price: item.selling_price.raw,
+      id: item.id,
+      purchase_price: item.price.purchase.raw,
+      selling_price: item.price.selling.raw,
     };
     this.dataService.showLoading(true);
     this.submissionService
-      .putApprove(body, { product_id: item.id })
+      .putApproval(body)
       .subscribe((res) => {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
@@ -182,7 +205,10 @@ export class CashierSubmissionComponent implements OnInit {
     this.dataService.showLoading(true);
     this.dialogService.brodcastCloseConfirmation();
     this.submissionService
-      .putDisapprove(null, { product_id: this.selectedItem.id })
+      .putApproval({
+        _method: 'DELETE',
+        id: this.selectedItem.id
+      })
       .subscribe(
         (res) => {
           this.dataService.showLoading(false);
@@ -196,4 +222,9 @@ export class CashierSubmissionComponent implements OnInit {
   }
 
   onSelect(event: any) {}
+
+  applyFilter() {
+    this.initTable = true;
+    this.getProducts();
+  }
 }

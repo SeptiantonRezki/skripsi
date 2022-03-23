@@ -105,19 +105,18 @@ export class DbProductSubmissionEditComponent implements OnInit {
       this.submissionService
         .getDbDetail(this.productId)
         .subscribe(({ data }) => {
-          console.log(data);
           const business = data.business || {};
           const patchData = {
             name: data.name,
             barcode: data.barcode,
-            category: data.category_id,
-            brand: data.brand_id,
+            category: data.category.id,
+            brand: data.brand.id,
           };
           if (business.name) {
             patchData["businessName"] = business.name;
           }
-          if (business.areas) {
-            business.areas.forEach((item) => {
+          if (business.area) {
+            business.area.forEach((item) => {
               if (item.level_desc === "division") {
                 patchData["businessZone"] = item.name;
               }
@@ -136,7 +135,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
             this.product.get("barcode").setValidators([Validators.required]);
             this.product.get("barcode").enable();
           }
-          this.approverType = data.status.toLowerCase();
+          this.approverType = data.approver.toLowerCase();
           this.hasBarcode = data.barcode ? true : false;
           this.product.patchValue(patchData);
           this.onLoad = false;
@@ -148,10 +147,16 @@ export class DbProductSubmissionEditComponent implements OnInit {
 
   getBarcode() {
     this.gettingBarcode = true;
-    this.submissionService.getBarcode(this.productId).subscribe((res) => {
-      this.product.get("barcode").setValue(res.data);
-      this.gettingBarcode = false;
-    });
+    this.submissionService.getBarcode(this.productId).subscribe(
+      res => {
+        this.product.get("barcode").setValue(res.data);
+        this.gettingBarcode = false;
+      },
+      error => {
+        this.dialogService.openSnackBar({message:error.error.message});
+        this.gettingBarcode = false;
+      }
+    );
   }
 
   getCategories(items) {
@@ -249,6 +254,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
         return;
       }
       const fd = new FormData();
+      fd.append("id", this.productId);
       fd.append("name", this.product.get("name").value);
       fd.append("barcode", this.product.get("barcode").value);
       fd.append("brand_id", this.product.get("brand").value);
@@ -259,9 +265,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       this.dataService.showLoading(true);
       if (this.approverType === "approver 1") {
         this.submissionService
-          .putApprove1(fd, {
-            product_id: this.productId,
-          })
+          .putApproval1(fd)
           .subscribe(
             this.submitSuccess.bind(this),
             this.submitError.bind(this)
@@ -269,9 +273,7 @@ export class DbProductSubmissionEditComponent implements OnInit {
       }
       if (this.approverType === "approver produk db") {
         this.submissionService
-          .putApproveDbProduct(fd, {
-            product_id: this.productId,
-          })
+          .putApproval2(fd)
           .subscribe(
             this.submitSuccess.bind(this),
             this.submitError.bind(this)
@@ -282,8 +284,9 @@ export class DbProductSubmissionEditComponent implements OnInit {
       this.dataService.showLoading(true);
       if (this.approverType === "approver 1") {
         this.submissionService
-          .putDisapprove1(null, {
-            product_id: this.productId,
+          .putApproval1({
+            _method: 'DELETE',
+            id: this.productId,
           })
           .subscribe(
             this.submitSuccess.bind(this),
@@ -292,8 +295,9 @@ export class DbProductSubmissionEditComponent implements OnInit {
       }
       if (this.approverType === "approver produk db") {
         this.submissionService
-          .putDisapproveDbProduct(null, {
-            product_id: this.productId,
+          .putApproval2({
+            _method: 'DELETE',
+            id: this.productId,
           })
           .subscribe(
             this.submitSuccess.bind(this),
