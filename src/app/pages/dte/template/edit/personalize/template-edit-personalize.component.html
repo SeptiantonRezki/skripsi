@@ -425,7 +425,7 @@
                   <div [formGroupName]="i" class="section-shadow p-24 mb-32">
 
                     <!-- CHOOSE QUESTION -->
-                    <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                    <div class="question-list" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto">
     
                       <mat-form-field fxFlex="68" class="question is-light" *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
                         <input matInput [formControl]="listProductSelected[i].product" (input)="keyUp.next($event.target.value)">
@@ -437,11 +437,11 @@
                       </mat-form-field>
     
                       <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
-                        <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below" class="add-image secondary-text" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                        <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below" class="secondary-text" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">videocam</mat-icon>
                         </button>
                         <button mat-icon-button matTooltip="Sisipkan Gambar" matTooltipPosition="below"
-                          class="add-image secondary-text" (click)="uploadImage('question', i)"
+                          class="secondary-text" (click)="uploadImage('question', i)"
                           *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">photo</mat-icon>
                         </button>
@@ -465,9 +465,12 @@
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
-
-                        <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
                       </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
+                      <mat-checkbox [id]="'image_quality-'+(i)" formControlName="image_quality_detection">Image Quality Detection</mat-checkbox>
+                      <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
                     </div>
     
                     <!-- NOMOR SOAL -->

@@ -803,6 +803,7 @@ export class TemplateEditComponent {
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0' ? false : true,
         encryption: item.encryption == 1 ? true : false,
+        image_quality_detection: item.image_quality_detection == 1 ? true : false,
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -1144,6 +1145,7 @@ export class TemplateEditComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
       // others: false,
       // required: false
     }))
@@ -1399,6 +1401,7 @@ export class TemplateEditComponent {
             required: item.type === 'stock_check' ? 1 : null,
             question_image_detail: item.question_image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',

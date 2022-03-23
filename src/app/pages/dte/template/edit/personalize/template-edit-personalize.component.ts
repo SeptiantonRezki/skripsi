@@ -459,6 +459,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0' ? false : true,
         encryption: item.encryption == 1 ? true : false,
+        image_quality_detection: item.image_quality_detection == 1 ? true : false,
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -1255,6 +1256,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       type: 'radio',
       question_image_detail: false,
       encryption: false,
+      image_quality_detection: false,
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
@@ -1676,6 +1678,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             required: item.type === 'stock_check' ? 1 : null,
             question_image_detail: item.question_image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',

@@ -655,6 +655,7 @@ export class TemplateCreateComponent {
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         image_detail: false,
         encryption: false,
+        image_quality_detection: false,
         // required: item.required,
         question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
           return this.formBuilder.group({
@@ -907,6 +908,7 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
     });
   }
 
@@ -1016,6 +1018,7 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
       // others: false,
       // required: false
     }));
@@ -1270,6 +1273,7 @@ export class TemplateCreateComponent {
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
