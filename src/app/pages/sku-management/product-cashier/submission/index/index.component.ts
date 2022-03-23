@@ -70,7 +70,7 @@ export class CashierSubmissionComponent implements OnInit {
       brand: [null],
       category: [null],
       in_databank: ['all'],
-      date: [null],
+      start_date: [null],
       end_date: [null],
       search: ['']
     });
@@ -151,6 +151,13 @@ export class CashierSubmissionComponent implements OnInit {
     // change in_databank to correct request
     if(this.formFilter.value.in_databank !== 'all') filter['filter[in_databank]'] = this.formFilter.value.in_databank;
     delete filter.in_databank;
+    // mapping date filter to correct request
+    ['start_date', 'end_date'].map(str => {
+      if(filter[str]) {
+        filter[`filter[created_period][${str}]`] = filter[str].format('YYYY-MM-DD');
+        delete filter[str];
+      };
+    });
 
     this.submissionService.get({...this.pagination, ...filter}).subscribe(
       (response) => {

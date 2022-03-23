@@ -174,7 +174,7 @@
                       'detail',
                       row.id
                     ]"
-                    [disabled]="row.actions.edit"
+                    [disabled]="!row.actions.edit"
                   >
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
@@ -184,7 +184,7 @@
                     matTooltip="Hapus Produk"
                     class="mat-custom-icon"
                     (click)="disapproveProduct(row)"
-                    [disabled]="row.actions.delete"
+                    [disabled]="!row.actions.delete"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>

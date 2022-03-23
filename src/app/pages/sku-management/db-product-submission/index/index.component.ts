@@ -166,8 +166,10 @@ export class DbProductSubmissionComponent implements OnInit {
         this.loadingIndicator = false;
       },
       (err) => {
-        console.error(err);
+        let msg = err.error.errors.search[0] ||  err.error.message;
+        this.dialogService.openSnackBar({message:msg});
         this.onLoad = false;
+        this.loadingIndicator = false;
       }
     );
   }
@@ -186,21 +188,23 @@ export class DbProductSubmissionComponent implements OnInit {
   }
 
   confirmDelete() {
-    const status = this.selectedItem.status.toLowerCase();
+    const status = this.selectedItem.approver.toLowerCase();
     const productId = this.selectedItem.id;
     this.dataService.showLoading(true);
     this.dialogService.brodcastCloseConfirmation();
     if (status === "approver 1") {
       this.submissionService
-        .putDisapprove1(null, {
-          product_id: productId,
+        .putApproval1({
+          _method: 'DELETE',
+          id: productId
         })
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
     if (status === "approver produk db") {
       this.submissionService
-        .putDisapproveDbProduct(null, {
-          product_id: productId,
+        .putApproval2({
+          _method: 'DELETE',
+          id: productId
         })
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
