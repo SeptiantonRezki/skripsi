@@ -4,7 +4,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
 import { AuthenticationService } from 'app/services/authentication.service';
-import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -28,6 +27,20 @@ export class DynamicPricingComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.authService.getDynamicPricingEncryptedToken().subscribe(res => {
+    //   const baseurl = environment.STREAMLIT;
+
+    //   const encodedToken = encodeURI(res.data);
+    //   this.authService.getDynamicPricingDecryptedToken({ token: encodedToken }, { username: 'ayodecrypt', password: '3mUAOH9dS4' }).subscribe(resDecrypt => {
+    //     const newEncodedToken = encodeURI(resDecrypt.data);
+    //     const httpParams = new HttpParams().set('token', newEncodedToken).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));
+    //     const fullUrl = `${baseurl}?${httpParams.toString()}`;
+    //     // console.log({fullUrl});
+
+    //     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
+    //     this.loading = false;
+    //   })
+    // })
     this.authService.getEncryptedToken().subscribe(res => {
       const baseurl = environment.STREAMLIT;
 

@@ -58,6 +58,8 @@ export class Endpoint {
         check_user_status: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/user-status`,
         get_user_cognito_ad: `${AYO_API_SERVICE(SERVER.user)}/oauth/cognito/get-user`,
         encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`,
+        dynamic_pricing_encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt-dynamic-pricing`,
+        dynamic_pricing_decrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/decrypt-dynamic-pricing`
       },
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`,
