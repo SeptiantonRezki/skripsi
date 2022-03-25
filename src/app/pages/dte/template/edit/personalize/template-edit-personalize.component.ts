@@ -37,6 +37,11 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
     { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
   ];
+  listBlockerSubmission: any[] = [
+    { value: 'soft', name: 'Soft' },
+    { value: 'med', name: 'Medium' },
+    { value: 'hard', name: 'Hard' },
+  ];
   isIRTypeError: boolean = false;
 
   listKategoriToolbox: any[];
@@ -460,6 +465,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         question_image_detail: item.question_image_detail === '0' ? false : true,
         encryption: item.encryption == 1 ? true : false,
         image_quality_detection: item.image_quality_detection == 1 ? true : false,
+        blocker_submission: [item.blocker_submission, Validators.required],
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -500,7 +506,9 @@ export class TemplateEditPersonalizeComponent implements OnInit {
           })
         )
       }));
-      console.log('questions', questions, this.listChoose);
+
+      this.handleChangeImageDetection(index);
+      
       this.allQuestionList.push({
         id: item.id,
         question: item.question,
@@ -1049,6 +1057,17 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
   }
 
+  handleChangeImageDetection(index): void {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (questions.at(index).get("image_quality_detection").value) {
+      questions.at(index).get("blocker_submission").enable();
+    } else {
+      questions.at(index).get("blocker_submission").setValue("");
+      questions.at(index).get("blocker_submission").disable();
+    }
+  }
+
   selectedImageIR(selectedIR, template, idx) {
     console.log('selectedIR IR', selectedIR, template, idx);
     // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
@@ -1146,6 +1165,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+    questions.at(idx).get('image_quality_detection').setValue(false);
+    this.handleChangeImageDetection(idx)
   }
 
   checkWordingRadioFreeType(item) {
@@ -1248,15 +1269,17 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id });
+    if (newId === -Infinity) newId = { id: 0 }
     this.isDetailBannerPertanyaan = false;
 
     questions.push(this.formBuilder.group({
-      id: newId.id + 1,
+      id: String(Number(newId.id) + 1),
       question: `Pertanyaan`,
       type: 'radio',
       question_image_detail: false,
       encryption: false,
       image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
       typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
@@ -1286,6 +1309,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
     this.templateList.push([]);
     this.templateListImageIR.push({ item_id: newId.id + 1 });
+    this.handleChangeImageDetection(newId.id);
   }
 
   createAdditional(): FormGroup {
@@ -1679,6 +1703,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             question_image_detail: item.question_image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
             image_quality_detection: item.image_quality_detection ? 1 : 0,
+            blocker_submission: item.blocker_submission || "",
             // required: item.required,
             question_image: item.question_image || '',
             question_video: item.question_video || '',
@@ -1907,14 +1932,26 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
+      const questions = this.templateTaskForm.get('questions') as FormArray;
+
       if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['material_description'].invalid)
         return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
 
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if (this.templateTaskForm.get('questions').invalid)
-        return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' });
+      if (this.templateTaskForm.get('questions').invalid) {
+        if (questions.value.length) {
+          for (const item of questions.value) {
+            if (item.image_quality_detection && !item.blocker_submission) {
+              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+            }
+          }
+        } else {
+          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+        }
+      }
+
       if (this.templateTaskForm.controls['copywritingList'].invalid)
         return this.dialogService.openSnackBar({ message: 'Copywriting belum dibuat, minimal ada satu Copywriting' });
       if (this.templateTaskForm.get('children').invalid)
