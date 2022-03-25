@@ -469,7 +469,26 @@
                     </div>
 
                     <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
-                      <mat-checkbox [id]="'image_quality-'+(i)" formControlName="image_quality_detection">Image Quality Detection</mat-checkbox>
+                      <div *ngIf="item.get('image_quality_detection').value">
+                        <mat-form-field class="is-light form-primary" style="width: 150px;">
+                          <mat-select id="selectBlockerSubmission" formControlName="blocker_submission" placeholder="Blocker Submission">
+                            <mat-option *ngFor="let blocker of listBlockerSubmission" [value]="blocker.value">
+                              {{blocker.name}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error>
+                            Blocker Submission harus diisi
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <mat-checkbox
+                        [id]="'image_quality-'+(i)"
+                        formControlName="image_quality_detection"
+                        (change)="handleChangeImageDetection(i)"
+                        *ngIf="item.get('type').value === 'image' || item.get('type').value === 'stock_check_ir' || item.get('type').value === 'planogram' || item.get('type').value === 'planogram_ir'"
+                      >
+                        Image Quality Detection
+                      </mat-checkbox>
                       <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
                     </div>
     
