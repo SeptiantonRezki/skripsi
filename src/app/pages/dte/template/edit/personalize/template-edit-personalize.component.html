@@ -763,13 +763,13 @@
                           </div>
                         </div>
                       </div>
+
+                      <!-- STOCK CHECK IR -->
                       <div fxFlex *ngIf="item.get('type').value === 'stock_check_ir'">
-                        <div class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
-                          <div id="banner">
-                            <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
-                          </div>
+                        <div fxFlex="45" class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
+                          <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
                         </div>
-                        <div class="responsive" *ngIf="!templateListImageIR[i].image">
+                        <div fxFlex="50" class="responsive" *ngIf="!templateListImageIR[i].image">
                           <table class="table">
                             <thead>
                               <tr>
@@ -780,7 +780,7 @@
                             </thead>
                             <tbody>
                               <tr *ngFor="let lst of templateListImageIR[i]['check_list']">
-                                <td style="max-width: 150px;">
+                                <td>
                                   <img [src]="lst.IMAGE_BRAND" alt="Stock Check IR" width="100%">
                                 </td>
                                 <td>

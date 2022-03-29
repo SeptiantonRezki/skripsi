@@ -432,7 +432,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             ir_id: item.stock_check_ir_id,
             ir_code: item.stock_check_ir_id,
             ir_name: item.stock_check_ir_name,
-            check_list: item.stock_check_ir_list
+            check_list: item.stock_check_ir_list,
+            image: item.stock_check_ir_image,
           });
         }
 
