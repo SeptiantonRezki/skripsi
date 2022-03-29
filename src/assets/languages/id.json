@@ -176,7 +176,12 @@
       "text29": "Apakah anda yakin untuk menghapus Salestree {{ index }}?",
       "text30": "Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
       "export_option": "atau pilih Eksport File sebagai acuan File Anda.",
-      "invalid_email": "Email Tidak Valid"
+      "invalid_email": "Email Tidak Valid",
+      "throttle_message_forgot_password": "Anda sudah melakukan request reset password sebanyak lebih dari 5x, silahkan coba kembali besok",
+      "network_error": "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!",
+      "not_found": "Data tidak valid / tidak ditemukan",
+      "invalid_credential": "Email / kata sandi yang Anda masukkan salah",
+      "error": "Terjadi Kesalahan"
     }
   },
   "login": {
