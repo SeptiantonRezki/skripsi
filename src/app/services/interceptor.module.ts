@@ -60,14 +60,14 @@ export class BaseInterceptor implements HttpInterceptor {
   throwIntercept(err, req) {
     console.error("HTTP ERROR LOGGER", err.status);
     if (err.status === 0)
-      this.injector.get(DialogService).openSnackBar({ message: "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!" });
+      this.injector.get(DialogService).openSnackBar({ message: this.ls.locale.global.messages.network_error });
 
     if (err instanceof HttpErrorResponse) {
       // kondisi ketika check isms
       if (err.status == 404) {
         if (err.error.status == false) {
-          this.injector.get(DialogService).openSnackBar({ message: "Data tidak valid / tidak ditemukan" });
-        } else if (err.error instanceof Blob) {
+          this.injector.get(DialogService).openSnackBar({ message: this.ls.locale.global.messages.not_found });
+        } else if (err.error instanceof Blob) { 
           // handle 404 Error response from postBlobAsJsonApi
           const reader = new FileReader();
           reader.addEventListener('load', () => {
@@ -111,7 +111,7 @@ export class BaseInterceptor implements HttpInterceptor {
         const country_code = localStorage.getItem('user_country');
 
         if (req.method == "POST") {
-          this.injector.get(DialogService).openSnackBar({ message: "Email / kata sandi yang Anda masukkan salah" });
+          this.injector.get(DialogService).openSnackBar({ message: this.ls.locale.global.messages.invalid_credential });
         }
 
         if (err.error === "Tidak ada otorisasi") {
@@ -119,14 +119,14 @@ export class BaseInterceptor implements HttpInterceptor {
           localStorage.setItem('user_country', country_code);
           this.router.navigate(["login"]);
           this.matDialog.closeAll();
-          this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error}` });
+          this.injector.get(DialogService).openSnackBar({ message: `${this.ls.locale.global.messages.error}, ${err.error}` });
         }
 
         window.localStorage.clear();
         localStorage.setItem('user_country', country_code);
         this.router.navigate(["login"]);
         this.matDialog.closeAll();
-        this.injector.get(DialogService).openSnackBar({ message: `Terjadi Kesalahan, ${err.error.message}` });
+        this.injector.get(DialogService).openSnackBar({ message: `${this.ls.locale.global.messages.error}, ${err.error.message}` });
 
         return Observable.throw(err);
       } else if (err.status == 403) {
@@ -172,6 +172,12 @@ export class BaseInterceptor implements HttpInterceptor {
           }
         }
         return Observable.throw(err);
+      } else if (err.status === 429) {
+
+        if(err.url.includes('oauth/password/forgot')) {
+          this.injector.get(DialogService).openSnackBar({message: this.ls.locale.global.messages.throttle_message_forgot_password});
+        }
+
       } else if (err.status == 500) {
         if (req.method == "POST") {
           this.injector.get(DialogService).openSnackBar({ message: err.error.message });
