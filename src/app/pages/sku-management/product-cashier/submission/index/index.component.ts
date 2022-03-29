@@ -75,7 +75,7 @@ export class CashierSubmissionComponent implements OnInit {
       search: ['']
     });
 
-    const promises = ['getDbBrands', 'getDbCategories'].map(item => new Promise((resolve, reject) => this.submissionService[item]().subscribe(response => resolve(response.data), err => reject(err))));
+    const promises = ['getBrands', 'getCategories'].map(item => new Promise((resolve, reject) => this.submissionService[item]().subscribe(response => resolve(response.data), err => reject(err))));
 
     Promise.all(promises).then(res => {
       this.listBrands = res[0];
