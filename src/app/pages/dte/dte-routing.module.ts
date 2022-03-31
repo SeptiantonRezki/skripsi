@@ -52,6 +52,7 @@ import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
 import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
 import { SkuComponent } from "./image-recognition/sku/sku.component";
+import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
 
 const routes: Routes = [
   {
@@ -593,6 +594,30 @@ const routes: Routes = [
   {
     path: "master-brand/detail/:id",
     component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/create",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/edit/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/detail/:id",
+    component: TemplateStockCheckComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },

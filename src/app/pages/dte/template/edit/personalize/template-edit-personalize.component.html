@@ -741,21 +741,30 @@
                           </div>
                         </div>
                       </div>
-                      <div fxFlex="45" *ngIf="item.get('type').value === 'stock_check_ir'">
-                        <div class="responsive">
+
+                      <!-- STOCK CHECK IR -->
+                      <div fxFlex *ngIf="item.get('type').value === 'stock_check_ir'">
+                        <div fxFlex="45" class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
+                          <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
+                        </div>
+                        <div fxFlex="50" class="responsive" *ngIf="!templateListImageIR[i].image">
                           <table class="table">
                             <thead>
                               <tr>
+                                <th nowrap>Image</th>
                                 <th nowrap>Product Name</th>
                                 <th nowrap>QTY</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr *ngFor="let lst of templateListImageIR[i]['check_list']">
-                                <td nowrap>
+                                <td>
+                                  <img [src]="lst.IMAGE_BRAND" alt="Stock Check IR" width="100%">
+                                </td>
+                                <td>
                                   {{ lst.PRODUCT_NAME }}
                                 </td>
-                                <td nowrap>
+                                <td>
                                   {{ lst.QUANTITY }}
                                 </td>
                               </tr>
