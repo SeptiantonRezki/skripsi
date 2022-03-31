@@ -162,6 +162,7 @@ import { ImportAudiencePersonalizeComponent } from './audience/import/personaliz
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
 import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
 import { SkuComponent } from './image-recognition/sku/sku.component';
+import { TemplateStockCheckComponent } from './image-recognition/template-stock-check/template-stock-check.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -340,6 +341,7 @@ export const MY_FORMATS = {
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
+    TemplateStockCheckComponent,
   ],
   exports: [
     TemplateIndexComponent,
