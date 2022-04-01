@@ -64,11 +64,38 @@
                   Tipe Konten harus diisi
                 </mat-error>
               </mat-form-field>
+              <div fxFlex="10"></div>
+              <div fxLayout="row" fxFlex="25" *ngIf="formNotification.controls['user_group'].value !== 'tsm'">
+                <mat-form-field fxFlex="50" class="is-light form-primary">
+                  <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()"
+                    formControlName="date" placeholder="Tanggal Terbit">
+                  <mat-error
+                    *ngIf="formNotification.controls['date'].hasError('required') && formNotification.controls['date'].touched">
+                    Tanggal Terbit harus diisi
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="tanggal_terbit">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #tanggal_terbit></mat-datepicker>
+                </mat-form-field>
+                <div fxFlex="10"></div>
+                <mat-form-field fxFlex="30" class="is-light form-primary" id="time">
+                  <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime"
+                    [format]="24" readonly>
+                  <mat-icon matSuffix>access_time</mat-icon>
+                  <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+                  <mat-error
+                    *ngIf="formNotification.controls['time'].hasError('required') && formNotification.controls['time'].touched">
+                    Waktu harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
           </div>
 
           <!-- Static Page & E-Wallet -->
-          <div class="pb-24" *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
+          <div class="pb-24"
+            *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="static_page_title" placeholder="Nama Halaman">
@@ -107,7 +134,8 @@
             <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">Isi Halaman</h3>
             </div>
-            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
+            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4"
+              fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
               Isi Halaman harus diisi
@@ -130,7 +158,8 @@
           </div>
 
           <!-- iframe & link_web -->
-          <div class="" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
+          <div class=""
+            *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <input matInput type="url" formControlName="url_link" placeholder="URL Link">
@@ -239,7 +268,8 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence" (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" [(ngModel)]="typeOfRecurrence">
+              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence"
+                (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" [(ngModel)]="typeOfRecurrence">
                 <mat-option *ngFor="let item of listTypeOfRecurrence" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -253,8 +283,7 @@
 
           <div fxLayout="row" *ngIf="typeOfRecurrence == 'Recurring'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_type"
-                [(ngModel)]="recurrenceType">
+              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_type" [(ngModel)]="recurrenceType">
                 <mat-option *ngFor="let item of listRecurrenceTypes" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -263,7 +292,8 @@
           <div [formGroup]="formDailyRecurrence" *ngIf="recurrenceType == 'Daily'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
@@ -276,7 +306,8 @@
           <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrenceType == 'Weekly'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
@@ -301,7 +332,8 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
@@ -325,7 +357,8 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
@@ -419,7 +452,8 @@
               </div>
             </div>
 
-            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row" fxLayoutAlign="start center">
+            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row"
+              fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="verification" placeholder="Jenis Konsumen">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
@@ -448,7 +482,8 @@
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="subscription_status" placeholder="Status Berlangganan">
-                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}</mat-option>
+                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}
+                  </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">
@@ -484,7 +519,8 @@
           </div>
         </div>
 
-        <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
+        <div class="pb-16 px-24"
+          *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
           <div class="" fxLayout="row" fxLayoutAlign="start center">
             <strong class="font-size-16">Transfer Token Credential</strong>
           </div>
@@ -499,14 +535,12 @@
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               Target Audience</mat-checkbox>
-            <mat-checkbox
-              *ngIf="formNotification.controls['user_group'].value === 'customer'"
-              class="mt-4 ml-20 mb-8"
-              (change)="isTargetArea($event)"
-              formControlName="is_target_area">
+            <mat-checkbox *ngIf="formNotification.controls['user_group'].value === 'customer'" class="mt-4 ml-20 mb-8"
+              (change)="isTargetArea($event)" formControlName="is_target_area">
               Target Area</mat-checkbox>
           </div>
-          <div *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
+          <div
+            *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">
@@ -608,14 +642,16 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Zone" formControlName="zone" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
                   Zona' :
                   item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Regional" formControlName="region" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   Regional'
                   :
                   item.code}}</mat-option>
@@ -623,7 +659,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Area" formControlName="area" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
                   Area'
                   :
                   item.code}}</mat-option>
@@ -631,7 +668,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                  'all' ?
                   'Semua
                   Salespoint'
                   :
@@ -640,7 +678,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="District" formControlName="district" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   District'
                   :
                   item.code}}</mat-option>
@@ -648,7 +687,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="Territory" formControlName="territory" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   Territori'
                   :
                   item.code}}</mat-option>
@@ -737,7 +777,7 @@
               [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
               [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
               [selectCheck]='selectCheck'>
-              
+
               <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
                 <ng-template ngx-datatable-header-template>
                   <mat-checkbox [checked]="allRowsSelected" (change)="onSelectAll(!allRowsSelected);"></mat-checkbox>
@@ -768,12 +808,8 @@
           </div>
           <target-area
             *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
-            (selectedArea)="getSelectedArea($event)"
-            (selectedAll)="getSelectedAll($event)"
-            (selectedAllId)="getSelectedAllId($event)"
-            [areas]="areasInit"
-            [isNotifValidation]="true"
-          ></target-area>
+            (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)"
+            (selectedAllId)="getSelectedAllId($event)" [areas]="areasInit" [isNotifValidation]="true"></target-area>
 
         </div>
 
@@ -791,7 +827,8 @@
             SIMPAN
           </button>
         </div>
-        <span class="noEditOptions" *ngIf="!isHideSaveButton">Notifikasi satu kali tidak dapat diedit, karena telah dikirim langsung saat dibuat.</span>
+        <span class="noEditOptions" *ngIf="!isHideSaveButton">Notifikasi satu kali tidak dapat diedit, karena telah
+          dikirim langsung saat dibuat.</span>
       </form>
     </div>
   </div>

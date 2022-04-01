@@ -304,6 +304,8 @@ export class NotificationCreateComponent {
       notif_type: ['notif', Validators.required],
       is_smoking: ['all', Validators.required],
       area_ids: [[]],
+      date: [moment(), Validators.required],
+      time: ["00:00", Validators.required],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -316,14 +318,14 @@ export class NotificationCreateComponent {
       territory: [""]
     })
 
-    if(this.ls.selectedLanguages == 'id'){
-      this.Country ='ID';
+    if (this.ls.selectedLanguages == 'id') {
+      this.Country = 'ID';
     }
-    else if(this.ls.selectedLanguages == 'km'){
+    else if (this.ls.selectedLanguages == 'km') {
       this.Country = 'KH';
     }
-    else if(this.ls.selectedLanguages == 'en-ph'){
-      this.Country ='PH';
+    else if (this.ls.selectedLanguages == 'en-ph') {
+      this.Country = 'PH';
     }
 
     this.isCreateOrEditNotification = this.router.url;
@@ -391,7 +393,7 @@ export class NotificationCreateComponent {
       if (res === 'retailer' || res === 'tsm') {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
-      } else if(res === 'customer') {
+      } else if (res === 'customer') {
         this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "pesan_antar" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Main Bareng", value: "main_bareng" }];
       } else {
         this.listLandingPage = [{ name: "Pesan Antar", value: "pesan_antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "main_bareng" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
@@ -399,8 +401,8 @@ export class NotificationCreateComponent {
       }
       if (res === 'wholesaler') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
-      } else if(res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value:"link_web" }];
+      } else if (res === 'customer') {
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
       } else {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
       }
@@ -1444,6 +1446,8 @@ export class NotificationCreateComponent {
       status: this.formNotification.get('status').value
     };
 
+    body['date'] = `${moment(this.formNotification.get('date').value).format('YYYY-MM-DD')} ${this.formNotification.get('time').value}:00`;
+
     //only allow edit for customer type, non one-time recurrence, else create new notification instead
     if (body.type === 'customer' && body.type_of_recurrence !== 'OneTime' && this.idNotif) {
       body.id = this.idNotif
@@ -1512,7 +1516,7 @@ export class NotificationCreateComponent {
     } else if (body.content_type === 'iframe' || body.content_type === 'link_web') {
       let url = this.formNotification.get('url_link').value;
       if (!url.match(/^[a-zA-Z]+:\/\//)) { url = 'http://' + url; }
-      body[`${body.content_type==='iframe' ? 'iframe' : 'link_web'}_value`] = url;
+      body[`${body.content_type === 'iframe' ? 'iframe' : 'link_web'}_value`] = url;
       body['transfer_token'] = this.formNotification.get('transfer_token').value;
     } else if (body.content_type === 'image') {
       if (this.imageContentTypeBase64) {
@@ -1642,7 +1646,7 @@ export class NotificationCreateComponent {
       } else {
         return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
       }
-    } else if(body.content_type === 'e_wallet') {
+    } else if (body.content_type === 'e_wallet') {
       body['content_wallet'] = this.formNotification.get("content_wallet").value;
       body['button_text'] = this.formNotification.get("button_text").value;
       body['static_page_body'] = this.formNotification.get("static_page_body").value;
@@ -1671,9 +1675,9 @@ export class NotificationCreateComponent {
         }
       }
     }
-    
+
     this.dataService.showLoading(true);
-    
+
     this.dataService.showLoading(true);
 
     this.notificationService.create(body).subscribe(
@@ -1707,7 +1711,7 @@ export class NotificationCreateComponent {
     }
 
     if (value !== 'static_page') {
-      if(value !== 'e_wallet') {
+      if (value !== 'e_wallet') {
         this.formNotification.controls['static_page_body'].setValue('');
         this.formNotification.controls['static_page_body'].disable();
       }
@@ -2218,13 +2222,13 @@ export class NotificationCreateComponent {
   }
 
   isTargetAudience(event) {
-    if(this.formNotification.get('is_target_area').value) this.formNotification.get('is_target_area').setValue(false);
+    if (this.formNotification.get('is_target_area').value) this.formNotification.get('is_target_area').setValue(false);
     if (event.checked) this.getAudience();
   }
   isTargetArea(event) {
-    if(this.formNotification.get('is_target_audience').value) this.formNotification.get('is_target_audience').setValue(false);
-    if(event.checked) {
-      if(this.selectedAll) {
+    if (this.formNotification.get('is_target_audience').value) this.formNotification.get('is_target_audience').setValue(false);
+    if (event.checked) {
+      if (this.selectedAll) {
         this.areasInit = this.selectedAllId;
       } else {
         this.areasInit = this.selectedArea;
@@ -2368,18 +2372,18 @@ export class NotificationCreateComponent {
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       frm.controls['area_ids'].setValue(area_ids);
-      if(area_ids.length > 0 && !area_ids.includes(1)) {
+      if (area_ids.length > 0 && !area_ids.includes(1)) {
         frm.controls['is_target_area'].setValue(true);
-        this.areasInit = frm.controls['area_ids'].value.map(item => ({id:item}));
+        this.areasInit = frm.controls['area_ids'].value.map(item => ({ id: item }));
       }
-      if(type == 'customer') {
+      if (type == 'customer') {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
         frm.controls['area_ids'].setValue(area_ids);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
-      
+
       setTimeout(() => {
         /**
          * dikasih timeout karena ada subscriber user_group, content_type ketika init
