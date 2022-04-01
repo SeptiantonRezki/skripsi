@@ -48,10 +48,10 @@ export class ImportCustomNotificationComponent implements OnInit {
         this.dataService.showLoading(false);
         console.log('preview => ', res);
         if (res && res.data) {
-          this.rows = res.data;
-          this.is_valid = res.is_valid;
+          this.rows = res.data.data;
+          this.is_valid = res.data.is_valid;
 
-          if (!res.is_valid) {
+          if (!res.data.is_valid) {
             this.dialogService.openSnackBar({ message: "File yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
 
             // meletakkan row yang error ke posisi atas
