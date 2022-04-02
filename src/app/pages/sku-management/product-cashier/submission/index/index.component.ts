@@ -43,6 +43,8 @@ export class CashierSubmissionComponent implements OnInit {
     {id: '0', name: 'TIDAK'},
   ];
   formFilter: FormGroup;
+  disabledEndDate: boolean = true;
+  minEndDate: Date;
 
   keyUp = new Subject<string>();
 
@@ -71,7 +73,7 @@ export class CashierSubmissionComponent implements OnInit {
       category: [null],
       in_databank: ['all'],
       start_date: [null],
-      end_date: [null],
+      end_date: [{ value: null, disabled: true}],
       search: ['']
     });
 
@@ -226,5 +228,19 @@ export class CashierSubmissionComponent implements OnInit {
   applyFilter() {
     this.initTable = true;
     this.getProducts();
+  }
+
+  changeStartDate() {
+    if(this.formFilter.controls.start_date.value) {
+      this.disabledEndDate = false;
+      this.formFilter.controls.end_date.enable();
+      if(this.formFilter.controls.end_date.value && this.formFilter.controls.start_date.value.unix() > this.formFilter.controls.end_date.value.unix()) this.formFilter.controls.end_date.patchValue(null);
+      this.minEndDate = this.formFilter.controls.start_date.value.toDate();
+    } else {
+      this.disabledEndDate = true;
+      this.formFilter.controls.end_date.patchValue(null);
+      this.formFilter.controls.end_date.disable();
+      this.minEndDate = null;
+    };
   }
 }

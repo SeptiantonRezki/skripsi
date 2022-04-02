@@ -53,6 +53,8 @@ export class DbProductSubmissionComponent implements OnInit {
   listCategories: any;
   listStatus: any;
   formFilter: FormGroup;
+  disabledEndDate: boolean = true;
+  minEndDate: Date;
 
   keyUp = new Subject<string>();
 
@@ -80,7 +82,7 @@ export class DbProductSubmissionComponent implements OnInit {
       category: [null],
       status: [null],
       start_date: [null],
-      end_date: [null],
+      end_date: [{ value: null, disabled: true}],
       search: ['']
     });
 
@@ -225,5 +227,19 @@ export class DbProductSubmissionComponent implements OnInit {
   applyFilter() {
     this.initTable = true;
     this.getProducts();
+  }
+
+  changeStartDate() {
+    if(this.formFilter.controls.start_date.value) {
+      this.disabledEndDate = false;
+      this.formFilter.controls.end_date.enable();
+      if(this.formFilter.controls.end_date.value && this.formFilter.controls.start_date.value.unix() > this.formFilter.controls.end_date.value.unix()) this.formFilter.controls.end_date.patchValue(null);
+      this.minEndDate = this.formFilter.controls.start_date.value.toDate();
+    } else {
+      this.disabledEndDate = true;
+      this.formFilter.controls.end_date.patchValue(null);
+      this.formFilter.controls.end_date.disable();
+      this.minEndDate = null;
+    };
   }
 }
