@@ -46,7 +46,7 @@
           </mat-form-field>
           <mat-form-field class="is-light" fxFlex="15">
             <input matInput [matDatepicker]="dari_tanggal" (focus)="dari_tanggal.open()" formControlName="start_date"
-              placeholder="Dari Tanggal">
+              placeholder="Dari Tanggal" (dateChange)="changeStartDate()">
             <mat-datepicker-toggle matSuffix [for]="dari_tanggal">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
             </mat-datepicker-toggle>
@@ -54,7 +54,7 @@
           </mat-form-field>
           <mat-form-field class="is-light" fxFlex="15">
             <input matInput [matDatepicker]="hingga_tanggal" (focus)="hingga_tanggal.open()" formControlName="end_date"
-              placeholder="Hingga Tanggal">
+              placeholder="Hingga Tanggal" disabled="disabledEndDate" [min]="minEndDate">
             <mat-datepicker-toggle matSuffix [for]="hingga_tanggal">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
             </mat-datepicker-toggle>
