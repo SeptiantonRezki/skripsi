@@ -56,10 +56,12 @@ export class CashierSubmissionEditComponent implements OnInit {
         this.product.patchValue({
           name: data.name,
           barcode: data.barcode,
-          purchase_price: data.purchase_price.raw,
-          selling_price: data.selling_price.raw,
+          purchase_price: data.price.purchase.raw,
+          selling_price: data.price.selling.raw,
         });
+        console.log('LOOK DATA', data);
       });
+      console.log('LOOK DATA DETAIL', this.product.value);
     } catch (error) {
       console.log(error);
       this.onLoad = false;
@@ -76,21 +78,21 @@ export class CashierSubmissionEditComponent implements OnInit {
         return;
       }
       const body = {
+        id: this.productId,
         selling_price: this.product.get("selling_price").value,
         purchase_price: this.product.get("purchase_price").value,
       };
       this.dataService.showLoading(true);
       this.submissionService
-        .putApprove(body, {
-          product_id: this.productId,
-        })
+        .putApproval(body)
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
     if (action === "disapprove") {
       this.dataService.showLoading(true);
       this.submissionService
-        .putDisapprove(null, {
-          product_id: this.productId,
+        .putApproval({
+          _method: 'DELETE',
+          id: this.productId
         })
         .subscribe(this.submitSuccess.bind(this), this.submitError.bind(this));
     }
