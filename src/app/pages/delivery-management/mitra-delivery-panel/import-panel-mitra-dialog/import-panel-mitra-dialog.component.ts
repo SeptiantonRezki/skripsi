@@ -43,7 +43,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf(".xls") === -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" }); // TODO
       return;
     }
 
@@ -66,7 +66,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." }) // TODO
       }
     )
   }
@@ -85,7 +85,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
       //   })
       this.dialogRef.close(this.rows);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: "Semua row tidak valid " }); // TODO
     }
   }
 

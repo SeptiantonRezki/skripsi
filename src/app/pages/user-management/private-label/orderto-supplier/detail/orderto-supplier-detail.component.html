@@ -21,7 +21,7 @@
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>Nama</th>
+                    <th>{{ls.locale.global.label.name}}</th>
                     <th>No Telepon / Nomor HP</th>
                   </tr>
                 </thead>
@@ -177,7 +177,7 @@
               <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
                 <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
                   (click)="saveUpdateQtyV2()">
-                  SIMPAN
+                  {{ls.locale.global.button.save}}
                 </button>
                 <button mat-raised-button *ngIf="showRedBG(detailOrder.status) && isAnyUpdate > -1" fxFlex="20"
                   (click)="updateAllPrice()" style="margin-left: 10px;">

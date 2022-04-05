@@ -18,10 +18,10 @@
         <div class="p-24" fxLayout="column">
           <div fxLayout="row">
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
-              <input matInput type="text" placeholder="Nama Supplier" formControlName="namasupplier" autocomplete="off">
+              <input matInput type="text" placeholder="{{ls.locale.produk_prinsipal.text4}}" formControlName="namasupplier" autocomplete="off">
               <mat-error
                 *ngIf="createForm.controls['namasupplier'].hasError('required') && createForm.controls['namasupplier'].touched ">
-                Nama Supplier harus diisi.
+                {{ls.locale.produk_prinsipal.text4}} harus diisi.
               </mat-error>
             </mat-form-field>
           </div>
@@ -92,7 +92,7 @@
             <label class="field-label" *ngIf="catatanControl.value">Catatan</label>
             <div fxLayout="row" >
               <div class="body-layout" fxFlex="100" fxFlex.gt-sm="50">
-                <textarea matInput class="body-text" placeholder="Catatan" [formControl]="catatanControl" wrap="soft"></textarea>
+                <textarea matInput class="body-text" placeholder="{{ls.locale.global.label.note}}" [formControl]="catatanControl" wrap="soft"></textarea>
               </div>
             </div>
             <!-- <mat-error *ngIf="createForm.controls['catatan'].hasError('required') && createForm.controls['catatan'].touched">
@@ -101,7 +101,7 @@
           </div>
           <div class="confirm pt-8 pb-24" fxLayout="row">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
-              SIMPAN
+              {{ls.locale.global.button.save}}
             </button>
           </div>
         </div>

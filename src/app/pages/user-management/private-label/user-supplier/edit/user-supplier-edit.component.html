@@ -26,8 +26,8 @@
             <ng-template matStepLabel>Informasi Dasar</ng-template>
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="nama" *ngIf="!isDetail">
-                <input matInput type="text" placeholder="Nama" formControlName="nama" readonly *ngIf="isDetail">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="nama" *ngIf="!isDetail">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="nama" readonly *ngIf="isDetail">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
                   Nama harus diisi.
@@ -67,7 +67,7 @@
 
         <mat-step [stepControl]="verticalStepperStep2">
           <form [formGroup]="verticalStepperStep2">
-            <ng-template matStepLabel>Nama Supplier</ng-template>
+            <ng-template matStepLabel>{{ls.locale.produk_prinsipal.text4}}</ng-template>
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field>
                 <mat-label>Perusahaan</mat-label>

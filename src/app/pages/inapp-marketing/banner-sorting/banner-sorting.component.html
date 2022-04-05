@@ -3,7 +3,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Pengaturan Urutan In-App Banner'">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> SIMPAN
+      <mat-icon>add</mat-icon> {{ls.locale.global.button.save}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -66,7 +66,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -107,7 +107,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name">{{row.name}}</span>
           </ng-template>

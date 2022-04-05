@@ -12,6 +12,7 @@ import { takeUntil } from "rxjs/operators";
 import { Endpoint } from '../../../../../classes/endpoint';
 import { PanelMitraService } from 'app/services/user-management/private-label/panel-mitra.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-mitra-index',
@@ -53,6 +54,7 @@ export class PanelMitraIndexComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -110,14 +112,14 @@ export class PanelMitraIndexComponent implements OnInit {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }

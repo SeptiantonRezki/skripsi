@@ -5,6 +5,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -29,7 +30,8 @@ export class NotificationCoinAdjustmentDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<NotificationCoinAdjustmentDialogComponent>,
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private dialogService: DialogService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService
   ) { }
 
   ngOnInit() {
@@ -100,7 +102,7 @@ export class NotificationCoinAdjustmentDialogComponent implements OnInit {
         captionDialog: `Anda akan mengirimkan email notifikasi ke <b>${this.selectedUser['fullname'] || 'Tidak Ada user yang terpilih'}</b> ?`,
         confirmCallback: () => this.confirmSubmit(),
         htmlContent: true,
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {

@@ -845,10 +845,10 @@ export class PaguyubanIndexComponent {
   deletePaguyuban(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Paguyuban",
-      captionDialog: "Apakah anda yakin untuk menghapus Paguyuban ini ?",
+      titleDialog: this.ls.locale.global.button.delete + " " + this.ls.locale.paguyuban.text1,
+      captionDialog: this.ls.locale.paguyuban.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -873,7 +873,7 @@ export class PaguyubanIndexComponent {
     this.paguyubanService.deleteMultiple(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
 
         this.getPaguyubanList();
         this.selected = [];
@@ -900,14 +900,14 @@ export class PaguyubanIndexComponent {
   deleteAllPaguyuban(): void {
     if (this.selected.length > 0) {
       let data = {
-        titleDialog: "Hapus Paguyuban",
-        captionDialog: "Apakah anda yakin untuk menghapus data yang telah dipilih ?",
+        titleDialog: this.ls.locale.global.button.delete + " " + this.ls.locale.paguyuban.text1,
+        captionDialog: this.ls.locale.paguyuban.delete_confirm,
         confirmCallback: this.confirmAllDelete.bind(this),
-        buttonText: ["Hapus", "Batal"]
+        buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
-      this.dialogService.openSnackBar({ message: 'Tidak ada paguyuban yang dipilih' })
+      this.dialogService.openSnackBar({ message: this.ls.locale.paguyuban.no_selected })
     }
   }
 
@@ -919,7 +919,7 @@ export class PaguyubanIndexComponent {
     this.paguyubanService.deleteMultiple(body).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
 
         this.getPaguyubanList();
         this.selected = [];

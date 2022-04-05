@@ -81,7 +81,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formHelp.controls['country'].hasError('required') && formHelp.controls['country'].touched">
-                    {{ ls.locale.global.label.country }} harus diisi
+                    {{ ls.locale.global.label.country }} {{ ls.locale.global.messages.mandatory_text }}
                   </mat-error>
                 </mat-form-field>
               </div>

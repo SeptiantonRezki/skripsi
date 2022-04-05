@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { WholesalerSpecialPriceService } from 'app/services/sku-management/wholesaler-special-price.service';
 
 @Component({
@@ -23,7 +24,9 @@ export class ImportWholesalerSpecialPriceComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private wholesalerService: WholesalerSpecialPriceService,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private ls: LanguagesService,
+    ) {
     this.rows = [];
     this.dataService.showLoading(false);
   }

@@ -146,10 +146,10 @@ export class MitraDeliveryPanelComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Panel Mitra",
-      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini ?",
+      titleDialog: "Hapus Panel Mitra", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -158,7 +158,7 @@ export class MitraDeliveryPanelComponent implements OnInit {
     this.mitraPanelService.delete({ panel_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getPanelMitraList();
         this.selected = [];

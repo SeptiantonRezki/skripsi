@@ -19,6 +19,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
 import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { InappMarketingValidator } from '../../InappMarketing.validator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-banner-edit',
@@ -132,7 +133,8 @@ export class BannerEditComponent {
     private formBuilder: FormBuilder,
     private _lightbox: Lightbox,
     private geotreeService: GeotreeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
@@ -1001,7 +1003,7 @@ export class BannerEditComponent {
       titleDialog: 'Hapus Geotree',
       captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1862,7 +1864,7 @@ export class BannerEditComponent {
         this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

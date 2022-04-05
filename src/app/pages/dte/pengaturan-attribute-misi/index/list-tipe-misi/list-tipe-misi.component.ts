@@ -15,6 +15,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogTipeMisiEditComponent } from "../dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-list-tipe-misi',
@@ -51,7 +52,8 @@ export class ListTipeMisiComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []

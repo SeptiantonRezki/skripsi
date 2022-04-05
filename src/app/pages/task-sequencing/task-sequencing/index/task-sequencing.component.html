@@ -20,7 +20,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -30,7 +30,7 @@
         [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
         (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama" prop="fullname">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">
               <!-- {{row.fullname}} -->

@@ -137,7 +137,7 @@
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
             <mat-form-field class="is-light tab-search">
-              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
             </mat-form-field>
           </div>
         </div>
@@ -206,7 +206,7 @@
       <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
           (click)="onSave()">
-          SIMPAN
+          {{ls.locale.global.button.save}}
         </button>
       </div>
     </div>

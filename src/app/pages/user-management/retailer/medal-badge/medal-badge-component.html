@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Medal & Badge'">
+  <page-content-header contentTitle="{{ls.locale.global.menu.medal_badge}}">
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -11,13 +11,13 @@
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <mat-tab-group [selectedIndex]="selectedTab" *ngIf="!isListCategoryDetails"
         (selectedIndexChange)="selectedTabChange($event)">
-        <mat-tab label="Medal">
+        <mat-tab label="{{ls.locale.retailer.medal_badge.text1}}">
           <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
             <app-medal-index-component [data]="dataIndexMedal" (changes)="medalChanges($event)" *ngIf="medalSelected === 'MEDAL_LIST'"></app-medal-index-component>
             <app-medal-create-component [data]="dataCreateMedal" (changes)="medalChanges($event)" *ngIf="medalSelected === 'MEDAL_CREATE' || medalSelected === 'MEDAL_EDIT'"></app-medal-create-component>
           </div>
         </mat-tab>
-        <mat-tab label="Daftar Retailer">
+        <mat-tab label="{{ls.locale.global.menu.list_retailer}}">
           <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
             <app-retailer-list-index-component></app-retailer-list-index-component>
           </div>

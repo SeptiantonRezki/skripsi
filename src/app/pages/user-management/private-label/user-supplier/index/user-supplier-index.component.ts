@@ -88,14 +88,14 @@ export class UserSupplierIndexComponent implements OnInit {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }

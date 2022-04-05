@@ -22,11 +22,11 @@
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput type="text" formControlName="start_date" placeholder="Tanggal Mulai">
+              <input matInput type="text" formControlName="start_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}">
             </mat-form-field>
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput type="text" formControlName="end_date" placeholder="Tanggal Berakhir">
+              <input matInput type="text" formControlName="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -47,7 +47,7 @@
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama" prop="name" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.retailer_id]" (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
           </ng-template>

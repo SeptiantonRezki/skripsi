@@ -170,7 +170,7 @@ export class FieldForceIndexComponent {
 
   getVersions() {
     this.generalService.getAppVersions({ type: 'field-force' }).subscribe(res => {
-      this.listVersions = [{ version: 'Semua Versi' }, ...res];
+      this.listVersions = [{ version: this.ls.locale.global.label.all_version }, ...res];
       console.log('res versions', res);
     })
   }

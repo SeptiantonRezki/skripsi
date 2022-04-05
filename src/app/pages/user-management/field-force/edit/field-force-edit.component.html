@@ -19,7 +19,7 @@
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field fxFlex="100" class="is-light px-24">
-            <input matInput placeholder="Nama" type="text" formControlName="fullname">
+            <input matInput placeholder="{{ls.locale.global.label.name}}" type="text" formControlName="fullname">
           </mat-form-field>
           <mat-form-field fxFlex="100" class="is-light px-24">
             <input matInput placeholder="Username" type="text" formControlName="username">
@@ -61,7 +61,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                    National harus diisi
+                    {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -72,7 +72,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                    Zone harus diisi
+                    {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -83,7 +83,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                    Regional harus diisi
+                    {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -94,7 +94,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                    Area harus diisi
+                    {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -106,7 +106,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                    Salespoint harus diisi
+                    {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -117,7 +117,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                    Distrik harus diisi
+                    {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -128,7 +128,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                    Territori harus diisi
+                    {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -137,15 +137,15 @@
 
           <div *ngIf="!isDetail" class="px-24">
             <div fxLayout="row" class="pt-16" fxLayoutAlign="start center">
-              <h2 class="">Ubah Kata Sandi Baru</h2>
+              <h2 class="">{{ls.locale.field_force.text1}}</h2>
             </div>
 
             <div fxLayout="row">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" *ngIf="showPassword" formControlName="password"
-                  placeholder="Kata Sandi Baru">
+                  placeholder="{{ls.locale.field_force.text2}}">
                 <input matInput type="password" *ngIf="!showPassword" formControlName="password"
-                  placeholder="Kata Sandi Baru">
+                  placeholder="{{ls.locale.field_force.text2}}">
                 <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
                   (click)="showPassword = !showPassword">
                   <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
@@ -156,9 +156,9 @@
             <div fxLayout="row">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi Kata Sandi Baru">
+                  placeholder="{{ls.locale.field_force.text3}}">
                 <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="Konfirmasi Kata Sandi Baru">
+                  placeholder="{{ls.locale.field_force.text3}}">
                 <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
                   (click)="showConfirmPassword = !showConfirmPassword">
                   <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
@@ -170,7 +170,7 @@
 
           <div *ngIf="!isDetail" class="confirm btn-confirm px-24 py-48" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-              SIMPAN
+              {{ls.locale.global.button.save}}
             </button>
           </div>
 

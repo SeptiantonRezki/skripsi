@@ -365,7 +365,7 @@ export class AdminPrincipalEditComponent {
       this.setDetailAdminPrincipal();
     } catch (error) {
       if (error.status === 404) {
-        this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
         this.router.navigate(["user-management", "admin-principal"]);
       }
       throw error;
@@ -2497,7 +2497,7 @@ export class AdminPrincipalEditComponent {
       this.adminPrincipalService.put(body, { principal_id: this.detailAdminPrincipal.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({
-            message: "Data Berhasil Diubah"
+            message: this.ls.locale.global.messages.text2
           });
           this.router.navigate(["user-management", "admin-principal"]);
           this.dataService.showLoading(false);
@@ -2505,7 +2505,7 @@ export class AdminPrincipalEditComponent {
         err => { this.dataService.showLoading(false); }
       );
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.dte.template_tugas.text39 });
       commonFormValidator.validateAllFields(this.formAdmin);
     }
   }
@@ -2523,27 +2523,27 @@ export class AdminPrincipalEditComponent {
       if (msg.name === "all") {
         switch (msg.level_desc) {
           case "national":
-            name = "Semua Zona";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.national}`;
             break;
 
           case "division":
-            name = "Semua Regional";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.regional}`;
             break;
 
           case "region":
-            name = "Semua Area";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.area}`;
             break;
 
           case "area":
-            name = "Semua Salespoint";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.salespoint}`;
             break;
 
           case "salespoint":
-            name = "Semua District";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.district}`;
             break;
 
           case "district":
-            name = "Semua Territory";
+            name = `${this.ls.locale.global.label.all} ${this.ls.locale.global.area.territory}`;
             break;
         }
 
@@ -2572,7 +2572,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup2();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2596,7 +2596,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup3();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2620,7 +2620,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup4();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2644,7 +2644,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup5();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2668,7 +2668,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup6();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2692,7 +2692,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup7();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2716,7 +2716,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup8();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2740,7 +2740,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup9();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2764,7 +2764,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup10();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;
@@ -2787,7 +2787,7 @@ export class AdminPrincipalEditComponent {
         this.initFormGroup();
       } catch (error) {
         if (error.status === 404) {
-          this.dialogService.openSnackBar({ message: "Data tidak ditemukan" });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.data_not_found });
           this.router.navigate(["user-management", "admin-principal"]);
         }
         throw error;

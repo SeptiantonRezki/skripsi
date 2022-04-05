@@ -911,7 +911,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       // this.idbService.getAnyOf(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -931,7 +931,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       // this.idbService.get(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;

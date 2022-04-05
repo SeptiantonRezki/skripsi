@@ -15,6 +15,7 @@ import moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 
 import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-mitra-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-mitra-edit',
@@ -91,6 +92,7 @@ export class PanelMitraEditComponent implements OnInit {
     private geotreeService: GeotreeService,
     private router: Router,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
       this.onLoad = false;
       this.selected = [];
@@ -1130,7 +1132,7 @@ export class PanelMitraEditComponent implements OnInit {
           this.selected = response.data.map((item: any) => ({ id: item.id, isHub: item.is_hub ? true : false }));
           // console.log('response.data', response.data);
           // console.log('this.selected', this.selected);
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

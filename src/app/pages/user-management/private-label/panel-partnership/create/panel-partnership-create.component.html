@@ -35,10 +35,10 @@
           <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput [matDatepicker]="tanggal_mulai" (focus)="tanggal_mulai.open()" formControlName="startDate"
-                  placeholder="Tanggal Mulai">
+                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}">
                 <mat-error
                   *ngIf="createForm.controls['startDate'].hasError('required') && createForm.controls['startDate'].touched">
-                  Tanggal Mulai harus diisi
+                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_mulai">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -47,10 +47,10 @@
             </mat-form-field>
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()" formControlName="endDate"
-                  placeholder="Tanggal Berakhir">
+                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
                 <mat-error
                   *ngIf="createForm.controls['endDate'].hasError('required') && createForm.controls['endDate'].touched">
-                  Tanggal Berakhir harus diisi
+                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -400,7 +400,7 @@
             (click)="submit()"
             fxFlex="20"
             >
-              SIMPAN
+              {{ls.locale.global.button.save}}
             </button>
           </div>
         </div>

@@ -541,7 +541,7 @@ export class PanelMitraVoucherComponent implements OnInit {
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
@@ -549,7 +549,7 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       })
@@ -718,7 +718,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   async exportMitra() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
-        message: 'Jumlah mitra yang dipilih tidak boleh kosong!'
+        message: this.ls.locale.global.messages.text12 // TODO
       })
       return;
     }
@@ -787,7 +787,7 @@ export class PanelMitraVoucherComponent implements OnInit {
 
   importMitra(): void {
     if (this.statusVoucher === 'need-approval') {
-      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.cn_reward.b2b_voucher.voucher_on_review });
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -803,7 +803,7 @@ export class PanelMitraVoucherComponent implements OnInit {
       if (response) {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         console.log('this', this.selected)
       }
     });
