@@ -100,6 +100,7 @@ export class RoleEditComponent {
     this.accessService.getDetail({ role_id: this.roleId }).subscribe(res => {
       this.detailRoles = res;
       this.roles = res.role;
+      this.is_otp.setValue(res.is_otp);
 
       let wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
         wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
