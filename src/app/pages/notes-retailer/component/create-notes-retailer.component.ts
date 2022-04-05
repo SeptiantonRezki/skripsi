@@ -514,7 +514,7 @@ export class CreateNotesRetailerComponent implements OnInit {
     this.pagination.per_page = 10;
     this.pagination.sort = "name";
     this.pagination.sort_type = "asc";
-    let areaSelected = Object.entries(this.formFilter.getRawValue())
+    let areaSelected = Object.entries(this.rawAreaIds)
       .map(([key, value]) => ({ key, value }))
       .filter(
         (item: any) =>
@@ -614,18 +614,18 @@ export class CreateNotesRetailerComponent implements OnInit {
       }
     }
 
-    this.loadingIndicator = true;
+    this.dataService.showLoading(true);
     this.audienceService.getListRetailer(this.pagination).subscribe(
       (res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
-        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
         if (this.isSelectedAll) {
           this.onSelect({ selected: res.data });
         }
       },
       (err) => {
-        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
       }
     );
   }
