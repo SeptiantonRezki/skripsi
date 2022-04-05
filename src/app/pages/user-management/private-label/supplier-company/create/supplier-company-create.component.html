@@ -8,14 +8,25 @@
         <h2 class="m-0">Tambah Supplier</h2>
         <!-- <mat-form-field class="orders dropdown" [class]="supplierStatusSelected == 'active'? 'orders status-active' : supplierStatusSelected == 'non-active'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center">
           <mat-select required [(ngModel)]="supplierStatusSelected"> -->
-            <!-- <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option> -->
-            <!-- <mat-option value="active" selected>Status Aktif</mat-option>
-            <mat-option value="non-active">Status Non-Aktif</mat-option>
-          </mat-select>
-        </mat-form-field> -->
+        <!-- <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option> -->
+        <!-- <mat-option value="active" selected>Status Aktif</mat-option>
+        <mat-option value="non-active">Status Non-Aktif</mat-option>
+      </mat-select>
+    </mat-form-field> -->
       </div>
       <form [formGroup]="createForm" autocomplete="off">
         <div class="p-24" fxLayout="column">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
+              <input matInput type="text" placeholder="Kode Supplier" formControlName="initial" autocomplete="off" 
+              (keypress)="keyPressAlphaNumeric($event)"
+              (paste)="keyPressAlphaNumeric($event)">
+              <mat-error
+                *ngIf="createForm.controls['initial'].hasError('required') && createForm.controls['initial'].touched ">
+                Kode Supplier harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
               <input matInput type="text" placeholder="Nama Supplier" formControlName="namasupplier" autocomplete="off">
@@ -29,13 +40,13 @@
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light form-primary">
               <mat-chip-list #chipList aria-label="Keyword Selection">
                 <mat-chip *ngFor="let product of products" [selectable]="productSelectable"
-                  [removable]="productRemovable" (removed)="removeChip(product)">
+                          [removable]="productRemovable" (removed)="removeChip(product)">
                   {{product.name}}
                   <mat-icon matChipRemove *ngIf="productRemovable">cancel</mat-icon>
                 </mat-chip>
                 <input matInput placeholder="Produk yang dijual" [matChipInputFor]="chipList"
-                  [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
-                  (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" >
+                       [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
+                       (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" >
               </mat-chip-list>
               <mat-error *ngIf="products.length == 0">
                 Produk yang dijual harus diisi.
@@ -43,7 +54,7 @@
             </mat-form-field>
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of productOptions | async" [value]="option.name"
-                (click)="addProductChip(option)" [disabled]="option.disabled">
+                          (click)="addProductChip(option)" [disabled]="option.disabled">
                 <span *ngIf="isProductFound">{{option.name}}</span>
                 <span *ngIf="!isProductFound" title="{{option.text}}">HASIL PENCARIAN untuk
                   <span style="font-weight: 800;">"{{option.value}}"</span> tidak ditemukan, Mohon hubungi tim
@@ -98,6 +109,13 @@
             <!-- <mat-error *ngIf="createForm.controls['catatan'].hasError('required') && createForm.controls['catatan'].touched">
               Catatan harus diisi.
             </mat-error> -->
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light pt-20">
+              <mat-select formControlName="is_open_api" placeholder="Open API">
+                <mat-option [value]="item.status" *ngFor="let item of pilihAPIList">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="confirm pt-8 pb-24" fxLayout="row">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">

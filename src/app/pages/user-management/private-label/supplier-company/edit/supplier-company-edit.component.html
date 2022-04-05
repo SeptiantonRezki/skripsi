@@ -22,6 +22,18 @@
         <div class="p-24" fxLayout="column">
           <div fxLayout="row">
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
+              <input matInput type="text" placeholder="Kode Supplier" formControlName="initial" autocomplete="off" #initial *ngIf="!isDetail" 
+              (keypress)="keyPressAlphaNumeric($event)"
+              (paste)="keyPressAlphaNumeric($event)">
+              <input matInput type="text" placeholder="Kode Supplier" formControlName="initial" autocomplete="off" readonly *ngIf="isDetail">
+              <mat-error
+                *ngIf="createForm.controls['initial'].hasError('required') && createForm.controls['initial'].touched ">
+                Kode Supplier harus diisi.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light">
               <input matInput type="text" placeholder="{{ ls.locale.produk_prinsipal.text4 }}" formControlName="namasupplier" autocomplete="off" #namasupplier *ngIf="!isDetail">
               <input matInput type="text" placeholder="{{ ls.locale.produk_prinsipal.text4 }}" formControlName="namasupplier" autocomplete="off" readonly *ngIf="isDetail">
               <mat-error
@@ -34,16 +46,16 @@
             <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="is-light form-primary">
               <mat-chip-list #chipList aria-label="Keyword Selection">
                 <mat-chip *ngFor="let product of products" [selectable]="productSelectable"
-                  [removable]="productRemovable" (removed)="removeChip(product)">
+                          [removable]="productRemovable" (removed)="removeChip(product)">
                   {{product.name}}
                   <mat-icon matChipRemove *ngIf="productRemovable">cancel</mat-icon>
                 </mat-chip>
                 <input matInput placeholder="{{ ls.locale.produk_prinsipal.text5 }}" [matChipInputFor]="chipList"
-                  [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
-                  (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" *ngIf="!isDetail">
-                  <input matInput placeholder="{{ ls.locale.produk_prinsipal.text5 }}" [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
-                    (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" readonly *ngIf="isDetail">
+                       [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
+                       (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" [matAutocomplete]="auto" *ngIf="!isDetail">
+                <input matInput placeholder="{{ ls.locale.produk_prinsipal.text5 }}" [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="productSeparatorKeysCodes" [matChipInputAddOnBlur]="productAddOnBlur"
+                       (matChipInputTokenEnd)="addChip($event)" [formControl]="productControl" readonly *ngIf="isDetail">
               </mat-chip-list>
               <mat-error *ngIf="products.length == 0">
                 {{ ls.locale.produk_prinsipal.text5 }} {{ ls.locale.global.messages.mandatory_text }}
@@ -51,7 +63,7 @@
             </mat-form-field>
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let option of productOptions | async" [value]="option.name"
-                (click)="addProductChip(option)" [disabled]="option.disabled">
+                          (click)="addProductChip(option)" [disabled]="option.disabled">
                 <span *ngIf="isProductFound">{{option.name}}</span>
                 <span *ngIf="!isProductFound" title="{{option.text}}">{{ ls.locale.bantuan.text7 }}
                   <span style="font-weight: 800;">"{{option.value}}"</span> {{ ls.locale.produk_prinsipal.text7a }}
@@ -107,6 +119,16 @@
                 <textarea matInput class="body-text" placeholder="{{ ls.locale.global.label.note }}" [formControl]="catatanControl" wrap="soft" readonly *ngIf="isDetail"></textarea>
               </div>
             </div>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="50" class="is-light pt-20">
+              <mat-select [(ngModel)]="isOpenAPISelected" formControlName="is_open_api" placeholder="Open API" *ngIf="!isDetail">
+                <mat-option [value]="item.status" *ngFor="let item of pilihAPIList">{{item.name}}</mat-option>
+              </mat-select>
+              <mat-select [(ngModel)]="isOpenAPISelected" formControlName="is_open_api" placeholder="Pilih API" [disabled]="true" *ngIf="isDetail">
+                <mat-option [value]="item.status" *ngFor="let item of pilihAPIList">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="confirm pt-8 pb-24" fxLayout="row" *ngIf="!isDetail">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20" (click)="onSave()">
