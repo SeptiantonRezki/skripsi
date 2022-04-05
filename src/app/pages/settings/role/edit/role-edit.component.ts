@@ -100,7 +100,6 @@ export class RoleEditComponent {
     this.accessService.getDetail({ role_id: this.roleId }).subscribe(res => {
       this.detailRoles = res;
       this.roles = res.role;
-      this.is_otp.setValue(res.is_otp);
 
       let wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
         wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
@@ -198,8 +197,10 @@ export class RoleEditComponent {
     this.formRolesGroup.get('salespoint').setValue(this.getArea('salespoint'));
     this.formRolesGroup.get('district').setValue(this.getArea('district'));
     this.formRolesGroup.get('territory').setValue(this.getArea('teritory'));
+    this.is_otp.setValue(this.detailRoles.is_otp);
 
     if (this.isDetail) this.formRolesGroup.disable();
+    if (this.isDetail) this.is_otp.disable();
   }
 
   getAudienceArea(selection, id) {
