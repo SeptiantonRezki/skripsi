@@ -1,68 +1,69 @@
 import {
-    Component,
-    OnInit,
-    HostListener,
-    ViewChild,
-    ElementRef,
-  } from "@angular/core";
-  import { formatCurrency } from "@angular/common";
-  import {
-    FormGroup,
-    FormBuilder,
-    Validators,
-    FormArray,
-    FormControl,
-  } from "@angular/forms";
-  import { Router, ActivatedRoute } from "@angular/router";
-  import { DataService } from '../../../services/data.service';
-  import { DialogService } from "../../../services/dialog.service";
-  import { Subject, Observable, ReplaySubject } from "rxjs";
-  import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
-  import { takeUntil } from "rxjs/operators";
-  import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
-  import { commonFormValidator } from "../../../classes/commonFormValidator";
-  import { Page } from "../../../classes/laravel-pagination";
-  import * as _ from "underscore";
-  import { environment } from "environments/environment";
-  import { IdbService } from "app/services/idb.service";
-  import {NotesRetailerModel} from 'app/pages/notes-retailer/notes-retailer.model';
-  import { NotesRetailerService } from '../../../services/notes-retailer/notes-retailer.service';
-  import { AudienceService } from '../../../services/dte/audience.service';
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
+import { formatCurrency } from "@angular/common";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+  FormControl,
+} from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
+import { DataService } from "../../../services/data.service";
+import { DialogService } from "../../../services/dialog.service";
+import { Subject, Observable, ReplaySubject } from "rxjs";
+import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
+import { takeUntil } from "rxjs/operators";
+import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
+import { commonFormValidator } from "../../../classes/commonFormValidator";
+import { Page } from "../../../classes/laravel-pagination";
+import * as _ from "underscore";
+import { environment } from "environments/environment";
+import { IdbService } from "app/services/idb.service";
+import { NotesRetailerModel } from "app/pages/notes-retailer/notes-retailer.model";
+import { NotesRetailerService } from "../../../services/notes-retailer/notes-retailer.service";
+import { AudienceService } from "../../../services/dte/audience.service";
 
-  @Component({
-    selector: 'app-list-notes-retailer.component',
-    templateUrl: './list-notes-retailer.component.html'
-  })
-  export class NotesRetailerListComponent implements OnInit {
+@Component({
+  selector: "app-list-notes-retailer.component",
+  templateUrl: "./list-notes-retailer.component.html",
+})
+export class NotesRetailerListComponent implements OnInit {
+  notesMdl: NotesRetailerModel;
+  rows: any[];
+  pagination: Page = new Page();
+  offsetPagination: any;
+  id: any;
+  loadingIndicator: Boolean = true;
+  keyUp = new Subject<string>();
 
-    notesMdl: NotesRetailerModel;
-    rows: any[];
-    pagination: Page = new Page();
-    offsetPagination: any;
-    id: any;
-    loadingIndicator: Boolean;
-    keyUp = new Subject<string>();
+  constructor(
+    private notesService: NotesRetailerService,
+    private dataService: DataService,
+    private audienceService: AudienceService,
+    private dialogService: DialogService,
+    private router: Router
+  ) {
+    this.notesMdl = new NotesRetailerModel();
 
-    constructor(
-        private notesService: NotesRetailerService,
-        private dataService: DataService,
-        private audienceService: AudienceService,
-        private dialogService: DialogService,
-        private router: Router,
-    ) {
-        this.notesMdl = new NotesRetailerModel();
-
-      const observable = this.keyUp.debounceTime(1000)
+    const observable = this.keyUp
+      .debounceTime(1000)
       .distinctUntilChanged()
-      .flatMap(search => {
+      .flatMap((search) => {
         return Observable.of(search).delay(500);
       })
-      .subscribe(data => {
+      .subscribe((data) => {
         this.updateFilter(data);
       });
-    }
+  }
 
-    ngOnInit() {
+  ngOnInit() {
+    this.loadingIndicator = true;
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -71,10 +72,11 @@ import {
     this.pagination.sort_type = sort_type;
     this.pagination.sort = sort;
 
-    this.offsetPagination = page ? (page - 1) : 0;
+    this.offsetPagination = page ? page - 1 : 0;
     this.notesService.getList(this.pagination).subscribe((res) => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      this.loadingIndicator = false;
     });
   }
 
@@ -86,7 +88,7 @@ import {
       titleDialog: "Hapus Notes",
       captionDialog: "Apakah anda yakin untuk menghapus Notes ini ?",
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"],
     };
     this.dialogService.openCustomConfirmationDialog(data);
     this.dataService.showLoading(false);
@@ -95,7 +97,7 @@ import {
   }
 
   confirmDelete(id) {
-    this.notesService.delete({ objective_id: this.id }).subscribe(res => {
+    this.notesService.delete({ objective_id: this.id }).subscribe((res) => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         // this.getAudience();
@@ -114,10 +116,10 @@ import {
     } else {
       const page = this.dataService.getFromStorage("page");
       this.pagination.page = page;
-      this.offsetPagination = page ? (page - 1) : 0;
+      this.offsetPagination = page ? page - 1 : 0;
     }
 
-    this.notesService.getList(this.pagination).subscribe(res => {
+    this.notesService.getList(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 
@@ -145,7 +147,7 @@ import {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.notesService.getList(this.pagination).subscribe(res => {
+    this.notesService.getList(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 
@@ -154,6 +156,6 @@ import {
   }
   directEdit(param?: any): void {
     this.rows = [];
-    this.dataService.setToStorage('detail_notes', param);
+    this.dataService.setToStorage("detail_notes", param);
   }
-  }
+}
