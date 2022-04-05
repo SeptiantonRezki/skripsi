@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { DialogService } from 'app/services/dialog.service';
 import { AccessService } from '../../../../services/settings/access.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class RoleEditComponent {
 
   typeArea: any[] = ["national", "zone", "region", "area", "salespoint", "district", "territory"];
   areaFromLogin;
+  is_otp: FormControl = new FormControl("0");
 
   constructor(
     private dialogService: DialogService,
@@ -99,16 +100,17 @@ export class RoleEditComponent {
     this.accessService.getDetail({ role_id: this.roleId }).subscribe(res => {
       this.detailRoles = res;
       this.roles = res.role;
+      this.is_otp.setValue(res.is_otp);
 
-      let wholesalerRole = _.find(this.roles, {nama: 'management pengguna'}),
-          wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, {nama: 'wholesaler'}),
-          wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, {value: 'principal.wholesaler.button.export'}),
-          wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, {value: 'principal.wholesaler.lihat'}),
+      let wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
+        wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
+        wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
+        wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.lihat' }),
 
-          retailerRole = _.find(this.roles, {nama: 'retailer'}),
-          retailerMenu = retailerRole && _.find(retailerRole.menu, {nama: 'Daftar Retailer'}),
-          retailerExportToggle = retailerMenu && _.find(retailerMenu.value, {value: 'principal.retailer.button.export'}),
-          retailerViewToggle = retailerMenu && _.find(retailerMenu.value, {value: 'principal.retailer.lihat'});
+        retailerRole = _.find(this.roles, { nama: 'retailer' }),
+        retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
+        retailerExportToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.button.export' }),
+        retailerViewToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.lihat' });
 
       if (wholesalerExportToggle && wholesalerViewToggle && wholesalerViewToggle.status == false) {
         wholesalerExportToggle.disabled = true;
@@ -335,9 +337,10 @@ export class RoleEditComponent {
       let body = {
         _method: 'PUT',
         name: this.formRolesGroup.get('name').value,
-        country: this.formRolesGroup.get('country').value, 
+        country: this.formRolesGroup.get('country').value,
         area_id: _.last(areas),
-        permissions: role
+        permissions: role,
+        is_otp: this.is_otp.value
       }
 
       this.accessService.put(body, { role_id: this.roleId }).subscribe(
