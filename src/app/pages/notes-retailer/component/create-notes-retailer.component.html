@@ -71,6 +71,7 @@
                 <mat-select
                   placeholder="Retail Classification"
                   formControlName="retail_classification"
+                  (selectionChange)="filterRetailerChange($event, 'retail_classification')"
                 >
                   <mat-option
                     *ngFor="let item of retailClassification"
@@ -84,6 +85,7 @@
                 <mat-select
                   placeholder="SRC Classification"
                   formControlName="src_classification"
+                  (selectionChange)="filterRetailerChange($event, 'src_classification')"
                 >
                   <mat-option
                     *ngFor="let item of srcClassification"
@@ -97,6 +99,7 @@
                 <mat-select
                   placeholder="SRC Type"
                   formControlName="src_type"
+                  (selectionChange)="filterRetailerChange($event, 'src_type')"
                 >
                   <mat-option
                     *ngFor="let item of srcType"

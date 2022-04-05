@@ -120,6 +120,7 @@ export class CreateNotesRetailerComponent implements OnInit {
   areaIds: any;
   rawAreaIds: any;
   selectedIds: any = {};
+  areaLoaded: boolean = false;
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -275,7 +276,6 @@ export class CreateNotesRetailerComponent implements OnInit {
       }
     })
     this.formAudience.get("type").valueChanges.subscribe((data) => {
-      // console.log("type", data);
       if (data === "mission") {
         if (this.formAudience.get("audience_type").value === 'scheduler') {
           this.getListScheduler();
@@ -301,9 +301,6 @@ export class CreateNotesRetailerComponent implements OnInit {
       this.valueChange = true;
     });
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
-    });
-
     this.filterScheduler.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -315,10 +312,6 @@ export class CreateNotesRetailerComponent implements OnInit {
       .subscribe(() => {
         this.filteringTradeProgram();
       });
-
-    this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
-      this.getRetailer();
-    });
 
     this.formFilterRetailer.get('retail_classification').valueChanges.subscribe((res) => {
       if (res) {
@@ -334,6 +327,14 @@ export class CreateNotesRetailerComponent implements OnInit {
     });
 
     if (this.notesMdl.geotree) this.selectedIds = this.notesMdl.geotree;
+    if (this.notesMdl.classification) this.formFilterRetailer.get("retail_classification").setValue(this.notesMdl.classification);
+    if (this.notesMdl.src_classification) this.formFilterRetailer.get("src_classification").setValue(this.notesMdl.src_classification);
+    if (this.notesMdl.src_type) this.formFilterRetailer.get("src_type").setValue(this.notesMdl.src_type);
+  }
+
+  filterRetailerChange(event: any, data: any) {
+    this.selected = [];
+    this.getRetailer();
   }
 
   onChangeInputSlide(event: any, i: number) {
@@ -439,7 +440,6 @@ export class CreateNotesRetailerComponent implements OnInit {
   getTradePrograms() {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
-        // console.log("res trade programs", res);
         this.listTradePrograms = res.data;
         this.filteredTradeProgram.next(res.data);
       },
@@ -452,7 +452,6 @@ export class CreateNotesRetailerComponent implements OnInit {
   getListScheduler() {
     this.audienceService.getListScheduler().subscribe(
       (res) => {
-        // console.log("res scheduler new", res);
         this.listScheduler = res.data;
         this.filteredScheduler.next(res.data);
       },
@@ -503,11 +502,15 @@ export class CreateNotesRetailerComponent implements OnInit {
     const [id, key, onClick] = lastSelected;
     this.lastLevel = { id, key };
     if (onClick) this.selected = [];
-    if (this.formAudience.get("target_audience").value) this.getRetailer();
+    if (this.rawAreaIds && this.formAudience.get("target_audience").value) this.getRetailer();
   }
 
   getRawAreaIds(data: any) {
     this.rawAreaIds = data;
+    if (!this.areaLoaded) {
+      this.getRetailer();
+      this.areaLoaded = true;
+    }
   }
 
   getRetailer() {
@@ -521,7 +524,6 @@ export class CreateNotesRetailerComponent implements OnInit {
           item.value !== null && item.value !== "" && item.value.length !== 0
       );
     let area_id = this.lastLevel.id;
-    console.log("area_id", area_id);
     let areaList = [
       "national",
       "division",
@@ -541,13 +543,10 @@ export class CreateNotesRetailerComponent implements OnInit {
       this.pagination["after_level"] = true;
     } else {
       let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      console.log("lastSelectedArea", lastSelectedArea)
       let indexAreaAfterEndLevel = areaList.indexOf(
         this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type
       );
-      console.log("indexAreaAfterEndLevel", indexAreaAfterEndLevel);
       let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      console.log("indexAreaSelected", indexAreaSelected);
       let is_area_2 = false;
 
       let self_area = this.areaFromLogin[0]
@@ -576,8 +575,6 @@ export class CreateNotesRetailerComponent implements OnInit {
         areaSelected[areaSelected.length - 1],
         last_self_area
       );
-
-      console.log("newLastSelfArea", newLastSelfArea);
 
       if (this.pagination["after_level"]) delete this.pagination["after_level"];
       this.pagination["self_area"] = self_area;
@@ -678,16 +675,6 @@ export class CreateNotesRetailerComponent implements OnInit {
     return row.id;
   }
 
-  // selectFn(allRowsSelected: boolean) {
-  //   // console.log('allRowsSelected_', allRowsSelected);
-  //   this.allRowsSelected = allRowsSelected;
-  //   if (allRowsSelected) {
-  //     this.formAudience.get('limit').setValue('pick-all');
-  //   } else {
-  //     this.formAudience.get('limit').setValue('limit');
-  //   }
-  // }
-
   appendRows(rows, next) {
     (rows || []).map((item) => {
       this.data.push(item);
@@ -774,7 +761,6 @@ export class CreateNotesRetailerComponent implements OnInit {
         this.idbService
           .getAll((dt) => dt.is_valid)
           .then((result) => {
-            // console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
               message: "File berhasil diimport",
@@ -861,17 +847,7 @@ export class CreateNotesRetailerComponent implements OnInit {
         );
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
-
-        // console.log(
-        //   "last self area",
-        //   last_self_area,
-        //   is_area_2,
-        //   levelCovered,
-        //   levelCovered.indexOf(lastSelectedArea.key) !== -1,
-        //   lastSelectedArea
-        // );
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
           if (is_area_2)
             this.pagination["last_self_area"] = [last_self_area[1]];
           else this.pagination["last_self_area"] = [last_self_area[0]];
