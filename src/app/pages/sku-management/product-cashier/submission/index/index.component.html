@@ -76,7 +76,7 @@
               autocomplete="off"
               formControlName="search"
             />
-            <mat-icon style="font-size: 20px; position: absolute; margin-left: -24px;">search</mat-icon>
+            <mat-icon style="font-size: 20px; position: absolute; margin-left: -24px;" [ngStyle]="{'opacity': this.formFilter.controls.search.value ? 0 : 1}">search</mat-icon>
           </mat-form-field>
           <div fxLayout="row" fxLayoutAlign="center center" fxFlex="10">
             <button mat-raised-button type="button" class="confirmation-button" (click)="applyFilter()" style="width: 100%;">
