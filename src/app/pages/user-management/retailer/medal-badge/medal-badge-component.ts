@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-medal-badge-component',
@@ -13,7 +14,9 @@ export class MedalBadgeComponent {
   dataIndexMedal: any;
   dataCreateMedal: any;
 
-  constructor() {
+  constructor(
+    private ls: LanguagesService
+  ) {
     this.medalSelected = 'MEDAL_LIST';
     this.onLoad = false;
   }

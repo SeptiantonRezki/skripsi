@@ -42,7 +42,7 @@
     </button>
     <button mat-raised-button class="save ml-20" color="primary" (click)="onSaveTemplate()"
       *ngIf="vendorTemplates.length > 0 || deleteListVendor.length > 0">
-      SIMPAN
+      {{ls.locale.global.button.save}}
     </button>
     <div class="ml-20" *ngIf="isSaved" fxLayout="row" fxLayoutAlign="start center"><span class="success"> </span>
       <mat-icon class="success">check</mat-icon>

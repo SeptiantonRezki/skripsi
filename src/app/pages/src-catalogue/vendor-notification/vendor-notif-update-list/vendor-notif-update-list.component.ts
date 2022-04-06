@@ -10,6 +10,7 @@ import { SupportService } from 'app/services/settings/support.service';
 import { Observable, Subject } from 'rxjs';
 import moment from 'moment';
 import { OrderCatalogueService } from 'app/services/src-catalogue/order-catalogue.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-vendor-notif-update-list',
@@ -65,7 +66,8 @@ export class VendorNotifUpdateListComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private notificationService: NotificationService,
     private adapter: DateAdapter<any>,
-    private ordersService: OrderCatalogueService
+    private ordersService: OrderCatalogueService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.allRowsSelected = false;

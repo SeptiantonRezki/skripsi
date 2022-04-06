@@ -167,15 +167,15 @@ export class DeviceRecoveredComponent implements OnInit {
     ` : `Anda akan mereset semua historical akun pada device yang sudah ada.
     <br><br>
     Yakin untuk melanjutkan ?
-    `
+    ` // TODO
 
     if (submitType === 'setting' && !this.max_retailer.valid) {
-      this.dialogService.openSnackBar({ message: 'Periksa Data Pengaturan kembali karena data tidak valid!' });
+      this.dialogService.openSnackBar({ message: 'Periksa Data Pengaturan kembali karena data tidak valid!' }); // TODO
       return;
     }
 
     if (submitType === 'recovery' && !this.reasonRecovery.valid) {
-      this.dialogService.openSnackBar({ message: 'Alasan Harus Diisi, periksa kembali!' });
+      this.dialogService.openSnackBar({ message: 'Alasan Harus Diisi, periksa kembali!' }); // TODO
       return;
     }
 
@@ -184,7 +184,7 @@ export class DeviceRecoveredComponent implements OnInit {
       captionDialog: caption,
       htmlContent: true.valueOf,
       confirmCallback: () => this.confirmSubmit(submitType),
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterCompanyService } from 'app/services/pay-later/pay-later-company.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-company',
@@ -35,7 +36,8 @@ export class PayLaterCompanyComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private paylaterCompanyService: PayLaterCompanyService
+    private paylaterCompanyService: PayLaterCompanyService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

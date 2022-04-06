@@ -1000,7 +1000,7 @@ export class GroupingPelangganIndexComponent implements OnInit {
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.getListGroupingPelanggan();
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

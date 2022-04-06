@@ -47,7 +47,7 @@ export class AudienceCreateComponent {
   listType: any[] = [
     { name: "Batasi Audience", value: "limit" },
     { name: "Pilih Semua", value: "pick-all" },
-  ];
+  ]; // TODO
   tsmScheduler: any[] = [
     { name: "TSM", value: "tsm" },
     { name: "Scheduler", value: "scheduler" },
@@ -62,7 +62,7 @@ export class AudienceCreateComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" }
-  ];
+  ]; // TODO
   srcClassification: any[] = [
     { name: "Semua Tipe", value: "all" }
   ];
@@ -1091,7 +1091,7 @@ export class AudienceCreateComponent {
       // this.idbService.getAnyOf(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -1111,7 +1111,7 @@ export class AudienceCreateComponent {
       // this.idbService.get(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -1562,14 +1562,14 @@ export class AudienceCreateComponent {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
+          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`, // TODO
         });
       }
       else if (limit && selectedRetailer > max) {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
+          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`, // TODO
         });
       }
 
@@ -1632,7 +1632,7 @@ export class AudienceCreateComponent {
             return this.dialogService.openSnackBar({
               message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
                 res.selisih
-              )}!`,
+              )}!`, // TODO
             });
           }
 
@@ -1756,12 +1756,12 @@ export class AudienceCreateComponent {
 
       if (this.formAudience.valid && this.selected.length === 0) {
         return this.dialogService.openSnackBar({
-          message: "Belum ada Audience yang dipilih!",
+          message: "Belum ada Audience yang dipilih!", // TODO
         });
       }
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: "Silakan lengkapi data terlebih dahulu!", // TODO
       });
     }
   }
@@ -1841,10 +1841,10 @@ export class AudienceCreateComponent {
       if (response) {
         
         // this.importAudienceResult = {...response};
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         this.router.navigate(["dte", "audience"]);
         // this.selected = response;
-        // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
       // this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });

@@ -11,6 +11,7 @@ import { DataService } from 'app/services/data.service';
 import { IdleService } from 'app/services/idle.service';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 import { ConfirmDialogComponent } from '../dialog/confirm-dialog/confirm-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-verification-index',
@@ -61,6 +62,7 @@ export class TaskVerificationIndexComponent implements OnInit {
     private userIdle: IdleService,
     private taskVerificationService: TaskVerificationService,
     private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

@@ -186,14 +186,14 @@
       <h3 class="text-bold">Durasi</h3>
       <div fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+          <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
             formControlName="startDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="Tanggal Berakhir"
+          <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}"
             formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
@@ -271,7 +271,7 @@
       <div class="confirm pt-24 pb-24" fxLayout="row" *ngIf="!isDetail">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
           [disabled]="coinRewardInvalid || submitting">
-          SIMPAN
+          {{ls.locale.global.button.save}}
         </button>
       </div>
     </div>

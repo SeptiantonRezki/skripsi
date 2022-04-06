@@ -40,7 +40,7 @@ export class CustomerIndexComponent {
   filterArea: Boolean;
 
   offsetPagination: any;
-  listStatus: any[] = [{ name: 'Semua Status', value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
   listVersions: any[] = [];
   listCities: any[] = [];
   constructor(
@@ -125,14 +125,14 @@ export class CustomerIndexComponent {
 
   getVersions() {
     this.generalService.getAppVersions({ type: 'customer' }).subscribe(res => {
-      this.listVersions = [{ version: 'Semua Versi' }, ...res];
+      this.listVersions = [{ version: this.ls.locale.global.label.all_version }, ...res];
     })
   }
 
   getCities() {
     this.generalService.getCities({ type: 'customer', area: 1 }).subscribe(res => {
       // this.listCities = [{  }]
-      this.listCities = [{ name: 'Semua Kota', id: -1 }];
+      this.listCities = [{ name: this.ls.locale.global.label.all_cities, id: -1 }];
       this.listCities = [
         ...this.listCities,
         ...res.data
@@ -156,7 +156,7 @@ export class CustomerIndexComponent {
     this.pagination['version'] = this.formFilterCustomer.get('version').value;
     this.pagination['city'] = this.formFilterCustomer.get('city').value
 
-    if (this.formFilterCustomer.get('version').value === 'Semua Versi') this.pagination['version'] = null;
+    if (this.formFilterCustomer.get('version').value === this.ls.locale.global.label.all_version) this.pagination['version'] = null;
     if (this.formFilterCustomer.get('status').value === '-1') this.pagination['status'] = null;
     if (this.formFilterCustomer.get('city').value === '-1') this.pagination['city'] = null;
 

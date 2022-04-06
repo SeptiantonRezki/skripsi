@@ -6,6 +6,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { CoinService } from 'app/services/sku-management/coin.service';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 
 @Component({
@@ -42,7 +43,8 @@ export class ProgramtsmComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private formBuilder: FormBuilder,
-    private coinService: CoinService
+    private coinService: CoinService,
+    private ls: LanguagesService,
   ) {
     this.onLoadTP = true;
 

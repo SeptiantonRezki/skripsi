@@ -42,8 +42,8 @@ export class SupplierCompanyIndexComponent implements OnInit {
   roles: PagesName = new PagesName();
 
   supplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(
@@ -94,14 +94,14 @@ export class SupplierCompanyIndexComponent implements OnInit {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }
@@ -195,10 +195,10 @@ export class SupplierCompanyIndexComponent implements OnInit {
   deleteById(id: any) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Perusahaan",
-      captionDialog: "Apakah anda yakin untuk menghapus Perusahaan ini?",
+      titleDialog: this.ls.locale.global.button.delete +" " + this.ls.locale.produk_prinsipal.text2,
+      captionDialog: this.ls.locale.produk_prinsipal.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -207,7 +207,7 @@ export class SupplierCompanyIndexComponent implements OnInit {
     this.supplierCompanyService.delete({ supplierId: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1});
         this.getList();
       },
       err => {

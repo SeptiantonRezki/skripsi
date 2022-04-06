@@ -14,7 +14,7 @@
               <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
                 <mat-icon>search</mat-icon>
                 <mat-form-field class="is-light tab-search">
-                  <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                  <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
                 </mat-form-field>
               </div>
             </div>
@@ -85,7 +85,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="20%" class="is-light form-primary">
                 <input matInput [matDatepicker]="dari" (focus)="dari.open()" [formControl]="start_date"
-                  placeholder="Tanggal Mulai">
+                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}">
                 <mat-datepicker-toggle matSuffix [for]="dari">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                 </mat-datepicker-toggle>
@@ -93,7 +93,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="20%" class="is-light form-primary">
                 <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [formControl]="end_date"
-                  placeholder="Tanggal Berakhir">
+                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
                 <mat-datepicker-toggle matSuffix [for]="sampai">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                 </mat-datepicker-toggle>

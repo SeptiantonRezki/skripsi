@@ -34,14 +34,14 @@
             <div fxLayout="row" fxLayoutGap="24px">
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="startPicker" #strDtInput="ngModel"
-                      placeholder="Tanggal Mulai" [(ngModel)] = "notesMdl.start_date"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" [(ngModel)] = "notesMdl.start_date"
                       name = "notesMdl.start_date">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="endDate" #endDtInput="ngModel"
-                      placeholder="Tanggal Berakhir" [(ngModel)] = "notesMdl.end_date"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [(ngModel)] = "notesMdl.end_date"
                       name = "notesMdl.end_date">
                 <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                 <mat-datepicker #endDate></mat-datepicker>
@@ -272,7 +272,7 @@
           fxFlex="20"
           [disabled]="(notesMdl.name === undefined || notesMdl.name === null || notesMdl.name === '' || nameInput.dirty && nameInput.invalid || notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === '')"
         >
-          SIMPAN
+          {{ls.locale.global.button.save}}
         </button>
       </div>
       <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="paramEdit != null" >

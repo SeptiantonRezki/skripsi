@@ -4,7 +4,7 @@
     <div fxLayout="row" class="pb-24 px-12">
       <mat-checkbox class="mt-4 ml-4 mb-8" [disabled]="disableForm"
         [formControl]="isVoucherAutomation">
-        Reimbursement</mat-checkbox>
+        Reimbursement</mat-checkbox> <!-- // TODO -->
     </div>
 
   <div *ngIf="isVoucherAutomation.value">
@@ -27,34 +27,34 @@
       <div fxFlex.lt-lg="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="is-light form-primary pb-12">
           <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-            placeholder="Tanggal Awal Penukaran Voucher" formControlName="startDate" [min]="minDate">
+            placeholder="Tanggal Awal Penukaran Voucher" formControlName="startDate" [min]="minDate"> <!-- // TODO -->
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
           <mat-error *ngIf="formPenukaranVoucher.controls['startDate'].hasError('required') && formPenukaranVoucher.controls['startDate'].touched">
             Tanggal Awal Program harus diisi.
-          </mat-error>
+          </mat-error> <!-- // TODO -->
           <mat-error *ngIf="formPenukaranVoucher.controls['startDate'].invalid">
             Tanggal Tidak Valid
-          </mat-error>
+          </mat-error> <!-- // TODO -->
         </mat-form-field>
 
         <mat-form-field class="is-light form-primary pb-12">
           <input matInput (focus)="endDate.open()" [min]="formPenukaranVoucher.controls['startDate'].value" [matDatepicker]="endDate"
-            placeholder="Tanggal Berakhir Penukaran Voucher" formControlName="endDate">
+            placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Voucher" formControlName="endDate"> <!-- // TODO -->
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
           <mat-error *ngIf="formPenukaranVoucher.controls['endDate'].hasError('required') && formPenukaranVoucher.controls['endDate'].touched">
             Tanggal Akhir Program harus diisi.
-          </mat-error>
+          </mat-error> <!-- // TODO -->
           <mat-error *ngIf="formPenukaranVoucher.controls['endDate'].invalid">
             Tanggal Tidak Valid
-          </mat-error>
+          </mat-error> <!-- // TODO -->
         </mat-form-field>
       </div>
 
       <div class="pt-12" fxLayout="column">
         <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
-          <span class="font-size-16">Opsi Penukaran Voucher</span>
+          <span class="font-size-16">Opsi Penukaran Voucher</span> <!-- // TODO -->
         </div>
 
         <div class="" fxLayout="row wrap" fxLayoutGap="30px">
@@ -62,7 +62,7 @@
             <mat-checkbox class="mt-4 ml-4 mb-8"
             formControlName="isVoucherB2B">
               Voucher B2B
-            </mat-checkbox>
+            </mat-checkbox> <!-- // TODO -->
           </div>
 
           <div fxLayout="column" class="pb-24">
@@ -72,7 +72,7 @@
             </mat-checkbox>
             <div *ngIf="formPenukaranVoucher.get('isTransferBank').value === true">
               <div class="outline-square">
-                <span class="nominal-label">Nominal Penukaran (Rupiah)</span>
+                <span class="nominal-label">Nominal Penukaran (Rupiah)</span> <!-- // TODO -->
                 <div formArrayName="transferBankArray" *ngFor="let item of formPenukaranVoucher.get('transferBankArray')['controls']; let i = index;">
                   <div [formGroupName]="i">
                     <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck" [disabled]="disableForm">
@@ -81,7 +81,7 @@
                   </div>
                 </div>
                 <mat-form-field class="is-light">
-                  <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahTransferBank">
+                  <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahTransferBank"> <!-- // TODO -->
                 </mat-form-field>
                 <button mat-icon-button (click)="addNominal('transfer-bank')" [disabled]="disableForm">
                   <mat-icon class="secondary-text">add</mat-icon>
@@ -93,11 +93,11 @@
           <div fxLayout="column" class="pb-24">
             <mat-checkbox class="mt-4 ml-4 mb-8"
               formControlName="isSaldoPojokBayar">
-              Saldo Pojok Bayar
+              Saldo Pojok Bayar <!-- // TODO -->
             </mat-checkbox>
             <div *ngIf="formPenukaranVoucher.get('isSaldoPojokBayar').value === true">
               <div class="outline-square">
-                <span class="nominal-label">Nominal Penukaran (Rupiah)</span>
+                <span class="nominal-label">Nominal Penukaran (Rupiah)</span> <!-- // TODO -->
                 <div formArrayName="saldoPojokBayarArray" *ngFor="let item of formPenukaranVoucher.get('saldoPojokBayarArray')['controls']; let i = index;">
                   <div [formGroupName]="i">
                     <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="isCheck" [disabled]="disableForm">
@@ -106,7 +106,7 @@
                   </div>
                 </div>
                 <mat-form-field class="is-light">
-                  <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahSaldoPojokBayar">
+                  <input matInput type="number" placeholder="Tambahkan Opsi" formControlName="tambahSaldoPojokBayar"> <!-- // TODO -->
                 </mat-form-field>
                 <button mat-icon-button (click)="addNominal('pojok-bayar')" [disabled]="disableForm">
                   <mat-icon class="secondary-text">add</mat-icon>
@@ -123,8 +123,8 @@
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_reimburse">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onUpdate()" [disabled]="disableForm">
-        SIMPAN
-      </button>
+        {{ls.locale.global.button.save}}
+      </button> <!-- // TODO -->
     </div>
 
   </div>

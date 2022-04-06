@@ -1,5 +1,5 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Perusahaan'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text2">
   </page-content-header>
 
   <div class="content p-24">
@@ -85,29 +85,29 @@
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light">
-              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="telepon" minlength="6" #telepon *ngIf="!isDetail">
-              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="telepon" minlength="6" readonly *ngIf="isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.bantuan.text10 }}" formControlName="telepon" minlength="6" #telepon *ngIf="!isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.bantuan.text10 }}" formControlName="telepon" minlength="6" readonly *ngIf="isDetail">
               <mat-error
                 *ngIf="createForm.controls['telepon'].hasError('required') && createForm.controls['telepon'].touched">
-                {{ ls.locale.global.label.phone_number }} {{ ls.locale.global.messages.mandatory_text }}
+                {{ ls.locale.bantuan.text10 }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <mat-error
                 *ngIf="createForm.get('telepon').errors?.minlength && createForm.controls['telepon'].touched">
-                Minimal Nomor Telepon 6 angka
+                {{ ls.locale.produk_prinsipal.phone_min }}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row">
             <mat-form-field fxFlex="50" class="is-light">
-              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="ponsel" minlength="10" #ponsel *ngIf="!isDetail">
-              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone_number }}" formControlName="ponsel" minlength="10" readonly *ngIf="isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone }}" formControlName="ponsel" minlength="10" #ponsel *ngIf="!isDetail">
+              <input matInput type="text" placeholder="{{ ls.locale.global.label.phone }}" formControlName="ponsel" minlength="10" readonly *ngIf="isDetail">
               <mat-error
                 *ngIf="createForm.controls['ponsel'].hasError('required') && createForm.controls['ponsel'].touched">
-                {{ ls.locale.global.label.phone_number }} {{ ls.locale.global.messages.mandatory_text }}
+                {{ ls.locale.global.label.phone }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
               <mat-error
                 *ngIf="createForm.get('ponsel').errors?.minlength && createForm.controls['ponsel'].touched">
-                Minimal Nomor Ponsel 10 angka
+                {{ ls.locale.produk_prinsipal.phone_min_2 }}
               </mat-error>
             </mat-form-field>
           </div>

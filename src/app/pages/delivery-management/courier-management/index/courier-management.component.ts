@@ -149,10 +149,10 @@ export class CourierManagementComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Layanan Kurir",
-      captionDialog: "Apakah anda yakin untuk menghapus Layanan Kurir ini ?",
+      titleDialog: "Hapus Layanan Kurir", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus Layanan Kurir ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -161,7 +161,7 @@ export class CourierManagementComponent implements OnInit {
     this.courierManagementService.delete({ courier_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getCourierList();
         this.selected = [];
@@ -200,7 +200,7 @@ export class CourierManagementComponent implements OnInit {
     this.courierManagementService.updateStatus({ courier_id: this.id }, { status: this.statusRow }).subscribe(res => {
       if (res && res.data) {
         this.dialogService.openSnackBar({
-          message: "Berhasil mengubah status kurir"
+          message: "Berhasil mengubah status kurir" // TODO
         });
       }
       this.dialogService.brodcastCloseConfirmation();

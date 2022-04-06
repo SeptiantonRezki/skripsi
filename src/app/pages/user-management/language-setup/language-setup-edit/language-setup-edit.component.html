@@ -17,7 +17,7 @@
             
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="name">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name">
                 <mat-error *ngIf="step1.controls['name'].hasError('required') && step1.controls['name'].touched ">
                   {{ls.locale.language_setup.name}} {{ ls.locale.global.messages.mandatory_text }}.
                 </mat-error>

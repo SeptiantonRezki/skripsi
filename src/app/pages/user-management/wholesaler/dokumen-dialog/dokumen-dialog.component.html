@@ -24,23 +24,23 @@
       <div fxLayout="row" style="margin-left: 15px;" *ngIf="data.image_url">
         <mat-form-field fxFlex="30">
           <input matInput [formControl]="document"
-            [placeholder]="'Nomor ' + (data?.document_type ? data?.document_type.toUpperCase() : 'Kartu') " disabled />
+            [placeholder]="ls.locale.wholesaler.number +' ' + (data?.document_type ? data?.document_type.toUpperCase() : ls.locale.wholesaler.card) " disabled />
           <mat-icon matSuffix (click)="copyMessage()" style="cursor: pointer;"
-            [matTooltip]="'Salin Nomor' + (data?.document_type ? data?.document_type.toUpperCase() : 'Kartu') ">
+            [matTooltip]="ls.locale.wholesaler.copy_number+' ' + (data?.document_type ? data?.document_type.toUpperCase() : ls.locale.wholesaler.card) ">
             content_copy
           </mat-icon>
         </mat-form-field>
       </div>
-      <p style="text-align: center;" *ngIf="!data.image_url">Tidak Ada Dokumen yang Ditampilkan</p>
+      <p style="text-align: center;" *ngIf="!data.image_url">{{ls.locale.wholesaler.no_document}}</p>
     </div>
     <div class="responsive" *ngIf="data.isAccess">
       <table class="table">
         <thead>
           <tr>
-            <th>Nama Supplier</th>
-            <th>Nama Produk</th>
-            <th>Akses KTP</th>
-            <th>Akses NPWP</th>
+            <th>{{ls.locale.produk_prinsipal.text4}}</th>
+            <th>{{ls.locale.katalog_src.produk.text15}}</th>
+            <th>{{ls.locale.wholesaler.id_access}}</th>
+            <th>{{ls.locale.wholesaler.tax_access}}</th>
           </tr>
         </thead>
         <tbody>
@@ -64,7 +64,7 @@
           </tr>
           <tr *ngIf="data.access.length === 0">
             <td style="text-align:center" colspan="9">
-              Tidak ada data ...
+              {{ls.locale.pengaturan.force_update_apps.text12}}
             </td>
           </tr>
         </tbody>
@@ -76,7 +76,7 @@
     <div class="p-16">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
-        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">Tutup</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()">{{ls.locale.global.button.back}}</button>
       </div>
     </div>
   </div>

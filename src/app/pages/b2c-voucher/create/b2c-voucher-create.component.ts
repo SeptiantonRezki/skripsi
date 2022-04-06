@@ -89,7 +89,7 @@ export class B2CVoucherCreateComponent implements OnInit {
   usage: any[] = [
     { label: 'Pesan Antar', value: 'coo' },
     { label: 'Langsung ke Toko', value: 'offline' }
-  ];
+  ]; // TODO
 
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -503,7 +503,7 @@ export class B2CVoucherCreateComponent implements OnInit {
       }
 
       if (body['limit_by'] === 'product' && body['limit_only'].length && !body['limit_only_purchase']) {
-        alert('Batasan Pembelian Minimum berdasarkan Produk harus diisi');
+        alert('Batasan Pembelian Minimum berdasarkan Produk harus diisi'); // TODO
         return;
       }
 

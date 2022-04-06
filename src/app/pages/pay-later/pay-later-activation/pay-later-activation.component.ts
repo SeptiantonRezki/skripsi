@@ -10,6 +10,7 @@ import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deac
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { GeotreeService } from 'app/services/geotree.service';
 import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-activation',
@@ -63,6 +64,7 @@ export class PayLaterActivationComponent implements OnInit {
     private payLaterDeactivateService: PayLaterDeactivateService,
     private geotreeService: GeotreeService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService,
   ) {
     const selectedTab = dataService.getFromStorage('selected_tab_paylater_deactivate');
     this.selectedTab = selectedTab ? selectedTab : 0;

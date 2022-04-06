@@ -32,9 +32,9 @@ export class AudienceEditComponent {
   listScheduler: Array<any>;
   listTradePrograms: any[];
   rows: any[];
-  listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }];
+  listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }]; // TODO
   tsmScheduler: any[] = [{ name: "TSM", value: "tsm" }, { name: "Scheduler", value: "scheduler" },];
-  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
+  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }]; // TODO
 
   retailClassification: any[] = [
     { name: "Semua Tipe", value: "all" },
@@ -1663,9 +1663,9 @@ export class AudienceEditComponent {
       if (response) {
         
         this.importAudienceResult = {...response};
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         // this.selected = response;
-        // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
       this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });

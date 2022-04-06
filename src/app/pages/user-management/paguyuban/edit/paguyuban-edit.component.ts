@@ -22,8 +22,8 @@ export class PaguyubanEditComponent {
   listAdminPrincipal: Array<any>;
   detailPaguyuban: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" }
   ];
 
   listLevelArea: any[];

@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-audience-dialog.component.html',
@@ -25,6 +26,7 @@ export class ImportAudienceDialogComponent implements OnInit {
     private dialogService: DialogService,
     private b2cVoucherService: B2CVoucherService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -41,7 +43,7 @@ export class ImportAudienceDialogComponent implements OnInit {
 
     console.warn('files info', this.files);
     if (this.files.name.indexOf('.xlsx') > -1) {
-      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLS!' });
+      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLS!' }); // TODO
       return;
     }
 
@@ -65,7 +67,7 @@ export class ImportAudienceDialogComponent implements OnInit {
           this.validData = res.data && res.data.is_valid ? res.data.is_valid : false;
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: 'Data tidak Valid, mohon mengunggah ulang.' });
+          this.dialogService.openSnackBar({ message: 'Data tidak Valid, mohon mengunggah ulang.' }); // TODO
           this.dataService.showLoading(false);
         }
       }, err => {
@@ -73,7 +75,7 @@ export class ImportAudienceDialogComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500) {
-          this.dialogService.openSnackBar({ message: 'Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.' });
+          this.dialogService.openSnackBar({ message: 'Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.' }); // TODO
         }
       }
     )
@@ -84,7 +86,7 @@ export class ImportAudienceDialogComponent implements OnInit {
       const res = this.rows.map(item => ({ ...item }));
       this.dialogRef.close(res);
     } else {
-      this.dialogService.openSnackBar({ message: 'Semua row tidak valid ' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages }); // TODO
     }
   }
 

@@ -8,6 +8,7 @@ import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-sequencing-duplicate',
@@ -43,7 +44,8 @@ export class TaskSequencingDuplicateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;

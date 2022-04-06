@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="!isDetail ? 'Tambah B2C Voucher' : 'Detail B2C Voucher'">
+  <page-content-header [contentTitle]="!isDetail ? 'Tambah B2C Voucher' : 'Detail B2C Voucher'"> <!-- // TODO -->
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
 
       <mat-tab-group>
-        <mat-tab label="Detail Voucher">
+        <mat-tab label="Detail Voucher"> <!-- // TODO -->
           <div class="ayo-middle" fxLayout="column">
             <form autocomplete="off" [formGroup]="formDetailVoucher" (keydown.enter)="$event.preventDefault();">
               <!-- <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" *ngIf="isDetail">
@@ -24,82 +24,82 @@
               </div> -->
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8 ml-24">
                 <mat-form-field fxFlex="50" class="is-light">
-                  <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
+                  <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text2}}" formControlName="name">
                   <mat-error
                     *ngIf="formDetailVoucher.controls['name'].hasError('required') && formDetailVoucher.controls['name'].touched ">
-                    Nama Voucher harus diisi.
-                  </mat-error>
+                    {{ls.locale.cn_reward.b2b_voucher.text2}} harus diisi.
+                  </mat-error> <!-- // TODO -->
                 </mat-form-field>
                 <mat-form-field fxFlex="50" class="is-light">
-                  <input matInput type="text" placeholder="Nama Lain Voucher" formControlName="alias">
+                  <input matInput type="text" placeholder="Nama Lain Voucher" formControlName="alias"> <!-- // TODO -->
                   <mat-error
                     *ngIf="formDetailVoucher.controls['alias'].hasError('required') && formDetailVoucher.controls['alias'].touched ">
                     Nama Lain Voucher harus diisi.
-                  </mat-error>
+                  </mat-error> <!-- // TODO -->
                 </mat-form-field>
                 <div fxLayout="row" fxFlex="50" fxLayoutGap="20px">
                   <mat-form-field class="is-light" fxFlex="45%">
-                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucherValue">
+                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucherValue"> <!-- // TODO -->
                     <mat-error
                       *ngIf="formDetailVoucher.controls['voucherValue'].hasError('required') && formDetailVoucher.controls['voucherValue'].touched ">
                       Nilai Voucher harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
                   <mat-form-field class="is-light" fxFlex="45%">
                     <input matInput type="number" placeholder="Jumlah Voucher per Consumer"
-                      formControlName="jumlahVoucherPerConsumer">
+                      formControlName="jumlahVoucherPerConsumer"> <!-- // TODO -->
                     <mat-error
                       *ngIf="formDetailVoucher.controls['jumlahVoucherPerConsumer'].hasError('required') && formDetailVoucher.controls['jumlahVoucherPerConsumer'].touched ">
                       Jumlah Voucher per Consumer harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
                 </div>
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                      placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher" (dateChange)="onDateChange('startVoucher', $event)">
+                      placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateVoucher" (dateChange)="onDateChange('startVoucher', $event)"> <!-- // TODO -->
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                     <mat-datepicker #startPicker></mat-datepicker>
                     <mat-error
                       *ngIf="formDetailVoucher.controls['startDate'].hasError('required') && formDetailVoucher.controls['startDate'].touched">
                       Tanggal Awal Program harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
 
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
-                      placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="endVoucher" (dateChange)="onDateChange('endVoucher', $event)">
+                      placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="endVoucher" (dateChange)="onDateChange('endVoucher', $event)"> <!-- // TODO -->
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
                     <mat-error
                       *ngIf="formDetailVoucher.controls['endDate'].hasError('required') && formDetailVoucher.controls['endDate'].touched">
                       Tanggal Akhir Program harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
                 </div>
                 <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
                       placeholder="Tanggal Awal Pemakaian Voucher" formControlName="available_at"
-                      [min]="useVoucher" (dateChange)="onDateChange('useVoucher', $event)">
+                      [min]="useVoucher" (dateChange)="onDateChange('useVoucher', $event)"> <!-- // TODO -->
                     <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
                     <mat-datepicker #voucherPicker></mat-datepicker>
                     <mat-error
                       *ngIf="formDetailVoucher.controls['available_at'].hasError('required') && formDetailVoucher.controls['available_at'].touched">
                       Tanggal Awal Pemakaian Voucher harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
 
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput (focus)="voucherExpiry.open()"
                       [matDatepicker]="voucherExpiry" placeholder="Tanggal Kedaluwarsa Voucher"
-                      formControlName="expired_at" [min]="usedVoucher" (dateChange)="onDateChange('usedVoucher', $event)">
+                      formControlName="expired_at" [min]="usedVoucher" (dateChange)="onDateChange('usedVoucher', $event)"> <!-- // TODO -->
                     <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
                     <mat-datepicker #voucherExpiry></mat-datepicker>
                     <mat-error
                       *ngIf="formDetailVoucher.controls['expired_at'].hasError('required') && formDetailVoucher.controls['expired_at'].touched">
                       Tanggal Kedaluwarsa Voucher harus diisi.
-                    </mat-error>
+                    </mat-error> <!-- // TODO -->
                   </mat-form-field>
                 </div>
                 <!-- <mat-form-field fxFlex="50">
@@ -108,18 +108,18 @@
                   </mat-select>
                 </mat-form-field> -->
               </div>
-              <h4 class="ml-24 p-8" style="font-weight: bold;">Batasan</h4>
+              <h4 class="ml-24 p-8" style="font-weight: bold;">Batasan</h4> <!-- // TODO -->
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8 ml-24">
                 <div fxFlex="60" fxLayoutGap="20px">
                   <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)">
-                    Batasi dengan Produk
-                  </mat-checkbox>
+                    {{ls.locale.cn_reward.b2b_voucher.text26}}
+                  </mat-checkbox> <!-- // TODO -->
                   <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">
                     Batasi Dengan Kategori
-                  </mat-checkbox>
+                  </mat-checkbox> <!-- // TODO -->
                   <mat-checkbox formControlName="limit_purchase" (change)="isCheckedPembelianMinimum($event)">
                     Berlaku Pembelian Minimum
-                  </mat-checkbox>
+                  </mat-checkbox> <!-- // TODO -->
                 </div>
                 <mat-form-field fxFlex="50" class="pt-20 is-light"
                   *ngIf="formDetailVoucher.get('limit_by_product').value">
@@ -129,10 +129,10 @@
                       {{product.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
                     </mat-chip>
-                    <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
+                    <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
                       (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
                       [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)">
+                      (matChipInputTokenEnd)="add($event)"> <!-- // TODO -->
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                     <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
@@ -143,42 +143,42 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="50" class="is-light"
                   *ngIf="formDetailVoucher.get('limit_by_product').value">
-                  <input matInput type="number" placeholder="Pembelian Minimum Berdasarkan Produk" formControlName="limit_only_purchase">
+                  <input matInput type="number" placeholder="Pembelian Minimum Berdasarkan Produk" formControlName="limit_only_purchase"> <!-- // TODO -->
                 </mat-form-field>
                 <mat-form-field fxFlex="50" class="pt-24 is-light"
                   *ngIf="!formDetailVoucher.get('limit_by_product').value">
-                  <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                  <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true"> <!-- // TODO -->
                 </mat-form-field>
                 <mat-form-field class="is-light" fxFlex="50">
-                  <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category"
-                    [disabled]="!formDetailVoucher.get('limit_by_category').value" multiple>
+                  <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category"
+                    [disabled]="!formDetailVoucher.get('limit_by_category').value" multiple> <!-- // TODO -->
                     <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field class="is-light" fxFlex="50">
                   <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian"
-                    formControlName="minimumPurchase" *ngIf="formDetailVoucher.get('limit_purchase').value">
+                    formControlName="minimumPurchase" *ngIf="formDetailVoucher.get('limit_purchase').value"> <!-- // TODO -->
                   <input matInput type="number" placeholder="Batasan Berdasarkan Pembelian"
-                    *ngIf="!formDetailVoucher.get('limit_purchase').value" [disabled]="true">
+                    *ngIf="!formDetailVoucher.get('limit_purchase').value" [disabled]="true"> <!-- // TODO -->
                   <mat-error
                     *ngIf="formDetailVoucher.controls['minimumPurchase'].hasError('required') && formDetailVoucher.controls['minimumPurchase'].touched">
                     Batasan Berdasarkan Pembelian harus diisi
-                  </mat-error>
+                  </mat-error> <!-- // TODO -->
                 </mat-form-field>
               </div>
-              <h4 class="ml-24 p-8" style="font-weight: bold;">Penggunaan Voucher</h4>
+              <h4 class="ml-24 p-8" style="font-weight: bold;">Penggunaan Voucher</h4> <!-- // TODO -->
               <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8 ml-24">
                 <div fxFlex="60" fxLayoutGap="20px" formArrayName="usage">
                   <mat-checkbox *ngFor="let item of usage" [value]="item.value" (change)="onUsageChange($event)">{{item.label}}</mat-checkbox>
                   <mat-error *ngIf="submitted && formDetailVoucher.controls['usage'].errors?.required" class="pt-20">
                     Penggunaan Voucher harus dipilih
-                  </mat-error>
+                  </mat-error> <!-- // TODO -->
                 </div>
               </div>
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSaveDetail()">
-                  SIMPAN
+                  {{ls.locale.global.button.save}}
                 </button>
               </div>
             </form>
@@ -257,7 +257,7 @@
                   <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon>search</mat-icon>
                     <mat-form-field class="is-light tab-search">
-                      <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                      <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
                     </mat-form-field>
                   </div>
                 </div>
@@ -331,7 +331,7 @@
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="isDetail">
                 <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
                   (click)="onSave()">
-                  SIMPAN
+                  {{ls.locale.global.button.save}}
                 </button>
               </div>
             </div>

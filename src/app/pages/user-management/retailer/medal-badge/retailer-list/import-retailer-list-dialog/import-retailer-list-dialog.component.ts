@@ -3,7 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { MedalBadgeService } from 'app/services/user-management/retailer/medal-badge.service';
-
+import { LanguagesService } from 'app/services/languages/languages.service';
 @Component({
   selector: 'app-import-retailer-list-dialog',
   templateUrl: './import-retailer-list-dialog.component.html',
@@ -27,6 +27,7 @@ export class ImportRetailerListDialogComponent implements OnInit {
     private dialogService: DialogService,
     private medalBadgeService: MedalBadgeService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];

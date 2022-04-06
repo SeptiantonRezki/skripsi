@@ -4,7 +4,7 @@
     <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
       <mat-icon>search</mat-icon>
       <mat-form-field class="is-light tab-search">
-        <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+        <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
       </mat-form-field>
     </div>
   </div>
@@ -98,7 +98,13 @@
   <ngx-datatable-column name="Status" prop="status" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
-        {{row.status_indo ? row.status_indo.replace('-', ' ').toUpperCase() : row.status}}
+        {{ (row.status === 'baru' ) ? this.ls.locale.global.order_status.new_order : '' }}
+        {{ (row.status === 'dibatalkan' ) ? this.ls.locale.global.order_status.canceled_order : '' }}
+        {{ (row.status === 'diproses' ) ? this.ls.locale.global.order_status.process_order : '' }}
+        {{ (row.status === 'dikirim' ) ? this.ls.locale.global.order_status.send_order : '' }}
+        {{ (row.status === 'diterima' ) ? this.ls.locale.global.order_status.received_order : '' }}
+        {{ (row.status === 'selesai' ) ? this.ls.locale.global.order_status.completed_order : '' }}
+        {{ (!['baru', 'dibatalkan', 'diproses', 'dikirim', 'diterima', 'selesai'].includes(row.status) ) ? row.status_indo.replace('-', ' ').toUpperCase() : '' }}
       </p>
     </ng-template>
   </ngx-datatable-column>

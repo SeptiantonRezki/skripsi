@@ -212,10 +212,10 @@ export class HelpIndexComponent {
   deletePage(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Bantuan",
-      captionDialog: "Apakah anda yakin untuk menghapus data bantuan ini ?",
+      titleDialog: "Hapus Bantuan", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus data bantuan ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -224,7 +224,7 @@ export class HelpIndexComponent {
     this.helpService.delete({ content_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getHelp();
       },

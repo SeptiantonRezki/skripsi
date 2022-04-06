@@ -73,7 +73,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
           </mat-form-field>
         </div>
       </div>
@@ -129,17 +129,17 @@
           <span class="row-address">{{row.ws_name || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Coin" prop="coin" [sortable]="false">
+      <ngx-datatable-column name="Coin" prop="coin" [sortable]="false"> <!-- // TODO -->
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.coin || 0}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false">
+      <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false"> <!-- // TODO -->
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false">
+      <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false"> <!-- // TODO -->
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
         </ng-template>

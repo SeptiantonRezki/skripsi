@@ -113,10 +113,10 @@
             </div>
             <div fxLayout="row" fxFlex="40">
               <!-- <textarea matInput name="note_duration" rows="6" formControlName="note_duration"
-                placeholder="Catatan"></textarea> -->
+                placeholder="{{ls.locale.global.label.note}}"></textarea> -->
               <textarea matInput name="note_duration" formControlName="note_duration" cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="9" cdkAutosizeMaxRows="15"
-                placeholder="Catatan"></textarea>
+                placeholder="{{ls.locale.global.label.note}}"></textarea>
             </div>
             <div fxLayout="column" fxFlex="40" style="margin-top: 20px;">
               <h3 style="font-weight: bold;">Status</h3>
@@ -172,7 +172,7 @@
           </div>
           <div fxLayout="row" fxLayoutAlign="end start" fxFlex="1 0 auto" class="border-bottom">
             <button mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteService(i)" matTooltipPosition="below"
-              class="secondary-text">
+              class="secondary-text"> <!-- // TODO -->
               <mat-icon class="secondary-text">delete</mat-icon>
             </button>
           </div>

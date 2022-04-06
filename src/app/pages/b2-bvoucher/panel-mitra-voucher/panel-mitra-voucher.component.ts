@@ -527,7 +527,7 @@ export class PanelMitraVoucherComponent implements OnInit {
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+          this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
@@ -535,7 +535,7 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       })
@@ -699,7 +699,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   async exportMitra() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
-        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+        message: this.ls.locale.global.messages.text12
       })
       return;
     }
@@ -783,7 +783,7 @@ export class PanelMitraVoucherComponent implements OnInit {
       if (response) {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         console.log('this', this.selected)
       }
     });

@@ -6,6 +6,7 @@ import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { LandingPageService } from "app/services/inapp-marketing/landing-page.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-landing-page-index",
@@ -33,7 +34,8 @@ export class LandingPageIndexComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private landingPageService: LandingPageService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];
