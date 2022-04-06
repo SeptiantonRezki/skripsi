@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class PayLaterPanelImportDialogComponent implements OnInit {
     private dialogService: DialogService,
     private mitraPanelService: PayLaterPanelService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;
