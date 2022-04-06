@@ -41,7 +41,7 @@
 
         <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama" type="text" formControlName="name">
+            <input matInput placeholder="{{ls.locale.global.label.name}}" type="text" formControlName="name">
             <mat-error
               *ngIf="formRetailer.controls['name'].hasError('required') && formRetailer.controls['name'].touched ">
               Nama Toko harus diisi.
@@ -478,7 +478,7 @@
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
               fxFlex="20" (click)="submit()">
-              SIMPAN
+              {{ls.locale.global.button.save}}
             </button>
           </div>
 

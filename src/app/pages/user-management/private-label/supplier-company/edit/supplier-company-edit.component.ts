@@ -30,8 +30,8 @@ export class SupplierCompanyEditComponent implements OnInit {
   catatanControl = new FormControl();
 
   supplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   pilihAPIList: any[] = [

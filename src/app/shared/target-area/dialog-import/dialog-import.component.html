@@ -2,7 +2,7 @@
   <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLS</span>
       </div>
     </div>
     <button
@@ -31,8 +31,8 @@
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br />
         <span matPrefix
-          >Tarik File Kesini atau
-          <strong>Pilih File</strong>
+          >{{ls.locale.global.messages.file_browse_label}}
+           
         </span>
       </div>
     </div>
@@ -90,7 +90,7 @@
             (click)="submit()"
             [disabled]="!isValid"
           >
-            Kirim
+            {{ls.locale.global.button.send}}
           </button>
           <button
             type="button"

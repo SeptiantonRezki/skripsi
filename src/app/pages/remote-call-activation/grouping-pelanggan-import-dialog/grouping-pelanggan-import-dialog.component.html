@@ -42,7 +42,7 @@
             <th nowrap>Ketersediaan</th>
             <th>Status</th>
             <th>Harga</th>
-            <th nowrap>Alasan Tidak Valid</th>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +67,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="9">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -79,7 +79,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0 || isInvalid">Kirim</button>
+          [disabled]="rows.length === 0 || isInvalid">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>

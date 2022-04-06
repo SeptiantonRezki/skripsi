@@ -114,12 +114,12 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataScheduler.start_date | dateToMoment"
-                    placeholder="Tanggal Mulai" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataScheduler.end_date | dateToMoment"
-                    placeholder="Tanggal Berakhir" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
@@ -147,12 +147,12 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataScheduler.backup?.start_date | dateToMoment"
-                    placeholder="Tanggal Mulai (Backup)" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataScheduler.backup?.end_date | dateToMoment"
-                    placeholder="Tanggal Berakhir (Backup)" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
@@ -175,7 +175,7 @@
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
               <mat-icon>search</mat-icon>
               <mat-form-field class="is-light tab-search">
-                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
               </mat-form-field>
             </div>
           </div>

@@ -50,7 +50,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="32" class="is-light form-primary">
                 <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()"
-                  formControlName="enddate" placeholder="Tanggal Berakhir">
+                  formControlName="enddate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
                 <mat-error
                   *ngIf="formPopupGroup.controls['enddate'].hasError('required') && formPopupGroup.controls['enddate'].touched">
                   Tanggal Terbit harus diisi
@@ -665,7 +665,7 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+                <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name"></ngx-datatable-column>
                 <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     {{row.code ? row.code : '-'}}
@@ -796,7 +796,7 @@
         </div>
         <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-            SIMPAN
+            {{ls.locale.global.button.save}}
           </button>
         </div>
       </form>

@@ -9,6 +9,7 @@ import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deac
 import { GeotreeService } from 'app/services/geotree.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import moment from 'moment';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-activation-src',
@@ -63,6 +64,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
     private payLaterDeactivateService: PayLaterDeactivateService,
     private geotreeService: GeotreeService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

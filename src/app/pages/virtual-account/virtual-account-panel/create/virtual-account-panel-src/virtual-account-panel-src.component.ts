@@ -12,6 +12,7 @@ import { VirtualAccountPanelService } from 'app/services/virtual-account/virtual
 import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VirtualAccountPanelImportDialogComponent } from '../../virtual-account-panel-import-dialog/virtual-account-panel-import-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-panel-src',
@@ -91,7 +92,8 @@ export class VirtualAccountPanelSrcComponent implements OnInit, OnDestroy {
     private router: Router,
     private panelService: VirtualAccountPanelService,
     private dialog: MatDialog,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -570,7 +572,7 @@ export class VirtualAccountPanelSrcComponent implements OnInit, OnDestroy {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

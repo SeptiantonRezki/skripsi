@@ -8,6 +8,7 @@ import { PagesName } from "app/classes/pages-name";
 import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CashierImportDialogComponent } from "./import-dialog/import-dialog.component";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-cashier-index",
@@ -40,7 +41,8 @@ export class CashierIndexComponent implements OnInit {
     private dataService: DataService,
     private productCashierService: ProductCashierService,
     private dialogService: DialogService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.permission = this.roles.getRoles("principal.produk_kasir");
     this.keyUp
@@ -199,7 +201,7 @@ export class CashierIndexComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.getProducts();
       }
     });

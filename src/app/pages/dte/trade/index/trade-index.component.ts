@@ -12,6 +12,7 @@ import moment from 'moment';
 import { FormGroup, FormBuilder } from '../../../../../../node_modules/@angular/forms';
 import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-trade-index',
@@ -61,7 +62,8 @@ export class TradeIndexComponent {
     private dataService: DataService,
     private tradeProgramService: TradeProgramService,
     private formBuilder: FormBuilder,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.filterArea = false;

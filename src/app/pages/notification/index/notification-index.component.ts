@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
 import { Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-notification-index',
@@ -37,7 +38,8 @@ export class NotificationIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Audience Personalize'"></page-content-header>
+  <page-content-header [contentTitle]="'Buat Audience Personalize'"></page-content-header> <!-- // TODO -->
   <!-- / HEADER -->
 
   <div class="content p-24">
@@ -13,7 +13,7 @@
                 <mat-form-field class="is-light form-primary">
                   <input matInput type="text" formControlName="name" placeholder="Nama Grup" />
                   <mat-error>
-                    Nama Grup harus diisi
+                    Nama Grup harus diisi <!-- // TODO -->
                   </mat-error>
                 </mat-form-field>
   
@@ -22,12 +22,12 @@
                     formControlName="mission_publication_id"
                     placeholder="Pilih Publish Misi"
                     #singleSelect
-                  >
+                  > <!-- // TODO -->
                     <ngx-mat-select-search
                       [formControl]="filterPublishMisi"
                       [placeholderLabel]="'Cari Publish Misi...'"
                       [noEntriesFoundLabel]="'Tidak ada Publish Misi yang ditemukan'"
-                    ></ngx-mat-select-search>
+                    ></ngx-mat-select-search> <!-- // TODO -->
                     <mat-option
                       *ngFor="let item of filteredPublishMisi | async"
                       [value]="item.id"
@@ -36,7 +36,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="formAudience.controls['mission_publication_id'].hasError('required') && formAudience.controls['mission_publication_id'].touched">
-                    Publish Misi harus diisi
+                    Publish Misi harus diisi <!-- // TODO -->
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -86,13 +86,13 @@
                       </mat-option>
                     </mat-select>
                     <mat-error>
-                      B2B Active harus diisi
+                      B2B Active harus diisi <!-- // TODO -->
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
                     <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="Total Required Panel" />
                     <mat-error>
-                      Total Required Panel harus diisi
+                      Total Required Panel harus diisi <!-- // TODO -->
                     </mat-error>
                   </mat-form-field>
                 </form>
@@ -101,7 +101,7 @@
               <div fxLayout="column">
                 <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)">
                   <mat-radio-button value="fixed-panel">
-                    Fixed Panel
+                    Fixed Panel <!-- // TODO -->
                   </mat-radio-button>
                 </mat-radio-group>
                 <div fxLayout="row" fxLayoutGap="16px" *ngIf="formAudience.get('audience_filter').value === 'fixed-panel'">
@@ -154,7 +154,7 @@
             (click)="checkAudience()"
             fxFlex="20"
           >
-            CHECK
+            CHECK <!-- // TODO -->
           </button>
           <button
             id="btn-simpan"
@@ -165,7 +165,7 @@
             fxFlex="20"
             [disabled]="!isChecked"
           >
-            SIMPAN
+            {{ls.locale.global.button.save}} <!-- // TODO -->
           </button>
         </div>
       </div>

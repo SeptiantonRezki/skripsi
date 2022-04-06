@@ -1857,7 +1857,7 @@ export class BannerCreateComponent {
         this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

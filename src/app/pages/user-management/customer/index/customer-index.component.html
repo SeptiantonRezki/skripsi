@@ -80,7 +80,9 @@
               <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status_indo == 'aktif' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status_indo.toUpperCase()}}
+                {{row.status == 'active' ? ls.locale.global.label.active_status : ''}}
+                {{row.status == 'inactive' ? ls.locale.global.label.inactive_status : ''}}
+                {{row.status == 'not-registered' ? ls.locale.global.label.unregistered_status : ''}}
               </p>
             </div>
           </ng-template>

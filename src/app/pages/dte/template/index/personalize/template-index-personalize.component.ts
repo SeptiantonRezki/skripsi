@@ -10,6 +10,7 @@ import { Endpoint } from '../../../../../classes/endpoint';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { async } from '@angular/core/testing';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-template-index-personalize',
@@ -57,7 +58,8 @@ export class TemplateIndexPersonalizeComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private templateTaskService: TemplateTaskService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

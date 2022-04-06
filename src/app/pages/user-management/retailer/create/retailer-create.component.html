@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Retailer'">
+  <page-content-header contentTitle="{{ls.locale.retailer?.create?.page_title || ''}}">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -13,35 +13,35 @@
 
           <form [formGroup]="verticalStepperStep1">
 
-            <ng-template matStepLabel>Informasi Toko</ng-template>
+            <ng-template matStepLabel>{{ls.locale.wholesaler.store_information}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="name">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name">
                 <mat-error *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
-                  Nama Toko harus diisi.
+                  {{ls.locale.global.label.name}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Alamat Toko" formControlName="address">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.store_address}}" formControlName="address">
                 <mat-error *ngIf="verticalStepperStep1.controls['address'].hasError('required') && verticalStepperStep1.controls['address'].touched ">
-                  Alamat Toko harus diisi.
+                  {{ls.locale.global.label.store_address}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Kode Agen" formControlName="business_code">
+                <input matInput type="text" placeholder="{{ls.locale.wholesaler.agent_code}}" formControlName="business_code">
                 <mat-error *ngIf="verticalStepperStep1.controls['business_code'].hasError('required') && verticalStepperStep1.controls['business_code'].touched ">
-                  Kode Agen harus diisi.
+                  {{ls.locale.wholesaler.agent_code}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -53,19 +53,19 @@
 
           <form [formGroup]="verticalStepperStep2">
 
-            <ng-template matStepLabel>Data Pemilik</ng-template>
+            <ng-template matStepLabel>{{ls.locale.wholesaler.owner_data}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.owner_name}}" formControlName="owner">
                 <mat-error *ngIf="verticalStepperStep2.controls['owner'].hasError('required') && verticalStepperStep2.controls['owner'].touched ">
-                  Nama Pemilik harus diisi.
+                  {{ls.locale.global.label.owner_name}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
               <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
-                <div class="label">Nomor Ponsel</div>
+                <div class="label">{{ls.locale.global.label.phone}}</div>
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                   <mat-form-field fxFlex="9" fxFlex.xs="30" class="form-primary">
                     <input matInput [value]="country_phone" readonly>
@@ -75,7 +75,7 @@
                   </mat-form-field>
                 </div>
                 <mat-error *ngIf="verticalStepperStep2.controls['phone'].hasError('required') && verticalStepperStep2.controls['phone'].touched ">
-                  Nomor ponsel harus diisi.
+                  {{ls.locale.global.label.phone}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </div>
 
@@ -83,7 +83,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -100,65 +100,65 @@
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Area" formControlName="area">
                 <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched ">
-                  Area harus diisi.
+                  Area {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div> -->
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['national'].hasError('required') && verticalStepperStep3.controls['national'].touched">
-                  National harus diisi
+                  {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', verticalStepperStep3.get('zone').value)">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone" (selectionChange)="getAudienceArea('region', verticalStepperStep3.get('zone').value)">
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['zone'].hasError('required') && verticalStepperStep3.controls['zone'].touched">
-                  Zone harus diisi
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', verticalStepperStep3.get('region').value)">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region" (selectionChange)="getAudienceArea('area', verticalStepperStep3.get('region').value)">
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['region'].hasError('required') && verticalStepperStep3.controls['region'].touched">
-                  Regional harus diisi
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', verticalStepperStep3.get('area').value)">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area" (selectionChange)="getAudienceArea('salespoint', verticalStepperStep3.get('area').value)">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched">
-                  Area harus diisi
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', verticalStepperStep3.get('salespoint').value)">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint" (selectionChange)="getAudienceArea('district', verticalStepperStep3.get('salespoint').value)">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['salespoint'].hasError('required') && verticalStepperStep3.controls['salespoint'].touched">
-                  Salespoint harus diisi
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', verticalStepperStep3.get('district').value)">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district" (selectionChange)="getAudienceArea('territory', verticalStepperStep3.get('district').value)">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['district'].hasError('required') && verticalStepperStep3.controls['district'].touched">
-                  Distrik harus diisi
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep3.controls['territory'].hasError('required') && verticalStepperStep3.controls['territory'].touched">
-                  Territori harus diisi
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
@@ -166,7 +166,7 @@
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Latitude" formControlName="latitude">
                 <mat-error *ngIf="verticalStepperStep3.controls['latitude'].hasError('required') && verticalStepperStep3.controls['latitude'].touched ">
-                  Latitude harus diisi.
+                  Latitude {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <!-- </div> -->
@@ -175,7 +175,7 @@
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" placeholder="Longitude" formControlName="longitude">
                 <mat-error *ngIf="verticalStepperStep3.controls['longitude'].hasError('required') && verticalStepperStep3.controls['longitude'].touched ">
-                  Longitude harus diisi.
+                  Longitude {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <!-- </div> -->
@@ -183,7 +183,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step3()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -195,14 +195,14 @@
 
           <form [formGroup]="verticalStepperStep4">
 
-            <ng-template matStepLabel>Tipe Toko</ng-template>
+            <ng-template matStepLabel>{{ls.locale.global.label.store_type}}</ng-template>
             <!-- <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
                 <mat-select placeholder="Tipe Retailer" formControlName="type">
                   <mat-option *ngFor="let item of listType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep4.controls['type'].hasError('required') && verticalStepperStep4.controls['type'].touched ">
-                  Tipe Retailer harus diisi
+                  Tipe Retailer {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div> -->
@@ -213,14 +213,14 @@
                   <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep4.controls['InternalClassification'].hasError('required') && verticalStepperStep4.controls['InternalClassification'].touched ">
-                  Internal Classification harus diisi
+                  Internal Classification {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step4()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -230,19 +230,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ls.locale.paguyuban.text5}}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ls.locale.global.button.back}}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Selesai
+                {{ls.locale.global.button.finish}}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

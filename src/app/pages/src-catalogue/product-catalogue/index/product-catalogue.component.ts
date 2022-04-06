@@ -220,7 +220,7 @@ export class ProductCatalogueComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.getProductCatalogue();
       }
     });

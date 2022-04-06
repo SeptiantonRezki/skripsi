@@ -137,7 +137,7 @@ export class DeviceAuthenticationComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)');
+      console.warn('Maaf, Terjadi Kesalahan Server! (failed to redirecting realtime server)'); // TODO
       // this.dialogService.openSnackBar({ message:"Maaf, Terjadi Kesalahan Server!" });
       return false;
     }

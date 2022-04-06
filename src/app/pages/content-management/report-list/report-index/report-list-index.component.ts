@@ -157,7 +157,7 @@ export class ReportListIndexComponent implements OnInit {
   rejectReport(id) {
     this.id = id;
     let data = {
-      titleDialog: "Apakah anda yakin ?",
+      titleDialog: "Apakah anda yakin ?", // TODO
       captionDialog: this.ls.locale.manajemen_konten.daftar_laporan.text10,
       confirmCallback: this.confirmReject.bind(this),
       buttonText: [this.ls.locale.dte.pengatur_jadwal_program.text32, this.ls.locale.dte.pengatur_jadwal_program.text33]
@@ -168,7 +168,7 @@ export class ReportListIndexComponent implements OnInit {
   deleteReport(id) {
     this.id = id;
     let data = {
-      titleDialog: "Apakah anda yakin ?",
+      titleDialog: "Apakah anda yakin ?", // TODO
       captionDialog: this.ls.locale.manajemen_konten.daftar_laporan.text11,
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.ls.locale.dte.pengatur_jadwal_program.text32, this.ls.locale.dte.pengatur_jadwal_program.text33]
@@ -182,7 +182,7 @@ export class ReportListIndexComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getReportList();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
       }
     });
   }
@@ -193,7 +193,7 @@ export class ReportListIndexComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getReportList();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
       }
     });
   }

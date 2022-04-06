@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Admin'">
+  <page-content-header [contentTitle]="ls.locale.admin_principal.text7">
     <div class="button-row" fxLayout="row">
       <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','admin-principal','create']">

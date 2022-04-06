@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Panel Mitra'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text9">
     <button style="width: 170px" [routerLink]="['/user-management', 'supplier-panel-mitra','create']" mat-raised-button
       type="button">
-      <mat-icon>add</mat-icon> TAMBAH
+      <mat-icon>add</mat-icon> {{ls.locale.global.button.add}}
     </button>
   </page-content-header>
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -11,23 +11,23 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="top-table pt-8 mb-8 bb">
-        <h2 class="pl-8">Daftar Produk</h2>
+        <h2 class="pl-8">{{ls.locale.produk_prinsipal.text10}}</h2>
         <div fxLayout="row" fxLayoutAlign="center center" fusePerfectScrollbar>
           <form [formGroup]="formFilter" autoComplete="off">
             <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="top-table p-8"
               fxLayoutAlign="center center">
               <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                <mat-select placeholder="Filter Kategori" formControlName="filtercategory"
+                <mat-select placeholder="{{ls.locale.produk_prinsipal.text14}}" formControlName="filtercategory"
                   (selectionChange)="selectionChangeFilterCategory($event)">
                   <mat-option [value]="item.id" *ngFor="let item of filterCategory">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxLayoutAlign="center center">
-                <mat-select placeholder="Filter Produk" formControlName="filterproduct"
+                <mat-select placeholder="{{ls.locale.produk_prinsipal.text13}}" formControlName="filterproduct"
                   (selectionChange)="selectionChangeFilterProduct($event)">
                   <mat-option>
-                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="'Cari Produk...'"
-                      [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="ls.locale.global.label.search"
+                      [noEntriesFoundLabel]="ls.locale.global.messages.data_not_found"></ngx-mat-select-search>
                   </mat-option>
                   <mat-option [value]="item.id" *ngFor="let item of filterProducts">{{item.name}}</mat-option>
                 </mat-select>
@@ -41,7 +41,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -50,7 +50,7 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Produk" prop="produkName" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.produk.text4}}" prop="produkName" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directEdit(row)"
               *ngIf="permission?.ubah || permission?.lihat; else elseDetail">{{row.product_name}}</span>
@@ -67,28 +67,28 @@
             <!-- </div> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kategori" prop="kategori" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.category}}" prop="kategori" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.category_name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Supplier" prop="phone" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text4}}" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.supplier_name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Mitra" prop="status" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text12}}" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.total_mitra}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="80" name="{{ls.locale.global.label.action}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button matTooltip="Edit" *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text" outline>edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{ls.locale.global.button.delete}}" (click)="deleteById(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

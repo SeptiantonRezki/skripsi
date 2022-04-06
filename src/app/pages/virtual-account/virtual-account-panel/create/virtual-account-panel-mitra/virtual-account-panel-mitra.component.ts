@@ -465,7 +465,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
   async export() {
     // if (this.selected.length === 0) {
     //   this.dialogService.openSnackBar({
-    //     message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+    //     message: this.ls.locale.global.messages.text12
     //   })
     //   return;
     // }
@@ -541,7 +541,7 @@ export class VirtualAccountPanelMitraComponent implements OnInit, OnDestroy {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

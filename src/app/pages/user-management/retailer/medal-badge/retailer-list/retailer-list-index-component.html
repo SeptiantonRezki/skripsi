@@ -63,8 +63,8 @@
     <form [formGroup]="formFilterMedalBadge" autoComplete="off">
       <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-          <mat-select placeholder="Kategori Medal" formControlName="medalCategory" multiple>
-            <mat-option [value]="'all'" selected>Semua Kategori Medal</mat-option>
+          <mat-select placeholder="{{ls.locale.retailer.medal_badge.text7}}" formControlName="medalCategory" multiple>
+            <mat-option [value]="'all'" selected>{{ls.locale.global.label.all}} {{ls.locale.retailer.medal_badge.text7}}</mat-option>
             <mat-option *ngFor="let medal of medalCategories" [value]="medal.value">{{ medal.name }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -72,7 +72,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -83,22 +83,22 @@
         [reorderable]="reorderable" [count]="rows.length" [limit]="50" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="true">
+        <ngx-datatable-column name="{{ls.locale.global.label.store_name}}" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Agen" prop="code" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.wholesaler.agent_code}}" prop="code" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.code || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.owner_name}}" prop="owner" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.owner || '-' }}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Medal" prop="medal_name" [sortable]="true">
+        <ngx-datatable-column name="{{ls.locale.retailer.medal_badge.text1}}" prop="medal_name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.medal_name}}</span>
           </ng-template>

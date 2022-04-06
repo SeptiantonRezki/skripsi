@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-mitra-delivery-panel',
@@ -40,7 +41,8 @@ export class MitraDeliveryPanelComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private mitraPanelService: MitraPanelService
+    private mitraPanelService: MitraPanelService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     // this.selected = [];
@@ -146,10 +148,10 @@ export class MitraDeliveryPanelComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Panel Mitra",
-      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini ?",
+      titleDialog: "Hapus Panel Mitra", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -158,7 +160,7 @@ export class MitraDeliveryPanelComponent implements OnInit {
     this.mitraPanelService.delete({ panel_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getPanelMitraList();
         this.selected = [];

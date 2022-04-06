@@ -68,7 +68,7 @@ export class DetailReportComponent implements OnInit {
       });
       if (this.isHistory) {
         this.formRiwayat.setValue({
-          actionPromo: this.detailReport.status === 'rejected' ? "Ditolak" : "Dihapus",
+          actionPromo: this.detailReport.status === 'rejected' ? "Ditolak" : "Dihapus", // TODO
           promoAdmin: this.detailReport.banner.user_admin ? this.detailReport.banner.user_admin : "-",
           actionDate: this.detailReport.updated_at
         });
@@ -85,10 +85,10 @@ export class DetailReportComponent implements OnInit {
   rejectReport(id) {
     this.id = id;
     let data = {
-      titleDialog: "Apakah anda yakin ?",
-      captionDialog: "Anda akan menolak laporan ini",
+      titleDialog: "Apakah anda yakin ?", // TODO
+      captionDialog: "Anda akan menolak laporan ini", // TODO
       confirmCallback: this.confirmReject.bind(this),
-      buttonText: ["YA", "TIDAK"]
+      buttonText: ["YA", "TIDAK"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -96,10 +96,10 @@ export class DetailReportComponent implements OnInit {
   deleteReport(id) {
     this.id = id;
     let data = {
-      titleDialog: "Apakah anda yakin ?",
-      captionDialog: "Anda akan menghapus laporan ini",
+      titleDialog: "Apakah anda yakin ?", // TODO
+      captionDialog: "Anda akan menghapus laporan ini", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["YA", "TIDAK"]
+      buttonText: ["YA", "TIDAK"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -110,7 +110,7 @@ export class DetailReportComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         // this.getReportList();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
         this.router.navigate(["content-management", "report-list", "detail", "history"]);
       }
     });
@@ -122,7 +122,7 @@ export class DetailReportComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         // this.getReportList();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
         this.router.navigate(["content-management", "report-list", "detail", "history"]);
       }
     });

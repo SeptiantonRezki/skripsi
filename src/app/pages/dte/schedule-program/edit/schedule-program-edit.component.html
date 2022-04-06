@@ -85,23 +85,23 @@
                     disabled>
                 </mat-form-field>
                 <!-- <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="Tanggal Mulai"
+                  <input matInput type="text" [value]="item.start_date | date:'dd/MM/yyyy'" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
                     disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="Tanggal Berakhir"
+                  <input matInput type="text" [value]="item.end_date | date:'dd/MM/yyyy'" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}"
                     disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field> -->
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date" [min]="minDate"
-                    [max]="maxStartDateTemplate" placeholder="Tanggal Mulai" (dateChange)="setMinDate(i)" readonly>
+                    [max]="maxStartDateTemplate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" (dateChange)="setMinDate(i)" readonly>
                   <mat-error *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
-                    Tanggal Mulai harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
                   </mat-error>
                   <mat-error *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
-                    Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="dari">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -110,13 +110,13 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('start_date').value" [max]="maxStartDateTemplate"
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [min]="item.get('start_date').value" [max]="maxStartDateTemplate"
                     readonly>
                   <mat-error *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
-                    Tanggal Berakhir harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
                   </mat-error>
                   <mat-error *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
-                    Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="sampai">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -134,7 +134,7 @@
           </button> -->
 
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-            SIMPAN
+            {{ls.locale.global.button.save}}
           </button>
         </div>
       </form>

@@ -8,6 +8,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-objective-dialog.component.html',
@@ -58,7 +59,8 @@ export class ImportObjectiveDialogComponent {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -99,12 +101,12 @@ export class ImportObjectiveDialogComponent {
             this.files = undefined;
 
             if (err.status === 404 || err.status === 500)
-              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+              this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
           })
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
         }
 
       },
@@ -113,7 +115,7 @@ export class ImportObjectiveDialogComponent {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
       }
     )
   }

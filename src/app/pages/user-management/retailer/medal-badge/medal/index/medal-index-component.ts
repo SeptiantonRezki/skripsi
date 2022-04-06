@@ -10,6 +10,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { FuseCopierService } from '@fuse/services/copier.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-medal-index-component',
@@ -41,6 +42,7 @@ export class MedalIndexComponent implements OnInit {
     private dialogService: DialogService,
     private fuseCopierService: FuseCopierService,
     private dataService: DataService,
+    private ls: LanguagesService
   ) {
     this.rows = [];
     this.onLoad = true;
@@ -131,7 +133,7 @@ export class MedalIndexComponent implements OnInit {
       titleDialog: 'Hapus Medal',
       captionDialog: 'Apakah anda yakin untuk menghapus Medal ini ?',
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

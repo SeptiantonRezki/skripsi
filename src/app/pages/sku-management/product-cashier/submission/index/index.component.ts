@@ -39,8 +39,8 @@ export class CashierSubmissionComponent implements OnInit {
   listCategories: any;
   listStatus: any[] = [
     {id: 'all', name: 'SEMUA'},
-    {id: '1', name: 'YA'},
-    {id: '0', name: 'TIDAK'},
+    {id: '1', name: 'ADA DI PRODUK DATABANK'},
+    {id: '0', name: 'TIDAK ADA DI PRODUK DATABANK'},
   ];
   formFilter: FormGroup;
 

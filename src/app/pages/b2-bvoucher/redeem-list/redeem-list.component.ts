@@ -622,7 +622,7 @@ export class RedeemListComponent implements OnInit {
       //     this.pagination.sort_type = 'asc';
       //     this.dataService.showLoading(false);
       //   } else {
-      //     this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      //     this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       //     Page.renderPagination(this.pagination, res.data);
       //     this.rows = [];
       //     this.loadingIndicator = false;
@@ -630,7 +630,7 @@ export class RedeemListComponent implements OnInit {
       //   }
       // }, err => {
       //   console.warn(err);
-      //   this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      //   this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       //   this.loadingIndicator = false;
       //   this.dataService.showLoading(false);
       // })
@@ -712,7 +712,7 @@ export class RedeemListComponent implements OnInit {
       if (response) {
         this.getRedeemList();
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
       }
     });
   }

@@ -31,9 +31,9 @@ export class WholesalerEditComponent {
 
   detailWholesaler: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Belum Terdaftar", value: "not-registered" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" },
+    { name: this.ls.locale.global.label.unregistered_status, value: "not-registered" }
   ];
   listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
   countryList: any[] = [];
@@ -516,7 +516,7 @@ export class WholesalerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: "Pemberian Akses Ke Supplier" };
+    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: this.ls.locale.wholesaler.grant_access_supplier };
 
     this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
 

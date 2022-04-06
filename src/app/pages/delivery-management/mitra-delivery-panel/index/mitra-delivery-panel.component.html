@@ -4,7 +4,7 @@
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/delivery','panel-mitra','create']">
-        <mat-icon>add</mat-icon>TAMBAH
+        <mat-icon>add</mat-icon>TAMBAH <!-- // TODO -->
       </button>
     </div>
   </page-content-header>
@@ -13,11 +13,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Kurir</h2>
+        <h2 class="pl-8">Daftar Kurir</h2> <!-- // TODO -->
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
           </mat-form-field>
         </div>
       </div>
@@ -26,16 +26,16 @@
         [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Kurir" prop="delivery_courier_name">
+        <ngx-datatable-column name="Nama Kurir" prop="delivery_courier_name"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.delivery_courier_name}} </a>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jenis Layanan" prop="delivery_courier_service_name">
+        <ngx-datatable-column name="Jenis Layanan" prop="delivery_courier_service_name"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.delivery_courier_service_name}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="200" name="Jumlah Mitra" prop="mitra_count" summary-template="activeCell">
+        <ngx-datatable-column [width]="200" name="Jumlah Mitra" prop="mitra_count" summary-template="activeCell"> <!-- // TODO -->
         </ngx-datatable-column>
 
         <!-- <ngx-datatable-column [width]="100" name="Status" prop="status">

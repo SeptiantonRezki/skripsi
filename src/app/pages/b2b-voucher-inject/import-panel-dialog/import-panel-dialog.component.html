@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLS</span>
       </div>
 
     </div>
@@ -23,8 +23,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+           
         </span>
       </div>
     </div>
@@ -36,15 +36,15 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Nama</th>
+            <th nowrap>{{ls.locale.global.label.name}}</th>
             <th nowrap>Kode</th>
             <th nowrap>Owner</th>
             <th nowrap>Tipe</th>
-            <th nowrap>Klasifikasi</th>
+            <th nowrap>{{ls.locale.global.label.classification}}</th>
             <th nowrap>Nominal</th>
             <th nowrap>Amount</th>
-            <th nowrap>Alasan Tidak Valid</th>
-          </tr>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
+          </tr> <!-- // TODO -->
         </thead>
         <tbody>
           <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#df5d52'}">
@@ -75,7 +75,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -85,15 +85,15 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Nama</th>
+            <th nowrap>{{ls.locale.global.label.name}}</th>
             <th nowrap>Kode</th>
             <th nowrap>Owner</th>
             <th nowrap>Tipe</th>
-            <th nowrap>Klasifikasi</th>
+            <th nowrap>{{ls.locale.global.label.classification}}</th>
             <th nowrap>Nominal</th>
             <th nowrap>Amount</th>
-            <th nowrap>Alasan Tidak Valid</th>
-          </tr>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
+          </tr> <!-- // TODO -->
         </thead>
         <tbody>
           <tr *ngFor="let item of rows" [ngStyle]="{'background' : item.flag ? '#fff' : '#df5d52'}">
@@ -124,7 +124,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}} <!-- // TODO -->
             </td>
           </tr>
         </tbody>
@@ -137,9 +137,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="isValid == false">Kirim</button>
+          [disabled]="isValid == false">{{ls.locale.global.button.send}}</button> <!-- // TODO -->
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">Batal</button> <!-- // TODO -->
       </div>
     </div>
   </div>

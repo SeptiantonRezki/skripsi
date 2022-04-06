@@ -32,6 +32,7 @@ import {CallObjModel} from 'app/pages/call-objective/call-objective.model';
 import { CallObjectiveSerive } from '../../../services/call-objective/call-objective.service';
 import { ImportObjectiveDialogComponent } from '../import-component/import-objective-dialog.component';
 import moment from 'moment';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-create-call-objective.component',
@@ -58,7 +59,7 @@ export class CreateCallObjectiveComponent implements OnInit {
   listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -67,10 +68,10 @@ export class CreateCallObjectiveComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" }
   ];
 
   selected = [];
@@ -149,6 +150,7 @@ export class CreateCallObjectiveComponent implements OnInit {
     private idbService: IdbService,
     private route: ActivatedRoute,
     private callObjService: CallObjectiveSerive,
+    private ls: LanguagesService,
   ) {
     this.callOjbMdl = new CallObjModel();
     this.exportTemplate = false;
@@ -1324,7 +1326,7 @@ export class CreateCallObjectiveComponent implements OnInit {
             console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
+              message: this.ls.locale.global.messages.text8,
             });
           });
       }

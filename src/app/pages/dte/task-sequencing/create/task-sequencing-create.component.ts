@@ -7,6 +7,7 @@ import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-task-sequencing-create",
@@ -34,7 +35,8 @@ export class TaskSequencingCreateComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService,
   ) {}
 
   ngOnInit() {

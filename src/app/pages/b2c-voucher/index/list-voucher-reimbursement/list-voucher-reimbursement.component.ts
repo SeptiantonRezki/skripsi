@@ -276,7 +276,7 @@ export class ListVoucherReimbursementComponent implements OnInit {
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
@@ -284,7 +284,7 @@ export class ListVoucherReimbursementComponent implements OnInit {
         }
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       });
