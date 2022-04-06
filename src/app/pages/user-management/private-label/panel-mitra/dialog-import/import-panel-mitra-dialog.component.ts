@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { FormControl } from '@angular/forms';
 import { PanelMitraService } from 'app/services/user-management/private-label/panel-mitra.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-panel-mitra-dialog.component.html',
@@ -30,6 +31,7 @@ export class ImportPanelMitraDialogComponent {
     private dialogService: DialogService,
     private panelMitraService: PanelMitraService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -85,7 +87,7 @@ export class ImportPanelMitraDialogComponent {
           console.log('res', res);
           this.rows = res.data;
           this.onImport = false;
-          this.dialogService.openSnackBar({ message: "File berhasil Diimport " });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           this.dataService.showLoading(false);
         }, err => {
           this.dataService.showLoading(false);

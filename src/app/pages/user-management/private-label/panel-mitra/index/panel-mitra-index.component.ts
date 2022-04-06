@@ -30,8 +30,8 @@ export class PanelMitraIndexComponent implements OnInit {
   id: any;
   listFilterCategory: any[];
   listFilterProducts: any[];
-  filterCategory: any[] = [{ name: 'Semua Kategori', id: '' },];
-  filterProducts: any[] = [{ name: 'Semua Produk', id: '' },];
+  filterCategory: any[] = [{ name: this.ls.locale.global.label.all_category, id: '' },];
+  filterProducts: any[] = [{ name: this.ls.locale.global.label.all +' ' + this.ls.locale.manajemen_barang_sku.produk.text1, id: '' },];
   formFilter: FormGroup;
   filterProdukSearch = new FormControl();
   private _onDestroy = new Subject<void>();
@@ -75,7 +75,7 @@ export class PanelMitraIndexComponent implements OnInit {
       filtercategory: "",
       filterproduct: "",
     });
-    this.listFilterCategory = [{ name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data];
+    this.listFilterCategory = [{ name: this.ls.locale.global.label.all_category, id: '' }, ...this.activatedRoute.snapshot.data["listCategory"].data];
     this.filterCategory = this.listFilterCategory;
     this.getList();
 
@@ -247,10 +247,10 @@ export class PanelMitraIndexComponent implements OnInit {
   deleteById(id: any) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Panel Mitra",
-      captionDialog: "Apakah anda yakin untuk menghapus Panel Mitra ini?",
+      titleDialog: this.ls.locale.produk_prinsipal.delete_panel_mitra,
+      captionDialog: this.ls.locale.produk_prinsipal.delete_panel_mitra_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -259,7 +259,7 @@ export class PanelMitraIndexComponent implements OnInit {
     this.panelMitraService.delete({ panelMitraId: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
         this.getList();
       },
       err => {

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-mitra-delivery-panel',
@@ -40,7 +41,8 @@ export class MitraDeliveryPanelComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private mitraPanelService: MitraPanelService
+    private mitraPanelService: MitraPanelService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     // this.selected = [];

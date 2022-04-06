@@ -1,14 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Order dari Mitra'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text20">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group>
-        <mat-tab label="Order ke Supplier">
+        <mat-tab label="{{ls.locale.produk_prinsipal.order_to_supplier}}">
           <div fxLayout="column" class="top-table pt-8 mb-8 pr-16 bb">
             <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center">
-              <h2 class="pl-16">Daftar Pesanan</h2>
+              <h2 class="pl-16">{{ls.locale.produk_prinsipal.text21}}</h2>
               <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
                 <mat-icon>search</mat-icon>
                 <mat-form-field class="is-light tab-search">
@@ -26,7 +26,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field class="orders datepicker is-light">
-                    <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+                    <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="{{ls.locale.dte.pengatur_jadwal_program.text5}}"
                       formControlName="from" (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
                     <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
                       (click)="formFilter.get('from').setValue('')">
@@ -39,7 +39,7 @@
                   </mat-form-field>
                   <mat-form-field class="orders datepicker is-light">
                     <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-                      placeholder="Sampai Tanggal" formControlName="to" readonly>
+                      placeholder="{{ls.locale.dte.pengatur_jadwal_program.text6}}" formControlName="to" readonly>
                     <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
                       (click)="formFilter.get('to').setValue('')">
                       <mat-icon>close</mat-icon>
@@ -73,37 +73,37 @@
             [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
             [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-            <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text22}}" prop="invoice_number" [sortable]="true" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name" (click)="directDetail(row)">{{row.invoice_number}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Nama Mitra" prop="wholesaler_name" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text23}}" prop="wholesaler_name" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.wholesaler_name}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Alamat" prop="address" [sortable]="true">
+            <ngx-datatable-column name="{{ls.locale.global.label.address}}" prop="address" [sortable]="true">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.address}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="No Telepon" prop="phone" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.global.label.phone}}" prop="phone" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.phone}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Jumlah Pesanan" prop="total_products" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text24}}" prop="total_products" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.total_products}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text25}}" prop="total_price" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.total_price | rupiahFormaterWithoutRp}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.global.label.created_at}}" prop="created_at" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-address">{{row.created_at | date:'dd/MM/yyyy'}}</span>
               </ng-template>
@@ -120,17 +120,17 @@
                 <div class="button-row" style="margin-left: -10px; padding-top: 5px; padding-bottom: 5px;">
                   <a #downloadLink></a>
                   <button mat-stroked-button color="" (click)="getDetailOrder(row.id)">
-                    CETAK PO
+                    {{ls.locale.global.label.print}} PO
                   </button>
                   <button *ngIf="permission.document" mat-stroked-button color="" (click)="openDocumentOrder(row)" style="margin-top: 2px;">
-                    DOKUMEN
+                    DOCUMENT
                   </button>
                 </div>
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
         </mat-tab>
-        <mat-tab label="Order ke Mitra Hub" *ngIf="!HIDE_FOR.includes(profileType)">
+        <mat-tab label="{{ls.locale.produk_prinsipal.order_to_hub}}" *ngIf="!HIDE_FOR.includes(profileType)">
           <app-order-to-mitra-hub></app-order-to-mitra-hub>
         </mat-tab>
       </mat-tab-group>

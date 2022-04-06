@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VirtualAccountTncService } from 'app/services/virtual-account/virtual-account-tnc.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-tnc',
@@ -35,7 +36,8 @@ export class VirtualAccountTncComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private VirtualAccountTncService: VirtualAccountTncService
+    private VirtualAccountTncService: VirtualAccountTncService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

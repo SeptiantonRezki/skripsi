@@ -1,5 +1,5 @@
 <div #containerScroll class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Panel Mitra'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text9">
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -9,52 +9,51 @@
           <form [formGroup]="formInput" autoComplete="off">
             <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" fxLayoutAlign="center center">
               <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                <mat-select placeholder="Pilih Kategori Produk" formControlName="filtercategory"
+                <mat-select placeholder="{{ls.locale.produk_prinsipal.text15}}" formControlName="filtercategory"
                   (selectionChange)="selectionChangeFilterCategory($event)">
                   <mat-option [value]="item.id" *ngFor="let item of filterCategory">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formInput.controls['filtercategory'].hasError('required') && formInput.controls['filtercategory'].touched">
-                  Kategori harus diisi
+                  {{ls.locale.produk_prinsipal.text11}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxLayoutAlign="center center">
-                <mat-select placeholder="Pilih Produk" formControlName="filterproduct"
+                <mat-select placeholder="{{ls.locale.produk_prinsipal.text16}}" formControlName="filterproduct"
                   (selectionChange)="selectionChangeFilterProduct($event)">
                   <mat-option>
-                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="'Cari Produk...'"
-                      [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                    <ngx-mat-select-search [formControl]="filterProdukSearch" [placeholderLabel]="ls.locale.global.label.search"
+                      [noEntriesFoundLabel]="ls.locale.global.messages.data_not_found"></ngx-mat-select-search>
                   </mat-option>
                   <mat-option [value]="item.id" *ngFor="let item of filterProducts">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formInput.controls['filterproduct'].hasError('required') && formInput.controls['filterproduct'].touched">
-                  Produk harus diisi
+                  {{ls.locale.manajemen_barang_sku.produk.text1}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxLayoutAlign="center center">
-                <mat-select placeholder="Pilih Supplier" formControlName="filtersupplier"
+                <mat-select placeholder="{{ls.locale.produk_prinsipal.text17}}" formControlName="filtersupplier"
                   (selectionChange)="selectionChangeFilterSupplier($event)">
                   <mat-option>
-                    <ngx-mat-select-search [formControl]="filterSupplierSearch" [placeholderLabel]="'Cari Supplier...'"
-                      [noEntriesFoundLabel]="'Tidak ada produk yang ditemukan'"></ngx-mat-select-search>
+                    <ngx-mat-select-search [formControl]="filterSupplierSearch" [placeholderLabel]="ls.locale.global.label.search"
+                      [noEntriesFoundLabel]="ls.locale.global.messages.data_not_found"></ngx-mat-select-search>
                   </mat-option>
                   <mat-option [value]="item.id" *ngFor="let item of filterSupplier">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formInput.controls['filtersupplier'].hasError('required') && formInput.controls['filtersupplier'].touched">
-                  Supplier harus diisi
+                  Supplier {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <div class="button-row" *ngIf="!isDetail">
-                <button mat-raised-button style="width: 160px" color="primary" (click)="aturPanelMitra()">ATUR PANEL
-                  MITRA</button>
+                <button mat-raised-button style="width: 160px" color="primary" (click)="aturPanelMitra()">{{ls.locale.produk_prinsipal.text18}}</button>
               </div>
             </div>
           </form>
         </div>
         <div fxLayout="column">
-          <label style="font-size: 10px;">Mitra Terpilih</label>
+          <label style="font-size: 10px;">{{ls.locale.produk_prinsipal.text19}}</label>
           <span style="font-size: 32px;">{{(allRowsSelected ? pagination.total : selected.length) |
             rupiahFormaterWithoutRp}}</span>
         </div>
@@ -161,32 +160,32 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="name" [sortable]="true">
+        <ngx-datatable-column name="{{ls.locale.call_objective.text8}}" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.phone}}" prop="phone" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.phone || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode" prop="code" [sortable]="true">
+        <ngx-datatable-column name="Code" prop="code" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.code || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="kodedivisi" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.produk_prinsipal.division_code}}" prop="kodedivisi" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.division || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Wilayah" prop="wilayah" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.area.district}}" prop="wilayah" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.district || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.area.area}}" prop="area" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.area || '-'}}</span>
           </ng-template>

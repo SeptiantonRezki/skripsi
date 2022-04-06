@@ -1,5 +1,5 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Perusahaan'">
+  <page-content-header [contentTitle]="ls.locale.produk_prinsipal.text2">
     <button style="width: 170px" (click)="directCreate()" mat-raised-button type="button">
       <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
     </button>
@@ -31,7 +31,7 @@
             <span class="row-address">{{row.address}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="{{ ls.locale.global.label.phone_number }}" prop="phone">
+        <ngx-datatable-column name="{{ ls.locale.global.label.phone }}" prop="phone">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.telephone}}</span>
           </ng-template>
@@ -54,10 +54,10 @@
         <ngx-datatable-column [width]="80" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="primary" matTooltip="Edit" (click)="directEdit(row)" [disabled]="!permission?.ubah">
+              <button mat-icon-button color="primary" matTooltip="{{ls.locale.global.button.edit}}" (click)="directEdit(row)" [disabled]="!permission?.ubah">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteById(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{ls.locale.global.button.delete}}" (click)="deleteById(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

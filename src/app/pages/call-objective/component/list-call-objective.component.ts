@@ -85,10 +85,10 @@ import { LanguagesService } from "app/services/languages/languages.service";
     this.loadingIndicator = true;
     this.id = id;
     let data = {
-      titleDialog: "Hapus Objective",
-      captionDialog: "Apakah anda yakin untuk menghapus Objective ini ?",
+      titleDialog: this.ls.locale.call_objective.delete,
+      captionDialog: this.ls.locale.call_objective.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
     this.dataService.showLoading(false);
@@ -102,7 +102,7 @@ import { LanguagesService } from "app/services/languages/languages.service";
         this.dialogService.brodcastCloseConfirmation();
         // this.getAudience();
         this.ngOnInit();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
       }
     });
   }

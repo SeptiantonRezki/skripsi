@@ -16,6 +16,7 @@ import { AreaService } from "app/services/area.service";
 import { DataService } from "app/services/data.service";
 import { DialogService } from "app/services/dialog.service";
 import { GeotreeService } from "app/services/geotree.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 import { Observable, Subject } from "rxjs";
 import { DialogImportComponent } from "./dialog-import/dialog-import.component";
 
@@ -70,7 +71,8 @@ export class TargetAreaComponent implements OnInit {
     private areaService: AreaService,
     private dataService: DataService,
     public dialogService: DialogService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.keyUp
       .debounceTime(500)

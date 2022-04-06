@@ -40,8 +40,8 @@ export class UserSupplierIndexComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
   userSupplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(

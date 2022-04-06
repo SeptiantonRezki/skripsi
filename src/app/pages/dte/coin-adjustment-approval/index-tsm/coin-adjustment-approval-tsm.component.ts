@@ -11,6 +11,7 @@ import { IdleService } from 'app/services/idle.service';
 import { forkJoin, Observable, ReplaySubject, Subject } from 'rxjs';
 import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-coin-adjustment-approval-tsm',
@@ -70,7 +71,8 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     private dataService: DataService,
     private userIdle: IdleService,
     private dialog: MatDialog,
-    private coinAdjustmentApprovalService: CoinAdjustmentApprovalService
+    private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

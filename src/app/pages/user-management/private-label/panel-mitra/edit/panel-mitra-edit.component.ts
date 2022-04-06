@@ -99,7 +99,7 @@ export class PanelMitraEditComponent implements OnInit {
       this.selectedHub = [];
       this.permission = this.roles.getRoles('principal.supplierpanelmitra');
       // console.log('snapshot', this.activatedRoute.snapshot.data);
-      this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data['listCategory'].data ];
+      this.listFilterCategory = [ { name: this.ls.locale.global.label.all_category, id: '' }, ...this.activatedRoute.snapshot.data['listCategory'].data ];
       // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
       this.filterCategory = this.listFilterCategory;
       // this.filterSupplier = this.listFilterSupplier;
@@ -461,7 +461,7 @@ export class PanelMitraEditComponent implements OnInit {
           }
           this.panelMitraService.update(body, { panelMitraId: this.panelMitraId }).subscribe(res => {
             this.dialogService.openSnackBar({
-              message: 'Berhasil Menyimpan Data'
+              message: this.ls.locale.global.messages.text2
             });
             this.router.navigate(['user-management', 'supplier-panel-mitra']);
             this.dataService.showLoading(false);

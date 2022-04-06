@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="'Call Objective'">
     <button style="min-width: 170px;" [routerLink]="['/callobj/call-objective-create']" mat-raised-button
       aria-label="Produk" type="button">
-      <mat-icon>add</mat-icon>Create
+      <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -16,7 +16,7 @@
         </button>
       </div> -->
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-        <h2 class="pl-8">Daftar Call Objective</h2> <!-- // TODO -->
+        <h2 class="pl-8">{{ls.locale.call_objective.text2}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">

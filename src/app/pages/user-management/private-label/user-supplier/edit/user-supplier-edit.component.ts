@@ -29,8 +29,8 @@ export class UserSupplierEditComponent implements OnInit {
   userSupplierStatusSelected: any;
   userSupplierId: any;
   userSupplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(

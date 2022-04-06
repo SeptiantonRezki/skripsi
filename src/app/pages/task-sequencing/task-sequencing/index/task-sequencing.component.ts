@@ -9,6 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-sequencing',
@@ -40,6 +41,7 @@ export class TaskSequencingComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []

@@ -38,30 +38,30 @@
           [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
           [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
   
-          <ngx-datatable-column name="Penjual" prop="name">
+          <ngx-datatable-column name="{{ls.locale.call_objective.text8}}" prop="name">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
               {{ row.name }}
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Kode" prop="code">
+          <ngx-datatable-column name="Code" prop="code">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.code }}
             </ng-template>
           </ngx-datatable-column>
   
-          <ngx-datatable-column name="Tipe" prop="tipe">
+          <ngx-datatable-column name="{{ls.locale.call_objective.text9}}" prop="tipe">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.tipe }}
             </ng-template>
           </ngx-datatable-column>
   
-          <ngx-datatable-column name="Field Force" prop="ff_name">
+          <ngx-datatable-column name="{{ls.locale.call_objective.text13}}" prop="ff_name">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.ff_name }}
             </ng-template>
           </ngx-datatable-column>
   
-          <ngx-datatable-column name="Daftar Ayo" prop="registered">
+          <ngx-datatable-column name="{{ls.locale.call_objective.text14}}" prop="registered">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.registered }}
             </ng-template>
@@ -83,7 +83,7 @@
           <button type="button" mat-raised-button color="primary" (click)="submit()"
             [disabled]="rows.length === 0">{{ls.locale.global.button.send}}</button>
           <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-            [disabled]="uploading">Batal</button>
+            [disabled]="uploading">{{ls.locale.global.button.cancel}}</button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-import-panel-mitra-dialog',
@@ -27,6 +28,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
     private dialogService: DialogService,
     private mitraPanelService: MitraPanelService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
