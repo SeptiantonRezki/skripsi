@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation, Inject } 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { NotificationService } from 'app/services/notification.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class ImportCustomNotificationComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private notificationService: NotificationService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.rows = [];

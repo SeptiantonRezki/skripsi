@@ -9,6 +9,7 @@ import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
 import { PanelPartnershipService } from 'app/services/user-management/private-label/panel-partnership.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   // selector: 'app-import-audience-dialog',
@@ -63,6 +64,7 @@ export class ImportAudienceDialogComponent {
     private dataService: DataService,
     private idbService: IdbService,
     private panelPartnershipService: PanelPartnershipService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
