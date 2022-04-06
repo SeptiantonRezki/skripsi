@@ -13,6 +13,7 @@ import { TaskVerificationService } from 'app/services/dte/task-verification.serv
 import { ConfirmDialogTsmComponent } from '../dialog/confirm-dialog-tsm/confirm-dialog-tsm.component';
 import { SequencingService } from 'app/services/dte/sequencing.service';
 import * as CryptoJS from 'crypto-js';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-verification-index-tsm',
@@ -65,7 +66,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     private userIdle: IdleService,
     private taskVerificationService: TaskVerificationService,
     private dialog: MatDialog,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

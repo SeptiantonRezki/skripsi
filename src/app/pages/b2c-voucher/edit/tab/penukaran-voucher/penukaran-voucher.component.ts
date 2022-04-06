@@ -210,7 +210,7 @@ export class PenukaranVoucherComponent implements OnInit {
           this.dataService.showLoading(false);
         });
       } else {
-        alert('Lengkapi bagian yang harus diisi!');
+        alert('Lengkapi bagian yang harus diisi!'); // TODO
         commonFormValidator.validateAllFields(this.formPenukaranVoucher);
         try {
           this.myScrollContainer.nativeElement.scrollTop = 0;

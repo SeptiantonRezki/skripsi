@@ -8,6 +8,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-tsm-coin.component.html',
@@ -56,6 +57,7 @@ export class ImportTsmCoinComponent {
     private dataService: DataService,
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     if (data) {
@@ -254,7 +256,7 @@ export class ImportTsmCoinComponent {
         captionDialog: `Apakah anda yakin ingin menyimpan data ini (Notifikasi Akan langsung diproses kepada Penerima) ?`,
         confirmCallback: () => this.confirmSubmit(),
         htmlContent: true,
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     // } else {

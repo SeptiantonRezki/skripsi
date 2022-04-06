@@ -7,6 +7,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -36,7 +37,8 @@ export class CoinDisburstmentComponent implements OnInit {
     private adapter: DateAdapter<any>,
     private dataService: DataService,
     private coinDisburstmentService: CoinDisburstmentService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

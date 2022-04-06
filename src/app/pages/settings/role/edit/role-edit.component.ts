@@ -197,7 +197,8 @@ export class RoleEditComponent {
     this.formRolesGroup.get('salespoint').setValue(this.getArea('salespoint'));
     this.formRolesGroup.get('district').setValue(this.getArea('district'));
     this.formRolesGroup.get('territory').setValue(this.getArea('teritory'));
-    this.is_otp.setValue(this.detailRoles.is_otp);
+    this.is_otp.setValue(this.detailRoles.is_otp + "");
+    console.log("detail roles", this.detailRoles.is_otp)
 
     if (this.isDetail) this.formRolesGroup.disable();
     if (this.isDetail) this.is_otp.disable();

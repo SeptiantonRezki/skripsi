@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disbursement'">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button" *ngIf="!isEdit">
-      <mat-icon>save</mat-icon> SIMPAN
+      <mat-icon>save</mat-icon> {{ls.locale.global.button.save}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -46,20 +46,20 @@
                   <mat-datepicker #startDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    Tanggal Mulai harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50%" class="is-light form-primary">
                   <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
-                    placeholder="Tanggal Berakhir Penukaran Koin">
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
                   <mat-datepicker-toggle matSuffix [for]="endDate">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    Tanggal Berakhir harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
                   </mat-error>
                 </mat-form-field>
               </div>

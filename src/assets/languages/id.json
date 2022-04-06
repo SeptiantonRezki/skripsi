@@ -94,7 +94,10 @@
       "all_district": "Semua Kecamatan",
       "owner_information": "Informasi Pemilik",
       "upload_image": "Unggah Gambar",
-      "updated_by": "Diperbarui Oleh"
+      "updated_by": "Diperbarui Oleh",
+      "all_access_cashier": "Semua Akses Kasir",
+      "cashier_access": "Akses Kasir",
+      "store_type": "Tipe Toko"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -181,7 +184,11 @@
       "network_error": "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!",
       "not_found": "Data tidak valid / tidak ditemukan",
       "invalid_credential": "Email / kata sandi yang Anda masukkan salah",
-      "error": "Terjadi Kesalahan"
+      "error": "Terjadi Kesalahan",
+      "invalid_reason": "Alasan Tidak Valid",
+      "send_email_notif": "Kirim Email Notifikasi",
+      "send_email_notif_to": "Anda akan mengirimkan email notifikasi ke",
+      "no_selected_user": "Tidak Ada user yang terpilih"
     }
   },
   "login": {
@@ -287,7 +294,8 @@
     "text16": "Tidak ada admin principal yang dipilih",
     "text17": "Detil Admin",
     "text18": "Nama Pengguna",
-    "text19": "Admin Detil"
+    "text19": "Admin Detil",
+    "create_title": "Buat Admin Principal"
   },
   "field_force": {
     "page_title": "Daftar Field Force",
@@ -319,7 +327,14 @@
     "grant_access": "Lihat Pemberian Akses",
     "has_branch": "Mempunyai Toko Cabang",
     "total_branch": "Jumlah Toko Cabang",
-    "area": "Area"
+    "area": "Area",
+    "grant_access_supplier": "Pemberian Akses Ke Supplier",
+    "id_access": "Akses KTP",
+    "tax_access": "Akses NPWP",
+    "no_document": "Tidak Ada Dokumen yang Ditampilkan",
+    "card": "Kartu",
+    "number": "Nomor",
+    "copy_number": "Salin Nomor"
   },
   "retailer": {
     "list": {
@@ -343,7 +358,11 @@
       "text5": "Buat Medal",
       "text6": "Apakah anda yakin untuk menghapus Medal ini",
       "text7": "Kategori Medal"
-    }
+    },
+    "create": {
+      "page_title": "Buat Retailer"
+    },
+    "excel_download_info": "Sistem sedang membuat file excel untuk anda download. Jika file excel sudah dibuat akan segera kami infokan via email."
   },
   "paguyuban": {
     "page_title": "Daftar Paguyuban",
@@ -354,7 +373,9 @@
     "text3": "Konfirmasi Kata Sandi Tidak Sesuai",
     "text4": "Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
     "text5": "Apakah anda yakin untuk menyelesaikan isian ini?",
-    "detail": "Detil Paguyuban"
+    "detail": "Detil Paguyuban",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Paguyuban ini ?",
+    "no_selected": "Tidak ada paguyuban yang dipilih"
   },
   "customer": {
     "text1": "Customer",
@@ -371,7 +392,9 @@
     "text1": "Principal Partnership",
     "text2": "Daftar Undian YBKS",
     "text3": "Nama Grup",
-    "principal_name": "Nama Principal"
+    "principal_name": "Nama Principal",
+    "delete": "Hapus Principal Partnership",
+    "delete_confirm": "Apakah anda yakin untuk menghapus principal partnership ini ?"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -389,7 +412,10 @@
     "text13": "Field Force",
     "text14": "Daftar AYO",
     "text15": "Update",
-    "text16": "Load Data"
+    "text16": "Load Data",
+    "name_2_char": "Nama harus lebih dari 2 karakter",
+    "delete": "Hapus Objective",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Objective ini ?"
   },
   "produk_prinsipal": {
     "text1": "Produk Prinsipal",
@@ -437,7 +463,16 @@
     "text43": "Uang Tunai",
     "text44": "Data Berhasil Disimpan",
     "text45": "Area geotree yang dipilih tidak boleh kosong",
-    "text46": "Order GSR"
+    "text46": "Order GSR",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Perusahaan ini?",
+    "phone_min": "Minimal Nomor Telepon 6 angka",
+    "phone_min_2": "Minimal Nomor Ponsel 10 angka",
+    "delete_panel_mitra": "Hapus Panel Mitra",
+    "delete_panel_mitra_confirm": "Apakah anda yakin untuk menghapus Panel Mitra ini?",
+    "division_code": "Kode Divisi",
+    "order_to_supplier": "Order ke Supplier",
+    "order_to_hub": "Order ke Mitra Hub",
+    "detail_order": "Detail Pesanan"
   },
   "strategic_partnership": {
     "text1": "Strategic Partnership",
@@ -508,7 +543,10 @@
       "text26": "Estimasi Pengiriman",
       "text27": "Estimasi Pengiriman Minimal 0 Hari",
       "text28": "Estimasi Pengiriman Maksimal 31 Hari",
-      "day": "Hari"
+      "day": "Hari",
+      "update_all_price": "PERBARUI SEMUA HARGA",
+      "shopping_voucher": "Voucher Belanja",
+      "total_order_value": "Total Nilai Pemesanan"
     },
     "produk": {
       "text1": "Produk Katalog SRC",
@@ -791,7 +829,14 @@
       "text4": "Jumlah SRC",
       "text5": "Total Koin Yang Terkirim",
       "text6": "Tanggal Request",
-      "text7": "Tanggal Approval"
+      "text7": "Tanggal Approval",
+      "approve": "Setujui Request Adjustment Coin",
+      "reject": "Tolak Request Adjustment Coin",
+      "are_you_sure": "Apakah anda yakin untuk",
+      "this_request_adjusment": "request adjustment coin ini ?",
+      "do_approve": "menyetujui",
+      "do_reject": "menolak",
+      "read_only_access": "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)"
     },
     "audience": {
       "text1": "Audience",
@@ -941,17 +986,19 @@
       "text17": "Penggunaan Voucher",
       "text18": "Pilih dari",
       "text19": "Nama Voucher",
-      "text20": "Nilai Penukaramn Untuk 1 Koin",
+      "text20": "Nilai Penukaran Untuk 1 Koin",
       "text21": "Jumlah Koin",
       "text22": "Tanggal Voucher Dibagikan",
-      "text23": "Tanggal kedaluarsa Voucher",
+      "text23": "Tanggal kadaluarsa Voucher",
       "text24": "Catatan",
       "text25": "Batasan",
       "text26": "Batasi dengan Produk",
       "text27": "Batasi dengan Kategori",
       "text28": "Produk B2B",
       "text29": "Batasan Berdasarkan Produk",
-      "text30": "Batasan Berdasarkan Kategori"
+      "text30": "Batasan Berdasarkan Kategori",
+      "published": "PUBLISHED",
+      "voucher_on_review": "Voucher sedang di Review"
     },
     "b2c_voucher": {
       "text1": "B2C Voucher",

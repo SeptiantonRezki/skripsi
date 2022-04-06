@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { ProductService } from "app/services/sku-management/product.service";
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { element } from 'protractor';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class ImportFileDialogComponent implements OnInit {
     private productService: ProductService,
     private dataService: DataService,
     private vendorService: VendorsService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;

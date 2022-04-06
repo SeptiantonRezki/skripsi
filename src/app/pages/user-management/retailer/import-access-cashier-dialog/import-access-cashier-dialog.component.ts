@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-access-cashier-dialog.component.html',
@@ -23,7 +24,8 @@ export class ImportAccessCashierDialogComponent {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private retailerService: RetailerService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);

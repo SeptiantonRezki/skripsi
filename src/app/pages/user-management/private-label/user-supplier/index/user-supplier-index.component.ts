@@ -40,8 +40,8 @@ export class UserSupplierIndexComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
   userSupplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(
@@ -88,14 +88,14 @@ export class UserSupplierIndexComponent implements OnInit {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }

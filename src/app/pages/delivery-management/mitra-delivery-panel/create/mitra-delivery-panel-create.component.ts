@@ -428,7 +428,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
   async export() {
     if (this.selectedMitra.length === 0) {
       this.dialogService.openSnackBar({
-        message: "Jumlah mitra yang dipilih tidak boleh kosong!"
+        message: this.ls.locale.global.messages.text12 // TODO
       })
       return;
     }
@@ -503,7 +503,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
           this.selectedMitra = this.selectedMitra.concat(response);
           console.log('this selected', this.selectedMitra);
           this.onSelect({ selected: this.selectedMitra });
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         }
       }
     });
@@ -524,7 +524,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
     if (this.formPanelMitra.valid) {
       if (this.selected.length === 0) {
         this.dialogService.openSnackBar({
-          message: "Jumlah Mitra yang dipilih tidak boleh kosong!"
+          message: "Jumlah Mitra yang dipilih tidak boleh kosong!" // TODO
         });
         return;
       }
@@ -556,7 +556,7 @@ export class MitraDeliveryPanelCreateComponent implements OnInit {
         this.dataService.showLoading(false);
       })
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" }); // TODO
       commonFormValidator.validateAllFields(this.formPanelMitra);
     }
   }

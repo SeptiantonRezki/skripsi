@@ -86,7 +86,7 @@
               </ng-template>
             </ngx-datatable-column>
     
-            <ngx-datatable-column name="Nama" [width]="200" prop="name">
+            <ngx-datatable-column name="{{ls.locale.global.label.name}}" [width]="200" prop="name">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
               </ng-template>

@@ -20,7 +20,7 @@
           <input
             id="search"
             matInput
-            placeholder="Cari"
+            placeholder="{{ls.locale.global.label.search}}"
             (keyup)="keyUp.next($event.target.value)"
             autocomplete="off"
           />
@@ -48,7 +48,7 @@
       (sort)="onSort($event)"
       (select)="onSelect($event)"
     >
-      <ngx-datatable-column name="Nama" prop="name">
+      <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
         <ng-template
           ngx-datatable-cell-template
           let-row="row"

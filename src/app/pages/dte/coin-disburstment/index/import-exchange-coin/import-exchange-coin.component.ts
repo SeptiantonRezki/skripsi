@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-import-exchange-coin',
@@ -26,6 +27,7 @@ export class ImportExchangeCoinComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private coinDisburstmentService: CoinDisburstmentService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.rows = [];

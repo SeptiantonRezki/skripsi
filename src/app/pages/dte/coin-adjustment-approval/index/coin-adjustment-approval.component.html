@@ -15,7 +15,7 @@
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
-                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+                <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
               </mat-form-field>
             </div>
           </div>

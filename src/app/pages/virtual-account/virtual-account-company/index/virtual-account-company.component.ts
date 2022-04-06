@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-company',
@@ -37,7 +38,8 @@ export class VirtualAccountCompanyComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private VirtualAccountCompanyService: VirtualAccountCompanyService 
+    private VirtualAccountCompanyService: VirtualAccountCompanyService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

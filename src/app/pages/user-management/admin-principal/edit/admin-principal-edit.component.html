@@ -39,7 +39,7 @@
               </mat-error>
             </mat-form-field>
             <!-- <mat-form-field fxFlex="31%" class="is-light">
-              <mat-select placeholder="Negara" formControlName="country" disabled>
+              <mat-select placeholder="{{ls.locale.global.label.country}}" formControlName="country" disabled>
                 <mat-option *ngFor="let item of listCountry" [value]="item.code">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
@@ -48,9 +48,9 @@
               </mat-error>
             </mat-form-field> -->
             <mat-form-field fxFlex="100" >
-              <input matInput placeholder="Negara" type="text" formControlName="countryname" disabled>
+              <input matInput placeholder="{{ls.locale.global.label.country}}" type="text" formControlName="countryname" disabled>
               <mat-error *ngIf="formAdmin.controls['countryname'].hasError('required') && formAdmin.controls['countryname'].touched ">
-                Negara harus diisi.
+                {{ls.locale.global.label.country}} {{ls.locale.global.messages.mandatory_text}}
               </mat-error>
             </mat-form-field>
 
@@ -94,17 +94,17 @@
             <div *ngIf="first_geotree" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
               fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national"
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                   id="area1_national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone"
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                   
                   (selectionChange)="getAudienceArea('region', formAdmin.get('zone').value)" id="area1_zone">
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -112,40 +112,40 @@
                   
                   (selectionChange)="getAudienceArea('area', formAdmin.get('region').value)" id="area1_region">
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area"
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                   
                   (selectionChange)="getAudienceArea('salespoint', formAdmin.get('area').value)" id="area1_area">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                   
                   (selectionChange)="getAudienceArea('district', formAdmin.get('salespoint').value)"
                   id="area1_salespoint">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district"
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                   
                   (selectionChange)="getAudienceArea('territory', formAdmin.get('district').value)" id="area1_district">
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="31%" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory"
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                   
                   id="area1_territory">
                   <mat-option *ngFor="let item of list['territory']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -176,17 +176,17 @@
               <div [formGroup]="formArea2" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                      id="area2_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     
                     (selectionChange)="getAudienceArea2('region', formArea2.get('zone').value)" id="area2_zone">
                     <mat-option *ngFor="let item of list2['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -194,41 +194,41 @@
                     
                     (selectionChange)="getAudienceArea2('area', formArea2.get('region').value)" id="area2_region">
                     <mat-option *ngFor="let item of list2['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     
                     (selectionChange)="getAudienceArea2('salespoint', formArea2.get('area').value)" id="area2_area">
                     <mat-option *ngFor="let item of list2['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     
                     (selectionChange)="getAudienceArea2('district', formArea2.get('salespoint').value)"
                     id="area2_salespoint">
                     <mat-option *ngFor="let item of list2['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     
                     (selectionChange)="getAudienceArea2('territory', formArea2.get('district').value)"
                     id="area2_district">
                     <mat-option *ngFor="let item of list2['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     
                     id="area2_territory">
                     <mat-option *ngFor="let item of list2['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -260,17 +260,17 @@
               <div [formGroup]="formArea3" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                      id="area3_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     
                     (selectionChange)="getAudienceArea3('region', formArea3.get('zone').value)" id="area3_zone">
                     <mat-option *ngFor="let item of list3['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -278,41 +278,41 @@
                     
                     (selectionChange)="getAudienceArea3('area', formArea3.get('region').value)" id="area3_region">
                     <mat-option *ngFor="let item of list3['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     
                     (selectionChange)="getAudienceArea3('salespoint', formArea3.get('area').value)" id="area3_area">
                     <mat-option *ngFor="let item of list3['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     
                     (selectionChange)="getAudienceArea3('district', formArea3.get('salespoint').value)"
                     id="area3_salespoint">
                     <mat-option *ngFor="let item of list3['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     
                     (selectionChange)="getAudienceArea3('territory', formArea3.get('district').value)"
                     id="area3_district">
                     <mat-option *ngFor="let item of list2['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     
                     id="area3_territory">
                     <mat-option *ngFor="let item of list3['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -344,17 +344,17 @@
               <div [formGroup]="formArea4" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                      id="area4_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     
                     (selectionChange)="getAudienceArea4('region', formArea4.get('zone').value)" id="area4_zone">
                     <mat-option *ngFor="let item of list4['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -362,41 +362,41 @@
                     
                     (selectionChange)="getAudienceArea4('area', formArea4.get('region').value)" id="area4_region">
                     <mat-option *ngFor="let item of list4['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     
                     (selectionChange)="getAudienceArea4('salespoint', formArea4.get('area').value)" id="area4_area">
                     <mat-option *ngFor="let item of list4['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     
                     (selectionChange)="getAudienceArea4('district', formArea4.get('salespoint').value)"
                     id="area4_salespoint">
                     <mat-option *ngFor="let item of list4['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     
                     (selectionChange)="getAudienceArea4('territory', formArea4.get('district').value)"
                     id="area4_district">
                     <mat-option *ngFor="let item of list4['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     
                     id="area4_territory">
                     <mat-option *ngFor="let item of list4['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -428,17 +428,17 @@
               <div [formGroup]="formArea5" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea5.get('national').value, listLevelArea)}}" id="area5_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea5.get('zone').value, list5['zone'])}}"
                     (selectionChange)="getAudienceArea5('region', formArea5.get('zone').value)" id="area5_zone">
                     <mat-option *ngFor="let item of list5['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -446,41 +446,41 @@
                     matTooltip="{{getToolTipData(formArea5.get('region').value, list5['region'])}}"
                     (selectionChange)="getAudienceArea5('area', formArea5.get('region').value)" id="area5_region">
                     <mat-option *ngFor="let item of list5['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea5.get('area').value, list5['area'])}}"
                     (selectionChange)="getAudienceArea5('salespoint', formArea5.get('area').value)" id="area5_area">
                     <mat-option *ngFor="let item of list5['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea5.get('salespoint').value, list5['salespoint'])}}"
                     (selectionChange)="getAudienceArea5('district', formArea5.get('salespoint').value)"
                     id="area5_salespoint">
                     <mat-option *ngFor="let item of list5['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea5.get('district').value, list5['district'])}}"
                     (selectionChange)="getAudienceArea5('territory', formArea5.get('district').value)"
                     id="area4_district">
                     <mat-option *ngFor="let item of list5['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea5.get('territory').value, list5['territory'])}}"
                     id="area4_territory">
                     <mat-option *ngFor="let item of list5['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -512,17 +512,17 @@
               <div [formGroup]="formArea6" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea6.get('national').value, listLevelArea)}}" id="area6_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea6.get('zone').value, list6['zone'])}}"
                     (selectionChange)="getAudienceArea6('region', formArea6.get('zone').value)" id="area6_zone">
                     <mat-option *ngFor="let item of list6['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -530,41 +530,41 @@
                     matTooltip="{{getToolTipData(formArea6.get('region').value, list6['region'])}}"
                     (selectionChange)="getAudienceArea6('area', formArea6.get('region').value)" id="area6_region">
                     <mat-option *ngFor="let item of list6['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea6.get('area').value, list6['area'])}}"
                     (selectionChange)="getAudienceArea6('salespoint', formArea6.get('area').value)" id="area6_area">
                     <mat-option *ngFor="let item of list6['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea6.get('salespoint').value, list6['salespoint'])}}"
                     (selectionChange)="getAudienceArea6('district', formArea6.get('salespoint').value)"
                     id="area6_salespoint">
                     <mat-option *ngFor="let item of list6['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea6.get('district').value, list6['district'])}}"
                     (selectionChange)="getAudienceArea6('territory', formArea6.get('district').value)"
                     id="area6_district">
                     <mat-option *ngFor="let item of list6['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea6.get('territory').value, list6['territory'])}}"
                     id="area6_territory">
                     <mat-option *ngFor="let item of list6['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -596,17 +596,17 @@
               <div [formGroup]="formArea7" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea7.get('national').value, listLevelArea)}}" id="area7_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea7.get('zone').value, list7['zone'])}}"
                     (selectionChange)="getAudienceArea7('region', formArea7.get('zone').value)" id="area7_zone">
                     <mat-option *ngFor="let item of list7['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -614,41 +614,41 @@
                     matTooltip="{{getToolTipData(formArea7.get('region').value, list7['region'])}}"
                     (selectionChange)="getAudienceArea7('area', formArea7.get('region').value)" id="area7_region">
                     <mat-option *ngFor="let item of list7['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea7.get('area').value, list7['area'])}}"
                     (selectionChange)="getAudienceArea7('salespoint', formArea7.get('area').value)" id="area7_area">
                     <mat-option *ngFor="let item of list7['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea7.get('salespoint').value, list7['salespoint'])}}"
                     (selectionChange)="getAudienceArea7('district', formArea7.get('salespoint').value)"
                     id="area7_salespoint">
                     <mat-option *ngFor="let item of list7['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea7.get('district').value, list7['district'])}}"
                     (selectionChange)="getAudienceArea7('territory', formArea7.get('district').value)"
                     id="area7_district">
                     <mat-option *ngFor="let item of list4['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea7.get('territory').value, list7['territory'])}}"
                     id="area7_territory">
                     <mat-option *ngFor="let item of list7['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -680,17 +680,17 @@
               <div [formGroup]="formArea8" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea8.get('national').value, listLevelArea)}}" id="area8_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea8.get('zone').value, list8['zone'])}}"
                     (selectionChange)="getAudienceArea8('region', formArea8.get('zone').value)" id="area8_zone">
                     <mat-option *ngFor="let item of list8['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -698,41 +698,41 @@
                     matTooltip="{{getToolTipData(formArea8.get('region').value, list8['region'])}}"
                     (selectionChange)="getAudienceArea8('area', formArea8.get('region').value)" id="area8_region">
                     <mat-option *ngFor="let item of list8['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea8.get('area').value, list8['area'])}}"
                     (selectionChange)="getAudienceArea8('salespoint', formArea8.get('area').value)" id="area8_area">
                     <mat-option *ngFor="let item of list8['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea8.get('salespoint').value, list8['salespoint'])}}"
                     (selectionChange)="getAudienceArea8('district', formArea8.get('salespoint').value)"
                     id="area8_salespoint">
                     <mat-option *ngFor="let item of list8['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea8.get('district').value, list8['district'])}}"
                     (selectionChange)="getAudienceArea8('territory', formArea8.get('district').value)"
                     id="area8_district">
                     <mat-option *ngFor="let item of list8['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea8.get('territory').value, list8['territory'])}}"
                     id="area8_territory">
                     <mat-option *ngFor="let item of list8['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -764,17 +764,17 @@
               <div [formGroup]="formArea9" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea9.get('national').value, listLevelArea)}}" id="area9_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea9.get('zone').value, list9['zone'])}}"
                     (selectionChange)="getAudienceArea9('region', formArea9.get('zone').value)" id="area9_zone">
                     <mat-option *ngFor="let item of list9['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -782,41 +782,41 @@
                     matTooltip="{{getToolTipData(formArea9.get('region').value, list9['region'])}}"
                     (selectionChange)="getAudienceArea9('area', formArea9.get('region').value)" id="area9_region">
                     <mat-option *ngFor="let item of list9['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea9.get('area').value, list9['area'])}}"
                     (selectionChange)="getAudienceArea9('salespoint', formArea9.get('area').value)" id="area9_area">
                     <mat-option *ngFor="let item of list9['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea9.get('salespoint').value, list9['salespoint'])}}"
                     (selectionChange)="getAudienceArea9('district', formArea9.get('salespoint').value)"
                     id="area9_salespoint">
                     <mat-option *ngFor="let item of list9['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea9.get('district').value, list9['district'])}}"
                     (selectionChange)="getAudienceArea9('territory', formArea9.get('district').value)"
                     id="area9_district">
                     <mat-option *ngFor="let item of list9['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea9.get('territory').value, list9['territory'])}}"
                     id="area9_territory">
                     <mat-option *ngFor="let item of list9['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -848,17 +848,17 @@
               <div [formGroup]="formArea10" fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px"
                 fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national"
+                  <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national"
                     matTooltip="{{getToolTipData(formArea10.get('national').value, listLevelArea)}}" id="area10_national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone"
+                  <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                     matTooltip="{{getToolTipData(formArea10.get('zone').value, list10['zone'])}}"
                     (selectionChange)="getAudienceArea10('region', formArea10.get('zone').value)" id="area10_zone">
                     <mat-option *ngFor="let item of list10['zone']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -866,41 +866,41 @@
                     matTooltip="{{getToolTipData(formArea10.get('region').value, list10['region'])}}"
                     (selectionChange)="getAudienceArea10('area', formArea8.get('region').value)" id="area10_region">
                     <mat-option *ngFor="let item of list10['region']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area"
+                  <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                     matTooltip="{{getToolTipData(formArea10.get('area').value, list10['area'])}}"
                     (selectionChange)="getAudienceArea10('salespoint', formArea10.get('area').value)" id="area10_area">
                     <mat-option *ngFor="let item of list10['area']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint"
+                  <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
                     matTooltip="{{getToolTipData(formArea10.get('salespoint').value, list10['salespoint'])}}"
                     (selectionChange)="getAudienceArea10('district', formArea10.get('salespoint').value)"
                     id="area10_salespoint">
                     <mat-option *ngFor="let item of list10['salespoint']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district"
+                  <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                     matTooltip="{{getToolTipData(formArea10.get('district').value, list10['district'])}}"
                     (selectionChange)="getAudienceArea10('territory', formArea10.get('district').value)"
                     id="area10_district">
                     <mat-option *ngFor="let item of list10['district']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory"
+                  <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory"
                     matTooltip="{{getToolTipData(formArea10.get('territory').value, list10['territory'])}}"
                     id="area10_territory">
                     <mat-option *ngFor="let item of list10['territory']" [value]="item.id">
-                      {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                      {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>

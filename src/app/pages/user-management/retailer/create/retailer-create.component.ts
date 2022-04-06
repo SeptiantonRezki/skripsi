@@ -347,7 +347,7 @@ export class RetailerCreateComponent {
   step4() {
     commonFormValidator.validateAllFields(this.verticalStepperStep4);
     if (this.verticalStepperStep1.controls['business_code'].invalid) {
-      this.dialogService.openSnackBar({ message: "Informasi Toko Kode Agen Wajib Diisi." });
+      this.dialogService.openSnackBar({ message: this.ls.locale.wholesaler.store_information + ' ' + this.ls.locale.global.messages.mandatory_text });
     }
   }
 

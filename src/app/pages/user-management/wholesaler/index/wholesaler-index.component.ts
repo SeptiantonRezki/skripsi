@@ -54,7 +54,7 @@ export class WholesalerIndexComponent {
   // 2 geotree property
   endArea: String;
   lastLevel: any;
-  listGsw: any[] = [{ name: 'Semua GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
+  listGsw: any[] = [{ name: this.ls.locale.global.label.all + ' GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
 
   /** shared component */
   // @Input() customExportImport = false;
@@ -1014,7 +1014,7 @@ export class WholesalerIndexComponent {
       if (response) {
         this.selected = response;
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           // this.getRetailerList();
         }
       }

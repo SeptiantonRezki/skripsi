@@ -176,10 +176,10 @@ export class PartnershipIndexComponent implements OnInit {
   deletePartnership(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Principal Partnership",
-      captionDialog: "Apakah anda yakin untuk menghapus principal partnership ini ?",
+      titleDialog: this.ls.locale.principal_partnership.delete,
+      captionDialog: this.ls.locale.principal_partnership.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -190,7 +190,7 @@ export class PartnershipIndexComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getPrincipalPartnership();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
       }
     });
   }

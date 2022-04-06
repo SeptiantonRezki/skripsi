@@ -8,6 +8,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-notes-dialog.component.html',
@@ -58,7 +59,8 @@ export class ImportNotesDialogComponent {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);

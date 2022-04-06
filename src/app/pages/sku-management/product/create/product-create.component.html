@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Tambah Produk'">
     <button style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
-      type="button">SIMPAN</button>
+      type="button">{{ls.locale.global.button.save}}</button>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -163,7 +163,7 @@
                       <div fxLayout="row">
                         <mat-form-field fxFlex="50" class="is-light">
                           <input matInput [min]="minDate" (focus)="startPinUp.open()" [matDatepicker]="startPinUp"
-                            placeholder="Tanggal Mulai" formControlName="start_date_pin_up">
+                            placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date_pin_up">
                           <mat-datepicker-toggle matSuffix [for]="startPinUp"></mat-datepicker-toggle>
                           <mat-datepicker #startPinUp></mat-datepicker>
                         </mat-form-field>
@@ -237,14 +237,14 @@
                       <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
                         <mat-form-field fxFlex="20" class="is-light form-primary">
                           <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                            placeholder="Tanggal Mulai" formControlName="start_date">
+                            placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date">
                           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                           <mat-datepicker #startPicker></mat-datepicker>
                         </mat-form-field>
                         <div fxFlex="2"></div>
                         <mat-form-field fxFlex="20" class="is-light form-primary">
                           <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
-                            placeholder="Tanggal Berakhir" formControlName="end_date">
+                            placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="end_date">
                           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                           <mat-datepicker #endDate></mat-datepicker>
                         </mat-form-field>
@@ -356,7 +356,7 @@
                               <span fxFlex="15" class="h6 text-semibold">Jumlah per Kemasan</span>
                               <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
                               <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
-                              <span fxFlex="15" class="h6 text-semibold">Tanggal Berakhir</span>
+                              <span fxFlex="15" class="h6 text-semibold">{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}</span>
                               <span fxFlex="15" class="h6 text-semibold">Tipe</span>
                               <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
                                 <span class="h6 text-semibold">Hapus</span>
@@ -420,7 +420,7 @@
                                         formControlName="price_discount_expires_at">
                                       <mat-error style="font-size: .8em"
                                         *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
-                                        Tanggal Berakhir Diskon harus diisi
+                                        {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Diskon harus diisi
                                       </mat-error>
                                       <mat-error style="font-size: .8em"
                                         *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">

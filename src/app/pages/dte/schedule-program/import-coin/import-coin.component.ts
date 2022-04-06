@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { ScheduleTradeProgramService } from 'app/services/dte/schedule-trade-program.service';
 import { DataService } from 'app/services/data.service';
 import { FormControl } from '@angular/forms';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   templateUrl: './import-coin.component.html',
@@ -26,7 +27,8 @@ export class ImportCoinComponent {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     if (data) {

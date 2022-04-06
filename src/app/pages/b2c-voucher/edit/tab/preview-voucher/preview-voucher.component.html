@@ -14,7 +14,7 @@
             <div fxLayout="row" fxLayoutAlign="space-between center" class="label-image">
               <div fxLayout="column">
                 <span style="font-size: 0.7em;">
-                  Berlaku Hingga
+                  Berlaku Hingga <!-- // TODO -->
                 </span>
                 <span style="font-weight: 800;">
                   {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}}
@@ -22,7 +22,7 @@
               </div>
               <div fxLayout="column">
                 <span style="font-size: 0.7em;">
-                  Kode Voucher
+                  Kode Voucher <!-- // TODO -->
                 </span>
                 <span style="font-weight: 800;">
                   XXXXXX
@@ -31,25 +31,25 @@
             </div>
           </div>
           <div fxLayout="column">
-            <span style="font-weight: 800;">Voucher Potongan Harga Belanja di SRC</span>
-            <span style="font-style: italic; font-size: 0.8em;">Berlaku Hingga {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}}</span>
+            <span style="font-weight: 800;">Voucher Potongan Harga Belanja di SRC <!-- // TODO --></span>
+            <span style="font-style: italic; font-size: 0.8em;">Berlaku Hingga <!-- // TODO --> {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}}</span>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="center center">
             <div class="preview-button" fxFlex="100">
-              Lihat Kode Voucher
+              Lihat Kode Voucher <!-- // TODO -->
             </div>
           </div>
           <div>
-            <span style="font-weight: 800;">Syarat & Ketentuan</span>
+            <span style="font-weight: 800;">Syarat & Ketentuan <!-- // TODO --></span>
             <ul class="pl-16 m-0">
-              <li *ngIf="detailVoucher?.usage.length === 2">Voucher dapat digunakan pada fitur Pesan Antar dan pembelian langsung ke SRC</li>
-              <li>Voucher tidak berlaku untuk pembelian produk ROKOK dan SUSU FORMULA BAYI DIBAWAH 6 BULAN</li>
-              <li>Voucher potongan ini senilai {{detailVoucher?.nominal | rupiahFormater}}</li>
-              <li *ngIf="detailVoucher?.limit_by === 'product'">Hanya dapat digunakan untuk pembelian produk {{dataLimitMap()}}</li>
-              <li *ngIf="detailVoucher?.limit_by === 'category'">Hanya dapat digunakan untuk pembelian kategori produk {{dataLimitMap()}}</li>
-              <li>Hanya dapat digunakan di Toko SRC bertanda khusus</li>
-              <li>Masa berlaku voucher ini hingga {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}}</li>
-              <li *ngIf="detailVoucher?.limit_purchase !== null && detailVoucher?.limit_purchase > 0">Minimum pembelian {{detailVoucher?.limit_purchase | rupiahFormater}}</li>
+              <li *ngIf="detailVoucher?.usage.length === 2">Voucher dapat digunakan pada fitur Pesan Antar dan pembelian langsung ke SRC <!-- // TODO --></li>
+              <li>Voucher tidak berlaku untuk pembelian produk ROKOK dan SUSU FORMULA BAYI DIBAWAH 6 BULAN <!-- // TODO --></li>
+              <li>Voucher potongan ini senilai <!-- // TODO --> {{detailVoucher?.nominal | rupiahFormater}}</li>
+              <li *ngIf="detailVoucher?.limit_by === 'product'">Hanya dapat digunakan untuk pembelian produk {{dataLimitMap()}} <!-- // TODO --></li>
+              <li *ngIf="detailVoucher?.limit_by === 'category'">Hanya dapat digunakan untuk pembelian kategori produk {{dataLimitMap()}} <!-- // TODO --></li>
+              <li>Hanya dapat digunakan di Toko SRC bertanda khusus <!-- // TODO --></li>
+              <li>Masa berlaku voucher ini hingga {{detailVoucher?.expired_at | date: 'dd MMMM yyyy'}} <!-- // TODO --></li>
+              <li *ngIf="detailVoucher?.limit_purchase !== null && detailVoucher?.limit_purchase > 0">Minimum pembelian {{detailVoucher?.limit_purchase | rupiahFormater}} <!-- // TODO --></li>
             </ul>
           </div>
         </div>
@@ -60,13 +60,13 @@
             <thead>
               <tr>
                 <th>
-                  Topic
+                  Topic <!-- // TODO -->
                 </th>
                 <th>
-                  Jumlah User
+                  Jumlah User <!-- // TODO -->
                 </th>
                 <th>
-                  Status
+                  Status <!-- // TODO -->
                 </th>
               </tr>
             </thead>

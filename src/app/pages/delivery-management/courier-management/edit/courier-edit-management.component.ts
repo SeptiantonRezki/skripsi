@@ -125,7 +125,7 @@ export class CourierEditManagementComponent implements OnInit {
     maxReceivedTime.setHours(14, 0, 0, 0);
 
     return this.formBuilder.group({
-      name: ["Layanan Baru", Validators.required],
+      name: ["Layanan Baru", Validators.required], // TODO
       est_fastest_duration: [1, Validators.required],
       est_fastest_duration_time: ["days"],
       est_longest_duration: [1, Validators.required],
@@ -210,7 +210,7 @@ export class CourierEditManagementComponent implements OnInit {
 
       if (hasNoValid.length > 0) {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Format Waktu Layanan Tidak Valid" });
+        this.dialogService.openSnackBar({ message: "Format Waktu Layanan Tidak Valid" }); // TODO
         return;
       }
       console.log('body', body, this.formCourier);
@@ -225,7 +225,7 @@ export class CourierEditManagementComponent implements OnInit {
         this.dataService.showLoading(false);
       })
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" }); // TODO
       commonFormValidator.validateAllFields(this.formCourier);
     }
   }

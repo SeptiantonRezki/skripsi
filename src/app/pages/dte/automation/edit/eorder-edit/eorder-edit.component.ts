@@ -820,7 +820,7 @@ export class EOrderEditComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.selected = response;
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

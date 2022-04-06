@@ -618,7 +618,7 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="Nama" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name"></ngx-datatable-column>
               <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   {{row.code ? row.code : '-'}}
@@ -748,10 +748,10 @@
         </div>
         <div *ngIf="!isDetail" class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" (click)="submit('draft')" fxFlex="20">
-            SIMPAN SEBAGAI DRAF
+            {{ls.locale.global.button.save}} SEBAGAI DRAF
           </button>
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit('publish')" fxFlex="20">
-            SIMPAN DAN KIRIM
+            {{ls.locale.global.button.save}} DAN KIRIM
           </button>
         </div>
       </form>

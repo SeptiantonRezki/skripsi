@@ -114,15 +114,15 @@ export class DeviceRecoverComponent implements OnInit {
   submitRecovery() {
     if (this.formRecovery.valid) {
       const data = {
-        titleDialog: 'Pulihkan Perangkat',
-        captionDialog: 'Apakah anda yakin untuk Memulihkan Perangkat ini ?',
+        titleDialog: 'Pulihkan Perangkat', // TODO
+        captionDialog: 'Apakah anda yakin untuk Memulihkan Perangkat ini ?', // TODO
         confirmCallback: this.confirmRecovery.bind(this),
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel] // TODO
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
       commonFormValidator.validateAllFields(this.formRecovery);
-      this.dialogService.openSnackBar({ message: 'Lengkapi data terlebih dahulu' });
+      this.dialogService.openSnackBar({ message: 'Lengkapi data terlebih dahulu' }); // TODO
     }
   }
 

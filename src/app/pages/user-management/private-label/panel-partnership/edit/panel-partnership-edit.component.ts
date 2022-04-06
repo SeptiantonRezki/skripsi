@@ -23,6 +23,7 @@ import { AudienceService } from "../../../../../services/dte/audience.service";
 
 import { PanelPartnershipService } from 'app/services/user-management/private-label/panel-partnership.service';
 import { ImportAudienceDialogComponent } from "../import/import-audience-dialog.component";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-partnership-edit',
@@ -111,7 +112,8 @@ export class PanelPartnershipEditComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private panelPartnershipService: PanelPartnershipService,
-    private idbService: IdbService
+    private idbService: IdbService,
+    private ls: LanguagesService
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1109,10 +1111,10 @@ export class PanelPartnershipEditComponent {
           console.log('result', result);
           // this.selected = result;
           this.onSelect({ selected: result });
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         })
         // this.selected = response;
-        // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }
