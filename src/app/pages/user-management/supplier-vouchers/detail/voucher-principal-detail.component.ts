@@ -9,6 +9,7 @@ import { DataService } from 'app/services/data.service';
 import { MatDialog } from '@angular/material';
 import { VoucherPrivateLabelService } from 'app/services/voucher-private-label.service';
 import { _getComponentHostLElementNode } from '@angular/core/src/render3/instructions';
+import { LanguagesService } from 'app/services/languages/languages.service';
 // import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
@@ -53,7 +54,7 @@ export class VoucherPrincipalDetailComponent implements OnInit {
     // public voucherPrincipalService: VoucherPrincipalService,
     public voucherPrivateLabelService: VoucherPrivateLabelService,
     public dialog: MatDialog,
-    // public ls: LanguagesService,
+    public ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

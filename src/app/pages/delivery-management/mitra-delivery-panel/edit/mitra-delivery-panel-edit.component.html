@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Panel Mitra'">
+  <page-content-header [contentTitle]="'Panel Mitra'"> <!-- // TODO -->
   </page-content-header>
 
   <div class="content p-24">
@@ -9,33 +9,33 @@
         <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
           <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-              <mat-select placeholder="Pilih Kurir" formControlName="courier">
+              <mat-select placeholder="Pilih Kurir" formControlName="courier"> <!-- // TODO -->
                 <mat-option *ngFor="let cr of listCourier" [value]="cr.id">{{ cr.name }}</mat-option>
               </mat-select>
               <mat-error class="mt-8 px-24"
                 *ngIf="formPanelMitra.controls['courier'].hasError('required') && formPanelMitra.controls['courier'].touched">
-                Jenis Kurir harus diisi.
+                Jenis Kurir harus diisi. <!-- // TODO -->
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-              <mat-select placeholder="Pilih Layanan" formControlName="service">
+              <mat-select placeholder="Pilih Layanan" formControlName="service"> <!-- // TODO -->
                 <mat-option *ngFor="let service of listCourierServices" [value]="service.id">{{ service.name }}
                 </mat-option>
               </mat-select>
               <mat-error class="mt-8 px-24"
                 *ngIf="formPanelMitra.controls['service'].hasError('required') && formPanelMitra.controls['service'].touched">
-                Jenis Layanan harus diisi.
+                Jenis Layanan harus diisi. <!-- // TODO -->
               </mat-error>
             </mat-form-field>
             <div fxLayout="row" fxFlex="20" style="height: 35px;">
               <button *ngIf="!isDetail" mat-raised-button type="button" class="confirmation-button" fxFlex="100"
                 (click)="getPanelMitraList()">
-                ATUR PANEL MITRA
+                ATUR PANEL MITRA <!-- // TODO -->
               </button>
             </div>
           </div>
           <div fxLayout="column" fxLayoutAlign="flex-end flex-end" fxFlex="10">
-            <small>Mitra Terpilih</small>
+            <small>Mitra Terpilih</small> <!-- // TODO -->
             <h1 style="margin-top: -4px;font-size: 30px;">{{ (allRowsSelected ? pagination.total :  selected.length) | rupiahFormaterWithoutRp }}</h1>
           </div>
         </div>
@@ -113,7 +113,7 @@
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
             <mat-form-field class="is-light tab-search">
-              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
             </mat-form-field>
           </div>
         </div>
@@ -155,7 +155,7 @@
             </ngx-datatable-column>
 
             <ngx-datatable-column name="{{ ls.locale.global.label.name }}" prop="name"></ngx-datatable-column>
-            <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false">
+            <ngx-datatable-column name="No. Ponsel" prop="phone" [sortable]="false"> <!-- // TODO -->
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.phone ? row.phone : '-'}}
               </ng-template>
@@ -165,12 +165,12 @@
                 {{row.classification ? row.classification : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false">
+            <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false"> <!-- // TODO -->
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.division ? row.division : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false">
+            <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false"> <!-- // TODO -->
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.region ? row.region : '-'}}
               </ng-template>

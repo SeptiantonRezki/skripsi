@@ -3,6 +3,7 @@ import { MedalBadgeService } from 'app/services/user-management/retailer/medal-b
 import { Page } from 'app/classes/laravel-pagination';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-medal-create-component',
@@ -35,6 +36,7 @@ export class MedalCreateComponent implements OnInit {
   constructor(
     private medalBadgeService: MedalBadgeService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
   }

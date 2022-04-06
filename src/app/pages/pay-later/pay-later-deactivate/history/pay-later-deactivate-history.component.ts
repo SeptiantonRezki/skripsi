@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { Observable, Subject } from 'rxjs';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-deactivate-history',
@@ -35,7 +36,8 @@ export class PayLaterDeactivateHistoryComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private payLaterDeactivateService: PayLaterDeactivateService
+    private payLaterDeactivateService: PayLaterDeactivateService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

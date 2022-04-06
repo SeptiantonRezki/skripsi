@@ -140,10 +140,10 @@ export class TncIndexComponent {
   deletePage(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Syarat & Ketentuan",
-      captionDialog: "Apakah anda yakin untuk menghapus data syarat & ketentuan ini ?",
+      titleDialog: "Hapus Syarat & Ketentuan", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus data syarat & ketentuan ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -152,7 +152,7 @@ export class TncIndexComponent {
     this.tncService.delete({ content_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getTnc();
       },

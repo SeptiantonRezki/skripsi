@@ -14,6 +14,7 @@ import { DialogService } from "app/services/dialog.service";
 import { MatDialogConfig, MatDialog } from "@angular/material";
 import { ProductSubmissionService } from "app/services/sku-management/product-submission.service";
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "db-product-submission",
@@ -67,7 +68,8 @@ export class DbProductSubmissionComponent implements OnInit {
     private dataService: DataService,
     private submissionService: ProductSubmissionService,
     private dialogService: DialogService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.permission = this.roles.getRoles("principal.pengajuan_produk_db");
   }

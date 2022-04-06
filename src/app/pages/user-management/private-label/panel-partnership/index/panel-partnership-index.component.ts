@@ -10,6 +10,7 @@ import { SupplierCompanyService } from "app/services/user-management/private-lab
 import { PanelPartnershipService } from "app/services/user-management/private-label/panel-partnership.service";
 
 import { Endpoint } from '../../../../../classes/endpoint';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-partnership-index',
@@ -51,6 +52,7 @@ export class PanelPartnershipIndexComponent {
     private panelPartnershipService: PanelPartnershipService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
     this.selected = [];
@@ -89,14 +91,14 @@ export class PanelPartnershipIndexComponent {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }

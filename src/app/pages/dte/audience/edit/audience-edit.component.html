@@ -365,11 +365,11 @@
     <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button"
         (click)="submit()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
       <button mat-raised-button *ngIf="formAudience.disabled" type="button" class="confirmation-button"
         (click)="updateAudience()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
     </div>
   </div>

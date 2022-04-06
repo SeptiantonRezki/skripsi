@@ -10,6 +10,7 @@ import { Observable, Subject } from 'rxjs';
 import { BannerSortingPagination } from './banner-sorting.pagination';
 import * as _ from 'underscore';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-banner-sorting',
@@ -90,6 +91,7 @@ export class BannerSortingComponent implements OnInit {
     private dataService: DataService,
     private bannerService: BannerService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];

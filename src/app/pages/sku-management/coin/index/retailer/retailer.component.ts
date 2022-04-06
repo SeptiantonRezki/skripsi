@@ -10,6 +10,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportAdjustmentCoinDialogComponent } from '../import-adjustment-coin-dialog/import-adjustment-coin-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'data-retailer',
@@ -59,7 +60,8 @@ export class RetailerComponent {
     private formBuilder: FormBuilder,
     private coinService: CoinService,
     private geotreeService: GeotreeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
 
@@ -974,7 +976,7 @@ export class RetailerComponent {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

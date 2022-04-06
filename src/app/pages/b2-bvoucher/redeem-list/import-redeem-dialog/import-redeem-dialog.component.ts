@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-import-redeem-dialog',
@@ -27,6 +28,7 @@ export class ImportRedeemDialogComponent {
     private dialogService: DialogService,
     private b2bVoucherService: BtoBVoucherService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -40,7 +42,7 @@ export class ImportRedeemDialogComponent {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf('.xls') === -1) {
-      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLS!' });
+      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLS!' }); // TODO
       return;
     }
 
@@ -59,10 +61,10 @@ export class ImportRedeemDialogComponent {
         if (err.status === 404 || err.status === 500) {
           this.dialogService.openSnackBar({
             message: 'Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.'
-          });
+          }); // TODO
         } else {
           console.log('err', err);
-          alert('Terjadi kesalahan saat Import File');
+          alert('Terjadi kesalahan saat Import File'); // TODO
         }
       }
     );
@@ -77,10 +79,10 @@ export class ImportRedeemDialogComponent {
         this.dialogRef.close(this.rows);
       }, err => {
         console.log('err submit', err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan saat Import File' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan saat Import File' }); // TODO
       });
     } else {
-      this.dialogService.openSnackBar({ message: 'Semua row tidak valid ' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages }); // TODO
     }
   }
 

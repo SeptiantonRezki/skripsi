@@ -8,6 +8,7 @@ import { PagesName } from "app/classes/pages-name";
 import { DataService } from "app/services/data.service";
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportFileDialogComponent } from "./import-file-dialog/import-file-dialog.component"
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: "app-product-index",
@@ -43,7 +44,8 @@ export class ProductIndexComponent implements OnInit {
     private productService: ProductService,
     private dialogService: DialogService,
     private dataService: DataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -239,7 +241,7 @@ export class ProductIndexComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.getProducts();
       }
     });

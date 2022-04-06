@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-tingkat-fitur-index',
@@ -38,6 +39,7 @@ export class TingkatFiturIndexComponent implements OnInit {
     private featureLevelService: FeatureLevelService,
     private dataService: DataService,
     private dialogService: DialogService,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -128,7 +130,7 @@ export class TingkatFiturIndexComponent implements OnInit {
       captionDialog: `<p>Apakah anda yakin untuk menghapus Tingkat Fitur: <strong>${row.name}</strong>?</p>`,
       confirmCallback: this._delete.bind(this, row.id),
       htmlContent: true,
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
 

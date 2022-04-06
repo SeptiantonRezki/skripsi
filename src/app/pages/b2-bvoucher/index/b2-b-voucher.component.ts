@@ -41,7 +41,7 @@ export class B2BVoucherComponent implements OnInit {
     { name: 'Katalog SRC Only', value: 'src-catalogue' },
     { name: 'B2B & Katalog SRC', value: 'both' },
     { name: 'Private Label', value: 'private-label' },
-  ];
+  ]; // TODO
 
   constructor(
     private http: HttpClient,
@@ -177,10 +177,10 @@ export class B2BVoucherComponent implements OnInit {
   deleteVoucher(id) {
     this.id = id;
     const data = {
-      titleDialog: 'Hapus Voucher',
-      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?',
+      titleDialog: 'Hapus Voucher', // TODO
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?', // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -191,7 +191,7 @@ export class B2BVoucherComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getVoucherList();
 
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' }); // TODO
       }
     });
   }

@@ -14,6 +14,15 @@
           class="tab-link"
           >Daftar Produk Kasir</a
         >
+        <div class="search-field">
+          <input
+            matInput
+            placeholder="{{ls.locale.global.label.search}}"
+            (keyup)="keyUp.next($event.target.value)"
+            autocomplete="off"
+          />
+          <mat-icon style="font-size: 20px">search</mat-icon>
+        </div>
       </nav>
       <div
         *ngIf="onLoadInitial"

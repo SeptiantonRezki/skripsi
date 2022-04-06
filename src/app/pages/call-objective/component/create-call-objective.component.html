@@ -11,7 +11,7 @@
         <div class="ayo-middle py-24" fxLayout="column">
           <form>
             <div fxLayout="row" *ngIf = "callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === ''">
-              <p style="color:red">*Nama harus diisi</p>
+              <p style="color:red">*{{ls.locale.global.label.name}} {{ls.locale.global.messages.mandatory_text}}</p>
             </div>
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary" appearance="fill">
@@ -40,13 +40,13 @@
               <small class="form-text text-danger"
                            *ngIf="nameInput.errors.minlength"
                            translateValues="{min: 3}">
-                           <p style="color:red"> Nama harus lebih dari 2 karakter</p>
+                           <p style="color:red">{{ls.locale.call_objective.name_2_char}}</p> <!-- // TODO -->
               </small>
               </div>
             <div fxLayout="row">
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="startPicker" #strDtInput="ngModel"
-                      placeholder="Tanggal Mulai" [(ngModel)] = "callOjbMdl.start_date"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" [(ngModel)] = "callOjbMdl.start_date"
                       name = "callOjbMdl.start_date">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
@@ -54,8 +54,8 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="endDate" #endDtInput="ngModel"
-                      placeholder="Tanggal Berakhir" [(ngModel)] = "callOjbMdl.end_date"
-                      name = "callOjbMdl.end_date">
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [(ngModel)] = "callOjbMdl.end_date"
+                      name = "callOjbMdl.end_date"> <!-- // TODO -->
                 <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                 <mat-datepicker #endDate></mat-datepicker>
                 </mat-form-field>
@@ -63,14 +63,14 @@
             <div fxLayout="row">
               <div fxFlex="45%" class="is-light form-primary" *ngIf = "callOjbMdl.start_date === undefined || callOjbMdl.start_date === null || callOjbMdl.start_date === '' || callOjbMdl.end_date === undefined || callOjbMdl.end_date === null || callOjbMdl.end_date === ''">
               <small class="form-text text-danger">
-                <p style="color:red"> Tanggal mulai & Tanggal berakhir harus diisi</p>
+                <p style="color:red"> {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} & {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{ls.locale.global.messages.mandatory_text}}</p> <!-- // TODO -->
               </small>
               </div>
             </div>
             <div fxLayout="row" *ngIf = "paramEdit !== null" >
               <h3>
                 <mat-slide-toggle [(ngModel)]="swithchBool" name="swithchBool"  (change)="onChangeInputSlide($event, i)">
-                  Status</mat-slide-toggle>
+                  Status</mat-slide-toggle> <!-- // TODO -->
                 </h3>
             </div>
             <br>
@@ -362,16 +362,16 @@
               </mat-checkbox> -->
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+          <ngx-datatable-column name="{{ls.locale.call_objective.text8}}" prop="name"></ngx-datatable-column>
           <ngx-datatable-column
-            name="No Ponsel"
+            name="{{ls.locale.global.label.phone}}"
             [width]="180"
             prop="phone"
             [sortable]="false"
           ></ngx-datatable-column>
-          <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+          <ngx-datatable-column name="Code" prop="code"></ngx-datatable-column> <!-- // TODO -->
           <ngx-datatable-column
-            name="Tipe"
+            name="Type"
             prop="classification"
           ></ngx-datatable-column>
           <!--[R]-->
@@ -393,16 +393,16 @@
             prop="ff_name"
             [sortable]="false"
           ></ngx-datatable-column>
-          <ngx-datatable-column name="Daftar Ayo" prop="status">
+          <ngx-datatable-column name="{{ls.locale.call_objective.text14}}" prop="status">
             <ng-template
               ngx-datatable-cell-template
               let-row="row"
               let-value="value"
             >
               <span *ngIf="row.status === 'active' || row.status === 'inactive'"
-                >Yes</span
+                >{{ls.locale.dte.pengatur_jadwal_program.text32}}</span
               >
-              <span *ngIf="row.status === 'not-registered'">No</span>
+              <span *ngIf="row.status === 'not-registered'">{{ls.locale.dte.pengatur_jadwal_program.text33}}</span>
             </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>
@@ -416,8 +416,8 @@
           fxFlex="20"
           [disabled]="(callOjbMdl.name === undefined || callOjbMdl.name === null || callOjbMdl.name === '' || nameInput.dirty && nameInput.invalid || callOjbMdl.start_date === undefined || callOjbMdl.start_date === null || callOjbMdl.start_date === '' || callOjbMdl.end_date === undefined || callOjbMdl.end_date === null || callOjbMdl.end_date === '')"
         >
-          SIMPAN
-        </button>
+          {{ls.locale.global.button.save}}
+        </button> <!-- // TODO -->
       </div>
       <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px" *ngIf="paramEdit != null" >
         <button

@@ -28,6 +28,7 @@ import { IdbService } from "app/services/idb.service";
 import { NotesRetailerModel } from "app/pages/notes-retailer/notes-retailer.model";
 import { NotesRetailerService } from "../../../services/notes-retailer/notes-retailer.service";
 import { AudienceService } from "../../../services/dte/audience.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-list-notes-retailer.component",
@@ -47,7 +48,8 @@ export class NotesRetailerListComponent implements OnInit {
     private dataService: DataService,
     private audienceService: AudienceService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService,
   ) {
     this.notesMdl = new NotesRetailerModel();
 

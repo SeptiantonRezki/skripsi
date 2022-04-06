@@ -9,7 +9,7 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama" prop="product_name">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="product_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{row.product_name || '-'}}</span>
           </ng-template>

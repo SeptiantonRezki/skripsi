@@ -159,7 +159,7 @@ export class CourierCreateManagamentComponent implements OnInit {
 
       if (hasNoValid.length > 0) {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Format Waktu Layanan Tidak Valid" });
+        this.dialogService.openSnackBar({ message: "Format Waktu Layanan Tidak Valid" }); // TODO
         return;
       }
       console.log('body', body, this.formCourier);
@@ -174,7 +174,7 @@ export class CourierCreateManagamentComponent implements OnInit {
         this.dataService.showLoading(false);
       })
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" }); // TODO
       commonFormValidator.validateAllFields(this.formCourier);
     }
   }

@@ -33,7 +33,7 @@
             [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
             (sort)="onSort($event)" (select)="onSelect($event)">
     
-            <ngx-datatable-column name="Nama" prop="name">
+            <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
               </ng-template>

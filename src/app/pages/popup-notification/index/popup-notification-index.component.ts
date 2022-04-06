@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-popup-notification-index',
@@ -38,7 +39,8 @@ export class PopupNotificationIndexComponent {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

@@ -14,7 +14,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input id="search" matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input id="search" matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -102,7 +102,7 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
@@ -114,13 +114,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
+        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
+        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>

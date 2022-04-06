@@ -16,7 +16,7 @@
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selected]="selected"
         [selectAllRowsOnPage]="false" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama" prop="name" [width]="113" [sortable]="true" *ngIf="activeCol.indexOf('name') !== -1">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name" [width]="113" [sortable]="true" *ngIf="activeCol.indexOf('name') !== -1">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address" style="cursor: pointer;">{{row.name || '-'}}</span>
           </ng-template>
@@ -34,7 +34,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Klasifikasi" prop="classification" [width]="138" [sortable]="true" *ngIf="activeCol.indexOf('classification') !== -1">
+        <ngx-datatable-column name="{{ls.locale.global.label.classification}}" prop="classification" [width]="138" [sortable]="true" *ngIf="activeCol.indexOf('classification') !== -1">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address" style="cursor: pointer;">{{row.classification || '-'}}</span>
           </ng-template>

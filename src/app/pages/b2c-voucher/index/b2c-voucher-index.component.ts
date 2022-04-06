@@ -251,10 +251,10 @@ export class B2CVoucherIndexComponent implements OnInit {
   deleteVoucher(id: any) {
     this.id = id;
     const data = {
-      titleDialog: 'Hapus Voucher',
-      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini ?',
+      titleDialog: 'Hapus Voucher', // TODO
+      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini ?', // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   } 
@@ -265,7 +265,7 @@ export class B2CVoucherIndexComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.onLoad = true;
         this.getB2CVoucherList();
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' }); // TODO
       }
     });
   }

@@ -15,7 +15,7 @@
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
-                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+                <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
               </mat-form-field>
             </div>
           </div>
@@ -59,7 +59,7 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Berakhir Penukaran Koin"
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin"
               prop="end_date" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.end_date | dateToMoment}}</span>

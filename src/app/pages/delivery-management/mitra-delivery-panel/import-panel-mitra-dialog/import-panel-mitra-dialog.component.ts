@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-import-panel-mitra-dialog',
@@ -27,6 +28,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
     private dialogService: DialogService,
     private mitraPanelService: MitraPanelService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -43,7 +45,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf(".xls") === -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" }); // TODO
       return;
     }
 
@@ -66,7 +68,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." }) // TODO
       }
     )
   }
@@ -85,7 +87,7 @@ export class ImportPanelMitraDialogComponent implements OnInit {
       //   })
       this.dialogRef.close(this.rows);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: "Semua row tidak valid " }); // TODO
     }
   }
 

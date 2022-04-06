@@ -30,7 +30,7 @@
             <tr>
               <th>Kode Toko</th>
               <th>Total Laporan</th>
-            </tr>
+            </tr> <!-- // TODO -->
           </thead>
           <tbody>
             <tr>
@@ -48,35 +48,35 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput placeholder="Pengguna" type="text" formControlName="user"
-              style="text-transform: capitalize;">
+              style="text-transform: capitalize;"> <!-- // TODO -->
           </mat-form-field>
         </div>
 
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput placeholder="Tipe Promosi" type="text" formControlName="promotionType"
-              style="text-transform: capitalize;">
+              style="text-transform: capitalize;"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Judul" type="text" formControlName="title">
+            <input matInput placeholder="Judul" type="text" formControlName="title"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Penjelasan Singkat" type="text" formControlName="description">
+            <input matInput placeholder="Penjelasan Singkat" type="text" formControlName="description"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Detail Promosi" type="text" formControlName="promotionDetail">
+            <input matInput placeholder="Detail Promosi" type="text" formControlName="promotionDetail"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput [matDatepicker]="createdPicker" placeholder="Tanggal Promosi dibuat"
-              formControlName="promoCreatedDate">
+              formControlName="promoCreatedDate"> <!-- // TODO -->
             <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
             <mat-datepicker #createdPicker></mat-datepicker>
           </mat-form-field>
@@ -84,7 +84,7 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput [matDatepicker]="expiredPicker" placeholder="Tanggal Promosi berakhir"
-              formControlName="promoExpiredDate">
+              formControlName="promoExpiredDate"> <!-- // TODO -->
             <mat-datepicker-toggle matSuffix [for]="expiredPicker"></mat-datepicker-toggle>
             <mat-datepicker #expiredPicker></mat-datepicker>
           </mat-form-field>
@@ -93,18 +93,18 @@
       <form [formGroup]="formRiwayat" fxFlex="50" *ngIf="isHistory">
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Tindakan" type="text" formControlName="actionPromo">
+            <input matInput placeholder="Tindakan" type="text" formControlName="actionPromo"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Admin" type="text" formControlName="promoAdmin">
+            <input matInput placeholder="Admin" type="text" formControlName="promoAdmin"> <!-- // TODO -->
           </mat-form-field>
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="40px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="100" class="is-light">
             <input matInput [matDatepicker]="actionDatePicker" placeholder="Tanggal Tindakan"
-              formControlName="actionDate">
+              formControlName="actionDate"> <!-- // TODO -->
             <mat-datepicker-toggle matSuffix [for]="actionDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #actionDatePicker></mat-datepicker>
           </mat-form-field>
@@ -114,12 +114,12 @@
     <div fxLayout="row" fxLayoutGap="20px" *ngIf="!isHistory">
       <button mat-raised-button type="button" class="delete-button" fxFlex="20" (click)="deleteReport(detailReport.id)"
         [disabled]="(detailReport.status == 'rejected' || detailReport.status == 'deleted')">
-        HAPUS
+        HAPUS <!-- // TODO -->
       </button>
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="20"
         (click)="rejectReport(detailReport.id)"
         [disabled]="(detailReport.status == 'rejected' || detailReport.status == 'deleted')">
-        TOLAK
+        TOLAK <!-- // TODO -->
       </button>
     </div>
   </div>

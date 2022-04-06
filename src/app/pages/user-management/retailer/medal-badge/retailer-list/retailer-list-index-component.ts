@@ -15,6 +15,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ImportRetailerListDialogComponent } from './import-retailer-list-dialog/import-retailer-list-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailer-list-index-component',
@@ -64,6 +65,7 @@ export class RetailerListIndexComponent implements OnInit {
     private geotreeService: GeotreeService,
     private dialogService: DialogService,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.rows = [];
     this.onLoad = true;
@@ -685,7 +687,7 @@ export class RetailerListIndexComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.getRetailerList();
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

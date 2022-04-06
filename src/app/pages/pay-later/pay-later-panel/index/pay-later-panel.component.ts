@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PayLaterPanelService } from 'app/services/pay-later/pay-later-panel.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-panel',
@@ -36,7 +37,8 @@ export class PayLaterPanelComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private payLaterPanelServicer: PayLaterPanelService
+    private payLaterPanelServicer: PayLaterPanelService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

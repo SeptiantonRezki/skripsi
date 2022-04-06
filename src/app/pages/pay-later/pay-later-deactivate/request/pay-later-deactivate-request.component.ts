@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { PayLaterDeactivateService } from 'app/services/pay-later/pay-later-deactivate.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { DeactivateReasonDialogComponent } from '../deactivate-reason-dialog/deactivate-reason-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-later-deactivate-request',
@@ -39,7 +40,8 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private payLaterDeactivateService: PayLaterDeactivateService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];
