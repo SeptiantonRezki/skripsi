@@ -43,6 +43,8 @@ export class ImportAudienceComponent {
     this.files = event;
 
     console.log('files info', this.files);
+    console.log("DAT23", this.dialogData);
+    
     if (this.files.name.indexOf(".xlsx") > -1) {
       this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
       return;
@@ -52,6 +54,7 @@ export class ImportAudienceComponent {
 
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
+    fd.append('type', this.dialogData.type);
     this.dataService.showLoading(true);
     if(this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
