@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { AudienceTradeProgramService } from 'app/services/dte-automation/audience-trade-program.service';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-indextsm',
@@ -45,20 +46,23 @@ export class IndextsmComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private audienceTradeProgramService: AudienceTradeProgramService,
-    private formBuilder: FormBuilder,) {
-      this.onLoad = true;
-      this.permission = this.roles.getRoles('principal.dteautomation');
-      console.log(this.permission);
-  
+    private formBuilder: FormBuilder,
+    private ls: LanguagesService,
+  ) {
+    this.onLoad = true;
+    this.permission = this.roles.getRoles('principal.dteautomation');
+    console.log(this.permission);
 
-      const observable = this.keyUp.debounceTime(1000)
-        .distinctUntilChanged()
-        .flatMap(search => {
-          return Observable.of(search).delay(500);
-        })
-        .subscribe(data => {
-          this.updateFilter(data);
-        }); }
+
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
+  }
 
   ngOnInit() {
     this.getDTEAutomationTsm();

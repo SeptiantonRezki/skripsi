@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
 import { DataService } from "app/services/data.service";
 import { AreaService } from "app/services/area.service";
 import * as _ from "underscore";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "target-area-dialog-import",
@@ -31,6 +32,7 @@ export class DialogImportComponent implements OnInit {
     public dialog: MatDialog,
     private areaService: AreaService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.payload = data;
