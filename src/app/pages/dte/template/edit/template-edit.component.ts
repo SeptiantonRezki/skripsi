@@ -37,6 +37,11 @@ export class TemplateEditComponent {
     { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
     { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
   ];
+  listBlockerSubmission: any[] = [
+    { value: 'soft', name: 'Soft' },
+    { value: 'med', name: 'Medium' },
+    { value: 'hard', name: 'Hard' },
+  ];
   isIRTypeError: boolean = false;
 
   listKategoriToolbox: any[];
@@ -394,7 +399,6 @@ export class TemplateEditComponent {
       questions.at(index).get('question_image_detail').setValue(false);
       question_image_description.reset();
     }
-    console.log('ini detail', questions.at(index).get('question_image_detail'));
   }
   onChangeDetailBanner(event) {
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
@@ -806,6 +810,8 @@ export class TemplateEditComponent {
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0' ? false : true,
         encryption: item.encryption == 1 ? true : false,
+        image_quality_detection: item.image_quality_detection == 1 ? true : false,
+        blocker_submission: [item.blocker_submission, Validators.required],
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
           title: '',
@@ -846,7 +852,9 @@ export class TemplateEditComponent {
           })
         )
       }));
-      console.log('questions', questions, this.listChoose);
+      
+      this.handleChangeImageDetection(index);
+
       this.allQuestionList.push({
         id: item.id,
         question: item.question,
@@ -999,6 +1007,17 @@ export class TemplateEditComponent {
     }
   }
 
+  handleChangeImageDetection(index): void {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (questions.at(index).get("image_quality_detection").value) {
+      questions.at(index).get("blocker_submission").enable();
+    } else {
+      questions.at(index).get("blocker_submission").setValue("");
+      questions.at(index).get("blocker_submission").disable();
+    }
+  }
+
   selectedImageIR(selectedIR, template, idx) {
     console.log('selectedIR IR', selectedIR, template, idx);
     // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
@@ -1095,6 +1114,8 @@ export class TemplateEditComponent {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+    questions.at(idx).get('image_quality_detection').setValue(false);
+    this.handleChangeImageDetection(idx)
   }
 
   checkWordingRadioFreeType(item) {
@@ -1125,10 +1146,11 @@ export class TemplateEditComponent {
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id });
+    if (newId === -Infinity) newId = { id: 0 }
     this.isDetailBannerPertanyaan = false;
 
     questions.push(this.formBuilder.group({
-      id: newId.id + 1,
+      id: String(Number(newId.id) + 1),
       question: `Pertanyaan`,
       type: 'radio',
       question_image_detail: false,
@@ -1147,6 +1169,8 @@ export class TemplateEditComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
       // others: false,
       // required: false
     }))
@@ -1162,6 +1186,7 @@ export class TemplateEditComponent {
 
     this.templateList.push([]);
     this.templateListImageIR.push({ item_id: newId.id + 1 });
+    this.handleChangeImageDetection(newId.id);
   }
 
   filteringPossibilitiesQuestion(questionId) {
@@ -1402,7 +1427,9 @@ export class TemplateEditComponent {
             required: item.type === 'stock_check' ? 1 : null,
             question_image_detail: item.question_image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
             // required: item.required,
+            blocker_submission: item.blocker_submission || "",
             question_image: item.question_image || '',
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
@@ -1629,14 +1656,25 @@ export class TemplateEditComponent {
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
+      const questions = this.templateTaskForm.get('questions') as FormArray;
+
       if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
         return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
 
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if (this.templateTaskForm.get('questions').invalid)
-        return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+      if (this.templateTaskForm.get('questions').invalid) {
+        if (questions.value.length) {
+          for (const item of questions.value) {
+            if (item.image_quality_detection && !item.blocker_submission) {
+              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+            }
+          }
+        } else {
+          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+        }
+      }
       else
         return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
     }
