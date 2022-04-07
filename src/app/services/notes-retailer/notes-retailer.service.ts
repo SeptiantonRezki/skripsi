@@ -32,7 +32,6 @@ export class NotesRetailerService extends BaseService {
     return this.postApi(url, body);
   }
   put(body, context): Observable<any> {
-    console.log('nyampe service', context);
     const url = this.getUrl(this.namespace, 'put', context);
     return this.putApi(url, body);
   }
