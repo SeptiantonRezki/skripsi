@@ -17,6 +17,7 @@ import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 import { WholesalerService } from "app/services/user-management/wholesaler.service";
 import { WholesalerSpecialPriceService } from "app/services/sku-management/wholesaler-special-price.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -117,6 +118,7 @@ export class ProductEditComponent {
     private dialog: MatDialog,
     private dataService: DataService,
     private wholesalerSpecialPriceService: WholesalerSpecialPriceService,
+    private ls: LanguagesService,
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
