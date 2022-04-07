@@ -7,6 +7,7 @@ import { TemplateTaskService } from '../../../../../services/dte/template-task.s
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -39,6 +40,7 @@ export class DiaglogMisiComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
     private dialogService: DialogService,
+    private ls: LanguagesService,
   ) { }
 
 

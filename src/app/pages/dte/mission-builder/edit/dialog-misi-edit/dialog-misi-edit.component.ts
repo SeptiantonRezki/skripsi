@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-dialog-misi-edit',
@@ -44,6 +45,7 @@ export class DialogMisiEditComponent implements OnInit {
     private templateTaskService: TemplateTaskService,
     private dialogService: DialogService,
     private dataService: DataService,
+    private ls: LanguagesService,
   ) { }
 
   ngOnInit() {
