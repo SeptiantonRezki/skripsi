@@ -17,6 +17,7 @@ import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
 import { Page } from "app/classes/laravel-pagination";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-template-edit-personalize',
@@ -190,7 +191,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
     private _lightbox: Lightbox,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
   ) {
     this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }];
     this.saveData = false;

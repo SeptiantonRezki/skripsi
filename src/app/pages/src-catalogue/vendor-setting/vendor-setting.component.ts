@@ -6,6 +6,7 @@ import { AuthenticationService } from 'app/services/authentication.service';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { GeneralService } from 'app/services/general.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { PengajuanSrcService } from 'app/services/user-management/pengajuan-src.service';
 import moment from 'moment';
@@ -96,6 +97,7 @@ export class VendorSettingComponent implements OnInit {
     private dialogService: DialogService,
     private generalService: GeneralService,
     private vendorService: VendorsService,
+    private ls: LanguagesService,
   ) {
     this.formSIUP = this.formBuilder.group({
       siup_number: [""],

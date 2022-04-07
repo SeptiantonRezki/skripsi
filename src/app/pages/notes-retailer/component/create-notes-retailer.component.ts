@@ -33,6 +33,7 @@ import { NotesRetailerService } from '../../../services/notes-retailer/notes-ret
 import { ImportNotesDialogComponent } from '../import-component/import-notes-dialog.component';
 import moment from 'moment';
 import { DatatableComponent } from "@swimlane/ngx-datatable";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-create-notes-retailer.component',
@@ -158,6 +159,7 @@ export class CreateNotesRetailerComponent implements OnInit {
     private idbService: IdbService,
     private route: ActivatedRoute,
     private notesRetailerService: NotesRetailerService,
+    private ls: LanguagesService,
   ) {
     this.notesMdl = new NotesRetailerModel();
     this.exportTemplate = false;
