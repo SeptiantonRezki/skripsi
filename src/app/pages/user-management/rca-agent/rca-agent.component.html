@@ -1,10 +1,10 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="ls.locale.rca_agent.index_title">
+  <page-content-header contentTitle="{{'rca_agent.index_title' | translate}}">
     <div class="button-row" fxLayout="row">
       <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/rca','agent-pengguna','create']">
-        <mat-icon>add</mat-icon>{{ ls.locale.global.button.add }}
+        <mat-icon>add</mat-icon>{{ 'global.button.add' | translate }}
       </button>
     </div>
   </page-content-header>
@@ -13,7 +13,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{ ls.locale.rca_agent.index_title }}</h2>
+        <h2 class="pl-8">{{ 'rca_agent.index_title' | translate }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -120,7 +120,7 @@
               <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                {{row.status == 'active' ? ('global.label.active' | translate) : ('global.label.inactive' | translate)}}
               </p>
             </div>
           </ng-template>

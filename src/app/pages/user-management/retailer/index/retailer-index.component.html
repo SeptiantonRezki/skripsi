@@ -46,12 +46,12 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" multiple>
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Zona' :
@@ -59,7 +59,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" multiple>
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
                 ? 'Semua
                 Regional'
@@ -68,7 +68,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Area'
@@ -77,7 +77,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
                 'all' ?
                 'Semua
@@ -87,7 +87,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" multiple>
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
                 'all' ? 'Semua
                 District'
@@ -96,7 +96,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory" multiple>
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
                 'all' ? 'Semua
                 Territori'
@@ -108,17 +108,17 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           style="margin-bottom: 25px;">
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Apps Version AYO SRC Toko" [formControl]="version_retailer">
+            <mat-select placeholder="{{'retailer.list.apps_version_ayo_toko' | translate}}" [formControl]="version_retailer">
               <mat-option *ngFor="let item of listVersionsRetailer" [value]="item.version">{{item.version}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Apps Version AYO SRC Kasir" [formControl]="version_cashier">
+            <mat-select placeholder="{{'retailer.list.apps_version_ayo_cashier' | translate}}" [formControl]="version_cashier">
               <mat-option *ngFor="let item of listVersionsCashier" [value]="item.version">{{item.version}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Status" [formControl]="status">
+            <mat-select placeholder="{{'global.label.status' | translate}}" [formControl]="status">
               <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -130,34 +130,34 @@
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Classification" [formControl]="retail_classification">
+            <mat-select placeholder="{{'global.label.classification' | translate}}" [formControl]="retail_classification">
               <mat-option *ngFor="let item of retailClassification" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Chatbot" [formControl]="chatbot">
+            <mat-select placeholder="{{'global.label.chat_bot' | translate}}" [formControl]="chatbot">
               <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="GSR" [formControl]="gsr">
+            <mat-select placeholder="{{'retailer.list.gsr' | translate}}" [formControl]="gsr">
               <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="GSM PL" [formControl]="gsm_pl">
+            <mat-select placeholder="{{'retailer.list.gsm_pl' | translate}}" [formControl]="gsm_pl">
               <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Pojok Bayar Validation" [formControl]="pojok_bayar_validation">
+            <mat-select placeholder="{{'retailer.list.pojok_bayar_validation' | translate}}" [formControl]="pojok_bayar_validation">
               <mat-option *ngFor="let item of listPojokBayar" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="Bank Account Validation" [formControl]="bank_final_validation">
+            <mat-select placeholder="{{'retailer.list.bank_account_validation' | translate}}" [formControl]="bank_final_validation">
               <mat-option *ngFor="let item of listBankFinalValidation" [value]="item.value">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -209,12 +209,12 @@
         <ngx-datatable-column name="{{ ls.locale.call_objective.text12 }}" prop="src_type" summary-template="activeCell">
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="GSR" prop="gsr_flag" summary-template="activeCell">
+        <ngx-datatable-column name="{{'retailer.list.gsr' | translate}}" prop="gsr_flag" summary-template="activeCell">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.gsr_flag === 1 ? 'On' : 'Off'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="GSM PL" prop="gsm_pl" summary-template="activeCell">
+        <ngx-datatable-column name="{{'retailer.list.gsm_pl' | translate}}" prop="gsm_pl" summary-template="activeCell">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.gsm_pl === 1 ? 'On' : 'Off'}}
           </ng-template>
@@ -228,7 +228,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="AYO SRC Toko Version" prop="version_retailer" summary-template="activeCell"
+        <ngx-datatable-column name="{{'retailer.list.apps_version_ayo_toko' | translate}}" prop="version_retailer" summary-template="activeCell"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
           </ng-template>
@@ -238,7 +238,7 @@
             {{row.is_chat_bot === 1 ? 'On' : 'Off'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="AYO SRC Kasir Version" prop="version_cashier" summary-template="activeCell"
+        <ngx-datatable-column name="{{'retailer.list.apps_version_ayo_cashier' | translate}}" prop="version_cashier" summary-template="activeCell"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_cashier || '-'}}
           </ng-template>
