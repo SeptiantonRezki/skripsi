@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vendors-index',
@@ -36,7 +37,8 @@ export class VendorsIndexComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private vendorsService: VendorsService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -141,10 +143,10 @@ export class VendorsIndexComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Vendor",
-      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      titleDialog: this.translate.instant('src_katalog.vendor.delete'),
+      captionDialog: this.translate.instant('src_katalog.vendor.delete_confirm'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -154,7 +156,7 @@ export class VendorsIndexComponent implements OnInit {
     this.vendorsService.delete({ vendor_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
         this.dataService.showLoading(false);
         this.getVendors();
       },
@@ -162,10 +164,10 @@ export class VendorsIndexComponent implements OnInit {
         if (err && err.status === 403) {
           this.dialogService.brodcastCloseConfirmation();
           let data = {
-            titleDialog: "Hapus Vendor secara Paksa",
-            captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan",
+            titleDialog: this.translate.instant('src_katalog.vendor.force_delete'),
+            captionDialog: this.translate.instant('src_katalog.vendor.force_delete_confirm'),
             confirmCallback: this.forceDelete.bind(this),
-            buttonText: ["Hapus Sekarang", "Batal"]
+            buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
           };
           this.dialogService.openCustomConfirmationDialog(data);
         }
@@ -180,7 +182,7 @@ export class VendorsIndexComponent implements OnInit {
     this.vendorsService.forceDelete({ vendor_id: this.id }, { force_delete: 1 }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
         this.dataService.showLoading(false);
         this.getVendors();
       },

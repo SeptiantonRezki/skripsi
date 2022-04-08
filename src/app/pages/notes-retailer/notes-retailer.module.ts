@@ -55,7 +55,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { CreateNotesRetailerComponent } from './component/create-notes-retailer.component';
 import {NotesRetailerListComponent} from './component/list-notes-retailer.component';
 import { ImportNotesDialogComponent } from './import-component/import-notes-dialog.component';
-
+import {TranslateModule} from '@ngx-translate/core';
 export const customCurrencyMaskConfig = {
   align: 'left',
   allowNegative: false,
@@ -118,6 +118,7 @@ export const MY_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
     NgxGraphModule,
+    TranslateModule,
   ],
   declarations: [
     CreateNotesRetailerComponent,

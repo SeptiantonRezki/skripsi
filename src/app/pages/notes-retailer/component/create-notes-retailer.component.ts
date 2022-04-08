@@ -779,7 +779,7 @@ export class CreateNotesRetailerComponent implements OnInit {
             // console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
+              message: this.ls.locale.global.messages.text8,
             });
             this.dataService.showLoading(false);
           });

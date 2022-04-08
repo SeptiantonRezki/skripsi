@@ -4,7 +4,7 @@
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/src-catalogue', 'store-layout-template', 'create']">
-        <mat-icon>add</mat-icon>BUAT
+        <mat-icon>add</mat-icon>{{'global.button.add' | translate}}
       </button>
     </div>
   </page-content-header>
@@ -60,7 +60,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button color="" matTooltip="Ubah Produk" (click)="directEdit(row)">
+              <button mat-icon-button color="" matTooltip="{{'global.button.edit' | translate}}" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" (click)="deleteUser(row.id)">

@@ -74,7 +74,7 @@
               <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                {{row.status == 'active' ? ('global.label.active' | translate) : ('global.label.inactive' | translate) }}
               </p>
             </div>
           </ng-template>

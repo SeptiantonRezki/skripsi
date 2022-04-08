@@ -33,6 +33,7 @@ import { VendorNotificationComponent } from './vendor-notification/vendor-notifi
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { VendorTemplateMessageComponent } from './vendor-setting/vendor-template-message/vendor-template-message.component';
 import { VendorNotifUpdateListComponent } from './vendor-notification/vendor-notif-update-list/vendor-notif-update-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -85,7 +86,8 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatDividerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    TranslateModule.forChild(),
   ],
   declarations: [VendorsIndexComponent, VendorsEditComponent, VendorsCreateComponent, StoreLayoutTemplateComponent, StoreLayoutTemplateCreateComponent, StoreLayoutTemplateEditComponent, UserSrcCatalogueComponent, UserSrcCatalogueCreateComponent, UserSrcCatalogueEditComponent, ProductCatalogueComponent, ProductCatalogueCreateComponent, ProductCatalogueEditComponent, CatalogueProductImportFileDialogComponent, OrderCatalogueComponent, OrderCatalogueDetailComponent, EstShippingDialogComponent, VendorSettingComponent, VendorNotificationComponent, VendorTemplateMessageComponent, VendorNotifUpdateListComponent],
   providers: [

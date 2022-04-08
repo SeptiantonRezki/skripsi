@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { StoreTemplateLayoutService } from 'app/services/src-catalogue/store-template-layout.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-store-layout-template',
@@ -36,7 +37,8 @@ export class StoreLayoutTemplateComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private storeTemplateLayoutService: StoreTemplateLayoutService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -130,10 +132,10 @@ export class StoreLayoutTemplateComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Vendor",
-      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      titleDialog: this.translate.instant('store_layout_template.delete'),
+      captionDialog: this.translate.instant('store_layout_template.delete_confirm'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

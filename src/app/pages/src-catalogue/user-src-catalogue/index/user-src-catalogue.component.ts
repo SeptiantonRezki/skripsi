@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { UserCatalogueService } from "app/services/src-catalogue/user-catalogue.service";
 import { Observable, Subject } from 'rxjs';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-src-catalogue',
@@ -36,7 +37,8 @@ export class UserSrcCatalogueComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private userCatalogueService: UserCatalogueService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -130,10 +132,10 @@ export class UserSrcCatalogueComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Vendor",
-      captionDialog: "Apakah anda yakin untuk menghapus Vendor ini ?",
+      titleDialog: this.translate.instant('src_katalog.vendor.delete'),
+      captionDialog: this.translate.instant('src_katalog.vendor.delete_confirm'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -143,7 +145,7 @@ export class UserSrcCatalogueComponent implements OnInit {
     this.userCatalogueService.delete({ user_catalogue_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
         this.dataService.showLoading(false);
         this.getUserCatalogues();
       },
