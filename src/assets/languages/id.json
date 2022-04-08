@@ -97,7 +97,10 @@
       "updated_by": "Diperbarui Oleh",
       "all_access_cashier": "Semua Akses Kasir",
       "cashier_access": "Akses Kasir",
-      "store_type": "Tipe Toko"
+      "store_type": "Tipe Toko",
+      "code": "Kode",
+      "yes": "Ya",
+      "no": "Tidak"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -111,7 +114,8 @@
       "delivery_ready": "Siap Dikirim",
       "pickup_ready": "Siap Diambil",
       "on_delivery": "Dalam Pengiriman",
-      "not_paid_off": "Belum Lunas"
+      "not_paid_off": "Belum Lunas",
+      "handed_over": "Pesanan Diserahkan"
     },
     "button": {
       "save": "Simpan",
@@ -130,8 +134,8 @@
       "export": "Export",
       "deactivate": "Non Aktifkan",
       "update_status": "PERBARUI STATUS",
-			"yes_continue": "Ya, lanjutkan",
-			"no_cancel": "Tidak, batalkan"
+      "yes_continue": "Ya, lanjutkan",
+      "no_cancel": "Tidak, batalkan"
     },
     "area": {
       "national": "National",
@@ -183,7 +187,8 @@
       "invalid_reason": "Alasan Tidak Valid",
       "send_email_notif": "Kirim Email Notifikasi",
       "send_email_notif_to": "Anda akan mengirimkan email notifikasi ke",
-      "no_selected_user": "Tidak Ada user yang terpilih"
+      "no_selected_user": "Tidak Ada user yang terpilih",
+      "failed_partial_import_at": "Gagal mengimport Sebagian Data! pada halaman "
     }
   },
   "login": {
@@ -343,7 +348,13 @@
       "text7": "Customer Code",
       "text8": "Customer Name",
       "text9": "Customer Type",
-      "text10": "Tanggal Input Referral Code"
+      "text10": "Tanggal Input Referral Code",
+      "apps_version_ayo_toko": "Apps Version AYO SRC Toko",
+      "apps_version_ayo_cashier": "Apps Version AYO SRC Kasir",
+      "pojok_bayar_validation": "Pojok Bayar Validation",
+      "bank_account_validation": "Rekening Bank Tervalidasi",
+      "gsr": "GSR",
+      "gsm_pl": "GSM PL"
     },
     "medal_badge": {
       "text1": "Medal",
@@ -356,6 +367,12 @@
     },
     "create": {
       "page_title": "Buat Retailer"
+    },
+    "detail": {
+      "page_title": "Detil Retailer",
+      "pkp": "PKP",
+      "detail_pojok_bayar_account": "Detail Akun Pojok Bayar",
+      "pojok_bayar": "Pojok Bayar"
     },
     "excel_download_info": "Sistem sedang membuat file excel untuk anda download. Jika file excel sudah dibuat akan segera kami infokan via email."
   },
@@ -475,7 +492,12 @@
     "text3": "Jumlah Audience",
     "text4": "Status Program",
     "text5": "Judul Partnership",
-    "text6": "Detail Mechanism"
+    "text6": "Detail Mechanism",
+    "list": "Daftar Panel Partnership",
+    "name": "Nama Partnership",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Partnership ini ?",
+    "status_changed": "Berhasil mengubah status",
+    "status_unchanged": "Gagal mengubah status"
   },
   "principal_notes_for_retailer": {
     "text": "Principal Notes For Retaailer"
@@ -501,7 +523,11 @@
       "text4": "Nama Vendor",
       "text5": "Alamat Vendor",
       "text6": "Tipe Vendor",
-      "text7": "Internal Classification"
+      "text7": "Internal Classification",
+      "delete": "Hapus Vendor",
+      "delete_confirm": "Apakah anda yakin untuk menghapus Vendor ini ?",
+      "force_delete": "Hapus Vendor secara Paksa",
+      "force_delete_confirm": "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan"
     },
     "pengguna": {
       "text1": "Pengguna",
@@ -541,7 +567,11 @@
       "day": "Hari",
       "update_all_price": "PERBARUI SEMUA HARGA",
       "shopping_voucher": "Voucher Belanja",
-      "total_order_value": "Total Nilai Pemesanan"
+      "total_order_value": "Total Nilai Pemesanan",
+      "wholesaler_customer_code": "Customer Code Mitra",
+      "hub_customer_code": "Customer Code Mitra Hub",
+      "wholesaler_hub_name": "Nama Mitra Hub",
+      "delivery_status": "Status Pengiriman"
     },
     "produk": {
       "text1": "Produk Katalog SRC",
@@ -566,7 +596,12 @@
       "text20": "Status Produk",
       "text21": "Baru bergabung menjadi SRC ?",
       "text22": "Ingin meningkatkan penjualan toko ?",
-      "text23": "Ingin mengembangkan usaha lebih besar lagi ?"
+      "text23": "Ingin mengembangkan usaha lebih besar lagi ?",
+      "delete_all_sku": "Apakah Anda Yakin untuk menghapus semua list SKU Anda?",
+      "delete_all_sku_confirm": "Apakah anda yakin akan menghapus SEMUA PRODUK? Pastikan anda sudah backup data produk anda dengan Export Excel di halaman produk.",
+      "stock_available": "Tersedia",
+      "stock_unavailable": "Tidak Tersedia",
+      "import_file": "Tarik File Kesini (Maks. 10.000 Baris SKU) atau Pilih File"
     }
   },
   "iklan_dalam_aplikasi": {
@@ -631,12 +666,21 @@
       "text24": "Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka",
       "text25": "Batas Waktu Menerima Pesanan (HH:MM)",
       "text26": "Ubah Kurir",
-      "text27": "Apakah kamu yakin ingin mengubah status Kurir ini ?"
+      "text27": "Apakah kamu yakin ingin mengubah status Kurir ini ?",
+      "delete": "Hapus Layanan Kurir",
+      "delete_confirm": "Apakah anda yakin untuk menghapus Layanan Kurir ini ?",
+      "new_service": "Layanan Baru",
+      "invalid_delivery_time": "Format Waktu Layanan Tidak Valid"
     },
     "panel_mitra": {
       "text1": "Panel Mitra",
       "text2": "Jenis Layanan",
-      "text3": "Jumlah Mitra"
+      "text3": "Jumlah Mitra",
+      "set_partner_panel": "ATUR PANEL MITRA",
+      "select_courier": "Pilih Kurir",
+      "courier_type": "Jenis Kurir",
+      "selected_partner": "Mitra Terpilih",
+      "select_service": "Pilih Layanan"
     }
   },
   "manajemen_barang_sku": {
@@ -1337,7 +1381,8 @@
   "rca_agent": {
     "page_title": "RCA Agent",
     "index_title": "Daftar RCA Agent",
-    "email_validation": "Pastikan Email dan username sesuai dengan Akun SSO anda."
+    "email_validation": "Pastikan Email dan username sesuai dengan Akun SSO anda.",
+    "delete_confirm": "Apakah anda yakin untuk menghapus RCA Agent ini ?"
   },
   "rca_grouping": {
     "page_title": "Grouping Pelanggan",
@@ -1419,5 +1464,168 @@
     "on_validation": "File JSON sedang dalam proses validasi",
     "validation_success": "Validasi Berhasil, silahkan Upload data",
     "validate": "VALIDATE"
+  },
+  "voucher_private_label": {
+    "store_count": "Jumlah Toko",
+    "store_redeem_voucher": "Toko Menukarkan Voucher",
+    "voucher_unused_value": "Nilai Voucher Belum Terpakai",
+    "voucher_used_value": "Nilai Voucher Ditukarkan",
+    "voucher_release_date": "Tanggal Voucher Dibagikan"
+  },
+  "notes_retailer": {
+    "list": "Daftar Notes untuk Retailer",
+    "name": "Nama Notes",
+    "description": "Description Notes",
+    "status": "Status Notes"
+  },
+  "store_layout_template": {
+    "delete": "Hapus Store Layout Template",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Store Layout Template ini ?"
+  },
+  "breadcrumbs": {
+    "device_management": {
+      "index": "Perangkat dipulihkan dan Pengaturan"
+    },
+    "help": {
+      "index": "Manajemen Bantuan",
+      "create": "Buat Topik Bantuan",
+      "edit": "Ubah Topik Bantuan"
+    },
+    "adminprincipal": {
+      "index": "Daftar Admin Principal",
+      "create": "Buat Admin Principal",
+      "edit": "Ubah Admin Principal",
+      "detail": "Detail Admin Principal"
+    },
+    "fieldforce": {
+      "index": "Daftar Field Force",
+      "create": "Buat Field Force",
+      "edit": "Ubah Field Force",
+      "detail": "Detail Field Force"
+    },
+    "wholesaler": {
+      "index": "Daftar Wholesaler",
+      "create": "Buat Wholesaler",
+      "edit": "Ubah Wholesaler",
+      "detail": "Detail Wholesaler"
+    },
+    "retailer": {
+      "index": "Daftar Retailer",
+      "create": "Buat Retailer",
+      "edit": "Ubah Retailer",
+      "detail": "Detail Retailer"
+    },
+    "medal_badge": {
+      "index": "Medal & Badge"
+    },
+    "customer": {
+      "index": "Daftar Consumer",
+      "detail": "Detail Consumer"
+    },
+    "pengajuan_src": {
+      "index": "Daftar Pengajuan SRC",
+      "create": "Buat Pengajuan SRC",
+      "edit": "Ubah Pengajuan SRC",
+      "detail": "Detail Pengajuan SRC"
+    },
+    "partnership": {
+      "index": "Daftar Principal Partnership",
+      "create": "Buat Principal Partnership",
+      "edit": "Ubah Principal Partnership",
+      "detail": "Detail Principal Partnership"
+    },
+    "panelpartnership": {
+      "strategic_partnership": "Strategic Partnership",
+      "index": "Panel Partnership",
+      "create": "Create",
+      "edit": "Ubah"
+    },
+    "privatelabel": {
+      "index": "Produk Prinsipal",
+      "suppliercompany": {
+        "index": "Perusahaan",
+        "create": "Create Perusahaan",
+        "edit": "Ubah Perusahaan",
+        "detail": "Detail Perusahaan"
+      },
+      "usersupplier": {
+        "index": "User Perusahaan",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "panelmitra": {
+        "index": "Panel Mitra",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "ordertosupplier": {
+        "index": "Order dari Mitra",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "suppliersettings": {
+        "index": "Pengaturan",
+        "stock": "Stock",
+        "stock_edit": "Edit",
+        "payment_method": "Metode Pembayaran",
+        "payment_method_edit": "Edit"
+      },
+      "suppliervouchers": {
+        "index": "Voucher Private Label"
+      }
+    },
+    "banner": {
+      "index": "Spanduk Online",
+      "create": "Buat Spanduk Online",
+      "edit": "Ubah Spanduk Online",
+      "detail": "Detail Spanduk Online",
+      "sorting": "Pengaturan In-App Banner"
+    },
+    "landingpage": {
+      "index": "Halaman Tujuan",
+      "create": "Buat Halaman Tujuan",
+      "edit": "Ubah Halaman Tujuan"
+    },
+    "product": {
+      "index": "Daftar Produk",
+      "create": "Tambah Produk",
+      "edit": "Ubah Produk",
+      "detail": "Detail Produk"
+    },
+    "productcashier": {
+      "index": "Daftar Produk Kasir",
+      "create": "Tambah Produk Kasir",
+      "edit": "Ubah Produk",
+      "detail": "Detail Produk",
+      "submission": "Produk Diajukan",
+      "submission_detail": "Detail Produk Submission"
+    },
+    "dbsubmission": {
+      "index": "Pengajuan Produk DB",
+      "detail": "Detail Produk Diajukan",
+      "approval": "Pengaturan Approval"
+    },
+    "reward": {
+      "index": "Katalog Hadiah",
+      "create": "Buat Katalog Hadiah",
+      "edit": "Ubah Katalog Hadiah"
+    },
+    "rewardhistory": {
+      "index": "Riwayat Penukaaran"
+    },
+    "coin": {
+      "index": "Manajemen Koin",
+      "trade": "Detail Trade Program",
+      "retailer": "Detail Retailer"
+    },
+    "courier_management": {
+      "index": "Daftar Kurir",
+      "create": "Buat Layanan Kurir",
+      "edit": "Ubah Layanan Kurir",
+      "detail": "Detail Layanan Kurir"
+    }
   }
 }
