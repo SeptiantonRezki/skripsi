@@ -1848,7 +1848,7 @@ export class BannerCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get("user_group").value, api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd) };
+    dialogConfig.data = { type: this.formBannerGroup.get("group_type").value, audience: this.formBannerGroup.get("user_group").value, api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd) };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 

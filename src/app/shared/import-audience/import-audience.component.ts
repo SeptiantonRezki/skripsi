@@ -52,6 +52,7 @@ export class ImportAudienceComponent {
 
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
+    fd.append('type', this.dialogData.type);
     this.dataService.showLoading(true);
     if(this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
