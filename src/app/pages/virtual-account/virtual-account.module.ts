@@ -51,6 +51,7 @@ import { RupiahFormaterPipe } from '@fuse/pipes/rupiah-formater';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { VirtualAccountListResolver } from 'app/resolver/virtual-account.resolver';
+import { TranslateModule } from '@ngx-translate/core';
 export const customCurrencyMaskConfig = {
   align: "left",
   allowNegative: false,
@@ -101,7 +102,8 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    TranslateModule.forChild(),
   ],
   declarations: [
       VirtualAccountCompanyComponent,

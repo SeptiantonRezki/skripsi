@@ -46,6 +46,7 @@ import { LightboxModule } from 'ngx-lightbox';
 import { ImportAudienceBannerDialogComponent } from './banner/import-audience-banner-dialog/import-audience-banner-dialog.component';
 import { BannerSortingComponent } from './banner-sorting/banner-sorting.component';
 import { DndModule } from 'ngx-drag-drop';
+import { TranslateModule } from "@ngx-translate/core";
 
 export const MY_FORMATS = {
   parse: {
@@ -87,6 +88,7 @@ export const MY_FORMATS = {
     DndModule,
     MatListModule,
     MatCardModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     BannerIndexComponent,

@@ -160,6 +160,7 @@ import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 
 export const customCurrencyMaskConfig = {
@@ -228,6 +229,7 @@ export const MY_FORMATS = {
     NgxGraphModule,
     PipesModule,
     NgxMaskModule.forRoot(),
+    TranslateModule.forChild(),
   ],
   declarations: [
     TemplateIndexComponent,

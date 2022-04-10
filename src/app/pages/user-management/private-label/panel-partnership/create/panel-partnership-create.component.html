@@ -91,7 +91,7 @@
               *ngIf="createForm.controls['geotree_checkbox'].value === true"
             >
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                   <mat-option
                     *ngFor="let item of listLevelArea"
                     [value]="item.id"
@@ -100,7 +100,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                   <mat-option
                     *ngFor="let item of filteringGeotree(list['zone'])"
                     [value]="item.id"
@@ -113,7 +113,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Regional"
+                  placeholder="{{'global.area.regional' | translate}}"
                   formControlName="region"
                   multiple
                 >
@@ -130,7 +130,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                   <mat-option
                     *ngFor="let item of filteringGeotree(list['area'])"
                     [value]="item.id"
@@ -143,7 +143,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Salespoint"
+                  placeholder="{{'global.area.salespoint' | translate}}"rea.salespoint' | translate}}"
                   formControlName="salespoint"
                   multiple
                 >
@@ -161,7 +161,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="District"
+                  placeholder="{{'global.area.district' | translate}}"
                   formControlName="district"
                   multiple
                 >
@@ -179,7 +179,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Territory"
+                  placeholder="{{'global.area.territory' | translate}}"
                   formControlName="territory"
                   multiple
                 >

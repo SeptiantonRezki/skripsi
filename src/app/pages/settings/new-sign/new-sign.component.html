@@ -96,12 +96,12 @@
             <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
               fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
                     'all' ? 'Semua
                     Zona' :
@@ -109,7 +109,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region" multiple>
+                <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
                     'all' ? 'Semua
                     Regional'
@@ -118,7 +118,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
                     'all' ? 'Semua
                     Area'
@@ -127,7 +127,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
                     === 'all' ?
                     'Semua
@@ -137,7 +137,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district" multiple>
+                <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
                     'all' ? 'Semua
                     District'
@@ -146,7 +146,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory" multiple>
+                <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
                     'all' ? 'Semua
                     Territori'
@@ -232,7 +232,7 @@
                 <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
                   fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="National" formControlName="national"
+                    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national"
                       matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
                       <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">
                         {{item.name}}
@@ -240,44 +240,44 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                      National {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.national' | translate}} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="Zone" formControlName="zone"
+                    <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
                       matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}"
                       (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
                       <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                      Zone {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.zone' | translate}} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="Regional" formControlName="region"
+                    <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
                       matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
                       (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
                       <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                      Regional {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.regional' | translate}} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="Area" formControlName="area"
+                    <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                       matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
                       (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
                       <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                      Area {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.area' | translate}}{{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="Salespoint" formControlName="salespoint"
+                    <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                       matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
                       (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
                       <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
@@ -285,11 +285,11 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                      Salespoint {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.salespoint' | translate}} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="District" formControlName="district"
+                    <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
                       matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
                       (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
                       <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">
@@ -298,18 +298,18 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                      Distrik {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.district' | translate}} {{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
-                    <mat-select placeholder="Territory" formControlName="territory"
+                    <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory"
                       matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
                       <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
                         {{item.name}}</mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                      Territori {{ ls.locale.global.messages.mandatory_text }}
+                      {{'global.area.territory' | translate}}{{ ls.locale.global.messages.mandatory_text }}
                     </mat-error>
                   </mat-form-field>
                 </div>
