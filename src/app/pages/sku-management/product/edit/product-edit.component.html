@@ -1,7 +1,7 @@
 <div #containerScroll class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="isDetail ? 'Detail Produk' : 'Ubah Produk'">
-    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
+  <page-content-header contentTitle="{{isDetail ? ('breadcrumbs.product.detail' | translate) : ('breadcrumbs.product.edit' | translate) }}">
+    <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="save" (click)="submit()"
       type="button">{{ls.locale.global.button.save}}</button>
   </page-content-header>
   <!-- / HEADER -->
@@ -15,49 +15,49 @@
       <form autocomplete="off" [formGroup]="formProductGroup" (keydown.enter)="$event.preventDefault();">
         <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
         <mat-tab-group>
-          <mat-tab label="Informasi Produk">
+          <mat-tab label="{{'manajemen_barang_sku.produk.text3' | translate}}">
             <div class="ayo-middle" fxLayout="column">
               <div class="p-24" fxLayout="column">
                 <div class="pb-24" fxLayout="row" fxLayoutAlign="space-between center">
                   <div *ngIf="!isDetail" class="button" (click)="openDialog()">
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                       <mat-icon class="secondary-text">horizontal_split</mat-icon>
-                      <span class="h5 text-center">SCAN BARCODE</span>
+                      <span class="h5 text-center">{{'manajemen_barang_sku.produk_kasir.text11' | translate}}</span>
                     </div>
                   </div>
                   <div *ngIf="detailProduct.cashier === 1" class="info-label" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
                     <mat-icon>check</mat-icon>
-                    <span>Produk tersedia online</span>
+                    <span>{{'manajemen_barang_sku.produk.online_available_product' | translate}}</span>
                   </div>
                 </div>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Kode Family" formControlName="code">
+                  <input matInput type="text" placeholder="{{'manajemen_barang_sku.produk.family_code' | translate}}" formControlName="code">
                   <mat-error
                     *ngIf="formProductGroup.controls['code'].hasError('required') && formProductGroup.controls['code'].touched">
-                    Kode Family harus diisi
+                    {{'manajemen_barang_sku.produk.family_code' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Nama Produk" formControlName="name">
+                  <input matInput type="text" placeholder="{{'manajemen_barang_sku.produk.text4' | translate}}" formControlName="name">
                   <mat-error
                     *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
-                    Nama Produk harus diisi
+                    {{'manajemen_barang_sku.produk.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Barcode" formControlName="barcode" readonly>
+                  <input matInput type="text" placeholder="{{'manajemen_barang_sku.produk.text5' | translate}}" formControlName="barcode" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="brand" placeholder="Perusahaan" #singleSelect>
-                    <ngx-mat-select-search [formControl]="filterBrand" [placeholderLabel]="'Cari Perusahaan...'"
-                      [noEntriesFoundLabel]="'Tidak ada perusahaan yang ditemukan'"></ngx-mat-select-search>
+                  <mat-select formControlName="brand" placeholder="{{'manajemen_barang_sku.produk.text6' | translate}}" #singleSelect>
+                    <ngx-mat-select-search [formControl]="filterBrand" placeholderLabel="{{'global.label.search' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredBrand | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formProductGroup.controls['brand'].hasError('required') && formProductGroup.controls['brand'].touched">
-                    Perusahaan harus diisi
+                    {{'manajemen_barang_sku.produk.text6' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
@@ -68,53 +68,53 @@
                       {{item.get('alias').value}}
                       <mat-icon matChipRemove *ngIf="removable && !isDetail">cancel</mat-icon>
                     </mat-chip>
-                    <input matInput placeholder="Nama Lain Produk" type="text" [matChipInputFor]="chipList"
+                    <input matInput placeholder="{{'manajemen_barang_sku.produk.product_other_name' | translate}}" type="text" [matChipInputFor]="chipList"
                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
                       (matChipInputTokenEnd)="addAlias($event)" [disabled]="isDetail">
                   </mat-chip-list>
                   <mat-error
                     *ngIf="formProductGroup.controls['alias'].hasError('required') && formProductGroup.controls['alias'].touched">
-                    Nama Lain Produk harus diisi
+                    {{'manajemen_barang_sku.produk.product_other_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select formControlName="category" placeholder="Kategori Produk" #singleSelect
+                  <mat-select formControlName="category" placeholder="{{'manajemen_barang_sku.produk.text13' | translate}}" #singleSelect
                     (selectionChange)="selectionChange()">
-                    <ngx-mat-select-search [formControl]="filterCategory" [placeholderLabel]="'Cari Kategori...'"
-                      [noEntriesFoundLabel]="'Tidak ada kategori yang ditemukan'"></ngx-mat-select-search>
+                    <ngx-mat-select-search [formControl]="filterCategory" placeholderLabel="{{'global.label.search' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found'}}"></ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
-                    Kategori Produk harus diisi
+                    {{'manajemen_barang_sku.produk.text13' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
                 <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
                   <mat-form-field fxFlex="100" class="is-light form-primary">
-                    <mat-select placeholder="Sub Kategori" formControlName="subCategory">
+                    <mat-select placeholder="{{'manajemen_barang_sku.produk.text14' | translate}}" formControlName="subCategory">
                       <mat-option [value]="item.id" *ngFor="let item of listSubCategory">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="formProductGroup.controls['category'].hasError('required') && formProductGroup.controls['category'].touched">
-                      Kategori Produk harus diisi
+                      {{'manajemen_barang_sku.produk.text13' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" class="">
 
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <mat-select placeholder="UOM" formControlName="packaging">
+                    <mat-select placeholder="{{'manajemen_barang_sku.produk.text15' | translate}}" formControlName="packaging">
                       <mat-option [value]="item.id" *ngFor="let item of listPackaging">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="formProductGroup.controls['packaging'].hasError('required') && formProductGroup.controls['packaging'].touched">
-                      Nama UOM harus diisi
+                      {{'manajemen_barang_sku.produk.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <!-- <mat-form-field fxFlex="25" class="is-light form-primary">
@@ -123,7 +123,7 @@
                 </div>
                 <div fxLayout="row wrap">
                   <div class="pt-16" fxLayout="column">
-                    <strong>Status Produk</strong>
+                    <strong>{{'manajemen_barang_sku.produk.text16' | translate}}</strong>
                     <mat-radio-group formControlName="status" class="radio-group pb-16">
                       <mat-radio-button class="radio-button" *ngFor="let item of statusProduk" [value]="item.status">
                         {{item.name}}
@@ -132,7 +132,7 @@
                   </div>
                   <div fxLayout="row" style="margin-left: 50px;" *ngIf="detailProduct.is_private_label_editable">
                     <div class="pt-16" fxLayout="column">
-                      <strong>Pin Up Product</strong>
+                      <strong>{{'manajemen_barang_sku.produk.text7' | translate}}</strong>
                       <mat-radio-group formControlName="status_pin_up" class="radio-group pb-16">
                         <mat-radio-button class="radio-button" *ngFor="let item of listPinUpProduct"
                           [value]="item.value">
@@ -142,7 +142,7 @@
                     </div>
                     <div class="pt-16" fxLayout="column" style="margin-left: 50px;"
                       *ngIf="formProductGroup.get('status_pin_up').value == 1">
-                      <strong>Durasi Pin Up</strong>
+                      <strong>{{'manajemen_barang_sku.produk.pinup_duration' | translate}}</strong>
                       <div fxLayout="row">
                         <mat-form-field fxFlex="50" class="is-light">
                           <input matInput [min]="minDate" (focus)="startPinUp.open()" [matDatepicker]="startPinUp"
@@ -151,31 +151,31 @@
                           <mat-datepicker #startPinUp></mat-datepicker>
                           <mat-error style="font-size: .8em"
                             *ngIf="formProductGroup.get('start_date_pin_up').hasError('matDatepickerMin') && formProductGroup.get('start_date_pin_up').touched">
-                            {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} tanggal hari ini
+                            {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{'manajemen_barang_sku.produk.date_today' | translate}}
                           </mat-error>
                         </mat-form-field>
 
                         <mat-form-field fxFlex="50" class="is-light" style="margin-left: 30px;">
                           <input [min]="formProductGroup.get('start_date_pin_up').value" matInput
-                            (focus)="endPinUp.open()" [matDatepicker]="endPinUp" placeholder="Tanggal Selesai"
+                            (focus)="endPinUp.open()" [matDatepicker]="endPinUp" placeholder="{{'manajemen_barang_sku.produk.end_date' | translate}}"
                             formControlName="end_date_pin_up">
                           <mat-datepicker-toggle matSuffix [for]="endPinUp"></mat-datepicker-toggle>
                           <mat-datepicker #endPinUp></mat-datepicker>
                           <mat-error style="font-size: .8em"
                             *ngIf="formProductGroup.get('end_date_pin_up').hasError('matDatepickerMin') && formProductGroup.get('end_date_pin_up').touched">
-                            Harus lebih lama dari tanggal mulai
+                            {{'manajemen_barang_sku.produk.more_than_start_date' | translate}}
                           </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
                     <div class="pt-16" fxLayout="column" style="margin-left: 50px;">
                       <mat-form-field fxFlex="100" class="is-light form-primary">
-                        <!-- <strong>Prioritas Produk</strong> -->
-                        <input matInput type="text" (keypress)="numberOnly($event)" placeholder="Prioritas Produk"
+                        <!-- <strong>{{'manajemen_barang_sku.produk.text8' | translate}}</strong> -->
+                        <input matInput type="text" (keypress)="numberOnly($event)" placeholder="{{'manajemen_barang_sku.produk.text8' | translate}}"
                           formControlName="priority_product">
                         <!-- <mat-error
                           *ngIf="formProductGroup.controls['name'].hasError('required') && formProductGroup.controls['name'].touched">
-                          Nama Produk harus diisi
+                          {{'manajemen_barang_sku.produk.text4' | translate}}{{'global.messages.mandatory_text' | translate}}
                         </mat-error> -->
                       </mat-form-field>
                     </div>
@@ -185,30 +185,28 @@
                 <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
                   fxLayoutGap.lt-md="10px" fxFlex="1 0 auto" style="margin-bottom: 20px;"
                   *ngIf="!detailProduct.sharelink_url">
-                  <button type="button" mat-stroked-button color="primary" (click)="generateLink()">GENERATE
-                    LINK</button>
+                  <button type="button" mat-stroked-button color="primary" (click)="generateLink()">{{'global.label.generate_link' | translate}}</button>
                 </div>
                 <div fxLayout="row" *ngIf="detailProduct.sharelink_url" style="margin-bottom: 20px;">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <input matInput type="text" placeholder="Link Product" [value]="detailProduct.sharelink_url"
+                    <input matInput type="text" placeholder="{{'manajemen_barang_sku.produk.product_link' | translate}}" [value]="detailProduct.sharelink_url"
                       disabled>
                     <mat-icon matSuffix (click)="copyMessage(detailProduct.sharelink_url)" style="cursor: pointer;"
-                      matTooltip="Salin Link">
+                      matTooltip="{{'global.label.copy_link' | translate}}">
                       content_copy
                     </mat-icon>
                   </mat-form-field>
                 </div>
 
                 <div class="pt-16">
-                  <strong>Jenis Produk</strong>
+                  <strong>{{'manajemen_barang_sku.produk.text18' | translate}}</strong>
                 </div>
                 <!-- <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Promo SRC</mat-checkbox> -->
                 <div fxLayout="row" fxLayoutGap="20px">
-                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">Produk
-                    Pilihan SRC</mat-checkbox>
+                  <mat-checkbox (change)="isPromo($event)" class="mt-4 ml-4 mb-8" formControlName="is_promo_src">{{'manajemen_barang_sku.produk.text9' | translate}}</mat-checkbox>
                   <mat-checkbox (change)="isPrivateLabel($event)" class="mt-4 ml-4 mb-8"
-                    formControlName="is_private_label">Produk Prinsipal</mat-checkbox>
-                  <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="is_paylater">Produk Pilihan Pojok Modal
+                    formControlName="is_private_label">{{'manajemen_barang_sku.produk.text10' | translate}}</mat-checkbox>
+                  <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="is_paylater">{{'manajemen_barang_sku.produk.text19' | translate}}
                   </mat-checkbox>
                 </div>
               </div>
@@ -222,7 +220,7 @@
                     <div [formGroupName]="i">
                       <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                         <div fxFlex="50">
-                          <h3 class="">Geotree {{i+1}}</h3>
+                          <h3 class="">{{'global.area.geotree'| translate}} {{i+1}}</h3>
                         </div>
                         <div *ngIf="formProductGroup.get('is_private_label').value && !isDetail" fxFlex="50"
                           fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column" fxLayoutGap="10px"
@@ -241,7 +239,7 @@
                       <div style="margin-left: 25px;margin-bottom: 15px;" fxLayout="row wrap"
                         *ngIf="formProductGroup.get('is_promo_src').value && i === 0">
                         <div fxFlex="15" style="margin-top: 15px;">
-                          <mat-checkbox formControlName="time_period">Periode Waktu</mat-checkbox>
+                          <mat-checkbox formControlName="time_period">{{'manajemen_barang_sku.produk.time_period'| translate}}</mat-checkbox>
                         </div>
                         <div fxLayout="row" fxFlex="70" *ngIf="wil.get('time_period').value === true">
                           <mat-form-field fxFlex="20" class="is-light form-primary">
@@ -269,7 +267,7 @@
                           </mat-select>
                           <mat-error
                             *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                            National harus diisi
+                            {{'global.area.national' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -281,7 +279,7 @@
                             </mat-option>
                           </mat-select>
                           <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                            Zone harus diisi
+                            {{'global.area.zone' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -293,7 +291,7 @@
                           </mat-select>
                           <mat-error
                             *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                            Regional harus diisi
+                            {{'global.area.regional' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -305,7 +303,7 @@
                             </mat-option>
                           </mat-select>
                           <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                            Area harus diisi
+                            Area {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -317,7 +315,7 @@
                           </mat-select>
                           <mat-error
                             *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                            Salespoint harus diisi
+                            {{'global.area.salespoint' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -329,7 +327,7 @@
                           </mat-select>
                           <mat-error
                             *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                            Distrik harus diisi
+                            {{'global.area.district' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                         <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -340,18 +338,18 @@
                           </mat-select>
                           <mat-error
                             *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                            Territori harus diisi
+                            {{'global.area.territory' | translate}} {{'global.messages.mandatory_text' | translate}}
                           </mat-error>
                         </mat-form-field>
                       </div>
                       <div *ngIf="formProductGroup.get('is_private_label').value">
                         <div class="wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                           <div fxFlex="50">
-                            <h3 class="">Harga Produk Geotree {{i+1}}
+                            <h3 class="">{{'katalog_src.produk.text11' | translate}} {{'global.area.geotree'| translate}} {{i+1}}
                             </h3>
                           </div>
                           <div class="button-row">
-                            <button mat-flat-button color="white" matTooltip="Tambah Kemasan"
+                            <button mat-flat-button color="white" matTooltip="{{'manajemen_barang_sku.produk.add_packaging' | translate}}"
                               (click)="addProductPrice(i)" [disabled]="isDetail">
                               <mat-icon>add</mat-icon>
                             </button>
@@ -362,14 +360,14 @@
                             <mat-divider></mat-divider>
                             <mat-list-item>
                               <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                                <span fxFlex="15" class="h6 text-semibold">Kemasan</span>
-                                <span fxFlex="15" class="h6 text-semibold">Jumlah per Kemasan</span>
-                                <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
-                                <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'manajemen_barang_sku.produk.packaging' | translate}}</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'manajemen_barang_sku.produk.amount_per_package' | translate}}</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'katalog_src.produk.text11' | translate}}</span>
+                                <span fxFlex="17" class="h6 text-semibold">{{'manajemen_barang_sku.produk.product_price_after_discount' | translate}}</span>
                                 <span fxFlex="15" class="h6 text-semibold">{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}</span>
-                                <span fxFlex="15" class="h6 text-semibold">Tipe</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'global.label.type' | translate}}</span>
                                 <div fxFlex="5" fxLayout="column" fxLayoutAlign="center center">
-                                  <span class="h6 text-semibold">Hapus</span>
+                                  <span class="h6 text-semibold">{{'global.button.delete' | translate}}</span>
                                 </div>
                               </div>
                             </mat-list-item>
@@ -384,7 +382,7 @@
                                         <input matInput type="text" formControlName="packaging">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
-                                          Nama Kemasan harus diisi
+                                          {{'manajemen_barang_sku.produk.packaging_name'}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -393,15 +391,15 @@
                                         <input matInput type="number" formControlName="packaging_amount">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['packaging_amount'].hasError('required') && item.controls['packaging_amount'].touched">
-                                          Jumlah per Kemasan harus diisi
+                                          {{'manajemen_barang_sku.produk.amount_per_package' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['packaging_amount'].hasError('min') && item.controls['packaging_amount'].touched">
-                                          Jumlah per Kemasan min. 1
+                                          {{'manajemen_barang_sku.produk.amount_per_package' | translate}} {{'manajemen_barang_sku.produk.min_1' | translate}} 
                                         </mat-error>
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['packaging_amount'].hasError('max') && item.controls['packaging_amount'].touched">
-                                          Jumlah per Kemasan maks. 1000
+                                          {{'manajemen_barang_sku.produk.amount_per_package' | translate}} {{'manajemen_barang_sku.produk.max_1000' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -410,7 +408,7 @@
                                         <input matInput type="tel" currencyMask min="0" formControlName="price">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
-                                          Harga Produk harus diisi
+                                          {{'katalog_src.produk.text11' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -420,7 +418,7 @@
                                           formControlName="price_discount">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
-                                          Tidak boleh melebihi harga produk
+                                          {{'manajemen_barang_sku.produk.cannot_more_than_product_price' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -430,11 +428,11 @@
                                           formControlName="price_discount_expires_at">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
-                                          {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Diskon harus diisi
+                                          {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.label.discount' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
-                                          {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} tanggal hari ini
+                                          {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{'manajemen_barang_sku.produk.date_today' | translate}}
                                         </mat-error>
                                         <mat-datepicker-toggle matSuffix [for]="dp">
                                           <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -471,7 +469,7 @@
                 </mat-tab>
                 <!--/ EOC GEOTREE TAB -->
 
-                <mat-tab label="Special Rate" formGroupName="special_rate">
+                <mat-tab label="{{'manajemen_barang_sku.produk.special_rate' | translate}}" formGroupName="special_rate">
                   <div class="" style="margin-bottom: 20px;"
                     *ngIf="!formProductGroup.get('special_rate')['controls']['rates']['controls'].length && formProductGroup.get('is_private_label').value && !isDetail">
                     <div>
@@ -518,24 +516,24 @@
                       <div *ngIf="formProductGroup.get('is_private_label').value">
                         <div class="pl-8 mb-16" fxLayout="row">
                           <div fxFlex="30">
-                            <label for="">Kemasan Terkecil:
+                            <label for="">{{'manajemen_barang_sku.produk.smallest_packaging' | translate}}:
                               <strong>{{formProductGroup.get('special_rate')['controls']['smallest_package'].value}}</strong></label>
                           </div>
                           <div fxFlex="30">
                             <mat-form-field fxFlex="100%" class="is-light form-primary special-rate-tipe">
-                              <mat-select placeholder="Tipe" formControlName="type">
+                              <mat-select placeholder="{{'global.label.type' | translate}}" formControlName="type">
                                 <mat-option *ngFor="let item of listTipe" [value]="item.value">
                                   {{item.name}}</mat-option>
                               </mat-select>
                             </mat-form-field>
                           </div>
                           <div fxFlex="30">
-                            <label for="">Jumlah Mitra Terpilih:
+                            <label for="">{{'manajemen_barang_sku.produk.total_selected_partner' | translate}}:
                               <strong>{{rate.get('panels_count').value}}</strong></label>
                           </div>
                           <div fxFlex="30">
                             <button mat-button color="primary"
-                              (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Pilih Mitra</button>
+                              (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">{{'manajemen_barang_sku.produk.select_partner' | translate}}</button>
                           </div>
                         </div>
                         <div>
@@ -543,14 +541,14 @@
                             <mat-divider></mat-divider>
                             <mat-list-item>
                               <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                                <span fxFlex="15" class="h6 text-semibold">Minimum Qty</span>
-                                <span fxFlex="15" class="h6 text-semibold">Harga Produk</span>
-                                <span fxFlex="17" class="h6 text-semibold">Harga Produk Setelah Potongan Harga</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'manajemen_barang_sku.produk.min_qty' | translate}}</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'katalog_src.produk.text11' | translate}}</span>
+                                <span fxFlex="17" class="h6 text-semibold">{{'manajemen_barang_sku.produk.product_price_after_discount' | translate}}</span>
                                 <span fxFlex="15" class="h6 text-semibold">{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}</span>
-                                <span fxFlex="15" class="h6 text-semibold">Delivery Cost</span>
+                                <span fxFlex="15" class="h6 text-semibold">{{'katalog_src.lihat_pesanan.text19' | translate}}</span>
                                 <div fxFlex="10" fxLayout="row" fxLayoutAlign="space-between center">
-                                  <span class="h6 text-semibold">Tambah</span>
-                                  <span class="h6 text-semibold">Hapus</span>
+                                  <span class="h6 text-semibold">{{'global.button.add' | translate}}</span>
+                                  <span class="h6 text-semibold">{{'global.button.delete' | translate}}</span>
                                 </div>
                               </div>
                             </mat-list-item>
@@ -567,7 +565,7 @@
                                         <input matInput type="text" formControlName="qty">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['qty'].hasError('required') && item.controls['qty'].touched">
-                                          Minimum Qty harus diisi
+                                          {{'manajemen_barang_sku.produk.min_qty' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -576,7 +574,7 @@
                                         <input matInput type="tel" currencyMask min="0" formControlName="price">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price'].hasError('required') && item.controls['price'].touched">
-                                          Harga Produk harus diisi
+                                          {{'katalog_src.produk.text11' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -586,7 +584,7 @@
                                           formControlName="price_discount">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount'].hasError('max') && item.controls['price_discount'].touched">
-                                          Tidak boleh melebihi harga produk
+                                          {{'manajemen_barang_sku.produk.cannot_more_than_product_price' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -596,11 +594,11 @@
                                           formControlName="price_discount_expires_at">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount_expires_at'].hasError('required') && item.controls['price_discount_expires_at'].touched">
-                                          {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Diskon harus diisi
+                                          {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Diskon {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['price_discount_expires_at'].hasError('matDatepickerMin') && item.controls['price_discount_expires_at'].touched">
-                                          {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} tanggal hari ini
+                                          {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{'manajemen_barang_sku.produk.date_today' | translate}}
                                         </mat-error>
                                         <mat-datepicker-toggle matSuffix [for]="dp">
                                           <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -613,7 +611,7 @@
                                         <input matInput type="tel" currencyMask min="0" formControlName="delivery_cost">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['delivery_cost'].hasError('required') && item.controls['delivery_cost'].touched">
-                                          Harga Produk harus diisi
+                                          {{'katalog_src.produk.text11' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>
@@ -648,7 +646,7 @@
 
                           <mat-expansion-panel-header style="background-color:#3a3a3a; ">
                             <mat-panel-title style="color: white;">
-                              Mitra
+                              {{'paylater_management.panel.text7' | translate}}
                             </mat-panel-title>
                             <!-- <mat-panel-description>
                                 This is a summary of the content
@@ -661,7 +659,7 @@
                             [businessId]="rate.get('panels').value">
                             <div *specialPriceSaveMitra>
                               <button mat-raised-button type="button" color="primary"
-                                (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">Simpan</button>
+                                (click)="toggleListMitra(rate.get('expanded_mitra').value, i)">{{'global.button.save' | translate}}</button>
                             </div>
                           </app-wholesaler-special-price>
 
@@ -682,7 +680,7 @@
 
             </div>
           </mat-tab>
-          <mat-tab label="Gambar Produk">
+          <mat-tab label="{{'manajemen_barang_sku.produk.product_image' | translate}}">
             <div class="ayo-middle p-24" style="height: 480px;" fxLayout="column">
               <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [invalidDrag]="isDetail"
                 [(file)]="files" [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false"
@@ -690,10 +688,9 @@
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                   <br>
-                  <span matPrefix>Tarik Gambar Kesini atau
-                    <strong>Pilih File</strong>
+                  <span matPrefix [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
                   </span>
-                  <span matPrefix>Ukuran 800x800 piksel, Maksimum 2MB</span>
+                  <span matPrefix>{{'manajemen_barang_sku.produk.max_image_size' | translate}}</span>
                 </div>
               </div>
 

@@ -381,7 +381,7 @@
                   </mat-form-field>
                   <mat-form-field fxFlex="30" class="is-light form-primary"
                     *ngIf="formRecurrenceCommon.controls.end_option.value === 'end_date'">
-                    <input matInput (focus)="endPicker.open()" [matDatepicker]="endPicker" placeholder="Tanggal Selesai"
+                    <input matInput (focus)="endPicker.open()" [matDatepicker]="endPicker" placeholder="{{'manajemen_barang_sku.produk.end_date' | translate}}"
                       formControlName="recurrence_end_date" [min]="minEndDate">
                     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
                     <mat-datepicker #endPicker></mat-datepicker>

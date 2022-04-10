@@ -18,6 +18,7 @@ import * as _ from 'underscore';
 import { WholesalerService } from "app/services/user-management/wholesaler.service";
 import { WholesalerSpecialPriceService } from "app/services/sku-management/wholesaler-special-price.service";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-product-edit',
@@ -63,13 +64,13 @@ export class ProductEditComponent {
 
   keyUp = new Subject<string>();
   statusProduk: any[] = [
-    { name: "Aktif", status: "active" },
-    { name: "Non Aktif", status: "inactive" }
+    { name: this.translate.instant('global.label.active'), status: "active" },
+    { name: this.translate.instant('global.label.inactive'), status: "inactive" }
   ];
 
   listPinUpProduct: any[] = [
-    { name: "Ya", value: 1 },
-    { name: "Tidak", value: 0 }
+    { name: this.translate.instant('global.label.yes'), value: 1 },
+    { name: this.translate.instant('global.label.no'), value: 0 }
   ]
   listTipe: any[] = [
     { name: "Distribusi", value: "Distribusi" },
@@ -119,6 +120,7 @@ export class ProductEditComponent {
     private dataService: DataService,
     private wholesalerSpecialPriceService: WholesalerSpecialPriceService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -173,7 +175,7 @@ export class ProductEditComponent {
     console.log("this.detail", this.detailProduct.id);
     this.productService.generateLink({ id: this.detailProduct.id }).subscribe(res => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: "Link Berhasil dibuat!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('manajemen_barang_sku.produk.success_generate_link') });
       this.getDetails();
     }, err => {
       this.dataService.showLoading(false);
@@ -187,7 +189,7 @@ export class ProductEditComponent {
       document.removeEventListener('copy', null);
     });
     document.execCommand('copy');
-    this.dialogService.openSnackBar({ message: "Link Product Disalin!" });
+    this.dialogService.openSnackBar({ message: this.translate.instant('manajemen_barang_sku.produk.success_copy_link') });
   }
 
   parallelResolver(): Observable<any[]> {
@@ -602,10 +604,13 @@ export class ProductEditComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
+      titleDialog: this.translate.instant('global.label.delete_data', {entity: this.translate.instant('global.label.area.geotree')}),
+      captionDialog: this.translate.instant('global.label.delete_confirm', {
+        entity: this.translate.instant('global.label.area.geotree'),
+        index: idx+1
+      }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -669,10 +674,14 @@ export class ProductEditComponent {
     else {
 
       let data = {
-        titleDialog: "Hapus Special Rate",
-        captionDialog: `Apakah anda yakin untuk menghapus Special Rate ${i + 1} ?`,
+        
+        titleDialog: this.translate.instant('global.label.delete_data', {entity: this.translate.instant('manajemen_barang_sku.produk.special_rate')}), 
+        captionDialog: this.translate.instant('global.label.delete_confirm', {
+          entity: this.translate.instant('manajemen_barang_sku.produk.special_rate'),
+          index: i+1
+        }),
         confirmCallback: () => { this.removeRates(i, true)},
-        buttonText: ["Hapus", "Batal"]
+        buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
       }
       this.dialogService.openCustomConfirmationDialog(data);
       return;
@@ -1075,7 +1084,7 @@ export class ProductEditComponent {
     // console.log(this.formProductGroup);
     // return;
     if (!this.formProductGroup.get('is_private_label').value && !this.is_private_label_res) {
-      this.dialogService.openSnackBar({ message: `Product ini masih terasosiasi dengan panel Mitra` });
+      this.dialogService.openSnackBar({ message: this.translate.instant('manajemen_barang_sku.produk.isolated_partner') });
     } else {
       if (!this.is_promo_src) {
         let areas = this.formProductGroup.controls['areas'] as FormArray;
@@ -1164,7 +1173,10 @@ export class ProductEditComponent {
 
           let same = this.findDuplicate(areas.map(item => item.value));
           if (same.length > 0) {
-            return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
+            return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.duplicate_data', {
+                entity: this.translate.instant('global.area.geotree')
+              })
+            });
           }
 
           areas.map((areaItem, i) => {
@@ -1218,7 +1230,10 @@ export class ProductEditComponent {
             _areas = [];
             let same = this.findDuplicate(areas.map(item => item.value));
             if (same.length > 0) {
-              return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
+              return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.duplicate_data', {
+                  entity: this.translate.instant('global.area.geotree')
+                })
+              });
             }
 
             product.listProdukPrivateLabel.map((itemPL, index) => {
@@ -1284,7 +1299,7 @@ export class ProductEditComponent {
           res => {
             this.loadingIndicator = false;
             this.router.navigate(["sku-management", "product"]);
-            this.dialogService.openSnackBar({ message: "Data berhasil diubah" });
+            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
             this.dataService.showLoading(false);
           },
           err => {
@@ -1298,13 +1313,15 @@ export class ProductEditComponent {
         if (this.formProductGroup.status == "INVALID") {
           console.log('failed,', this.formProductGroup.get('is_promo_src').hasError('required'))
           console.log('failed2,', this.formProductGroup.get('is_private_label').hasError('required'))
-          msg = "Silakan lengkapi data terlebih dahulu!";
+          msg = this.translate.instant('global.label.please_complete_data');
         } else if (!this.files) {
-          msg = "Gambar produk belum dipilih!";
+          msg = this.translate.instant('global.label.no_selected_image', {
+            type: this.translate.instant('global.label.product')
+          });
         } else if (this.files.size > 2000000) {
-          msg = "Ukuran gambar tidak boleh melebihi 2MB!";
+          msg = this.translate.instant('global.label.max_image_size_data', {size: '200mb!'});;
         } else {
-          msg = "Silakan lengkapi data terlebih dahulu!";
+          msg = this.translate.instant('global.label.please_complete_data');
         }
 
         this.dialogService.openSnackBar({ message: msg });
@@ -1507,10 +1524,14 @@ export class ProductEditComponent {
     this.wilayahIndex = j;
 
     let data = {
-      titleDialog: "Hapus Data Kemasan",
-      captionDialog: `Apakah anda yakin untuk menghapus data Kemasan ${param.value.packaging}?`,
+      titleDialog: this.translate.instant('global.label.delete_data', {
+        entity: this.translate.instant('manajemen_barang_sku.produk.packaging')
+      }),
+      captionDialog: this.translate.instant('global.label.delete_confirm', {
+        entity: this.translate.instant('manajemen_barang_sku.produk.packaging') + " " + param.value.packaging
+      }),
       confirmCallback: this.confirmRemovePackaging.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1520,7 +1541,7 @@ export class ProductEditComponent {
     let packaging = wilayah.at(this.wilayahIndex).get('listProdukPrivateLabel') as FormArray;
     packaging.removeAt(this.packagingIndex);
 
-    this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+    this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     this.dialogService.brodcastCloseConfirmation();
   }
 

@@ -37,7 +37,7 @@
             <div [formGroupName]="i">
               <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxFlex="50">
-                  <h3 class="">Geotree {{i+1}}</h3>
+                  <h3 class="">{{'global.area.geotree'| translate}} {{i+1}}</h3>
                 </div>
                 <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                   fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">

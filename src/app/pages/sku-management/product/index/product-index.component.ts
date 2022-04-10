@@ -9,6 +9,7 @@ import { DataService } from "app/services/data.service";
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { ImportFileDialogComponent } from "./import-file-dialog/import-file-dialog.component"
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: "app-product-index",
@@ -39,13 +40,17 @@ export class ProductIndexComponent implements OnInit {
 
   dialogRef: any;
   offsetPagination: any;
+  pageName = this.translate.instant('global.label.product');
+  titleParam = {entity: this.pageName}
+  fileTypeParam = { entity: 'XLS' }
 
   constructor(
     private productService: ProductService,
     private dialogService: DialogService,
     private dataService: DataService,
     private dialog: MatDialog,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -168,11 +173,14 @@ export class ProductIndexComponent implements OnInit {
 
   deleteProduct(id): void {
     this.id = id;
+    // "Apakah anda yakin untuk menghapus Produk ini ?"
     let data = {
-      titleDialog: "Hapus Produk",
-      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
+      titleDialog: this.translate.instant('global.messages.delete_data', { entity: this.translate.instant('global.label.product') }),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {
+        entity: this.translate.instant('global.label.product')
+      }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -181,7 +189,7 @@ export class ProductIndexComponent implements OnInit {
     this.productService.delete({ product_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getProducts();
       },
