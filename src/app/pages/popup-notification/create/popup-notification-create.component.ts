@@ -25,6 +25,7 @@ import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service
 import { PagesName } from 'app/classes/pages-name';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -154,6 +155,8 @@ export class PopupNotificationCreateComponent {
   private _onDestroy = new Subject<void>();
   permission: any;
   roles: PagesName = new PagesName();
+  
+  pageName = this.translate.instant('notification.popup_notifikasi.page_name');
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -171,7 +174,8 @@ export class PopupNotificationCreateComponent {
     private geotreeService: GeotreeService,
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private bannerService: BannerService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];

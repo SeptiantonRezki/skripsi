@@ -83,12 +83,12 @@
           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone"
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
               (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
@@ -96,7 +96,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region"
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
               (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
@@ -105,7 +105,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area"
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
               (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
@@ -114,7 +114,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint"
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
               (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
                 'Semua
@@ -124,7 +124,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district"
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
               (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
@@ -133,7 +133,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory">
               <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :

@@ -49,6 +49,7 @@ import { PayLaterActivationComponent } from './pay-later-activation/pay-later-ac
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { PayLaterDistributionListComponent } from './pay-later-distribution-list/pay-later-distribution-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -100,6 +101,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     MatAutocompleteModule,
+    TranslateModule.forChild(),
   ],
   declarations: [PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent, PayLaterDistributionListComponent],
   providers: [

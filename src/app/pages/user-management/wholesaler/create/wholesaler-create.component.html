@@ -108,7 +108,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Area" formControlName="area">
+                <input matInput type="text" placeholder="{{'global.area.area' | translate}}" formControlName="area">
                 <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched ">
                   Area {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>

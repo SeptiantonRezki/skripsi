@@ -15,7 +15,7 @@
       <form autocomplete="off" [formGroup]="formSortBanner" fxLayout="row" class="p-24" fxLayoutAlign="start center">
 
           <div class="">
-            <strong class="font-size-16">Tipe Spanduk: </strong>
+            <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' | translate}}: </strong>
           </div>
           <mat-radio-group formControlName="type_banner" class="radio-group" fxLayout="row wrap">
             <mat-radio-button class="radio-button" [value]="item.value" *ngFor="let item of listTypeBanner">
