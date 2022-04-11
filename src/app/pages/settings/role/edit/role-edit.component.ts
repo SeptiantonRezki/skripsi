@@ -9,6 +9,7 @@ import { RetailerService } from '../../../../services/user-management/retailer.s
 
 import * as _ from 'underscore';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-role-edit',
@@ -40,7 +41,8 @@ export class RoleEditComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private retailerService: RetailerService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.roles = this.activatedRoute.snapshot.data['menu'];
@@ -353,7 +355,7 @@ export class RoleEditComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' })
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') })
     }
   }
 

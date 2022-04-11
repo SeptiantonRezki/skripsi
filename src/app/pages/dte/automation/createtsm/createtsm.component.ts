@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-createtsm',
@@ -68,7 +69,8 @@ export class CreatetsmComponent implements OnInit {
     private audienceTradeProgramService: AudienceTradeProgramService,
     private dialogService: DialogService,
     private router: Router,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.selectedTab = 0;
    }
@@ -340,7 +342,7 @@ export class CreatetsmComponent implements OnInit {
       });
     } else {
       this.submitting = false;
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formAutomation);
       // commonFormValidator.validateAllFields(this.formAutomation);
     }

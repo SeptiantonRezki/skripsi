@@ -87,7 +87,7 @@
             {{row.type.toUpperCase()}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Koin" prop="coin" [sortable]="false">
+        <ngx-datatable-column name="{{'dte.template_tugas.add_options' | translate}}" prop="coin" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin | rupiahFormaterWithoutRp}}
           </ng-template>

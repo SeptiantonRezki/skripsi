@@ -13,6 +13,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Utils } from 'app/classes/utils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -125,7 +126,8 @@ export class RetailerEditComponent {
     private retailerService: RetailerService,
     private generalService: GeneralService,
     private helpService: HelpService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
@@ -755,7 +757,7 @@ export class RetailerEditComponent {
       );
     } else {
       this.dialogService.openSnackBar({
-        message: 'Silakan lengkapi data terlebih dahulu!'
+        message: this.translate.instant('global.label.please_complete_data')
       });
       commonFormValidator.validateAllFields(this.formRetailer);
     }
