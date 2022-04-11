@@ -1455,9 +1455,7 @@ export class NotificationCreateComponent {
 
     if (body.type === 'customer') {
       body['employee'] = this.formNotification.get('employee').value;
-      if (this.formNotification.get('is_smoking').value !== '1') {
-        body['verification'] = this.formNotification.get('verification').value;
-      }
+      body['verification'] = this.formNotification.get('verification').value;
       body['subscription_status'] = this.formNotification.get('subscription_status').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
       body['is_smoking'] = this.formNotification.get('is_smoking').value;
@@ -1671,8 +1669,6 @@ export class NotificationCreateComponent {
         }
       }
     }
-    
-    this.dataService.showLoading(true);
     
     this.dataService.showLoading(true);
 
