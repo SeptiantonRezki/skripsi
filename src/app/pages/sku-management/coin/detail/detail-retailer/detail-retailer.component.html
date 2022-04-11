@@ -33,37 +33,37 @@
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="py-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" fxLayoutAlign="start stretch">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
+              <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formDetailRetailer.get('zone').value)">
+              <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" (selectionChange)="getAudienceArea('region', formDetailRetailer.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formDetailRetailer.get('region').value)">
+              <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" (selectionChange)="getAudienceArea('area', formDetailRetailer.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formDetailRetailer.get('area').value)">
+              <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formDetailRetailer.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formDetailRetailer.get('salespoint').value)">
+              <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formDetailRetailer.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formDetailRetailer.get('district').value)">
+              <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" (selectionChange)="getAudienceArea('territory', formDetailRetailer.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory">
+              <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -87,7 +87,7 @@
             {{row.type.toUpperCase()}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Koin" prop="coin" [sortable]="false">
+        <ngx-datatable-column name="{{'dte.template_tugas.add_options' | translate}}" prop="coin" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin | rupiahFormaterWithoutRp}}
           </ng-template>

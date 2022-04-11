@@ -27,6 +27,7 @@ import { SelectSearchComponent } from "./select-search/select-search.component";
 import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { ngfModule } from "angular-file";
     MatToolbarModule,
     MatProgressSpinnerModule,
     ngfModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     ToolbarSearchComponent,

@@ -166,6 +166,7 @@ import { TemplateStockCheckComponent } from './image-recognition/template-stock-
 import { TaskVerificationComponent } from './task-verification-2/task-verification/task-verification.component';
 import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 
 export const customCurrencyMaskConfig = {
@@ -234,6 +235,7 @@ export const MY_FORMATS = {
     NgxGraphModule,
     PipesModule,
     NgxMaskModule.forRoot(),
+    TranslateModule.forChild(),
   ],
   declarations: [
     TemplateIndexComponent,

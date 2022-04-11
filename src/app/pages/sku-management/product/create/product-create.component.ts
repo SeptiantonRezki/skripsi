@@ -17,6 +17,7 @@ import { DataService } from "app/services/data.service";
 import * as _ from 'underscore';
 import { json } from "sjcl";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-product-create",
@@ -57,13 +58,13 @@ export class ProductCreateComponent {
 
   keyUp = new Subject<string>();
   statusProduk: any[] = [
-    { name: "Aktif", status: "active" },
-    { name: "Non Aktif", status: "inactive" }
+    { name: this.translate.instant('global.label.active'), status: "active" },
+    { name: this.translate.instant('global.label.inactive'), status: "inactive" }
   ];
 
   listPinUpProduct: any[] = [
-    { name: "Ya", value: 1 },
-    { name: "Tidak", value: 0 }
+    { name: this.translate.instant('global.label.yes'), value: 1 },
+    { name: this.translate.instant('global.label.no'), value: 0 }
   ];
   jenisProduk: any[] = [
     { name: "Promo SRC", value: "promo_src" },
@@ -106,7 +107,8 @@ export class ProductCreateComponent {
     private productService: ProductService,
     private dialog: MatDialog,
     private dataService: DataService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.otherProduct = [];
     this.listSubCategory = [];
@@ -332,10 +334,13 @@ export class ProductCreateComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
+      titleDialog: this.translate.instant('global.label.delete_data', { entity: this.translate.instant('global.label.area.geotree') }),
+      captionDialog: this.translate.instant('global.label.delete_confirm', {
+        entity: this.translate.instant('global.label.area.geotree'),
+        index: idx + 1
+      }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -725,7 +730,10 @@ export class ProductCreateComponent {
 
         let same = this.findDuplicate(areas.map(item => item.value));
         if (same.length > 0) {
-          return this.dialogService.openSnackBar({ message: "Terdapat duplikat geotree, mohon periksa kembali data anda!" });
+          return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.duplicate_data', {
+              entity: this.translate.instant('global.area.geotree')
+            })
+          });
         }
         let grandIndex = 0;
         areas.map((areaItem, i) => {
@@ -804,13 +812,15 @@ export class ProductCreateComponent {
       } else {
         let msg;
         if (this.formProductGroup.status == "INVALID") {
-          msg = "Silakan lengkapi data terlebih dahulu!";
+          msg = this.translate.instant('global.label.please_complete_data');
         } else if (!this.files) {
-          msg = "Gambar produk belum dipilih!";
+          msg = this.translate.instant('global.label.no_selected_image', {
+            type: this.translate.instant('global.label.product')
+          });
         } else if (this.files.size > 2000000) {
-          msg = "Ukuran gambar tidak boleh melebihi 200mb!";
+          msg = this.translate.instant('global.label.max_image_size_data', {size: '200mb!'});
         } else {
-          msg = "Silakan lengkapi data terlebih dahulu!";
+          msg = this.translate.instant('global.label.please_complete_data');
         }
 
         this.dialogService.openSnackBar({ message: msg });
@@ -1000,10 +1010,14 @@ export class ProductCreateComponent {
     this.wilayahIndex = j;
 
     let data = {
-      titleDialog: "Hapus Data Kemasan",
-      captionDialog: `Apakah anda yakin untuk menghapus data Kemasan ${param.value.packaging}?`,
+      titleDialog: this.translate.instant('global.label.delete_data', {
+        entity: this.translate.instant('manajemen_barang_sku.produk.packaging')
+      }),
+      captionDialog: this.translate.instant('global.label.delete_confirm', {
+        entity: this.translate.instant('manajemen_barang_sku.produk.packaging') + " " + param.value.packaging
+      }),
       confirmCallback: this.confirmRemovePackaging.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1013,7 +1027,7 @@ export class ProductCreateComponent {
     let packaging = wilayah.at(this.wilayahIndex).get('listProdukPrivateLabel') as FormArray;
     packaging.removeAt(this.packagingIndex);
 
-    this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+    this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     this.dialogService.brodcastCloseConfirmation();
   }
 

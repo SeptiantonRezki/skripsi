@@ -22,7 +22,7 @@
 
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <!-- <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
+              <!-- <input matInput type="text" placeholder="{{'dte.dte_automation.text8' | translate}}" (keyup)="searchTradeProgram.next($event.target.value)"
                 formControlName="trade_creator_id" [matAutocomplete]="tradeProgram">
               <mat-autocomplete #tradeProgram="matAutocomplete" [displayWith]="displayTpName">
                 <mat-option *ngFor="let item of filteredTpOptions | async" [value]="item">
@@ -32,7 +32,7 @@
               <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
                 Trade Program harus diisi
               </mat-error> -->
-              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" #singleSelect
+              <mat-select formControlName="trade_creator_id" placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelect
                 (selectionChange)="getTradeProgram()">
                 <ngx-mat-select-search [formControl]="filterTP" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>

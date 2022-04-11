@@ -55,6 +55,7 @@ import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { CreateCallObjectiveComponent } from './component/create-call-objective.component';
 import {CallObjectiveListComponent} from './component/list-call-objective.component';
 import { ImportObjectiveDialogComponent } from './import-component/import-objective-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: 'left',
@@ -118,6 +119,7 @@ export const MY_FORMATS = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     LightboxModule,
     NgxGraphModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     CreateCallObjectiveComponent,

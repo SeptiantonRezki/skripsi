@@ -16,7 +16,7 @@
                   [(ngModel)] = "notesMdl.name"
                   type="text"
                   name = "notesMdl.name"
-                  placeholder="Nama Note"
+                  placeholder="{{'notes_retailer.name' | translate}}"
                 />
               </mat-form-field>
               <mat-form-field fxFlex="50" class="is-light form-primary">
@@ -25,29 +25,31 @@
                   [(ngModel)] = "notesMdl.description"
                   type="text"
                   name = "notesMdl.description"
-                  placeholder="Notes Description"
+                  placeholder="{{'notes_retailer.description' | translate}}"
                 />
               </mat-form-field>
             </div>
-            <div *ngIf="notesMdl.name === undefined || notesMdl.name === null || notesMdl.name === ''" class="mat-error mat-error-block">Nama harus diisi</div>
-            <div *ngIf="nameInput.dirty && nameInput.invalid && nameInput.errors.minlength" class="mat-error mat-error-block">Nama harus lebih dari 2 karakter</div>
+            <div *ngIf="notesMdl.name === undefined || notesMdl.name === null || notesMdl.name === ''" class="mat-error mat-error-block">{{'notes_retailer.name' | translate}} {{'global.messages.mandatory_text' | translate}}</div>
+            <div *ngIf="nameInput.dirty && nameInput.invalid && nameInput.errors.minlength" class="mat-error mat-error-block">{{'call_objective.name_2_char' | translate}}</div>
             <div fxLayout="row" fxLayoutGap="24px">
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="startPicker" #strDtInput="ngModel"
-                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" [(ngModel)] = "notesMdl.start_date"
+                      placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" [(ngModel)] = "notesMdl.start_date"
                       name = "notesMdl.start_date">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <input matInput [matDatepicker]="endDate" #endDtInput="ngModel"
-                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [(ngModel)] = "notesMdl.end_date"
+                      placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" [(ngModel)] = "notesMdl.end_date"
                       name = "notesMdl.end_date">
                 <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                 <mat-datepicker #endDate></mat-datepicker>
                 </mat-form-field>
             </div>
-            <div *ngIf="notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === ''" class="mat-error mat-error-block">Tanggal mulai & Tanggal berakhir harus diisi</div>
+            <div *ngIf="notesMdl.start_date === undefined || notesMdl.start_date === null || notesMdl.start_date === '' || notesMdl.end_date === undefined || notesMdl.end_date === null || notesMdl.end_date === ''" class="mat-error mat-error-block">
+              {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} & {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
+            </div>
             <div fxLayout="row" *ngIf = "paramEdit !== null" class="pb-24">
               <h3>
                 <mat-slide-toggle [(ngModel)]="status" name="status" (change)="onChangeInputSlide($event, i)">
@@ -113,7 +115,7 @@
             </div>
           </form>
           <div [formGroup]="formAudience" fxLayout="row" class="pt-16">
-            <mat-checkbox formControlName="target_audience">Target Audience</mat-checkbox>
+            <mat-checkbox formControlName="target_audience">{{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
           </div>
         </div>
       </div>
@@ -197,14 +199,14 @@
               ></mat-checkbox>
             </ng-template>
           </ngx-datatable-column>
-          <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+          <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
           <ngx-datatable-column
-            name="No Ponsel"
+            name="{{'global.label.phone' | translate}}"
             [width]="180"
             prop="phone"
             [sortable]="false"
           ></ngx-datatable-column>
-          <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+          <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
           <ngx-datatable-column
             name="Tipe"
             prop="classification"

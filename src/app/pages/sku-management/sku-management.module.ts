@@ -87,6 +87,7 @@ import { DbProductSubmissionApprovalComponent } from "./db-product-submission/ap
 import { DbProductSubmissionEditComponent } from "./db-product-submission/edit/edit.component";
 import { UploadImageComponent } from "./db-product-submission/dialog/upload-image/upload-image.component";
 import { PreviewImageComponent } from './db-product-submission/dialog/preview-image/preview-image.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -146,6 +147,7 @@ export const MY_FORMATS = {
     MatExpansionModule,
     UserManagementModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    TranslateModule.forChild(),
   ],
   declarations: [
     ProductIndexComponent,

@@ -9,6 +9,7 @@ import { ProductService } from "app/services/sku-management/product.service";
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { element } from 'protractor';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class ImportFileDialogComponent implements OnInit {
     private dataService: DataService,
     private vendorService: VendorsService,
     private ls: LanguagesService,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.payload = data;
@@ -83,7 +85,7 @@ export class ImportFileDialogComponent implements OnInit {
       },
       err => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."})
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.failed_upload_reffer_export') })
       }
     )
   }

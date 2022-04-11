@@ -1,9 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Principal Notes for Retailer'">
+  <page-content-header contentTitle="{{'notes_retailer.list' | translate}}">
     <button style="min-width: 170px;" [routerLink]="['/notesretailer/notes-retailer-create']" mat-raised-button
       aria-label="Produk" type="button">
-      <mat-icon>add</mat-icon>Create
+      <mat-icon>add</mat-icon>{{'global.button.add' | translate}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -16,7 +16,7 @@
         </button>
       </div> -->
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-        <h2 class="pl-8">Daftar Notes untuk Retailer</h2>
+        <h2 class="pl-8">{{'notes_retailer.list' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -41,37 +41,37 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Notes" prop="name">
+        <ngx-datatable-column name="{{'notes_retailer.name' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span>{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Description Notes" prop="description">
+        <ngx-datatable-column name="{{'notes_retailer.description' | translate}}" prop="description">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-description" >{{row.description}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="start_date">
+        <ngx-datatable-column [width]="90" name="{{'global.label.created_at' | translate}}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="90" name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" prop="end_date">
+        <ngx-datatable-column [width]="90" name="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status Notes" prop="status">
+        <ngx-datatable-column name="{{'notes_retailer.status' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span *ngIf="row.status === 'inactive'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
             <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
           </ng-template>
         </ngx-datatable-column> 
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">

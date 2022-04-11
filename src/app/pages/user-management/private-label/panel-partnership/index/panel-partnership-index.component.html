@@ -1,14 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Panel Partnership'">
+  <page-content-header contentTitle="{{'strategic_partnership.text2' | translate}}">
     <button style="width: 170px" [routerLink]="['/user-management', 'panel-partnership','create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> TAMBAH
+      <mat-icon>add</mat-icon> {{'global.button.add' | translate}}
     </button>
   </page-content-header>
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Panel Partnership</h2>
+        <h2 class="pl-8">{{'strategic_partnership.list' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -26,29 +26,29 @@
             <span class="row-name">{{row.name_supplier}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Partnership" prop="name_partnership">
+        <ngx-datatable-column name="{{'strategic_partnership.text2' | translate}}" prop="name_partnership">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-partnership">{{row.name_partnership}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Jumlah Audience" prop="total_audience">
+        <ngx-datatable-column name="{{'strategic_partnership.text3' | translate}}" prop="total_audience">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-total_audience">{{row.total_audience}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" prop="start_date">
+        <ngx-datatable-column name="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-start_date">{{row.start_date}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" prop="end_date">
+        <ngx-datatable-column name="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-end_date">{{row.end_date}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="1">
         </ngx-datatable-column>
-        <ngx-datatable-column name="Status Program" prop="status_program">
+        <ngx-datatable-column name="{{'strategic_partnership.text4' | translate}}" prop="status_program">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.status_program}}</span>
           </ng-template>
@@ -68,13 +68,13 @@
             <!-- </span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="100" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="100" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="primary" matTooltip="Edit" (click)="directEdit(row)" [disabled]="!permission?.ubah">
+              <button mat-icon-button color="primary" matTooltip="{{'global.button.edit' | translate}}" (click)="directEdit(row)" [disabled]="!permission?.ubah">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deletePartnership(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deletePartnership(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

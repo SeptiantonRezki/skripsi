@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ls.locale.global.label.upload_file}} XLS</span> <!-- // TODO -->
+        <span>{{'global.label.upload_file' | translate}} XLS</span>
       </div>
 
     </div>
@@ -24,7 +24,6 @@
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
         <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
-            <!-- // TODO -->
         </span>
       </div>
     </div>
@@ -36,14 +35,14 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Penjual</th>
-            <th nowrap>No. Ponsel</th>
-            <th nowrap>Kode</th>
-            <th nowrap>Tipe</th>
-            <th nowrap>Kode Divisi</th>
-            <th nowrap>Wilayah</th>
-            <th nowrap>Area</th>
-          </tr> <!-- // TODO -->
+            <th nowrap>{{'call_objective.text8' | translate}}</th>
+            <th nowrap>{{'global.label.phone' | translate}}</th>
+            <th nowrap>{{'global.label.code' | translate}}</th>
+            <th nowrap>{{'call_objective.text9' | translate}}</th>
+            <th nowrap>{{'produk_prinsipal.division_code' | translate}}</th>
+            <th nowrap>{{'global.area.regional' | translate}}</th>
+            <th nowrap>{{'global.area.area' | translate}}</th>
+          </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of rows">
@@ -72,7 +71,7 @@
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
               {{ls.locale.global.messages.file_unselected_warn}}
-            </td> <!-- // TODO -->
+            </td>
           </tr>
         </tbody>
       </table>
@@ -84,9 +83,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="(rows.length === 0)">{{ls.locale.global.button.send}}</button> <!-- // TODO -->
+          [disabled]="(rows.length === 0)">{{'global.button.send' | translate}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button> <!-- // TODO -->
+          [disabled]="uploading">{{'global.button.cancel'}}</button>
       </div>
     </div>
   </div>

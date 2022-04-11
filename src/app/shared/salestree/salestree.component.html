@@ -1,6 +1,6 @@
 <div [formGroup]="form" fxLayout="row wrap" fxLayoutGap="24px grid">
   <mat-form-field fxFlex="25" class="is-light form-primary">
-    <mat-select placeholder="National" formControlName="national" multiple>
+    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national" multiple>
       <mat-option *ngFor="let item of geoList.national" [value]="item.id">{{
         item.code
       }}</mat-option>
@@ -8,7 +8,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="25" class="is-light form-primary">
     <mat-select
-      placeholder="Zone"
+      placeholder="{{'global.area.zone' | translate}}"
       formControlName="division"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('division')"
@@ -34,7 +34,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="25" class="is-light form-primary">
     <mat-select
-      placeholder="Area"
+      placeholder="{{'global.area.area' | translate}}"
       formControlName="area"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('area')"
@@ -47,7 +47,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="25" class="is-light form-primary">
     <mat-select
-      placeholder="Salespoint"
+      placeholder="{{'global.area.salespoint' | translate}}"
       formControlName="salespoint"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('salespoint')"
@@ -60,7 +60,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="25" class="is-light form-primary">
     <mat-select
-      placeholder="District"
+      placeholder="{{'global.area.district' | translate}}"
       formControlName="district"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('district')"
@@ -73,7 +73,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="25" class="is-light form-primary">
     <mat-select
-      placeholder="Territory"
+      placeholder="{{'global.area.territory' | translate}}"
       formControlName="territory"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('territory')"

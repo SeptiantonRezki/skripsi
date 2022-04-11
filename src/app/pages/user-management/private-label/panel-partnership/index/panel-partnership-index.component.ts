@@ -43,8 +43,8 @@ export class PanelPartnershipIndexComponent {
   roles: PagesName = new PagesName();
 
   supplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(
@@ -159,9 +159,9 @@ export class PanelPartnershipIndexComponent {
       status: e
     };
     this.panelPartnershipService.updateStatus(body, { partnership_id: item.id }).subscribe(res => {
-      this.dialogService.openSnackBar({ message: "Berhasil mengubah status" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.strategic_partnership.status_changed });
       }, err => {
-        this.dialogService.openSnackBar({ message: "Gagal mengubah status" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.strategic_partnership.status_unchanged });
         this.getList();
       }
     );
@@ -216,10 +216,10 @@ export class PanelPartnershipIndexComponent {
   deletePartnership(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Panel Partnership",
-      captionDialog: "Apakah anda yakin untuk menghapus Partnership ini ?",
+      titleDialog: this.ls.locale.global.button.delete +' '+ this.ls.locale.strategic_partnership.text2,
+      captionDialog: this.ls.locale.strategic_partnership.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -228,7 +228,7 @@ export class PanelPartnershipIndexComponent {
     this.panelPartnershipService.delete({ partnership_id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
       this.getList();
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
     });
   }
 

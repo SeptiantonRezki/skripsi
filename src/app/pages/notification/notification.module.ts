@@ -44,6 +44,7 @@ import { ImportPopUpAudienceComponent } from "../popup-notification/import-pop-u
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { CustomNotificationCreateComponent } from './create/custom-notification/custom-notification-create.component';
 import { ImportCustomNotificationComponent } from './create/custom-notification/import/import-custom-notification.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 export const MY_FORMATS = {
   parse: {
@@ -86,7 +87,8 @@ export const MY_FORMATS = {
     MatDialogModule,
     MatToolbarModule,
     MatSlideToggleModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     NotificationIndexComponent,

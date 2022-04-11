@@ -971,7 +971,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                   (selectionChange)="getAudienceArea2('district', wilayah_2.get('salespoint').value)"
                   id="area2_salespoint">
                   <mat-option *ngFor="let item of list2['salespoint']" [value]="item.id">

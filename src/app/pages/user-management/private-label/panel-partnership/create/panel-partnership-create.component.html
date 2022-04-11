@@ -1,5 +1,5 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <page-content-header [contentTitle]="'Panel Partnership'"></page-content-header>
+  <page-content-header contentTitle="{{'strategic_partnership.text2' | translate}}"></page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
@@ -8,21 +8,21 @@
           <div class="mt-16 pt-24 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px"
             fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <mat-select formControlName="namaSupplier" placeholder="Pilih Supplier" id="namaSupplier" #singleSelect>
-                <ngx-mat-select-search [formControl]="filterSPL" [placeholderLabel]="'Cari Supplier...'"
-                  [noEntriesFoundLabel]="'Tidak ada Supplier yang ditemukan'"></ngx-mat-select-search>
+              <mat-select formControlName="namaSupplier" placeholder="{{'produk_prinsipal.text17' | translate}}" id="namaSupplier" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterSPL" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredSPL | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
                 *ngIf="createForm.controls['namaSupplier'].hasError('required') && createForm.controls['namaSupplier'].touched">
-                Supplier harus diisi
+                {{'produk_prinsipal.text17' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <mat-select formControlName="status" placeholder="Pilih Status">
+              <mat-select formControlName="status" placeholder="{{'dte.pengaturan_attribute_misi.text10' | translate}}">
                 <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option>
               </mat-select>
               <!--<mat-error
@@ -35,10 +35,10 @@
           <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput [matDatepicker]="tanggal_mulai" (focus)="tanggal_mulai.open()" formControlName="startDate"
-                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}">
+                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}">
                 <mat-error
                   *ngIf="createForm.controls['startDate'].hasError('required') && createForm.controls['startDate'].touched">
-                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
+                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text'}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_mulai">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -47,10 +47,10 @@
             </mat-form-field>
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput [matDatepicker]="tanggal_berakhir" (focus)="tanggal_berakhir.open()" formControlName="endDate"
-                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
+                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}">
                 <mat-error
                   *ngIf="createForm.controls['endDate'].hasError('required') && createForm.controls['endDate'].touched">
-                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
+                  {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text'}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -60,7 +60,7 @@
           </div>
           <div class="px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47.5%" class="is-light form-primary">
-              <input matInput type="text" formControlName="title" placeholder="Judul Partnership">
+              <input matInput type="text" formControlName="title" placeholder="{{'strategic_partnership.text5' | translate}}">
               <!--<mat-error
                 *ngIf="createForm.controls['positive_button'].hasError('required') && createForm.controls['positive_button'].touched">
                 Positif Button harus diisi
@@ -70,7 +70,7 @@
 
           <div class="pb-24 px-24">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">Detail Mechanism</h3>
+              <h3 class="">{{'strategic_partnership.text6' | translate}}</h3>
             </div>
             <textarea [froalaEditor]="options" formControlName="detail" class="pb-4" fxFlex="100"></textarea>
             <!--<mat-error style="padding-top: 6px !important; font-size: .86em;"
@@ -91,7 +91,7 @@
               *ngIf="createForm.controls['geotree_checkbox'].value === true"
             >
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national">
+                <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                   <mat-option
                     *ngFor="let item of listLevelArea"
                     [value]="item.id"
@@ -100,7 +100,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone" multiple>
+                <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                   <mat-option
                     *ngFor="let item of filteringGeotree(list['zone'])"
                     [value]="item.id"
@@ -113,7 +113,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Regional"
+                  placeholder="{{'global.area.regional' | translate}}"
                   formControlName="region"
                   multiple
                 >
@@ -130,7 +130,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area" multiple>
+                <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                   <mat-option
                     *ngFor="let item of filteringGeotree(list['area'])"
                     [value]="item.id"
@@ -143,7 +143,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Salespoint"
+                  placeholder="{{'global.area.salespoint' | translate}}"
                   formControlName="salespoint"
                   multiple
                 >
@@ -161,7 +161,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="District"
+                  placeholder="{{'global.area.district' | translate}}"
                   formControlName="district"
                   multiple
                 >
@@ -179,7 +179,7 @@
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
                 <mat-select
-                  placeholder="Territory"
+                  placeholder="{{'global.area.territory' | translate}}"
                   formControlName="territory"
                   multiple
                 >
@@ -335,16 +335,16 @@
                 ></mat-checkbox>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
             <ngx-datatable-column
-              name="No Ponsel"
+              name="{{'global.label.phone' | translate}}"
               [width]="180"
               prop="phone"
               [sortable]="false"
             ></ngx-datatable-column>
-            <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
             <ngx-datatable-column
-              name="Tipe"
+              name="{{'call_objective.text9' | translate}}"
               prop="classification"
             ></ngx-datatable-column>
             <ngx-datatable-column
@@ -364,7 +364,7 @@
               prop="ff_name"
               [sortable]="false"
             ></ngx-datatable-column>
-            <ngx-datatable-column name="Daftar Ayo" prop="status">
+            <ngx-datatable-column name="{{'call_objective.text14' | translate}}" prop="status">
             <ng-template
               ngx-datatable-cell-template
               let-row="row"
@@ -377,12 +377,12 @@
             </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column
-              name="Kode Divisi"
+              name="{{'produk_prinsipal.division_code' | translate}}"
               prop="division_code"
               [sortable]="false"
             ></ngx-datatable-column>
             <ngx-datatable-column
-              name="Wilayah"
+              name="{{'global.area.regional' | translate}}"
               prop="region_code"
               [sortable]="false"
             ></ngx-datatable-column>
@@ -400,7 +400,7 @@
             (click)="submit()"
             fxFlex="20"
             >
-              {{ls.locale.global.button.save}}
+              {{'global.button.save' | translate}}
             </button>
           </div>
         </div>
