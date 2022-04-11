@@ -82,9 +82,9 @@ export class PreviewVoucherComponent implements OnInit {
     } else {
       let data = {
         titleDialog: this.ls.locale.global.label.edit_status_voucher,
-        captionDialog: this.ls.locale.global.messages.text20 + ` ${str}?`,
+        captionDialog: `${this.ls.locale.global.messages.text20.replace('{{ status }}', str)}?`,
         confirmCallback: str === 'Approve' ? this.approveVoucher.bind(this) : this.rejectVoucher.bind(this),
-        buttonText: ["this.ls.locale.global.button.yes_continue", "Batal"] // TODO
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel] // TODO
       };
       this.dialogService.openCustomConfirmationDialog(data);
     };
