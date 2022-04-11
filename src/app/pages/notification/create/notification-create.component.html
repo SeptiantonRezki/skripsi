@@ -55,13 +55,13 @@
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="Tipe Konten"
+                <mat-select formControlName="content_type" placeholder="{{'notification.popup_notifikasi.text15' | translate}}"
                   (selectionChange)="contentType(formNotification.get('content_type').value)">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
-                  Tipe Konten harus diisi
+                  {{'notification.popup_notifikasi.text15' | translate}} harus diisi
                 </mat-error>
               </mat-form-field>
               <div fxFlex="10"></div>
@@ -98,10 +98,10 @@
             *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" formControlName="static_page_title" placeholder="Nama Halaman">
+                <input matInput type="text" formControlName="static_page_title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['static_page_title'].hasError('required') && formNotification.controls['static_page_title'].touched">
-                  Nama Halaman harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -165,7 +165,7 @@
                 <input matInput type="url" formControlName="url_link" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['url_link'].hasError('required') && formNotification.controls['url_link'].touched">
-                  URL harus diisi
+                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formNotification.controls['url_link'].hasError('pattern') && formNotification.get('url_link').value !== ''">
@@ -191,7 +191,7 @@
                 role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
                 <img [src]="imageContentTypeBase64" class="multiple-img" (click)="previewImage()" />
                 <span class="preview-image-content" (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
-                <!-- <mat-icon matTooltip="Hapus gambar" (click)="removeImageVideo()"
+                <!-- <mat-icon matTooltip="{{'global.label.delete_image' | translate}}" (click)="removeImageVideo()"
                   class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                   matchipremove="" role="img" aria-hidden="true">cancel</mat-icon> -->
               </div>
@@ -217,7 +217,7 @@
                 [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)" selectable="1"
                 multiple="1">
 
-                Tarik gambar kesini atau <strong>pilih file</strong>
+                <span [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate"></span>
               </div>
             </div>
             <div *ngIf="multipleImageContentType.length > 0" fxLayout="row wrap">
@@ -227,7 +227,7 @@
                   role="option" tabindex="-1" aria-disabled="false" aria-selected="false" style="height: 60px;">
                   <img [src]="img" class="multiple-img" (click)="previewImage(i)" />
                   <span class="preview-image-content" (click)="previewImage(i)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
-                  <mat-icon matTooltip="Hapus gambar" (click)="removeImageMultiple(i)"
+                  <mat-icon matTooltip="{{'global.label.delete_image' | translate}}" (click)="removeImageMultiple(i)"
                     class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                     matchipremove="" role="img" aria-hidden="true">cancel</mat-icon>
                 </div>

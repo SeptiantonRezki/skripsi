@@ -252,7 +252,7 @@
       </span>
       <div fxLayout="row" *ngIf="!isDetail">
         <mat-form-field fxFlex="45" class="is-light form-primary">
-          <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id">
+          <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelectTradeProgram formControlName="trade_program_id">
             <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
               [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
             <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">

@@ -16,6 +16,7 @@ import { environment } from 'environments/environment';
 import { GeotreeService } from 'app/services/geotree.service';
 import { IdbService } from 'app/services/idb.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-audience-edit',
@@ -126,7 +127,8 @@ export class AudienceEditComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private idbService: IdbService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1554,7 +1556,7 @@ export class AudienceEditComponent {
       if (this.formAudience.valid && this.selected.length === 0) {
         return this.dialogService.openSnackBar({ message: 'Belum ada Audience yang dipilih!' });
       }
-      return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 

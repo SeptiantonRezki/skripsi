@@ -22,7 +22,7 @@
               <mat-icon>add</mat-icon> BUAT
             </button>
             <mat-form-field appearance="standard">
-              <mat-label>Cari</mat-label>
+              <mat-label>{{'global.label.search' | translate}}</mat-label>
               <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
               <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
@@ -95,7 +95,7 @@
                   <!-- <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
                     <mat-icon class="secondary-text">assignment</mat-icon>
                   </button> -->
-                  <button id="btn-duplikat" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)" [disabled]="row.type === 'personalization'">
+                  <button id="btn-duplikat" mat-icon-button color="" matTooltip="{{'dte.template_tugas.text8' | translate}}" (click)="duplicate(row)" [disabled]="row.type === 'personalization'">
                     <mat-icon class="secondary-text">content_copy</mat-icon>
                   </button>
                   <button id="btn-request_file" type="button" mat-icon-button color="" matTooltip="Request File" (click)="requestFile(row)"
@@ -127,7 +127,7 @@
           </ngx-datatable>
           <a #downloadLink></a>
         </mat-tab>
-        <mat-tab label="Personalize">
+        <mat-tab label="{{'dte.template_tugas.personalize' | translate}}">
           <app-task-sequencing-index-personalize></app-task-sequencing-index-personalize>
         </mat-tab>
       </mat-tab-group>
