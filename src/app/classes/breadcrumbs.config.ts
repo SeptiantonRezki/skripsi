@@ -1550,43 +1550,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Trade Program"
+          name: "breadcrumbs.trade_program.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.detail"
         }
       ]
     },
