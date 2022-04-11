@@ -9,14 +9,14 @@
         <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
           <h2 class="">DTE Automation TSM</h2>
           <div fxFlex class="p-16 h3" style="margin-left: 80px;">
-            <mat-checkbox [formControl]="shareable">Shareable Link</mat-checkbox>
+            <mat-checkbox [formControl]="shareable">{{'dte.template_tugas.text12' | translate}}</mat-checkbox>
             <mat-checkbox [formControl]="exclude_gsm" style="margin-left: 50px;">Exclude Transaction GSM</mat-checkbox>
           </div>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <mat-select placeholder="Automation" formControlName="automation">
+              <mat-select placeholder="{{'dte.dte_automation.text5' | translate}}" formControlName="automation">
                 <mat-option *ngFor="let item of listAutomation" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -24,14 +24,14 @@
           <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px"
             *ngIf="formAutomation.get('automation').value === 'e-order'">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <mat-select placeholder="Jenis Tantangan E-Order" formControlName="jenis_tantangan">
+              <mat-select placeholder="{{'dte.dte_automation.text7' | translate}}" formControlName="jenis_tantangan">
                 <mat-option *ngFor="let item of listJenisTantangan" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <div class="mt-8 px-24" fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id"
+              <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelectTradeProgram formControlName="trade_program_id"
                 (selectionChange)="onSelectingTradeProgram($event)">
                 <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>

@@ -15,7 +15,7 @@
               <mat-icon>add</mat-icon>BUAT
             </button>
             <mat-form-field appearance="standard">
-              <mat-label>Cari</mat-label>
+              <mat-label>{{'global.label.search' | translate}}</mat-label>
               <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
               <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
@@ -92,7 +92,7 @@
             </ngx-datatable-column>
           </ngx-datatable>
         </mat-tab>
-        <mat-tab label="Personalize">
+        <mat-tab label="{{'dte.template_tugas.personalize' | translate}}">
           <app-audience-index-personalize></app-audience-index-personalize>
         </mat-tab>
       </mat-tab-group>

@@ -60,25 +60,25 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area"
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
               (selectionChange)="getAudienceArea('salespoint', formRcaAgent.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <!-- <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint"
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
               (selectionChange)="getAudienceArea('district', formRcaAgent.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district"
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
               (selectionChange)="getAudienceArea('territory', formRcaAgent.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory">
               <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field> -->

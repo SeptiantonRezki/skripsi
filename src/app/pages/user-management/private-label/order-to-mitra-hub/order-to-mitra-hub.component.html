@@ -1,6 +1,6 @@
 <div fxLayout="column" class="top-table pt-8 mb-8 pr-16 bb">
   <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center">
-    <h2 class="pl-16">Daftar Pesanan</h2>
+    <h2 class="pl-16">{{ls.locale.katalog_src.lihat_pesanan.text3}}</h2>
     <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
       <mat-icon>search</mat-icon>
       <mat-form-field class="is-light tab-search">
@@ -18,7 +18,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="orders datepicker is-light">
-          <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+          <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="{{ls.locale.dte.pengatur_jadwal_program.text5}}"
             formControlName="from" (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
           <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
             (click)="formFilter.get('from').setValue('')">
@@ -30,7 +30,7 @@
           <mat-datepicker #dari></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="orders datepicker is-light">
-          <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="Sampai Tanggal"
+          <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate" placeholder="{{ls.locale.dte.pengatur_jadwal_program.text6}}"
             formControlName="to" readonly>
           <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
             (click)="formFilter.get('to').setValue('')">
@@ -60,37 +60,37 @@
   [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
   [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-  <ngx-datatable-column name="Nomor PO" prop="invoice_number" [sortable]="true" [width]="200">
+  <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text22}}" prop="invoice_number" [sortable]="true" [width]="200">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-name">{{row.invoice_number}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Customer Code Mitra" prop="customer_code" [sortable]="false">
+  <ngx-datatable-column name="{{ls.locale.katalog_src.lihat_pesanan.wholesaler_customer_code}}" prop="customer_code" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.customer_code}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Nama Mitra" prop="customer_name" [sortable]="false">
+  <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text23}}" prop="customer_name" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.customer_name}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Customer Code Mitra Hub" prop="customer_hub_code" [sortable]="true">
+  <ngx-datatable-column name="{{ls.locale.katalog_src.lihat_pesanan.hub_customer_code}}" prop="customer_hub_code" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.customer_hub_code}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Nama Mitra Hub" prop="customer_hub_name" [sortable]="false">
+  <ngx-datatable-column name="{{ls.locale.katalog_src.lihat_pesanan.wholesaler_hub_name}}" prop="customer_hub_name" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.customer_hub_name}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Total Pesanan" prop="total_price" [sortable]="false">
+  <ngx-datatable-column name="{{ls.locale.produk_prinsipal.text25}}" prop="total_price" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.total_price | rupiahFormaterWithoutRp}}</span>
     </ng-template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Tanggal" prop="created_at" [sortable]="false">
+  <ngx-datatable-column name="{{ls.locale.global.label.date}}" prop="created_at" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-address">{{row.created_at | date:'dd/MM/yyyy'}}</span>
     </ng-template>

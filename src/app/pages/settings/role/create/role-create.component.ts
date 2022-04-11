@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 
 import * as _ from 'underscore';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-role-create',
@@ -35,7 +36,8 @@ export class RoleCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private router: Router,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.roles = this.activatedRoute.snapshot.data['menu'];
     console.log(this.roles);
@@ -294,7 +296,7 @@ export class RoleCreateComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' })
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') })
       commonFormValidator.validateAllFields(this.formRolesGroup);
     }
   }

@@ -105,14 +105,14 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area"
+              <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                 matTooltip="{{getToolTipData(formPaguyuban.get('area').value, list['area'])}}"
                 (selectionChange)="getAudienceArea('salespoint', formPaguyuban.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint"
+              <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                 matTooltip="{{getToolTipData(formPaguyuban.get('salespoint').value, list['salespoint'])}}"
                 (selectionChange)="getAudienceArea('district', formPaguyuban.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>

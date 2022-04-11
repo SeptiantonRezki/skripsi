@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Voucher Private Label'">
+  <page-content-header contentTitle="{{'breadcrumbs.privatelabel.suppliervouchers.index' | translate}}">
   </page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Voucher Private Label</h2>
+        <h2 class="pl-8">{{'breadcrumbs.privatelabel.suppliervouchers.index' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -35,37 +35,37 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Toko" prop="store_count" [sortable]="true">
+        <ngx-datatable-column name="{{'voucher_private_label.store_count' | translate}}" prop="store_count" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.store_count}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Toko Menukarkan Voucher" prop="store_redeem" [sortable]="true">
+        <ngx-datatable-column name="{{'voucher_private_label.store_redeem_voucher' | translate}}" prop="store_redeem" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.store_redeem}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nilai Voucher Belum Terpakai" prop="nominal" [sortable]="true">
+        <ngx-datatable-column name="{{'voucher_private_label.voucher_unused_value' | translate}}" prop="nominal" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.voucher_not_redeem | rupiahFormater}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nilai Voucher Ditukarkan" prop="nominal_exchanged" [sortable]="true">
+        <ngx-datatable-column name="{{'voucher_private_label.voucher_used_value' | translate}}" prop="nominal_exchanged" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.voucher_redeem | rupiahFormater}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Voucher Dibagikan" prop="available_at" [sortable]="true">
+        <ngx-datatable-column name="{{'voucher_private_label.voucher_release_date' | translate}}" prop="available_at" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.available_at | date: 'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Expiry" prop="expired_at" [sortable]="true">
+        <ngx-datatable-column name="{{'cn_reward.b2b_voucher.text10' | translate}}" prop="expired_at" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.expired_at | date: 'dd/MM/yyyy'}}</span>
           </ng-template>

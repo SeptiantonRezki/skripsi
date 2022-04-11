@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ls.locale.global.label.upload_file}} XLS</span>
+        <span>{{'global.label.upload_file' | translate}} XLS</span>
       </div>
 
     </div>
@@ -24,7 +24,7 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+        <span matPrefix>{{'global.messages.file_browse_label' | translate}}
            
         </span>
       </div>
@@ -39,25 +39,25 @@
         [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
 
-        <ngx-datatable-column name="Penjual" prop="name">
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
             {{ row.name }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="No. Ponsel" prop="phone">
+        <ngx-datatable-column name="{{'global.label.phone' | translate}}" prop="phone">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.phone }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode" prop="code">
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.code }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tipe" prop="tipe">
+        <ngx-datatable-column name="{{'call_objective.text9' | translate}}" prop="tipe">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.tipe }}
           </ng-template>
@@ -69,19 +69,19 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Daftar Ayo" prop="registered">
+        <ngx-datatable-column name="{{'call_objective.text14' | translate}}" prop="registered">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.registered }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Divisi" prop="division_code">
+        <ngx-datatable-column name="{{'produk_prinsipal.division_code' | translate}}" prop="division_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.division_code }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Wilayah" prop="region_code">
+        <ngx-datatable-column name="{{'global.area.regional' | translate}}" prop="region_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.region_code }}
           </ng-template>
@@ -93,7 +93,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ls.locale.global.messages.invalid_reason}}" prop="reason">
+        <ngx-datatable-column name="{{'global.messages.invalid_reason' | translate}}" prop="reason">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.reason ? row.reason : '-' }}
           </ng-template>
@@ -163,9 +163,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0">{{ls.locale.global.button.send}}</button>
+          [disabled]="rows.length === 0">{{'global.button.send' | translate}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

@@ -63,11 +63,11 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
+              <!-- <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
               <mat-select [disabled]="data?.is_editable === 0" formControlName="trade_creator_id"
-                placeholder="Pilih Trade Program" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)"
+                placeholder="{{'dte.dte_automation.text8' | translate}}" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)"
                 #singleSelect>
                 <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
                   [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false">

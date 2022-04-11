@@ -50,21 +50,21 @@
 
                 <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                       <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
                         {{ item.name === "all" ? "Semua Zona" : item.code }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Regional" formControlName="region" multiple>
+                    <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
                       <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">
                         {{ item.name === "all" ? "Semua Regional" : item.code }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                       <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">
                         {{ item.name === "all" ? "Semua Area" : item.code }}
                       </mat-option>

@@ -16,6 +16,7 @@ import { RcaAgentEditComponent } from '../user-management/rca-agent/edit/rca-age
 import { PositionCodeDialogComponent } from './position-code-dialog/position-code-dialog.component';
 import { RoutePlanDaysDialogComponent } from './route-plan-days-dialog/route-plan-days-dialog.component';
 import { GroupingPelangganImportDialogComponent } from './grouping-pelanggan-import-dialog/grouping-pelanggan-import-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -94,7 +95,8 @@ const routes: Routes = [
     MatMenuModule,
     MatAutocompleteModule,
     MatChipsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TranslateModule.forChild(),
   ],
   declarations: [GroupingPelangganIndexComponent, RoutePlanComponent, RcaAgentComponent, RcaAgentCreateComponent, RcaAgentEditComponent, PositionCodeDialogComponent, RoutePlanDaysDialogComponent, GroupingPelangganImportDialogComponent],
   exports: [PositionCodeDialogComponent, RoutePlanDaysDialogComponent, GroupingPelangganImportDialogComponent],

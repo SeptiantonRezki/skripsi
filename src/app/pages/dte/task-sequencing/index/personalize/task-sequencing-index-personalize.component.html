@@ -6,7 +6,7 @@
     <mat-icon>add</mat-icon> BUAT
   </button>
   <mat-form-field appearance="standard">
-    <mat-label>Cari</mat-label>
+    <mat-label>{{'global.label.search' | translate}}</mat-label>
     <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off" [disabled]="!permission.lihat">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>

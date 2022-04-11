@@ -135,7 +135,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="10%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district" multiple>
+                  <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name
                       ===
                       'all' ? 'Semua

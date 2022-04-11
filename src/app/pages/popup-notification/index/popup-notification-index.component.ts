@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
 import { PagesName } from 'app/classes/pages-name';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-popup-notification-index',
@@ -34,6 +35,8 @@ export class PopupNotificationIndexComponent {
 
   roles: PagesName = new PagesName();
   permission: any;
+  pageName = this.translate.instant('notification.popup_notifikasi.page_name');
+  entityParams = { entity: this.pageName }
 
   constructor(
     private router: Router,
@@ -41,6 +44,7 @@ export class PopupNotificationIndexComponent {
     private dataService: DataService,
     private notificationService: NotificationService,
     private ls: LanguagesService,
+    private translate:TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -139,10 +143,14 @@ export class PopupNotificationIndexComponent {
   deletePopup(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Popup Notifikasi",
-      captionDialog: "Apakah anda yakin untuk menghapus popup notifikasi ini ?",
+      titleDialog: this.translate.instant('global.messages.delete_data', {
+        entity: this.pageName
+      }),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {
+        entity: this.pageName,
+      }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -153,7 +161,7 @@ export class PopupNotificationIndexComponent {
         this.dialogService.brodcastCloseConfirmation();
         this.getNotifList();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       }
     });
   }
