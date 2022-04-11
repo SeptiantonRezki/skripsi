@@ -95,10 +95,10 @@
 
           <form [formGroup]="verticalStepperStep3">
 
-            <ng-template matStepLabel>Area</ng-template>
+            <ng-template matStepLabel>{{'global.area.area' | translate}}</ng-template>
             <!-- <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Area" formControlName="area">
+                <input matInput type="text" placeholder="{{'global.area.area' | translate}}" formControlName="area">
                 <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched ">
                   Area {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
@@ -198,22 +198,22 @@
             <ng-template matStepLabel>{{ls.locale.global.label.store_type}}</ng-template>
             <!-- <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Tipe Retailer" formControlName="type">
+                <mat-select placeholder="{{'iklan_dalam_aplikasi.spanduk_online.retailer_type' | translate}}" formControlName="type">
                   <mat-option *ngFor="let item of listType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep4.controls['type'].hasError('required') && verticalStepperStep4.controls['type'].touched ">
-                  Tipe Retailer {{ls.locale.global.messages.mandatory_text}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.retailer_type' | translate}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div> -->
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Internal Classification" formControlName="InternalClassification" (selectionChange)="classificationSelectionChange($event)">
+                <mat-select placeholder="{{'retailer.list.text3' | translate}}" formControlName="InternalClassification" (selectionChange)="classificationSelectionChange($event)">
                   <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="verticalStepperStep4.controls['InternalClassification'].hasError('required') && verticalStepperStep4.controls['InternalClassification'].touched ">
-                  Internal Classification {{ls.locale.global.messages.mandatory_text}}
+                  {{'retailer.list.text3' | translate}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div>

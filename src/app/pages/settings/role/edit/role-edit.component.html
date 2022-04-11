@@ -35,7 +35,7 @@
         <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-16 px-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['national'].hasError('required') && formRolesGroup.controls['national'].touched">
@@ -43,7 +43,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" (selectionChange)="getAudienceArea('region', formRolesGroup.get('zone').value)">
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" (selectionChange)="getAudienceArea('region', formRolesGroup.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['zone'].hasError('required') && formRolesGroup.controls['zone'].touched">
@@ -51,7 +51,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" (selectionChange)="getAudienceArea('area', formRolesGroup.get('region').value)">
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" (selectionChange)="getAudienceArea('area', formRolesGroup.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['region'].hasError('required') && formRolesGroup.controls['region'].touched">
@@ -59,7 +59,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formRolesGroup.get('area').value)">
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" (selectionChange)="getAudienceArea('salespoint', formRolesGroup.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['area'].hasError('required') && formRolesGroup.controls['area'].touched">
@@ -67,7 +67,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formRolesGroup.get('salespoint').value)">
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" (selectionChange)="getAudienceArea('district', formRolesGroup.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['salespoint'].hasError('required') && formRolesGroup.controls['salespoint'].touched">
@@ -75,7 +75,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" (selectionChange)="getAudienceArea('territory', formRolesGroup.get('district').value)">
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" (selectionChange)="getAudienceArea('territory', formRolesGroup.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['district'].hasError('required') && formRolesGroup.controls['district'].touched">
@@ -83,7 +83,7 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory">
               <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formRolesGroup.controls['territory'].hasError('required') && formRolesGroup.controls['territory'].touched">

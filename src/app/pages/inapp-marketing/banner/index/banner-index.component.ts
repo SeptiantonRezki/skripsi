@@ -8,6 +8,7 @@ import { DataService } from "app/services/data.service";
 import { BannerService } from "app/services/inapp-marketing/banner.service";
 import { PagesName } from "app/classes/pages-name";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-banner-index",
@@ -91,6 +92,7 @@ export class BannerIndexComponent {
     private dataService: DataService,
     private bannerService: BannerService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.infoTerkiniOnLoad = true;
@@ -531,10 +533,10 @@ export class BannerIndexComponent {
   deleteSpanduk(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Spanduk",
-      captionDialog: "Apakah anda yakin untuk menghapus spanduk ini ?",
+      titleDialog: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.delete_banner'),
+      captionDialog: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.delete_banner_confirm'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -545,7 +547,7 @@ export class BannerIndexComponent {
         this.dialogService.brodcastCloseConfirmation();
         this.getBanner();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       }
     });
   }

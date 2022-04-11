@@ -1,10 +1,10 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Popup Notifikasi'">
+  <page-content-header contentTitle="{{'notification.popup_notifikasi.text1' | translate}}">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/notifications', 'popup-notification', 'create']">
-        <mat-icon>add</mat-icon>BUAT
+        <mat-icon>add</mat-icon>{{'global.button.create' | translate}}
       </button>
     </div>
   </page-content-header>
@@ -13,7 +13,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Popup Notifikasi</h2>
+        <h2 class="pl-8">{{'notification.popup_notifikasi.text1' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -26,31 +26,31 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="ID" prop="id">
+        <ngx-datatable-column name="{{'notification.popup_notifikasi.text2' | translate}}" prop="id">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.id}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Judul Popup Notifikasi" prop="title">
+        <ngx-datatable-column name="{{'notification.popup_notifikasi.text3' | translate}}" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
             {{row.title}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="type">
+        <ngx-datatable-column name="{{'notification.popup_notifikasi.text4' | translate}}" prop="type">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'notification.popup_notifikasi.text5' | translate}}" prop="static_page_slug"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+        <ngx-datatable-column name="{{'notification.popup_notifikasi.text6' | translate}}" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <!-- <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
               <button mat-icon-button color="primary" (click)="deleteUser(row.id)">
@@ -59,19 +59,19 @@
             </div>
           </ng-template>
         </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Detail Popup Notifikasi"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'global.label.detail_entity' | translate:entityParams }}"
                 [routerLink]="['/notifications', 'popup-notification', 'detail', row.id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Popup Notifikasi"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'global.label.edit_entity' | translate:entityParams }}"
                 [routerLink]="['/notifications', 'popup-notification', 'edit', row.id]">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Popup Notifikasi" (click)="deletePopup(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'global.label.delete_entity' | translate:entityParams }}" (click)="deletePopup(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

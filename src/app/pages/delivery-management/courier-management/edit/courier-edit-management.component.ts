@@ -8,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { CourierService } from 'app/services/delivery-management/courier.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-courier-edit-management',
@@ -41,7 +42,8 @@ export class CourierEditManagementComponent implements OnInit {
     private courierManagementService: CourierService,
     private _ngZone: NgZone,
     private activatedRoute: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.courierID = params[2].path;
@@ -125,7 +127,7 @@ export class CourierEditManagementComponent implements OnInit {
     maxReceivedTime.setHours(14, 0, 0, 0);
 
     return this.formBuilder.group({
-      name: ["Layanan Baru", Validators.required], // TODO
+      name: [this.translate.instant('delivery_managemet.daftar_kurir.new_service'), Validators.required], // TODO
       est_fastest_duration: [1, Validators.required],
       est_fastest_duration_time: ["days"],
       est_longest_duration: [1, Validators.required],
@@ -210,7 +212,7 @@ export class CourierEditManagementComponent implements OnInit {
 
       if (hasNoValid.length > 0) {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Format Waktu Layanan Tidak Valid" }); // TODO
+        this.dialogService.openSnackBar({ message: this.translate.instant('delivery_managemet.daftar_kurir.invalid_delivery_time') });
         return;
       }
       console.log('body', body, this.formCourier);
@@ -225,7 +227,7 @@ export class CourierEditManagementComponent implements OnInit {
         this.dataService.showLoading(false);
       })
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" }); // TODO
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.text39') });
       commonFormValidator.validateAllFields(this.formCourier);
     }
   }

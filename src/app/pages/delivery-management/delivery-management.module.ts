@@ -17,6 +17,7 @@ import { DeliveryManagementRoutingModule } from './delivery-management-routing.m
 import { NgxCurrencyModule } from 'ngx-currency';
 import { NgxMaskModule } from "ngx-mask";
 import { ImportPanelMitraDialogComponent } from './mitra-delivery-panel/import-panel-mitra-dialog/import-panel-mitra-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -55,7 +56,8 @@ export const customCurrencyMaskConfig = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     NgxMaskModule.forRoot(),
     MatExpansionModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslateModule.forChild(),
   ],
   declarations: [CourierManagementComponent, CourierCreateManagamentComponent, CourierEditManagementComponent, MitraDeliveryPanelComponent, MitraDeliveryPanelCreateComponent, MitraDeliveryPanelEditComponent, ImportPanelMitraDialogComponent],
   providers: [

@@ -1,11 +1,11 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="ls.locale.iklan_dalam_aplikasi.spanduk_online.text1">
+  <page-content-header contentTitle="{{'iklan_dalam_aplikasi.spanduk_online.text1' | translate}}">
     <button [routerLink]="['/advertisement','banner', 'sorting']" mat-raised-button type="button">
-      <mat-icon>sort</mat-icon> {{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text2 }}
+      <mat-icon>sort</mat-icon> {{ 'iklan_dalam_aplikasi.spanduk_online.text2' | translate }}
     </button>
     <button style="width: 170px" [routerLink]="['/advertisement','banner', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> {{ ls.locale.bantuan.text14 }}
+      <mat-icon>add</mat-icon> {{ 'bantuan.text14' | translate }}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -13,7 +13,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{ ls.locale.iklan_dalam_aplikasi.spanduk_online.text1 }}</h2>
+        <h2 class="pl-8">{{ 'iklan_dalam_aplikasi.spanduk_online.text1' | translate }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -89,15 +89,15 @@
         <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -112,7 +112,7 @@
   <div class="content p-24" *ngIf="!infoTerkiniOnLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Info Terkini</h2>
+        <h2 class="pl-8">{{'iklan_dalam_aplikasi.spanduk_online.nets'}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -188,15 +188,15 @@
         <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -212,7 +212,7 @@
   <div class="content p-24" *ngIf="!terdekatOnLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Toko Terdekat</h2>
+        <h2 class="pl-8">{{'iklan_dalam_aplikasi.spanduk_online.nets'}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -254,28 +254,28 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
+        <ngx-datatable-column name="{{'global.label.name' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text3' | translate}}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text4' | translate}}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text5' | translate}}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{'global.label.status' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -285,18 +285,18 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -312,7 +312,7 @@
   <div class="content p-24" *ngIf="!infoSRCOnLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Info SRC</h2>
+        <h2 class="pl-8">{{'iklan_dalam_aplikasi.spanduk_online.src_info'}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -360,22 +360,22 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text3' | translate}}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text4' | translate}}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text5' | translate}}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{'global.label.status' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -385,18 +385,18 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -412,7 +412,7 @@
   <div class="content p-24" *ngIf="!fbtnOnLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Flying Button</h2>
+        <h2 class="pl-8">{{'iklan_dalam_aplikasi.spanduk_online.flying_button'}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -460,22 +460,22 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="user_group">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text3' | translate}}" prop="user_group">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.user_group | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Halaman Tujuan" prop="target_page">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text4' | translate}}" prop="target_page">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.target_page?.slug}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa" prop="to">
+        <ngx-datatable-column name="{{'iklan_dalam_aplikasi.spanduk_online.text5' | translate}}" prop="to">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.to | date: 'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="68" name="{{'global.label.status' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -485,18 +485,18 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -512,7 +512,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Aktivasi Konsumen</h2>
+        <h2 class="pl-8">{{'iklan_dalam_aplikasi.spanduk_online.consumer_activation'}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -588,15 +588,15 @@
         <ngx-datatable-column [width]="98" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Lihat Spanduk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.view_banner'}}"
                 (click)="directDetail(row)">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Spanduk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.edit_banner' | translate}}"
                 (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Spanduk" (click)="deleteSpanduk(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'iklan_dalam_aplikasi.spanduk_online.delete_banner'}}" (click)="deleteSpanduk(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

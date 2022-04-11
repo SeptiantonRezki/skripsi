@@ -46,6 +46,7 @@ import { ImportAudienceDialogComponent } from './edit/tab/import-audience-dialog
 import { ListVoucherReimbursementComponent } from './index/list-voucher-reimbursement/list-voucher-reimbursement.component';
 import { PreviewVoucherComponent } from './edit/tab/preview-voucher/preview-voucher.component';
 import { ConfirmationPublishDialogComponent } from './edit/tab/preview-voucher/confirmation-publish-dialog/confirmation-publish-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: 'left',
@@ -102,6 +103,7 @@ export const MY_FORMATS = {
     NgxMaskModule.forRoot(),
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
+    TranslateModule.forChild(),
   ],
   declarations: [
     B2CVoucherIndexComponent,

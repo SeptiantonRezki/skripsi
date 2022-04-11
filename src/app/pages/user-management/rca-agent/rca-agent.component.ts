@@ -824,10 +824,10 @@ export class RcaAgentComponent implements OnInit {
   deleteAgent(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus RCA Agent",
-      captionDialog: "Apakah anda yakin untuk menghapus RCA Agent ini ?",
+      titleDialog: this.ls.locale.global.button.delete + " RCA Agent",
+      captionDialog: this.ls.locale.rca_agent.delete_confirm,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.ls.locale.global.button.delete, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -836,7 +836,7 @@ export class RcaAgentComponent implements OnInit {
     this.rcaAgentService.delete({ agent_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text1 });
 
         this.getFfList();
       },
