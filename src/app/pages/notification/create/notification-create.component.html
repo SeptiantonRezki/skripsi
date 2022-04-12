@@ -451,8 +451,7 @@
               </div>
             </div>
 
-            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row"
-              fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="verification" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
