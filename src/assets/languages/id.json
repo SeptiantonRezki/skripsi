@@ -153,6 +153,7 @@
       "delete_entity": "Hapus {{entity}}",
       "create_entity": "Buat {{entity}}",
       "product": "Produk",
+      "promotion": "Promosi",
       "import_entity": "Import {{entity}}",
       "export_entity": "Export {{entity}}",
       "import_sku_innerhtml": "Tarik File Kesini (Maks. 10.000 Baris SKU) atau <strong>Pilih File</strong>",
@@ -161,7 +162,8 @@
       "discount": "Diskon",
       "delete_image": "Hapus gambar",
       "qry": "QTY",
-      "promotion": "Promosi"
+      "list_entity": "Daftar {{entity}}",
+      "all_type": "Semua Tipe"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -197,7 +199,8 @@
       "update_status": "PERBARUI STATUS",
       "yes_continue": "Ya, lanjutkan",
       "no_cancel": "Tidak, batalkan",
-      "create": "BUAT"
+      "create": "BUAT",
+      "check": "CHECK"
     },
     "area": {
       "national": "National",
@@ -246,6 +249,11 @@
       "text30": "Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
       "export_option": "atau pilih Eksport File sebagai acuan File Anda.",
       "invalid_email": "Email Tidak Valid",
+      "throttle_message_forgot_password": "Anda sudah melakukan request reset password sebanyak lebih dari 5x, silahkan coba kembali besok",
+      "network_error": "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!",
+      "not_found": "Data tidak valid / tidak ditemukan",
+      "invalid_credential": "Email / kata sandi yang Anda masukkan salah",
+      "error": "Terjadi Kesalahan",
       "invalid_reason": "Alasan Tidak Valid",
       "send_email_notif": "Kirim Email Notifikasi",
       "send_email_notif_to": "Anda akan mengirimkan email notifikasi ke",
@@ -980,7 +988,13 @@
       "text4": "Nama Prinsipal Non HMS",
       "text5": "Ubah Group Trade Program",
       "text6": "Nama Group Trade Program",
-      "text7": "Merupakan Group Trade Program Non HMS"
+      "text7": "Merupakan Group Trade Program Principal Non HMS",
+      "text8": "Hapus Group Trade Program",
+      "text9": "Apakah anda yakin untuk menghapus data syarat & ketentuan ini?",
+      "text10": "Buat Group Trade Program",
+      "text11": "Tarik Gambar Kesini atau Pilih File",
+      "text12": "Ukuran 410x210 Pixel",
+      "text13": "Gambar Maksimal 2 mb"
     },
     "trade_program": {
       "text1": "Trade Program",
@@ -992,7 +1006,8 @@
       "text7": "Tidak diterbitkan",
       "text8": "Trade Program Sedang Berjalan",
       "text9": "Hapus Trade Program",
-      "text10": "Apakah anda yakin untuk menghapus trade program ini?"
+      "text10": "Apakah anda yakin untuk menghapus trade program ini?",
+      "group_trade_program_not_found": "Tidak ada Group Trade Program yang ditemukan"
     },
     "pengatur_jadwal_program": {
       "text1": "Pengatur Jadwal Trade Program",
@@ -1051,6 +1066,14 @@
       "read_only_access": "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)"
     },
     "audience": {
+      "audience_personalize": "Audience Personalize",
+      "b2b_active": "B2B Active",
+      "delete_audience_group": "Hapus Audience Grup",
+      "estimated_success": "Estimated Task Success",
+      "fixed_panel": "Fixed Panel",
+      "panel_blast": "Panel Blast",
+      "publish_mission": "Publish Misi",
+      "select_publish_mission": "Pilih Publish Misi",
       "text1": "Audience",
       "text2": "Jumlah Pengguna",
       "text3": "Status Persetujuan Audience",
@@ -1066,7 +1089,8 @@
       "text13": "Retail Classification",
       "text14": "SRC Classification",
       "text15": "SRC Type",
-      "text16": "Daftar AYO"
+      "text16": "Daftar AYO",
+      "total_required_panel": "Total Required Panel"
     },
     "distribution_list": {
       "text": "Distribution List"
@@ -1201,7 +1225,7 @@
       "text20": "Nilai Penukaran Untuk 1 Koin",
       "text21": "Jumlah Koin",
       "text22": "Tanggal Voucher Dibagikan",
-      "text23": "Tanggal kadaluarsa Voucher",
+      "text23": "Tanggal kedaluarsa Voucher",
       "text24": "Catatan",
       "text25": "Batasan",
       "text26": "Batasi dengan Produk",
@@ -1808,6 +1832,18 @@
       "create": "Buat Layanan Kurir",
       "edit": "Ubah Layanan Kurir",
       "detail": "Detail Layanan Kurir"
+    },
+    "group_trade_program": {
+      "index": "Group Trade Program",
+      "create": "Buat Group Trade Program",
+      "edit": "Ubah Group Trade Program",
+      "detail": "Detail Group Trade Program"
+    },
+    "trade_program": {
+      "index": "Trade Program",
+      "create": "Buat Trade Program",
+      "edit": "Ubah Trade Program",
+      "detail": "Detail Trade Program"
     }
   }
 }
