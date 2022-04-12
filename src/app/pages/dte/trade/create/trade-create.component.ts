@@ -29,7 +29,7 @@ export class TradeCreateComponent {
   validComboDrag: boolean;
   valueChange: Boolean;
   saveData: Boolean;
-  statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
+  statusTP: any[] = [{ name: this.translate.instant('dte.trade_program.text6'), value: 'publish' }, { name: this.translate.instant('dte.trade_program.text7'), value: 'unpublish' }]
 
   private _onDestroy = new Subject<void>();
   filteredGTpOptions: Observable<string[]>;
@@ -159,7 +159,7 @@ export class TradeCreateComponent {
   }
 
   submit(): void {
-    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2mb!' })
+    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: this.translate.instant('dte.group_trade_program.text13') })
 
     if (this.formTradeProgram.valid) {
       this.saveData = !this.saveData;

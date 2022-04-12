@@ -604,7 +604,7 @@
               </ngx-datatable-column>
 
               <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name"></ngx-datatable-column>
-              <ngx-datatable-column name="Kode" prop="code" [sortable]="false">
+              <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   {{row.code ? row.code : '-'}}
                 </ng-template>

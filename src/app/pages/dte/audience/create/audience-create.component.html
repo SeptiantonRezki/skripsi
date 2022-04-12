@@ -16,7 +16,7 @@
                 matInput
                 type="text"
                 formControlName="name"
-                placeholder="Nama Grup"
+                placeholder="{{'dte.audience.text4' | translate }}"
               /> <!-- // TODO -->
               <mat-error
                 *ngIf="
@@ -24,13 +24,13 @@
                   formAudience.controls['name'].touched
                 "
               >
-                Nama Grup harus diisi <!-- // TODO -->
+                {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
               </mat-error>
             </mat-form-field>
           </div>
 
           <div fxLayout="row">
-            <label id="ts">Jenis Audience <!-- // TODO --></label>
+            <label id="ts">{{'dte.audience.text5' | translate }} <!-- // TODO --></label>
           </div>
 
           <div fxLayout="row">
@@ -72,7 +72,7 @@
                 matInput
                 type="number"
                 min="0"
-                placeholder="Audience Minimal"
+                placeholder="{{'dte.audience.text9' | translate }}"
                 formControlName="min"
                 numericOnly
               /> <!-- // TODO -->
@@ -82,7 +82,7 @@
                   formAudience.controls['min'].touched
                 "
               >
-                Audience Minimal harus diisi <!-- // TODO -->
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
               </mat-error>
               <mat-error
                 *ngIf="
@@ -90,7 +90,7 @@
                   formAudience.controls['min'].touched
                 "
               >
-                Audience Minimal tidak boleh kurang dari 0 <!-- // TODO -->
+                {{'dte.audience.text9' | translate }} tidak boleh kurang dari 0 <!-- // TODO -->
               </mat-error>
             </mat-form-field>
 
@@ -99,7 +99,7 @@
                 matInput
                 type="number"
                 min="0"
-                placeholder="Audience Maksimal"
+                placeholder="{{'dte.audience.text10' | translate }}"
                 formControlName="max"
                 numericOnly
               /> <!-- // TODO -->
@@ -109,7 +109,7 @@
                   formAudience.controls['max'].touched
                 "
               >
-                Audience Maksimal harus diisi <!-- // TODO -->
+                {{'dte.audience.text10' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
               </mat-error>
               <mat-error
                 *ngIf="
@@ -117,7 +117,7 @@
                   formAudience.controls['max'].touched
                 "
               >
-                Audience maksimal tidak boleh kurang dari jumlah minimal
+                {{'dte.audience.text10' | translate }} tidak boleh kurang dari jumlah minimal
                 audience <!-- // TODO -->
               </mat-error>
             </mat-form-field>
@@ -141,16 +141,14 @@
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select
                 formControlName="trade_scheduler_id"
-                placeholder="Nama Pengatur Jadwal Trade Program"
+                placeholder="{{'dte.pengatur_jadwal_program.text16' | translate }}"
                 #singleSelect
-              > <!-- // TODO -->
+              >
                 <ngx-mat-select-search
                   [formControl]="filterScheduler"
-                  [placeholderLabel]="'Cari Jadwal Trade Program...'"
-                  [noEntriesFoundLabel]="
-                    'Tidak ada Jadwal Trade Program yang ditemukan'
-                  "
-                ></ngx-mat-select-search> <!-- // TODO -->
+                  placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                ></ngx-mat-select-search>
                 <mat-option
                   *ngFor="let item of filteredScheduler | async"
                   [value]="item.id"
@@ -165,7 +163,7 @@
                   ) && formAudience.controls['trade_scheduler_id'].touched
                 "
               >
-                Nama Pengatur Jadwal Trade Program harus diisi <!-- // TODO -->
+                {{'dte.pengatur_jadwal_program.text16' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
               </mat-error>
             </mat-form-field>
           </div>
@@ -177,12 +175,12 @@
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select
                 formControlName="trade_creator_id"
-                placeholder="Nama Trade Program"
+                placeholder="{{'dte.trade_program.text3' | translate}}"
                 #singleSelect
               > <!-- // TODO -->
                 <ngx-mat-select-search
                   [formControl]="filterTradeProgram"
-                  [placeholderLabel]="'Cari Trade Program...'"
+                  placeholderLabel="{{'global.label.search' | translate}}"
                   [noEntriesFoundLabel]="
                     'Tidak ada Trade Program yang ditemukan'
                   "
@@ -201,7 +199,7 @@
                   ) && formAudience.controls['trade_creator_id'].touched
                 "
               >
-                Nama Trade Program harus diisi <!-- // TODO -->
+                {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text'}} <!-- // TODO -->
               </mat-error>
             </mat-form-field>
           </div>
@@ -223,7 +221,7 @@
           (click)="loadFormFilter()"
           fxFlex="20"
         >
-          Load Data
+          {{'dte.template_tugas.text24' | translate}}
         </button>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
@@ -357,7 +355,7 @@
           <!--[R]-->
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="Retail Classification"
+              placeholder="{{'dte.audience.text13' | translate}}"
               formControlName="retail_classification"
             > <!-- // TODO -->
               <mat-option
@@ -370,7 +368,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="SRC Classification"
+              placeholder="{{'dte.audience.text14' | translate}}"
               formControlName="src_classification"
             > <!-- // TODO -->
               <mat-option
@@ -383,7 +381,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="SRC Type"
+              placeholder="{{'dte.audience.text15' | translate}}"
               formControlName="src_type"
             > <!-- // TODO -->
               <mat-option
@@ -532,51 +530,51 @@
 
 
 
-        <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column> <!-- // TODO -->
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column> <!-- // TODO -->
         <!-- <ngx-datatable-column
           name="No Ponsel"
           [width]="180"
           prop="phone"
           [sortable]="false"
         ></ngx-datatable-column> -->
-        <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column> <!-- // TODO -->
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column> <!-- // TODO -->
         <ngx-datatable-column
           name="Tipe"
           prop="classification"
         ></ngx-datatable-column>
         <!--[R]-->
         <ngx-datatable-column
-          name="Retailer Classification"
+          name="{{'call_objective.text10' | translate}}"
           prop="retail_classification"
         ></ngx-datatable-column> <!-- // TODO -->
         <ngx-datatable-column
-          name="SRC Classification"
+          name="{{'dte.audience.text14' | translate}}"
           prop="src_classification"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="SRC Type"
+          name="{{'dte.audience.text15' | translate}}"
           prop="src_type"
         ></ngx-datatable-column> <!-- // TODO -->
         <!--[R]-->
         <ngx-datatable-column
-          name="Field Force"
+          name="{{'call_objective.text13' | translate}}"
           prop="ff_name"
           [sortable]="false"
         ></ngx-datatable-column> <!-- // TODO -->
-        <ngx-datatable-column name="Daftar Ayo" prop="status">
+        <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
           <ng-template
             ngx-datatable-cell-template
             let-row="row"
             let-value="value"
           >
             <span *ngIf="row.status === 'active' || row.status === 'inactive'"
-              >Yes</span
+              >{{'global.label.yes' | translate}}</span
             >
-            <span *ngIf="row.status === 'not-registered'">No</span>
+            <span *ngIf="row.status === 'not-registered'">{{'global.label.no' | translate}}</span>
           </ng-template>
         </ngx-datatable-column> <!-- // TODO -->
         <!-- <ngx-datatable-column
-          name="Kode Divisi"
+          name="{{'global.label.code' | translate}} Divisi"
           prop="division_code"
           [sortable]="false"
         ></ngx-datatable-column> -->

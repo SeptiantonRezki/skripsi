@@ -13,7 +13,7 @@
         <div class="ayo-middle p-24" fxLayout="column">
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="50%" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
+              <input matInput type="text" formControlName="name" placeholder="{{'dte.trade_program.text3' | translate}}">
             </mat-form-field>
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput type="tel" currencyMask min="0" formControlName="budget" placeholder="Dana Trade Program">
@@ -52,7 +52,7 @@
             <span class="row-name" [routerLink]="['/sku-management', 'coin', 'detail-retailer', row.retailer_id]" (click)="setToStorage(row, 'coin_detail_retailer')">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Nama Trade Program" prop="trade_program" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'dte.trade_program.text3' | translate}}" prop="trade_program" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Nama Template Tugas" prop="template_name" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="type" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

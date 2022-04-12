@@ -80,7 +80,7 @@
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama Trade Program" prop="trade_program" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'dte.trade_program.text3' | translate}}" prop="trade_program" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Nama Template Tugas" prop="template_name" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="type" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

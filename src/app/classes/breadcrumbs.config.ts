@@ -1550,43 +1550,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Trade Program"
+          name: "breadcrumbs.trade_program.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.detail"
         }
       ]
     },
@@ -1799,43 +1799,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Group Trade Program"
+          name: "breadcrumbs.group_trade_program.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Group Trade Program"
+          name: "breadcrumbs.group_trade_program.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Group Trade Program"
+          name: "breadcrumbs.group_trade_program.detail"
         }
       ]
     },
