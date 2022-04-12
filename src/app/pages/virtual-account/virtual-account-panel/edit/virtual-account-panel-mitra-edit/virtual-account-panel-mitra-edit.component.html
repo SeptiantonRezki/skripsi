@@ -121,7 +121,7 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+          <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
           <ngx-datatable-column name="No. Rekening" prop="rekening_number" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.rekening_number ? row.rekening_number : '-'}}

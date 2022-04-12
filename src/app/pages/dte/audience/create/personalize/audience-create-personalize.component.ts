@@ -34,6 +34,7 @@ import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialo
 import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
 import { merge } from "rxjs/observable/merge";
 import { ImportAudiencePersonalizeComponent } from "../../import/personalize/import-audience-personalize.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-audience-create-personalize',
@@ -56,7 +57,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   ]; // TODO
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -70,10 +71,10 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     { name: "Not Active", value: "inactive" },
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -100,6 +101,8 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   allRowsSelected: boolean;
   isChecked: boolean = false;
   data_imported: any = [];
+  pageName = this.translate.instant('dte.audience.audience_personalize');
+  titleParam = {entity: this.pageName};
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -152,6 +155,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     private idbService: IdbService,
     private ls: LanguagesService,
     private sequencingService: SequencingService,
+    private translate: TranslateService,
     ) {
     this.exportTemplate = false;
     this.saveData = false;

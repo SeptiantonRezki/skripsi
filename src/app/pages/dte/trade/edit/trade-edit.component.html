@@ -63,10 +63,10 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
+              <input matInput type="text" formControlName="name" placeholder="{{'dte.trade_program.text3' | translate}}">
               <mat-error
                 *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
-                Nama Trade Program harus diisi
+                {{'dte.trade_program.text3' | translate}} harus diisi
               </mat-error>
             </mat-form-field>
           </div>

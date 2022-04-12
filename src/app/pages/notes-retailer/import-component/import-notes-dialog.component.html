@@ -33,7 +33,7 @@
           [reorderable]="reorderable" [count]="pagination.total"
           [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
   
-          <ngx-datatable-column name="Penjual" prop="name">
+          <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
               {{ row.name }}
             </ng-template>
@@ -50,13 +50,13 @@
             </ng-template>
           </ngx-datatable-column>
   
-          <ngx-datatable-column name="Field Force" prop="ff_name">
+          <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.ff_name }}
             </ng-template>
           </ngx-datatable-column>
   
-          <ngx-datatable-column name="Daftar Ayo" prop="registered">
+          <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="registered">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{ row.registered }}
             </ng-template>
