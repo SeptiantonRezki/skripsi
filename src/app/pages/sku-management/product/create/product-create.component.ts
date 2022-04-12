@@ -334,8 +334,8 @@ export class ProductCreateComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: this.translate.instant('global.label.delete_data', { entity: this.translate.instant('global.label.area.geotree') }),
-      captionDialog: this.translate.instant('global.label.delete_confirm', {
+      titleDialog: this.translate.instant('global.messages.delete_data', { entity: this.translate.instant('global.label.area.geotree') }),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {
         entity: this.translate.instant('global.label.area.geotree'),
         index: idx + 1
       }),
@@ -1010,10 +1010,10 @@ export class ProductCreateComponent {
     this.wilayahIndex = j;
 
     let data = {
-      titleDialog: this.translate.instant('global.label.delete_data', {
+      titleDialog: this.translate.instant('global.messages.delete_data', {
         entity: this.translate.instant('manajemen_barang_sku.produk.packaging')
       }),
-      captionDialog: this.translate.instant('global.label.delete_confirm', {
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {
         entity: this.translate.instant('manajemen_barang_sku.produk.packaging') + " " + param.value.packaging
       }),
       confirmCallback: this.confirmRemovePackaging.bind(this),
