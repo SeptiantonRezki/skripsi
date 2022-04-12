@@ -102,7 +102,7 @@
         <!-- <ngx-datatable-column name="Wholesaler Id" prop="id" [sortable]="false">
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Penjual" prop="name">
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
           </ng-template>

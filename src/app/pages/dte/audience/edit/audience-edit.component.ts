@@ -77,6 +77,9 @@ export class AudienceEditComponent {
   exportTemplate: Boolean;
   allRowsSelected: boolean;
 
+  pageName = this.translate.instant('dte.audience.text1');
+  titleParam = {entity: this.pageName};
+
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterTradeProgram: FormControl = new FormControl();

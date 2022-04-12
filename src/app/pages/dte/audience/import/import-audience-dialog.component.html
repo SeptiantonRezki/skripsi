@@ -47,7 +47,7 @@
         [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
 
-        <ngx-datatable-column name="Penjual" prop="name">
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
             {{ row.name }}
           </ng-template>
@@ -59,7 +59,7 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Kode" prop="code">
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.code }}
           </ng-template>
@@ -71,13 +71,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Field Force" prop="ff_name">
+        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.ff_name }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Daftar Ayo" prop="registered">
+        <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="registered">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.registered }}
           </ng-template>
@@ -111,12 +111,12 @@
       <!-- <table class="table">
           <thead>
             <tr>
-              <th nowrap>Penjual</th>
+              <th nowrap>{{'call_objective.text8' | translate}}</th>
               <th nowrap>No. Ponsel</th>
-              <th nowrap>Kode</th>
+              <th nowrap>{{'global.label.code' | translate}}</th>
               <th nowrap>Tipe</th>
-              <th nowrap>Field Force</th>
-              <th nowrap>Daftar Ayo</th>
+              <th nowrap>{{'call_objective.text13' | translate}}</th>
+              <th nowrap>{{'dte.audience.text16' | translate}}</th>
               <th nowrap>Divisi</th>
               <th nowrap>Wilayah</th>
               <th nowrap>Area</th>
@@ -173,7 +173,7 @@
         <button type="button" mat-raised-button color="primary" (click)="submit()"
           [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

@@ -206,7 +206,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep4.controls['role_id'].hasError('required') && verticalStepperStep4.controls['role_id'].touched">
-                  ls.locale.wholesaler.feature_role {{ ls.locale.global.messages.mandatory_text }}
+                  {{ls.locale.wholesaler.feature_role}} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 

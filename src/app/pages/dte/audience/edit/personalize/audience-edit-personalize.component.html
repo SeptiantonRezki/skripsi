@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Audience Personalize'"></page-content-header> <!-- // TODO -->
+  <page-content-header contentTitle="{{'global.label.edit_entity' | translate:titleParam}}"></page-content-header> <!-- // TODO -->
   <!-- / HEADER -->
 
   <div class="content p-24">
@@ -11,16 +11,16 @@
             <div class="p-24" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
               <div fxLayout="column">
                 <mat-form-field class="is-light form-primary">
-                  <input matInput type="text" formControlName="name" placeholder="Nama Grup" />
+                  <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}" />
                   <mat-error>
-                    Nama Grup harus diisi <!-- // TODO -->
+                    {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
                   </mat-error>
                 </mat-form-field>
   
                 <mat-form-field class="is-light form-primary">
                   <mat-select
                     formControlName="mission_publication_id"
-                    placeholder="Pilih Publish Misi"
+                    placeholder="{{'dte.audience.select_publish_mission' | translate}}"
                     #singleSelect
                   > <!-- // TODO -->
                     <ngx-mat-select-search
@@ -36,7 +36,7 @@
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="formAudience.controls['mission_publication_id'].hasError('required') && formAudience.controls['mission_publication_id'].touched">
-                    Publish Misi harus diisi <!-- // TODO -->
+                    {{'dte.audience.publish_mission' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -73,26 +73,26 @@
                 </form>
                 <form [formGroup]="formFilterRetailer" fxLayout="column">
                   <mat-form-field class="is-light form-primary">
-                    <mat-select placeholder="Retail Classification" formControlName="retail_classification" multiple>
+                    <mat-select placeholder="{{'dte.audience.text13' | translate}}" formControlName="retail_classification" multiple>
                       <mat-option *ngFor="let item of retailClassification" [value]="item.value" (onSelectionChange)="handleClassification($event)">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
-                    <mat-select placeholder="B2B Active" formControlName="b2b_active">
+                    <mat-select placeholder="{{'dte.audience.b2b_active' | translate}}" formControlName="b2b_active">
                       <mat-option *ngFor="let item of b2bActiveList" [value]="item.value">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error>
-                      B2B Active harus diisi <!-- // TODO -->
+                      {{'dte.audience.b2b_active' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
-                    <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="Total Required Panel" />
+                    <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="{{'dte.audience.total_required_panel' | translate}}" />
                     <mat-error>
-                      Total Required Panel harus diisi <!-- // TODO -->
+                      {{'dte.audience.total_required_panel' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
                     </mat-error>
                   </mat-form-field>
                 </form>
@@ -101,7 +101,7 @@
               <div fxLayout="column">
                 <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)" [disabled]="isDetail">
                   <mat-radio-button value="fixed-panel">
-                    Fixed Panel
+                    {{'dte.audience.fixed_panel' | translate}}
                   </mat-radio-button>
                 </mat-radio-group>
                 <div fxLayout="row" fxLayoutGap="16px" *ngIf="formAudience.get('audience_filter').value === 'fixed-panel'">
@@ -134,13 +134,13 @@
                 <mat-card-title class="cards__title">
                   {{ formAudience.get("panel_count").value }}
                 </mat-card-title>
-                <mat-card-subtitle style="color: white;">Panel Blast</mat-card-subtitle>
+                <mat-card-subtitle style="color: white;">{{'dte.audience.panel_blast' | translate}}</mat-card-subtitle>
               </mat-card>
               <mat-card class="text-center cards">
                 <mat-card-title class="cards__title">
                   {{ handleEstimate(formAudience.get("est_task_compliance").value) }}
                 </mat-card-title>
-                <mat-card-subtitle style="color: white;">Estimated Task Success</mat-card-subtitle>
+                <mat-card-subtitle style="color: white;">{{'dte.audience.estimated_success' | translate}}</mat-card-subtitle>
               </mat-card>
             </div>
           </div>
@@ -155,7 +155,7 @@
             (click)="checkAudience()"
             fxFlex="20"
           >
-            CHECK <!-- // TODO -->
+            {{'global.button.check' | translate}}<!-- // TODO -->
           </button>
           <button
             id="btn-simpan"

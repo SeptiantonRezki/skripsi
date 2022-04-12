@@ -144,7 +144,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penjual" prop="name" [sortable]="true">
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
           </ng-template>

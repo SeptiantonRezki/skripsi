@@ -34,8 +34,8 @@
               </mat-error> -->
               <mat-select formControlName="trade_creator_id" placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelect
                 (selectionChange)="getTradeProgram()">
-                <ngx-mat-select-search [formControl]="filterTP" [placeholderLabel]="'Cari Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <ngx-mat-select-search [formControl]="filterTP" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
