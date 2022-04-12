@@ -61,7 +61,7 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at">
+        <ngx-datatable-column name="{{'global.label.created_at' | translate}}" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>

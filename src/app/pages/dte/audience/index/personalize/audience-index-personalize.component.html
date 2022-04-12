@@ -1,9 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-  <h2 class="pl-8">Daftar Audience Personalize</h2>
+  <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
 </div>
 <div class="mx-12" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
   <button id="btn-create-audience" style="width: 170px;" [routerLink]="['/dte', 'audience', 'create-personalize']" mat-raised-button type="button" class="confirmation-button">
-    <mat-icon>add</mat-icon>BUAT
+    <mat-icon>add</mat-icon>{{'global.button.create' | translate}}
   </button>
   <mat-form-field appearance="standard">
     <mat-label>{{'global.label.search' | translate}}</mat-label>
@@ -36,7 +36,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Nama Pengaturan Jadwal" [sortable]="false" prop="trade_name">
+  <ngx-datatable-column name="{{'dte.pengatur_jadwal_program.text1' | translate}}" [sortable]="false" prop="trade_name">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-name">{{row.trade_name ? row.trade_name : '-'}}</span>
     </ng-template>
@@ -51,7 +51,7 @@
   <ngx-datatable-column name="{{ ls.locale.dte.audience.text2 }}" [sortable]="false" prop="total_audiences">
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="90" name="Tanggal Dibuat" prop="created_at">
+  <ngx-datatable-column [width]="90" name="{{'global.label.created_at' | translate}}" prop="created_at">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.created_at | date:'dd/MM/yyyy'}}
     </ng-template>
@@ -74,7 +74,7 @@
           <mat-icon class="secondary-text">edit</mat-icon>
         </button>
         <button id="btn-delete" mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
-          matTooltip="Hapus Audience Grup" (click)="deleteAudience(row.id)">
+          matTooltip="{{'dte.audience.delete_audience_group' | translate}}" (click)="deleteAudience(row.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

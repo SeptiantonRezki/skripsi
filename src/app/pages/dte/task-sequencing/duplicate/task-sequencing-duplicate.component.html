@@ -19,7 +19,7 @@
           <div fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="start">
 
             <!--<mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama Trade Program" formControlName="namaTrade">
+              <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" formControlName="namaTrade">
               <mat-error
                 *ngIf="taskSequenceForm.controls['namaTrade'].hasError('required') && taskSequenceForm.controls['namaTrade'].touched ">
                 Nama Trade harus diisi.
@@ -47,8 +47,8 @@
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
               <mat-select formControlName="trade_creator_id" placeholder="{{'dte.dte_automation.text8' | translate}}" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)" #singleSelect>
-                <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
+                <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>

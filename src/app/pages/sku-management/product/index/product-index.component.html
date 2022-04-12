@@ -1,9 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Produk'">
+  <page-content-header [contentTitle]="pageName">
     <button style="min-width: 170px;" [routerLink]="['/sku-management', 'product', 'create']" mat-raised-button
       aria-label="Produk" type="button">
-      <mat-icon>add</mat-icon>{{'global.label.add_entity' | translate:paramTitle }}
+      <mat-icon>add</mat-icon>{{'global.label.add_entity' | translate:titleParam }}
     </button>
     <!-- <button style="min-width: 170px;" mat-raised-button type="button" class="is-danger">HAPUS</button> -->
   </page-content-header>

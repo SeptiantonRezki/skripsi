@@ -783,7 +783,7 @@
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name"></ngx-datatable-column>
-              <ngx-datatable-column name="Kode" prop="code">
+              <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   {{row.code ? row.code : '-'}}
                 </ng-template>

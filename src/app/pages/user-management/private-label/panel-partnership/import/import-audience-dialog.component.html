@@ -63,7 +63,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Field Force" prop="ff_name">
+        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.ff_name }}
           </ng-template>
@@ -103,12 +103,12 @@
       <!-- <table class="table">
           <thead>
             <tr>
-              <th nowrap>Penjual</th>
+              <th nowrap>{{'call_objective.text8' | translate}}</th>
               <th nowrap>No. Ponsel</th>
               <th nowrap>Kode</th>
               <th nowrap>Tipe</th>
-              <th nowrap>Field Force</th>
-              <th nowrap>Daftar Ayo</th>
+              <th nowrap>{{'call_objective.text13' | translate}}</th>
+              <th nowrap>{{'dte.audience.text16' | translate}}</th>
               <th nowrap>Divisi</th>
               <th nowrap>Wilayah</th>
               <th nowrap>Area</th>

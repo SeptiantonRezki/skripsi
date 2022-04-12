@@ -35,7 +35,7 @@
                 name="trade_creator_id">
                 <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <input matInput type="text" placeholder="Nama Trade Program" [value]="dataTsm['trade_creator_name']"
+              <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" [value]="dataTsm['trade_creator_name']"
                 name="trade_creator_name" disabled>
             </mat-form-field>
           </div>
@@ -173,7 +173,7 @@
           <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="p-16 px-24"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()" fxFlex="20">
-              Load Data
+              {{'dte.template_tugas.text24' | translate}}
             </button>
           </div>
 
