@@ -91,7 +91,7 @@
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
                   <!-- attribut button hapus harus ada permission [disabled]="!permission?.hapus" -->
-                  <button mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteAutomation(row.id)">
+                  <button mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteAutomation(row.id)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>

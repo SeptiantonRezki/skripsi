@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Tugas'">
+  <page-content-header contentTitle="{{'dte.template_tugas.text3' | translate}}">
     <!-- <button id="btn-buat_tugas" style="width: 170px" [routerLink]="['/dte','template-task', 'create']" mat-raised-button type="button">
       <mat-icon>add</mat-icon> BUAT
     </button> -->
@@ -12,14 +12,14 @@
       <mat-tab-group>
         <mat-tab label="Default">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-            <h2 class="pl-8">Daftar Tugas</h2>
+            <h2 class="pl-8">{{'dte.template_tugas.text3' | translate}}</h2>
           </div>
           <div class="mx-12" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
             <button id="btn-buatTugas" style="width: 170px" [routerLink]="['/dte','template-task', 'create']" mat-raised-button type="button" class="confirmation-button">
-              <mat-icon>add</mat-icon> BUAT
+              <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
             </button>
             <mat-form-field appearance="standard">
-              <mat-label>Cari</mat-label>
+              <mat-label>{{'global.label.search' | translate}}</mat-label>
               <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
               <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
@@ -27,31 +27,31 @@
           <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Kategory Toolbox" [(ngModel)]="filterKategoryToolbox" name="Kategory"
+              <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text2' | translate}}" [(ngModel)]="filterKategoryToolbox" name="{{'global.label.category' | translate}}"
                 [ngModelOptions]="{standalone: true}">
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriToolbox"> {{lsCat.name}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Tipe Misi" [(ngModel)]="filterTipeMisi" name="filterTipeMisi"
+              <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text3' | translate}}" [(ngModel)]="filterTipeMisi" name="filterTipeMisi"
                 [ngModelOptions]="{standalone: true}">
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTipeMisi"> {{lsCat.name}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Internal Kategori" [(ngModel)]="filterInternalMisi" name="filterInternalMisi"
+              <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text4' | translate}}" [(ngModel)]="filterInternalMisi" name="filterInternalMisi"
                 [ngModelOptions]="{standalone: true}">
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTingkatinternalMisi"> {{lsCat.name}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Kategory Misi" [(ngModel)]="filterKategoryMisi" name="filterKategoryMisi"
+              <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text5' | translate}}" [(ngModel)]="filterKategoryMisi" name="filterKategoryMisi"
                 [ngModelOptions]="{standalone: true}">
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriMisi"> {{lsCat.name}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Project Misi" [(ngModel)]="filterProjectMisi" name="filterProjectMisi"
+              <mat-select placeholder="{{'dte.template_tugas.mission_project' | translate}}" [(ngModel)]="filterProjectMisi" name="filterProjectMisi"
                 [ngModelOptions]="{standalone: true}">
                 <mat-option [value]="lsCat.id" *ngFor="let lsCat of listProjectMisi"> {{lsCat.name}} </mat-option>
               </mat-select>
@@ -59,11 +59,11 @@
             <div class="confirm p-10" fxLayout="row" fxLayoutGap="20px">
               <button mat-raised-button type="button" class="publish-button" (click)="reset()" style="width: 170px"
                 style="height: 50px">
-                Reset
+                {{'dte.template_tugas.text23' | translate}}
               </button>
               <button mat-raised-button type="button" class="confirmation-button" (click)="load()" style="width: 170px"
                 style="height: 50px">
-                Load Data
+                {{'dte.template_tugas.text24' | translate}}
               </button>
             </div>
           </div>
@@ -91,32 +91,32 @@
                 <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Nama Lain Misi" [width]="200" prop="other_name">
+            <ngx-datatable-column name="{{'dte.template_tugas.text6' | translate}}" [width]="200" prop="other_name">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name">{{row.other_name}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column [width]="200" name="Deskripsi" headerClass="textright" prop="description">
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Kategory Toolbox" headerClass="textright" prop="task_toolbox_name">
+            <ngx-datatable-column [width]="100" name="{{'dte.pengaturan_attribute_misi.text2' | translate}}" headerClass="textright" prop="task_toolbox_name">
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Tipe Misi" headerClass="textright" prop="task_toolbox_type_name">
+            <ngx-datatable-column [width]="100" name="{{'dte.pengaturan_attribute_misi.text3' | translate}}" headerClass="textright" prop="task_toolbox_type_name">
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Internal Kategori" headerClass="textright"
+            <ngx-datatable-column [width]="100" name="{{'dte.pengaturan_attribute_misi.text4' | translate}}" headerClass="textright"
               prop="task_toolbox_internal_name"></ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Kategori Misi" headerClass="textright"
+            <ngx-datatable-column [width]="100" name="{{'dte.pengaturan_attribute_misi.text5' | translate}}" headerClass="textright"
               prop="task_toolbox_categories_name"></ngx-datatable-column>
-            <ngx-datatable-column [width]="100" name="Project Misi" headerClass="textright"
+            <ngx-datatable-column [width]="100" name="{{'dte.template_tugas.mission_project' | translate}}" headerClass="textright"
               prop="task_toolbox_project_name"></ngx-datatable-column>
-              <ngx-datatable-column name="Negara" [width]="100" prop="name">
+              <ngx-datatable-column name="{{'global.label.country' | translate}}" [width]="100" prop="name">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <span class="row-country" (click)="directDetail(row)">{{row.country}}</span>
                 </ng-template>
               </ngx-datatable-column>
-            <ngx-datatable-column [width]="80" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ngx-datatable-column [width]="80" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button id="btn-duplicate" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
+                  <button id="btn-duplicate" mat-icon-button color="" matTooltip="{{'dte.template_tugas.text8' | translate}}" (click)="duplicate(row)">
                     <mat-icon class="secondary-text">content_copy</mat-icon>
                   </button>
                   <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
@@ -125,7 +125,7 @@
                   <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
-                  <button id="btn-delete" mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)"
+                  <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteTemplateTask(row.id)"
                     [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -135,7 +135,7 @@
           </ngx-datatable>
         </mat-tab>
 
-        <mat-tab label="Personalize">
+        <mat-tab label="{{'dte.template_tugas.personalize' | translate}}">
           <app-template-index-personalize></app-template-index-personalize>
         </mat-tab>
       </mat-tab-group>

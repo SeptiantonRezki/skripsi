@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-audience-trade-program',
@@ -67,7 +68,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     private audienceTradeProgramService: AudienceTradeProgramService,
     private dialogService: DialogService,
     private router: Router,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab");
     this.selectedTab = 0;
@@ -372,7 +374,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       });
     } else {
       this.submitting = false;
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formAutomation);
       // commonFormValidator.validateAllFields(this.formAutomation);
     }

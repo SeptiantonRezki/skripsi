@@ -9,6 +9,7 @@ import { startWith, map, takeUntil } from 'rxjs/operators';
 import { ScheduleTradeProgramService } from '../../../../services/dte/schedule-trade-program.service';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-schedule-program-create',
@@ -78,7 +79,8 @@ export class ScheduleProgramCreateComponent {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.saveData = false;
     this.adapter.setLocale("id");
@@ -489,7 +491,7 @@ export class ScheduleProgramCreateComponent {
         )
       }
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formSchedule);
     }
   }

@@ -46,12 +46,12 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="200" name="Nama Halaman" prop="title">
+        <ngx-datatable-column [width]="200" name="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directEdit(row)">{{row.title}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="400" name="Isi Halaman" prop="body">
+        <ngx-datatable-column [width]="400" name="{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}" prop="body">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.body?.length > 100 ?
             row.body?.substring(0, 100) + '...' : row.body}}</ng-template>
         </ngx-datatable-column>

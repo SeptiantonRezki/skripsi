@@ -54,6 +54,7 @@ import { TingkatFiturFormComponent } from "./tingkat-fitur/form/tingkat-fitur-fo
 import { TingkatFitureRolesComponent } from "./tingkat-fitur/tree/tingkat-fitur-tree.component";
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { TingkatFiturTreeData } from './tingkat-fitur/tree/tingkat-fitur-tree-data.service';
+import { TranslateModule } from "@ngx-translate/core";
 export const MY_FORMATS = {
   parse: {
     dateInput: "LL"
@@ -99,6 +100,7 @@ export const MY_FORMATS = {
     MatTooltipModule,
     MatTreeModule,
     CdkTreeModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     RoleIndexComponent,
