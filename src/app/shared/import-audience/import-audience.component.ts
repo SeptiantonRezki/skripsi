@@ -80,7 +80,7 @@ export class ImportAudienceComponent {
                 this.dialogService.brodcastCloseConfirmation();
               };
               const data = {
-                titleDialog: this.translate.instant('global.label.delete_confirm', { entity: this.translate.instant('global.label.invalid_data'), index: '' }),
+                titleDialog: this.translate.instant('global.messages.delete_confirm', { entity: this.translate.instant('global.label.invalid_data'), index: '' }),
                 confirmCallback: () => filterData(),
                 rejectCallback: () => {
                   this.dialogService.openSnackBar({
