@@ -1,34 +1,34 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Notifikasi'">
+  <page-content-header contentTitle="{{'global.label.create_entity' | translate:titleParam}}">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formNotification">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="pb-24">
-          <h2 class="">Buat Notifikasi</h2>
+          <h2 class="">{{'global.label.create_entity' | translate:titleParam}}</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <mat-form-field fxFlex="50" class="is-light form-primary">
-            <input matInput type="text" formControlName="title" placeholder="Judul Notifikasi">
+            <input matInput type="text" formControlName="title" placeholder="{{'notification.buat_notifikasi.text3' | translate}}">
             <mat-error
               *ngIf="formNotification.controls['title'].hasError('required') && formNotification.controls['title'].touched">
-              Judul Notifikasi harus diisi
+              {{'notification.buat_notifikasi.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </mat-form-field>
           <div class="" fxLayout="row" fxLayoutAlign="start center">
-            <h3 class="">Konten Notifikasi</h3>
+            <h3 class="">{{'notification.buat_notifikasi.text10' | translate}}</h3>
           </div>
           <textarea [froalaEditor]="options" formControlName="body" fxFlex="100"></textarea>
           <mat-error style="padding-top: 6px !important; font-size: .86em;"
             *ngIf="formNotification.controls['body'].hasError('required') && formNotification.controls['body'].touched">
-            Konten Notifikasi harus diisi
+            {{'notification.buat_notifikasi.text10' | translate}} {{'global.messages.mandatory_text' | translate}}
           </mat-error>
           <div class="pb-16">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
-                <strong>Grup Pengguna</strong>
+                <strong>{{'notification.buat_notifikasi.text4' | translate}}</strong>
               </h3>
             </div>
             <mat-radio-group formControlName="user_group" class="radio-group" (change)="selectChange($event)">
@@ -41,12 +41,12 @@
           <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="notif_type" placeholder="Tipe Notifikasi">
+                <mat-select formControlName="notif_type" placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}">
                   <mat-option *ngFor="let item of listNotifType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['notif_type'].hasError('required') && formNotification.controls['notif_type'].touched">
-                  Tipe Notifikasi harus diisi
+                  {{'notification.buat_notifikasi.notification_type' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -61,7 +61,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
-                  {{'notification.popup_notifikasi.text15' | translate}} harus diisi
+                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -74,7 +74,7 @@
                 <input matInput type="text" formControlName="static_page_title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['static_page_title'].hasError('required') && formNotification.controls['static_page_title'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -86,7 +86,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_wallet'].hasError('required') && formNotification.controls['content_wallet'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -95,7 +95,7 @@
                 <input matInput type="text" formControlName="button_text" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['button_text'].hasError('required') && formNotification.controls['button_text'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formNotification.controls['button_text'].hasError('maxlength') && formNotification.controls['button_text'].touched">
@@ -110,7 +110,7 @@
             <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
-              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} harus diisi
+              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </div>
 
@@ -123,7 +123,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['landing_page_value'].hasError('required') && formNotification.controls['landing_page_value'].touched">
-                  Landing Page harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -232,7 +232,7 @@
 
           <div class="pt-16 pb-16" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
-              <strong>Frekuensi Pengiriman</strong>
+              <strong>{{'notification.buat_notifikasi.text12' | translate}}</strong>
             </h3>
           </div>
 
@@ -246,13 +246,13 @@
 
           <div fxLayout="row" class="pb-24 px-24">
             <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="send_ayo" (change)="sendAYOChange($event)">
-              Send from AYO SRC
+              {{'notification.buat_notifikasi.text15' | translate}}
             </mat-checkbox>
           </div>
 
           <div fxLayout="row" *ngIf="typeOfRecurrence == 'Recurring'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Pola Pengulangan" formControlName="recurrence_type"
+              <mat-select placeholder="{{'notification.buat_notifikasi.repeat_pattern' | translate}}" formControlName="recurrence_type"
                 [(ngModel)]="recurrenceType">
                 <mat-option *ngFor="let item of listRecurrenceTypes" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
@@ -262,12 +262,12 @@
           <div [formGroup]="formDailyRecurrence" *ngIf="recurrenceType == 'Daily'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formDailyRecurrence.controls['recurrence_time'].hasError('required') && formDailyRecurrence.controls['recurrence_time'].touched">
-                  Waktu terbit harus diisi
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -275,12 +275,12 @@
           <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrenceType == 'Weekly'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formWeeklyRecurrence.controls['recurrence_time'].hasError('required') && formWeeklyRecurrence.controls['recurrence_time'].touched">
-                  Waktu terbit harus diisi
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -300,12 +300,12 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formMonthlyRecurrence.controls['recurrence_time'].hasError('required') && formMonthlyRecurrence.controls['recurrence_time'].touched">
-                  Waktu terbit harus diisi
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -324,12 +324,12 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formYearlyRecurrence.controls['recurrence_time'].hasError('required') && formYearlyRecurrence.controls['recurrence_time'].touched">
-                  Waktu terbit harus diisi
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -338,28 +338,28 @@
           <div class="pt-16" [formGroup]="formRecurrenceCommon" *ngIf="typeOfRecurrence == 'Recurring'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light mr-8">
-                <input matInput type="number" formControlName="recurrence_pattern" placeholder="Dikirim setiap">
+                <input matInput type="number" formControlName="recurrence_pattern" placeholder="{{'notification.buat_notifikasi.send_every' | translate}}">
                 <mat-error
                   *ngIf="formRecurrenceCommon.controls['recurrence_pattern'].hasError('required') && formRecurrenceCommon.controls['recurrence_pattern'].touched">
-                  Interval pengulangan harus diisi
+                  {{'notification.buat_notifikasi.repeat_interval' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <span matSuffix>{{ recurrenceLabel[recurrenceType] }}</span>
               </mat-form-field>
             </div>
             <div class="pt-12 pb-12" fxLayout="row" fxLayoutAlign="start center">
               <h4 class="">
-                <strong>Periode Pengiriman</strong>
+                <strong>{{'notification.buat_notifikasi.send_period' | translate}}</strong>
               </h4>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
+                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}"
                   formControlName="recurrence_start_date" [min]="minStartDate">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
                 <mat-error class="mt-8 px-24"
                   *ngIf="formRecurrenceCommon.controls['recurrence_start_date'].hasError('required') && formRecurrenceCommon.controls['recurrence_start_date'].touched">
-                  Tanggal mulai harus diisi.
+                  Tanggal mulai {{'global.messages.mandatory_text' | translate}}.
                 </mat-error>
               </mat-form-field>
               <div fxFlex="25">
@@ -387,7 +387,7 @@
                     <mat-datepicker #endPicker></mat-datepicker>
                     <mat-error class="mt-8 px-24"
                       *ngIf="formRecurrenceCommon.controls['recurrence_end_date'].hasError('required') && formRecurrenceCommon.controls['recurrence_end_date'].touched">
-                      Tanggal selesai harus diisi.
+                      Tanggal selesai {{'global.messages.mandatory_text' | translate}}.
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -412,7 +412,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
-                    Tipe Konsumen harus diisi
+                    Tipe Konsumen {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -425,7 +425,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['verification'].hasError('required') && formNotification.controls['verification'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} harus diisi
+                  {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -438,7 +438,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formNotification.controls['employee'].hasError('required') && formNotification.controls['employee'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}harus diisi
+                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -451,7 +451,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">
-                  Status berlangganan harus diisi
+                  Status berlangganan {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -520,7 +520,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                      {{'global.area.national' | translate}} harus diisi
+                      {{'global.area.national' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -531,7 +531,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                      {{'global.area.zone' | translate}} harus diisi
+                      {{'global.area.zone' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -542,7 +542,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                      {{'global.area.regional' | translate}} harus diisi
+                      {{'global.area.regional' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -553,7 +553,7 @@
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                      {{'global.area.area' | translate}}harus diisi
+                      {{'global.area.area' | translate}}{{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -565,7 +565,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                      {{'global.area.salespoint' | translate}} harus diisi
+                      {{'global.area.salespoint' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -578,7 +578,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                      {{'global.area.district' | translate}} harus diisi
+                      {{'global.area.district' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -589,7 +589,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                      {{'global.area.territory' | translate}}harus diisi
+                      {{'global.area.territory' | translate}}{{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
