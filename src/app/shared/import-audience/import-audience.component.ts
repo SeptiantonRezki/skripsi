@@ -45,7 +45,7 @@ export class ImportAudienceComponent {
   async preview(event) {
     this.files = undefined;
     this.files = event;
-    
+
     if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
       this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
       return;
@@ -81,27 +81,30 @@ export class ImportAudienceComponent {
                 this.dialogService.brodcastCloseConfirmation();
               };
               const data = {
-                titleDialog: `Apakah anda ingin menghapus data yang tidak valid?`,
+                titleDialog: this.translate.instant('global.messages.delete_confirm', { entity: this.translate.instant('global.label.invalid_data'), index: '' }),
                 confirmCallback: () => filterData(),
                 rejectCallback: () => {
-                  this.dialogService.openSnackBar({ message: "Silahkan unggah ulang data" });
+                  this.dialogService.openSnackBar({
+                    message: this.translate.instant("global.messages.please_reupload", { entity: this.translate.instant('global.label.data') })
+                  });
                   this.dialogService.brodcastCloseConfirmation();
                 },
-                buttonText: ['Ya', 'Tidak']
+                buttonText: [this.translate.instant('global.label.yes'), this.translate.instant('global.label.no')]
               };
               this.dialogService.openCustomConfirmationDialog(data);
             };
           } else {
-            this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.reupload_invalid') });
             this.dataService.showLoading(false);
           }
         },
         err => {
           this.dataService.showLoading(false);
           this.files = undefined;
-  
           if (err.status === 404 || err.status === 500)
-            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+            this.dialogService.openSnackBar({
+              message: this.translate.instant('global.messages.text16')
+            })
         }
       )
     };
