@@ -1899,6 +1899,7 @@ export class BannerCreateComponent {
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {
+      type: this.formBannerGroup.get("group_type").value,
       audience: this.formBannerGroup.get("user_group").value,
       api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd),
       fileType: 'xls'
