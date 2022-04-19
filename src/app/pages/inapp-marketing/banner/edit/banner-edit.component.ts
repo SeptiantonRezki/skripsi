@@ -1914,7 +1914,11 @@ export class BannerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get('user_group').value, api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd) };
+    dialogConfig.data = {
+      audience: this.formBannerGroup.get('user_group').value,
+      api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd),
+      fileType: 'xls'
+    };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
