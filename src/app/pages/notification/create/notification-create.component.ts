@@ -2255,7 +2255,7 @@ export class NotificationCreateComponent {
     try {
       const response = await this.notificationService.exportPushNotifAudience({ selected: body, audience: this.formNotification.get("user_group").value, age: age }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PushNotification_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PushNotification_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
@@ -2312,7 +2312,11 @@ export class NotificationCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formNotification.get("user_group").value, api: fd => this.notificationService['importPushNotifAudience'](fd) };
+    dialogConfig.data = {
+      audience: this.formNotification.get("user_group").value,
+      api: fd => this.notificationService['importPushNotifAudience'](fd),
+      fileType: 'xlsx'
+    };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 

@@ -20,6 +20,7 @@ export class ImportAudienceComponent {
   invalidData: any;
   dialogData: any;
   counter: any = false;
+  fileType: any;
 
   typeTargeted: string;
 
@@ -38,6 +39,7 @@ export class ImportAudienceComponent {
   }
 
   ngOnInit() {
+    this.fileType = this.dialogData.fileType ? `.${this.dialogData.fileType}` : null;
   }
 
   async preview(event) {
@@ -47,8 +49,8 @@ export class ImportAudienceComponent {
     console.log('files info', this.files);
     console.log("DAT23", this.dialogData);
     
-    if (this.files.name.indexOf(".xlsx") == -1) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: 'XLSX' }) });
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
       return;
     }
 
