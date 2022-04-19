@@ -56,7 +56,7 @@ export class ImportAudienceComponent {
       this.dialogData.api(fd).subscribe(
         res => {
           if (res) {
-            const data = res.data.audiences || res.data.data;
+            const data = res.data.audiences || res.data.data || res.data;
             this.rows = data;
             this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
