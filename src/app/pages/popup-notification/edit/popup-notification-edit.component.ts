@@ -2128,7 +2128,7 @@ export class PopupNotificationEditComponent {
     dialogConfig.data = {
       audience: this.formPopupGroup.get("user_group").value,
       api: fd => this.notificationService['importAudience'](fd),
-      type: 'xlsx'
+      fileType: 'xlsx'
     };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);

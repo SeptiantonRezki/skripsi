@@ -1851,7 +1851,7 @@ export class BannerCreateComponent {
     dialogConfig.data = {
       audience: this.formBannerGroup.get("user_group").value,
       api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd),
-      type: 'xls'
+      fileType: 'xls'
     };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);

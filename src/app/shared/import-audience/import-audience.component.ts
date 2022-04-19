@@ -35,15 +35,15 @@ export class ImportAudienceComponent {
   }
 
   ngOnInit() {
-    this.fileType = this.dialogData.type ? `.${this.dialogData.type}` : null;
+    this.fileType = this.dialogData.fileType ? `.${this.dialogData.fileType}` : null;
   }
 
   async preview(event) {
     this.files = undefined;
     this.files = event;
 
-    if (this.dialogData.type && this.files.name.indexOf(`.${this.dialogData.type}`) == -1) {
-      this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.type.toUpperCase()}!` });
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.fileType.toUpperCase()}!` });
       return;
     }
 

@@ -2315,7 +2315,7 @@ export class NotificationCreateComponent {
     dialogConfig.data = {
       audience: this.formNotification.get("user_group").value,
       api: fd => this.notificationService['importPushNotifAudience'](fd),
-      type: 'xlsx'
+      fileType: 'xlsx'
     };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
