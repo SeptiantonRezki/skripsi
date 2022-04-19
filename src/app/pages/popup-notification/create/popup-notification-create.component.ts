@@ -2085,7 +2085,7 @@ export class PopupNotificationCreateComponent {
     try {
       const response = await this.notificationService.exportAudience({ selected: body, audience: this.formPopupGroup.get("user_group").value }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.exportAccessCashier = false;
@@ -2144,7 +2144,11 @@ export class PopupNotificationCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value, api: fd => this.notificationService['importAudience'](fd) };
+    dialogConfig.data = {
+      audience: this.formPopupGroup.get("user_group").value,
+      api: fd => this.notificationService['importAudience'](fd),
+      fileType: 'xlsx'
+    };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
