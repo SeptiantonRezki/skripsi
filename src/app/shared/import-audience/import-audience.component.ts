@@ -45,12 +45,12 @@ export class ImportAudienceComponent {
   async preview(event) {
     this.files = undefined;
     this.files = event;
-  
+    
     if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
-      this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.fileType.toUpperCase()}!` });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
       return;
     }
-  
+
     let fd = new FormData();
   
     fd.append('file', this.files);
