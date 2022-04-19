@@ -41,12 +41,11 @@ export class ImportAudienceComponent {
   async preview(event) {
     this.files = undefined;
     this.files = event;
-
-    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+    if (this.dialogData.fileType
+      && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
       this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.fileType.toUpperCase()}!` });
       return;
     }
-
     let fd = new FormData();
 
     fd.append('file', this.files);
