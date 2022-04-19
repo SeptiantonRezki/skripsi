@@ -40,9 +40,8 @@ export class ImportAudienceComponent {
     this.files = undefined;
     this.files = event;
 
-    console.log('files info', this.files);
-    if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    if (this.files.name.indexOf(".xlsx") == -1) {
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLSX!" });
       return;
     }
 
@@ -55,7 +54,7 @@ export class ImportAudienceComponent {
       this.dialogData.api(fd).subscribe(
         res => {
           if (res) {
-            const data = res.data.audiences || res.data;
+            const data = res.data.audiences || res.data.data;
             this.rows = data;
             this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
