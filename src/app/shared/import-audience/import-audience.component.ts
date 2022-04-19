@@ -45,15 +45,14 @@ export class ImportAudienceComponent {
   async preview(event) {
     this.files = undefined;
     this.files = event;
-
-    console.log('files info', this.files);
-    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) > -1) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
+  
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.fileType.toUpperCase()}!` });
       return;
     }
-
+  
     let fd = new FormData();
-
+  
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     this.dataService.showLoading(true);
@@ -82,20 +81,18 @@ export class ImportAudienceComponent {
                 this.dialogService.brodcastCloseConfirmation();
               };
               const data = {
-                titleDialog: this.translate.instant('global.messages.delete_confirm', { entity: this.translate.instant('global.label.invalid_data'), index: '' }),
+                titleDialog: `Apakah anda ingin menghapus data yang tidak valid?`,
                 confirmCallback: () => filterData(),
                 rejectCallback: () => {
-                  this.dialogService.openSnackBar({
-                    message: this.translate.instant("global.messages.please_reupload", { entity: this.translate.instant('global.label.data') })
-                  });
+                  this.dialogService.openSnackBar({ message: "Silahkan unggah ulang data" });
                   this.dialogService.brodcastCloseConfirmation();
                 },
-                buttonText: [this.translate.instant('global.label.yes'), this.translate.instant('global.label.no')]
+                buttonText: ['Ya', 'Tidak']
               };
               this.dialogService.openCustomConfirmationDialog(data);
             };
           } else {
-            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.reupload_invalid') });
+            this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
             this.dataService.showLoading(false);
           }
         },
@@ -104,9 +101,7 @@ export class ImportAudienceComponent {
           this.files = undefined;
   
           if (err.status === 404 || err.status === 500)
-            this.dialogService.openSnackBar({
-              message: this.translate.instant('global.messages.text16')
-            })
+            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
         }
       )
     };
