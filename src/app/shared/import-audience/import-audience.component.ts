@@ -18,6 +18,7 @@ export class ImportAudienceComponent {
   invalidData: any;
   dialogData: any;
   counter: any = false;
+  fileType: any;
 
   typeTargeted: string;
 
@@ -34,14 +35,15 @@ export class ImportAudienceComponent {
   }
 
   ngOnInit() {
+    this.fileType = this.dialogData.type ? `.${this.dialogData.type}` : null;
   }
 
   async preview(event) {
     this.files = undefined;
     this.files = event;
 
-    if (this.files.name.indexOf(".xlsx") == -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLSX!" });
+    if (this.dialogData.type && this.files.name.indexOf(`.${this.dialogData.type}`) == -1) {
+      this.dialogService.openSnackBar({ message: `Ekstensi File wajib ${this.dialogData.type.toUpperCase()}!` });
       return;
     }
 
