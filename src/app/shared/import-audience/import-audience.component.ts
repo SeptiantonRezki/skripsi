@@ -55,7 +55,6 @@ export class ImportAudienceComponent {
     }
 
     let fd = new FormData();
-
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     fd.append('type', this.dialogData.type);
@@ -105,7 +104,6 @@ export class ImportAudienceComponent {
         err => {
           this.dataService.showLoading(false);
           this.files = undefined;
-  
           if (err.status === 404 || err.status === 500)
             this.dialogService.openSnackBar({
               message: this.translate.instant('global.messages.text16')
