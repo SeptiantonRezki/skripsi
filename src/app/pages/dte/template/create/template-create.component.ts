@@ -112,6 +112,7 @@ export class TemplateCreateComponent {
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
   isBackgroundMisi: FormControl = new FormControl(false);
+  isGuideline: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -301,6 +302,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
+      image_mechanism: [],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -1235,7 +1237,6 @@ export class TemplateCreateComponent {
     } else {
       this.isDetailBanner = false;
     }
-    console.log('ini is', this.isDetailBanner);
   }
   
   async submit() {
@@ -1262,6 +1263,7 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
+        image_mechanism: this.templateTaskForm.get('image_mechanism').value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1594,6 +1596,35 @@ export class TemplateCreateComponent {
         color: ''
       }
       this.uploadImageBgMisi(update);
+    }
+  }
+
+  getImageData(file: any) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(file);
+    })
+  }
+
+  uploadImageGuideline(value: any){
+    let images = [];
+    value.forEach(async (item: any) => {
+      images.push(this.getImageData(item))
+    });
+
+    Promise.all(images)
+      .then((data) => data.map(item => ({file: item})))
+      .then((data) => {
+        this.templateTaskForm.get('image_mechanism').setValue(data);
+      })
+  }
+
+  onChangeGuideline(){
+    if (!this.isGuideline.value) {
+      this.uploadImageGuideline([]);
     }
   }
 

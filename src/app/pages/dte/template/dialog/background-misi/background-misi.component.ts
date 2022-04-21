@@ -18,6 +18,10 @@ export class BackgroundMisiComponent implements OnInit {
   @Input() bgMisi: any;
   @Input() isDetail: any;
 
+  @Input() isMultiple: any;
+  selectedFiles: any;
+  @Input() currentFiles: any = [];
+  
   constructor(
     private dialogService: DialogService,
   ) {}
@@ -29,7 +33,7 @@ export class BackgroundMisiComponent implements OnInit {
     if (!this.colorFont) {
       this.colorFont = "#ffffff"
     }
-    if (this.judulMisi.length > 120){
+    if (this.judulMisi && this.judulMisi.length > 120){
       this.judulMisi = this.judulMisi.slice(0, 120) + "...";
     }
 
@@ -39,7 +43,7 @@ export class BackgroundMisiComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    if (changes.judulMisi.currentValue.length > 120){
+    if (changes.judulMisi && changes.judulMisi.currentValue.length > 120){
       this.judulMisi = this.judulMisi.slice(0, 120) + "...";
     }
   }
@@ -52,7 +56,7 @@ export class BackgroundMisiComponent implements OnInit {
     this.upload.emit({image: '', color: ''});
   }
 
-  submit() {    
+  submit() {
     if (this.files && this.files.size <= 2000000 && this.fileType == 'image') {
       this.isSize = true;
       let reader = new FileReader();
@@ -77,7 +81,8 @@ export class BackgroundMisiComponent implements OnInit {
   }
 
   onSelectFile(value: any) {
-    // console.log('value => ', value);
+    console.log('value => ', value);
+    console.log('files => ', this.files);
     const file = value;
 
     if (file) {
@@ -86,5 +91,59 @@ export class BackgroundMisiComponent implements OnInit {
         this.submit();
       }
     }
+  }
+
+  onSelectFileMultiple() {
+    let isOverSize = false;
+    let newFile = [];
+
+    if (this.currentFiles.length === Number(this.isMultiple)) {
+      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+      this.selectedFiles = [];
+      return;
+    }
+
+    this.selectedFiles.forEach(item => {
+      if (item.size > 2000000) {
+        isOverSize = true;
+      } else {
+        newFile.push(item);
+      }
+    });
+    if (isOverSize) this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2MB'});
+
+    const restImage = Number(this.isMultiple) - this.currentFiles.length;
+    if (restImage < newFile.length) {
+      newFile = newFile.slice(0, restImage);
+      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+    }
+
+    this.currentFiles = [...this.currentFiles, ...newFile];
+    this.submitMultiple();
+  }
+
+  submitMultiple(){
+    this.selectedFiles = [];
+    
+    const newFile = [...this.currentFiles];
+    newFile.forEach((file) => {
+      if (file instanceof File){
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          file['image_url'] = reader.result;
+        };
+      }
+    });
+
+    this.currentFiles = [...newFile];
+    this.upload.emit(this.currentFiles);
+  }
+
+  removeImageGuideline(index){
+    const newFile = [...this.currentFiles];
+    newFile.splice(index, 1);
+    this.currentFiles = [...newFile];
+    this.upload.emit(this.currentFiles);
   }
 }
