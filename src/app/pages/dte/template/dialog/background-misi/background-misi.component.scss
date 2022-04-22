@@ -21,3 +21,28 @@ input[type="color"]{
   width: 50%;
   cursor: pointer;
 }
+
+#bg-misi, #guideline__drop{
+  max-width: 640px;
+}
+
+.guideline__wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.guideline__container{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.guidelineBanner {
+  height: 210px;
+  width: 410px;
+  border-radius: 6px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 1px solid gray;
+}
