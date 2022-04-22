@@ -772,26 +772,47 @@
                 </div>
               </div>
             </div>
-            <!-- <pre>{{dataTemplateTask | json}}</pre> -->
           </div>
         </div>
 
         <div class="background-misi" fxLayout="column">
-          <mat-checkbox id="background-misi"
-            [formControl]="isBackgroundMisi"
-            (change)="onChangeBgMisi()"
-            [disabled]="isDetail"
-          >
-            {{'dte.template_tugas.text37' | translate}}
-          </mat-checkbox>
-          <app-background-misi
-            (upload)="uploadImageBgMisi($event)"
-            [isDetail]="isDetail"
-            [judulMisi]="templateTaskForm.value.name"
-            [bgMisi]="templateTaskForm.value.background_image"
-            [colorFont]="templateTaskForm.value.background_font_color"
-            *ngIf="isBackgroundMisi.value"
-          ></app-background-misi>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-checkbox
+              id="background-misi"
+              [formControl]="isBackgroundMisi"
+              (change)="onChangeBgMisi()"
+              [disabled]="isDetail"
+            >
+              {{'dte.template_tugas.text37' | translate}}
+            </mat-checkbox>
+            <mat-checkbox
+              id="guideline"
+              [formControl]="isGuideline"
+              (change)="onChangeGuideline()"
+              [disabled]="isDetail"
+            >
+              Upload Guideline Mekanisme Program
+            </mat-checkbox>
+          </div>
+          <div *ngIf="isBackgroundMisi.value" class="mt-16">
+            <div class="mb-8">Background Misi</div>
+            <app-background-misi
+              (upload)="uploadImageBgMisi($event)"
+              [isDetail]="isDetail"
+              [judulMisi]="templateTaskForm.value.name"
+              [bgMisi]="templateTaskForm.value.background_image"
+              [colorFont]="templateTaskForm.value.background_font_color"
+            ></app-background-misi>
+          </div>
+          <div *ngIf="isGuideline.value" class="mt-16">
+            <div class="mb-8">Guideline Mekanisme Program</div>
+            <app-background-misi
+              (upload)="uploadImageGuideline($event)"
+              isMultiple="5"
+              [isDetail]="isDetail"
+              [currentFiles]="templateTaskForm.value.image_mechanism"
+            ></app-background-misi>
+          </div>
         </div>
       </form>
 
