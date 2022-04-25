@@ -171,9 +171,7 @@
         <div *ngIf="!isDetail">
           <mat-icon style="cursor: pointer;" (click)="removeImageGuideline(index)">cancel_outline</mat-icon>
         </div>
-        <div id="preview-bg-misi" class="preview-bg-misi">
-          <div class="guidelineBanner" [ngStyle]="{'background-image': 'url(' + item.image_url + ')'}"></div>
-        </div>
+        <img [src]="item.image_url" class="guidelineBanner" alt="guideline">
       </div>
     </div>
 
