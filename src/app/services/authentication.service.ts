@@ -106,4 +106,14 @@ export class AuthenticationService extends BaseService {
     const url = this.getUrl(this.namespace, "encrypted_token");
     return this.getApi(url);
   }
+
+  getDynamicPricingEncryptedToken(): Observable<any> {
+    const url = this.getUrl(this.namespace, "dynamic_pricing_encrypted_token");
+    return this.getApi(url);
+  }
+
+  getDynamicPricingDecryptedToken(body, creds): Observable<any> {
+    const url = this.getUrl(this.namespace, "dynamic_pricing_decrypted_token");
+    return this.getWithBasicAuthApi(url, body, creds);
+  }
 }

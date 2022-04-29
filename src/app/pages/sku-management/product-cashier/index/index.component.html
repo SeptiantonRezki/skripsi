@@ -41,7 +41,6 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0">
       <nav mat-tab-nav-bar>
-        <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
         <a
           *ngIf="permission.pengajuan_produk"
           mat-tab-link
@@ -49,6 +48,7 @@
           class="tab-link"
           >Produk Diajukan</a
         >
+        <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
         <div class="search-field">
           <input
             matInput

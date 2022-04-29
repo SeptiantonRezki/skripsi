@@ -81,6 +81,15 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
         this.filteringMissionOther();
       });
 
+    this.form.get('coin_verification').valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe((value) => {
+        if (value > 0) {
+          !this.form.get('verifikasiFF').value ? this.form.get('verifikasi').patchValue(true) : null;
+        }
+      });
+
     if (this.data !== null) {
       this.form.patchValue({
         task_template_id: this.data.data.attribute.task_template_id,

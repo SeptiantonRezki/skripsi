@@ -1211,7 +1211,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     } else {
       body['panels'] = this.selected.map(bsn => ({
         business_id: bsn.id,
-        nominal: bsn.nominal,
+        nominal: bsn.nominal_format_number,
         amount: bsn.amount
       }));
     }

@@ -71,11 +71,13 @@ export class SalestreeComponent implements OnInit {
       if (Array.isArray(item)) {
         this.setLimitArea(item);
       } else {
-        const itemIndex = this.geoLevel.indexOf(item.level_desc);
-        if (!this.limitArea.hasOwnProperty(item.level_desc))
-          this.limitArea[item.level_desc] = [];
+        let levelDesc = item.level_desc;
+        if (levelDesc === "teritory") levelDesc = "territory";
+        const itemIndex = this.geoLevel.indexOf(levelDesc);
+        if (!this.limitArea.hasOwnProperty(levelDesc))
+          this.limitArea[levelDesc] = [];
         if (this.limitAreaIndex < itemIndex) this.limitAreaIndex = itemIndex;
-        this.limitArea[item.level_desc].push(item.id);
+        this.limitArea[levelDesc].push(item.id);
       }
     });
   }

@@ -41,6 +41,11 @@ export class TemplateCreateComponent {
     { value: 'ir-for-not-comply', name: this.translate.instant('dte.template_tugas.ir_not_comply') },
     { value: 'ir-for-checking-only', name: this.translate.instant('dte.template_tugas.ir_checking_only') },
   ];
+  listBlockerSubmission: any[] = [
+    { value: 'soft', name: 'Soft' },
+    { value: 'med', name: 'Medium' },
+    { value: 'hard', name: 'Hard' },
+  ];
   isIRTypeError: boolean = false;
   // listKategoriToolbox: any[] = [{ value: '1', name: 'Toolbox 1' }, { value: '2', name: 'Toolbox 2' }];
   // listTipeMisi: any[] = [{ value: '1', name: 'Tipe Misi 1' }, { value: '2', name: 'Tipe Misi 2' }];
@@ -683,6 +688,8 @@ export class TemplateCreateComponent {
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         image_detail: false,
         encryption: false,
+        image_quality_detection: false,
+        blocker_submission: ["", Validators.required],
         // required: item.required,
         question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
           return this.formBuilder.group({
@@ -794,6 +801,17 @@ export class TemplateCreateComponent {
     }
   }
 
+  handleChangeImageDetection(index): void {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (questions.at(index).get("image_quality_detection").value) {
+      questions.at(index).get("blocker_submission").enable();
+    } else {
+      questions.at(index).get("blocker_submission").setValue("");
+      questions.at(index).get("blocker_submission").disable();
+    }
+  }
+
   selectedImageIR(selectedIR, template) {
     console.log('selectedIR IR', selectedIR, template);
     let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
@@ -887,6 +905,8 @@ export class TemplateCreateComponent {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+    questions.at(idx).get('image_quality_detection').setValue(false);
+    this.handleChangeImageDetection(idx)
   }
 
   checkWordingRadioFreeType(item) {
@@ -935,6 +955,8 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
     });
   }
 
@@ -1044,6 +1066,8 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
       // others: false,
       // required: false
     }));
@@ -1058,7 +1082,8 @@ export class TemplateCreateComponent {
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
     this.templateList.push([]);
     this.templateListImageIR.push({ item_id: newId.id + 1 });
-    // this.listAnswerKeys.push([{ indexKey: 0, valid: false }]);
+
+    this.handleChangeImageDetection(newId.id);
   }
 
   addRejectedReason() {
@@ -1298,6 +1323,8 @@ export class TemplateCreateComponent {
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
+            blocker_submission: item.blocker_submission || "",
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
@@ -1502,14 +1529,24 @@ export class TemplateCreateComponent {
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
+      const questions = this.templateTaskForm.get('questions') as FormArray;
+      
       if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
         return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
       if (this.templateTaskForm.get('image').invalid)
         return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
-
-      if (this.templateTaskForm.get('questions').invalid)
-        return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+      if (this.templateTaskForm.get('questions').invalid) {
+        if (questions.value.length) {
+          for (const item of questions.value) {
+            if (item.image_quality_detection && !item.blocker_submission) {
+              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+            }
+          }
+        } else {
+          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+        }
+      }
       else
         return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }

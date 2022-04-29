@@ -87,10 +87,11 @@ export class ImportNotesDialogComponent {
           // this.recursiveImport(res);
           this.pagination['per_page'] = 250;
           this.audienceService.showImport(this.pagination).subscribe(response => {
+            const parseData = response.data.data.map((item: any) => ({ ...item, id: item.id || `${item.code}_${this.currPage}` }));
             this.currPage += 1;
             this.lastPage = response.data.last_page;
-            this.totalData = this.totalData + response.data.data.length;
-            this.idbService.bulkUpdate(response.data.data).then(res => {
+            this.totalData = this.totalData + parseData.length;
+            this.idbService.bulkUpdate(parseData).then(res => {
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
@@ -127,10 +128,11 @@ export class ImportNotesDialogComponent {
     if (this.currPage <= this.lastPage) {
       this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
         if (response && response.data) {
-          this.idbService.bulkUpdate(response.data.data).then(res => {
+          const parseData = response.data.data.map((item: any) => ({ ...item, id: item.id || `${item.code}_${this.currPage}` }));
+          this.idbService.bulkUpdate(parseData).then(res => {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
-            this.totalData = this.totalData + response.data.data.length;
+            this.totalData = this.totalData + parseData.length;
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({

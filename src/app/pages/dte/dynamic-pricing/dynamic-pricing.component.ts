@@ -4,7 +4,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
 import { AuthenticationService } from 'app/services/authentication.service';
-import { DataService } from 'app/services/data.service';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -28,7 +27,7 @@ export class DynamicPricingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getEncryptedToken().subscribe(res => {
+    this.authService.getDynamicPricingEncryptedToken().subscribe(res => {
       const baseurl = environment.STREAMLIT;
 
       const encodedToken = encodeURI(res.data);

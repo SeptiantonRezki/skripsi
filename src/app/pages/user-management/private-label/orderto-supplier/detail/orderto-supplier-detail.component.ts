@@ -185,7 +185,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           else this.orderStatuses = [];
           this.statusLogs = res.order_status_logs;
           this.statusForm = this.formBuilder.group({
-            newStatus: ""
+            newStatus: "",
+            reject_reason: ""
           });
 
           this.productsForm = this.formBuilder.group({

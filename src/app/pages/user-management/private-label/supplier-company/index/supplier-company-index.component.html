@@ -17,9 +17,9 @@
         </div>
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-        [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+                     [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+                     [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+                     [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column name="{{ ls.locale.produk_prinsipal.text4 }}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -41,13 +41,13 @@
             <span [class]="row.status == 'active'? 'dropdown-active' : 'dropdown-inactive'" *ngIf="!permission?.ubah">{{row.status}}
             </span>
             <!-- <span> -->
-              <mat-form-field class="orders dropdown" [class]="row.status == 'active'? 'orders status-active' : row.status == 'inactive'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center" *ngIf="permission?.ubah">
-                <mat-select [(ngModel)]="row.status" (selectionChange)="selectionStatus($event, row, $index)">
-                  <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option>
-                  <!-- <mat-option [value]="active" selected>Aktif</mat-option>
-                  <mat-option [value]="inactive">Non-Aktif</mat-option> -->
-                </mat-select>
-              </mat-form-field>
+            <mat-form-field class="orders dropdown" [class]="row.status == 'active'? 'orders status-active' : row.status == 'inactive'? 'orders status-nonactive': 'orders status-active'" fxLayout="row" fxLayoutAlign="center center" *ngIf="permission?.ubah">
+              <mat-select [(ngModel)]="row.status" (selectionChange)="selectionStatus($event, row, $index)">
+                <mat-option [value]="item.status" *ngFor="let item of supplierStatusList">{{item.name}}</mat-option>
+                <!-- <mat-option [value]="active" selected>Aktif</mat-option>
+                <mat-option [value]="inactive">Non-Aktif</mat-option> -->
+              </mat-select>
+            </mat-form-field>
             <!-- </span> -->
           </ng-template>
         </ngx-datatable-column>

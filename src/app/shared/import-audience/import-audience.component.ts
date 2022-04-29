@@ -20,6 +20,7 @@ export class ImportAudienceComponent {
   invalidData: any;
   dialogData: any;
   counter: any = false;
+  fileType: any;
 
   typeTargeted: string;
 
@@ -38,28 +39,29 @@ export class ImportAudienceComponent {
   }
 
   ngOnInit() {
+    this.fileType = this.dialogData.fileType ? `.${this.dialogData.fileType}` : null;
   }
 
   async preview(event) {
     this.files = undefined;
     this.files = event;
 
-    console.log('files info', this.files);
-    if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: 'XLS' }) });
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
       return;
     }
 
     let fd = new FormData();
-
+  
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
+    fd.append('type', this.dialogData.type);
     this.dataService.showLoading(true);
     if(this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
         res => {
           if (res) {
-            const data = res.data.audiences || res.data;
+            const data = res.data.audiences || res.data.data || res.data;
             this.rows = data;
             this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
@@ -100,7 +102,6 @@ export class ImportAudienceComponent {
         err => {
           this.dataService.showLoading(false);
           this.files = undefined;
-  
           if (err.status === 404 || err.status === 500)
             this.dialogService.openSnackBar({
               message: this.translate.instant('global.messages.text16')

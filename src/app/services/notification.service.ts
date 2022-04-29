@@ -138,10 +138,10 @@ export class NotificationService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
-  // importPushNotifAudience(body?): Observable<any> {
-  //   const url = this.getUrl(this.namespace, "import_pn_audience");
-  //   return this.postApi(url, body);
-  // }
+  importPushNotifAudience(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_pn_audience");
+    return this.postApi(url, body);
+  }
 
   previewImport(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "preview_import");

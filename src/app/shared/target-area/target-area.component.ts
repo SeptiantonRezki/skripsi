@@ -52,6 +52,7 @@ export class TargetAreaComponent implements OnInit {
   rows: any[] = [];
   selected: any[] = [];
   isSelectedAll: boolean = false;
+  defaultSelectedAll: boolean = false;
 
   dialogRef: any;
 
@@ -103,7 +104,12 @@ export class TargetAreaComponent implements OnInit {
 
     const areas = data.areas.currentValue;
     if (areas.length) {
-      this.onSelect({ selected: areas });
+      const areasId = areas.map(({id}) => id);
+      if (areasId.length == 1 && areasId[0] == 1) {
+        this.defaultSelectedAll = true;
+      } else {
+        this.onSelect({ selected: areas });
+      };
     }
   }
 
@@ -143,8 +149,9 @@ export class TargetAreaComponent implements OnInit {
         this.rows = res.data ? res.data : [];
         Page.renderPagination(this.pagination, res);
 
-        if (this.isSelectedAll) {
+        if (this.isSelectedAll || this.defaultSelectedAll) {
           this.onSelect({ selected: res.data });
+          this.defaultSelectedAll = false;
         }
       });
   }

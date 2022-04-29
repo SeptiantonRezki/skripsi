@@ -64,11 +64,38 @@
                   {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
+              <div fxFlex="10"></div>
+              <div fxLayout="row" fxFlex="25" *ngIf="formNotification.controls['user_group'].value !== 'tsm'">
+                <mat-form-field fxFlex="50" class="is-light form-primary">
+                  <input matInput [matDatepicker]="tanggal_terbit" (focus)="tanggal_terbit.open()"
+                    formControlName="date" placeholder="Tanggal Terbit">
+                  <mat-error
+                    *ngIf="formNotification.controls['date'].hasError('required') && formNotification.controls['date'].touched">
+                    Tanggal Terbit harus diisi
+                  </mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="tanggal_terbit">
+                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #tanggal_terbit></mat-datepicker>
+                </mat-form-field>
+                <div fxFlex="10"></div>
+                <mat-form-field fxFlex="30" class="is-light form-primary" id="time">
+                  <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="fullTime"
+                    [format]="24" readonly>
+                  <mat-icon matSuffix>access_time</mat-icon>
+                  <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+                  <mat-error
+                    *ngIf="formNotification.controls['time'].hasError('required') && formNotification.controls['time'].touched">
+                    Waktu harus diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
           </div>
 
           <!-- Static Page & E-Wallet -->
-          <div class="pb-24" *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
+          <div class="pb-24"
+            *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="static_page_title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
@@ -107,7 +134,8 @@
             <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
             </div>
-            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4" fxFlex="100"></textarea>
+            <textarea [froalaEditor]="optionsStaticPage" formControlName="static_page_body" class="pb-4"
+              fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
               {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
@@ -130,7 +158,8 @@
           </div>
 
           <!-- iframe & link_web -->
-          <div class="" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
+          <div class=""
+            *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <input matInput type="url" formControlName="url_link" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
@@ -238,7 +267,8 @@
 
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence" (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" [(ngModel)]="typeOfRecurrence">
+              <mat-select placeholder="Tipe Pengulangan" formControlName="type_of_recurrence"
+                (selectionChange)="checkOnetimeFrequency(typeOfRecurrence)" [(ngModel)]="typeOfRecurrence">
                 <mat-option *ngFor="let item of listTypeOfRecurrence" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -418,7 +448,7 @@
               </div>
             </div>
 
-            <div class="" *ngIf="formNotification.get('is_smoking').value !== 'yes'" fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="verification" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
@@ -483,7 +513,8 @@
           </div>
         </div>
 
-        <div class="pb-16 px-24" *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
+        <div class="pb-16 px-24"
+          *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
           <div class="" fxLayout="row" fxLayoutAlign="start center">
             <strong class="font-size-16">{{'notification.popup_notifikasi.text18' | translate}}</strong>
           </div>
@@ -505,7 +536,8 @@
               formControlName="is_target_area">
               {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
           </div>
-          <div *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
+          <div
+            *ngIf="formNotification.get('is_target_audience').value === false && formNotification.get('is_target_area').value === false">
             <div class="" formArrayName="areas"
               *ngFor="let wil of formNotification.get('areas')['controls']; let i = index;">
               <div [formGroupName]="i">
@@ -723,10 +755,10 @@
               fxLayoutAlign="end center" class="p-16 export">
               <a #downloadLink></a>
               <button mat-raised-button type="button" class="is-danger" (click)="import()">
-                <mat-icon>arrow_downward</mat-icon> Import XLS
+                <mat-icon>arrow_downward</mat-icon> Import XLSX
               </button>
               <button mat-raised-button type="button" class="is-danger" (click)="export()">
-                <mat-icon>arrow_upward</mat-icon> Export XLS
+                <mat-icon>arrow_upward</mat-icon> Export XLSX
               </button>
             </div>
             <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
@@ -736,7 +768,7 @@
               [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
               [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
               [selectCheck]='selectCheck'>
-              
+
               <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
                 <ng-template ngx-datatable-header-template>
                   <mat-checkbox [checked]="allRowsSelected" (change)="onSelectAll(!allRowsSelected);"></mat-checkbox>
@@ -767,12 +799,8 @@
           </div>
           <target-area
             *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
-            (selectedArea)="getSelectedArea($event)"
-            (selectedAll)="getSelectedAll($event)"
-            (selectedAllId)="getSelectedAllId($event)"
-            [areas]="areasInit"
-            [isNotifValidation]="true"
-          ></target-area>
+            (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)"
+            (selectedAllId)="getSelectedAllId($event)" [areas]="areasInit" [isNotifValidation]="true"></target-area>
 
         </div>
 
@@ -790,7 +818,8 @@
             {{ls.locale.global.button.save}}
           </button>
         </div>
-        <span class="noEditOptions" *ngIf="!isHideSaveButton">Notifikasi satu kali tidak dapat diedit, karena telah dikirim langsung saat dibuat.</span>
+        <span class="noEditOptions" *ngIf="!isHideSaveButton">Notifikasi satu kali tidak dapat diedit, karena telah
+          dikirim langsung saat dibuat.</span>
       </form>
     </div>
   </div>

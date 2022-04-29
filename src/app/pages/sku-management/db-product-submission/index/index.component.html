@@ -19,7 +19,7 @@
   <div class="content p-24">
     <div class="table-wrapper">
       <div
-        *ngIf="onLoad"
+        *ngIf="onLoadInitial"
         fxLayout="row"
         fxLayoutAlign="center center"
         class="py-48"
@@ -30,122 +30,169 @@
           color="accent"
         ></mat-spinner>
       </div>
-      <div *ngIf="!onLoad">
-        <ngx-datatable
-          class="material"
-          [rows]="rows"
-          [loadingIndicator]="loadingIndicator"
-          [columnMode]="'force'"
-          [offset]="offsetPagination"
-          [headerHeight]="48"
-          [footerHeight]="56"
-          [rowHeight]="'auto'"
-          [scrollbarH]="true"
-          [reorderable]="reorderable"
-          [count]="pagination.total"
-          [limit]="pagination.per_page"
-          [externalPaging]="true"
-          [externalSorting]="true"
-          (page)="setPage($event)"
-          (sort)="onSort($event)"
-          (select)="onSelect($event)"
+      <div *ngIf="!onLoadInitial">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between center" class="p-20">
+          <h2 style="margin: unset">Daftar Produk</h2>
+        </div>
+        <div [formGroup]="formFilter" class="px-20" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="15px grid" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="is-light" fxFlex="15">
+            <mat-select placeholder="Perusahaan" formControlName="brand" multiple>
+              <mat-option *ngFor="let item of listBrands" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="is-light" fxFlex="15">
+            <mat-select placeholder="Kategori" formControlName="category" multiple>
+              <mat-option *ngFor="let item of listCategories" [value]="item.id">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="is-light" fxFlex="15">
+            <mat-select placeholder="Status" formControlName="status" multiple>
+              <mat-option *ngFor="let item of listStatus" [value]="item.value">{{ item.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="is-light" fxFlex="15">
+            <input matInput [matDatepicker]="dari_tanggal" (focus)="dari_tanggal.open()" formControlName="start_date"
+              placeholder="Dari Tanggal">
+            <mat-datepicker-toggle matSuffix [for]="dari_tanggal">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #dari_tanggal></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="is-light" fxFlex="15">
+            <input matInput [matDatepicker]="hingga_tanggal" (focus)="hingga_tanggal.open()" formControlName="end_date"
+              placeholder="Hingga Tanggal">
+            <mat-datepicker-toggle matSuffix [for]="hingga_tanggal">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #hingga_tanggal></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="is-light" fxFlex="15">
+            <input
+              matInput
+              placeholder="Cari"
+              autocomplete="off"
+              formControlName="search"
+            />
+            <mat-icon style="font-size: 20px; position: absolute; margin-left: -24px;" [ngStyle]="{'opacity': this.formFilter.controls.search.value ? 0 : 1}">search</mat-icon>
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="center center" fxFlex="10">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="applyFilter()" style="width: 100%;">
+              Apply
+            </button>
+          </div>
+        </div>
+        <div
+          *ngIf="!initTable"
+          class="p-20 h3 text-center"
         >
-          <ngx-datatable-column name="Nama Produk" prop="name">
-            <ng-template
-              ngx-datatable-cell-template
-              let-row="row"
-              let-value="value"
-            >
-              <span>{{ row.name }}</span>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Barcode" prop="barcode">
-            <ng-template ngx-datatable-cell-template let-value="value">
-              {{ value || "-" }}</ng-template
-            >
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Perusahaan" prop="brand">
-            <ng-template ngx-datatable-cell-template let-value="value">
-              {{ value || "-" }}</ng-template
-            >
-          </ngx-datatable-column>
-          <ngx-datatable-column
-            [width]="88"
-            name="Kategori"
-            prop="category"
-          ></ngx-datatable-column>
-          <ngx-datatable-column name="Status" prop="status" [sortable]="false">
-            <ng-template let-column="column" ngx-datatable-header-template>
-              <div
-                class="datatable-header-cell-label draggable"
-                style="
-                  display: inline-block;
-                  height: 48px;
-                  line-height: 48px;
-                  width: 150px;
-                  cursor: pointer;
-                "
-                [matMenuTriggerFor]="statusMenu"
-              >
-                {{ column.name
-                }}{{
-                  approvalStatusActive && approvalStatusActive !== "Semua"
-                    ? " - " + approvalStatusActive
-                    : ""
-                }}
-              </div>
-              <mat-menu #statusMenu="matMenu" yPosition="below">
-                <button
-                  mat-menu-item
-                  *ngFor="let item of approvalStatus"
-                  (click)="approvalStatusChange(item)"
-                >
-                  {{ item.name }}
-                </button>
-              </mat-menu>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column
-            [width]="100"
-            name="Tindakan"
-            headerClass="textright"
-            [sortable]="false"
+          Silahkan isi filter terlebih dahulu!
+        </div>
+        <div
+          *ngIf="onLoad && initTable"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          class="py-48"
+        >
+          <mat-spinner
+            [strokeWidth]="6"
+            [diameter]="50"
+            color="accent"
+          ></mat-spinner>
+        </div>
+        <div *ngIf="!onLoad && initTable">
+          <ngx-datatable
+            class="material"
+            [rows]="rows"
+            [loadingIndicator]="loadingIndicator"
+            [columnMode]="'force'"
+            [offset]="offsetPagination"
+            [headerHeight]="48"
+            [footerHeight]="56"
+            [rowHeight]="'auto'"
+            [scrollbarH]="true"
+            [reorderable]="reorderable"
+            [count]="pagination.total"
+            [limit]="pagination.per_page"
+            [externalPaging]="true"
+            [externalSorting]="true"
+            (page)="setPage($event)"
+            (sort)="onSort($event)"
+            (select)="onSelect($event)"
           >
-            <ng-template
-              ngx-datatable-cell-template
-              let-row="row"
-              let-value="value"
+            <ngx-datatable-column name="Nama Produk" prop="name">
+              <ng-template
+                ngx-datatable-cell-template
+                let-row="row"
+                let-value="value"
+              >
+                <span>{{ row.name }}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Barcode" prop="barcode">
+              <ng-template ngx-datatable-cell-template let-value="value">
+                {{ value || "-" }}</ng-template
+              >
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Perusahaan" prop="brand.name">
+              <ng-template ngx-datatable-cell-template let-value="value">
+                {{ value || "-" }}</ng-template
+              >
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              [width]="88"
+              name="Kategori"
+              prop="category.name"
+            ></ngx-datatable-column>
+            <ngx-datatable-column
+              [width]="90"
+              name="Tanggal Dibuat"
+              prop="created_at"
+              [sortable]="false"
+            ></ngx-datatable-column>
+            <ngx-datatable-column name="Status" prop="approver" [sortable]="false">
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              [width]="100"
+              name="Tindakan"
+              headerClass="textright"
+              [sortable]="false"
             >
-              <div class="button-row" style="white-space: nowrap">
-                <button
-                  mat-icon-button
-                  color=""
-                  matTooltip="Ubah Produk"
-                  class="mat-custom-icon"
-                  [routerLink]="[
-                    '/sku-management',
-                    'db-product-submission',
-                    'detail',
-                    row.id
-                  ]"
-                  [disabled]="row.status !== approverType"
-                >
-                  <mat-icon class="secondary-text">edit</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  color="primary"
-                  matTooltip="Hapus Produk"
-                  class="mat-custom-icon"
-                  (click)="disapproveProduct(row)"
-                  [disabled]="row.status !== approverType"
-                >
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
-        </ngx-datatable>
+              <ng-template
+                ngx-datatable-cell-template
+                let-row="row"
+                let-value="value"
+              >
+                <div class="button-row" style="white-space: nowrap">
+                  <button
+                    mat-icon-button
+                    color=""
+                    matTooltip="Ubah Produk"
+                    class="mat-custom-icon"
+                    [routerLink]="[
+                      '/sku-management',
+                      'db-product-submission',
+                      'detail',
+                      row.id
+                    ]"
+                    [disabled]="!row.actions.edit"
+                  >
+                    <mat-icon class="secondary-text">edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    matTooltip="Hapus Produk"
+                    class="mat-custom-icon"
+                    (click)="disapproveProduct(row)"
+                    [disabled]="!row.actions.delete"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
       </div>
     </div>
   </div>

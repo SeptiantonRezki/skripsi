@@ -25,6 +25,7 @@ export class SupplierCompanyEditComponent implements OnInit {
   @ViewChild('alamat') alamat: ElementRef;
   @ViewChild('telepon') telepon: ElementRef;
   @ViewChild('ponsel') ponsel: ElementRef;
+  @ViewChild('initial') initial: ElementRef;
   productControl= new FormControl();
   catatanControl = new FormControl();
 
@@ -33,7 +34,13 @@ export class SupplierCompanyEditComponent implements OnInit {
     { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
+  pilihAPIList: any[] = [
+    { name: 'Ya', status: 1 },
+    { name: 'Tidak', status: 0 }
+  ];
+
   supplierStatusSelected: any;
+  isOpenAPISelected: any;
   products: any[];
   productVisible: boolean = true;
   productSelectable: boolean = true;
@@ -48,6 +55,7 @@ export class SupplierCompanyEditComponent implements OnInit {
   isDetail: boolean;
   supplierId: any;
   detailSupplier: any;
+  initialUnique: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,6 +85,8 @@ export class SupplierCompanyEditComponent implements OnInit {
       alamat: ["", Validators.required],
       telepon: ["", [Validators.required, Validators.minLength(6)]],
       ponsel: ["", [Validators.required, Validators.minLength(6)]],
+      is_open_api: ["", Validators.required],
+      initial: ["", Validators.required],
       // catatan: "",
     })
     this.catatanControl.setValue('');
@@ -92,14 +102,16 @@ export class SupplierCompanyEditComponent implements OnInit {
         this.detailSupplier = response.data;
         this.createForm.get('namasupplier').setValue(this.detailSupplier.name);
         if(this.router.url.indexOf('/user-management/private-label') > -1){
-          
-        this.products = this.detailSupplier.products;
+
+          this.products = this.detailSupplier.products;
         }
         this.createForm.get('alamat').setValue(this.detailSupplier.address);
         this.createForm.get('telepon').setValue(this.detailSupplier.telephone);
         this.createForm.get('ponsel').setValue(this.detailSupplier.cellphone);
         this.catatanControl.setValue(this.detailSupplier.note);
         this.supplierStatusSelected = this.detailSupplier.status;
+        this.isOpenAPISelected = this.detailSupplier.is_open_api;
+        this.createForm.get('initial').setValue(this.detailSupplier.initial);
       }
     } catch (error) {
       if (error.status === 404) {
@@ -202,15 +214,26 @@ export class SupplierCompanyEditComponent implements OnInit {
     }
   }
 
+  keyPressAlphaNumeric(event) { // Only AlphaNumeric
+    var inp = String.fromCharCode(event.keyCode);
+
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
   checkError() {
     if (this.createForm.controls['namasupplier'].hasError('required')) {
       this.createForm.get('namasupplier').markAsTouched({ onlySelf: true });
       this.namasupplier.nativeElement.focus();
       console.log('#001');
-    // } else if (this.products.length == 0) {
-    //   this.chipList.errorState = true;
-    //   this.chipList.focus();
-    //   console.log('#002');
+      // } else if (this.products.length == 0) {
+      //   this.chipList.errorState = true;
+      //   this.chipList.focus();
+      //   console.log('#002');
     } else if (this.createForm.controls['alamat'].hasError('required')) {
       this.createForm.get('alamat').markAsTouched({ onlySelf: true });
       this.alamat.nativeElement.focus();
@@ -223,6 +246,14 @@ export class SupplierCompanyEditComponent implements OnInit {
       this.createForm.get('ponsel').markAsTouched({ onlySelf: true });
       this.ponsel.nativeElement.focus();
       console.log('#005');
+    } else if (this.createForm.controls['is_open_api'].hasError('required') || this.createForm.get("is_open_api").errors) {
+      this.createForm.get('is_open_api').markAsTouched({ onlySelf: true });
+      this.ponsel.nativeElement.focus();
+      console.log('#006');
+    } else if (this.createForm.controls['initial'].hasError('required') || this.createForm.get("initial").errors) {
+      this.createForm.get('initial').markAsTouched({ onlySelf: true });
+      this.ponsel.nativeElement.focus();
+      console.log('#007');
     }
   }
 
@@ -233,7 +264,7 @@ export class SupplierCompanyEditComponent implements OnInit {
       const products = this.products.map((item) => item.id);
       var body = {};
       if(this.router.url.indexOf('/user-management/private-label') > -1){
-         body = {
+        body = {
           name: this.createForm.get("namasupplier").value,
           address: this.createForm.get("alamat").value,
           telephone: this.createForm.get("telepon").value,
@@ -241,7 +272,9 @@ export class SupplierCompanyEditComponent implements OnInit {
           // note: this.createForm.get("catatan").value,
           note: this.catatanControl.value,
           products: products,
-          status: this.supplierStatusSelected
+          status: this.supplierStatusSelected,
+          is_open_api: this.isOpenAPISelected,
+          initial: this.createForm.get("initial").value
         };
       }else{
         body = {
@@ -252,24 +285,29 @@ export class SupplierCompanyEditComponent implements OnInit {
           // note: this.createForm.get("catatan").value,
           note: this.catatanControl.value,
           // products: products
-          status: this.supplierStatusSelected
+          status: this.supplierStatusSelected,
+          is_open_api: this.isOpenAPISelected,
+          initial: this.createForm.get("initial").value
         };
       }
       this.supplierCompanyService.update(body, { supplierId: this.detailSupplier.id }).subscribe(res => {
-        this.dialogService.openSnackBar({
-          message: "Berhasil Mengubah Data"
-        });
-        if(this.router.url.indexOf('/user-management/private-label') > -1){
-          this.products = [];
-          this.router.navigate(["user-management", "private-label"]);
-        }else{
-          this.router.navigate(["user-management", "supplier-company"]);
-        }
+          this.dialogService.openSnackBar({
+            message: "Berhasil Mengubah Data"
+          });
+          if(this.router.url.indexOf('/user-management/private-label') > -1){
+            this.products = [];
+            this.router.navigate(["user-management", "private-label"]);
+          }else{
+            this.router.navigate(["user-management", "supplier-company"]);
+          }
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
+          if(err.error.errors.initial[0] === "Isian initial sudah ada sebelumnya.") {
+            this.initialUnique = true;
+          }
           this.dialogService.openSnackBar({
-            message: err.error.message
+            message: (this.initialUnique)?  err.error.errors.initial[0] : err.error.message
           });
         }
       );

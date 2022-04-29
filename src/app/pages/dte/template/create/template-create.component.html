@@ -308,7 +308,7 @@
             <div formArrayName="questions"
               *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
               <div [formGroupName]="i" class="py-24">
-                <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <div class="question-list" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto">
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
                     <input id="namaProduk" matInput type="text" placeholder="Nama Produk" (input)="keyUp.next($event.target.value)"
@@ -335,7 +335,7 @@
                     </button>
                   </div>
 
-                  <div fxLayout="column" fxLayoutGap="24px">
+                  <div fxLayout="column" fxLayoutGap="24px" class="ml-auto">
                     <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
                       <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
                         <mat-select-trigger>
@@ -356,9 +356,31 @@
                         </ng-container>
                       </mat-select>
                     </mat-form-field>
-
-                    <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                   </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
+                  <div *ngIf="item.get('image_quality_detection').value">
+                    <mat-form-field class="is-light form-primary" style="width: 150px;">
+                      <mat-select id="selectBlockerSubmission" formControlName="blocker_submission" placeholder="Blocker Submission">
+                        <mat-option *ngFor="let blocker of listBlockerSubmission" [value]="blocker.value">
+                          {{blocker.name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>
+                        Blocker Submission harus diisi
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <mat-checkbox
+                    [id]="'image_quality-'+(i)"
+                    formControlName="image_quality_detection"
+                    (change)="handleChangeImageDetection(i)"
+                    *ngIf="item.get('type').value === 'image' || item.get('type').value === 'stock_check_ir' || item.get('type').value === 'planogram' || item.get('type').value === 'planogram_ir'"
+                  >
+                    Image Quality Detection
+                  </mat-checkbox>
+                  <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
 
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
@@ -621,21 +643,30 @@
                       </div>
                     </div>
                   </div>
-                  <div fxFlex="45" *ngIf="item.get('type').value === 'stock_check_ir'">
-                    <div class="responsive">
+
+                  <!-- STOCK CHECK IR -->
+                  <div fxFlex *ngIf="item.get('type').value === 'stock_check_ir'">
+                    <div fxFlex="45" class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
+                      <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
+                    </div>
+                    <div fxFlex="50" class="responsive" *ngIf="!templateListImageIR[i].image">
                       <table class="table">
                         <thead>
                           <tr>
+                            <th nowrap>Image</th>
                             <th nowrap>{{'katalog_src.produk.text15' | translate}}</th>
                             <th nowrap>{{'global.label.qty'| translate}}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let lst of templateListImageIR[i]['check_list']">
-                            <td nowrap>
+                            <td>
+                              <img [src]="lst.IMAGE_BRAND" alt="Stock Check IR" width="100%">
+                            </td>
+                            <td>
                               {{ lst.PRODUCT_NAME }}
                             </td>
-                            <td nowrap>
+                            <td>
                               {{ lst.QUANTITY }}
                             </td>
                           </tr>

@@ -129,7 +129,7 @@ export class ForceUpdateAppsComponent {
         region: this.formForceUpdate.controls['region'].value,
       }
       try {
-        this.accessServices.postForceUpdate(body).subscribe(res => {
+        this.accessServices.getForceUpdateUsers(body).subscribe(res => {
           console.log('res', res);
             this.dataService.showLoading(false);
           if (res.status === 'success') {

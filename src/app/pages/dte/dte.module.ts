@@ -160,6 +160,12 @@ import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
+import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
+import { SkuComponent } from './image-recognition/sku/sku.component';
+import { TemplateStockCheckComponent } from './image-recognition/template-stock-check/template-stock-check.component';
+import { TaskVerificationComponent } from './task-verification-2/task-verification/task-verification.component';
+import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
+import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 import { TranslateModule } from "@ngx-translate/core";
 
 
@@ -338,6 +344,12 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
+    GroupSkuComponent,
+    SkuComponent,
+    TemplateStockCheckComponent,
+    TaskVerificationComponent,
+    AssignmentCartComponent,
+    TaskVerificationAssignmentComponent,
   ],
   exports: [
     TemplateIndexComponent,
