@@ -28,7 +28,7 @@ input[type="color"]{
 
 .guideline__wrapper{
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 24px;
 }
 
@@ -44,4 +44,9 @@ input[type="color"]{
   background-size: cover;
   background-repeat: no-repeat;
   border: 1px solid gray;
+}
+
+.guideline__deskripsi{
+  width: 100%;
+  max-width: 350px;
 }

@@ -163,17 +163,29 @@
         <span matPrefix>Tarik Gambar Kesini atau
           <strong>Pilih File</strong>
         </span>
-        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2MB</span>
+        <span matPrefix>Maksimum 2MB</span>
       </div>
     </div>
-    <div *ngIf="currentFiles.length" class="pt-24 pb-24 guideline__wrapper">
-      <div *ngFor="let item of currentFiles; let index = index" class="guideline__container">
-        <div *ngIf="!isDetail">
-          <mat-icon style="cursor: pointer;" (click)="removeImageGuideline(index)">cancel_outline</mat-icon>
+    <form name="form" [formGroup]="guidelineForm" (keydown.enter)="$event.preventDefault();">
+      <div *ngIf="currentFiles.length" class="pt-24 pb-24 guideline__wrapper">
+        <div formArrayName="guideline" *ngFor="let item of currentFiles; let index = index">
+          <div [formGroupName]="index" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+            <div class="guideline__container">
+              <div *ngIf="!isDetail">
+                <mat-icon style="cursor: pointer;" (click)="removeImageGuideline(index)">cancel_outline</mat-icon>
+              </div>
+              <img [src]="item.image_url" class="guidelineBanner" alt="guideline">
+            </div>
+            <div class="guideline__deskripsi">
+              <mat-form-field class="example-full-width guideline__deskripsi" appearance="fill">
+                <mat-label>Deskripsi</mat-label>
+                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="Isi Deskripsi"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
-        <img [src]="item.image_url" class="guidelineBanner" alt="guideline">
       </div>
-    </div>
+    </form>
 
   </div>
 
