@@ -113,6 +113,7 @@ export class TemplateEditComponent {
   isBackgroundMisi: FormControl = new FormControl(false);
   isGuideline: FormControl = new FormControl(false);
   image_mechanism_list: any[] = [];
+  image_mechanism_text_list: any[] = [];
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -1388,6 +1389,8 @@ export class TemplateEditComponent {
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let questionsIsEmpty = [];
+      let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
+
       let body = {
         _method: 'PUT',
         task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
@@ -1403,7 +1406,7 @@ export class TemplateEditComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_mechanism: this.image_mechanism_list || [],
+        image_mechanism: new_image_mechanism || [],
         video: this.detailTask.video ? this.detailTask.video : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1769,26 +1772,33 @@ export class TemplateEditComponent {
     })
   }
 
-  uploadImageGuideline(value: any){
+  uploadImageGuideline({images, forms}){
     const initialImages = Object.values(this.detailTask.task_template_image);
 
     // filter mana saja yang berubah
-    const changed = initialImages.filter((obj1:any) => !value.some((obj2:any) => obj1.id === obj2.id));
+    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
 
     // memisahkan yang berubah dengan yang tidak
     let imagesFile = [];
-    value.forEach(async (item: any) => {
-      if (item instanceof File) imagesFile.push(this.getImageData(item));
+    let newIndex = [];
+    let changedByTextIndex = [];
+    images.forEach((item: any, index) => {
+      if (item instanceof File) {
+        imagesFile.push(this.getImageData(item));
+        newIndex.push(index);
+      } else if (item.description !== forms[index].description) {
+        changedByTextIndex.push(index);
+      }
     });
     
     Promise.all(imagesFile)
       .then((data) => data.map((item, idx) => {
         if (changed[idx] && changed[idx].hasOwnProperty('id')) {
           // EDIT
-          return {task_template_image_id: changed[idx]['id'], file: item};
+          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
         } else {
           // ADD
-          return {task_template_image_id: "", file: item};
+          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
         }
       }))
       .then((data) => {
@@ -1800,7 +1810,7 @@ export class TemplateEditComponent {
             if (data[idx] && data[idx].hasOwnProperty('id')){
               newDatas.push(data[idx]);
             } else {
-              newDatas.push({task_template_image_id : item['id'], file: ""});
+              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
             }
           });
 
@@ -1810,11 +1820,21 @@ export class TemplateEditComponent {
       .then((data) => {
         this.image_mechanism_list = data;
       });
+
+    let newText = [];
+    changedByTextIndex.forEach(index => {
+      newText.push({
+        task_template_image_id: images[index].id,
+        file: "",
+        description: forms[index].description,
+      });
+    });
+    this.image_mechanism_text_list = newText;
   }
 
   onChangeGuideline(){
     if (!this.isGuideline.value) {
-      this.uploadImageGuideline([]);
+      this.uploadImageGuideline({images: [], forms: []});
     }
   }
 

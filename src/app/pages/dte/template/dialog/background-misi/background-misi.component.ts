@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { DialogService } from 'app/services/dialog.service';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-background-misi',
@@ -21,9 +23,11 @@ export class BackgroundMisiComponent implements OnInit {
   @Input() isMultiple: any;
   selectedFiles: any;
   @Input() currentFiles: any = [];
+  guidelineForm: FormGroup;
   
   constructor(
     private dialogService: DialogService,
+    private formBuilder: FormBuilder,
   ) {}
 
   ngOnInit() {
@@ -40,6 +44,18 @@ export class BackgroundMisiComponent implements OnInit {
     setTimeout(() => {
       document.getElementById("bg-misi").getElementsByTagName("input")[0].id = "upload-file-misi";
     }, 500);
+
+    this.guidelineForm = this.formBuilder.group({
+      guideline: this.formBuilder.array([], Validators.required),
+    });
+
+    this.guidelineForm.valueChanges.debounceTime(500).subscribe(res => {
+      this.upload.emit({images: this.currentFiles, forms: this.guidelineForm.get('guideline').value});
+    });
+
+    if (this.currentFiles) {
+      this.setValueGuideline(); 
+    }
   }
 
   ngOnChanges(changes: SimpleChanges){
@@ -81,8 +97,6 @@ export class BackgroundMisiComponent implements OnInit {
   }
 
   onSelectFile(value: any) {
-    console.log('value => ', value);
-    console.log('files => ', this.files);
     const file = value;
 
     if (file) {
@@ -94,6 +108,7 @@ export class BackgroundMisiComponent implements OnInit {
   }
 
   onSelectFileMultiple() {
+    let guideline = this.guidelineForm.get('guideline') as FormArray;
     let isOverSize = false;
     let newFile = [];
 
@@ -118,32 +133,56 @@ export class BackgroundMisiComponent implements OnInit {
       this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
     }
 
+    newFile.forEach(item => {
+      guideline.push(this.formBuilder.group({
+        file: [''],
+        description: [''],
+      }));
+    });
+
     this.currentFiles = [...this.currentFiles, ...newFile];
     this.submitMultiple();
   }
 
   submitMultiple(){
+    let guideline = this.guidelineForm.get('guideline') as FormArray;
     this.selectedFiles = [];
     
     const newFile = [...this.currentFiles];
-    newFile.forEach((file) => {
+    newFile.forEach((file, idx) => {
       if (file instanceof File){
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
           file['image_url'] = reader.result;
+          guideline.at(idx).get('file').setValue(reader.result);
         };
       }
     });
 
     this.currentFiles = [...newFile];
-    this.upload.emit(this.currentFiles);
+    this.upload.emit({images: this.currentFiles, forms: this.guidelineForm.get('guideline').value});
   }
 
   removeImageGuideline(index){
+    let guideline = this.guidelineForm.get('guideline') as FormArray;
+    guideline.removeAt(index);
+
     const newFile = [...this.currentFiles];
     newFile.splice(index, 1);
     this.currentFiles = [...newFile];
-    this.upload.emit(this.currentFiles);
+
+    this.upload.emit({images: this.currentFiles, forms: this.guidelineForm.get('guideline').value});
   }
+
+  setValueGuideline(){
+    let guideline = this.guidelineForm.get('guideline') as FormArray;
+
+    this.currentFiles.forEach((item, idx) => {
+      guideline.push(this.formBuilder.group({
+        file: [item.image_url],
+        description: [item.description],
+      }));
+    });
+  };
 }

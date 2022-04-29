@@ -1599,32 +1599,13 @@ export class TemplateCreateComponent {
     }
   }
 
-  getImageData(file: any) {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader();
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.readAsDataURL(file);
-    })
-  }
-
-  uploadImageGuideline(value: any){
-    let images = [];
-    value.forEach(async (item: any) => {
-      images.push(this.getImageData(item))
-    });
-
-    Promise.all(images)
-      .then((data) => data.map(item => ({file: item})))
-      .then((data) => {
-        this.templateTaskForm.get('image_mechanism').setValue(data);
-      })
+  uploadImageGuideline({images, forms}){
+    this.templateTaskForm.get('image_mechanism').setValue(forms);
   }
 
   onChangeGuideline(){
     if (!this.isGuideline.value) {
-      this.uploadImageGuideline([]);
+      this.uploadImageGuideline({images: [], forms: []});
     }
   }
 

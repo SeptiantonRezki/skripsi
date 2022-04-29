@@ -113,6 +113,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   isBackgroundMisi: FormControl = new FormControl(false);
   isGuideline: FormControl = new FormControl(false);
   image_mechanism_list: any[] = [];
+  image_mechanism_text_list: any[] = [];
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -1543,26 +1544,33 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     })
   }
 
-  uploadImageGuideline(value: any){
+  uploadImageGuideline({images, forms}){
     const initialImages = Object.values(this.detailTask.task_template_image);
 
     // filter mana saja yang berubah
-    const changed = initialImages.filter((obj1:any) => !value.some((obj2:any) => obj1.id === obj2.id));
+    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
 
     // memisahkan yang berubah dengan yang tidak
     let imagesFile = [];
-    value.forEach(async (item: any) => {
-      if (item instanceof File) imagesFile.push(this.getImageData(item));
+    let newIndex = [];
+    let changedByTextIndex = [];
+    images.forEach((item: any, index) => {
+      if (item instanceof File) {
+        imagesFile.push(this.getImageData(item));
+        newIndex.push(index);
+      } else if (item.description !== forms[index].description) {
+        changedByTextIndex.push(index);
+      };
     });
     
     Promise.all(imagesFile)
       .then((data) => data.map((item, idx) => {
         if (changed[idx] && changed[idx].hasOwnProperty('id')) {
           // EDIT
-          return {task_template_image_id: changed[idx]['id'], file: item};
+          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
         } else {
           // ADD
-          return {task_template_image_id: "", file: item};
+          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
         }
       }))
       .then((data) => {
@@ -1574,7 +1582,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             if (data[idx] && data[idx].hasOwnProperty('id')){
               newDatas.push(data[idx]);
             } else {
-              newDatas.push({task_template_image_id : item['id'], file: ""});
+              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
             }
           });
 
@@ -1584,11 +1592,21 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       .then((data) => {
         this.image_mechanism_list = data;
       });
+    
+    let newText = [];
+    changedByTextIndex.forEach(index => {
+      newText.push({
+        task_template_image_id: images[index].id,
+        file: "",
+        description: forms[index].description,
+      });
+    });
+    this.image_mechanism_text_list = newText;
   }
 
   onChangeGuideline(){
     if (!this.isGuideline.value) {
-      this.uploadImageGuideline([]);
+      this.uploadImageGuideline({images: [], forms: []});
     }
   }
 
@@ -1706,6 +1724,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
       let children: any[] = this.templateTaskForm.get('children').value;
+      let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
 
       questions.map((item, index) => {
         questions[index].question = this.html2text(item.question);
@@ -1728,7 +1747,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
-        image_mechanism: this.image_mechanism_list || [],
+        image_mechanism: new_image_mechanism || [],
         video: this.detailTask.video ? this.detailTask.video : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         is_branching: this.frmIsBranching.value ? 1 : 0,
