@@ -16,6 +16,7 @@ import { ImportAudienceDialogComponent } from '../../audience/import/import-audi
 import { IdbService } from 'app/services/idb.service';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coin-disburstment-create',
@@ -92,6 +93,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   // Untuk Edit
   isEdit: boolean;
   detailCoin: any;
+  pageName = this.translate.instant('dte.coin_disbursement.text1');
+  titleParam = {entity: this.pageName}
   constructor(
     private dataService: DataService,
     private dialogService: DialogService,
@@ -105,6 +108,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private idbService: IdbService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isEdit = params[1].path === 'edit' ? true : false;

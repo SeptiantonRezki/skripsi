@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-  <h2 class="pl-8">List Penukaran Koin</h2>
+  <h2 class="pl-8">{{'dte.coin_disbursement.coin_exchange_list' | translate}}</h2>
   <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
     <mat-icon>search</mat-icon>
     <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -81,20 +81,20 @@
         <input matInput type="text" placeholder="Group Trade Program" formControlName="group_trade_program" name="group_trade_program">
       </mat-form-field> -->
       <mat-form-field fxFlex="25%" class="is-light form-primary">
-        <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple>
+        <mat-select placeholder="{{'dte.group_trade_program.text1' | translate}}" formControlName="group_trade_program" multiple>
           <mat-option *ngFor="let item of groupTradePrograms" [value]="item.id">{{item.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="18%" class="is-light form-primary">
-        <input matInput type="text" placeholder="Nama Program Penukaran Koin" formControlName="name" name="name">
+        <input matInput type="text" placeholder="{{'dte.coin_disbursement.text12' | translate}}" formControlName="name" name="name">
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Opsi Penukaran" formControlName="opsi_penukaran">
+        <mat-select placeholder="{{'dte.coin_disbursement.text14' | translate}}" formControlName="opsi_penukaran">
           <mat-option *ngFor="let item of tradeOptions" [value]="item.id">{{item.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Status Pembayaran" formControlName="payment_status">
+        <mat-select placeholder="{{'global.label.payment_status' | translate}}" formControlName="payment_status">
           <mat-option *ngFor="let item of paymentStatuses" [value]="item.id">{{item.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -105,13 +105,13 @@
   <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
     fxLayoutAlign="end center" class="p-16 export">
     <button mat-raised-button type="button" class="is-danger" (click)="exportExchange(true)">
-      <mat-icon>arrow_upward</mat-icon> Export Detail by trade program
+      <mat-icon>arrow_upward</mat-icon> {{'dte.coin_disbursement.export_detail_by_trade_program' | translate}}
     </button>
     <button mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
-      <mat-icon>arrow_downward</mat-icon> Import XLS
+      <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
     </button>
     <button mat-raised-button type="button" class="is-danger" (click)="exportExchange(false)">
-      <mat-icon>arrow_upward</mat-icon> Export XLS
+      <mat-icon>arrow_upward</mat-icon> {{'global.button.export' | translate}} XLS
     </button>
   </div>
   <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
@@ -120,31 +120,31 @@
     [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
     (page)="setPage($event)" (sort)="onSort($event)">
 
-    <ngx-datatable-column [width]="200" name="Nama Program Penukaran" prop="name" [flexGrow]="3">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text2' | translate}}" prop="name" [flexGrow]="3">
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Retailer Code" prop="retailer_code">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.retailer_code' | translate}}" prop="retailer_code">
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Toko SRC" prop="retailer_name">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.src_store' | translate}}" prop="retailer_name">
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Area" prop="area_code">
+    <ngx-datatable-column [width]="200" name="{{'global.area.area' | translate}}" prop="area_code">
     </ngx-datatable-column>
-    <ngx-datatable-column [width]="200" name="Regional" prop="division_code">
+    <ngx-datatable-column [width]="200" name="{{'global.area.regional' | translate}}" prop="division_code">
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Opsi Penukaran" prop="opsi_penukaran">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text14' | translate}}" prop="opsi_penukaran">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span class="row-name" style="text-transform: capitalize;">{{row.opsi_penukaran}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Group Trade Program" prop="group_trade_program_name">
+    <ngx-datatable-column [width]="200" name="{{'dte.group_trade_program.text1' | translate}}" prop="group_trade_program_name">
     </ngx-datatable-column>
 
     <!-- Butuh Konfirmasi Om Harry -->
-    <ngx-datatable-column [width]="200" name="Nominal Penukaran" prop="coin_valuation">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.exchange_nominal' | translate}}" prop="coin_valuation">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span class="row-name">
           {{ (row.nominal_exchange_format_currency).replace(ls.locale.global.currency,'') }}
@@ -152,38 +152,38 @@
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Jumlah Koin yang ditukar" prop="coin">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text4' | translate}}" prop="coin">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span class="row-name">{{row.coin | rupiahFormaterWithoutRp}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Request" prop="request_date" [flexGrow]="3">
+    <ngx-datatable-column [width]="200" [sortable]="false" name="{{'dte.approval_coin_adjustment.text6' | translate}}" prop="request_date" [flexGrow]="3">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span>{{row.request_date | dateToMoment}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Status Pembayaran" prop="opsi_penukaran">
+    <ngx-datatable-column [width]="200" name="{{'global.label.payment_status' | translate}}" prop="opsi_penukaran">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span class="row-name" style="text-transform: capitalize;">{{row.status_pembayaran ? row.status_pembayaran :
           "-"}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Pembayaran" prop="payment_date" [flexGrow]="3">
+    <ngx-datatable-column [width]="200" [sortable]="false" name="{{'katalog_src.lihat_pesanan.text17' | translate}}" prop="payment_date" [flexGrow]="3">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span>{{row.payment_date | dateToMoment}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Nominal Pembayaran" prop="nominal_pembayaran">
+    <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.payment_amount' | translate}}" prop="nominal_pembayaran">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <span class="row-name">{{row.nominal_pembayaran_format_currency}}</span>
       </ng-template>
     </ngx-datatable-column>
 
-    <ngx-datatable-column [width]="200" name="Reason" prop="reason">
+    <ngx-datatable-column [width]="200" name="{{'dte.approval_coin_adjustment.reason' | translate}}" prop="reason">
     </ngx-datatable-column>
 
   </ngx-datatable>

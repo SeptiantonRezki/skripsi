@@ -12,6 +12,7 @@ import { forkJoin, Observable, ReplaySubject, Subject } from 'rxjs';
 import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coin-adjustment-approval-tsm',
@@ -38,16 +39,16 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
   minDate: any;
 
   statusFilter: any[] = [
-    { name: 'Urutkan Perhari', value: 'day' },
-    { name: 'Urutkan Perbulan', value: 'mounth' },
-    { name: 'Urutkan Pertahun', value: 'year' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text2'), value: 'day' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text3'), value: 'mounth' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text4'), value: 'year' }
   ];
 
   listStatuses: any[] = [
-    { name: 'Semua Status', value: "" },
-    { name: 'Approved', value: 'approved' },
-    { name: 'Rejected', value: 'rejected' },
-    { name: 'Pending', value: 'pending' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text7'), value: "" },
+    { name: this.translate.instant('dte.approval_coin_adjustment.approved'), value: 'approved' },
+    { name: this.translate.instant('dte.approval_coin_adjustment.rejected'), value: 'rejected' },
+    { name: this.translate.instant('dte.approval_coin_adjustment.pending'), value: 'pending' }
   ];
 
   dialogRef: any;
@@ -73,6 +74,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

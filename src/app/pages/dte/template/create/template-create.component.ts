@@ -941,7 +941,7 @@ export class TemplateCreateComponent {
       type: 'radio',
       content_typePertanyaan: "static_page",
       image_detail: false,
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
@@ -1049,7 +1049,7 @@ export class TemplateCreateComponent {
       id: newId.id + 1,
       question: this.questionParam,
       type: 'radio',
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       content_typePertanyaan: 'static_page',
       image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
@@ -1535,16 +1535,16 @@ export class TemplateCreateComponent {
         return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
       if (this.templateTaskForm.get('image').invalid)
-        return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_selected_image') });
       if (this.templateTaskForm.get('questions').invalid) {
         if (questions.value.length) {
           for (const item of questions.value) {
             if (item.image_quality_detection && !item.blocker_submission) {
-              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+              return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_filled_blocker_submission') })
             }
           }
         } else {
-          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+          return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_created_question_min_one') })
         }
       }
       else

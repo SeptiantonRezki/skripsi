@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
@@ -46,6 +47,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
   saveData: Boolean = false;
   idApproval: any;
   isTSM: Boolean = false;
+  pageName = this.translate.instant('dte.approval_coin_adjustment.text1');
+  titleParam = {entity: this.pageName};
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -56,7 +60,8 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
     this.permissionNotifikasi = this.roles.getRoles('principal.dtenotifikasiapprovalcoinadjustment');

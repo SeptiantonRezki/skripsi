@@ -57,7 +57,7 @@
                   cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
-                  {{'dte.template_tugas.text25' | translate}} harus diisi
+                  {{'dte.template_tugas.text25' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -75,7 +75,7 @@
                 <textarea matInput formControlName="description" [froalaEditor]="options" placeholder="{{'dte.template_tugas.text26' | translate}}" style="font-size: 13px;" data-froala-id="froala-tugas"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
-                  {{'dte.template_tugas.text26' | translate}} harus diisi
+                  {{'dte.template_tugas.text26' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -97,7 +97,7 @@
                   [disabled]="!templateTaskForm.get('material').value"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
-                  {{'dte.template_tugas.text28' | translate}} Tugas harus diisi
+                  {{'dte.template_tugas.text28' | translate}} Tugas {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -219,7 +219,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="item.controls['content_type'].hasError('required') && item.controls['content_type'].touched">
-                      {{'notification.popup_notifikasi.text15' | translate}} harus diisi
+                      {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -231,7 +231,7 @@
                     <mat-form-field fxFlex="100" class="is-light form-primary">
                       <input matInput type="text" formControlName="title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                       <mat-error *ngIf="item.controls['title'].hasError('required') && item.controls['title'].touched">
-                        {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} harus diisi
+                        {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -241,7 +241,7 @@
                   <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                   <mat-error style="padding-top: 6px !important; font-size: .86em;"
                     *ngIf="item.controls['body'].hasError('required') && item.controls['body'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} harus diisi
+                    {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </div>
                 <!-- Landing Page -->
@@ -367,13 +367,13 @@
                 <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
                   <div *ngIf="item.get('image_quality_detection').value">
                     <mat-form-field class="is-light form-primary" style="width: 150px;">
-                      <mat-select id="selectBlockerSubmission" formControlName="blocker_submission" placeholder="Blocker Submission">
+                      <mat-select id="selectBlockerSubmission" formControlName="blocker_submission" placeholder="{{'dte.template_tugas.blocker_submission' | translate}}">
                         <mat-option *ngFor="let blocker of listBlockerSubmission" [value]="blocker.value">
                           {{blocker.name}}
                         </mat-option>
                       </mat-select>
                       <mat-error>
-                        Blocker Submission harus diisi
+                        {{'dte.template_tugas.blocker_submission' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -383,7 +383,7 @@
                     (change)="handleChangeImageDetection(i)"
                     *ngIf="item.get('type').value === 'image' || item.get('type').value === 'stock_check_ir' || item.get('type').value === 'planogram' || item.get('type').value === 'planogram_ir'"
                   >
-                    Image Quality Detection
+                  {{'dte.template_tugas.image_quality_detection' | translate}}
                   </mat-checkbox>
                   <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
@@ -447,7 +447,7 @@
                       <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                       <mat-error style="padding-top: 6px !important; font-size: .86em;"
                         *ngIf="itemque.controls['body'].hasError('required') && itemque.controls['body'].touched">
-                        {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} harus diisi
+                        {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </div>
                     <!-- Landing Page -->
@@ -692,7 +692,7 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th nowrap>Image</th>
+                            <th nowrap>{{'global.label.image' | translate}}</th>
                             <th nowrap>{{'katalog_src.produk.text15' | translate}}</th>
                             <th nowrap>{{'global.label.qty'| translate}}</th>
                           </tr>
@@ -746,9 +746,9 @@
                 <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start"
                   fxFlex="1 0 auto">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <mat-select formControlName="reason" [placeholder]="'Pilih Alasan '+ (k+1)" id="reason" (click)="selectForm('reason')" #singleSelect>
-                      <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" [placeholderLabel]="'Cari Alasan...'"
-                        [noEntriesFoundLabel]="'Tidak ada Alasan yang ditemukan'"></ngx-mat-select-search>
+                    <mat-select formControlName="reason" placeholder="{{'dte.template_tugas.select_reason' | translate}} {{ k+1 }}" id="reason" (click)="selectForm('reason')" #singleSelect>
+                      <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" placeholderLabel="{{'global.label.search' | translate}}"
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                       <mat-option *ngFor="let item of filteredReason | async" [value]="item.name">
                         {{item.name}}
                       </mat-option>

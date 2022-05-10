@@ -176,6 +176,8 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
 
   listAnswerKeys: any[] = [];
   questionParam = this.translate.instant('dte.template_tugas.text10');
+  pageName = this.translate.instant('dte.template_tugas.task_personalize');
+  titleParam = { entity: this.pageName };
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -1013,7 +1015,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       encryption: false,
       image_quality_detection: false,
       blocker_submission: ["", Validators.required],
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
@@ -1112,7 +1114,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       id: newId.id + 1,
       question: this.questionParam,
       type: 'radio',
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       content_typePertanyaan: 'static_page',
       image_detail: false,
       encryption: false,
@@ -1753,28 +1755,28 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       const questions = this.templateTaskForm.get('questions') as FormArray;
 
       if (this.templateTaskForm.controls['material_description'].invalid)
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
       if (this.templateTaskForm.get('image').invalid)
-        return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_selected_image') });
 
       if (this.templateTaskForm.get('questions').invalid) {
         if (questions.value.length) {
           for (const item of questions.value) {
             if (item.image_quality_detection && !item.blocker_submission) {
-              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+              return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_filled_blocker_submission') })
             }
           }
         } else {
-          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+          return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_created_question_min_one') })
         }
       }
       if (this.templateTaskForm.controls['copywritingList'].invalid)
-        return this.dialogService.openSnackBar({ message: 'Copywriting belum dibuat, minimal ada satu Copywriting' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_created_copywriting') });
       if (this.templateTaskForm.get('children').invalid)
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi Copywriting Set-Up' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.please_complete_copywriting_setup') });
       else
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 

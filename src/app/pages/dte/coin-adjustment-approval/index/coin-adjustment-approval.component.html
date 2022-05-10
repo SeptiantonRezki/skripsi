@@ -1,17 +1,17 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Approval Coin Adjustment'">
+  <page-content-header contentTitle="{{'dte.approval_coin_adjustment.text1' | translate}}">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">List Approval Coin Adjustment</h2>
+        <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
       </div>
       <mat-tab-group>
-        <mat-tab label="Non-TSM">
+        <mat-tab label="{{'manajemen_barang_sku.manajemen_koin.text2' | translate}}">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-            <h2 class="pl-8">Approval Coin Adjustment Non-TSM</h2>
+            <h2 class="pl-8">{{'dte.approval_coin_adjustment.text1' | translate}} {{'manajemen_barang_sku.manajemen_koin.text2' | translate}}</h2>
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -29,7 +29,7 @@
               </mat-form-field>
               <div fxFlex="1"></div>
               <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
-                <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+                <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="{{'dte.pengatur_jadwal_program.text5' | translate}}"
                   formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
                 <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="formFilter.get('start_date').setValue('')">
@@ -43,7 +43,7 @@
               <div fxFlex="1"></div>
               <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
                 <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-                  placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+                  placeholder="{{'dte.pengatur_jadwal_program.text6' | translate}}" formControlName="end_date" readonly>
                 <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
                   (click)="formFilter.get('end_date').setValue('')">
                   <mat-icon>close</mat-icon>
@@ -61,7 +61,7 @@
               </mat-form-field>
               <div fxFlex="1"></div>
               <div class="button-row pb-16">
-                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">{{'global.button.filter' | translate}}</button>
               </div>
             </div>
           </form>
@@ -70,22 +70,22 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               class="top-table p-8">
               <mat-form-field fxFlex="20" class="orders dropdown">
-                <mat-select formControlName="requestor_id" placeholder="Requestor" id="requestor_id" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterRequestor" [placeholderLabel]="'Cari Requestor...'"
-                    [noEntriesFoundLabel]="'Tidak ada Requestor yang ditemukan'" [clearSearchInput]="true">
+                <mat-select formControlName="requestor_id" placeholder="{{'dte.approval_coin_adjustment.text2' | translate}}" id="requestor_id" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterRequestor" placeholderLabel="{{'global.label.search' | translate}}"
+                    noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="true">
                   </ngx-mat-select-search>
-                  <mat-option>Semua</mat-option>
+                  <mat-option>{{'global.label.all' | translate}}</mat-option>
                   <mat-option *ngFor="let item of filteredRequestor | async" [value]="item.user_id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="20" class="orders dropdown">
-                <mat-select formControlName="approver_id" placeholder="Approver" id="approver_id" #singleSelect>
-                  <ngx-mat-select-search [formControl]="filterApprover" [placeholderLabel]="'Cari Approver...'"
-                    [noEntriesFoundLabel]="'Tidak ada Approver yang ditemukan'" [clearSearchInput]="true">
+                <mat-select formControlName="approver_id" placeholder="{{'dte.approval_coin_adjustment.text3' | translate}}" id="approver_id" #singleSelect>
+                  <ngx-mat-select-search [formControl]="filterApprover" placeholderLabel="{{'global.label.search' | translate}}"
+                    noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="true">
                   </ngx-mat-select-search>
-                  <mat-option>Semua</mat-option>
+                  <mat-option>{{'global.label.all' | translate}}</mat-option>
                   <mat-option *ngFor="let item of filteredApprover | async" [value]="item.user_id">
                     {{item.name}}
                   </mat-option>
@@ -162,11 +162,11 @@
             <ngx-datatable-column [width]="250" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px" *ngIf="permissionCoinAdjustment?.lihat">
-                  <button type="button" mat-icon-button color="" matTooltip="Lihat"
+                  <button type="button" mat-icon-button color="" matTooltip="{{'dte.pengatur_jadwal_program.text15' | translate}}"
                     [routerLink]="['/dte', 'approval-coin-adjusment', 'detail', row.id]">
                     <mat-icon class="secondary-text">assignment</mat-icon>
                   </button>
-                  <button type="button" mat-icon-button color="" matTooltip="Export Approval Coin Adjustment"
+                  <button type="button" mat-icon-button color="" matTooltip="{{'dte.approval_coin_adjustment.export_approval_coin_adjustment' | translate}}"
                     (click)="export(row)">
                     <mat-icon class="orange-500-fg">save_alt</mat-icon>
                     <!-- <mat-icon *ngIf="row.task_sequencing_management_status !== 'publish'" class="secondary-text">save_alt

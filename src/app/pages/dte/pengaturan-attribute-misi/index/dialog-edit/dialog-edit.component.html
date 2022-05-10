@@ -1,18 +1,18 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h1 mat-dialog-title>Edit {{ data.title }}</h1>
+  <h1 mat-dialog-title>{{'global.label.edit_entity' | translate:titleParam}}</h1>
   <mat-dialog-content>
     <mat-form-field style="width: 100%;">
       <input
         matInput
         formControlName="name"
-        placeholder="Nama {{ data.title }}"
+        placeholder="{{'dte.pengaturan_attribute_misi.internal_category_name' | translate}}"
         value="{{name}}"
         required
       />
     </mat-form-field>
 
     <div class="mb-16" fxLayout="column" fxLayoutGap="8px" *ngIf="isColor">
-      <span style="font-size: 12px; font-weight: bold;">Warna copywriting</span>
+      <span style="font-size: 12px; font-weight: bold;">{{'dte.pengaturan_attribute_misi.copywriting_color' | translate}}</span>
       <input
         id="colorCopywriting"
         type="color"
@@ -21,21 +21,21 @@
     </div>
     
     <mat-form-field style="width: 100%;">
-      <mat-select placeholder="Pilih Status" formControlName="status">
-        <mat-option value="active">Aktif</mat-option>
-        <mat-option value="inactive">Tidak Aktif</mat-option>
+      <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text10' | translate}}" formControlName="status">
+        <mat-option value="active">{{'global.label.active' | translate}}</mat-option>
+        <mat-option value="inactive">{{'global.label.inactive' | translate}}</mat-option>
       </mat-select>
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
+    <button mat-raised-button color="success" type="submit">{{'global.button.save' | translate}}</button>
     <button
       mat-raised-button
       color="warn"
       type="button"
       (click)="dialogRef.close()"
     >
-      Batal
+      {{'global.button.cancel' | translate}}
     </button>
   </mat-dialog-actions>
 </form>
