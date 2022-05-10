@@ -22,6 +22,7 @@ import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-notification-create',
@@ -212,6 +213,8 @@ export class NotificationCreateComponent {
   set recurrenceType(val: string) {
     this._recurrenceType = val;
   }
+  pageName = this.translate.instant('notification.text');
+  titleParam = {entity: this.pageName};
 
   ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
 
@@ -228,7 +231,8 @@ export class NotificationCreateComponent {
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
     private ls: LanguagesService,
-    private bannerService: BannerService
+    private bannerService: BannerService,
+    private translate: TranslateService,
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];

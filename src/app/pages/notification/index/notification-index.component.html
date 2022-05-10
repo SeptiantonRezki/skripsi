@@ -17,7 +17,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{'list_entity' | translate:titleParam}}</h2>
+        <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
@@ -42,7 +42,7 @@
         (sort)="onSort($event)"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column name="{{'notification.content_type' | translate}}" prop="notification_content_type">
+        <ngx-datatable-column name="{{'notification.buat_notifikasi.text2' | translate}}" prop="notification_content_type">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.notification_content_type}}
           </ng-template>

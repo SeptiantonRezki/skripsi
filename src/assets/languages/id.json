@@ -1507,7 +1507,10 @@
       "selected_date": "Tanggal & Bulan Terpilih",
       "date_month_repeatation": "Tanggal & bulan pengulangan",
       "date_repeatation": "Tanggal pengulangan",
-      "month_repeatation": "Bulan pengulangan"
+      "month_repeatation": "Bulan pengulangan",
+      "send_period": "Periode Pengiriman",
+      "release_time": "Waktu Terbit",
+      "send_every": "Dikirim setiap"
     },
     "popup_notifikasi": {
       "page_name": "Popup Notifikasi",
