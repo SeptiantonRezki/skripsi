@@ -1510,7 +1510,8 @@
       "month_repeatation": "Bulan pengulangan",
       "send_period": "Periode Pengiriman",
       "release_time": "Waktu Terbit",
-      "send_every": "Dikirim setiap"
+      "send_every": "Dikirim setiap",
+      "notification_type": "Tipe Notifikasi"
     },
     "popup_notifikasi": {
       "page_name": "Popup Notifikasi",
