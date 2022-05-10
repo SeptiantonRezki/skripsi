@@ -38,7 +38,7 @@
             </mat-radio-group>
           </div>
 
-          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+          <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="notif_type" placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}">
@@ -433,7 +433,7 @@
           </div>
 
           <!-- Consumer -->
-          <div *ngIf="formNotification.controls['user_group'].value === 'customer'">
+          <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
             <div class="">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
@@ -487,7 +487,7 @@
             </div>
           </div>
 
-          <div class="pb-16" *ngIf="formNotification.controls['user_group'].value === 'customer'">
+          <div class="pb-16" *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
                 <strong>{{'iklan_dalam_aplikasi.spanduk_online.text16' | translate}}</strong>
@@ -499,7 +499,7 @@
               </mat-radio-button>
             </mat-radio-group>
           </div>
-          <div class="pb-16" *ngIf="formNotification.controls['user_group'].value === 'customer'">
+          <div class="pb-16" *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
                 <strong>Employee</strong>
@@ -530,7 +530,7 @@
               formControlName="is_target_audience">
               {{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
             <mat-checkbox
-              *ngIf="formNotification.controls['user_group'].value === 'customer'"
+              *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
               class="mt-4 ml-20 mb-8"
               (change)="isTargetArea($event)"
               formControlName="is_target_area">
@@ -798,7 +798,7 @@
             </ngx-datatable>
           </div>
           <target-area
-            *ngIf="formNotification.controls['user_group'].value === 'customer' && formNotification.get('is_target_area').value"
+            *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value) && formNotification.get('is_target_area').value"
             (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)"
             (selectedAllId)="getSelectedAllId($event)" [areas]="areasInit" [isNotifValidation]="true"></target-area>
 
