@@ -18,7 +18,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
   formGroupTradeProgramError: any;
   isDetail: Boolean;
   detailGroupTradeProgram: any;
-  listStatus: any[] = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }]
+  listStatus: any[] = [{ name: this.translate.instant('global.label.active'), value: 'active' }, { name: this.translate.instant('global.label.inactive'), value: 'inactive' }]
   formStatus: FormControl = new FormControl('');
   listUserGroup: any[] = [{ name: "HMS", value: "HMS" }, { name: "NON HMS", value: "NON-HMS" }];
 

@@ -1,19 +1,19 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h1 mat-dialog-title>Buat Tipe Misi</h1>
+  <h1 mat-dialog-title>{{'global.label.create_entity' | translate:titleParam}}</h1>
   <mat-dialog-content>
     <mat-form-field>
-      <input matInput formControlName="name" placeholder="Nama Tipe Misi" required/>
+      <input matInput formControlName="name" placeholder="{{'dte.pengaturan_attribute_misi.mission_type_name' | translate}}" required/>
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
+    <button mat-raised-button color="success" type="submit">{{'global.button.save' | translate}}</button>
     <button
       mat-raised-button
       color="warn"
       type="button"
       (click)="dialogRef.close()"
     >
-      Batal
+      {{'global.button.cancel' | translate}}
     </button>
   </mat-dialog-actions>
 </form>

@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disbursement'">
+  <page-content-header contentTitle="{{ isEdit ? ('global.label.edit_entity' | translate:titleParam) : ('global.label.create_entity' | translate:titleParam)  }}">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button" *ngIf="!isEdit">
       <mat-icon>save</mat-icon> {{ls.locale.global.button.save}}
     </button>
@@ -14,24 +14,24 @@
             <form autocomplete="off" [formGroup]="formCoin">
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Nama Program Penukaran Koin" formControlName="name"
+                  <input matInput type="text" placeholder="{{'dte.coin_disbursement.text12' | translate}}" formControlName="name"
                     name="name">
                   <mat-error
                     *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
-                    Nama Program Penukaran Koin harus diisi
+                    {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="Coin Valuation, 1 Coin = " formControlName="coin_valuation" name="coin_valuation">
+                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="{{'dte.coin_disbursement.text13' | translate}}" formControlName="coin_valuation" name="coin_valuation">
                   <mat-error
                     *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
-                    Coin Valuation harus diisi
+                    {{'dte.coin_disbursement.coin_valuation' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formCoin.controls['coin_valuation'].hasError('min') && formCoin.controls['coin_valuation'].touched">
-                    Coin Valuation harus lebih dari > 0
+                    {{'dte.coin_disbursement.coin_valuation_more_than_zero' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -39,14 +39,14 @@
                 fxFlex="50%">
                 <mat-form-field fxFlex="50%" class="is-light form-primary">
                   <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
-                    placeholder="Tanggal Awal Penukaran Koin">
+                    placeholder="{{'dte.coin_disbursement.text9' | translate}}">
                   <mat-datepicker-toggle matSuffix [for]="startDate">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #startDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
 
@@ -59,28 +59,28 @@
                   <mat-datepicker #endDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
 
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_id" multiple>
+                  <mat-select placeholder="{{'dte.group_trade_program.text1' | translate}}" formControlName="group_trade_id" multiple>
                     <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
-                    Group Trade Program harus diisi
+                    {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
               <div fxLayout="column" class="px-24">
-                <h4 style="font-weight: bold;">Opsi Penukaran</h4>
+                <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text14' | translate}}</h4>
                 <div fxLayout="row" fxFlex="48">
-                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">Transfer Bank</mat-checkbox>
+                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">{{'dte.coin_disbursement.text15' | translate}}</mat-checkbox>
                   <div fxFlex="1"></div>
-                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">Saldo Pojok Bayar</mat-checkbox>
+                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">{{'dte.coin_disbursement.text16' | translate}}</mat-checkbox>
                 </div>
               </div>
             </form>
@@ -90,9 +90,9 @@
         <mat-tab label="Target Penerima">
           <div class="ayo-middle py-24" fxLayout="column">
             <div fxLayout="column" class="px-24">
-              <h4 style="font-weight: bold;">Filter Audience</h4>
+              <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text18' | translate}}</h4>
               <div fxLayout="row" fxFlex="48">
-                <mat-checkbox class="example-margin" [formControl]="isTargetedRetailer">Targeted Retailer</mat-checkbox>
+                <mat-checkbox class="example-margin" [formControl]="isTargetedRetailer">{{'dte.coin_disbursement.text19' | translate}}</mat-checkbox>
               </div>
             </div>
           </div>
@@ -205,10 +205,10 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
               <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
-                <mat-icon>arrow_downward</mat-icon> Import XLS
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
               </button>
               <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
-                <mat-icon>arrow_upward</mat-icon> Export Template
+                <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
               </button>
             </div>
             <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>

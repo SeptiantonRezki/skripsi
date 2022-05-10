@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-dialog-kategori-misi",
@@ -17,6 +18,8 @@ import { LanguagesService } from "app/services/languages/languages.service";
 })
 export class DialogKategoriMisiComponent implements OnInit {
   form: FormGroup;
+  pageName = this.translate.instant('dte.pengaturan_attribute_misi.text5');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private router: Router,
@@ -26,7 +29,8 @@ export class DialogKategoriMisiComponent implements OnInit {
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private dialogService: DialogService,
     private audienceService: AudienceService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {

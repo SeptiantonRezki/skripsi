@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
@@ -28,7 +29,8 @@ export class ImportExchangeCoinComponent implements OnInit {
     private dataService: DataService,
     private coinDisburstmentService: CoinDisburstmentService,
     private ls: LanguagesService,
-    @Inject(MAT_DIALOG_DATA) data
+    @Inject(MAT_DIALOG_DATA) data,
+    private translate: TranslateService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -56,12 +58,12 @@ export class ImportExchangeCoinComponent implements OnInit {
           }
           else{
             this.files = undefined;
-            this.dialogService.openSnackBar({ message: "Upload gagal, Nama Program Penukaran yang diupload tidak sesuai." })
+            this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.failed_upload_inconsistent_name') })
           }
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.failed_upload_invalid_file') })
         }
 
       },
@@ -70,7 +72,7 @@ export class ImportExchangeCoinComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.failed_upload_invalid_file') })
       }
     )
   }
@@ -83,7 +85,7 @@ export class ImportExchangeCoinComponent implements OnInit {
     this.coinDisburstmentService.importExchange(data).subscribe(res => {
       this.dialogRef.close(true)
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: "File berhasil Diimport" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text8') });
     }, err => {
       this.dataService.showLoading(false);
     })

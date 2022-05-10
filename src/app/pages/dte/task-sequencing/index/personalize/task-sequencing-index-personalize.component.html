@@ -1,9 +1,9 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="px-12 pt-12">
-  <h2 class="pl-8">Personalize Management</h2>
+  <h2 class="pl-8">{{'dte.task_sequencing.personalize_management' | translate}}</h2>
 </div>
 <div class="px-12" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
   <button id="btnBuatTaskSequencing" style="width: 170px" [routerLink]="['/dte','publish-mission']" mat-raised-button type="button" class="confirmation-button">
-    <mat-icon>add</mat-icon> BUAT
+    <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
   </button>
   <mat-form-field appearance="standard">
     <mat-label>{{'global.label.search' | translate}}</mat-label>
@@ -23,58 +23,58 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="120" name="Status" prop="status">
+  <ngx-datatable-column [width]="120" name="{{'global.label.status' | translate}}" prop="status">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="name-container">
         <p id="status" class="status text-truncate h6 p-4"
           style="min-width: 80px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
           [ngClass]="row.status == 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-          {{row.status == 'publish' ? 'Aktif' : 'Tidak Aktif'}}
+          {{row.status == 'publish' ? ('global.label.active' | translate) : ('global.label.inactive' | translate)}}
         </p>
       </div>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Trade Program" prop="trade_creator_name" [sortable]="true">
+  <ngx-datatable-column name="{{'dte.trade_program.text1' | translate}}" prop="trade_creator_name" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.trade_creator_name}}
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Total Budget Used" prop="budget" [sortable]="true">
+  <ngx-datatable-column name="{{'dte.task_sequencing.text3' | translate}}" prop="budget" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.budget_format_currency}}
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Total Week Duration" prop="total_week" [sortable]="true">
+  <ngx-datatable-column name="{{'dte.task_sequencing.text4' | translate}}" prop="total_week" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.total_week}}
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Last Update" prop="updated_at" [sortable]="true">
+  <ngx-datatable-column name="{{'dte.task_sequencing.text5' | translate}}" prop="updated_at" [sortable]="true">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.updated_at | date:'dd/MM/yyyy HH:mm'}}
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="Created" prop="created_at">
+  <ngx-datatable-column name="{{'dte.task_sequencing.text6' | translate}}" prop="created_at">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       {{row.created_at | date:'dd/MM/yyyy HH:mm'}}
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Tindakan" headerClass="textright" [sortable]="false">
+  <ngx-datatable-column [width]="150" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
       style="justify-content: center !important">
       <div class="button-row" style="margin-left: -10px">
-        <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Edit Task Sequencing"
+        <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'dte.task_sequencing.edit_task_sequencing' | translate}}"
           (click)="directEdit(row)">
           <mat-icon class="secondary-text">edit</mat-icon>
         </button>
         <button id="btn-delete" mat-icon-button color="primary" [disabled]="row.status === 'approved' || !permission?.hapus"
-          matTooltip="Hapus Task Sequencing" (click)="deleteTaskSequencing(row.id)">
+          matTooltip="{{'dte.task_sequencing.delete_task_sequencing' | translate}}" (click)="deleteTaskSequencing(row.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -83,6 +83,6 @@
 </ngx-datatable>
 
 <div class="p-12 pb-24 text-center" *ngIf="!permission.lihat">
-  Tidak memiliki akses Lihat Publish Misi
+  {{'dte.task_sequencing.view_permission_denied' | translate}}
 </div>
 <a #downloadLink></a>

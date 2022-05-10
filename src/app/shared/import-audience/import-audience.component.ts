@@ -55,6 +55,7 @@ export class ImportAudienceComponent {
     }
 
     let fd = new FormData();
+  
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     fd.append('type', this.dialogData.type);

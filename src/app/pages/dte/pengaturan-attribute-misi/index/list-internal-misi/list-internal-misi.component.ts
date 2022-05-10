@@ -16,6 +16,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { LanguagesService } from "app/services/languages/languages.service";
 import { DialogEditComponent } from '../dialog-edit/dialog-edit.component';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-list-internal-misi',
@@ -45,6 +46,8 @@ export class ListInternalMisiComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  pageName = this.translate.instant('dte.pengaturan_attribute_misi.text4');
+  titleParam = {entity: this.pageName};
 
   constructor(
     public Dialog: MatDialog,
@@ -54,7 +57,8 @@ export class ListInternalMisiComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -80,7 +84,7 @@ export class ListInternalMisiComponent implements OnInit {
   openDialogInternalMisi() {
     const dataProps = {
       data: {
-        title:'Internal Kategori',
+        title: this.translate.instant('dte.pengaturan_attribute_misi.text4'),
         methodGet: 'getInternalMisi',
         methodCreate: 'createInternalMisi',
      },
@@ -99,7 +103,7 @@ export class ListInternalMisiComponent implements OnInit {
   openDialogInternalMisiEdit(id,name, status) {
     const dataProps = {
       data: {
-        title:'Internal Kategori',
+        title: this.translate.instant('dte.pengaturan_attribute_misi.text4'),
         methodPut: 'putInternalMisi',
         paramsId: 'internal_misi_id',
         id: id,
@@ -234,10 +238,10 @@ export class ListInternalMisiComponent implements OnInit {
   deleteInternalMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Internal Kategori",
-      captionDialog: "Apakah anda yakin untuk menghapus Internal Kategori ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', this.titleParam),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.pageName, index: ""}),
       confirmCallback: this.confirmDeleteInternalnMisi.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -247,7 +251,7 @@ export class ListInternalMisiComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.getInternalMisi();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 

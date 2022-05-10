@@ -81,7 +81,7 @@
                   <mat-select formControlName="category" placeholder="{{'manajemen_barang_sku.produk.text13' | translate}}" #singleSelect
                     (selectionChange)="selectionChange()">
                     <ngx-mat-select-search [formControl]="filterCategory" placeholderLabel="{{'global.label.search' | translate}}"
-                      noEntriesFoundLabel="{{'global.messages.data_not_found'}}"></ngx-mat-select-search>
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredCategory | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
@@ -382,7 +382,7 @@
                                         <input matInput type="text" formControlName="packaging">
                                         <mat-error style="font-size: .8em"
                                           *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
-                                          {{'manajemen_barang_sku.produk.packaging_name'}} {{'global.messages.mandatory_text' | translate}}
+                                          {{'manajemen_barang_sku.produk.packaging_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                                         </mat-error>
                                       </mat-form-field>
                                     </div>

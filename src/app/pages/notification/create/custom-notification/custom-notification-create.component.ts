@@ -22,6 +22,7 @@ import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { ImportCustomNotificationComponent } from './import/import-custom-notification.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-notification-create',
@@ -70,6 +71,8 @@ export class CustomNotificationCreateComponent implements OnInit {
 
   _typeOfRecurrence: string;
   _recurrenceType: string;
+  pageName = this.translate.instant('notification.text');
+  titleParam = {entity: this.pageName}
 
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
@@ -102,7 +105,8 @@ export class CustomNotificationCreateComponent implements OnInit {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];

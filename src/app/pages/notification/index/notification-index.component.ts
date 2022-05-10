@@ -8,6 +8,7 @@ import { NotificationService } from 'app/services/notification.service';
 import { Router } from '@angular/router';
 import { PagesName } from 'app/classes/pages-name';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-notification-index',
@@ -34,12 +35,17 @@ export class NotificationIndexComponent {
   roles: PagesName = new PagesName();
   permission: any;
 
+  pageName = this.translate.instant('notification.text');
+  titleParam = {entity: this.pageName}
+  customNotifParam = {entity: this.translate.instant('notification.customize_push_notification')}
+
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
     private notificationService: NotificationService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -143,10 +149,10 @@ export class NotificationIndexComponent {
   deleteNotif(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Notifikasi",
-      captionDialog: "Apakah anda yakin untuk menghapus notifikasi ini ?",
+      titleDialog: this.translate.instant('global.messages.delete_data', {entity: this.pageName}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.pageName}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -155,7 +161,7 @@ export class NotificationIndexComponent {
     this.notificationService.deleteCustom({ notification_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getNotifList();
       },

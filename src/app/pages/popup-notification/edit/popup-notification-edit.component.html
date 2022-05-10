@@ -21,7 +21,7 @@
               <input matInput type="text" formControlName="title" placeholder="{{'notification.popup_notifikasi.text3' | translate}}">
               <mat-error
                 *ngIf="formPopupGroup.controls['title'].hasError('required') && formPopupGroup.controls['title'].touched">
-                {{'notification.popup_notifikasi.text3' | translate}} {{'global.messages.mandatory_text'}}
+                {{'notification.popup_notifikasi.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <div fxFlex="45" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
@@ -31,7 +31,7 @@
                   placeholder="{{'notification.popup_notifikasi.text7' | translate}}">
                 <mat-error
                   *ngIf="formPopupGroup.controls['date'].hasError('required') && formPopupGroup.controls['date'].touched">
-                  {{'notification.popup_notifikasi.text7' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.text7' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_terbit">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -45,7 +45,7 @@
                 <ngx-material-timepicker #fullTime></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formPopupGroup.controls['time'].hasError('required') && formPopupGroup.controls['time'].touched">
-                  {{'notification.popup_notifikasi.time' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="32" class="is-light form-primary">
@@ -53,7 +53,7 @@
                   formControlName="enddate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}">
                 <mat-error
                   *ngIf="formPopupGroup.controls['enddate'].hasError('required') && formPopupGroup.controls['enddate'].touched">
-                  {{'notification.popup_notifikasi.text7' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.text7' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -67,7 +67,7 @@
                 <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formPopupGroup.controls['endtime'].hasError('required') && formPopupGroup.controls['endtime'].touched">
-                  {{'notification.popup_notifikasi.time' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -77,14 +77,14 @@
               <input matInput type="text" formControlName="positive_button" placeholder="{{'notification.popup_notifikasi.text11' | translate}}">
               <mat-error
                 *ngIf="formPopupGroup.controls['positive_button'].hasError('required') && formPopupGroup.controls['positive_button'].touched">
-                {{'notification.popup_notifikasi.text11' | translate}} {{'global.messages.mandatory_text'}}
+                {{'notification.popup_notifikasi.text11' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="48%" class="is-light form-primary">
               <input matInput type="text" formControlName="negative_button" placeholder="{{'notification.popup_notifikasi.text12' | translate}}">
               <mat-error
                 *ngIf="formPopupGroup.controls['negative_button'].hasError('required') && formPopupGroup.controls['negative_button'].touched">
-                {{'notification.popup_notifikasi.text12' | translate}} {{'global.messages.mandatory_text'}}
+                {{'notification.popup_notifikasi.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -119,7 +119,7 @@
               </mat-select>
               <mat-error
                 *ngIf="formMonthlyRecurrence.controls['recurrence_date'].hasError('required') && formMonthlyRecurrence.controls['recurrence_date'].touched">
-                {{'global.label.date' | translate}} {{'global.messages.mandatory_text'}}
+                {{'global.label.date' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -136,7 +136,7 @@
               </div>
               <mat-error style="font-size:75%;"
                 *ngIf="listDateChosen.hasError('required') && listDateChosen.touched">
-                {{'notification.buat_notifikasi.date_month_repeatation' | translate}} {{'global.messages.mandatory_text'}}
+                {{'notification.buat_notifikasi.date_month_repeatation' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </div>
             <div fxLayout="row" [formGroup]="formYearlyRecurrence">
@@ -146,7 +146,7 @@
                     <mat-option *ngFor="let item of listDates" [value]="item">{{item}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="formYearlyRecurrence.controls['recurrence_date'].hasError('required') && formYearlyRecurrence.controls['recurrence_date'].touched">
-                    {{'notification.buat_notifikasi.date_repeatation' | translate}} {{'global.messages.mandatory_text'}}.
+                    {{'notification.buat_notifikasi.date_repeatation' | translate}} {{'global.messages.mandatory_text' | translate}}.
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="48"  class="is-light form-primary">
@@ -154,7 +154,7 @@
                     <mat-option *ngFor="let item of listMonths" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error *ngIf="formYearlyRecurrence.controls['recurrence_month'].hasError('required') && formYearlyRecurrence.controls['recurrence_month'].touched">
-                    {{'notification.buat_notifikasi.month_repeatation' | translate}} {{'global.messages.mandatory_text'}}.
+                    {{'notification.buat_notifikasi.month_repeatation' | translate}} {{'global.messages.mandatory_text' | translate}}.
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -192,7 +192,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPopupGroup.controls['user_group'].hasError('required') && formPopupGroup.controls['user_group'].touched">
-                    {{'notification.popup_notifikasi.text4' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'notification.popup_notifikasi.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -228,7 +228,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPopupGroup.controls['is_smoker'].hasError('required') && formPopupGroup.controls['is_smoker'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -242,7 +242,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPopupGroup.controls['verification'].hasError('required') && formPopupGroup.controls['verification'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -256,7 +256,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPopupGroup.controls['employee'].hasError('required') && formPopupGroup.controls['employee'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -270,7 +270,7 @@
                   </mat-select>
                   <mat-error
                     *ngIf="formPopupGroup.controls['subscription'].hasError('required') && formPopupGroup.controls['subscription'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -285,7 +285,7 @@
                   <input matInput type="number" formControlName="age_consumer_from" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}">
                   <mat-error
                     *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('required') && formPopupGroup.controls['age_consumer_from'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formPopupGroup.controls['age_consumer_from'].hasError('min') && formPopupGroup.get('age_consumer_from').touched">
@@ -296,7 +296,7 @@
                   <input matInput type="number" formControlName="age_consumer_to" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}">
                   <mat-error
                     *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('required') && formPopupGroup.controls['age_consumer_to'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formPopupGroup.controls['age_consumer_to'].hasError('min') && formPopupGroup.get('age_consumer_to').touched">
@@ -327,7 +327,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formPopupGroup.controls['content_type'].hasError('required') && formPopupGroup.controls['content_type'].touched">
-                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -360,7 +360,7 @@
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formPopupGroup.controls['body'].hasError('required') && formPopupGroup.controls['body'].touched">
-              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text'}}
+              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </div>
 
@@ -374,7 +374,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formPopupGroup.controls['landing_page'].hasError('required') && formPopupGroup.controls['landing_page'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -387,7 +387,7 @@
                 <input matInput type="url" formControlName="url_iframe" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error
                   *ngIf="formPopupGroup.controls['url_iframe'].hasError('required') && formPopupGroup.controls['url_iframe'].touched">
-                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formPopupGroup.controls['url_iframe'].hasError('pattern') && formPopupGroup.get('url_iframe').value !== ''">
@@ -435,7 +435,7 @@
                 <input matInput type="url" formControlName="url_web" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error
                   *ngIf="formPopupGroup.controls['url_web'].hasError('required') && formPopupGroup.controls['url_web'].touched">
-                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formPopupGroup.controls['url_web'].hasError('pattern') && formPopupGroup.get('url_web').value !== ''">
@@ -454,7 +454,7 @@
                 </mat-select>
                 <mat-error
                 *ngIf="formPopupGroup.get('content_wallet').hasError('required') && formPopupGroup.get('content_wallet').touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -463,7 +463,7 @@
                 <input matInput type="text" formControlName="button_text" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
                 <mat-error
                   *ngIf="formPopupGroup.get('button_text').hasError('required') && formPopupGroup.get('button_text').touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formPopupGroup.get('button_text').hasError('maxlength') && formPopupGroup.get('button_text').touched">
@@ -478,7 +478,7 @@
               fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formPopupGroup.get('body_wallet').hasError('required') && formPopupGroup.get('body_wallet').touched">
-              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text'}}
+              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </div>
 
@@ -714,7 +714,7 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                        {{'global.area.national' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.national' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -725,7 +725,7 @@
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                        {{'global.area.zone' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.zone' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -737,7 +737,7 @@
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                        {{'global.area.regional' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.regional' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -748,7 +748,7 @@
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                        {{'global.area.area' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.area' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -760,7 +760,7 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                        {{'global.area.salespoint' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.salespoint' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -772,7 +772,7 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                        {{'global.area.district' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.district' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="31%" class="is-light form-primary">
@@ -783,7 +783,7 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                        {{'global.area.territory' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'global.area.territory' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>

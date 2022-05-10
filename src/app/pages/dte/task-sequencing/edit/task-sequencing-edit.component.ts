@@ -12,6 +12,7 @@ import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 import { ImportTsmCoinComponent } from '../import-coin/import-tsm-coin.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-sequencing-edit',
@@ -46,6 +47,9 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   pagination: Page = new Page();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  
+  pageName = this.translate.instant('dte.task_sequencing.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,7 +58,8 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private dataService: DataService,
     private sequencingService: SequencingService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
 
     activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
@@ -320,10 +325,10 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         const date = String(moment(res.data.last_request).format('DD MMMM YYYY'));
     
         let data = {
-          titleDialog: `Coin adjustment terakhir sudah pernah dilakukan untuk Task Sequencing ini pada tanggal ${date}. Apakah mau melanjutkan proses pengajuan ini?`,
+          titleDialog: this.translate.instant('dte.task_sequencing.coin_adjustment_confirm', {date: date}),
           captionDialog: "",
           confirmCallback: this.import.bind(this, true),
-          buttonText: ["Lanjutkan", "Batal"]
+          buttonText: [this.translate.instant('global.button.yes_continue'), this.translate.instant('global.button.cancel')]
         };
         this.dialogService.openCustomConfirmationDialog(data);
       } else {

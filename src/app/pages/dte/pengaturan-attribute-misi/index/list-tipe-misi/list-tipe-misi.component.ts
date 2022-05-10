@@ -16,6 +16,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogTipeMisiEditComponent } from "../dialog-tipe-misi-edit/dialog-tipe-misi-edit.component";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-list-tipe-misi',
@@ -54,6 +55,7 @@ export class ListTipeMisiComponent implements OnInit {
     private dataService: DataService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -218,10 +220,10 @@ export class ListTipeMisiComponent implements OnInit {
   deleteTipeMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Tipe Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Tipe Misi ini ?",
+      titleDialog: this.translate.instant("global.label.delete_entity", {entity: this.translate.instant('dte.pengaturan_attribute_misi.text3') }),
+      captionDialog: this.translate.instant("global.messages.delete_confirm", {entity: this.translate.instant('dte.pengaturan_attribute_misi.text3'), index: "" }),
       confirmCallback: this.confirmDeleteTipeMisi.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -231,7 +233,7 @@ export class ListTipeMisiComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.getTipeMisi();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 

@@ -33,6 +33,7 @@ export class DialogEditComponent implements OnInit {
   statusChange = false;
   isColor: boolean = false;
   colorCopywriting: string;
+  titleParam = {entity: this.data.title};
 
   constructor(
     private router: Router,
