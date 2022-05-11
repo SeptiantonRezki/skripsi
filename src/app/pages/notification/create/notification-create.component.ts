@@ -496,7 +496,7 @@ export class NotificationCreateComponent {
     }
 
     if (this.formNotification.controls.user_group.value !== 'customer') {
-      this.formNotification.controls.type_of_recurrence.disable();
+      // this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
@@ -1311,7 +1311,7 @@ export class NotificationCreateComponent {
 
     if (e.source.value != 'customer') {
       this.typeOfRecurrence = 'OneTime';
-      this.formNotification.controls.type_of_recurrence.disable();
+      // this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
       this.formNotification.controls.subscription_status.setValue('all');
