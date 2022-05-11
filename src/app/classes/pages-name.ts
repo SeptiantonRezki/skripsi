@@ -138,6 +138,10 @@ export class PagesName {
       "/dte/template-stock-check/create": "principal.dte_image_recognition_stock_check.buat",
       "/dte/template-stock-check/edit/": "principal.dte_image_recognition_stock_check.ubah",
       "/dte/template-stock-check/detail/": "principal.dte_image_recognition_stock_check.lihat",
+      "/dte/template-planogram": "principal.dte_image_recognition_planogram.lihat",
+      "/dte/template-planogram/create": "principal.dte_image_recognition_planogram.buat",
+      "/dte/template-planogram/edit/": "principal.dte_image_recognition_planogram.ubah",
+      "/dte/template-planogram/detail/": "principal.dte_image_recognition_planogram.lihat",
 
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
