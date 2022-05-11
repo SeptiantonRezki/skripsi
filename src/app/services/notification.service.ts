@@ -163,10 +163,6 @@ export class NotificationService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete_custom', context);
     return this.deleteApi(url);
   }
-  getProductBarcodes(context):Observable<any> {
-    const url = this.getUrl("product", "product_barcodes", context);
-    return this.getApi(url)
-  }
   /**
    * update token in firebase database
    * 

@@ -11,7 +11,6 @@ import {
   MatFormFieldModule,
   MatSelectModule,
   MatCheckboxModule,
-  MatAutocompleteModule,
   MatProgressSpinnerModule
 } from "@angular/material";
 import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.component";
@@ -29,7 +28,6 @@ import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
 import { TranslateModule } from "@ngx-translate/core";
-import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
 
 @NgModule({
   imports: [
@@ -45,7 +43,6 @@ import { SearchProductBarcodeComponent } from './search-product-barcode/search-p
     MatCheckboxModule,
     MatToolbarModule,
     MatProgressSpinnerModule,
-    MatAutocompleteModule,
     ngfModule,
     TranslateModule.forChild(),
   ],
@@ -60,7 +57,6 @@ import { SearchProductBarcodeComponent } from './search-product-barcode/search-p
     SelectSearchDirective,
     DialogImportComponent,
     ImportAudienceComponent,
-    SearchProductBarcodeComponent,
   ],
   exports: [
     ToolbarSearchComponent,
@@ -72,7 +68,6 @@ import { SearchProductBarcodeComponent } from './search-product-barcode/search-p
     SelectSearchComponent,
     DialogImportComponent,
     ImportAudienceComponent,
-    SearchProductBarcodeComponent,
   ],
   entryComponents: [
     NotificationCoinAdjustmentDialogComponent,
