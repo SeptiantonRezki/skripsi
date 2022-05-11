@@ -42,6 +42,7 @@ export class NotificationCreateComponent {
   formMonthlyRecurrence: FormGroup;
   formYearlyRecurrence: FormGroup;
   formRecurrenceCommon: FormGroup;
+  listProductBarcodes: Array<any> = [{id:1, name:"test"}]
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSubscriptionStatus: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'subscribed' }, { name: 'Tidak Berlangganan', value: 'not-subscribed' }]
@@ -306,6 +307,7 @@ export class NotificationCreateComponent {
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
+      barcode:["", Validators.required]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -404,7 +406,7 @@ export class NotificationCreateComponent {
       } else if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
       } else {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
       }
 
       if (res !== 'customer') {
@@ -968,6 +970,10 @@ export class NotificationCreateComponent {
     // this.getAudience();
   }
 
+  handleSearchProduct(event){
+    this.formNotification.get("barcode").setValue(event)
+  }
+
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formNotification.controls['areas'] as FormArray;
@@ -1443,7 +1449,8 @@ export class NotificationCreateComponent {
       type_of_recurrence: this.typeOfRecurrence,
       send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       country: this.Country,
-      status: this.formNotification.get('status').value
+      status: this.formNotification.get('status').value,
+      barcode_value: this.formNotification.get("barcode").value.id
     };
 
     body['date'] = `${moment(this.formNotification.get('date').value).format('YYYY-MM-DD')} ${this.formNotification.get('time').value}:00`;

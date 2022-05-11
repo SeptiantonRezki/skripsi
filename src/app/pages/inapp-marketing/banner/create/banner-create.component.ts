@@ -38,6 +38,7 @@ export class BannerCreateComponent {
   listLevelArea: any[];
   list: any;
   indexDelete: any;
+  listProductBarcodes: Array<any> = [{id:1, name:"testcoba"}];
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -63,7 +64,8 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.image'), value: "image" },
     { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
     { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
-    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }
+    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" },
+    { name: "Spesifik Produk B2B", value: "spesific_product_b2b" }
   ];
   listContentWallet: any[];
   listLandingPage: any[] = [];
@@ -271,6 +273,7 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
+      barcode:["", Validators.required]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -880,6 +883,10 @@ export class BannerCreateComponent {
     });
   }
 
+  handleSearchProduct(event){
+    this.formBannerGroup.get("barcode").setValue(event)
+  }
+
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formBannerGroup.controls['areas'] as FormArray;
@@ -1213,9 +1220,9 @@ export class BannerCreateComponent {
         fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
       }
-      else {
-
-      }
+      else if(body.content_type === "spesific_product_b2b"){
+        fd.append("barcode", this.formBannerGroup.get("barcode").value.id)
+      }else{}
 
       if (body.user_group === 'retailer') {
         fd.append('age', this.formBannerGroup.get('age').value);
