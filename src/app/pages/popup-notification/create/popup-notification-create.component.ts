@@ -43,11 +43,17 @@ export class PopupNotificationCreateComponent {
   dialogRef: any;
   exportAccessCashier: Boolean;
 
+  productTemp: any = {
+    id: '...',
+    name: '....'
+  }
+
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
 
   lvl: any[];
   minDate: any;
+  listProductBarcodes: Array<any> = []
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
@@ -254,6 +260,7 @@ export class PopupNotificationCreateComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
+      barcode:["", Validators.required]
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -407,7 +414,7 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'retailer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
@@ -1163,6 +1170,10 @@ export class PopupNotificationCreateComponent {
     });
   }
 
+  handleSearchProduct(event){
+    this.formPopupGroup.get("barcode").setValue(event)
+  }
+
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
@@ -1434,6 +1445,7 @@ export class PopupNotificationCreateComponent {
         country: this.Country,
         is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
+        action_data:this.formPopupGroup.get('barcode').value.id
       }
 
       if (body.type === 'retailer') {

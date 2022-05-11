@@ -96,4 +96,8 @@ export class BannerService extends BaseService {
     const url = this.getUrl(this.namespace, "list_banner_customer");
     return this.getApi(url);
   }
+  getProductBarcodes(context):Observable<any> {
+    const url = this.getUrl("product", "product_barcodes", context);
+    return this.getApi(url)
+  }
 }

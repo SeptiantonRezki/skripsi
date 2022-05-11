@@ -233,7 +233,8 @@ export class Endpoint {
         export2: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/export/report`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
           }&status=active`,
-        generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
+        generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`,
+        product_barcodes:`${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product?barcode=${context.param}`
       },
       product_cashier: {
         get: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product`,
