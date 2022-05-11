@@ -42,7 +42,7 @@ export class NotificationCreateComponent {
   formMonthlyRecurrence: FormGroup;
   formYearlyRecurrence: FormGroup;
   formRecurrenceCommon: FormGroup;
-  listProductBarcodes: Array<any> = [{id:1, name:"test"}]
+  listProductBarcodes: Array<any> = []
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSubscriptionStatus: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'subscribed' }, { name: 'Tidak Berlangganan', value: 'not-subscribed' }]
@@ -307,7 +307,7 @@ export class NotificationCreateComponent {
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -1450,7 +1450,6 @@ export class NotificationCreateComponent {
       send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       country: this.Country,
       status: this.formNotification.get('status').value,
-      barcode_value: this.formNotification.get("barcode").value.id
     };
 
     body['date'] = `${moment(this.formNotification.get('date').value).format('YYYY-MM-DD')} ${this.formNotification.get('time').value}:00`;
@@ -1655,6 +1654,8 @@ export class NotificationCreateComponent {
       body['content_wallet'] = this.formNotification.get("content_wallet").value;
       body['button_text'] = this.formNotification.get("button_text").value;
       body['static_page_body'] = this.formNotification.get("static_page_body").value;
+    }else if (body.content_type === "spesific_product_b2b"){
+      body['barcode_value'] = this.formNotification.get("barcode").value.id
     }
 
     if (this.formNotification.get("is_target_audience").value) {

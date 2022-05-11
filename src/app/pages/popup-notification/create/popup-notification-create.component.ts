@@ -260,7 +260,7 @@ export class PopupNotificationCreateComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -1445,7 +1445,6 @@ export class PopupNotificationCreateComponent {
         country: this.Country,
         is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
-        action_data:this.formPopupGroup.get('barcode').value.id
       }
 
       if (body.type === 'retailer') {
@@ -1526,6 +1525,10 @@ export class PopupNotificationCreateComponent {
 
       if (body.action === 'landing-page') {
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
+      }
+
+      if (body.action === 'spesific_product_b2b') {
+        body['action_data'] = this.formPopupGroup.get('barcode').value.id;
       }
 
       if (body.action === 'iframe') {

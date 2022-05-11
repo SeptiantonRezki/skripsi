@@ -38,7 +38,7 @@ export class BannerCreateComponent {
   listLevelArea: any[];
   list: any;
   indexDelete: any;
-  listProductBarcodes: Array<any> = [{id:1, name:"testcoba"}];
+  listProductBarcodes: Array<any> = [];
 
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
@@ -273,7 +273,7 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
-      barcode:["", Validators.required]
+      barcode:[""]
     })
 
     this.formFilter = this.formBuilder.group({
