@@ -214,7 +214,7 @@ export class NotificationCreateComponent {
     this._recurrenceType = val;
   }
   pageName = this.translate.instant('notification.text');
-  titleParam = {entity: this.pageName};
+  titleParam = { entity: this.pageName };
 
   ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
 
@@ -502,7 +502,7 @@ export class NotificationCreateComponent {
     }
 
     if (!this.ALLOW_FOR_TYPE.includes(this.formNotification.controls.user_group.value)) {
-      this.formNotification.controls.type_of_recurrence.disable();
+      // this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
@@ -1317,7 +1317,7 @@ export class NotificationCreateComponent {
 
     if (!this.ALLOW_FOR_TYPE.includes(e.source.value)) {
       this.typeOfRecurrence = 'OneTime';
-      this.formNotification.controls.type_of_recurrence.disable();
+      // this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
       this.formNotification.controls.subscription_status.setValue('all');

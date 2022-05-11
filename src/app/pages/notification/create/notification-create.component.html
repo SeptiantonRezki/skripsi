@@ -11,7 +11,8 @@
         </div>
         <div class="ayo-middle" fxLayout="column">
           <mat-form-field fxFlex="50" class="is-light form-primary">
-            <input matInput type="text" formControlName="title" placeholder="{{'notification.buat_notifikasi.text3' | translate}}">
+            <input matInput type="text" formControlName="title"
+              placeholder="{{'notification.buat_notifikasi.text3' | translate}}">
             <mat-error
               *ngIf="formNotification.controls['title'].hasError('required') && formNotification.controls['title'].touched">
               {{'notification.buat_notifikasi.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
@@ -41,12 +42,14 @@
           <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="notif_type" placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}">
+                <mat-select formControlName="notif_type"
+                  placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}">
                   <mat-option *ngFor="let item of listNotifType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['notif_type'].hasError('required') && formNotification.controls['notif_type'].touched">
-                  {{'notification.buat_notifikasi.notification_type' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.notification_type' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -55,13 +58,15 @@
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="{{'notification.popup_notifikasi.text15' | translate}}"
+                <mat-select formControlName="content_type"
+                  placeholder="{{'notification.popup_notifikasi.text15' | translate}}"
                   (selectionChange)="contentType(formNotification.get('content_type').value)">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
-                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
               <div fxFlex="10"></div>
@@ -98,31 +103,37 @@
             *ngIf="formNotification.get('content_type').value === 'static_page' || formNotification.get('content_type').value === 'e_wallet'">
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" formControlName="static_page_title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
+                <input matInput type="text" formControlName="static_page_title"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['static_page_title'].hasError('required') && formNotification.controls['static_page_title'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
             <!-- E-Wallet Content -->
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'e_wallet'">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_wallet" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}}">
+                <mat-select formControlName="content_wallet"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}}">
                   <mat-option *ngFor="let item of listContentWallet" [value]="item.id">{{item.app_name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_wallet'].hasError('required') && formNotification.controls['content_wallet'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
             <div fxLayout="row" *ngIf="formNotification.get('content_type').value === 'e_wallet'">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" formControlName="button_text" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
+                <input matInput type="text" formControlName="button_text"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['button_text'].hasError('required') && formNotification.controls['button_text'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formNotification.controls['button_text'].hasError('maxlength') && formNotification.controls['button_text'].touched">
@@ -138,7 +149,8 @@
               fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formNotification.controls['static_page_body'].hasError('required') && formNotification.controls['static_page_body'].touched">
-              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
+              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
+              translate}}
             </mat-error>
           </div>
 
@@ -146,12 +158,14 @@
           <div class="" *ngIf="formNotification.get('content_type').value === 'landing_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="landing_page_value" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
+                <mat-select formControlName="landing_page_value"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['landing_page_value'].hasError('required') && formNotification.controls['landing_page_value'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}
+                  {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -162,10 +176,12 @@
             *ngIf="formNotification.get('content_type').value === 'iframe' || formNotification.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <input matInput type="url" formControlName="url_link" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
+                <input matInput type="url" formControlName="url_link"
+                  placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error
                   *ngIf="formNotification.controls['url_link'].hasError('required') && formNotification.controls['url_link'].touched">
-                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
                 <mat-error
                   *ngIf="formNotification.controls['url_link'].hasError('pattern') && formNotification.get('url_link').value !== ''">
@@ -182,7 +198,8 @@
             <div fxFlex="30" class="inline-block">
               <div ngfDrop selectable="1" [(validDrag)]="validComboDrag" [(file)]="imageContentType" accept="image/*"
                 class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
-                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)" [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
+                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)"
+                [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
               </div>
             </div>
             <div *ngIf="imageContentType">
@@ -190,7 +207,8 @@
                 class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
                 role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
                 <img [src]="imageContentTypeBase64" class="multiple-img" (click)="previewImage()" />
-                <span class="preview-image-content" (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                <span class="preview-image-content"
+                  (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
                 <!-- <mat-icon matTooltip="{{'global.label.delete_image' | translate}}" (click)="removeImageVideo()"
                   class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                   matchipremove="" role="img" aria-hidden="true">cancel</mat-icon> -->
@@ -201,7 +219,8 @@
                 class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted p-12"
                 role="option" tabindex="-1" aria-disabled="false" aria-selected="false">
                 <img [src]="imagePrivew" class="multiple-img" (click)="previewImage()" />
-                <span class="preview-image-content" (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                <span class="preview-image-content"
+                  (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
               </div>
             </div>
           </div>
@@ -226,7 +245,8 @@
                   class="multiple-img-chip mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                   role="option" tabindex="-1" aria-disabled="false" aria-selected="false" style="height: 60px;">
                   <img [src]="img" class="multiple-img" (click)="previewImage(i)" />
-                  <span class="preview-image-content" (click)="previewImage(i)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                  <span class="preview-image-content"
+                    (click)="previewImage(i)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
                   <mat-icon matTooltip="{{'global.label.delete_image' | translate}}" (click)="removeImageMultiple(i)"
                     class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                     matchipremove="" role="img" aria-hidden="true">cancel</mat-icon>
@@ -282,22 +302,33 @@
 
           <div fxLayout="row" *ngIf="typeOfRecurrence == 'Recurring'">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="{{'notification.buat_notifikasi.repeat_pattern' | translate}}" formControlName="recurrence_type"
-                [(ngModel)]="recurrenceType">
+              <mat-select placeholder="{{'notification.buat_notifikasi.repeat_pattern' | translate}}"
+                formControlName="recurrence_type" [(ngModel)]="recurrenceType">
                 <mat-option *ngFor="let item of listRecurrenceTypes" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
+          <!-- <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Jadwal Pengulangan" formControlName="selected_day" multiple>
+                <mat-option *ngFor="let item of listWeekDays" [value]="item.id">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+
           <div [formGroup]="formDailyRecurrence" *ngIf="recurrenceType == 'Daily'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time"
+                  placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formDailyRecurrence.controls['recurrence_time'].hasError('required') && formDailyRecurrence.controls['recurrence_time'].touched">
-                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -305,12 +336,15 @@
           <div [formGroup]="formWeeklyRecurrence" *ngIf="recurrenceType == 'Weekly'">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time"
+                  placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formWeeklyRecurrence.controls['recurrence_time'].hasError('required') && formWeeklyRecurrence.controls['recurrence_time'].touched">
-                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -330,12 +364,15 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time"
+                  placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formMonthlyRecurrence.controls['recurrence_time'].hasError('required') && formMonthlyRecurrence.controls['recurrence_time'].touched">
-                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -354,12 +391,15 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time"
+                  placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time"
+                  [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formYearlyRecurrence.controls['recurrence_time'].hasError('required') && formYearlyRecurrence.controls['recurrence_time'].touched">
-                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -368,10 +408,12 @@
           <div class="pt-16" [formGroup]="formRecurrenceCommon" *ngIf="typeOfRecurrence == 'Recurring'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light mr-8">
-                <input matInput type="number" formControlName="recurrence_pattern" placeholder="{{'notification.buat_notifikasi.send_every' | translate}}">
+                <input matInput type="number" formControlName="recurrence_pattern"
+                  placeholder="{{'notification.buat_notifikasi.send_every' | translate}}">
                 <mat-error
                   *ngIf="formRecurrenceCommon.controls['recurrence_pattern'].hasError('required') && formRecurrenceCommon.controls['recurrence_pattern'].touched">
-                  {{'notification.buat_notifikasi.repeat_interval' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'notification.buat_notifikasi.repeat_interval' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
                 <span matSuffix>{{ recurrenceLabel[recurrenceType] }}</span>
               </mat-form-field>
@@ -383,7 +425,8 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}"
+                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}"
                   formControlName="recurrence_start_date" [min]="minStartDate">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
@@ -411,7 +454,8 @@
                   </mat-form-field>
                   <mat-form-field fxFlex="30" class="is-light form-primary"
                     *ngIf="formRecurrenceCommon.controls.end_option.value === 'end_date'">
-                    <input matInput (focus)="endPicker.open()" [matDatepicker]="endPicker" placeholder="{{'manajemen_barang_sku.produk.end_date' | translate}}"
+                    <input matInput (focus)="endPicker.open()" [matDatepicker]="endPicker"
+                      placeholder="{{'manajemen_barang_sku.produk.end_date' | translate}}"
                       formControlName="recurrence_end_date" [min]="minEndDate">
                     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
                     <mat-datepicker #endPicker></mat-datepicker>
@@ -450,12 +494,14 @@
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="verification" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
+                <mat-select formControlName="verification"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
                   <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['verification'].hasError('required') && formNotification.controls['verification'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -463,12 +509,14 @@
             <div class="">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="employee" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}">
+                  <mat-select formControlName="employee"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}">
                     <mat-option *ngFor="let item of listEmployee" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formNotification.controls['employee'].hasError('required') && formNotification.controls['employee'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -476,12 +524,15 @@
 
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="subscription_status" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
-                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}</mat-option>
+                <mat-select formControlName="subscription_status"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
+                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}
+                  </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}
+                  {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -529,11 +580,8 @@
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               {{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
-            <mat-checkbox
-              *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
-              class="mt-4 ml-20 mb-8"
-              (change)="isTargetArea($event)"
-              formControlName="is_target_area">
+            <mat-checkbox *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
+              class="mt-4 ml-20 mb-8" (change)="isTargetArea($event)" formControlName="is_target_area">
               {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
           </div>
           <div
@@ -639,14 +687,16 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
                   Zona' :
                   item.code}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   Regional'
                   :
                   item.code}}</mat-option>
@@ -654,7 +704,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all'
+                  ? 'Semua
                   Area'
                   :
                   item.code}}</mat-option>
@@ -662,7 +713,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
+                <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                  'all' ?
                   'Semua
                   Salespoint'
                   :
@@ -671,7 +723,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   District'
                   :
                   item.code}}</mat-option>
@@ -679,7 +732,8 @@
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
               <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
-                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
+                <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                  'all' ? 'Semua
                   Territori'
                   :
                   item.code}}</mat-option>
@@ -748,7 +802,8 @@
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
-                <input matInput formControlName="search" placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
+                <input matInput formControlName="search" placeholder="{{ls.locale.global.label.search}}"
+                  (keyup)="keyUp.next($event.target.value)">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
