@@ -40,7 +40,7 @@
             <th nowrap>Name</th>
             <th nowrap>{{'global.label.code' | translate}}</th>
             <th nowrap>Owner</th>
-            <th nowrap>Tipe</th>
+            <th nowrap>Type</th>
             <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
         </thead>
@@ -79,7 +79,7 @@
             <th nowrap>Name</th>
             <th nowrap>{{'global.label.code' | translate}}</th>
             <th nowrap>Owner</th>
-            <th nowrap>Tipe</th>
+            <th nowrap>Type</th>
             <th nowrap>Valid</th>
             <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
@@ -102,7 +102,7 @@
               {{ item.type }}
             </td>
             <td nowrap>
-              {{ item.is_valid ? 'VALID' : 'TIDAK VALID' }}
+              {{ item.is_valid ? 'VALID' : 'INVALID' }}
             </td>
             <td nowrap>
               {{ item.reason }}

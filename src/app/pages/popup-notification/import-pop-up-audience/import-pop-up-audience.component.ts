@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { NotificationService } from 'app/services/notification.service';
 import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: './import-pop-up-audience.component.html',
@@ -30,6 +31,7 @@ export class ImportPopUpAudienceComponent {
     private notificationService: NotificationService,
     private dataService: DataService,
     private ls: LanguagesService,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -53,7 +55,7 @@ export class ImportPopUpAudienceComponent {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text18') });
       return;
     }
 
@@ -72,7 +74,10 @@ export class ImportPopUpAudienceComponent {
           this.validData = (res.data || []).filter(item => item.is_valid).length;
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+          this.dialogService.openSnackBar({ message: 
+            this.translate.instant('global.message.reupload_invalid', {
+              entity: ''
+            }) });
           this.dataService.showLoading(false);
         }
       },
@@ -81,7 +86,7 @@ export class ImportPopUpAudienceComponent {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text16') })
       }
     )
   }
@@ -91,7 +96,7 @@ export class ImportPopUpAudienceComponent {
       const res = this.dialogData.type === 'push_notification' ? this.rows.filter(item => item.is_valid) : this.rows.map(item => { return { ...item } });
       this.dialogRef.close(res);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text17') });
     }
   }
 
