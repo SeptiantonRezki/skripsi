@@ -39,8 +39,8 @@ export class CustomNotificationCreateComponent implements OnInit {
   areaFromLogin;
   minStartDate: any = new Date();
 
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }];
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
+  listContentType: any[] = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }];
+  listUserGroup: any[] = [{ name: this.translate.instant('global.menu.retailer'), value: "retailer" }, { name: this.translate.instant('customer.text1'), value: "customer" }];
 
   audienceSelected: any[] = [];
 

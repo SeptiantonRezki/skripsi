@@ -1524,6 +1524,7 @@
   },
   "notification": {
     "text": "Notifikasi",
+    "customize_push_notification": "Notifikasi Kustom",
     "buat_notifikasi": {
       "text1": "Daftar Notifikasi",
       "text2": "Tipe Konten Notifikasi",
@@ -1553,7 +1554,10 @@
       "send_period": "Periode Pengiriman",
       "release_time": "Waktu Terbit",
       "send_every": "Dikirim setiap",
-      "notification_type": "Tipe Notifikasi"
+      "notification_type": "Tipe Notifikasi",
+      "repeat_types": "Tipe Pengulangan",
+      "create_custom_notification": "Buat Customized Notification",
+      "target_user": "Target User"
     },
     "popup_notifikasi": {
       "page_name": "Popup Notifikasi",
