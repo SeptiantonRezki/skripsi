@@ -9,7 +9,7 @@
   <div class="content p-24">
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab">
-        <mat-tab label="Penukaran Coin">
+        <mat-tab label="{{'dte.coin_disbursement.coin_exchange' | translate}}">
           <div class="ayo-middle py-24" fxLayout="column">
             <form autocomplete="off" [formGroup]="formCoin">
               <div fxLayout="row" class="px-24">
@@ -87,7 +87,7 @@
           </div>
         </mat-tab>
         <!-- TIPE MISI -->
-        <mat-tab label="Target Penerima">
+        <mat-tab label="{{'dte.coin_disbursement.text17' | translate}}">
           <div class="ayo-middle py-24" fxLayout="column">
             <div fxLayout="column" class="px-24">
               <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text18' | translate}}</h4>
@@ -270,13 +270,13 @@
           </div>
           <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="isEdit">
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-              {{ isEdit && detailCoin.status === 'publish' ? 'UNPUBLISH' : 'SIMPAN' }}
+              {{ isEdit && detailCoin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('global.button.save' | translate) }}
             </button>
           </div>
           <a #downloadLink></a>
         </mat-tab>
 
-        <mat-tab label="List Penukaran Coin" *ngIf="isEdit && detailCoin.status === 'publish'">
+        <mat-tab label="{{'dte.coin_disbursement.coin_exchange_list' | translate}}" *ngIf="isEdit && detailCoin.status === 'publish'">
           <app-coin-disburstment-exchange></app-coin-disburstment-exchange>
         </mat-tab>
       </mat-tab-group>

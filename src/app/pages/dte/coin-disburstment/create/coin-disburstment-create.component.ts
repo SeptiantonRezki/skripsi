@@ -35,7 +35,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
   rows: any[];
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -44,10 +44,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     { name: "KA", value: "KA" }
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -1148,11 +1148,11 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     let args = this.getArgsForSubmit();
     if (this.formCoin.valid) {
       if (!this.isPojokBayar.value && !this.isTransferBank.value) {
-        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu Opsi Penukaran!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_select_exchange_options') });
         return;
       }
       if (this.isTargetedRetailer.value && !this.allRowsSelected && this.selected.length === 0) {
-        this.dialogService.openSnackBar({ message: "Belum ada Retailer Terpilih di Target Penerima!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_select_target_receiver') });
         return;
       }
 
@@ -1221,7 +1221,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     } else {
       console.log(this.findInvalidControls(this.formCoin));
       commonFormValidator.validateAllFields(this.formCoin);
-      this.dialogService.openSnackBar({ message: "Lengkapi Pengisian Formulir!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_fill_form') });
     }
   }
 
@@ -1282,7 +1282,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
             console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
+              message: this.translate.instant('global.messages.text8'),
             });
           });
       }
