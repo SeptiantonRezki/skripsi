@@ -163,7 +163,8 @@
       "delete_image": "Hapus gambar",
       "qry": "QTY",
       "list_entity": "Daftar {{entity}}",
-      "all_type": "Semua Tipe"
+      "all_type": "Semua Tipe",
+      "consumer": "Consumer"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -269,6 +270,31 @@
       "reupload_invalid": "Data {{entity}} tidak Valid, mohon mengunggah ulang.",
       "failed_upload_reffer_export": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda.",
       "requesting": "Requesting"
+    },
+    "calendar": {
+      "april": "April",
+      "august": "Agustus",
+      "daily": "Harian",
+      "december": "Desember",
+      "february": "Februari",
+      "friday": "Jumat",
+      "january": "Januari",
+      "july": "Juli",
+      "june": "Juni",
+      "march": "Maret",
+      "may": "Mei",
+      "monday": "Senin",
+      "monthly": "Bulanan",
+      "november": "November",
+      "october": "Oktober",
+      "saturday": "Sabtu",
+      "september": "September",
+      "sunday": "Minggu",
+      "thursday": "Kamis",
+      "tuesday": "Selasa",
+      "wednesday": "Rabu",
+      "weekly": "Mingguan",
+      "yearly": "Tahunan"
     }
   },
   "login": {
@@ -1309,7 +1335,11 @@
       "failed_upload_inconsistent_name": "Upload gagal, Nama Program Penukaran yang diupload tidak sesuai.",
       "failed_upload_invalid_file": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.",
       "coin_valuation": "Coin Valuation",
-      "coin_valuation_more_than_zero": "Coin Valuation harus lebih dari > 0"
+      "coin_valuation_more_than_zero": "Coin Valuation harus lebih dari > 0",
+      "coin_exchange": "Penukaran Coin",
+      "please_select_exchange_options": "Silahkan pilih salah satu Opsi Penukaran!",
+      "please_select_target_receiver": "Belum ada Retailer Terpilih di Target Penerima!",
+      "please_fill_form": "Lengkapi Pengisian Formulir!"
     }
   },
   "cn_reward": {
@@ -1538,7 +1568,12 @@
       "text21": "Notifikasi Journey Builder",
       "text22": "Data Berhasil Disimpan",
       "text23": "Apakah anda yakin untuk menghapus popup notifikasi ini?",
-      "time": "Waktu"
+      "time": "Waktu",
+      "label1": "Aktivasi notifikasi sekali kirim",
+      "label2": "Aktivasi notifikasi berulang"
+    },
+    "custom_notifikasi": {
+      "page_name": "Buat Customized Push Notification"
     }
   },
   "manajemen_konten": {
