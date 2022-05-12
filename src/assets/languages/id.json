@@ -294,7 +294,19 @@
       "tuesday": "Selasa",
       "wednesday": "Rabu",
       "weekly": "Mingguan",
-      "yearly": "Tahunan"
+      "yearly": "Tahunan",
+      "jan_s": "Jan",
+      "feb_s": "Feb",
+      "mar_s": "Mar",
+      "apr_s": "Apr",
+      "may_s": "Mei",
+      "jun_s": "Jun",
+      "jul_s": "Jul",
+      "aug_s": "Agu",
+      "sep_s": "Sep",
+      "oct_s": "Okt",
+      "nov_s": "Nov",
+      "dec_s": "Des"
     }
   },
   "login": {
@@ -1568,9 +1580,16 @@
       "text21": "Notifikasi Journey Builder",
       "text22": "Data Berhasil Disimpan",
       "text23": "Apakah anda yakin untuk menghapus popup notifikasi ini?",
+      "text24": "VALID",
+      "text25": "TIDAK VALID",
       "time": "Waktu",
       "label1": "Aktivasi notifikasi sekali kirim",
-      "label2": "Aktivasi notifikasi berulang"
+      "label2": "Aktivasi notifikasi berulang",
+      "message1": "Harap pilih minimal satu hari terbit!",
+      "message2": "Harap pilih minimal satu tanggal terbit!",
+      "message3": "Harap pilih minimal satu tanggal & bulan terbit!",
+      "message4": "Target Area harus dipilih!",
+      "message5": "Harap pilih tanggal dan bulan pengulangan!"
     },
     "custom_notifikasi": {
       "page_name": "Buat Customized Push Notification"
@@ -1995,6 +2014,11 @@
       "create": "Buat Trade Program",
       "edit": "Ubah Trade Program",
       "detail": "Detail Trade Program"
+    },
+    "popup_notifikasi": {
+      "index": "Pop-up Notifikasi",
+      "create": "Buat Pop-up Notifikasi",
+      "edit": "Ubah Pop-up Notifikasi"
     }
   }
 }
