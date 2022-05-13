@@ -429,7 +429,8 @@
           </div>
 
           <!-- Targeted Audience Options -->
-          <div class="pt-16 pb-16" fxLayout="row" fxLayoutAlign="start center">
+          <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
+            class="pt-16 pb-16" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
               <strong>Filter Pengguna</strong>
             </h3>
@@ -529,11 +530,13 @@
 
         <div *ngIf="formNotification.value.user_group != 'tsm'">
           <div fxLayout="row" class="pb-24 px-24">
-            <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
+            <mat-checkbox 
+            *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
+            class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               {{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
             <mat-checkbox
-              *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)"
+              *ngIf="formNotification.controls['user_group'].value === 'customer'"
               class="mt-4 ml-20 mb-8"
               (change)="isTargetArea($event)"
               formControlName="is_target_area">

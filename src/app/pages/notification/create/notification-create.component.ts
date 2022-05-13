@@ -1311,6 +1311,11 @@ export class NotificationCreateComponent {
       this.formNotification.get('user_group').patchValue('tsm');
     }
 
+    if(e.source.value !== 'customer'){
+      this.formNotification.get('is_target_area').setValue(false)
+      this.formNotification.get('is_target_audience').setValue(false)
+    }
+
     if (!this.ALLOW_FOR_TYPE.includes(e.source.value)) {
       this.typeOfRecurrence = 'OneTime';
       this.formNotification.controls.type_of_recurrence.disable();
