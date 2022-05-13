@@ -254,6 +254,7 @@ export class PopupNotificationEditComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
+      barcode:["", Validators.required]
     });
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -294,6 +295,9 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.get("content_wallet").disable();
       this.formPopupGroup.get("body_wallet").disable();
       this.formPopupGroup.get("button_text").disable();
+      this.formPopupGroup.get("barcode").disable();
+      this.formPopupGroup.get("barcode").disable();
+      this.formPopupGroup.get("barcode").setValue("");
 
       if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
         this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
@@ -398,10 +402,11 @@ export class PopupNotificationEditComponent {
       }
 
       if (res === 'retailer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
+        this.formPopupGroup.get("barcode").disable();
 
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
@@ -409,6 +414,14 @@ export class PopupNotificationEditComponent {
 
         if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
           this.formPopupGroup.controls['landing_page'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode'].enable();
         }
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
@@ -545,6 +558,8 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.get("content_wallet").disable();
       this.formPopupGroup.get("body_wallet").disable();
       this.formPopupGroup.get("button_text").disable();
+      this.formPopupGroup.get("barcode").disable();
+      this.formPopupGroup.get("barcode").setValue("");
 
       if (value === "new-product") {
         this.formPopupGroup.get("product").setValidators([Validators.required])
@@ -552,6 +567,11 @@ export class PopupNotificationEditComponent {
 
       if (value === "link_to_web_browser") {
         this.formPopupGroup.get("url_web").enable();
+      }
+
+      if (value === "spesific_product_b2b") {
+        this.formPopupGroup.controls['barcode'].enable();
+        this.formPopupGroup.get("barcode").setValidators([Validators.required]);
       }
 
       if (value === "e_wallet") {
@@ -1078,6 +1098,15 @@ export class PopupNotificationEditComponent {
     }
   }
 
+  // handle onChange search product barcode
+  // if id empty return empty string
+  handleSearchProduct(event){
+    if(event.id)
+    this.formPopupGroup.get("barcode").setValue(event)
+    else
+    this.formPopupGroup.get("barcode").setValue("")
+  }
+
   async getDetails() {
     try {
       const response = await this.notificationService.getById({}, { popup_notif_id: this.idPopup }).toPromise();
@@ -1192,6 +1221,10 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('url_web').setValue(response.action_data);
       }
 
+      if(response.action === "spesific_product_b2b"){
+        this.formPopupGroup.controls['barcode'].setValue(JSON.parse(response.action_data).product_info);
+      }
+
       if (response.action === 'e_wallet') {
         const e_wallet = JSON.parse(response.action_data) || {};
         this.formPopupGroup.get('content_wallet').setValue(parseInt(e_wallet.wallet_id));
@@ -1283,7 +1316,8 @@ export class PopupNotificationEditComponent {
   }
 
   submit() {
-    console.log(this.formPopupGroup);
+    console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
+
     if ((this.formPopupGroup.valid && this.imageConverted === undefined) || (this.formPopupGroup.valid && this.imageConverted)) {
 
       this.dataService.showLoading(true);

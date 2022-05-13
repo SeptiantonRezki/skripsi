@@ -1222,6 +1222,7 @@ export class BannerCreateComponent {
       }
       else if(body.content_type === "spesific_product_b2b"){
         fd.append("barcode", this.formBannerGroup.get("barcode").value.id)
+        fd.append("name_product", this.formBannerGroup.get("barcode").value.name)
       }else{}
 
       if (body.user_group === 'retailer') {

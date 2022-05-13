@@ -260,7 +260,7 @@ export class PopupNotificationCreateComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:[""]
+      barcode:["", Validators.required]
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -313,6 +313,8 @@ export class PopupNotificationCreateComponent {
       this.formPopupGroup.get("content_wallet").disable();
       this.formPopupGroup.get("body_wallet").disable();
       this.formPopupGroup.get("button_text").disable();
+      this.formPopupGroup.get("barcode").disable();
+      this.formPopupGroup.get("barcode").setValue("");
 
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
@@ -418,13 +420,17 @@ export class PopupNotificationCreateComponent {
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-
+        
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
-
+        
         if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
           this.formPopupGroup.controls['landing_page'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode'].enable();
         }
 
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
@@ -543,9 +549,16 @@ export class PopupNotificationCreateComponent {
       this.formPopupGroup.get("content_wallet").disable();
       this.formPopupGroup.get("body_wallet").disable();
       this.formPopupGroup.get("button_text").disable();
+      this.formPopupGroup.get("barcode").disable();
+      this.formPopupGroup.get("barcode").setValue("");
 
       if (value === "new-product") {
         this.formPopupGroup.get("product").setValidators([Validators.required])
+      }
+
+      if (value === "spesific_product_b2b") {
+        this.formPopupGroup.controls['barcode'].enable();
+        this.formPopupGroup.get("barcode").setValidators([Validators.required]);
       }
 
       if (value === "link_to_web_browser") {
@@ -1170,8 +1183,14 @@ export class PopupNotificationCreateComponent {
     });
   }
 
+  // handle onChange search product barcode
+  // if id empty return empty string
   handleSearchProduct(event){
+    if(event.id)
     this.formPopupGroup.get("barcode").setValue(event)
+    else
+    this.formPopupGroup.get("barcode").setValue("")
+    // console.log( this.formPopupGroup.get("barcode").value)
   }
 
   async generataList(selection, id, index, type) {
@@ -1423,6 +1442,7 @@ export class PopupNotificationCreateComponent {
   }
 
   submit() {
+    console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
     if (this.formPopupGroup.valid) {
       if (this.formPopupGroup.get('content_type').value !== 'new-product' && !this.files) {
         this.dialogService.openSnackBar({ message: "Gambar popup notifikasi belum dipilih!" });
@@ -1528,7 +1548,8 @@ export class PopupNotificationCreateComponent {
       }
 
       if (body.action === 'spesific_product_b2b') {
-        body['action_data'] = this.formPopupGroup.get('barcode').value.id;
+        body['barcode_value'] = this.formPopupGroup.get('barcode').value.id;
+        body['name_value'] = this.formPopupGroup.get('barcode').value.name;
       }
 
       if (body.action === 'iframe') {
@@ -1601,6 +1622,7 @@ export class PopupNotificationCreateComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
+      // console.log(body)
       this.notificationService.createPopup(body).subscribe(
         res => {
           this.dataService.showLoading(false);
