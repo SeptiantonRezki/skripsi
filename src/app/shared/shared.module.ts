@@ -27,6 +27,7 @@ import { SelectSearchComponent } from "./select-search/select-search.component";
 import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
+import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
 import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
@@ -56,6 +57,7 @@ import { TranslateModule } from "@ngx-translate/core";
     SelectSearchComponent,
     SelectSearchDirective,
     DialogImportComponent,
+    SearchProductBarcodeComponent,
     ImportAudienceComponent,
   ],
   exports: [
@@ -67,6 +69,7 @@ import { TranslateModule } from "@ngx-translate/core";
     SalestreeComponent,
     SelectSearchComponent,
     DialogImportComponent,
+    SearchProductBarcodeComponent,
     ImportAudienceComponent,
   ],
   entryComponents: [
