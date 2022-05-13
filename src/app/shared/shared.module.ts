@@ -28,8 +28,8 @@ import { SelectSearchComponent } from "./select-search/select-search.component";
 import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
-import { TranslateModule } from "@ngx-translate/core";
 import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -59,8 +59,8 @@ import { SearchProductBarcodeComponent } from './search-product-barcode/search-p
     SelectSearchComponent,
     SelectSearchDirective,
     DialogImportComponent,
-    ImportAudienceComponent,
     SearchProductBarcodeComponent,
+    ImportAudienceComponent,
   ],
   exports: [
     ToolbarSearchComponent,
@@ -71,8 +71,8 @@ import { SearchProductBarcodeComponent } from './search-product-barcode/search-p
     SalestreeComponent,
     SelectSearchComponent,
     DialogImportComponent,
-    ImportAudienceComponent,
     SearchProductBarcodeComponent,
+    ImportAudienceComponent,
   ],
   entryComponents: [
     NotificationCoinAdjustmentDialogComponent,
