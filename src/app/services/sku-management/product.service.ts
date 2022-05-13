@@ -88,6 +88,11 @@ export class ProductService extends BaseService {
     return this.multipartPost(url, body)
   }
 
+  getProductBarcodes(context):Observable<any> {
+    const url = this.getUrl(this.namespace, "product_barcodes", context);
+    return this.getApi(url)
+  }
+
   generateLink(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "generate_link");
     return this.postApi(url, body);
