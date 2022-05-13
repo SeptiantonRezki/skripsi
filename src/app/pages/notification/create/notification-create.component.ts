@@ -43,6 +43,7 @@ export class NotificationCreateComponent {
   formMonthlyRecurrence: FormGroup;
   formYearlyRecurrence: FormGroup;
   formRecurrenceCommon: FormGroup;
+  listProductBarcodes: Array<any> = []
 
   listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
   listSubscriptionStatus: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'subscribed' }, { name: 'Tidak Berlangganan', value: 'not-subscribed' }]
@@ -409,8 +410,10 @@ export class NotificationCreateComponent {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
       } else if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
-      } else {
+      } else if(res === 'tsm'){
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+      } else{
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -433,6 +436,7 @@ export class NotificationCreateComponent {
 
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
+      // console.log(this.formNotification.controls['content_type'].value)
       this.contentType(this.formNotification.controls['content_type'].value);
     });
 
@@ -974,6 +978,13 @@ export class NotificationCreateComponent {
     // this.getAudience();
   }
 
+  handleSearchProduct(event){
+    if(event.id)
+    this.formNotification.get("barcode").setValue(event)
+    else
+    this.formNotification.get("barcode").setValue("")
+  }
+
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formNotification.controls['areas'] as FormArray;
@@ -1329,6 +1340,7 @@ export class NotificationCreateComponent {
   }
 
   async submit() {
+    // console.log(this.formNotification.valid, this.formNotification.get("barcode").value, this.formNotification.controls['barcode'], this.formNotification.get("title").value, this.formNotification.controls['title'].hasError('required'))
     if (!this.formNotification.valid) {
       this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
       commonFormValidator.validateAllFields(this.formNotification);
@@ -1449,7 +1461,7 @@ export class NotificationCreateComponent {
       type_of_recurrence: this.typeOfRecurrence,
       send_sfmc: this.formNotification.get('send_ayo').value ? '0' : '1',
       country: this.Country,
-      status: this.formNotification.get('status').value
+      status: this.formNotification.get('status').value,
     };
 
     body['date'] = `${moment(this.formNotification.get('date').value).format('YYYY-MM-DD')} ${this.formNotification.get('time').value}:00`;
@@ -1654,6 +1666,9 @@ export class NotificationCreateComponent {
       body['content_wallet'] = this.formNotification.get("content_wallet").value;
       body['button_text'] = this.formNotification.get("button_text").value;
       body['static_page_body'] = this.formNotification.get("static_page_body").value;
+    }else if (body.content_type === "spesific_product_b2b"){
+      body['barcode_value'] = this.formNotification.get("barcode").value.id
+      body['name_value'] = this.formNotification.get("barcode").value.name
     }
 
     if (this.formNotification.get("is_target_audience").value) {
@@ -1757,6 +1772,14 @@ export class NotificationCreateComponent {
     } else {
       this.formNotification.controls['content_wallet'].disable();
       this.formNotification.controls['button_text'].disable();
+    }
+
+    if (value === 'spesific_product_b2b') {
+      this.formNotification.get('barcode').setValidators([Validators.required]);
+      this.formNotification.controls['barcode'].enable();
+    } else {
+      this.formNotification.controls['barcode'].setValue("");
+      this.formNotification.controls['barcode'].disable();
     }
   }
 
@@ -2341,7 +2364,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc, area_ids, is_smoking
+        verification, send_sfmc, area_ids, is_smoking,
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2352,7 +2375,8 @@ export class NotificationCreateComponent {
       const image_url = (content_type === 'image') ? content_type_value.image_value : [];
       const wallet_value = (content_type === 'e_wallet') ? content_type_value.target_page.wallet.app_name : '';
       const button_text = (content_type === 'e_wallet') ? content_type_value.target_page.button_text : '';
-
+      const productInfo = (content_type === "spesific_product_b2b") ? {id:content_type_value.product_info.barcode, name:content_type_value.product_info.name} : ''
+      // console.log(productInfo)
       if (static_page_slug) {
         const { body } = await this.notificationService.getPageContent(static_page_slug).toPromise();
         static_page_body = body || '';
@@ -2389,6 +2413,9 @@ export class NotificationCreateComponent {
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
+      if(content_type === "spesific_product_b2b")
+        frm.controls['barcode'].setValue(productInfo);
+
 
       setTimeout(() => {
         /**
@@ -2400,7 +2427,6 @@ export class NotificationCreateComponent {
         frm.controls['content_wallet'].setValue(wallet_value);
         frm.controls['button_text'].setValue(button_text);
       }, 1000);
-
       if (type_of_recurrence == 'Recurring' && recurrence) {
         this.formNotification.controls.type_of_recurrence.enable();
         this.typeOfRecurrence = 'Recurring'
