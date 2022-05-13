@@ -64,7 +64,8 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.image'), value: "image" },
     { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
     { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
-    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }
+    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" },
+    { name: "Spesifik Produk B2B", value: "spesific_product_b2b" }
   ];
   listContentWallet: any[];
   listLandingPage: any[] = [];
@@ -272,6 +273,7 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
+      barcode:["", Validators.required]
     })
 
     this.formFilter = this.formBuilder.group({

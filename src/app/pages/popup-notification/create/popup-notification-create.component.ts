@@ -43,13 +43,19 @@ export class PopupNotificationCreateComponent {
   dialogRef: any;
   exportAccessCashier: Boolean;
 
+  productTemp: any = {
+    id: '...',
+    name: '....'
+  }
+
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
 
   lvl: any[];
   minDate: any;
-  listJenisKonsumen: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.verified'), value: "verified" }];
-  listSubscription: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.subscribe'), value: "yes" }, { name: this.translate.instant('global.label.unsubscribe'), value: "no" }];
+  listProductBarcodes: Array<any> = []
+  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
+  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: this.translate.instant('global.label.src'), value: "src" }, { name: this.translate.instant('global.label.ws_downline'), value: "downline" }];
@@ -261,6 +267,7 @@ export class PopupNotificationCreateComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
+      barcode:["", Validators.required]
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -435,7 +442,8 @@ export class PopupNotificationCreateComponent {
         this.listContentType = [
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
-          { name: this.translate.instant('global.label.iframe'), value: "iframe" }
+          { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+          {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
