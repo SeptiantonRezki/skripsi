@@ -65,7 +65,8 @@ export class BannerEditComponent {
     { name: this.translate.instant('global.label.image'), value: "image" },
     { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
     { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
-    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }
+    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" },
+    { name: "Spesifik Produk B2B", value: "spesific_product_b2b" }
   ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
@@ -188,6 +189,7 @@ export class BannerEditComponent {
   ) {
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
+    console.log(this.detailBanner)
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
@@ -300,6 +302,7 @@ export class BannerEditComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:['all'],
+      barcode:["", Validators.required]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -839,6 +842,16 @@ export class BannerEditComponent {
     return areaList;
   }
 
+  handleSearchProduct(event){
+    console.log(
+    this.formBannerGroup.get("barcode").value
+    )
+    if(event.id)
+    this.formBannerGroup.get("barcode").setValue(event)
+    else
+    this.formBannerGroup.get("barcode").setValue("")
+  }
+
   async getDetails() {
     this.formBannerGroup.get('name').setValue(this.detailBanner.name);
     this.formBannerGroup.get('from').setValue(this.detailBanner.from);
@@ -848,6 +861,7 @@ export class BannerEditComponent {
     this.formBannerGroup.get('promo').setValue(this.detailBanner.promo);
     this.formBannerGroup.get('status').setValue(this.detailBanner.status);
     this.formBannerGroup.get('content_type').setValue(this.detailBanner.target_page.type);
+    console.log(this.detailBanner.target_page.type, this.formBannerGroup.get('content_type').value)
     this.formBannerGroup.get('is_target_audience').setValue(this.detailBanner.target_audience === 0 ? false : true);
     if (this.detailBanner.target_audience && this.detailBanner.target_audience === 1) {
       this.formBannerGroup.controls['is_target_audience'].setValue(true);
@@ -911,6 +925,11 @@ export class BannerEditComponent {
 
     if (this.detailBanner.target_page.type === 'landing_page') {
       this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+    }
+
+    if (this.detailBanner.target_page.type === 'spesific_product_b2b') {
+      this.formBannerGroup.get('barcode').setValue({id:this.detailBanner.target_page.product_info.barcode, name:this.detailBanner.target_page.product_info.name});
+    console.log( this.formBannerGroup.get('barcode').value)
     }
 
     if (this.detailBanner.target_page.type === 'iframe' || this.detailBanner.target_page.type === 'link_web') {
@@ -1391,6 +1410,9 @@ export class BannerEditComponent {
       } else if (body.content_type === 'link_web') {
         fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
+      } else if (body.content_type === 'spesific_product_b2b') {
+        fd.append('barcode', this.formBannerGroup.get('barcode').value.id);
+        fd.append('name_product', this.formBannerGroup.get('barcode').value.name);
       }
       else {
 
@@ -1561,6 +1583,13 @@ export class BannerEditComponent {
     if (value !== 'e_wallet') {
       this.formBannerGroup.controls['content_wallet'].disable();
       this.formBannerGroup.controls['button_text'].disable();
+    }
+
+    if(value === "spesific_product_b2b"){
+      this.formBannerGroup.controls['barcode'].enable()
+    }else{
+      this.formBannerGroup.controls['barcode'].setValue("")
+      this.formBannerGroup.controls['barcode'].disable()
     }
 
     if (value === 'landing_page') {
