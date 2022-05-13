@@ -217,7 +217,8 @@ export class NotificationCreateComponent {
   pageName = this.translate.instant('notification.text');
   titleParam = { entity: this.pageName };
 
-  ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
+  //ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
+  ALLOW_FOR_TYPE = ['customer'];
 
   constructor(
     private formBuilder: FormBuilder,
