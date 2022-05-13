@@ -273,7 +273,7 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
-      barcode:[""]
+      barcode:["", Validators.required]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -884,7 +884,13 @@ export class BannerCreateComponent {
   }
 
   handleSearchProduct(event){
+    console.log(
+    this.formBannerGroup.get("barcode").value
+    )
+    if(event.id)
     this.formBannerGroup.get("barcode").setValue(event)
+    else
+    this.formBannerGroup.get("barcode").setValue("")
   }
 
   async generataList(selection, id, index, type) {
@@ -1120,6 +1126,13 @@ export class BannerCreateComponent {
       this.formBannerGroup.controls['url_iframe'].disable();
     }
 
+    if(value === "spesific_product_b2b"){
+      this.formBannerGroup.controls['barcode'].enable()
+    }else{
+      this.formBannerGroup.controls['barcode'].setValue("")
+      this.formBannerGroup.controls['barcode'].disable()
+    }
+
     if (value !== 'e_wallet') {
       this.formBannerGroup.controls['content_wallet'].disable();
       this.formBannerGroup.controls['button_text'].disable();
@@ -1169,7 +1182,7 @@ export class BannerCreateComponent {
   }
 
   async submit(status?: string) {
-    console.log(this.formBannerGroup);
+    console.log(this.formBannerGroup.valid, this.formBannerGroup.controls['barcode']);
     let invalids = this.findInvalidControls();
     console.log('invalid form', invalids);
     if(this.onLoad == false)

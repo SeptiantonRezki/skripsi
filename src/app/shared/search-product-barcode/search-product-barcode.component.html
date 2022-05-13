@@ -21,7 +21,7 @@
     </mat-option>
   </mat-autocomplete>
   <button
-    *ngIf="search.value"
+    *ngIf="search.value && !this.disabled"
     matSuffix
     mat-icon-button
     aria-label="Clear"

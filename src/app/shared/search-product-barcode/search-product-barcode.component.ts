@@ -25,6 +25,8 @@ export class SearchProductBarcodeComponent implements OnInit {
   selected: FormControl = new FormControl({ id: "", name: "" });
 
   @Input() value: any;
+  
+  @Input() disabled: boolean = false;
 
   @Output() onChange: EventEmitter<any> = new EventEmitter();
 
@@ -45,6 +47,7 @@ export class SearchProductBarcodeComponent implements OnInit {
     this.selected.valueChanges.subscribe((value) => {
       this.onChange.emit(value);
     });
+    if(this.disabled)this.search.disable()
   }
 
   getData(bypass: boolean = false) {

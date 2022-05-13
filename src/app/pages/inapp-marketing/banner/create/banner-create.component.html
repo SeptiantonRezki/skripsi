@@ -360,7 +360,12 @@
           <div class="pb-24 px-24" *ngIf="formBannerGroup.get('content_type').value === 'spesific_product_b2b'">
             <div fxLayout="row">
                 <search-product-barcode fxFlex="45" (onChange)="handleSearchProduct($event)">
-
+                  <mat-error
+                  *ngIf="formBannerGroup.controls['barcode'].hasError('required') && formBannerGroup.controls['barcode'].touched">
+                  <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
+                  translate}} -->
+                  Barcode Produk Harus diisi
+                </mat-error>
                 </search-product-barcode>
             </div>
           </div>

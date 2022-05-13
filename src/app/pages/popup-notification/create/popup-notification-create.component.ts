@@ -1442,7 +1442,7 @@ export class PopupNotificationCreateComponent {
   }
 
   submit() {
-    console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
+    // console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
     if (this.formPopupGroup.valid) {
       if (this.formPopupGroup.get('content_type').value !== 'new-product' && !this.files) {
         this.dialogService.openSnackBar({ message: "Gambar popup notifikasi belum dipilih!" });

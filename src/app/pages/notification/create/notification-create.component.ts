@@ -405,7 +405,9 @@ export class NotificationCreateComponent {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
       } else if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
-      } else {
+      } else if(res === 'tsm'){
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+      } else{
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
       }
 
@@ -429,7 +431,7 @@ export class NotificationCreateComponent {
 
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
-      console.log(this.formNotification.controls['content_type'].value)
+      // console.log(this.formNotification.controls['content_type'].value)
       this.contentType(this.formNotification.controls['content_type'].value);
     });
 
@@ -2369,7 +2371,7 @@ export class NotificationCreateComponent {
       const wallet_value = (content_type === 'e_wallet') ? content_type_value.target_page.wallet.app_name : '';
       const button_text = (content_type === 'e_wallet') ? content_type_value.target_page.button_text : '';
       const productInfo = (content_type === "spesific_product_b2b") ? {id:content_type_value.product_info.barcode, name:content_type_value.product_info.name} : ''
-      console.log(productInfo)
+      // console.log(productInfo)
       if (static_page_slug) {
         const { body } = await this.notificationService.getPageContent(static_page_slug).toPromise();
         static_page_body = body || '';

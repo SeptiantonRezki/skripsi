@@ -1316,7 +1316,7 @@ export class PopupNotificationEditComponent {
   }
 
   submit() {
-    console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
+    // console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
 
     if ((this.formPopupGroup.valid && this.imageConverted === undefined) || (this.formPopupGroup.valid && this.imageConverted)) {
 
@@ -1415,6 +1415,11 @@ export class PopupNotificationEditComponent {
 
       if (body.action === 'static-page') {
         body['action_data'] = this.formPopupGroup.get('body').value;
+      }
+
+      if (body.action === 'spesific_product_b2b') {
+        body['name_value'] = this.formPopupGroup.get('barcode').value.name;
+        body['barcode_value'] = this.formPopupGroup.get('barcode').value.id;
       }
 
       if (body.action === 'landing-page') {
