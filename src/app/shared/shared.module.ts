@@ -10,6 +10,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatFormFieldModule,
   MatSelectModule,
+  MatAutocompleteModule,
   MatCheckboxModule,
   MatProgressSpinnerModule
 } from "@angular/material";
@@ -43,6 +44,7 @@ import { TranslateModule } from "@ngx-translate/core";
     NgxDatatableModule,
     MatCheckboxModule,
     MatToolbarModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
     ngfModule,
     TranslateModule.forChild(),
