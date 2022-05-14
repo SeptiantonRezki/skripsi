@@ -37,17 +37,17 @@
       </div>
     </div>
     <div *ngIf="isUploaded && !isValid && !payload.isNotifValidation || isUploaded && payload.isNotifValidation && rows.length === 0" class="notif notif-error mt-24">
-      Silahkan cek kembali <span *ngIf="!payload.isNotifValidation; else showFile">produk</span><ng-template #showFile>file</ng-template> yang anda upload!
+      {{'global.label.please_recheck' | translate}} <span *ngIf="!payload.isNotifValidation; else showFile">{{'global.label.product' | translate}}</span><ng-template #showFile>{{'global.label.file' | translate}}</ng-template> {{'global.label.you_uploaded' | translate}}
     </div>
     <div *ngIf="rows.length > 0" class="preview">
       <div class="preview-container">
         <table class="preview-table">
           <thead>
             <tr>
-              <th nowrap>Kode Area</th>
-              <th nowrap>Region</th>
-              <th nowrap>Zone</th>
-              <th nowrap>Tipe</th>
+              <th nowrap>{{'global.label.area_code' | translate}}</th>
+              <th nowrap>{{'global.area.regional' | translate}}</th>
+              <th nowrap>{{'global.area.zone' | translate}}</th>
+              <th nowrap>{{'global.label.type' | translate}}</th>
             </tr>
           </thead>
           <tbody>
@@ -65,13 +65,13 @@
                 {{ item.zone || "-" }}
               </td>
               <td nowrap>
-                {{ item.is_valid === 0 ? "-" : "Area" }}
+                {{ item.is_valid === 0 ? "-" : ('global.area.area' | translate) }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="preview-total">{{ rowsLength }} Area<span *ngIf="payload.isNotifValidation"> Valid</span></div>
+      <div class="preview-total">{{ rowsLength }} {{'global.area.area' | translate}}<span *ngIf="payload.isNotifValidation"> {{'global.label.valid' | translate}}</span></div>
     </div>
     <div class="border-top mt-16">
       <div class="pt-16">
@@ -99,7 +99,7 @@
             (click)="dialogRef.close()"
             [disabled]="uploading"
           >
-            Batal
+            {{'global.button.cancel' | translate}}
           </button>
         </div>
       </div>

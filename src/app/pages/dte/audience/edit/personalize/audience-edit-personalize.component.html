@@ -25,8 +25,8 @@
                   > <!-- // TODO -->
                     <ngx-mat-select-search
                       [formControl]="filterPublishMisi"
-                      [placeholderLabel]="'Cari Publish Misi...'"
-                      [noEntriesFoundLabel]="'Tidak ada Publish Misi yang ditemukan'"
+                      placeholderLabel="{{'global.label.search' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
                     ></ngx-mat-select-search> <!-- // TODO -->
                     <mat-option
                       *ngFor="let item of filteredPublishMisi | async"
@@ -112,9 +112,9 @@
                       class="is-danger"
                       (click)="exportAudience()"
                     >
-                      <mat-icon>arrow_upward</mat-icon> Export Template
+                      <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
                     </button>
-                    <label *ngIf="exportTemplate" style="color: white;">Downloading Template</label>
+                    <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
                   </div>
                   <button
                     mat-raised-button
@@ -123,7 +123,7 @@
                     (click)="importAudience()"
                     [disabled]="isDetail"
                   >
-                    <mat-icon>arrow_downward</mat-icon> Import XLSX
+                    <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
                   </button>
                 </div>
               </div>

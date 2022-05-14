@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-diaglog-waktu-tunggu',
@@ -14,6 +15,7 @@ export class DiaglogWaktuTungguComponent implements OnInit {
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<DiaglogWaktuTungguComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class DiaglogWaktuTungguComponent implements OnInit {
       component_id: this.data.data.component_id,
       task_sequencing_management_id: this.data.data.task_sequencing_management_id,
       task_template_id: this.data.data.task_template_id,
-      name: 'Waktu Tunggu',
+      name: this.translate.instant('dte.task_sequencing.text24'),
       type: 'time',
       attribute: form.value,
       next_step_component: this.data.data.next_step_component,

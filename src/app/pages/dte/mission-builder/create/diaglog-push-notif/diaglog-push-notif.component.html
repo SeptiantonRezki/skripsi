@@ -1,12 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h2 class="">Pengaturan Push Notification</h2>
+  <h2 class="">{{'dte.task_sequencing.push_notif_settings' | translate}}</h2>
 
   <mat-dialog-content>
 
   <mat-form-field style="width: 100%">
-    <mat-select formControlName="notification_id" placeholder="Pilih Push Notification" id="notification_id" #singleSelect>
-      <ngx-mat-select-search [formControl]="filterPushNotif" [placeholderLabel]="'Cari Push Notification...'"
-        [noEntriesFoundLabel]="'Tidak ada Push Notification yang ditemukan'"></ngx-mat-select-search>
+    <mat-select formControlName="notification_id" placeholder="{{'dte.task_sequencing.text38' | translate}}" id="notification_id" #singleSelect>
+      <ngx-mat-select-search [formControl]="filterPushNotif" placeholderLabel="{{'global.label.search' | translate}}"
+        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
       <mat-option *ngFor="let item of filteredPushNotif | async" [value]="item.id">
         {{item.title}}
       </mat-option>
@@ -14,7 +14,7 @@
   </mat-form-field>
 
   <mat-form-field style="width: 100%">
-    <input matInput formControlName="time" placeholder="Jam Terbit" [ngxTimepicker]="jam_terbit" [format]="24" readonly/>
+    <input matInput formControlName="time" placeholder="{{'dte.task_sequencing.text40' | translate}}" [ngxTimepicker]="jam_terbit" [format]="24" readonly/>
     <mat-icon matSuffix>access_time</mat-icon>
     <ngx-material-timepicker #jam_terbit></ngx-material-timepicker>
   </mat-form-field>
@@ -22,8 +22,8 @@
   </mat-dialog-content>
   <br><br>
   <mat-dialog-actions>
-    <button mat-raised-button color="success" type="submit">Simpan</button>
-    <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Batal</button>
+    <button mat-raised-button color="success" type="submit">{{'global.button.save' | translate}}</button>
+    <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">{{'global.button.cancel' | translate}}</button>
   </mat-dialog-actions>
 
 </form>

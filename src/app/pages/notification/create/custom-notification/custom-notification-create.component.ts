@@ -203,7 +203,7 @@ export class CustomNotificationCreateComponent implements OnInit {
 
   async submit() {    
     if (!this.formNotification.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formNotification);
       return;
     }
@@ -215,13 +215,13 @@ export class CustomNotificationCreateComponent implements OnInit {
       startDate = moment(startDateStr)
 
       if(!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
-        this.dialogService.openSnackBar({ message: "Tanggal mulai tidak boleh sebelum hari ini!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('notification.buat_notifikasi.message1') });
         return;
       }
     }
 
     if (!this.rows.length) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formNotification);
       return;
     }
