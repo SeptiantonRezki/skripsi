@@ -1569,8 +1569,14 @@ export class NotificationCreateComponent {
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if (this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
-                let [key, val] = entry
+                let [key, val] = entry;
                 bodyVideo.append(key, val);
+                bodyVideo.delete('recurrence_day');
+                if(key === 'recurrence_day'){
+                  for (let i = 0; i < val.length; i++) {
+                    bodyVideo.append('recurrence_day['+i+']', val[i]);
+                  }
+                }
               })
             }
             this.notificationService.create(bodyVideo).subscribe(
@@ -1630,8 +1636,14 @@ export class NotificationCreateComponent {
 
           if (this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
-              let [key, val] = entry
+              let [key, val] = entry;
               bodyVideo.append(key, val);
+              bodyVideo.delete('recurrence_day');
+              if(key === 'recurrence_day'){
+                for (let i = 0; i < val.length; i++) {
+                  bodyVideo.append('recurrence_day['+i+']', val[i]);
+                }
+              }
             })
           }
 
