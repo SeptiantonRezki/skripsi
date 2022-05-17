@@ -402,7 +402,8 @@ export class NotificationCreateComponent {
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+        //this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Image", value: "image" }, { name: "Video", value: "video" }]; // hide Unlinked and Iframe
       } else if (res === 'customer') {
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
       } else {
@@ -546,6 +547,8 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+
+    this.formNotification.get('send_ayo').setValue(true);
   }
 
   resetAudience() {
@@ -1327,6 +1330,8 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }
+    this.formNotification.controls.send_ayo.setValue(true);
+    this.formNotification.controls.send_ayo.disable();
   }
 
   async submit() {
@@ -1569,8 +1574,14 @@ export class NotificationCreateComponent {
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if (this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
-                let [key, val] = entry
+                let [key, val] = entry;
                 bodyVideo.append(key, val);
+                bodyVideo.delete('recurrence_day');
+                if(key === 'recurrence_day'){
+                  for (let i = 0; i < val.length; i++) {
+                    bodyVideo.append('recurrence_day['+i+']', val[i]);
+                  }
+                }
               })
             }
             this.notificationService.create(bodyVideo).subscribe(
@@ -1630,8 +1641,14 @@ export class NotificationCreateComponent {
 
           if (this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
-              let [key, val] = entry
+              let [key, val] = entry;
               bodyVideo.append(key, val);
+              bodyVideo.delete('recurrence_day');
+              if(key === 'recurrence_day'){
+                for (let i = 0; i < val.length; i++) {
+                  bodyVideo.append('recurrence_day['+i+']', val[i]);
+                }
+              }
             })
           }
 
