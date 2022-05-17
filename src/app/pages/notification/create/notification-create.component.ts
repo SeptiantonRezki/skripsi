@@ -411,9 +411,12 @@ export class NotificationCreateComponent {
       if (res === 'wholesaler') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }];
       } else if (res === 'customer') {
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" }, { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }];
-      } else {
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
+      } else if(res === 'tsm'){
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
+      } else{
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
+        
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
