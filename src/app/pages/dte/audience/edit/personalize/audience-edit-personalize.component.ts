@@ -53,8 +53,8 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   rows: any[];
 
   audienceFilter: any[] = [
-    { name: "Population Blast", value: "population-blast" },
-    { name: "Recommended Panel", value: "recommended-panel" },
+    { name: this.translate.instant('dte.audience.population_blast'), value: "population-blast" },
+    { name: this.translate.instant('dte.audience.recommended_panel'), value: "recommended-panel" },
   ]; // TODO
 
   retailClassification: any[] = [
@@ -67,9 +67,9 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   b2bActiveList: any[] = [
-    { name: "All", value: "all" },
-    { name: "Active", value: "active" },
-    { name: "Not Active", value: "inactive" },
+    { name: this.translate.instant('global.label.all_status'), value: "all" },
+    { name: this.translate.instant('global.label.active'), value: "active" },
+    { name: this.translate.instant('global.label.inactive'), value: "inactive" },
   ];
   srcClassification: any[] = [
     { name: this.translate.instant('global.label.all_type'), value: "all" }
@@ -1034,7 +1034,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formAudience);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",// TODO
+        message: this.translate.instant('global.label.please_complete_data'),
       });
     }
   }
@@ -1142,7 +1142,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       } else {
         if (!this.data_imported.length) {
           this.dialogService.openSnackBar({
-            message: "Silahkan import file terlebih dahulu",// TODO
+            message: this.translate.instant('global.label.please_import_file'),
           });
           return;
         }
@@ -1192,7 +1192,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formFilterRetailer);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",// TODO
+        message: this.translate.instant('global.label.please_complete_data'),
       });
     }
   }

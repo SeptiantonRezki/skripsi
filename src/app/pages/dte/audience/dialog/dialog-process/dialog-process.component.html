@@ -2,8 +2,8 @@
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar fxLayout="column" fxLayoutAlign=" center">
     <mat-spinner diameter="100"></mat-spinner>
-    <div class="dialog__title mt-24">Data Sedang Diproses</div> <!-- // TODO -->
-    <div class="dialog__subtitle">Mohon tunggu 5 - 10 menit</div> <!-- // TODO -->
+    <div class="dialog__title mt-24">{{'dte.audience.on_process_data' | translate}}</div>
+    <div class="dialog__subtitle">{{'dte.audience.please_wait' | translate}}</div>
   </div>
 
   <div class="border-top">
@@ -15,7 +15,7 @@
           type="button"
           class="dialog__btn--primary"
         >
-          Kembali ke Dashboard <!-- // TODO -->
+          {{'dte.audience.back_to_dashboard' | translate}}
         </button>
       </a>
       <button
@@ -26,7 +26,7 @@
         (click)="dialogRef.close()"
         fxFlex="50"
       >
-        Batalkan Check <!-- // TODO -->
+        {{'dte.audience.cancel_check' | translate}}
       </button>
     </div>
   </div>

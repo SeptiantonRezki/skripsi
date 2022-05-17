@@ -12,6 +12,7 @@ import { IdleService } from 'app/services/idle.service';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 import { ConfirmDialogComponent } from '../dialog/confirm-dialog/confirm-dialog.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-verification-index',
@@ -53,6 +54,8 @@ export class TaskVerificationIndexComponent implements OnInit {
 
   dialogRef: any;
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  pageName = this.translate.instant('dte.task_verification.text2')
+  titleParam = {entity: this.pageName}
 
   constructor(
     private dialogService: DialogService,
@@ -63,6 +66,7 @@ export class TaskVerificationIndexComponent implements OnInit {
     private taskVerificationService: TaskVerificationService,
     private dialog: MatDialog,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

@@ -36,7 +36,7 @@
     
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
       <div fxFlex>
-        <span for="" style="font-weight: bolder;">Requesting Preview</span>
+        <span for="" style="font-weight: bolder;">{{'dte.task_sequencing.requesting_preview' | translate}}</span>
         <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
       </div>
     </div>
@@ -65,7 +65,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tipe" prop="tipe">
+        <ngx-datatable-column name="{{'global.label.type' | translate}}" prop="tipe">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.tipe }}
           </ng-template>

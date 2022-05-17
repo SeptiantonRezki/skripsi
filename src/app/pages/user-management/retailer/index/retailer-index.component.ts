@@ -15,6 +15,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-retailer-index',
@@ -121,7 +122,8 @@ export class RetailerIndexComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private generalService: GeneralService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -1307,10 +1309,10 @@ export class RetailerIndexComponent {
   deleteWholesaler(id): void {
     this.id = id;
     let data = {
-      titleDialog: 'Hapus Retailer',
-      captionDialog: 'Apakah anda yakin untuk menghapus Retailer ini ?',
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.translate.instant('global.menu.retailer')}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('global.menu.retailer'), index: ''}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
+      buttonText: [this.translate.instant('global.button.delete'), this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1319,7 +1321,7 @@ export class RetailerIndexComponent {
     this.retailerService.delete({ retailer_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getRetailerList();
       },

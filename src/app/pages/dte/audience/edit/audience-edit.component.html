@@ -59,7 +59,7 @@
                 {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error *ngIf="formAudience.controls['min'].hasError('min') && formAudience.controls['min'].touched">
-                {{'dte.audience.text9' | translate }} tidak boleh kurang dari 0
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -70,7 +70,7 @@
                 {{'dte.audience.text10' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error *ngIf="formAudience.controls['max'].hasError('min') && formAudience.controls['max'].touched">
-                {{'dte.audience.text10' | translate }} tidak boleh kurang dari jumlah minimal audience
+                {{'dte.audience.text10' | translate }} {{'global.label.min_audience' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -267,16 +267,16 @@
         fxLayoutAlign="end center" class="p-16 export">
         <div fxLayout="column">
           <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
-            <mat-icon>arrow_downward</mat-icon> Import XLS
+            <mat-icon>arrow_downward</mat-icon> {{'global.label.import_entity' | translate:paramImportTranslate }}
           </button>
           <label
-          *ngIf="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status) && detailAudience.import_audience_status_type" style="font-weight: bolder; color: white;">Requesting {{(detailAudience.import_audience_status_type || '').toUpperCase()}}</label>
+          *ngIf="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status) && detailAudience.import_audience_status_type" style="font-weight: bolder; color: white;">{{'global.messages.requesting' | translate}} {{(detailAudience.import_audience_status_type || '').toUpperCase()}}</label>
         </div>
         <div fxLayout="column">
           <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
-            <mat-icon>arrow_upward</mat-icon> Export Template
+            <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
           </button>
-          <label style="color: white;">{{(exportTemplate) ? 'Downloading Template' : ' '}}</label>
+          <label style="color: white;">{{(exportTemplate) ? ('dte.audience.downloading_template' | translate) : ' '}}</label>
         </div>
       </div>
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>

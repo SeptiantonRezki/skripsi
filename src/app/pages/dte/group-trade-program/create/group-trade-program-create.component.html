@@ -37,7 +37,7 @@
           </div>
           <div fxLayout="row" *ngIf="formGroupTradeProgram.get('user_group').value">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="principal" placeholder="Nama Principal">
+              <input matInput type="text" formControlName="principal" placeholder="{{'principal_partnership.principal_name' | translate}}">
             </mat-form-field>
           </div>
           <div fxLayout="column" *ngIf="formGroupTradeProgram.get('user_group').value">
