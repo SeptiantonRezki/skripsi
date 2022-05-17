@@ -85,7 +85,8 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
-    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.upc'), value: "upc", icon: "insert_chart" },
+    { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
@@ -99,7 +100,7 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
-    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.upc'), value: "upc", icon: "insert_chart" },
     { name: this.translate.instant('dte.template_tugas.stock_check_ir'), value: "stock_check_ir", icon: "check_box" },
     { name: this.translate.instant('dte.template_tugas.planogram_ir'), value: "planogram_ir", icon: "cloud_upload" },
   ];
@@ -1304,7 +1305,7 @@ export class TemplateCreateComponent {
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
-          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+          if (item.type === 'upc' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
@@ -1312,7 +1313,7 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            required: item.type === 'stock_check' ? 1 : null,
+            required: item.type === 'upc' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
@@ -1359,8 +1360,8 @@ export class TemplateCreateComponent {
                 return tmpung;
               }
             }),
-            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
-            stock_check_data: item.type === 'stock_check' ? ({
+            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'upc' ? ["Ada", "Tidak Ada"] : []),
+            stock_check_data: item.type === 'upc' ? ({
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
