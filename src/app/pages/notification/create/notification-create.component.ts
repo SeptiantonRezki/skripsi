@@ -33,7 +33,7 @@ export class NotificationCreateComponent {
   onLoad: boolean;
   loadingIndicator: boolean;
   formFilter: FormGroup;
-  listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
   formNotification: FormGroup;
   formArea: FormGroup;
   formNotificationError: any;
@@ -45,14 +45,14 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
   listProductBarcodes: Array<any> = []
 
-  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
-  listSubscriptionStatus: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'subscribed' }, { name: 'Tidak Berlangganan', value: 'not-subscribed' }]
+  listJenisKonsumen: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.verified'), value: "verified" }];
+  listSubscriptionStatus: any[] = [{ name: this.translate.instant('global.label.all'), value: 'all' }, { name: this.translate.instant('global.label.subscribe'), value: 'subscribed' }, { name: this.translate.instant('global.label.unsubscribe'), value: 'not-subscribed' }]
   userGroup: any[] = [
-    { name: "Field Force", value: "field-force" },
-    { name: "Wholesaler", value: "wholesaler" },
-    { name: "Retailer", value: "retailer" },
+    { name: this.translate.instant('global.menu.field_force'), value: "field-force" },
+    { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" },
+    { name: this.translate.instant('global.menu.retailer'), value: "retailer" },
     // { name: "Paguyuban", value: "paguyuban" },
-    { name: "Customer", value: "customer" }
+    { name: this.translate.instant('customer.text1'), value: "customer" }
   ];
 
   dialogRef: any;
@@ -63,19 +63,19 @@ export class NotificationCreateComponent {
 
   listLevelArea: any[];
   list: any;
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }, { name: "Wholesaler", value: "wholesaler" }, { name: "TSM", value: "tsm" }];
-  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: 'Semua', value: 'all' }];
-  listEmployeeFilter: any[] = [{ name: 'Employee Only', value: 'employee-only' }, { name: 'Semua', value: 'all' }];
+  listUserGroup: any[] = [{ name: this.translate.instant('global.menu.retailer'), value: "retailer" }, { name: this.translate.instant('customer.text1'), value: "customer" }, { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" }, { name: "TSM", value: "tsm" }];
+  listAge: any[] = [{ name: "18+", value: "18+" }, { name: "18-", value: "18-" }, { name: this.translate.instant('global.label.all'), value: 'all' }];
+  listEmployeeFilter: any[] = [{ name: this.translate.instant('global.label.employee_only'), value: 'employee-only' }, { name: this.translate.instant('global.label.all'), value: 'all' }];
   listLandingPage: any[] = [];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Pojok Modal", value: "pojok_modal" }];
+  listContentType: any[] = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }];
   listNotifType: any[] = [
-    { name: "Kirim Sebagai Notifikasi", value: "notif" },
-    { name: "Kirim Sebagai Pesan", value: "message" },
+    { name: this.translate.instant('notification.buat_notifikasi.send_as_notif'), value: "notif" },
+    { name: this.translate.instant('notification.buat_notifikasi.send_as_message'), value: "message" },
   ];
   listConsumentType: any[] = [
-    { name: 'Semua', value: 'all' },
-    { name: 'Merokok', value: '1' },
-    { name: 'Tidak Merokok', value: '0' }
+    { name: this.translate.instant('global.label.all'), value: 'all' },
+    { name: this.translate.instant('global.label.smoking'), value: '1' },
+    { name: this.translate.instant('global.label.not_smoke'), value: '0' }
   ];
 
   imageContentType: File;
@@ -86,24 +86,24 @@ export class NotificationCreateComponent {
   videoContentType: File;
   videoContentTypeURL: any;
 
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = { ...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
-  public optionsStaticPage: Object = Config.FROALA_CONFIG_NOTIFICATION; // Static Page Only
+  public optionsStaticPage: Object = {...Config.FROALA_CONFIG_NOTIFICATION, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') }; // Static Page Only
 
   audienceSelected: any[] = [];
 
   listTypeOfRecurrence: Object[] = [
-    { id: 'OneTime', name: 'Aktivasi notifikasi sekali kirim' },
-    { id: 'Recurring', name: 'Aktivasi notifikasi berulang' },
-    { id: 'Bday', name: 'Aktivasi notifikasi ulang tahun' },
-    { id: 'Bday18', name: 'Aktivasi notifikasi ulang tahun ke-18' }
+    { id: 'OneTime', name: this.translate.instant('notification.buat_notifikasi.text14') },
+    { id: 'Recurring', name: this.translate.instant('notification.popup_notifikasi.label2') },
+    { id: 'Bday', name: this.translate.instant('notification.buat_notifikasi.birthday_notif_activation') },
+    { id: 'Bday18', name: this.translate.instant('notification.buat_notifikasi.birthday_notif_18') }
   ];
 
   listRecurrenceTypes: Object[] = [
-    { id: 'Daily', name: 'Harian' },
-    { id: 'Weekly', name: 'Mingguan' },
-    { id: 'Monthly', name: 'Bulanan' },
-    { id: 'Yearly', name: 'Tahunan' }
+    { id: 'Daily', name: this.translate.instant('global.calendar.daily') },
+    { id: 'Weekly', name: this.translate.instant('global.calendar.weekly') },
+    { id: 'Monthly', name: this.translate.instant('global.calendar.monthly') },
+    { id: 'Yearly', name: this.translate.instant('global.calendar.yearly') }
   ];
 
   recurrenceLabel: Object = {
@@ -114,28 +114,28 @@ export class NotificationCreateComponent {
   }
 
   listWeekDays: any[] = [
-    { id: 'Monday', name: 'Senin' },
-    { id: 'Tuesday', name: 'Selasa' },
-    { id: 'Wednesday', name: 'Rabu' },
-    { id: 'Thursday', name: 'Kamis' },
-    { id: 'Friday', name: 'Jumat' },
-    { id: 'Saturday', name: 'Sabtu' },
-    { id: 'Sunday', name: 'Minggu' }
+    { id: 'Monday', name: this.translate.instant('global.calendar.monday') },
+    { id: 'Tuesday', name: this.translate.instant('global.calendar.tuesday') },
+    { id: 'Wednesday', name: this.translate.instant('global.calendar.wednesday') },
+    { id: 'Thursday', name: this.translate.instant('global.calendar.thursday') },
+    { id: 'Friday', name: this.translate.instant('global.calendar.friday') },
+    { id: 'Saturday', name: this.translate.instant('global.calendar.saturday') },
+    { id: 'Sunday', name: this.translate.instant('global.calendar.sunday') }
   ]
 
   listMonths: Object[] = [
-    { id: 'Jan', name: 'Januari' },
-    { id: 'Feb', name: 'Februari' },
-    { id: 'Mar', name: 'Maret' },
-    { id: 'Apr', name: 'April' },
-    { id: 'May', name: 'Mei' },
-    { id: 'Jun', name: 'Juni' },
-    { id: 'Jul', name: 'Juli' },
-    { id: 'Aug', name: 'Agustus' },
-    { id: 'Sep', name: 'September' },
-    { id: 'Oct', name: 'Oktober' },
-    { id: 'Nov', name: 'November' },
-    { id: 'Dec', name: 'Desember' },
+    { id: 'Jan', name: this.translate.instant('global.calendar.january') },
+    { id: 'Feb', name: this.translate.instant('global.calendar.february') },
+    { id: 'Mar', name: this.translate.instant('global.calendar.march') },
+    { id: 'Apr', name: this.translate.instant('global.calendar.april') },
+    { id: 'May', name: this.translate.instant('global.calendar.may') },
+    { id: 'Jun', name: this.translate.instant('global.calendar.june') },
+    { id: 'Jul', name: this.translate.instant('global.calendar.july') },
+    { id: 'Aug', name: this.translate.instant('global.calendar.august') },
+    { id: 'Sep', name: this.translate.instant('global.calendar.september') },
+    { id: 'Oct', name: this.translate.instant('global.calendar.october') },
+    { id: 'Nov', name: this.translate.instant('global.calendar.november') },
+    { id: 'Dec', name: this.translate.instant('global.calendar.december') },
   ]
 
   listDates: number[];
@@ -217,8 +217,8 @@ export class NotificationCreateComponent {
   pageName = this.translate.instant('notification.text');
   titleParam = { entity: this.pageName };
 
-  //ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
-  ALLOW_FOR_TYPE = ['customer'];
+  ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
+  // ALLOW_FOR_TYPE = ['customer'];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -400,22 +400,20 @@ export class NotificationCreateComponent {
 
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
       if (res === 'retailer' || res === 'tsm') {
-        this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
+        this.listLandingPage = [{ name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, { name: this.translate.instant('global.label.mission'), value: "misi" }, { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }];
         // this.formNotification.controls['landing_page_value'].disable();
       } else if (res === 'customer') {
-        this.listLandingPage = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }, { name: "Pesan Antar", value: "pesan_antar" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Main Bareng", value: "main_bareng" }];
+        this.listLandingPage = [{ name: this.translate.instant('global.label.coupon'), value: "kupon" }, { name: this.translate.instant('global.label.nearby'), value: "terdekat" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('cn_reward.b2c_voucher.text26'), value: "pesan_antar" }, { name: this.translate.instant('global.label.challenge'), value: "tantangan" }, { name: this.translate.instant('global.label.opportunity'), value: "peluang" }, { name: this.translate.instant('global.label.play_together'), value: "main_bareng" }];
       } else {
-        this.listLandingPage = [{ name: "Pesan Antar", value: "pesan_antar" }, { name: "Terdekat", value: "terdekat" }, { name: "Main Bareng", value: "main_bareng" }, { name: "Tantangan", value: "tantangan" }, { name: "Peluang", value: "peluang" }, { name: "Kupon", value: "kupon" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
+        this.listLandingPage = [{ name: this.translate.instant('cn_reward.b2c_voucher.text26'), value: "pesan_antar" }, { name: this.translate.instant('global.label.nearby'), value: "terdekat" }, { name: this.translate.instant('global.label.play_together'), value: "main_bareng" }, { name: this.translate.instant('global.label.challenge'), value: "tantangan" }, { name: this.translate.instant('global.label.opportunity'), value: "peluang" }, { name: "Kupon", value: "kupon" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }];
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }];
       } else if (res === 'customer') {
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "E-Wallet", value: "e_wallet" }, { name: "Link to Web Browser", value: "link_web" }];
-      } else if(res === 'tsm'){
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
-      } else{
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" }, { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }];
+      } else {
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -556,6 +554,8 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+
+    this.formNotification.get('send_ayo').setValue(true);
   }
 
   resetAudience() {
@@ -915,10 +915,10 @@ export class NotificationCreateComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: "Hapus Salestree",
-      captionDialog: `Apakah anda yakin untuk menghapus Salestree ${idx + 1} ?`,
+      titleDialog: this.translate.instant('global.label.delete_salestree'),
+      captionDialog: this.translate.instant('global.messages.text29', {index: idx+1}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1001,7 +1001,7 @@ export class NotificationCreateComponent {
         }
 
         _.clone(response || []).map(item => {
-          list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }));
+          list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_zone') : item.name }));
         });
 
         if (type !== 'render') {
@@ -1020,14 +1020,14 @@ export class NotificationCreateComponent {
         break;
       case 'region':
         item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Zone') {
+        if (item.name !== this.translate.instant('global.label.all_zone')) {
           const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
           _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_regional') : item.name }));
           });
         }
 
@@ -1038,7 +1038,7 @@ export class NotificationCreateComponent {
           wilayah.at(index).get('district').setValue('');
           wilayah.at(index).get('territory').setValue('');
 
-          if (item.name === 'Semua Zone') {
+          if (item.name === this.translate.instant('global.label.all_zone')) {
             this.clearFormArray(index, 'list_region');
           }
           this.clearFormArray(index, 'list_area');
@@ -1049,14 +1049,14 @@ export class NotificationCreateComponent {
         break;
       case 'area':
         item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Regional') {
+        if (item.name !== this.translate.instant('global.label.all_regional')) {
           const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
           _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_area') : item.name }));
           });
         }
 
@@ -1066,7 +1066,7 @@ export class NotificationCreateComponent {
           wilayah.at(index).get('district').setValue('');
           wilayah.at(index).get('territory').setValue('');
 
-          if (item.name === 'Semua Regional') {
+          if (item.name === this.translate.instant('global.label.all_regional')) {
             this.clearFormArray(index, 'list_area');
           }
           this.clearFormArray(index, 'list_salespoint');
@@ -1076,14 +1076,14 @@ export class NotificationCreateComponent {
         break;
       case 'salespoint':
         item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Area') {
+        if (item.name !== this.translate.instant('global.label.all_area')) {
           const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
           _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_salespoint') : item.name }));
           });
         }
 
@@ -1092,7 +1092,7 @@ export class NotificationCreateComponent {
           wilayah.at(index).get('district').setValue('');
           wilayah.at(index).get('territory').setValue('');
 
-          if (item.name === 'Semua Area') {
+          if (item.name === this.translate.instant('global.label.all_area')) {
             this.clearFormArray(index, 'list_salespoint');
           }
           this.clearFormArray(index, 'list_district');
@@ -1101,14 +1101,14 @@ export class NotificationCreateComponent {
         break;
       case 'district':
         item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Salespoint') {
+        if (item.name !== this.translate.instant('global.label.all_salespoint')) {
           const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
           _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_district2') : item.name }));
           });
         }
 
@@ -1116,7 +1116,7 @@ export class NotificationCreateComponent {
           wilayah.at(index).get('district').setValue('');
           wilayah.at(index).get('territory').setValue('');
 
-          if (item.name === 'Semua Salespoint') {
+          if (item.name === this.translate.instant('global.label.all_salespoint')) {
             this.clearFormArray(index, 'list_district');
           }
           this.clearFormArray(index, 'list_territory');
@@ -1124,21 +1124,21 @@ export class NotificationCreateComponent {
         break;
       case 'territory':
         item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua District') {
+        if (item.name !== this.translate.instant('global.label.all_district2')) {
           const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
           let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
           while (list.length > 0) {
             list.removeAt(list.length - 1);
           }
           _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
+            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? this.translate.instant('global.label.all_territory') : item.name }));
           });
         }
 
         if (type !== 'render') {
           wilayah.at(index).get('territory').setValue('');
 
-          if (item.name === 'Semua District') {
+          if (item.name === this.translate.instant('global.label.all_district2')) {
             this.clearFormArray(index, 'list_territory');
           }
         }
@@ -1328,6 +1328,11 @@ export class NotificationCreateComponent {
       this.formNotification.get('user_group').patchValue('tsm');
     }
 
+    if(e.source.value !== 'customer'){
+      this.formNotification.get('is_target_area').setValue(false)
+      this.formNotification.get('is_target_audience').setValue(false)
+    }
+
     if (!this.ALLOW_FOR_TYPE.includes(e.source.value)) {
       this.typeOfRecurrence = 'OneTime';
       // this.formNotification.controls.type_of_recurrence.disable();
@@ -1339,23 +1344,25 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }
+    this.formNotification.controls.send_ayo.setValue(true);
+    this.formNotification.controls.send_ayo.disable();
   }
 
   async submit() {
     // console.log(this.formNotification.valid, this.formNotification.get("barcode").value, this.formNotification.controls['barcode'], this.formNotification.get("title").value, this.formNotification.controls['title'].hasError('required'))
     if (!this.formNotification.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formNotification);
       return;
     }
 
     if (this.typeOfRecurrence === 'Recurring' && !this.recurrenceType) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       return;
     }
 
     if (this.recurrenceType == 'Daily' && !this.formDailyRecurrence.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formDailyRecurrence);
       return;
     }
@@ -1364,7 +1371,7 @@ export class NotificationCreateComponent {
 
     if (this.recurrenceType == 'Weekly') {
       if (!this.formWeeklyRecurrence.valid) {
-        this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
         commonFormValidator.validateAllFields(this.formWeeklyRecurrence);
         return;
       }
@@ -1374,25 +1381,25 @@ export class NotificationCreateComponent {
       selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key])
 
       if (selectedWeekDays.length == 0) {
-        this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.message1') });
         return;
       }
     }
 
     if (this.recurrenceType == 'Monthly' && !this.formMonthlyRecurrence.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
       return;
     }
 
     if (this.recurrenceType == 'Yearly' && !this.formYearlyRecurrence.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formYearlyRecurrence);
       return;
     }
 
     if (this.typeOfRecurrence == 'Recurring' && !this.formRecurrenceCommon.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formRecurrenceCommon);
       return;
     }
@@ -1404,19 +1411,19 @@ export class NotificationCreateComponent {
       startDate = moment(startDateStr)
 
       if (!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
-        this.dialogService.openSnackBar({ message: "Tanggal mulai tidak boleh sebelum hari ini!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('notification.buat_notifikasi.message1') });
         return;
       }
 
       if (this.formRecurrenceCommon.controls.end_option.value === 'end_date') {
         let endDateStr = this.formRecurrenceCommon.controls.recurrence_end_date.value
         if (!endDateStr) {
-          this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
           return;
         }
         endDate = moment(endDateStr)
         if (startDate.isSameOrAfter(endDate, 'day')) {
-          this.dialogService.openSnackBar({ message: "Tanggal selesai harus setelah tanggal mulai!" });
+          this.dialogService.openSnackBar({ message: this.translate.instant('notification.buat_notifikasi.message2') });
           return;
         }
       }
@@ -1426,7 +1433,7 @@ export class NotificationCreateComponent {
     if (this.formNotification.get("is_target_audience").value) {
       let unique_set = new Set(this.audienceSelected);
       if (this.audienceSelected.length !== unique_set.size) {
-        this.dialogService.openSnackBar({ message: 'Mohon cek kembali data yang diupload.' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('notification.buat_notifikasi.message3') });
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return;
@@ -1450,7 +1457,7 @@ export class NotificationCreateComponent {
 
     let same = this.findDuplicate(areas.map(item => item.value));
     if (same.length > 0) {
-      return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+      return this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text28') });
     }
 
     let body: any = {
@@ -1582,8 +1589,14 @@ export class NotificationCreateComponent {
             bodyVideo.append('type_of_recurrence', body.type_of_recurrence);
             if (this.typeOfRecurrence == 'Recurring') {
               Object.entries(recurrenceBody).forEach(entry => {
-                let [key, val] = entry
+                let [key, val] = entry;
                 bodyVideo.append(key, val);
+                bodyVideo.delete('recurrence_day');
+                if(key === 'recurrence_day'){
+                  for (let i = 0; i < val.length; i++) {
+                    bodyVideo.append('recurrence_day['+i+']', val[i]);
+                  }
+                }
               })
             }
             this.notificationService.create(bodyVideo).subscribe(
@@ -1600,7 +1613,7 @@ export class NotificationCreateComponent {
             );
           });
         } else {
-          return this.dialogService.openSnackBar({ message: "Konten image belum dipilih" });
+          return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.no_selected_content') });
         }
       }
     } else if (body.content_type === 'video') {
@@ -1643,8 +1656,14 @@ export class NotificationCreateComponent {
 
           if (this.typeOfRecurrence == 'Recurring') {
             Object.entries(recurrenceBody).forEach(entry => {
-              let [key, val] = entry
+              let [key, val] = entry;
               bodyVideo.append(key, val);
+              bodyVideo.delete('recurrence_day');
+              if(key === 'recurrence_day'){
+                for (let i = 0; i < val.length; i++) {
+                  bodyVideo.append('recurrence_day['+i+']', val[i]);
+                }
+              }
             })
           }
 
@@ -1662,7 +1681,7 @@ export class NotificationCreateComponent {
           );
         });
       } else {
-        return this.dialogService.openSnackBar({ message: "Konten video belum dipilih" });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.no_selected_video_content') });
       }
     } else if (body.content_type === 'e_wallet') {
       body['content_wallet'] = this.formNotification.get("content_wallet").value;
@@ -1692,7 +1711,7 @@ export class NotificationCreateComponent {
           body['area_ids'] = str;
         } else {
           this.dataService.showLoading(false);
-          return this.dialogService.openSnackBar({ message: "Target Area harus dipilih!" });
+          return this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.message4') });
         }
       }
     }
@@ -2268,7 +2287,7 @@ export class NotificationCreateComponent {
 
   async export() {
     if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text27') });
       return;
     }
     this.dataService.showLoading(true);

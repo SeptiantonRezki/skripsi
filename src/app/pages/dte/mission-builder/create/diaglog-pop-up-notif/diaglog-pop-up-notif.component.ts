@@ -5,6 +5,7 @@ import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { SequencingService } from '../../../../../services/dte/sequencing.service';
 import { Page } from 'app/classes/laravel-pagination';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-diaglog-pop-up-notif',
@@ -26,6 +27,7 @@ export class DiaglogPopUpNotifComponent implements OnInit {
     public dialogRef: MatDialogRef<DiaglogPopUpNotifComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private sequencingService: SequencingService,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit() {
@@ -91,7 +93,7 @@ export class DiaglogPopUpNotifComponent implements OnInit {
       component_id: this.data.data.component_id,
       task_sequencing_management_id: this.data.data.task_sequencing_management_id,
       task_template_id: this.data.data.task_template_id,
-      name: 'Pop Up Notification',
+      name: this.translate.instant('dte.task_sequencing.text20'),
       type: 'pop-up-notification',
       attribute: form.value,
       next_step_component: this.data.data.next_step_component,

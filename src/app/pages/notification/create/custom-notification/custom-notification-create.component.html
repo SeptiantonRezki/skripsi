@@ -46,7 +46,7 @@
                 <mat-datepicker #startPicker></mat-datepicker>
                 <mat-error
                   *ngIf="formNotification.controls['recurrence_start_date'].hasError('required') && formNotification.controls['recurrence_start_date'].touched">
-                  Tanggal mulai {{'global.messages.mandatory_text' | translate}}.
+                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}.
                 </mat-error>
               </mat-form-field>
 
@@ -65,10 +65,10 @@
 
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center" class="p-16 export">
           <button mat-raised-button type="button" class="is-danger" (click)="export()">
-            <mat-icon>arrow_upward</mat-icon> Export template
+            <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
           </button>
           <button mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
-            <mat-icon>arrow_downward</mat-icon> Import template
+            <mat-icon>arrow_downward</mat-icon> {{'global.label.import_template' | translate}}
           </button>
         </div>
 

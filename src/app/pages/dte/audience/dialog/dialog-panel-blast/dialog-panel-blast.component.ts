@@ -8,6 +8,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-panel-blast',
@@ -55,6 +56,7 @@ export class DialogPanelBlastComponent implements OnInit {
     private dataService: DataService,
     private idbService: IdbService,
     @Inject(MAT_DIALOG_DATA) data: any,
+    private translate: TranslateService,
   ) {
     this.rows = [];
     this.detailData = data;
@@ -76,7 +78,7 @@ export class DialogPanelBlastComponent implements OnInit {
         this.recursiveImport();
       }, err => {
         this.dialogService.openSnackBar({
-          message: "Gagal Preview Data!"
+          message: this.translate.instant('dte.audience.failed_preview')
         })
       })
     }
