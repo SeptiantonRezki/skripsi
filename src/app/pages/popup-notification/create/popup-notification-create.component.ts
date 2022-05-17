@@ -54,8 +54,8 @@ export class PopupNotificationCreateComponent {
   lvl: any[];
   minDate: any;
   listProductBarcodes: Array<any> = []
-  listJenisKonsumen: any[] = [{ name: "Semua", value: "all" }, { name: "Terverifikasi", value: "verified" }];
-  listSubscription: any[] = [{ name: "Semua", value: "all" }, { name: "Berlangganan", value: "yes" }, { name: "Tidak Berlangganan", value: "no" }];
+  listJenisKonsumen: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.verified'), value: "verified" }];
+  listSubscription: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.subscribe'), value: "yes" }, { name: this.translate.instant('global.label.unsubscribe'), value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: this.translate.instant('global.label.src'), value: "src" }, { name: this.translate.instant('global.label.ws_downline'), value: "downline" }];
@@ -2158,7 +2158,7 @@ export class PopupNotificationCreateComponent {
 
   async export() {
     if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text27') });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text27') });
       return;
     }
     this.dataService.showLoading(true);
