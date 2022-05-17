@@ -16,6 +16,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { ConfirmDialogTsmComponent } from '../dialog/confirm-dialog-tsm/confirm-dialog-tsm.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-verification-detail-tsm',
@@ -41,9 +42,9 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
 
   listAudience: Array<any>;
 
-  listReminder: Array<any> = [{ name: 'Tiap Minggu', value: 'by-weekly' }, { name: 'Tiap 2 Minggu', value: 'bi-weekly' }, { name: 'Tidak Ada', value: 'none' }];
-  listNotification: Array<any> = [{ name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
-  listAddNotif: Array<any> = [{ name: 'H+1', value: 1 }, { name: 'H+2', value: 2 }, { name: 'H+3', value: 3 }];
+  listReminder: Array<any> = [{ name: this.translate.instant('dte.task_verification.weekly'), value: 'by-weekly' }, { name: this.translate.instant('dte.task_verification.every_two_weeks'), value: 'bi-weekly' }, { name: this.translate.instant('dte.task_verification.nothing'), value: 'none' }];
+  listNotification: Array<any> = [{ name: this.translate.instant('global.label.yes'), value: 1 }, { name: this.translate.instant('global.label.no'), value: 0 }];
+  listAddNotif: Array<any> = [{ name: this.translate.instant('dte.task_verification.h_plus', {value: 1}), value: 1 }, { name: this.translate.instant('dte.task_verification.h_plus', {value: 2}), value: 2 }, { name: this.translate.instant('dte.task_verification.h_plus', {value: 3}), value: 3 }];
 
   public filterTP: FormControl = new FormControl();
   public filteredTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -78,22 +79,22 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
   rows: any[];
   pagination: Page = new Page();
   status: Array<object> = [
-    { label: 'Draft', value: 'draft' },
-    { label: 'Submitted', value: 'pending' },
-    { label: 'Not Submitted', value: ['active', 'not-active'] },
-    { label: 'Approved', value: 'approved' },
-    { label: 'Rejected', value: 'rejected' }
+    { label: this.translate.instant('dte.pengatur_jadwal_program.text10'), value: 'draft' },
+    { label: this.translate.instant('dte.task_verification.submitted'), value: 'pending' },
+    { label: this.translate.instant('dte.task_verification.not_submited'), value: ['active', 'not-active'] },
+    { label: this.translate.instant('dte.approval_coin_adjustment.approved'), value: 'approved' },
+    { label: this.translate.instant('dte.approval_coin_adjustment.rejected'), value: 'rejected' }
   ];
 
   statusCoinList: Array<object> = [
-    { label: 'Sudah Dikirim', value: 'sudah_dikirim' },
-    { label: 'Belum Dikirim', value: 'belum_dikirim' },
+    { label: this.translate.instant('dte.task_verification.sent'), value: 'sudah_dikirim' },
+    { label: this.translate.instant('dte.task_verification.not_sent'), value: 'belum_dikirim' },
   ];
 
   irCheckList: Array<object> = [
-    { label: 'Checked By IR', value: 'checked_by_ir' },
-    { label: 'Checking', value: 'checking' },
-    { label: 'Not Submitted', value: 'not_submitted' },
+    { label: this.translate.instant('dte.task_verification.checked_by_ir'), value: 'checked_by_ir' },
+    { label: this.translate.instant('dte.task_verification.checking'), value: 'checking' },
+    { label: this.translate.instant('dte.task_verification.not_submited'), value: 'not_submitted' },
   ];
 
   keyUp = new Subject<string>();
@@ -109,7 +110,8 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
     private taskVerificationService: TaskVerificationService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.permissionVerifikasiMisi = this.roles.getRoles('principal.dtetaskverification');
     this.permissionReleaseCoin = this.roles.getRoles('principal.dtetaskverificationreleasecoin');
@@ -301,7 +303,7 @@ export class TaskVerificationDetailTsmComponent implements OnInit {
 
     if (this.dataTsm.status_berjalan === 'expired') {
       return this.dialogService.openSnackBar({
-        message: `Tidak dapat adjust coin karna status scheduler trade program telah ${this.dataTsm.status_berjalan}`
+        message: `${this.translate.instant('dte.task_verification.import_expired_message')} ${this.dataTsm.status_berjalan}`
       });
     }
 

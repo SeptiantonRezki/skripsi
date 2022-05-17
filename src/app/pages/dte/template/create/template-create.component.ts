@@ -69,7 +69,7 @@ export class TemplateCreateComponent {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = {...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
   listChoose: Array<any> = [
   ];

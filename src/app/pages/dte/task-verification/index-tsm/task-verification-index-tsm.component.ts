@@ -14,6 +14,7 @@ import { ConfirmDialogTsmComponent } from '../dialog/confirm-dialog-tsm/confirm-
 import { SequencingService } from 'app/services/dte/sequencing.service';
 import * as CryptoJS from 'crypto-js';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-verification-index-tsm',
@@ -43,20 +44,22 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
   minDate: any;
 
   statusFilter: any[] = [
-    { name: 'Urutkan Perhari', value: 'day' },
-    { name: 'Urutkan Perbulan', value: 'mounth' },
-    { name: 'Urutkan Pertahun', value: 'year' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text2'), value: 'day' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text3'), value: 'mounth' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text4'), value: 'year' }
   ];
 
   listStatuses: any[] = [
-    { name: 'Semua Status', value: "" },
-    { name: 'Publish', value: 'publish' },
-    { name: 'Unpublish', value: 'unpublish' },
-    { name: 'Draft', value: 'draft' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text7'), value: "" },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text8'), value: 'publish' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text9'), value: 'unpublish' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text10'), value: 'draft' }
   ];
 
   dialogRef: any;
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  pageName = this.translate.instant('dte.task_verification.mission_verification_tsm')
+  titleParam = {entity: this.pageName}
 
   constructor(
     private dialogService: DialogService,
@@ -68,6 +71,7 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     private dialog: MatDialog,
     private sequencingService: SequencingService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
