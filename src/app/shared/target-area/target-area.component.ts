@@ -287,7 +287,7 @@ export class TargetAreaComponent implements OnInit {
   async export() {
     if (!this.selected.length) {
       this.dialogService.openSnackBar({
-        message: this.translate.instant('global.messages.select_area_to_export'),
+        message: this.translate.instant('global.label.select_area_to_export'),
       });
       return;
     }
