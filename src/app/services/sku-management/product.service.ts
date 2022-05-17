@@ -89,7 +89,7 @@ export class ProductService extends BaseService {
   }
 
   getProductBarcodes(context):Observable<any> {
-    const url = this.getUrl(this.namespace, "product_barcodes", context);
+    const url = this.getUrl(this.namespace, "product_barcodes", {param: context.barcode});
     return this.getApi(url)
   }
 
