@@ -554,6 +554,8 @@ export class NotificationCreateComponent {
         this.getAudience();
       }
     });
+
+    this.formNotification.get('send_ayo').setValue(true);
   }
 
   resetAudience() {
@@ -1342,6 +1344,8 @@ export class NotificationCreateComponent {
       this.formNotification.controls.send_ayo.enable();
       this.formNotification.controls.send_ayo.setValue(false);
     }
+    this.formNotification.controls.send_ayo.setValue(true);
+    this.formNotification.controls.send_ayo.disable();
   }
 
   async submit() {

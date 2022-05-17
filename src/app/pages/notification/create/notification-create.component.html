@@ -43,7 +43,8 @@
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="notif_type"
-                  placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}">
+                  placeholder="{{'notification.buat_notifikasi.notification_type' | translate}}"
+                  [disabled]="formNotification.controls['user_group'].value !== 'customer'">
                   <mat-option *ngFor="let item of listNotifType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
@@ -311,7 +312,7 @@
           </div>
 
           <div fxLayout="row" class="pb-24 px-24">
-            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="send_ayo" (change)="sendAYOChange($event)">
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="send_ayo" (change)="sendAYOChange($event)" disabled>
               {{'notification.buat_notifikasi.text15' | translate}}
             </mat-checkbox>
           </div>
