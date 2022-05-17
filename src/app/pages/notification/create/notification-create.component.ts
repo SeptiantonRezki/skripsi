@@ -106,10 +106,10 @@ export class NotificationCreateComponent {
   ];
 
   recurrenceLabel: Object = {
-    Daily: 'hari',
-    Weekly: 'minggu',
-    Monthly: 'bulan',
-    Yearly: 'tahun'
+    Daily: this.translate.instant('notification.buat_notifikasi.day'),
+    Weekly: this.translate.instant('notification.buat_notifikasi.week'),
+    Monthly: this.translate.instant('notification.buat_notifikasi.month'),
+    Yearly: this.translate.instant('notification.buat_notifikasi.year')
   }
 
   listWeekDays: any[] = [

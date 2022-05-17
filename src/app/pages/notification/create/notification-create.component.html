@@ -482,7 +482,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">
-                  Status berlangganan {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -807,7 +807,7 @@
 
         <div *ngIf="!typeOfRecurrence == 'OneTime' || isActiveInactiveShow" class="pt-16" fxLayout="row">
           <mat-form-field fxFlex="45" class="is-light form-primary">
-            <mat-select placeholder="Status" formControlName="status">
+            <mat-select placeholder="{{'global.label.status' | translate}}" formControlName="status">
               <mat-option value="Active">{{'global.label.active' | translate}}</mat-option>
               <mat-option value="Inactive">{{'global.label.inactive' | translate}}</mat-option>
             </mat-select>
