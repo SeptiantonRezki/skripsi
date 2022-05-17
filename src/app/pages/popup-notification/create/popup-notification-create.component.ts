@@ -2120,7 +2120,7 @@ export class PopupNotificationCreateComponent {
 
   async export() {
     if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text27') });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text27') });
       return;
     }
     this.dataService.showLoading(true);
