@@ -18,6 +18,7 @@ import { debounceTime, takeUntil } from "rxjs/operators";
   styleUrls: ["./search-product-barcode.component.scss"],
 })
 export class SearchProductBarcodeComponent implements OnInit {
+  isInitFetching: boolean = true;
   isFetching: boolean = false;
   filteredOptions: Array<any> = [];
   search: FormControl = new FormControl("");
@@ -48,6 +49,18 @@ export class SearchProductBarcodeComponent implements OnInit {
       this.onChange.emit(value);
     });
     if(this.disabled)this.search.disable()
+  }
+
+  ngAfterViewInit() {
+    // fetching
+    setTimeout(() => {
+      this.filteredOptions = [
+        { id: 1, name: "satu" },
+        { id: 2, name: "dua" },
+      ]
+
+      this.isInitFetching = false;
+    }, 2000);
   }
 
   getData(bypass: boolean = false) {
@@ -96,6 +109,9 @@ export class SearchProductBarcodeComponent implements OnInit {
   }
 
   isLoading() {
+    if (this.isInitFetching) {
+      return true;
+    }
     if (this.search.value) {
       if (this.isFetching) {
         return true;

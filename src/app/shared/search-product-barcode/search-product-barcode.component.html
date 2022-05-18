@@ -14,6 +14,9 @@
     <mat-option *ngFor="let item of filteredOptions" [value]="item.id">
       {{ item.name }} - {{item.id}}
     </mat-option>
+    <mat-option *ngIf="!isLoading() && !filteredOptions.length" disabled>
+      Ga ada data
+    </mat-option>
     <mat-option *ngIf="isLoading()" disabled>
       <div class="spinner">
         <mat-spinner diameter="18" color="primary"></mat-spinner>

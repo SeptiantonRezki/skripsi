@@ -43,11 +43,6 @@ export class PopupNotificationCreateComponent {
   dialogRef: any;
   exportAccessCashier: Boolean;
 
-  productTemp: any = {
-    id: '...',
-    name: '....'
-  }
-
   typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
   areaFromLogin;
 
