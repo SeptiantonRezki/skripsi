@@ -178,6 +178,8 @@ export class PagesName {
       "/dte/assignment-cart": "principal.dteassignmentcart.lihat",
       "/dte/verification-assignment": "principal.dteverificationassignment.lihat",
       "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
+      "/dte/verification-approval": "principal.dteverificationapproval.lihat",
+      "/dte/verification-approval/detail/": "principal.dteverificationapproval.lihat",
     }
     return PAGES[name];
   }
