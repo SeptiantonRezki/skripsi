@@ -825,8 +825,8 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     }
 
 
-    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
+    this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+    additional.push(this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next_question: '' }));
 
     if (rawType.includes("radio_")) {
       this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
@@ -934,7 +934,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
@@ -1139,7 +1139,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       id: newId.id + 1,
       question: this.questionParam,
       is_next_question: false,
-      possibilities: [{ key: 'Opsi 1', next: '', isBranching: false }],
+      possibilities: [{ key: this.translate.instant('global.label.opsi_index', {index: 1}), next: '', isBranching: false }],
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
@@ -1149,7 +1149,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({ option: 'Opsi 1', next_question: '' })
+    return this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: 1}), next_question: '' })
   }
 
   createRejectedReson(): FormGroup {
