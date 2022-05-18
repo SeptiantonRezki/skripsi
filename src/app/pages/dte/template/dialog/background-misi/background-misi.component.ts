@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'app/services/dialog.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class BackgroundMisiComponent implements OnInit {
 
   constructor(
     private dialogService: DialogService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -71,7 +73,7 @@ export class BackgroundMisiComponent implements OnInit {
       else{
         this.isSize = false;
         this.upload.emit({image: '', color: ''});
-        this.dialogService.openSnackBar({ message: 'Ukuran gambar melebihi 2MB'});
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.image_size_limit', {size: '2MB'}) });
       }
     }
   }

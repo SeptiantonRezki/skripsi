@@ -71,15 +71,18 @@
                 <div class="name-container">
                   <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'publish'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text8' | translate}}
                   </p>
                   <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'unpublish'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text9' | translate}}
                   </p>
                   <p class="status text-truncate h6 p-4 status-order mat-orange-900-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'draft'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text10' | translate}}
                   </p>
                 </div>
               </ng-template>

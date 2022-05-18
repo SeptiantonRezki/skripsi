@@ -7,10 +7,9 @@
         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
           <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
           <br>
-          <span matPrefix>Tarik Gambar Kesini atau
-            <strong>Pilih File</strong>
+          <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
           </span>
-          <span matPrefix>Ukuran 410x210 piksel, Maksimum 2MB</span>
+          <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
         </div>
       </div>
   
@@ -134,14 +133,14 @@
                 </div>
                 <div fxLayout="column" fxLayoutAlign="space-between" fxFlex="1 0 auto">
                   <div>{{judulMisi}}</div>
-                  <div>Batas waktu hingga : 02 Juli 2021</div>
+                  <div>{{'dte.template_tugas.expiry_date_template' | translate}}</div>
                 </div>
               </div>
             </div>
 
             <!-- Memilih warna font -->
             <div class="pt-16" fxLayout="column" fxLayoutGap="8px" *ngIf="!isDetail">
-              <span>Pengaturan warna font :</span>
+              <span>{{'dte.template_tugas.font_color_settings' | translate}} :</span>
               <input id="color-font" type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
             </div>
           </div>

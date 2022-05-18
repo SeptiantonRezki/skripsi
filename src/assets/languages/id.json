@@ -187,7 +187,15 @@
       "please_recheck": "Silahkan cek kembali",
       "file": "File",
       "you_uploaded": "yang anda upload!",
-      "area_code": "Kode Area"
+      "area_code": "Kode Area",
+      "upload": "Unggah",
+      "video": "Video",
+      "image2": "Gambar",
+      "format_video_landscape": "Format MP4, Video landscape, Maksimum 50MB",
+      "video_size_limit": "Ukuran Video melebihi batas maks 50MB",
+      "size": "Ukuran",
+      "select": "Pilih",
+      "opsi_index": "Opsi {{index}}"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -292,7 +300,9 @@
       "please_reupload": "Silahkan unggah ulang {{entity}}",
       "reupload_invalid": "Data {{entity}} tidak Valid, mohon mengunggah ulang.",
       "failed_upload_reffer_export": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda.",
-      "requesting": "Requesting"
+      "requesting": "Requesting",
+      "image_size_limit": "Ukuran gambar melebihi {{size}}",
+      "video_size_limit": "Ukuran video melebihi {{size}}"
     },
     "calendar": {
       "april": "April",
@@ -1079,7 +1089,9 @@
       "question_list": "List Pertanyaan",
       "question_list_info": "Gunakan tanda <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... sebagai parameter pada <strong>Judul Pertanyaan</strong>",
       "blocker_submission": "Blocker Submission",
-      "image_quality_detection": "Image Quality Detection"
+      "image_quality_detection": "Image Quality Detection",
+      "expiry_date_template": "Batas waktu hingga : 02 Juli 2021",
+      "font_color_settings": "Pengaturan warna font"
     },
     "group_trade_program": {
       "text1": "Group Trade Program",
