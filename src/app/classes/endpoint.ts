@@ -233,7 +233,7 @@
          export2: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/export/report`,
          products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
            }&status=active`,
-         product_barcodes:`${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product?barcode=${context.param}`,
+         product_barcodes:`${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product?search=${context.param}`,
          generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`,
        },
        product_cashier: {
