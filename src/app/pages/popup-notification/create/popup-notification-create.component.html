@@ -404,7 +404,7 @@
           <!-- spesifik produk b2b -->
           <div class="px-24 pb-10" *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'spesific_product_b2b'">
             <div fxLayout="row">
-              <search-product-barcode fxFlex="45" [value]="formPopupGroup.controls['barcode'].value" (onChange)="handleSearchProduct($event)">
+              <search-product-barcode [inputPlaceHolder]="'Search Barcode'" fxFlex="45" [value]="formPopupGroup.controls['barcode'].value" (onChange)="handleSearchProduct($event)">
                 <mat-error
                   *ngIf="formPopupGroup.controls['barcode'].hasError('required') && formPopupGroup.controls['barcode'].touched">
                   <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
