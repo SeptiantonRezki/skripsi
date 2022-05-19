@@ -18,6 +18,7 @@ import { debounceTime, takeUntil } from "rxjs/operators";
   styleUrls: ["./search-product-barcode.component.scss"],
 })
 export class SearchProductBarcodeComponent implements OnInit {
+  isInitFetching: boolean = true;
   isFetching: boolean = false;
   filteredOptions: Array<any> = [];
   search: FormControl = new FormControl("");
@@ -50,6 +51,18 @@ export class SearchProductBarcodeComponent implements OnInit {
     if(this.disabled)this.search.disable()
   }
 
+  ngAfterViewInit() {
+    // fetching
+    this.getTheData("", true)
+    // setTimeout(() => {
+    //   this.filteredOptions = [
+    //     { id: 1, name: "satu" },
+    //     { id: 2, name: "dua" },
+    //   ]
+
+    // }, 2000);
+  }
+
   getData(bypass: boolean = false) {
     const search = this.search.value;
     if (!bypass && this.searchInput.nativeElement !== document.activeElement) {
@@ -60,6 +73,10 @@ export class SearchProductBarcodeComponent implements OnInit {
       return;
     }
     this.isFetching = true;
+    this.getTheData(search)
+  }
+
+  getTheData(search = "", init=false){
     this.productService.getProductBarcodes({ barcode: search }).subscribe((res) => {
       const response = res.data || {};
       const list = response.data.map(({ barcode, name }) => ({
@@ -68,6 +85,8 @@ export class SearchProductBarcodeComponent implements OnInit {
       }));
       this.filteredOptions = list;
       this.isFetching = false;
+      if(init)
+      this.isInitFetching = false;
     });
   }
 
@@ -96,6 +115,9 @@ export class SearchProductBarcodeComponent implements OnInit {
   }
 
   isLoading() {
+    if (this.isInitFetching) {
+      return true;
+    }
     if (this.search.value) {
       if (this.isFetching) {
         return true;
