@@ -862,6 +862,22 @@ export class TemplateCreateComponent {
     }
   }
 
+  handleChangeUPC(index, enable:boolean){
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (enable) {
+      questions.at(index).get("upcCodeMax").enable();
+      questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
+      questions.at(index).get("upcCoin").enable();
+      questions.at(index).get("upcCoin").setValidators([Validators.required]);
+    } else {
+      questions.at(index).get("upcCodeMax").setValue("");
+      questions.at(index).get("upcCodeMax").disable();
+      questions.at(index).get("upcCoin").setValue("");
+      questions.at(index).get("upcCOin").disable();
+    }
+  }
+
   changeType(item, idx?) {
     this.checkIsIRExist();
 
@@ -923,6 +939,10 @@ export class TemplateCreateComponent {
     questions.at(idx).get('typeSelection').setValue(typeSelection);
     questions.at(idx).get('image_quality_detection').setValue(false);
     this.handleChangeImageDetection(idx)
+    if(item.value.type === "upc")
+    this.handleChangeUPC(idx, true)
+    else
+    this.handleChangeUPC(idx, false)
   }
 
   checkWordingRadioFreeType(item) {
@@ -1084,6 +1104,8 @@ export class TemplateCreateComponent {
       encryption: false,
       image_quality_detection: false,
       blocker_submission: ["", Validators.required],
+      upcCodeMax:["", Validators.required],
+      upcCoin:["", Validators.required]
       // others: false,
       // required: false
     }));
