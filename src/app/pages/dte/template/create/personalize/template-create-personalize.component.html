@@ -704,10 +704,10 @@
                           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                             <div fxFlex="30">Brand Family:</div>
                             <div fxLayout="row" fxFlex="20">
-                              <search-product-barcode formControlName="upcBrandFamily">
-                                <mat-error>
+                              <search-product-barcode [isBrandFamily]="true" formControlName="upcBrandFamily">
+                                <!-- <mat-error>
                                   Brand Family Harus diisi
-                                </mat-error>
+                                </mat-error> -->
                               </search-product-barcode>
                             </div>
                           </div>

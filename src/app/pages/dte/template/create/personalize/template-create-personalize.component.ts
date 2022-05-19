@@ -1487,340 +1487,342 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   }
   
   async submit() {
-    if (this.templateTaskForm.valid) {
-      this.dataService.showLoading(true);
+    let questionsTemp = this.templateTaskForm.get('questions') as FormArray;
+    console.log(questionsTemp.at(0).get("upcBrandFamily").value)
+    // if (this.templateTaskForm.valid) {
+    //   this.dataService.showLoading(true);
 
-      // this.saveData = !this.saveData;
-      this.saveData = true;
-      let questions: any[] = this.templateTaskForm.get('questions').value;
-      let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
-      let image_description: any[] = this.templateTaskForm.get('image_description').value;
-      let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
-      let children: any[] = this.templateTaskForm.get('children').value;
+    //   // this.saveData = !this.saveData;
+    //   this.saveData = true;
+    //   let questions: any[] = this.templateTaskForm.get('questions').value;
+    //   let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
+    //   let image_description: any[] = this.templateTaskForm.get('image_description').value;
+    //   let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
+    //   let children: any[] = this.templateTaskForm.get('children').value;
 
-      questions.map((item, index) => {
-        questions[index].question = this.html2text(item.question);
-      });
+    //   questions.map((item, index) => {
+    //     questions[index].question = this.html2text(item.question);
+    //   });
 
-      children.map((child, index) => {
-        children[index].name = this.html2text(child.name);
-        children[index].description = this.html2text(child.description);
-      });
+    //   children.map((child, index) => {
+    //     children[index].name = this.html2text(child.name);
+    //     children[index].description = this.html2text(child.description);
+    //   });
 
-      let questionsIsEmpty = [];
-      let body = {
-        task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
-        task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
-        task_toolbox_internal_id: this.templateTaskForm.get('tingkat_internal_misi').value,
-        task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
-        task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
-        name: this.templateTaskForm.get('name').value,
-        // other_name: this.templateTaskForm.get('other_name').value,
-        // description: this.templateTaskForm.get('description').value,
-        material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
-        material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
-        image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
-        // background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
-        // background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_detail: this.isDetailBanner ? 1 : 0,
-        video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
-        is_branching: this.frmIsBranching.value ? 1 : 0,
-        is_shareable: this.shareable.value ? 1 : 0,
-        is_ir_template: this.isIRTemplate.value ? 1 : 0,
-        is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
-        image_description: image_description.map((item, index) => {
-          if (item.content_type === 'image' && this.isDetailBanner) {
-            let tmp = {
-              content_type: item.content_type,
-              content_image: item.imageDetailBanner
-            };
-            return tmp;
-          } else if (item.content_type === 'landing_page' && this.isDetailBanner) {
-            let tmp = {
-              content_type: item.content_type,
-              landing_page: item.landing_page,
-            };
-            return tmp;
-          } else if (item.content_type === 'static_page' && this.isDetailBanner) {
-            let tmp = {
-              content_type: item.content_type,
-              title: item.title,
-              body: item.body,
-            };
-            return tmp;
-          } else if (item.content_type === 'iframe' && this.isDetailBanner) {
-            let tmp = {
-              content_type: item.content_type,
-              url_iframe: item.url_iframe,
-            };
-            return tmp;
-          } else if (item.content_type === 'unlinked' && this.isDetailBanner) {
-            let tmp = {
-              content_type: item.content_type,
-            };
-            return tmp;
-          }
-        }),
-        questions: questions.map((item, index) => {
-          // if (item.question_image) {
-          console.log('fioter', this.filteredNext);
-          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
-            questionsIsEmpty.push({ qId: item.id });
-          }
-          let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
-          let mockup = {
-            id: item.id,
-            question: item.question,
-            type: item.type,
-            required: item.type === 'stock_check' ? 1 : null,
-            is_child: isNext ? 1 : 0,
-            is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
-              key: item.additional[idx].option,
-              next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
-            })) : [],
-            // required: item.required,
-            question_image: item.question_image || '',
-            question_image_detail: item.image_detail ? 1 : 0,
-            encryption: item.encryption ? 1 : 0,
-            image_quality_detection: item.image_quality_detection ? 1 : 0,
-            blocker_submission: item.blocker_submission || "",
-            question_video: item.question_video || '',
-            question_image_description: item.question_image_description.map((tmp, index) => {
-              if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                  content_image: tmp.question_image_detail_photo
-                };
-                return tmpung;
-              } else if (tmp.content_typePertanyaan === 'landing_page' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                  landing_page: tmp.landing_page,
-                };
-                return tmpung;
-              } else if (tmp.content_typePertanyaan === 'static_page' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                  title: tmp.title,
-                  body: tmp.body,
-                };
-                return tmpung;
-              } else if (tmp.content_typePertanyaan === 'iframe' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                  url_iframe: tmp.url_iframe,
-                };
-                return tmpung;
-              } else if (tmp.content_typePertanyaan === 'unlinked' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                };
-                return tmpung;
-              } else if (tmp.content_typePertanyaan === 'unlinked' && item.image_detail) {
-                let tmpung = {
-                  content_type: tmp.content_typePertanyaan,
-                };
-                return tmpung;
-              }
-            }),
-            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
-            stock_check_data: item.type === 'stock_check' ? ({
-              sku_id: this.listProductSelected[index].sku_id,
-              name: this.listProductSelected[index].name,
-              directly: this.listDirectBelanja[index]
-            }) : null,
-          };
+    //   let questionsIsEmpty = [];
+    //   let body = {
+    //     task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
+    //     task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
+    //     task_toolbox_internal_id: this.templateTaskForm.get('tingkat_internal_misi').value,
+    //     task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
+    //     task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
+    //     name: this.templateTaskForm.get('name').value,
+    //     // other_name: this.templateTaskForm.get('other_name').value,
+    //     // description: this.templateTaskForm.get('description').value,
+    //     material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
+    //     material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
+    //     image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
+    //     // background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
+    //     // background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
+    //     image_detail: this.isDetailBanner ? 1 : 0,
+    //     video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
+    //     is_branching: this.frmIsBranching.value ? 1 : 0,
+    //     is_shareable: this.shareable.value ? 1 : 0,
+    //     is_ir_template: this.isIRTemplate.value ? 1 : 0,
+    //     is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
+    //     image_description: image_description.map((item, index) => {
+    //       if (item.content_type === 'image' && this.isDetailBanner) {
+    //         let tmp = {
+    //           content_type: item.content_type,
+    //           content_image: item.imageDetailBanner
+    //         };
+    //         return tmp;
+    //       } else if (item.content_type === 'landing_page' && this.isDetailBanner) {
+    //         let tmp = {
+    //           content_type: item.content_type,
+    //           landing_page: item.landing_page,
+    //         };
+    //         return tmp;
+    //       } else if (item.content_type === 'static_page' && this.isDetailBanner) {
+    //         let tmp = {
+    //           content_type: item.content_type,
+    //           title: item.title,
+    //           body: item.body,
+    //         };
+    //         return tmp;
+    //       } else if (item.content_type === 'iframe' && this.isDetailBanner) {
+    //         let tmp = {
+    //           content_type: item.content_type,
+    //           url_iframe: item.url_iframe,
+    //         };
+    //         return tmp;
+    //       } else if (item.content_type === 'unlinked' && this.isDetailBanner) {
+    //         let tmp = {
+    //           content_type: item.content_type,
+    //         };
+    //         return tmp;
+    //       }
+    //     }),
+    //     questions: questions.map((item, index) => {
+    //       // if (item.question_image) {
+    //       console.log('fioter', this.filteredNext);
+    //       if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+    //         questionsIsEmpty.push({ qId: item.id });
+    //       }
+    //       let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
+    //       let mockup = {
+    //         id: item.id,
+    //         question: item.question,
+    //         type: item.type,
+    //         required: item.type === 'stock_check' ? 1 : null,
+    //         is_child: isNext ? 1 : 0,
+    //         is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
+    //         possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+    //           key: item.additional[idx].option,
+    //           next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
+    //         })) : [],
+    //         // required: item.required,
+    //         question_image: item.question_image || '',
+    //         question_image_detail: item.image_detail ? 1 : 0,
+    //         encryption: item.encryption ? 1 : 0,
+    //         image_quality_detection: item.image_quality_detection ? 1 : 0,
+    //         blocker_submission: item.blocker_submission || "",
+    //         question_video: item.question_video || '',
+    //         question_image_description: item.question_image_description.map((tmp, index) => {
+    //           if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //               content_image: tmp.question_image_detail_photo
+    //             };
+    //             return tmpung;
+    //           } else if (tmp.content_typePertanyaan === 'landing_page' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //               landing_page: tmp.landing_page,
+    //             };
+    //             return tmpung;
+    //           } else if (tmp.content_typePertanyaan === 'static_page' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //               title: tmp.title,
+    //               body: tmp.body,
+    //             };
+    //             return tmpung;
+    //           } else if (tmp.content_typePertanyaan === 'iframe' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //               url_iframe: tmp.url_iframe,
+    //             };
+    //             return tmpung;
+    //           } else if (tmp.content_typePertanyaan === 'unlinked' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //             };
+    //             return tmpung;
+    //           } else if (tmp.content_typePertanyaan === 'unlinked' && item.image_detail) {
+    //             let tmpung = {
+    //               content_type: tmp.content_typePertanyaan,
+    //             };
+    //             return tmpung;
+    //           }
+    //         }),
+    //         additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+    //         stock_check_data: item.type === 'stock_check' ? ({
+    //           sku_id: this.listProductSelected[index].sku_id,
+    //           name: this.listProductSelected[index].name,
+    //           directly: this.listDirectBelanja[index]
+    //         }) : null,
+    //       };
 
-          if (this.frmQuiz.value === 'quiz') {
-            mockup['coin'] = item.coin;
-            mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
-          }
+    //       if (this.frmQuiz.value === 'quiz') {
+    //         mockup['coin'] = item.coin;
+    //         mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
+    //       }
 
-          if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
-            mockup['type'] = 'stock_check_ir';
-            mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
-            mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
-            mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
-          }
+    //       if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
+    //         mockup['type'] = 'stock_check_ir';
+    //         mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
+    //         mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
+    //         mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
+    //       }
 
-          if (item.type === 'planogram_ir' && this.templateListImageIR[index]['ir_id']) {
-            mockup['type'] = 'planogram';
-            mockup['planogram_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
-            mockup['planogram_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
-            mockup['planogram_image'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['image'] : null;
-          }
-          return mockup;
-        }),
-        rejected_reason_choices: rejected_reason.map(item => item.reason),
-        rejected_reason_ids: rejected_reason.map(item => 
-          (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
-        ),
-        ir_type: this.templateTaskForm.get('ir_type').value,
-        task_toolbox_copywrite_ids: copywritingList.map(item => item.id),
-        children: this.templateTaskForm.get('children').value,
-      }
+    //       if (item.type === 'planogram_ir' && this.templateListImageIR[index]['ir_id']) {
+    //         mockup['type'] = 'planogram';
+    //         mockup['planogram_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_id'] : null;
+    //         mockup['planogram_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
+    //         mockup['planogram_image'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['image'] : null;
+    //       }
+    //       return mockup;
+    //     }),
+    //     rejected_reason_choices: rejected_reason.map(item => item.reason),
+    //     rejected_reason_ids: rejected_reason.map(item => 
+    //       (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
+    //     ),
+    //     ir_type: this.templateTaskForm.get('ir_type').value,
+    //     task_toolbox_copywrite_ids: copywritingList.map(item => item.id),
+    //     children: this.templateTaskForm.get('children').value,
+    //   }
       
-      if (questionsIsEmpty.length > 0) {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.complete_question_message') });
-        return;
-      }
+    //   if (questionsIsEmpty.length > 0) {
+    //     this.dataService.showLoading(false);
+    //     this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.complete_question_message') });
+    //     return;
+    //   }
 
-      if (this.isIRTemplate.value && !body.ir_type) {
-        this.dataService.showLoading(false);
-        this.isIRTypeError = true;
-        this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.please_select_ir') });
-        return;
-      }
+    //   if (this.isIRTemplate.value && !body.ir_type) {
+    //     this.dataService.showLoading(false);
+    //     this.isIRTypeError = true;
+    //     this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.please_select_ir') });
+    //     return;
+    //   }
 
-      console.log('body', body);
-      if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
-        if (this.videoMaster) {
-          let bodyMasterVideo = new FormData();
-          bodyMasterVideo.append('file', this.videoMaster);
-          this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
-            async res => {
-              body.video = res.data;
-              if (this.questionVideo.length > 0) {
-                const promise1 = await this.questionVideo.map(async (qv) => {
-                  let bodyQuestionVideo = new FormData();
-                  bodyQuestionVideo.append('file', qv.event);
-                  await new Promise(async (resolve, reject) => {
-                    this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                      resQuestionVideo => {
-                        resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                      }, err => {
-                        console.log(err.error);
-                        reject(err);
-                        this.dataService.showLoading(false);
-                        return;
-                      });
-                  });
-                  return qv;
-                });
+    //   console.log('body', body);
+    //   if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
+    //     if (this.videoMaster) {
+    //       let bodyMasterVideo = new FormData();
+    //       bodyMasterVideo.append('file', this.videoMaster);
+    //       this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
+    //         async res => {
+    //           body.video = res.data;
+    //           if (this.questionVideo.length > 0) {
+    //             const promise1 = await this.questionVideo.map(async (qv) => {
+    //               let bodyQuestionVideo = new FormData();
+    //               bodyQuestionVideo.append('file', qv.event);
+    //               await new Promise(async (resolve, reject) => {
+    //                 this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+    //                   resQuestionVideo => {
+    //                     resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+    //                   }, err => {
+    //                     console.log(err.error);
+    //                     reject(err);
+    //                     this.dataService.showLoading(false);
+    //                     return;
+    //                   });
+    //               });
+    //               return qv;
+    //             });
 
-                Promise.all(promise1).then(() => {
-                  this.taskTemplateService.createPersonalize(body).subscribe(
-                    res => {
-                      this.dataService.showLoading(false);
-                      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                      this.router.navigate(['dte', 'template-task']);
-                    }, err => {
-                      console.log(err.error)
-                      this.dataService.showLoading(false);
-                      return;
-                    })
-                });
-              } else {
-                this.taskTemplateService.createPersonalize(body).subscribe(
-                  res => {
-                    this.dataService.showLoading(false);
-                    this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                    this.router.navigate(['dte', 'template-task']);
-                  },
-                  err => {
-                    console.log(err.error)
-                    this.dataService.showLoading(false);
-                    return;
-                  }
-                )
-              }
-            },
-            err => {
-              console.log(err.error)
-              this.dataService.showLoading(false);
-              return;
-            }
-          )
-        } else {
-          if (this.questionVideo.length > 0) {
-            const promise1 = await this.questionVideo.map(async (qv) => {
-              let bodyQuestionVideo = new FormData();
-              bodyQuestionVideo.append('file', qv.event);
-              await new Promise(async (resolve, reject) => {
-                this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                  resQuestionVideo => {
-                    resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                  }, err => {
-                    console.log(err.error);
-                    reject(err);
-                    this.dataService.showLoading(false);
-                    return;
-                  });
-              });
-              return qv;
-            });
+    //             Promise.all(promise1).then(() => {
+    //               this.taskTemplateService.createPersonalize(body).subscribe(
+    //                 res => {
+    //                   this.dataService.showLoading(false);
+    //                   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //                   this.router.navigate(['dte', 'template-task']);
+    //                 }, err => {
+    //                   console.log(err.error)
+    //                   this.dataService.showLoading(false);
+    //                   return;
+    //                 })
+    //             });
+    //           } else {
+    //             this.taskTemplateService.createPersonalize(body).subscribe(
+    //               res => {
+    //                 this.dataService.showLoading(false);
+    //                 this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //                 this.router.navigate(['dte', 'template-task']);
+    //               },
+    //               err => {
+    //                 console.log(err.error)
+    //                 this.dataService.showLoading(false);
+    //                 return;
+    //               }
+    //             )
+    //           }
+    //         },
+    //         err => {
+    //           console.log(err.error)
+    //           this.dataService.showLoading(false);
+    //           return;
+    //         }
+    //       )
+    //     } else {
+    //       if (this.questionVideo.length > 0) {
+    //         const promise1 = await this.questionVideo.map(async (qv) => {
+    //           let bodyQuestionVideo = new FormData();
+    //           bodyQuestionVideo.append('file', qv.event);
+    //           await new Promise(async (resolve, reject) => {
+    //             this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+    //               resQuestionVideo => {
+    //                 resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+    //               }, err => {
+    //                 console.log(err.error);
+    //                 reject(err);
+    //                 this.dataService.showLoading(false);
+    //                 return;
+    //               });
+    //           });
+    //           return qv;
+    //         });
 
-            Promise.all(promise1).then(() => {
-              this.taskTemplateService.createPersonalize(body).subscribe(
-                res => {
-                  this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                  this.router.navigate(['dte', 'template-task']);
-                }, err => {
-                  console.log(err.error);
-                  this.dataService.showLoading(false);
-                  return;
-                })
-            });
-          } else {
-            this.taskTemplateService.createPersonalize(body).subscribe(
-              res => {
-                this.dataService.showLoading(false);
-                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                this.router.navigate(['dte', 'template-task']);
-              },
-              err => {
-                console.log(err.error);
-                this.dataService.showLoading(false);
-                return;
-              }
-            )
-          }
-        }
-      } else {
-        this.taskTemplateService.createPersonalize(body).subscribe(
-          res => {
-            this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-            this.router.navigate(['dte', 'template-task']);
-          },
-          err => {
-            console.log(err.error);
-            this.dataService.showLoading(false);
-          }
-        );
-      }
+    //         Promise.all(promise1).then(() => {
+    //           this.taskTemplateService.createPersonalize(body).subscribe(
+    //             res => {
+    //               this.dataService.showLoading(false);
+    //               this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //               this.router.navigate(['dte', 'template-task']);
+    //             }, err => {
+    //               console.log(err.error);
+    //               this.dataService.showLoading(false);
+    //               return;
+    //             })
+    //         });
+    //       } else {
+    //         this.taskTemplateService.createPersonalize(body).subscribe(
+    //           res => {
+    //             this.dataService.showLoading(false);
+    //             this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //             this.router.navigate(['dte', 'template-task']);
+    //           },
+    //           err => {
+    //             console.log(err.error);
+    //             this.dataService.showLoading(false);
+    //             return;
+    //           }
+    //         )
+    //       }
+    //     }
+    //   } else {
+    //     this.taskTemplateService.createPersonalize(body).subscribe(
+    //       res => {
+    //         this.dataService.showLoading(false);
+    //         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //         this.router.navigate(['dte', 'template-task']);
+    //       },
+    //       err => {
+    //         console.log(err.error);
+    //         this.dataService.showLoading(false);
+    //       }
+    //     );
+    //   }
 
-    } else {
-      commonFormValidator.validateAllFields(this.templateTaskForm);
-      const questions = this.templateTaskForm.get('questions') as FormArray;
+    // } else {
+    //   commonFormValidator.validateAllFields(this.templateTaskForm);
+    //   const questions = this.templateTaskForm.get('questions') as FormArray;
 
-      if (this.templateTaskForm.controls['material_description'].invalid)
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
+    //   if (this.templateTaskForm.controls['material_description'].invalid)
+    //     return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
 
-      if (this.templateTaskForm.get('image').invalid)
-        return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
+    //   if (this.templateTaskForm.get('image').invalid)
+    //     return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
 
-      if (this.templateTaskForm.get('questions').invalid) {
-        if (questions.value.length) {
-          for (const item of questions.value) {
-            if (item.image_quality_detection && !item.blocker_submission) {
-              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
-            }
-          }
-        } else {
-          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
-        }
-      }
-      if (this.templateTaskForm.controls['copywritingList'].invalid)
-        return this.dialogService.openSnackBar({ message: 'Copywriting belum dibuat, minimal ada satu Copywriting' });
-      if (this.templateTaskForm.get('children').invalid)
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi Copywriting Set-Up' });
-      else
-        return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
-    }
+    //   if (this.templateTaskForm.get('questions').invalid) {
+    //     if (questions.value.length) {
+    //       for (const item of questions.value) {
+    //         if (item.image_quality_detection && !item.blocker_submission) {
+    //           return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+    //         }
+    //       }
+    //     } else {
+    //       return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+    //     }
+    //   }
+    //   if (this.templateTaskForm.controls['copywritingList'].invalid)
+    //     return this.dialogService.openSnackBar({ message: 'Copywriting belum dibuat, minimal ada satu Copywriting' });
+    //   if (this.templateTaskForm.get('children').invalid)
+    //     return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi Copywriting Set-Up' });
+    //   else
+    //     return this.dialogService.openSnackBar({ message: 'Silahkan lengkapi data terlebih dahulu!' });
+    // }
   }
 
 }

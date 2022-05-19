@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ProductService } from "app/services/sku-management/product.service";
 import { Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
@@ -16,18 +16,37 @@ import { debounceTime, takeUntil } from "rxjs/operators";
   selector: "search-product-barcode",
   templateUrl: "./search-product-barcode.component.html",
   styleUrls: ["./search-product-barcode.component.scss"],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi:true,
+      useExisting: SearchProductBarcodeComponent
+    }
+  ]
 })
-export class SearchProductBarcodeComponent implements OnInit {
+export class SearchProductBarcodeComponent implements ControlValueAccessor {
   isInitFetching: boolean = true;
   isFetching: boolean = false;
   filteredOptions: Array<any> = [];
   search: FormControl = new FormControl("");
   filterDestroy = new Subject();
   selected: FormControl = new FormControl({ id: "", name: "" });
+  initData: Array<any> = [];
+  isTouched: boolean = false;
 
   @Input() value: any;
-  
+
+  @Input() inputPlaceHolder: string;
+
+  @Input() errorMessage: string;
+
+  @Input() isBrandFamily: boolean = false;
+
   @Input() disabled: boolean = false;
+
+  onChangeValue = (value) => {};
+
+  onTouched = () => {};
 
   @Output() onChange: EventEmitter<any> = new EventEmitter();
 
@@ -39,7 +58,11 @@ export class SearchProductBarcodeComponent implements OnInit {
     this.search.valueChanges
       .pipe(debounceTime(300))
       .pipe(takeUntil(this.filterDestroy))
-      .subscribe(() => this.getData());
+      .subscribe(() => {
+        this.onTouched();
+        this.isTouched = true;
+        this.getData();
+      });
     if (this.value) {
       this.search.setValue(this.value.name);
       this.selected.setValue(this.value);
@@ -48,19 +71,19 @@ export class SearchProductBarcodeComponent implements OnInit {
     this.selected.valueChanges.subscribe((value) => {
       this.onChange.emit(value);
     });
-    if(this.disabled)this.search.disable()
+    if (this.disabled) this.search.disable();
   }
 
   ngAfterViewInit() {
     // fetching
-    setTimeout(() => {
-      this.filteredOptions = [
-        { id: 1, name: "satu" },
-        { id: 2, name: "dua" },
-      ]
+    this.getTheData("", true);
+    // setTimeout(() => {
+    //   this.filteredOptions = [
+    //     { id: 1, name: "satu" },
+    //     { id: 2, name: "dua" },
+    //   ]
 
-      this.isInitFetching = false;
-    }, 2000);
+    // }, 2000);
   }
 
   getData(bypass: boolean = false) {
@@ -73,22 +96,50 @@ export class SearchProductBarcodeComponent implements OnInit {
       return;
     }
     this.isFetching = true;
-    this.productService.getProductBarcodes({ barcode: search }).subscribe((res) => {
-      const response = res.data || {};
-      const list = response.data.map(({ barcode, name }) => ({
-        id: barcode,
-        name,
-      }));
-      this.filteredOptions = list;
-      this.isFetching = false;
-    });
+    this.getTheData(search);
+  }
+
+  getTheData(search = "", init = false) {
+    if (this.isBrandFamily) {
+      this.productService.getProductCode({ code: search }).subscribe((res) => {
+        const response = res.data || {};
+        const list = response.data.map(({ code, name }) => ({
+          id: code,
+          name,
+        }));
+        this.filteredOptions = list;
+        this.isFetching = false;
+        if (init) {
+          this.isInitFetching = false;
+          this.initData = list;
+        }
+      });
+    } else {
+      this.productService
+        .getProductBarcodes({ barcode: search })
+        .subscribe((res) => {
+          const response = res.data || {};
+          const list = response.data.map(({ barcode, name }) => ({
+            id: barcode,
+            name,
+          }));
+          this.filteredOptions = list;
+          this.isFetching = false;
+          if (init) {
+            this.isInitFetching = false;
+            this.initData = list;
+          }
+        });
+    }
   }
 
   getSelected(option: any) {
     this.searchInput.nativeElement.blur();
     setTimeout(() => {
       this.search.setValue(option.viewValue);
-      this.selected.setValue({ id: option.value, name: option.viewValue });
+      if (!this.isBrandFamily)
+        this.selected.setValue({ id: option.value, name: option.viewValue });
+      else this.onChangeValue({ id: option.value, name: option.viewValue });
     }, 0);
   }
 
@@ -106,6 +157,8 @@ export class SearchProductBarcodeComponent implements OnInit {
   clear() {
     this.search.setValue("");
     this.selected.setValue({ id: "", name: "" });
+    this.filteredOptions = this.initData;
+    setTimeout(() => this.searchInput.nativeElement.blur(), 0);
   }
 
   isLoading() {
@@ -119,5 +172,18 @@ export class SearchProductBarcodeComponent implements OnInit {
         return false;
       }
     }
+  }
+
+  writeValue(obj: any): void {
+    this.selected.setValue(obj);
+  }
+
+  registerOnChange(onChange: any) {
+    this.onChangeValue = onChange;
+    console.log(this.onChangeValue)
+  }
+
+  registerOnTouched(onTouched: any) {
+    this.onTouched = onTouched;
   }
 }
