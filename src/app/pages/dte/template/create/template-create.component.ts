@@ -71,6 +71,7 @@ export class TemplateCreateComponent {
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = Config.FROALA_CONFIG;
 
+
   listChoose: Array<any> = [
   ];
 
@@ -85,7 +86,7 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
-    { name: this.translate.instant('dte.template_tugas.upc'), value: "upc", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
     { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
@@ -316,6 +317,8 @@ export class TemplateCreateComponent {
       })]),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
       ir_type: [""],
+      upcConversionCoin:["", Validators.required],
+      upcCoin:["", Validators.required]
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -399,6 +402,14 @@ export class TemplateCreateComponent {
     );
   }
 
+  handleUPC(event){
+    if(event.key.match(/^[0-9\.\-\/]+$/)){
+      this.templateTaskForm.get("upcCoin").setValue(event.target.value)
+      return true
+    }
+    return false
+  }
+
   filteringLTM() {
     if (!this.listTipeMisi) {
       return;
@@ -480,6 +491,10 @@ export class TemplateCreateComponent {
     };
 
     myReader.readAsDataURL(file);
+  }
+
+  handleUPCCC(event){
+    console.log(event)
   }
 
   imagesContentTypeQuestionChild(image, index) {

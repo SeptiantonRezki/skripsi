@@ -85,6 +85,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
     { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
@@ -323,6 +324,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       ir_type: ["", Validators.required],
       copywritingList: this.formBuilder.array([], Validators.required),
       children: this.formBuilder.array([]),
+      upcConversionCoin:["", Validators.required],
+      upcCoin:["", Validators.required]
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -714,6 +717,14 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     this.filteredLKT.next(
       this.listKategoriToolbox.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
+  }
+
+  handleUPC(event){
+    if(event.key.match(/^[0-9\.\-\/]+$/)){
+      this.templateTaskForm.get("upcCoin").setValue(event.target.value)
+      return true
+    }
+    return false
   }
 
   getListKategoriToolbox() {

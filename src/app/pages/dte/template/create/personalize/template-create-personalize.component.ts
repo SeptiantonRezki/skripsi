@@ -85,6 +85,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
     { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: "UPC", value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
@@ -323,6 +324,8 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       ir_type: ["", Validators.required],
       copywritingList: this.formBuilder.array([], Validators.required),
       children: this.formBuilder.array([]),
+      upcConversionCoin:["", Validators.required],
+      upcCoin:["", Validators.required]
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -572,6 +575,15 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       }
     );
   }
+
+  handleUPC(event){
+    if(event.key.match(/^[0-9\.\-\/]+$/)){
+      this.templateTaskForm.get("upcCoin").setValue(event.target.value)
+      return true
+    }
+    return false
+  }
+  
   
   filteringLKM() {
     if (!this.listKategoriMisi) {
@@ -1630,123 +1642,123 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       }
 
       console.log('body', body);
-      if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
-        if (this.videoMaster) {
-          let bodyMasterVideo = new FormData();
-          bodyMasterVideo.append('file', this.videoMaster);
-          this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
-            async res => {
-              body.video = res.data;
-              if (this.questionVideo.length > 0) {
-                const promise1 = await this.questionVideo.map(async (qv) => {
-                  let bodyQuestionVideo = new FormData();
-                  bodyQuestionVideo.append('file', qv.event);
-                  await new Promise(async (resolve, reject) => {
-                    this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                      resQuestionVideo => {
-                        resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                      }, err => {
-                        console.log(err.error);
-                        reject(err);
-                        this.dataService.showLoading(false);
-                        return;
-                      });
-                  });
-                  return qv;
-                });
+      // if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
+      //   if (this.videoMaster) {
+      //     let bodyMasterVideo = new FormData();
+      //     bodyMasterVideo.append('file', this.videoMaster);
+      //     this.taskTemplateService.uploadVideo(bodyMasterVideo).subscribe(
+      //       async res => {
+      //         body.video = res.data;
+      //         if (this.questionVideo.length > 0) {
+      //           const promise1 = await this.questionVideo.map(async (qv) => {
+      //             let bodyQuestionVideo = new FormData();
+      //             bodyQuestionVideo.append('file', qv.event);
+      //             await new Promise(async (resolve, reject) => {
+      //               this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+      //                 resQuestionVideo => {
+      //                   resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+      //                 }, err => {
+      //                   console.log(err.error);
+      //                   reject(err);
+      //                   this.dataService.showLoading(false);
+      //                   return;
+      //                 });
+      //             });
+      //             return qv;
+      //           });
 
-                Promise.all(promise1).then(() => {
-                  this.taskTemplateService.createPersonalize(body).subscribe(
-                    res => {
-                      this.dataService.showLoading(false);
-                      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                      this.router.navigate(['dte', 'template-task']);
-                    }, err => {
-                      console.log(err.error)
-                      this.dataService.showLoading(false);
-                      return;
-                    })
-                });
-              } else {
-                this.taskTemplateService.createPersonalize(body).subscribe(
-                  res => {
-                    this.dataService.showLoading(false);
-                    this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                    this.router.navigate(['dte', 'template-task']);
-                  },
-                  err => {
-                    console.log(err.error)
-                    this.dataService.showLoading(false);
-                    return;
-                  }
-                )
-              }
-            },
-            err => {
-              console.log(err.error)
-              this.dataService.showLoading(false);
-              return;
-            }
-          )
-        } else {
-          if (this.questionVideo.length > 0) {
-            const promise1 = await this.questionVideo.map(async (qv) => {
-              let bodyQuestionVideo = new FormData();
-              bodyQuestionVideo.append('file', qv.event);
-              await new Promise(async (resolve, reject) => {
-                this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
-                  resQuestionVideo => {
-                    resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
-                  }, err => {
-                    console.log(err.error);
-                    reject(err);
-                    this.dataService.showLoading(false);
-                    return;
-                  });
-              });
-              return qv;
-            });
+      //           Promise.all(promise1).then(() => {
+      //             this.taskTemplateService.createPersonalize(body).subscribe(
+      //               res => {
+      //                 this.dataService.showLoading(false);
+      //                 this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //                 this.router.navigate(['dte', 'template-task']);
+      //               }, err => {
+      //                 console.log(err.error)
+      //                 this.dataService.showLoading(false);
+      //                 return;
+      //               })
+      //           });
+      //         } else {
+      //           this.taskTemplateService.createPersonalize(body).subscribe(
+      //             res => {
+      //               this.dataService.showLoading(false);
+      //               this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //               this.router.navigate(['dte', 'template-task']);
+      //             },
+      //             err => {
+      //               console.log(err.error)
+      //               this.dataService.showLoading(false);
+      //               return;
+      //             }
+      //           )
+      //         }
+      //       },
+      //       err => {
+      //         console.log(err.error)
+      //         this.dataService.showLoading(false);
+      //         return;
+      //       }
+      //     )
+      //   } else {
+      //     if (this.questionVideo.length > 0) {
+      //       const promise1 = await this.questionVideo.map(async (qv) => {
+      //         let bodyQuestionVideo = new FormData();
+      //         bodyQuestionVideo.append('file', qv.event);
+      //         await new Promise(async (resolve, reject) => {
+      //           this.taskTemplateService.uploadVideo(bodyQuestionVideo).subscribe(
+      //             resQuestionVideo => {
+      //               resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
+      //             }, err => {
+      //               console.log(err.error);
+      //               reject(err);
+      //               this.dataService.showLoading(false);
+      //               return;
+      //             });
+      //         });
+      //         return qv;
+      //       });
 
-            Promise.all(promise1).then(() => {
-              this.taskTemplateService.createPersonalize(body).subscribe(
-                res => {
-                  this.dataService.showLoading(false);
-                  this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                  this.router.navigate(['dte', 'template-task']);
-                }, err => {
-                  console.log(err.error);
-                  this.dataService.showLoading(false);
-                  return;
-                })
-            });
-          } else {
-            this.taskTemplateService.createPersonalize(body).subscribe(
-              res => {
-                this.dataService.showLoading(false);
-                this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-                this.router.navigate(['dte', 'template-task']);
-              },
-              err => {
-                console.log(err.error);
-                this.dataService.showLoading(false);
-                return;
-              }
-            )
-          }
-        }
-      } else {
-        this.taskTemplateService.createPersonalize(body).subscribe(
-          res => {
-            this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-            this.router.navigate(['dte', 'template-task']);
-          },
-          err => {
-            console.log(err.error);
-            this.dataService.showLoading(false);
-          }
-        );
-      }
+      //       Promise.all(promise1).then(() => {
+      //         this.taskTemplateService.createPersonalize(body).subscribe(
+      //           res => {
+      //             this.dataService.showLoading(false);
+      //             this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //             this.router.navigate(['dte', 'template-task']);
+      //           }, err => {
+      //             console.log(err.error);
+      //             this.dataService.showLoading(false);
+      //             return;
+      //           })
+      //       });
+      //     } else {
+      //       this.taskTemplateService.createPersonalize(body).subscribe(
+      //         res => {
+      //           this.dataService.showLoading(false);
+      //           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //           this.router.navigate(['dte', 'template-task']);
+      //         },
+      //         err => {
+      //           console.log(err.error);
+      //           this.dataService.showLoading(false);
+      //           return;
+      //         }
+      //       )
+      //     }
+      //   }
+      // } else {
+      //   this.taskTemplateService.createPersonalize(body).subscribe(
+      //     res => {
+      //       this.dataService.showLoading(false);
+      //       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      //       this.router.navigate(['dte', 'template-task']);
+      //     },
+      //     err => {
+      //       console.log(err.error);
+      //       this.dataService.showLoading(false);
+      //     }
+      //   );
+      // }
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
