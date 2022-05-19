@@ -53,14 +53,14 @@ export class SearchProductBarcodeComponent implements OnInit {
 
   ngAfterViewInit() {
     // fetching
-    setTimeout(() => {
-      this.filteredOptions = [
-        { id: 1, name: "satu" },
-        { id: 2, name: "dua" },
-      ]
+    this.getTheData("", true)
+    // setTimeout(() => {
+    //   this.filteredOptions = [
+    //     { id: 1, name: "satu" },
+    //     { id: 2, name: "dua" },
+    //   ]
 
-      this.isInitFetching = false;
-    }, 2000);
+    // }, 2000);
   }
 
   getData(bypass: boolean = false) {
@@ -73,6 +73,10 @@ export class SearchProductBarcodeComponent implements OnInit {
       return;
     }
     this.isFetching = true;
+    this.getTheData(search)
+  }
+
+  getTheData(search = "", init=false){
     this.productService.getProductBarcodes({ barcode: search }).subscribe((res) => {
       const response = res.data || {};
       const list = response.data.map(({ barcode, name }) => ({
@@ -81,6 +85,8 @@ export class SearchProductBarcodeComponent implements OnInit {
       }));
       this.filteredOptions = list;
       this.isFetching = false;
+      if(init)
+      this.isInitFetching = false;
     });
   }
 

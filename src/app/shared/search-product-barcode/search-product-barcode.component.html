@@ -15,7 +15,7 @@
       {{ item.name }} - {{item.id}}
     </mat-option>
     <mat-option *ngIf="!isLoading() && !filteredOptions.length" disabled>
-      Ga ada data
+      Tidak ada produk yang ditemukan
     </mat-option>
     <mat-option *ngIf="isLoading()" disabled>
       <div class="spinner">
