@@ -57,6 +57,7 @@ import { TemplatePlanogramComponent } from "./image-recognition/template-planogr
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 
 const routes: Routes = [
   {
@@ -667,6 +668,16 @@ const routes: Routes = [
   {
     path: 'verification-assignment/detail/:id',
     component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval/detail/:id',
+    component: VerificationApprovalComponent,
     canActivate: [PageGuard]
   },
 ];

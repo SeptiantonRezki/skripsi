@@ -55,7 +55,7 @@
                   cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
-                  {{'dte.template_tugas.text25' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'dte.template_tugas.text25' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -72,7 +72,7 @@
                 <textarea matInput [froalaEditor]="options" formControlName="description" data-froala-id="froala-tugas"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
-                  {{'dte.template_tugas.text26' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'dte.template_tugas.text26' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -91,7 +91,7 @@
                   [disabled]="!templateTaskForm.get('material').value"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
-                  {{'dte.template_tugas.text28' | translate}} Tugas {{'global.messages.mandatory_text'}}
+                  {{'dte.template_tugas.text28' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -211,7 +211,7 @@
                     </mat-select>
                     <mat-error
                       *ngIf="item.controls['content_type'].hasError('required') && item.controls['content_type'].touched">
-                      {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text'}}
+                      {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -223,7 +223,7 @@
                     <mat-form-field fxFlex="100" class="is-light form-primary">
                       <input matInput type="text" formControlName="title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                       <mat-error *ngIf="item.controls['title'].hasError('required') && item.controls['title'].touched">
-                        {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -233,7 +233,7 @@
                   <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                   <mat-error style="padding-top: 6px !important; font-size: .86em;"
                     *ngIf="item.controls['body'].hasError('required') && item.controls['body'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </div>
                 <!-- Landing Page -->
@@ -368,7 +368,7 @@
                         </mat-option>
                       </mat-select>
                       <mat-error>
-                        {{'dte.template_tugas.blocker_submission' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'dte.template_tugas.blocker_submission' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -441,7 +441,7 @@
                       <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                       <mat-error style="padding-top: 6px !important; font-size: .86em;"
                         *ngIf="itemque.controls['body'].hasError('required') && itemque.controls['body'].touched">
-                        {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text'}}
+                        {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </div>
                     <!-- Landing Page -->

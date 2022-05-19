@@ -187,7 +187,15 @@
       "please_recheck": "Silahkan cek kembali",
       "file": "File",
       "you_uploaded": "yang anda upload!",
-      "area_code": "Kode Area"
+      "area_code": "Kode Area",
+      "upload": "Unggah",
+      "video": "Video",
+      "image2": "Gambar",
+      "format_video_landscape": "Format MP4, Video landscape, Maksimum 50MB",
+      "video_size_limit": "Ukuran Video melebihi batas maks 50MB",
+      "size": "Ukuran",
+      "select": "Pilih",
+      "opsi_index": "Opsi {{index}}"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -292,7 +300,9 @@
       "please_reupload": "Silahkan unggah ulang {{entity}}",
       "reupload_invalid": "Data {{entity}} tidak Valid, mohon mengunggah ulang.",
       "failed_upload_reffer_export": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda.",
-      "requesting": "Requesting"
+      "requesting": "Requesting",
+      "image_size_limit": "Ukuran gambar melebihi {{size}}",
+      "video_size_limit": "Ukuran video melebihi {{size}}"
     },
     "calendar": {
       "april": "April",
@@ -1079,7 +1089,9 @@
       "question_list": "List Pertanyaan",
       "question_list_info": "Gunakan tanda <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... sebagai parameter pada <strong>Judul Pertanyaan</strong>",
       "blocker_submission": "Blocker Submission",
-      "image_quality_detection": "Image Quality Detection"
+      "image_quality_detection": "Image Quality Detection",
+      "expiry_date_template": "Batas waktu hingga : 02 Juli 2021",
+      "font_color_settings": "Pengaturan warna font"
     },
     "group_trade_program": {
       "text1": "Group Trade Program",
@@ -1374,7 +1386,56 @@
       "change_schedule": "Ubah Tanggal Penjadwalan",
       "mission_export": "Export Misi",
       "verified_all": "Verified All",
-      "coin_release": "Release Coin"
+      "coin_release": "Release Coin",
+      "do_approve": "Setujui",
+      "do_reject": "Tolak",
+      "reason_index": "Alasan {{index}}",
+      "confirm_verif": "Apakah anda yakin untuk verifikasi (sebanyak {{mission_amount}}) misi ini?",
+      "confirm_send_coin": "Apakah anda yakin untuk mengirim coin untuk misi ini (Total {{total_src}} SRC)?",
+      "confirm_send_coin_2": "Apakah anda yakin untuk mengirim coin untuk SRC {{name}} - {{code}}?",
+      "deadline": "Deadline",
+      "coin_will_receive": "Coin yang akan diperoleh",
+      "planogram_template": "Template Planogram",
+      "photo_proved": "Bukti Foto",
+      "ir_check": "IR Check",
+      "compliance": "Compliance",
+      "brand": "Brand",
+      "qty": "Quantity",
+      "other": "Lainnya",
+      "verify_mission_error": "Terjadi Kesalahan saat verifikasi misi",
+      "release_coin_error": "Terjadi Kesalahan saat release coin",
+      "approve_confirm_message": "Apakah anda yakin untuk menyetujui misi ini?",
+      "fill_reject_reason": "Silahkan isi alasan penolakan",
+      "mission_verification_tsm": "Verifikasi Misi TSM",
+      "task_sequencing_name": "Nama Task Sequencing Management",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "audience_group": "Audience / Grup",
+      "view_list_audience": "Lihat daftar audience",
+      "template_task_backup": "Template Tugas (Backup)",
+      "download_failed": "Terjadi kesalahan saat mendownload misi",
+      "backup": "Backup",
+      "mission_status": "Status Misi",
+      "retailer_id": "Retailer Id",
+      "customer_code": "Customer Code",
+      "division": "Division",
+      "submit_mission_date": "Tanggal Submit Misi",
+      "wib": "WIB",
+      "not_submited": "Not Submitted",
+      "submitted": "Submitted",
+      "sent": "Sudah Dikirim",
+      "not_sent": "Belum Dikirim",
+      "checked_by_ir": "Checked By IR",
+      "checking": "Checking",
+      "weekly": "Tiap Minggu",
+      "every_two_weeks": "Tiap 2 Minggu",
+      "nothing": "Tidak Ada",
+      "h_plus": "H+{{value}}",
+      "import_expired_message": "Tidak dapat adjust coin karna status scheduler trade program telah",
+      "detail_mission_verification": "Detail Verifikasi Misi",
+      "detail_mission_verification_tsm": "Detail Verifikasi Misi TSM",
+      "reblast_type": "Reblast Type",
+      "list_audience_group": "Daftar Audience / Grup"
     },
     "coin_disbursement": {
       "text1": "Coin Disbursement",
@@ -1637,7 +1698,11 @@
       "ended_at": "Berakhir pada",
       "repeat_at": "Pengulangan ke",
       "consumer_type": "Tipe Konsumen",
-      "employee": "Employee"
+      "employee": "Employee",
+      "day": "Hari",
+      "week": "Minggu",
+      "month": "Bulan",
+      "year": "Tahun"
     },
     "popup_notifikasi": {
       "page_name": "Popup Notifikasi",
@@ -1673,7 +1738,9 @@
       "message2": "Harap pilih minimal satu tanggal terbit!",
       "message3": "Harap pilih minimal satu tanggal & bulan terbit!",
       "message4": "Target Area harus dipilih!",
-      "message5": "Harap pilih tanggal dan bulan pengulangan!"
+      "message5": "Harap pilih tanggal dan bulan pengulangan!",
+      "new_product": "New Product",
+      "date_selected": "Tanggal dan bulan pengulangan sudah dipilih."
     },
     "custom_notifikasi": {
       "page_name": "Buat Customized Push Notification"

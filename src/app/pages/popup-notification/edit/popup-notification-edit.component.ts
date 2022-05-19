@@ -55,7 +55,7 @@ export class PopupNotificationEditComponent {
   listContentType: any[] = [];
   listLandingPage: any[] = [];
   listGender: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.male'), value: "male" }, { name: this.translate.instant('global.label.female'), value: "female" }];
-  listSmoker: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.smoking'), value: "yes" }, { name: this.translate.instant('global.label.not_smoking'), value: "no" }];
+  listSmoker: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.smoking'), value: "yes" }, { name: this.translate.instant('global.label.not_smoke'), value: "no" }];
   listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
   listTypeOfRecurrence: Object[] = [
     { id: 'once', name: this.translate.instant('notification.popup_notifikasi.label1') },
@@ -118,7 +118,7 @@ export class PopupNotificationEditComponent {
   listDateChosen: FormControl = new FormControl([], Validators.required);
   formPopupErrors: any;
 
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = {...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
   idPopup: any;
   isDetail: Boolean;
@@ -1849,7 +1849,7 @@ export class PopupNotificationEditComponent {
 
   async export() {
     if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text27') });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text27') });
       return;
     }
     this.dataService.showLoading(true);

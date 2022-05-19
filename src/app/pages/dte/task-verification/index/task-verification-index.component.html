@@ -61,7 +61,7 @@
               </mat-form-field>
               <div fxFlex="1"></div>
               <div class="button-row pb-16">
-                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">{{'global.button.filter' | translate}}</button>
               </div>
             </div>
           </form>
@@ -92,7 +92,7 @@
               [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="{{'dte.template_tugas.text6' | translate}}/Template Tugas"
+            <ngx-datatable-column [width]="190" [sortable]="false" name="{{'dte.template_tugas.text6' | translate}}/{{'dte.template_tugas.text1'}}"
               prop="other_name_template" [flexGrow]="3">
             </ngx-datatable-column>
 
@@ -102,7 +102,7 @@
             <ngx-datatable-column [sortable]="false" name="{{'dte.task_verification.text5' | translate}}" prop="compliance_rate" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{'dte.task_verification.text6' | translate}}" prop="start_date" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.start_date | dateToMoment}} s/d {{ row.end_date | dateToMoment}}</span>
               </ng-template>
@@ -116,15 +116,18 @@
                 <div class="name-container">
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-green-800-bg"
                     style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'publish'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text8' | translate}}
                   </p>
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
                     style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'draft'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text10' | translate}}
                   </p>
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
                     *ngIf="row.status_scheduler == 'unpublish'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text9' | translate}}
                   </p>
                 </div>
               </ng-template>
@@ -137,7 +140,7 @@
             <ngx-datatable-column [width]="250" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button id="btn-lihat" type="button" mat-icon-button color="" matTooltip="Lihat"
+                  <button id="btn-lihat" type="button" mat-icon-button color="" matTooltip="{{'dte.pengatur_jadwal_program.text13' | translate}}"
                     [routerLink]="['/dte', 'taskverification', 'detail', row.id, row.scheduler_templates_id]"
                     [disabled]="!permissionVerifikasiMisi?.lihat">
                     <mat-icon class="secondary-text">assignment</mat-icon>

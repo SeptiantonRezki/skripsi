@@ -68,7 +68,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG_PERSONALIZE;
+  public options: Object = { ...Config.FROALA_CONFIG_PERSONALIZE, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
   listChoose: Array<any> = [
   ];
