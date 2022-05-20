@@ -56,6 +56,9 @@ import { TemplateStockCheckComponent } from "./image-recognition/template-stock-
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
+import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
+import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
+import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 
 const routes: Routes = [
   {
@@ -642,6 +645,51 @@ const routes: Routes = [
   {
     path: 'verification-assignment/detail/:id',
     component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade/create',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade/edit/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade/detail/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'coin-redemption-approval',
+    component: CoinRedemptionApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/create',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/edit/:id',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/detail/:id',
+    component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
 ];
