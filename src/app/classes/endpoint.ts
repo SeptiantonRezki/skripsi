@@ -160,7 +160,10 @@ export class Endpoint {
         import_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/preview`,
         store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`,
         request_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/request-export`,
-        status_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/status-export`
+        status_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/status-export`,
+
+        // TODO: ubah api
+        export_bank_account: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/status-export`
       },
       paguyuban: {
         get: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/paguyuban`,

@@ -35,10 +35,12 @@ export class RetailerIndexComponent {
   exportAccessCashier: boolean;
   canRequestExport = true;
   resultExport = null;
+  resultExportBank = null;
 
   keyUp = new Subject<string>();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadBankLink') downloadBankLink: ElementRef;
   @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -1208,6 +1210,16 @@ export class RetailerIndexComponent {
           this.canRequestExport = res.data.can_request;
         });
 
+        // TODO: sesuaikan payload
+        this.retailerService.exportBankAccount({
+          area: this.pagination['area'],
+          retailer_id: this.selectedRetailer,
+          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+        }).subscribe(res => {
+          console.log('Status Export :', res);
+          this.resultExportBank = res.data.result;
+        });
+
         this.loadingIndicator = false;
         
       },
@@ -1390,6 +1402,11 @@ export class RetailerIndexComponent {
   download() {
     this.downloadLink.nativeElement.href = this.resultExport;
     this.downloadLink.nativeElement.click();
+  }
+
+  downloadBank() {
+    this.downloadBankLink.nativeElement.href = this.resultExport;
+    this.downloadBankLink.nativeElement.click();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {

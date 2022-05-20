@@ -15,9 +15,13 @@
     <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
       style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
       <a #downloadLink></a>
+      <a #downloadBankLink></a>
       <!-- <button mat-raised-button type="button" color="primary">
         Kelola ls.locale.global.label.cashier_access
       </button> disabled tiket CDE-2572-dissable-mass-upload -->
+      <button *ngIf="permission.export" (click)="downloadBank()" mat-raised-button type="button" class="is-danger">
+        <mat-icon>arrow_downward</mat-icon> Download Bank Account
+      </button>
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
