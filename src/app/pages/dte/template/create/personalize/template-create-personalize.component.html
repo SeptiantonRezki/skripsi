@@ -702,12 +702,11 @@
                             </div>
                           </div>
                           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                            <div fxFlex="30">Brand Family:</div>
-                            <div fxLayout="row" fxFlex="20">
-                              <search-product-barcode [isBrandFamily]="true" formControlName="upcBrandFamily">
-                                <!-- <mat-error>
+                            <div fxLayout="row" fxFlex="50">
+                              <search-product-barcode style="width: 100%;" [errorMessage]="'Tidak Ditemukan Brand'" [inputPlaceHolder]="'Search Brand Family'" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                                <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.touched">
                                   Brand Family Harus diisi
-                                </mat-error> -->
+                                </mat-error>
                               </search-product-barcode>
                             </div>
                           </div>

@@ -1,13 +1,20 @@
 import {
   Component,
+  Directive,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Input,
   OnInit,
   Output,
   ViewChild,
 } from "@angular/core";
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
+import {
+  ControlValueAccessor,
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+} from "@angular/forms";
 import { ProductService } from "app/services/sku-management/product.service";
 import { Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
@@ -16,14 +23,15 @@ import { debounceTime, takeUntil } from "rxjs/operators";
   selector: "search-product-barcode",
   templateUrl: "./search-product-barcode.component.html",
   styleUrls: ["./search-product-barcode.component.scss"],
-  providers: [
+  providers:[
     {
       provide: NG_VALUE_ACCESSOR,
-      multi:true,
-      useExisting: SearchProductBarcodeComponent
+      multi: true,
+      useExisting: SearchProductBarcodeComponent,
     }
   ]
 })
+
 export class SearchProductBarcodeComponent implements ControlValueAccessor {
   isInitFetching: boolean = true;
   isFetching: boolean = false;
@@ -32,7 +40,6 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
   filterDestroy = new Subject();
   selected: FormControl = new FormControl({ id: "", name: "" });
   initData: Array<any> = [];
-  isTouched: boolean = false;
 
   @Input() value: any;
 
@@ -55,12 +62,11 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
   constructor(private productService: ProductService) {}
 
   ngOnInit() {
+    // console.log(this.form)
     this.search.valueChanges
       .pipe(debounceTime(300))
       .pipe(takeUntil(this.filterDestroy))
       .subscribe(() => {
-        this.onTouched();
-        this.isTouched = true;
         this.getData();
       });
     if (this.value) {
@@ -89,12 +95,15 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
   getData(bypass: boolean = false) {
     const search = this.search.value;
     if (!bypass && this.searchInput.nativeElement !== document.activeElement) {
+      // this.onTouched()
       return;
     }
     if (!search) {
+      this.onTouched()
       this.filteredOptions = [];
       return;
     }
+    this.onTouched()
     this.isFetching = true;
     this.getTheData(search);
   }
@@ -137,9 +146,9 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
     this.searchInput.nativeElement.blur();
     setTimeout(() => {
       this.search.setValue(option.viewValue);
-      if (!this.isBrandFamily)
-        this.selected.setValue({ id: option.value, name: option.viewValue });
-      else this.onChangeValue({ id: option.value, name: option.viewValue });
+      this.selected.setValue({ id: option.value, name: option.viewValue });
+      if (this.isBrandFamily)
+      this.onChangeValue({ id: option.value, name: option.viewValue });
     }, 0);
   }
 
@@ -147,16 +156,20 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
     if (!this.selected.value.id) return;
     if (!this.search.value) {
       this.selected.setValue({ id: "", name: "" });
+      if (this.isBrandFamily) this.onChangeValue("");
       return;
     }
     if (this.search.value !== this.selected.value.name) {
       this.search.setValue(this.selected.value.name);
     }
+    this.onTouched();
   }
 
   clear() {
     this.search.setValue("");
     this.selected.setValue({ id: "", name: "" });
+    if (this.isBrandFamily) this.onChangeValue("");
+    // console.log(this.selected)s
     this.filteredOptions = this.initData;
     setTimeout(() => this.searchInput.nativeElement.blur(), 0);
   }
@@ -174,15 +187,21 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
     }
   }
 
+  // ControlValueAccessor interface
   writeValue(obj: any): void {
+    // console.log("writeValue", obj);
+    this.search.setValue(obj.name);
     this.selected.setValue(obj);
+    // console.log(this.selected)
   }
 
+  // ControlValueAccessor interface
   registerOnChange(onChange: any) {
     this.onChangeValue = onChange;
-    console.log(this.onChangeValue)
+    // console.log(this.onChangeValue);
   }
 
+  // ControlValueAccessor interface
   registerOnTouched(onTouched: any) {
     this.onTouched = onTouched;
   }

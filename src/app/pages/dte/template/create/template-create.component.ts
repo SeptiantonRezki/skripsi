@@ -317,8 +317,7 @@ export class TemplateCreateComponent {
       })]),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
       ir_type: [""],
-      upcConversionCoin:["", Validators.required],
-      upcCoin:["", Validators.required]
+      
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -402,14 +401,6 @@ export class TemplateCreateComponent {
     );
   }
 
-  handleUPC(event){
-    if(event.key.match(/^[0-9\.\-\/]+$/)){
-      this.templateTaskForm.get("upcCoin").setValue(event.target.value)
-      return true
-    }
-    return false
-  }
-
   filteringLTM() {
     if (!this.listTipeMisi) {
       return;
@@ -491,10 +482,6 @@ export class TemplateCreateComponent {
     };
 
     myReader.readAsDataURL(file);
-  }
-
-  handleUPCCC(event){
-    console.log(event)
   }
 
   imagesContentTypeQuestionChild(image, index) {
@@ -864,17 +851,23 @@ export class TemplateCreateComponent {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log(questions.at(index).get("upcBrandFamily"))
+    console.log(questions.at(index).get("upcCoin"))
     
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
       questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
       questions.at(index).get("upcCoin").enable();
       questions.at(index).get("upcCoin").setValidators([Validators.required]);
+      questions.at(index).get("upcBrandFamily").enable();
+      questions.at(index).get("upcBrandFamily").setValidators([Validators.required]);
     } else {
       questions.at(index).get("upcCodeMax").setValue("");
       questions.at(index).get("upcCodeMax").disable();
       questions.at(index).get("upcCoin").setValue("");
-      questions.at(index).get("upcCOin").disable();
+      questions.at(index).get("upcCoin").disable();
+      questions.at(index).get("upcBrandFamily").setValue("");
+      questions.at(index).get("upcBrandFamily").disable();
     }
   }
 
@@ -1104,11 +1097,13 @@ export class TemplateCreateComponent {
       encryption: false,
       image_quality_detection: false,
       blocker_submission: ["", Validators.required],
-      upcCodeMax:["", Validators.required],
-      upcCoin:["", Validators.required]
+      upcCodeMax:[""],
+      upcCoin:[""],
+      upcBrandFamily:[""]
       // others: false,
       // required: false
     }));
+
 
     this.allQuestionList.push({
       id: newId.id + 1,
@@ -1278,6 +1273,7 @@ export class TemplateCreateComponent {
   
   async submit() {
     if (this.templateTaskForm.valid) {
+      console.log(this.templateTaskForm.value)
       this.dataService.showLoading(true);
       // this.saveData = !this.saveData;
       this.saveData = true;
@@ -1342,7 +1338,7 @@ export class TemplateCreateComponent {
         questions: questions.map((item, index) => {
           // if (item.question_image) {
           console.log('fioter', this.filteredNext);
-          if (item.type === 'upc' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
@@ -1350,7 +1346,7 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            required: item.type === 'upc' ? 1 : null,
+            required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
@@ -1397,8 +1393,8 @@ export class TemplateCreateComponent {
                 return tmpung;
               }
             }),
-            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'upc' ? ["Ada", "Tidak Ada"] : []),
-            stock_check_data: item.type === 'upc' ? ({
+            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,
               directly: this.listDirectBelanja[index]
@@ -1408,6 +1404,13 @@ export class TemplateCreateComponent {
           if (this.frmQuiz.value === 'quiz') {
             mockup['coin'] = item.coin;
             mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
+          }
+
+          if (item.type === "upc") {
+            mockup['max_upc_code'] = item.upcCodeMax;
+            mockup['upc_coin_conversion'] = item.upcCoin;
+            mockup['name_brand'] = item.upcBrandFamily.name;
+            mockup['code_brand'] = item.upcBrandFamily.id;
           }
 
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {

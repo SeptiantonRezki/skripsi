@@ -565,7 +565,9 @@
                         <div fxFlex="30">Maksimal UPC Code yang diinput:</div>
                         <div fxLayout="row" fxFlex="20">
                           <mat-form-field fxFlex="100" class="question is-light">
-                            <input class="inputUPC" matInput type="number" min="1">
+                            <input class="inputUPC" matInput 
+                            formControlName="upcCodeMax"
+                            type="number" min="1">
                             <mat-error>
                               Maksimal UPC Code harus diisi
                             </mat-error>
@@ -576,7 +578,9 @@
                         <div fxFlex="30">Konversi coin per 1 kode UPC:</div>
                         <div fxLayout="row" fxFlex="20">
                           <mat-form-field fxFlex="100" class="question is-light">
-                            <input class="inputUPC"  matInput type="text" >
+                            <input class="inputUPC" 
+                            formControlName="upcCoin" 
+                            matInput type="number" >
                             <mat-error>
                               Konversi coin harus diisi
                             </mat-error>
@@ -584,10 +588,9 @@
                         </div>
                       </div>
                       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                        <div fxFlex="30">Brand Family:</div>
-                        <div fxLayout="row" fxFlex="20">
-                          <search-product-barcode>
-                            <mat-error *ngIf="templateTaskForm.controls['upcConversionCoin'].hasError('required') && templateTaskForm.controls['upcConversionCoin'].touched">
+                        <div fxLayout="row" fxFlex="50">
+                          <search-product-barcode style="width: 100%;" [inputPlaceHolder]="'Search Brand Family'" [disabled]="isDetail" [errorMessage]="'Tidak Ditemukan Brand'" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                            <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.get('questions').at(i).get('upcBrandFamily').touched && templateTaskForm.touched">
                               Brand Family Harus diisi
                             </mat-error>
                           </search-product-barcode>

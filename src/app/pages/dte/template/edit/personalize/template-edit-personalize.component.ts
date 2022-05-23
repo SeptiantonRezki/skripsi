@@ -324,8 +324,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       ir_type: ["", Validators.required],
       copywritingList: this.formBuilder.array([], Validators.required),
       children: this.formBuilder.array([]),
-      upcConversionCoin:["", Validators.required],
-      upcCoin:["", Validators.required]
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -534,7 +532,10 @@ export class TemplateEditPersonalizeComponent implements OnInit {
           item.additional.map((itm, idx) => {
             return this.formBuilder.group({ option: itm, next_question: item.possibilities && item.possibilities.length > 0 ? item.possibilities[idx].next : '' })
           })
-        )
+        ),
+        upcCodeMax:item.max_upc_code ? [item.max_upc_code, Validators.required] : "",
+        upcCoin:item.upc_coin_conversion? [item.upc_coin_conversion, Validators.required] : "",
+        upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : ""
       }));
 
       this.handleChangeImageDetection(index);
@@ -717,14 +718,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     this.filteredLKT.next(
       this.listKategoriToolbox.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
-  }
-
-  handleUPC(event){
-    if(event.key.match(/^[0-9\.\-\/]+$/)){
-      this.templateTaskForm.get("upcCoin").setValue(event.target.value)
-      return true
-    }
-    return false
   }
 
   getListKategoriToolbox() {
@@ -1146,17 +1139,21 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
       questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
       questions.at(index).get("upcCoin").enable();
       questions.at(index).get("upcCoin").setValidators([Validators.required]);
+      questions.at(index).get("upcBrandFamily").enable();
+      questions.at(index).get("upcBrandFamily").setValidators([Validators.required]);
     } else {
       questions.at(index).get("upcCodeMax").setValue("");
       questions.at(index).get("upcCodeMax").disable();
       questions.at(index).get("upcCoin").setValue("");
-      questions.at(index).get("upcCOin").disable();
+      questions.at(index).get("upcCoin").disable();
+      questions.at(index).get("upcBrandFamily").setValue("");
+      questions.at(index).get("upcBrandFamily").disable();
     }
   }
 
@@ -1352,8 +1349,9 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
       question_image: [''],
       question_video: [''],
-      upcCodeMax:["", Validators.required],
-      upcCoin:["", Validators.required],
+      upcCodeMax:[""],
+      upcCoin:[""],
+      upcBrandFamily:[""],
       // others: false,
       // required: false
     }))
@@ -1671,6 +1669,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   }
 
   async submit() {
+    console.log(this.templateTaskForm.valid)
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
       this.saveData = !this.saveData;
@@ -1818,6 +1817,13 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
             mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
             mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
+          }
+
+          if (item.type === "upc") {
+            mockup['max_upc_code'] = item.upcCodeMax;
+            mockup['upc_coin_conversion'] = item.upcCoin;
+            mockup['name_brand'] = item.upcBrandFamily.name;
+            mockup['code_brand'] = item.upcBrandFamily.id;
           }
 
           if (item.type === 'planogram_ir') {
