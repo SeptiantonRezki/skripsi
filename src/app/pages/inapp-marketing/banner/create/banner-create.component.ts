@@ -1334,15 +1334,16 @@ export class BannerCreateComponent {
         fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
       }
 
+      var x= [];
       if (this.formBannerGroup.get("is_target_audience").value) {
         fd.append('target_audience', "1");
         this.audienceSelected.map(aud => {
-          fd.append('target_audiences[]', aud.id)
+          x.push(aud.id)
         });
+        fd.append('target_audiences[]', JSON.stringify(x));
       } else {
         fd.append('target_audience', "0");
       }
-
       this.bannerService.create(fd).subscribe(
         res => {
           this.loadingIndicator = false;
