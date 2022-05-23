@@ -670,8 +670,47 @@
                           <mat-icon matSuffix>dialpad</mat-icon>
                         </mat-form-field>
                       </ng-container>
+                      <ng-container *ngIf="item.get('typeSelection').value['value'] == 'upc'">
+                        <div fxLayout="column" fxFlex="100">
+                          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                            <div fxFlex="30">Maksimal UPC Code yang diinput:</div>
+                            <div fxLayout="row" fxFlex="20">
+                              <mat-form-field fxFlex="100" class="question is-light">
+                                <input class="inputUPC" matInput 
+                                formControlName="upcCodeMax"
+                                type="number" min="1">
+                                <mat-error>
+                                  Maksimal UPC Code harus diisi
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                            <div fxFlex="30">Konversi coin per 1 kode UPC:</div>
+                            <div fxLayout="row" fxFlex="20">
+                              <mat-form-field fxFlex="100" class="question is-light">
+                                <input class="inputUPC" 
+                                formControlName="upcCoin" 
+                                matInput type="number" >
+                                <mat-error>
+                                  Konversi coin harus diisi
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                            <div fxLayout="row" fxFlex="50">
+                              <search-product-barcode style="width: 100%;" [errorMessage]="'Tidak Ditemukan Brand'" [inputPlaceHolder]="'Search Brand Family'" [disabled]="isDetail" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                                <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.touched">
+                                  Brand Family Harus diisi
+                                </mat-error>
+                              </search-product-barcode>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
                       <ng-container
-                        *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date'">
+                        *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date' && item.get('typeSelection').value['value'] !== 'upc'">
                         <div fxFlex="100" fxLayout="column">
                           <div *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                             <div formArrayName="additional"

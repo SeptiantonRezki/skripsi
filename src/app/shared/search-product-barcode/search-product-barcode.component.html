@@ -1,9 +1,10 @@
-<mat-form-field fxLayout="row wrap" class="is-light form-primary search-product-barcode">
+<mat-form-field fxLayout="row wrap" [hideRequiredMarker]="true" class="is-light form-primary search-product-barcode">
   <input
     matInput
     [placeholder]="inputPlaceHolder"
     [formControl]="search"
     [matAutocomplete]="auto"
+    required
     #searchInput
   />
   <mat-autocomplete

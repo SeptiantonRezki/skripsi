@@ -71,6 +71,7 @@ export class TemplateCreateComponent {
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public options: Object = {...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
+
   listChoose: Array<any> = [
   ];
 
@@ -86,6 +87,7 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
     { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
@@ -99,7 +101,7 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
-    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.upc'), value: "upc", icon: "insert_chart" },
     { name: this.translate.instant('dte.template_tugas.stock_check_ir'), value: "stock_check_ir", icon: "check_box" },
     { name: this.translate.instant('dte.template_tugas.planogram_ir'), value: "planogram_ir", icon: "cloud_upload" },
   ];
@@ -317,6 +319,7 @@ export class TemplateCreateComponent {
       })]),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
       ir_type: [""],
+      
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -848,6 +851,28 @@ export class TemplateCreateComponent {
     }
   }
 
+  handleChangeUPC(index, enable:boolean){
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log(questions.at(index).get("upcBrandFamily"))
+    console.log(questions.at(index).get("upcCoin"))
+    
+    if (enable) {
+      questions.at(index).get("upcCodeMax").enable();
+      questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
+      questions.at(index).get("upcCoin").enable();
+      questions.at(index).get("upcCoin").setValidators([Validators.required]);
+      questions.at(index).get("upcBrandFamily").enable();
+      questions.at(index).get("upcBrandFamily").setValidators([Validators.required]);
+    } else {
+      questions.at(index).get("upcCodeMax").setValue("");
+      questions.at(index).get("upcCodeMax").disable();
+      questions.at(index).get("upcCoin").setValue("");
+      questions.at(index).get("upcCoin").disable();
+      questions.at(index).get("upcBrandFamily").setValue("");
+      questions.at(index).get("upcBrandFamily").disable();
+    }
+  }
+
   changeType(item, idx?) {
     this.checkIsIRExist();
 
@@ -909,6 +934,10 @@ export class TemplateCreateComponent {
     questions.at(idx).get('typeSelection').setValue(typeSelection);
     questions.at(idx).get('image_quality_detection').setValue(false);
     this.handleChangeImageDetection(idx)
+    if(item.value.type === "upc")
+    this.handleChangeUPC(idx, true)
+    else
+    this.handleChangeUPC(idx, false)
   }
 
   checkWordingRadioFreeType(item) {
@@ -1070,9 +1099,13 @@ export class TemplateCreateComponent {
       encryption: false,
       image_quality_detection: false,
       blocker_submission: ["", Validators.required],
+      upcCodeMax:[""],
+      upcCoin:[""],
+      upcBrandFamily:[""]
       // others: false,
       // required: false
     }));
+
 
     this.allQuestionList.push({
       id: newId.id + 1,
@@ -1241,6 +1274,7 @@ export class TemplateCreateComponent {
   
   async submit() {
     if (this.templateTaskForm.valid) {
+      console.log(this.templateTaskForm.value)
       this.dataService.showLoading(true);
       // this.saveData = !this.saveData;
       this.saveData = true;
@@ -1372,6 +1406,13 @@ export class TemplateCreateComponent {
           if (this.frmQuiz.value === 'quiz') {
             mockup['coin'] = item.coin;
             mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
+          }
+
+          if (item.type === "upc") {
+            mockup['max_upc_code'] = item.upcCodeMax;
+            mockup['upc_coin_conversion'] = item.upcCoin;
+            mockup['name_brand'] = item.upcBrandFamily.name;
+            mockup['code_brand'] = item.upcBrandFamily.id;
           }
 
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {

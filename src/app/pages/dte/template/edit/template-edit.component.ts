@@ -85,6 +85,7 @@ export class TemplateEditComponent {
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
     { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
@@ -884,7 +885,10 @@ export class TemplateEditComponent {
           item.additional.map((itm, idx) => {
             return this.formBuilder.group({ option: itm, next_question: item.possibilities && item.possibilities.length > 0 ? item.possibilities[idx].next : '' })
           })
-        )
+        ),
+        upcCodeMax:item.max_upc_code ? [item.max_upc_code, Validators.required] : "",
+        upcCoin:item.upc_coin_conversion? [item.upc_coin_conversion, Validators.required] : "",
+        upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : ""
       }));
       
       this.handleChangeImageDetection(index);
@@ -1089,6 +1093,26 @@ export class TemplateEditComponent {
     }
   }
 
+  handleChangeUPC(index, enable:boolean){
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (enable) {
+      questions.at(index).get("upcCodeMax").enable();
+      questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
+      questions.at(index).get("upcCoin").enable();
+      questions.at(index).get("upcCoin").setValidators([Validators.required]);
+      questions.at(index).get("upcBrandFamily").enable();
+      questions.at(index).get("upcBrandFamily").setValidators([Validators.required]);
+    } else {
+      questions.at(index).get("upcCodeMax").setValue("");
+      questions.at(index).get("upcCodeMax").disable();
+      questions.at(index).get("upcCoin").setValue("");
+      questions.at(index).get("upcCoin").disable();
+      questions.at(index).get("upcBrandFamily").setValue("");
+      questions.at(index).get("upcBrandFamily").disable();
+    }
+  }
+
   changeType(item, idx?) {
     this.checkIsIRExist();
 
@@ -1150,6 +1174,10 @@ export class TemplateEditComponent {
     questions.at(idx).get('typeSelection').setValue(typeSelection);
     questions.at(idx).get('image_quality_detection').setValue(false);
     this.handleChangeImageDetection(idx)
+    if(item.value.type === "upc")
+    this.handleChangeUPC(idx, true)
+    else
+    this.handleChangeUPC(idx, false)
   }
 
   checkWordingRadioFreeType(item) {
@@ -1207,6 +1235,9 @@ export class TemplateEditComponent {
       blocker_submission: ["", Validators.required],
       // others: false,
       // required: false
+      upcCodeMax:["",],
+      upcCoin:["",],
+      upcBrandFamily:["",],
     }))
 
     this.allQuestionList.push({
@@ -1520,6 +1551,13 @@ export class TemplateEditComponent {
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
             mockup['stock_check_ir_name'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_name'] : null;
             mockup['stock_check_ir_list'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['check_list'] : null;
+          }
+
+          if (item.type === "upc") {
+            mockup['max_upc_code'] = item.upcCodeMax;
+            mockup['upc_coin_conversion'] = item.upcCoin;
+            mockup['name_brand'] = item.upcBrandFamily.name;
+            mockup['code_brand'] = item.upcBrandFamily.id;
           }
 
           if (item.type === 'planogram_ir') {
