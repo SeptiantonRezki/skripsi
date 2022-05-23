@@ -24,8 +24,15 @@ export class SearchProductBarcodeComponent implements OnInit {
   search: FormControl = new FormControl("");
   filterDestroy = new Subject();
   selected: FormControl = new FormControl({ id: "", name: "" });
+  initData:Array<any> = []
 
   @Input() value: any;
+
+  @Input() inputPlaceHolder: string;
+
+  @Input() errorMessage: string;
+
+  @Input() isBrandFamily: boolean = false;
   
   @Input() disabled: boolean = false;
 
@@ -77,6 +84,11 @@ export class SearchProductBarcodeComponent implements OnInit {
   }
 
   getTheData(search = "", init=false){
+    if (this.isBrandFamily) {
+      
+    } else {
+
+    }
     this.productService.getProductBarcodes({ barcode: search }).subscribe((res) => {
       const response = res.data || {};
       const list = response.data.map(({ barcode, name }) => ({
@@ -85,8 +97,10 @@ export class SearchProductBarcodeComponent implements OnInit {
       }));
       this.filteredOptions = list;
       this.isFetching = false;
-      if(init)
-      this.isInitFetching = false;
+      if(init){
+        this.isInitFetching = false;
+        this.initData = list
+      }
     });
   }
 
@@ -112,6 +126,8 @@ export class SearchProductBarcodeComponent implements OnInit {
   clear() {
     this.search.setValue("");
     this.selected.setValue({ id: "", name: "" });
+    this.filteredOptions = this.initData;
+    setTimeout(() => this.searchInput.nativeElement.blur(), 0);
   }
 
   isLoading() {
