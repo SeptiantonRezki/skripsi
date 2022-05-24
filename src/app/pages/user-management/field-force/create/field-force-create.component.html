@@ -1,107 +1,221 @@
-<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Field Force'">
-  </page-content-header>
-  <!-- / HEADER -->
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <page-content-header
+    [contentTitle]="'Buat Field Force'"
+  ></page-content-header>
   <div class="content p-24">
-    <div class="vertical-stepper-wrapper is-thirdquart is-half">
-
-      <!-- VERTICAL STEPPER EXAMPLE -->
-      <mat-vertical-stepper class="mat-elevation-z4" [linear]="true">
-
-        <mat-step [stepControl]="verticalStepperStep1">
-
-          <form [formGroup]="verticalStepperStep1">
-
-            <ng-template matStepLabel>Informasi Dasar</ng-template>
-
-            <div fxFlex="1 0 auto" fxLayout="column">
-
-              <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name">
-                <mat-error *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
-                  Nama harus diisi.
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Username" formControlName="username">
-                <mat-error *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                  Username harus diisi.
-                </mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
-              </button>
-            </div>
-
-          </form>
-
-        </mat-step>
-
-        <mat-step [stepControl]="verticalStepperStep2">
-
-          <form [formGroup]="verticalStepperStep2">
-
-            <ng-template matStepLabel>Wilayah</ng-template>
-
-            belum selesai
-            <!-- <div fxFlex="1 0 auto" fxLayout="column">
-              <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Wilayah" formControlName="level_desc" (selectionChange)="selectionChange($event)">
-                  <mat-option *ngFor="let item of listLevel" [value]="item.level_desc">{{item.level_desc |
-                    toCapitalize}}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="verticalStepperStep2.controls['level_desc'].hasError('required') && verticalStepperStep2.controls['level_desc'].touched">
-                  Wilayah harus diisi
-                </mat-error>
-              </mat-form-field>
-
-              <ng-container *ngIf="verticalStepperStep2.get('level_desc').value">
-                <dropdown-form [dataCb]="ObjectArea" [form]="verticalStepperStep2" (selectionChange)="onSelect($event)"></dropdown-form>
-              </ng-container>
-            </div> -->
-
-            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
-              </button>
-            </div>
-
-          </form>
-
-        </mat-step>
-
-        <mat-step>
-
-          <ng-template matStepLabel>{{'global.button.finish' | translate}}</ng-template>
-
-          <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
-          </div>
-
-          <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-            <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <form
+        [formGroup]="formUser"
+        fxLayout="row wrap"
+        fxLayout.lt-md="column"
+        fxLayoutGap="24px grid"
+        class="p-24"
+      >
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxFlex.lt-md="100"
+          fxLayoutGap="16px"
+        >
+          <mat-form-field class="is-light form-primary">
+            <input matInput formControlName="name" placeholder="Nama" />
+            <mat-error
+              *ngIf="
+                formUser.get('name').hasError('required') &&
+                formUser.get('name').touched
+              "
+            >
+              Nama harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input matInput formControlName="username" placeholder="Username" />
+            <mat-error
+              *ngIf="
+                formUser.get('username').hasError('required') &&
+                formUser.get('username').touched
+              "
+            >
+              Username harus diisi
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <mat-select formControlName="type" placeholder="Tipe">
+              <mat-option [value]="type.id" *ngFor="let type of listType">{{
+                type.name
+              }}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                formUser.get('type').hasError('required') &&
+                formUser.get('type').touched
+              "
+            >
+              Tipe harus dipilih
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="classification"
+              placeholder="Classification"
+            >
+              <mat-option
+                [value]="classification.id"
+                *ngFor="let classification of listClassification"
+                >{{ classification.name }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                formUser.get('classification').hasError('required') &&
+                formUser.get('classification').touched
+              "
+            >
+              Classification harus dipilih
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input matInput formControlName="version" placeholder="Apps Version" />
+          </mat-form-field>
+        </div>
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxFlex.lt-md="100"
+          fxLayoutGap="16px"
+        >
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Kata Sandi"
+            />
+            <mat-icon matSuffix (click)="showPassword = !showPassword">{{
+              showPassword ? "visibility" : "visibility_off"
+            }}</mat-icon>
+            <mat-error
+              *ngIf="
+                formUser.get('password').hasError('required') &&
+                formUser.get('password').touched
+              "
+            >
+              Kata Sandi harus diisi
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formUser.get('password').hasError('minlength') &&
+                formUser.get('password').touched
+              "
+            >
+              Kata Sandi minimal 8 karakter
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              formControlName="password_confirmation"
+              placeholder="Konfirmasi Kata Sandi"
+            />
+            <mat-icon
+              matSuffix
+              (click)="showConfirmPassword = !showConfirmPassword"
+              >{{
+                showConfirmPassword ? "visibility" : "visibility_off"
+              }}</mat-icon
+            >
+            <mat-error
+              *ngIf="
+                formUser.get('password_confirmation').hasError('required') &&
+                formUser.get('password_confirmation').touched
+              "
+            >
+              Konfirmasi Kata Sandi harus diisi
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formUser.get('password_confirmation').hasError('notEqual') &&
+                formUser.get('password_confirmation').touched
+              "
+            >
+              Konfirmasi Kata Sandi tidak sesuai
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" class="pb-32">
+          <mat-slide-toggle formControlName="status">
+            {{
+              formUser.get("status").value ? "Aktif" : "Tidak Aktif"
+            }}</mat-slide-toggle
+          >
+        </div>
+      </form>
+      <div
+        fxLayout="column"
+        *ngFor="let areas of formUser.get('areas')['controls']; let i = index"
+      >
+        <div
+          fxLayoutGap="20px"
+          fxLayoutAlign="space-between center"
+          class="px-24 py-16"
+          style="background: #3a3a3a"
+        >
+          <div style="font-size: 18px; color: white">Geotree {{ i + 1 }}</div>
+          <div fxLayoutGap="20px">
+            <button
+              *ngIf="
+                formUser.get('areas').value.length === 1 ||
+                i === formUser.get('areas').value.length - 1
+              "
+              mat-raised-button
+              type="button"
+              (click)="addAreas()"
+            >
+              <mat-icon>add</mat-icon>
             </button>
-            <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
-              <ng-container *ngIf="submitting == false">
-                Selesai
-              </ng-container>
-              <ng-container *ngIf="submitting == true">
-                <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
-              </ng-container>
+            <button
+              *ngIf="formUser.get('areas').value.length > 1"
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="dialogRemoveAreas(i)"
+            >
+              <mat-icon>delete</mat-icon>
             </button>
           </div>
-
-        </mat-step>
-
-      </mat-vertical-stepper>
-      <!-- / VERTICAL STEPPER EXAMPLE -->
-
+        </div>
+        <div class="p-24">
+          <salestree
+            [limit]="areaFromLogin"
+            [limitLevel]="limitLevel"
+            [multiple]="false"
+            (areaWithKey)="getAreaIds($event, i)"
+          ></salestree>
+          <mat-error
+            *ngIf="
+              formUser.get('areas').at(i).get('area_id').hasError('required') &&
+              formUser.get('areas').touched
+            "
+            >Geotree harus dilengkapi</mat-error
+          >
+        </div>
+      </div>
+    </div>
+    <div
+      class="confirm btn-confirm pt-24 pb-24"
+      fxLayout="row"
+      fxLayoutGap="25px"
+    >
+      <button
+        mat-raised-button
+        type="button"
+        class="confirmation-button"
+        fxFlex="20"
+        (click)="submit()"
+      >
+        Simpan
+      </button>
     </div>
   </div>
 </div>

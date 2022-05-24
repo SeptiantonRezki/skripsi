@@ -15,6 +15,8 @@ export class SalestreeComponent implements OnInit {
   @Output() areaWithKey: EventEmitter<any[]> = new EventEmitter();
   @Input() limit: any = [{ id: 1, type: "national" }];
   @Input() value: any;
+  @Input() multiple: boolean = true;
+  @Input() limitLevel: string;
 
   initArea: boolean = false;
   loadingArea = new FormControl({});
@@ -50,6 +52,16 @@ export class SalestreeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.limitLevel) {
+      let nextGeoLevel = [];
+      let pop = false;
+      for (let level of this.geoLevel) {
+        if (pop) continue;
+        nextGeoLevel.push(level);
+        if (this.limitLevel === level) pop = true;
+      }
+      this.geoLevel = nextGeoLevel;
+    }
     this.loadingArea.valueChanges.subscribe((res) => {
       if (this.initArea) return;
       if (Object.keys(res).length) {
@@ -100,11 +112,11 @@ export class SalestreeComponent implements OnInit {
       limitValue[level] = this.limitArea[level];
       this.form.get(level).disable();
     }
-    this.form.patchValue(limitValue);
+    this.form.patchValue(this.parseValue(limitValue));
 
     if (this.value) {
       const value = this.value;
-      this.form.patchValue(value);
+      this.form.patchValue(this.parseValue(value));
     }
 
     const [areaIds, lastAreaKey]: any[] = this.getSelectedAllId();
@@ -115,9 +127,16 @@ export class SalestreeComponent implements OnInit {
     this.updateForm();
   }
 
+  parseValue(data: any) {
+    if (this.multiple) return data;
+    let nextData = {...data};
+    for (let level in data) nextData[level] = nextData[level][0];
+    return nextData;
+  }
+
   getLevel(value: string, onClick: boolean = false) {
-    const level = this.form.get(value).value;
-    const index = this.geoLevel.indexOf(value);
+    let level = this.form.get(value).value;
+    let index = this.geoLevel.indexOf(value);
 
     if (index + 1 <= this.geoLevel.length) {
       if (onClick) {
@@ -128,9 +147,13 @@ export class SalestreeComponent implements OnInit {
         this.areaWithKey.emit([areaIds, lastAreaKey, onClick]);
       }
 
-      const fd = new FormData();
       let subLevel = this.geoLevel[index + 1];
+      if (!subLevel) return;
+
+      const fd = new FormData();
       fd.append("area_type", subLevel === "territory" ? "teritory" : subLevel);
+
+      if (level && !Array.isArray(level)) level = [level];
 
       if (level.length) {
         level.forEach((item: any) => {
@@ -200,6 +223,7 @@ export class SalestreeComponent implements OnInit {
     let levelKey = "";
     this.geoLevel.forEach((item) => {
       let lastLevel = this.form.get(item).value;
+      if (lastLevel && !Array.isArray(lastLevel)) lastLevel = [lastLevel];
       if (!lastLevel.length) return false;
       levelId = lastLevel;
       levelKey = item;
@@ -209,5 +233,9 @@ export class SalestreeComponent implements OnInit {
 
   isChecked(option: any, value: any) {
     return option && value && option.toString() === value.toString();
+  }
+
+  isLimit(area: string) {
+    return this.geoLevel.indexOf(area) >= 0;
   }
 }
