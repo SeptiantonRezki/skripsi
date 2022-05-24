@@ -43,7 +43,12 @@ export class FieldForceCreateComponent {
 
   ngOnInit() {
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
+    this.createForm();
+    this.addAreas();
+    this.setEvents();
+  }
 
+  createForm() {
     this.formUser = this.formBuilder.group(
       {
         name: ["", Validators.required],
@@ -63,9 +68,9 @@ export class FieldForceCreateComponent {
         ),
       }
     );
+  }
 
-    this.addAreas();
-
+  setEvents() {
     this.formUser.get("type").valueChanges.subscribe((value: string) => {
       let level = "territory";
       if (value === "spv") level = "district";
