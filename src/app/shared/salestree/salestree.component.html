@@ -1,83 +1,83 @@
 <div [formGroup]="form" fxLayout="row wrap" fxLayoutGap="24px grid">
   <mat-form-field fxFlex="25" class="is-light form-primary">
-    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national" multiple>
+    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national" [multiple]="multiple">
       <mat-option *ngFor="let item of geoList.national" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('division')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="{{'global.area.zone' | translate}}"
       formControlName="division"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('division')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('region')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="Region"
       formControlName="region"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('region')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('area')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="{{'global.area.area' | translate}}"
       formControlName="area"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('area')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('salespoint')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="{{'global.area.salespoint' | translate}}"
       formControlName="salespoint"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('salespoint')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.salespoint" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('district')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="{{'global.area.district' | translate}}"
       formControlName="district"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('district')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.district" [value]="item.id">{{
         item.code
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field fxFlex="25" class="is-light form-primary">
+  <mat-form-field *ngIf="isLimit('territory')" fxFlex="25" class="is-light form-primary">
     <mat-select
       placeholder="{{'global.area.territory' | translate}}"
       formControlName="territory"
       [compareWith]="isChecked"
       (selectionChange)="getSelectedLevel('territory')"
-      multiple
+      [multiple]="multiple"
     >
       <mat-option *ngFor="let item of geoList.territory" [value]="item.id">{{
         item.code
