@@ -1,473 +1,219 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DialogService } from 'app/services/dialog.service';
-import { DataService } from 'app/services/data.service';
-import { FieldForceService } from 'app/services/user-management/field-force.service';
-import { commonFormValidator } from 'app/classes/commonFormValidator';
-import * as _ from 'underscore';
-import { LanguagesService } from 'app/services/languages/languages.service';
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FieldForceService } from "app/services/user-management/field-force.service";
+import { DialogService } from "app/services/dialog.service";
+import { Router, ActivatedRoute } from "@angular/router";
+
+import { DataService } from "app/services/data.service";
+import { LanguagesService } from "app/services/languages/languages.service";
+import { commonFormValidator } from "app/classes/commonFormValidator";
 
 @Component({
-  selector: 'app-field-force-edit',
-  templateUrl: './field-force-edit.component.html',
-  styleUrls: ['./field-force-edit.component.scss']
+  selector: "app-field-force-edit",
+  templateUrl: "./field-force-edit.component.html",
+  styleUrls: ["./field-force-edit.component.scss"],
 })
 export class FieldForceEditComponent {
-  formFF: FormGroup;
-  formdataErrors: any;
-  onLoad: Boolean;
-  showPassword = false;
-  showConfirmPassword = false;
-  indexDelete: any;
-
-  detailFF: any;
-  listStatus: any[] = [
-    { name: this.ls.locale.global.label.active_status, value: "active" },
-    { name: this.ls.locale.global.label.inactive_status, value: "inactive" }
+  listType: any = [
+    { id: "asm", name: "Manager" },
+    { id: "spv", name: "Supervisor" },
+    { id: "field-force", name: "Field Force" },
   ];
-
   listClassification: any = [
-    {
-      id: 1,
-      name : "REE"
-    },
-    {
-      id: 2,
-      name : "WEE"
-    }
+    { id: "ree", name: "REE" },
+    { id: "wee", name: "WEE" },
   ];
-  listLevelArea: any[];
-  list: any;
+  areaFromLogin: any;
+  formUser: FormGroup;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+  removeIndex: number;
 
-  areaFromLogin;
-  detailAreaSelected: any[];
+  limitLevel: string = "territory";
 
-  isDetail: Boolean;
+  pageId: string;
+  isDetail: boolean;
+  initDetail: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private fieldForcePrincipal: FieldForceService,
     private dialogService: DialogService,
+    private router: Router,
     private dataService: DataService,
-    private fieldforceService: FieldForceService,
+    private activatedRoute: ActivatedRoute,
     private ls: LanguagesService
   ) {
-    this.formdataErrors = {
-      status: {},
-      national: {},
-      zone: {},
-      region: {},
-      area: {},
-      salespoint: {},
-      district: {},
-      territory: {}
-    };
-
-    this.activatedRoute.url.subscribe(params => {
-      this.isDetail = params[1].path === 'detail' ? true : false;
-    })
-
-    this.detailFF = this.dataService.getFromStorage("detail_field_force");
-    this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
-
-    this.listLevelArea = [
-      {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
-      }
-    ];
-
-    this.list = {
-      zone: [],
-      region: [],
-      area: [],
-      salespoint: [],
-      district: [],
-      territory: []
-    }
+    this.activatedRoute.url.subscribe((params) => {
+      this.pageId = params[2].path;
+      this.isDetail = params[1].path === "detail" ? true : false;
+    });
   }
 
   ngOnInit() {
-    this.onLoad = true;
+    this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
+    this.createForm();
+    this.getDetails();
+    this.setEvents();
+  }
 
-    this.formFF = this.formBuilder.group({
-      fullname: [""],
-      username: [""],
-      status: ["", Validators.required],
-      wilayah: this.formBuilder.array([], Validators.required),
-      password: [""],
-      password_confirmation: [""],
-      version: [""],
-      classification: [""]
+  createForm() {
+    this.formUser = this.formBuilder.group(
+      {
+        name: [{ value: "", disabled: true }],
+        username: [{ value: "", disabled: true }],
+        password: [""],
+        password_confirmation: [""],
+        classification: [{ value: "", disabled: this.isDetail }],
+        areas: this.formBuilder.array([], Validators.required),
+        type: [{ value: "", disabled: this.isDetail }, Validators.required],
+        version: [{ value: "", disabled: this.isDetail }],
+        status: [{ value: true, disabled: this.isDetail }],
+      },
+      {
+        validator: commonFormValidator.isEqual(
+          "password",
+          "password_confirmation"
+        ),
+      }
+    );
+  }
+
+  getDetails() {
+    this.fieldForcePrincipal
+      .detail({ fieldforce_id: this.pageId })
+      .subscribe((res) => {
+        const data = res.data || {};
+        const patchData = {
+          name: data.fullname,
+          username: data.username,
+          type: data.type,
+          status: data.status === "active",
+          classification: data.classification
+            ? data.classification.toLowerCase()
+            : null,
+          version: data.version,
+        };
+
+        const areas = Object.values(data.geotree).map((value) => value);
+        this.addAreas(areas);
+
+        this.formUser.patchValue(patchData);
+        this.initDetail = true;
+      });
+  }
+
+  setEvents() {
+    this.formUser.get("type").valueChanges.subscribe((value: string) => {
+      let level = "territory";
+      if (value === "spv") level = "district";
+      if (value === "asm") level = "area";
+      if (value === "field-force") {
+        commonFormValidator.validators(this.formUser, "classification", [
+          Validators.required,
+        ]);
+      } else {
+        commonFormValidator.validators(this.formUser, "classification");
+      }
+      this.limitLevel = level;
+      if (this.initDetail) this.resetAreas();
     });
 
-    this.formFF.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(this.formFF, this.formdataErrors);
-    });
-
-    this.formFF.get('fullname').disable();
-    this.formFF.get('username').disable();
-
-    this.setDetail();
-  }
-
-  async setDetail() {
-
-    this.formFF.controls['fullname'].setValue(this.detailFF.fullname);
-    this.formFF.controls['username'].setValue(this.detailFF.username);
-    this.formFF.controls['status'].setValue(this.detailFF.status);
-    this.formFF.controls['version'].setValue(this.detailFF.version);
-    this.formFF.controls['classification'].setValue(this.detailFF.classification);
-
-    for (const { val, index } of this.detailFF.area_code.map((val, index) => ({ val, index }))) {
-      const response = await this.fieldforceService.getParentByCode({ parent: val }).toPromise();
-      let wilayah = this.formFF.controls['wilayah'] as FormArray;
-
-      wilayah.push(this.formBuilder.group({
-        national: [this.getArea(response, 'national'), Validators.required],
-        zone: [this.getArea(response, 'division'), Validators.required],
-        region: [this.getArea(response, 'region'), Validators.required],
-        area: [this.getArea(response, 'area'), Validators.required],
-        salespoint: [this.getArea(response, 'salespoint'), Validators.required],
-        district: [this.getArea(response, 'district'), Validators.required],
-        territory: [this.getArea(response, 'teritory'), Validators.required],
-        list_national: this.formBuilder.array(this.listLevelArea),
-        list_zone: this.formBuilder.array([]),
-        list_region: this.formBuilder.array([]),
-        list_area: this.formBuilder.array([]),
-        list_salespoint: this.formBuilder.array([]),
-        list_district: this.formBuilder.array([]),
-        list_territory: this.formBuilder.array([])
-      }))
-
-      this.initArea(index);
-      this.initFormGroup(response, index);
-
-      if (this.detailFF.area_code.length === (index + 1)) {
-        this.onLoad = false;
-        if (this.isDetail) this.formFF.disable();
+    this.formUser.get("password").valueChanges.subscribe((value: string) => {
+      if (value) {
+        commonFormValidator.validators(this.formUser, "password_confirmation", [
+          Validators.required,
+        ]);
+      } else {
+        commonFormValidator.validators(this.formUser, "password_confirmation");
       }
-    }
-    this.formFF.controls['version'].disable();
-    // this.formFF.controls['classification'].disable();
-
-  }
-
-  createWilayah(): FormGroup {
-    return this.formBuilder.group({
-      national: [1, Validators.required],
-      zone: ["", Validators.required],
-      salespoint: ["", Validators.required],
-      region: ["", Validators.required],
-      area: ["", Validators.required],
-      district: ["", Validators.required],
-      territory: ["", Validators.required],
-      list_national: this.formBuilder.array(this.listLevelArea),
-      list_zone: this.formBuilder.array([]),
-      list_region: this.formBuilder.array([]),
-      list_area: this.formBuilder.array([]),
-      list_salespoint: this.formBuilder.array([]),
-      list_district: this.formBuilder.array([]),
-      list_territory: this.formBuilder.array([])
-    })
-  }
-
-  initArea(index) {
-    let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    this.areaFromLogin.map(item => {
-      switch (item.type.trim()) {
-        case 'national':
-          console.log(wilayah.at(index));
-          wilayah.at(index).get('national').disable();
-          break
-        case 'division':
-          wilayah.at(index).get('zone').disable();
-          break;
-        case 'region':
-          wilayah.at(index).get('region').disable();
-          break;
-        case 'area':
-          wilayah.at(index).get('area').disable();
-          break;
-        case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
-          break;
-        case 'district':
-          wilayah.at(index).get('district').disable();
-          break;
-        case 'territory':
-          wilayah.at(index).get('territory').disable();
-          break;
-      }
-    })
-  }
-
-  initFormGroup(response, index) {
-    response.data.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.generataList(level_desc, item.id, index, 'render');
     });
   }
 
-  async generataList(selection, id, index, type) {
-    let item: any;
-    let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    switch (selection) {
-      case 'zone':
-        const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-        let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-
-        while (list.length > 0) {
-          list.removeAt(list.length - 1);
-        }
-
-        _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-          list.push(this.formBuilder.group(item));
-        });
-
-        if (type !== 'render') {
-          wilayah.at(index).get('region').setValue(null);
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_region');
-          this.clearFormArray(index, 'list_area');
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'region':
-        item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-            list.push(this.formBuilder.group(item));
-          });
-        } else {
-          wilayah.at(index).get(`list_${selection}`).setValue([]);
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('region').setValue('');
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_area');
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'area':
-        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-            list.push(this.formBuilder.group(item));
-          });
-        } else {
-          wilayah.at(index).get(`list_${selection}`).setValue([]);
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'salespoint':
-        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-            list.push(this.formBuilder.group(item));
-          });
-        } else {
-          wilayah.at(index).get(`list_${selection}`).setValue([]);
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'district':
-        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-            list.push(this.formBuilder.group(item));
-          });
-        } else {
-          wilayah.at(index).get(`list_${selection}`).setValue([]);
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'territory':
-        item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          const response = await this.fieldforceService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response.filter(item => item.name !== 'all') || []).map(item => {
-            list.push(this.formBuilder.group(item));
-          });
-        } else {
-          wilayah.at(index).get(`list_${selection}`).setValue([]);
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('territory').setValue('');
-        }
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  getArea(response, selection) {
-    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
-  }
-
-  submit() {
-    if (this.formFF.valid) {
-      let wilayah = this.formFF.controls['wilayah'] as FormArray;
-
-      let body = {
-        _method: "PUT",
-        username: this.formFF.get("username").value,
-        name: this.formFF.get("fullname").value,
-        areas: wilayah.value.map(item => item.territory),
-        status: this.formFF.get("status").value,
-        classification: this.formFF.get("classification").value
-      };
-
-      if (this.formFF.get("password").value)
-        body['password'] = this.formFF.get("password").value;
-
-      if (this.formFF.get("password_confirmation").value)
-        body['password_confirmation'] = this.formFF.get("password_confirmation").value;
-
-      this.fieldforceService.put(body, { fieldforce_id: this.detailFF.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({ message: "Data Berhasil Diubah" });
-          this.router.navigate(["user-management", "field-force"]);
-          window.localStorage.removeItem("detail_field_force");
-        },
-        err => { }
+  addAreas(list: any = [""]) {
+    let areas = this.formUser.get("areas") as FormArray;
+    for (let item of list)
+      areas.push(
+        this.formBuilder.group({
+          area_id: [""],
+          areas: [item],
+        })
       );
-    } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
-      commonFormValidator.validateAllFields(this.formFF);
-    }
-
   }
 
-  getToolTipData(value, array) {
-    if (value && array.length) {
-      let msg = array.filter(item => item.id === value)[0]['name'];
-      return msg;
-    } else {
-      return "";
-    }
-  }
-
-  addWilayah() {
-    let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    // if (wilayah.length < 2) {
-    wilayah.push(this.createWilayah());
-    const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
-    this.initArea(index);
-    this.generataList('zone', 1, index, 'render');
-    // }
-  }
-
-  deleteWilayah(idx) {
-    this.indexDelete = idx;
+  dialogRemoveAreas(index: number) {
+    this.removeIndex = index;
     let data = {
       titleDialog: "Hapus Geotree",
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      captionDialog: "Apakah anda yakin untuk menghapus Geotree ini ?",
+      confirmCallback: this.removeAreas.bind(this),
+      buttonText: ["Hapus", "Batal"],
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
-  confirmDelete() {
-    let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    wilayah.removeAt(this.indexDelete);
+  removeAreas() {
+    let areas = this.formUser.get("areas") as FormArray;
+    areas.removeAt(this.removeIndex);
     this.dialogService.brodcastCloseConfirmation();
   }
 
-  clearFormArray = (index, selection) => {
-    let wilayah = this.formFF.controls['wilayah'] as FormArray;
-    let list = wilayah.at(index).get(selection) as FormArray;
-    while (list.length > 0) {
-      list.removeAt(list.length - 1);
+  resetAreas() {
+    let areas = this.formUser.get("areas") as FormArray;
+    while (areas.length) areas.removeAt(0);
+    this.addAreas();
+  }
+
+  getAreaIds(obj: any, i: number) {
+    const [id, key, onClick] = obj;
+    const areas = this.formUser.get("areas") as FormArray;
+    const area = areas.at(i).get("area_id");
+    area.setValue(id);
+    if (key !== this.limitLevel) {
+      setTimeout(() => {
+        if (onClick) {
+          area.markAsDirty();
+          area.markAsTouched();
+        }
+        area.setErrors({ required: true });
+      }, 0);
     }
   }
 
+  submit() {
+    if (!this.formUser.valid) {
+      commonFormValidator.markAllAsTouched(this.formUser);
+      return;
+    }
+    let areas = this.formUser.get("areas") as FormArray;
+    let body = {
+      _method: "PUT",
+      name: this.formUser.get("name").value,
+      type: this.formUser.get("type").value,
+      classification: this.formUser.get("classification").value || null,
+      version: this.formUser.get("version").value,
+      areas: areas.value.map(({ area_id }) => area_id[0]),
+      status: this.formUser.get("status").value ? "active" : "inactive",
+    };
+    if (this.formUser.get("password").value) {
+      body["password"] = this.formUser.get("password").value;
+      body["password_confirmation"] = this.formUser.get(
+        "password_confirmation"
+      ).value;
+    }
+    this.dataService.showLoading(true);
+    this.fieldForcePrincipal
+      .put(body, { fieldforce_id: this.pageId })
+      .subscribe(
+        () => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Berhasil diubah" });
+          this.router.navigate(["user-management", "field-force"]);
+        },
+        () => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Terjadi kesalahan" });
+        }
+      );
+  }
 }
