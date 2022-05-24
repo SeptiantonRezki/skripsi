@@ -507,7 +507,6 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
       fd.append('business_id[]', item.id);
     })
     fd.append('type', 'retailer');
-    fd.append('paylater_company_id', this.paylaterCompanyId)
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
