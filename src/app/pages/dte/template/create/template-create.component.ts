@@ -1069,11 +1069,6 @@ export class TemplateCreateComponent {
     });
   }
 
-  numberOnly(event) {
-    console.log(event)
-    console.log(/^[\d./-]+$/.test(event.key))
-  }
-
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id })
@@ -1103,8 +1098,8 @@ export class TemplateCreateComponent {
       encryption: false,
       image_quality_detection: false,
       blocker_submission: ["", Validators.required],
-      upcCodeMax:["", Validators.min(1)],
-      upcCoin:["", Validators.min(1)],
+      upcCodeMax:[""],
+      upcCoin:[""],
       upcBrandFamily:[""]
       // others: false,
       // required: false

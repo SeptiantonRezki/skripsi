@@ -680,7 +680,7 @@
                                 <input class="inputUPC" matInput 
                                 formControlName="upcCodeMax"
                                 type="number" min="1" 
-                                onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57 && (event.target.value.length === 0 && event.which ===48) ? false : true'>
                                 <mat-error>
                                   Maksimal UPC Code harus diisi
                                 </mat-error>
@@ -694,7 +694,8 @@
                                 <input class="inputUPC" 
                                 formControlName="upcCoin" 
                                 matInput type="number" 
-                                onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                min="1" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57 && (event.target.value.length === 0 && event.which ===48) ? false : true'>
                                 <mat-error>
                                   Konversi coin harus diisi
                                 </mat-error>
