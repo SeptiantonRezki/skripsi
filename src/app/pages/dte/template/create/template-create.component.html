@@ -605,7 +605,8 @@
                           <mat-form-field fxFlex="100" class="question is-light">
                             <input class="inputUPC" matInput 
                             formControlName="upcCodeMax"
-                            type="number" min="1">
+                            type="number" min="1" 
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                             <mat-error>
                               Maksimal UPC Code harus diisi
                             </mat-error>
@@ -618,7 +619,8 @@
                           <mat-form-field fxFlex="100" class="question is-light">
                             <input class="inputUPC" 
                             formControlName="upcCoin" 
-                            matInput type="number" >
+                            matInput type="number" min="1" 
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                             <mat-error>
                               Konversi coin harus diisi
                             </mat-error>
