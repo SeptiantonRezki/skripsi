@@ -98,7 +98,7 @@ export class SearchProductBarcodeComponent implements ControlValueAccessor {
     }
     if (!search) {
       this.onTouched()
-      this.filteredOptions = [];
+      this.filteredOptions = this.initData;
       return;
     }
     this.onTouched()

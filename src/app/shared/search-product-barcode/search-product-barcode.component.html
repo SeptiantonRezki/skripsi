@@ -15,7 +15,7 @@
     <mat-option *ngFor="let item of filteredOptions" [value]="item.id">
       {{ item.name }} - {{item.id}}
     </mat-option>
-    <mat-option *ngIf="!isLoading() && !filteredOptions.length" disabled>
+    <mat-option *ngIf="search.value && !isLoading() && !filteredOptions.length" disabled>
       {{errorMessage}}
     </mat-option>
     <mat-option *ngIf="isLoading()" disabled>
