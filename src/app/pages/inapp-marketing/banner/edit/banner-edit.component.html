@@ -346,7 +346,7 @@
           <!-- spesifik produk b2b -->
           <div class="pb-24 px-24" *ngIf="formBannerGroup.get('content_type').value === 'spesific_product_b2b'">
             <div fxLayout="row">
-                <search-product-barcode [inputPlaceHolder]="'Search Barcode'" [disabled]="isDetail" fxFlex="45" [value]="formBannerGroup.get('barcode').value" (onChange)="handleSearchProduct($event)">
+                <search-product-barcode [errorMessage]="'Tidak ada produk ditemukan'" [inputPlaceHolder]="'Search Barcode'" [disabled]="isDetail" fxFlex="45" [value]="formBannerGroup.get('barcode').value" (onChange)="handleSearchProduct($event)">
                   <mat-error
                   *ngIf="formBannerGroup.controls['barcode'].hasError('required') && formBannerGroup.controls['barcode'].touched">
                   <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
