@@ -157,8 +157,7 @@ export class TradeCreateComponent {
   }
 
   getSubGroupTradeProgram() {
-    // TODO: UBAH API
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+    this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
       this.listSubGroupTradeProgram = res.data ? res.data.data : [];
       this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
     })
@@ -219,9 +218,7 @@ export class TradeCreateComponent {
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
       fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program').value);
-
-      // TODO: SESUAIKAN DENGAN KEY BE
-      fd.append('____', this.formTradeProgram.get('sub_group_trade_program').value);
+      fd.append('trade_creator_sub_group_id', this.formTradeProgram.get('sub_group_trade_program').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.create(fd).subscribe(

@@ -681,6 +681,9 @@ const routes: Routes = [
   {
     path: 'verification-approval/detail/:id',
     component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
     path: 'sub-group-trade-program',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard]
