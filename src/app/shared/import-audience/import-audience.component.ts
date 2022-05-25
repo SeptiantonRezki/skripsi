@@ -49,10 +49,10 @@ export class ImportAudienceComponent {
     console.log('files info', this.files);
     console.log("DAT23", this.dialogData);
 
-    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
-      return;
-    }
+    // if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
+    //   return;
+    // }
 
     let fd = new FormData();
 
