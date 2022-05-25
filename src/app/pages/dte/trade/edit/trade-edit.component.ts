@@ -123,9 +123,7 @@ export class TradeEditComponent {
       coin_expiry_date: this.detailFormTrade.coin_expiry_date,
       status: this.detailFormTrade.status_publish,
       group_trade_program_id: this.detailFormTrade.trade_creator_group_id ? this.detailFormTrade.trade_creator_group_id : '',
-
-      // TODO: SESUAIKAN DENGAN KEY BE
-      sub_group_trade_program_id: this.detailFormTrade.xxx ? this.detailFormTrade.xxx : '',
+      sub_group_trade_program_id: this.detailFormTrade.trade_creator_sub_group_id ? this.detailFormTrade.trade_creator_sub_group_id : '',
     })
 
     if (this.detailFormTrade.status === 'active') {
@@ -182,8 +180,7 @@ export class TradeEditComponent {
   }
 
   getSubGroupTradeProgram() {
-    // TODO: UBAH API
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+    this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
       this.listSubGroupTradeProgram = res.data ? res.data.data : [];
       this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
     })
@@ -252,9 +249,7 @@ export class TradeEditComponent {
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
       fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program_id').value);
-
-      // TODO: SESUAIKAN DENGAN KEY BE
-      fd.append('____', this.formTradeProgram.get('sub_group_trade_program_id').value);
+      fd.append('trade_creator_sub_group_id', this.formTradeProgram.get('sub_group_trade_program_id').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.put(fd, { trade_program_id: this.detailFormTrade.id }).subscribe(
