@@ -101,9 +101,10 @@ export class TemplateCreateComponent {
     { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
     { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
     { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
-    { name: this.translate.instant('dte.template_tugas.upc'), value: "upc", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
     { name: this.translate.instant('dte.template_tugas.stock_check_ir'), value: "stock_check_ir", icon: "check_box" },
     { name: this.translate.instant('dte.template_tugas.planogram_ir'), value: "planogram_ir", icon: "cloud_upload" },
+    { name: "UPC", value: "upc", icon: "insert_chart" },
   ];
 
   listChooseQuiz: Array<any> = [
