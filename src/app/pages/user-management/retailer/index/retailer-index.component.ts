@@ -36,10 +36,12 @@ export class RetailerIndexComponent {
   exportAccessCashier: boolean;
   canRequestExport = true;
   resultExport = null;
+  resultExportBank = null;
 
   keyUp = new Subject<string>();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadBankLink') downloadBankLink: ElementRef;
   @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -1210,6 +1212,11 @@ export class RetailerIndexComponent {
           this.canRequestExport = res.data.can_request;
         });
 
+        this.retailerService.exportBankAccount().subscribe(res => {
+          console.log('Status Export :', res);
+          this.resultExportBank = res.data.result;
+        });
+
         this.loadingIndicator = false;
         
       },
@@ -1392,6 +1399,11 @@ export class RetailerIndexComponent {
   download() {
     this.downloadLink.nativeElement.href = this.resultExport;
     this.downloadLink.nativeElement.click();
+  }
+
+  downloadBank() {
+    this.downloadBankLink.nativeElement.href = this.resultExportBank;
+    this.downloadBankLink.nativeElement.click();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {
