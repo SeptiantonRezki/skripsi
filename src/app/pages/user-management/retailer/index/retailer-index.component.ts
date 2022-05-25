@@ -1210,12 +1210,7 @@ export class RetailerIndexComponent {
           this.canRequestExport = res.data.can_request;
         });
 
-        // TODO: sesuaikan payload
-        this.retailerService.exportBankAccount({
-          area: this.pagination['area'],
-          retailer_id: this.selectedRetailer,
-          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
-        }).subscribe(res => {
+        this.retailerService.exportBankAccount().subscribe(res => {
           console.log('Status Export :', res);
           this.resultExportBank = res.data.result;
         });
@@ -1405,7 +1400,7 @@ export class RetailerIndexComponent {
   }
 
   downloadBank() {
-    this.downloadBankLink.nativeElement.href = this.resultExport;
+    this.downloadBankLink.nativeElement.href = this.resultExportBank;
     this.downloadBankLink.nativeElement.click();
   }
 
