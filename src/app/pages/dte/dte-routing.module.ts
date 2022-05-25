@@ -648,22 +648,22 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: 'sub-group-trade',
+    path: 'sub-group-trade-program',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard]
   },
   {
-    path: 'sub-group-trade/create',
+    path: 'sub-group-trade-program/create',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard]
   },
   {
-    path: 'sub-group-trade/edit/:id',
+    path: 'sub-group-trade-program/edit/:id',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard]
   },
   {
-    path: 'sub-group-trade/detail/:id',
+    path: 'sub-group-trade-program/detail/:id',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard]
   },
