@@ -58,6 +58,9 @@ import { TaskVerificationComponent } from "./task-verification-2/task-verificati
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
+import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
+import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 
 const routes: Routes = [
   {
@@ -678,6 +681,51 @@ const routes: Routes = [
   {
     path: 'verification-approval/detail/:id',
     component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/create',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/edit/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/detail/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'coin-redemption-approval',
+    component: CoinRedemptionApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/create',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/edit/:id',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/detail/:id',
+    component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
 ];

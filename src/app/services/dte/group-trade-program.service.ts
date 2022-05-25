@@ -33,4 +33,8 @@ export class GroupTradeProgramService extends BaseService {
     return this.deleteApi(url);
   }
 
+  getSubGroupTrade(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_sub_group_trade');
+    return this.getApi(url, queryParams);
+  }
 }
