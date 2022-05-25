@@ -564,7 +564,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
+        get_sub_group_trade: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/sub-group`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
       },
       PLSupplierCompany: {
         getList: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/private-label/supplier-company`,
