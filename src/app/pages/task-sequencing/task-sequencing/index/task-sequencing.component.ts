@@ -9,6 +9,8 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from "rxjs/Observable";
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-sequencing',
@@ -33,6 +35,8 @@ export class TaskSequencingComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  pageName = this.translate.instant('dte.task_sequencing.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private http: HttpClient,
@@ -40,6 +44,8 @@ export class TaskSequencingComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []

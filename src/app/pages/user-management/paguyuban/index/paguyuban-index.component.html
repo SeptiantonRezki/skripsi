@@ -50,7 +50,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Area'
@@ -59,7 +59,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
                 'all' ?
                 'Semua
@@ -69,7 +69,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" multiple>
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
                 'all' ? 'Semua
                 District'
@@ -78,7 +78,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory" multiple>
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
                 'all' ? 'Semua
                 Territori'
@@ -137,7 +137,7 @@
               <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
                 [ngClass]="row.paguyuban?.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.paguyuban?.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                {{row.paguyuban?.status == 'active' ? ls.locale.global.label.active : ls.locale.global.label.inactive}}
               </p>
             </div>
           </ng-template>

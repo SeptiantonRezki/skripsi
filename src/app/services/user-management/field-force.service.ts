@@ -31,6 +31,11 @@ export class FieldForceService extends BaseService {
     return this.deleteApi(url);
   }
 
+  detail(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail", context);
+    return this.getApi(url);
+  }
+
   getParentArea(context?): Observable<any> {
     const url = this.getUrl("general", "parent", context);
     return this.getApi(url);

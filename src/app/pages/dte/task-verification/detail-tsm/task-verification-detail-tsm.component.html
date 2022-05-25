@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detail Verifikasi Misi'"></page-content-header>
+  <page-content-header contentTitle="{{'dte.task_verification.detail_mission_verification' | translate}}"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column" fusePerfectScrollbar>
       <div class="px-24" fxLayout="row" fxLayoutAlign="space-between center">
-        <h2>Detail Verifikasi Misi TSM</h2>
+        <h2>{{'dte.task_verification.detail_mission_verification_tsm' | translate}}</h2>
         <!-- <div *ngIf="dataTsm['audience']">
             <button *ngIf="permission?.lihat" mat-button style="border: 1px solid; margin-right: 10px"
               (click)="export()">
@@ -24,7 +24,7 @@
         <form autocomplete="off">
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" placeholder="Nama Task Sequencing Management"
+              <input matInput type="text" placeholder="{{'dte.task_verification.task_sequencing_name' | translate}}"
                 [value]="dataTsm['task_sequencing_management_name']" name="task_sequencing_management_name" disabled>
             </mat-form-field>
           </div>
@@ -35,7 +35,7 @@
                 name="trade_creator_id">
                 <mat-option *ngFor="let item of listTradeProgram" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <input matInput type="text" placeholder="Nama Trade Program" [value]="dataTsm['trade_creator_name']"
+              <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" [value]="dataTsm['trade_creator_name']"
                 name="trade_creator_name" disabled>
             </mat-form-field>
           </div>
@@ -44,12 +44,12 @@
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
-                <strong>Audience</strong>
+                <strong>{{'dte.audience.text1' | translate}}</strong>
               </h3>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Audience / Grup" [value]="dataTsm['audience_group_name']"
+                <input matInput type="text" placeholder="{{'dte.task_verification.audience_group' | translate}}" [value]="dataTsm['audience_group_name']"
                   disabled>
                 <!-- <button mat-button matTooltip="Lihat daftar audience"
                   (click)="openListAudience(dataTsm['audience'])" matSuffix mat-icon-button>
@@ -63,16 +63,16 @@
 
             <div fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
-                <strong>Estimasi Budget</strong>
+                <strong>{{'dte.pengatur_jadwal_program.text17' | translate}}</strong>
               </h3>
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="25px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Permintaan Dana"
+                <input matInput type="text" placeholder="{{'dte.pengatur_jadwal_program.text18' | translate}}"
                   [value]="dataTsm['budget_request'] | rupiahFormater" disabled>
               </mat-form-field>
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" placeholder="Dana Trade Program"
+                <input matInput type="text" placeholder="{{'dte.trade_program.text4' | translate}}"
                   [value]="dataTsm['budget_trade_program'] | rupiahFormater" disabled>
               </mat-form-field>
             </div>
@@ -82,7 +82,7 @@
             <div>
               <div class="py-2 template-task" fxLayout="row" fxLayoutAlign="space-between center">
                 <div fxFlex="20">
-                  <h3 class="">Template Tugas</h3>
+                  <h3 class="">{{'dte.template_tugas.text1' | translate}}</h3>
                 </div>
                 <!-- <div fxFlex="80" fxLayout="row wrap" fxLayoutAlign="end center" fxLayout.lt-md="column"
                   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -106,26 +106,26 @@
 
 
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Template Tugas"
+                  <input matInput type="text" placeholder="{{'dte.template_tugas.text1' | translate}}"
                     [value]="dataTsm.task_sequencing_management_template_name" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
                   <input matInput type="text" min="0" [value]="dataTsm.coin_delivered"
-                    placeholder="Nilai Coin Tugas Terkirim" disabled>
+                    placeholder="{{'dte.pengatur_jadwal_program.text19' | translate}}" disabled>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="22%" class="is-light form-primary">
                   <input matInput type="text" min="0" [value]="dataTsm.coin_approved"
-                    placeholder="Nilai Coin Tugas Disetujui" disabled>
+                    placeholder="{{'dte.pengatur_jadwal_program.text20' | translate}}" disabled>
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
-                  <input matInput type="text" [value]="dataTsm.start_date | dateToMoment" placeholder="Tanggal Mulai"
+                  <input matInput type="text" [value]="dataTsm.start_date | dateToMoment" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
                     disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
-                  <input matInput type="text" [value]="dataTsm.end_date | dateToMoment" placeholder="Tanggal Berakhir"
+                  <input matInput type="text" [value]="dataTsm.end_date | dateToMoment" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}"
                     disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
@@ -154,12 +154,12 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataTsm.backup?.start_date | dateToMoment"
-                    placeholder="Tanggal Mulai (Backup)" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput type="text" [value]="dataTsm.backup?.end_date | dateToMoment"
-                    placeholder="Tanggal Berakhir (Backup)" disabled>
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} (Backup)" disabled>
                   <mat-icon matSuffix>date_range</mat-icon>
                 </mat-form-field>
               </div>
@@ -173,7 +173,7 @@
           <div fxLayout="row wrap" fxLayoutAlign="end stretch" fxLayout.lt-md="column" class="p-16 px-24"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()" fxFlex="20">
-              Load Data
+              {{'dte.template_tugas.text24' | translate}}
             </button>
           </div>
 
@@ -182,7 +182,7 @@
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center" style="margin-right: 15px;">
               <mat-icon>search</mat-icon>
               <mat-form-field class="is-light tab-search">
-                <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
               </mat-form-field>
             </div>
           </div>
@@ -190,12 +190,12 @@
           <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
             fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national">
+              <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone" multiple>
+              <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all'
                   ? 'Semua
                   Zona' :
@@ -203,7 +203,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region" multiple>
+              <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
                   'all' ? 'Semua
                   Regional'
@@ -212,7 +212,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area" multiple>
+              <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all'
                   ? 'Semua
                   Area'
@@ -221,7 +221,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+              <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
                   'all' ?
                   'Semua
@@ -231,7 +231,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district" multiple>
+              <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
                   'all' ? 'Semua
                   District'
@@ -240,7 +240,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory" multiple>
+              <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
                 <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
                   'all' ? 'Semua
                   Territori'
@@ -252,19 +252,19 @@
           <div fxLayout="row wrap" fxLayoutAlign="start stretch" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
             fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Status Misi" [(ngModel)]="statusValue" name="statusValue"
+              <mat-select placeholder="{{'dte.task_verification.mission_status' | translate}}" [(ngModel)]="statusValue" name="statusValue"
                 [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="wtLoop.value" *ngFor="let wtLoop of status"> {{wtLoop.label}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="Status Coin" [(ngModel)]="statusCoinSelected" name="statusCoinSelected"
+              <mat-select placeholder="{{'dte.task_verification.text8' | translate}}" [(ngModel)]="statusCoinSelected" name="statusCoinSelected"
                 [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="scl.value" *ngFor="let scl of statusCoinList"> {{scl.label}} </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="12%" class="is-light form-primary">
-              <mat-select placeholder="IR Check" [(ngModel)]="irCheckSelected" name="irCheckSelected"
+              <mat-select placeholder="{{'dte.task_verification.ir_check' | translate}}" [(ngModel)]="irCheckSelected" name="irCheckSelected"
                 [ngModelOptions]="{standalone: true}" multiple>
                 <mat-option [value]="icl.value" *ngFor="let icl of irCheckList"> {{icl.label}} </mat-option>
               </mat-select>
@@ -282,31 +282,31 @@
             [rowHeight]="'auto'" [reorderable]="reorderable" [selected]="selected" [count]="pagination.total"
             [limit]="pagination.per_page" [externalPaging]="true" [selectAllRowsOnPage]="false" [externalSorting]="true"
             (select)="onSelect($event)" fusePerfectScrollbar> -->
-            <ngx-datatable-column name="Retailer Id" prop="id" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Customer Code" prop="code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.retailer_id' | translate}}" prop="id" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.customer_code' | translate}}" prop="code" [sortable]="false"></ngx-datatable-column>
             <!-- <ngx-datatable-column name="No Hp" prop="nomor_hp" [sortable]="false"></ngx-datatable-column> -->
-            <ngx-datatable-column name="Nama Retailer" prop="name"></ngx-datatable-column>
-            <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Region" prop="region_code" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Division" prop="division_code" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="IR Check" prop="ir_verification" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Reblast Type" [sortable]="false">
+            <ngx-datatable-column name="{{'dte.approval_coin_adjustment.retailer_name' | translate}}" prop="name"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'global.area.area' | translate}}" prop="area_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'global.area.regional' | translate}}" prop="region_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.division' | translate}}" prop="division_code" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.ir_check' | translate}}" prop="ir_verification" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.reblast_type' | translate}}" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{ row.type + ' ' + (row.increment ? row.increment : '') }}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Status Misi" prop="status_misi" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Status Coin" prop="status_coin" [sortable]="false"></ngx-datatable-column>
-            <ngx-datatable-column name="Tanggal Submit Misi" [sortable]="false" [width]="180">
+            <ngx-datatable-column name="{{'dte.task_verification.mission_status' | translate}}" prop="status_misi" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.text8' | translate}}" prop="status_coin" [sortable]="false"></ngx-datatable-column>
+            <ngx-datatable-column name="{{'dte.task_verification.submit_mission_date' | translate}}" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span *ngIf="row.tgl_submit_misi !== null">{{row.tgl_submit_misi.date | date: 'dd/MM/yyy HH:mm'}}
-                  WIB</span>
+                  {{'dte.task_verification.wib' | translate}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Action" [sortable]="false">
+            <ngx-datatable-column name="{{'global.label.action' | translate}}" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button type="button" mat-icon-button matTooltip="Verifikasi Misi"
+                  <button type="button" mat-icon-button matTooltip="{{'dte.task_verification.text2' | translate}}"
                     (click)="openConfirmDialog(row, 'Verifikasi Misi TSM')"
                     [disabled]="row.status_misi !== 'submitted' || !permissionVerifikasiMisi?.ubah || row.task_sequencing_management_template_quiz === 1">
                     <mat-icon
@@ -317,7 +317,7 @@
                       class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
 
-                  <button type="button" mat-icon-button matTooltip="Release Coin"
+                  <button type="button" mat-icon-button matTooltip="{{'dte.task_verification.coin_release' | translate}}"
                     (click)="openConfirmDialog(row, 'Release TSM Coin')"
                     [disabled]="row.status_misi !== 'approved' || row.status_coin == 'sudah dikirim' || !permissionReleaseCoin?.ubah || row.task_sequencing_management_template_quiz === 1">
                     <mat-icon

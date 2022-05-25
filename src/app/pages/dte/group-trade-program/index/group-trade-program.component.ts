@@ -8,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-group-trade-program',
@@ -41,7 +42,8 @@ export class GroupTradeProgramComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private groupTradeProgramService: GroupTradeProgramService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     this.onLoad = true;
     this.permission = this.roles.getRoles('principal.dtegrouptradeprogram')
@@ -184,10 +186,10 @@ export class GroupTradeProgramComponent implements OnInit {
   deleteTemplateTask(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Group Trade Program",
-      captionDialog: "Apakah anda yakin untuk menghapus group trade program ini ?",
+      titleDialog: this.translate.instant('dte.group_trade_program.text8'),
+      captionDialog: this.translate.instant('dte.group_trade_program.text9'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -198,7 +200,7 @@ export class GroupTradeProgramComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getGroupTradeProgram();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text1') });
       }
     });
   }

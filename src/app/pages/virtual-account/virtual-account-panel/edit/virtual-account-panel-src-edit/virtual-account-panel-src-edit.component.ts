@@ -593,7 +593,7 @@ export class VirtualAccountPanelSrcEditComponent implements OnInit, OnDestroy {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

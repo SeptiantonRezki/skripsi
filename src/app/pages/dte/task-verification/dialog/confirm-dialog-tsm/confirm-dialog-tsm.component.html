@@ -2,7 +2,7 @@
   <div *ngIf="data.popupType == 'Verification All TSM Mission'">
     <div class="p-16">
       <div fxLayout="row" fxLayoutAlign="center center" class="info">
-        Apakah anda yakin untuk verifikasi (sebanyak {{jumlahMisi}}) misi ini?
+        {{'dte.task_verification.confirm_verif' | translate:{'mission_amount': jumlahMisi } }}
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="p-8">
         <mat-radio-group [formControl]="verificationConfirm">
@@ -24,15 +24,15 @@
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <button mat-raised-button [disabled]="isDisagree && !reason || isDisagree == null"
           *ngIf="isDisagree && !reason || isDisagree == null" style="cursor: no-drop;">
-          Simpan
+          {{'global.button.save' | translate}}
         </button>
         <button mat-raised-button class="primary-green" (click)="saveVerification()"
           *ngIf="isDisagree !== null && isDisagree && reason || !isDisagree && isDisagree !== null">
-          Simpan
+          {{'global.button.save' | translate}}
         </button>
 
         <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
-          Batal
+          {{'global.button.cancel' | translate}}
         </button>
       </div>
     </div>
@@ -41,18 +41,18 @@
   <div *ngIf="data.popupType == 'Release TSM Coin On Index'">
     <div class="p-16">
       <div fxLayout="row" fxLayoutAlign="center center" class="info">
-        Apakah anda yakin untuk mengirim coin untuk misi ini (Total {{totalSRC}} SRC)?
+        {{'dte.task_verification.confirm_send_coin' | translate:{'total_src': totalSRC} }}
       </div>
     </div>
 
     <div class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <button mat-raised-button class="primary-green" (click)="saveCoin()">
-          Simpan
+          {{'global.button.save' | translate}}
         </button>
 
         <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
-          Batal
+          {{'global.button.cancel' | translate}}
         </button>
       </div>
     </div>
@@ -61,18 +61,18 @@
   <div *ngIf="data.popupType == 'Release TSM Coin'">
     <div class="p-16">
       <div fxLayout="row" fxLayoutAlign="center center" class="info">
-        Apakah anda yakin untuk mengirim coin untuk SRC {{data.name}} - {{data.code}}?
+        {{'dte.task_verification.confirm_send_coin_2' | translate:{'name': data.name, 'code': data.code } }}
       </div>
     </div>
 
     <div class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <button mat-raised-button class="primary-green" (click)="releaseCoinTsm()">
-          Simpan
+          {{'global.button.save' | translate}}
         </button>
 
         <button mat-raised-button class="ml-20" color="primary" (click)="dialogRef.close()">
-          Batal
+          {{'global.button.cancel' | translate}}
         </button>
       </div>
     </div>
@@ -99,19 +99,19 @@
       <div fxLayout="row" fxLayoutAlign="start center" style="font-size: 16px;">
         {{dataSubmission.data.name}} </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="title">
-        Deadline
+        {{'dte.task_verification.deadline' | translate}}
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="desc">
         {{dataSubmission.data.end_date}}
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="title">
-        Deskripsi
+        {{'global.label.description' | translate}}
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="desc">
         {{dataSubmission.data.description}}
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="title">
-        Coin yang akan diperoleh
+        {{'dte.task_verification.coin_will_receive' | translate}}
       </div>
       <div fxLayout="row" fxLayoutAlign="start center" class="desc coin">
         <img src="assets/images/ayo/coin.png" width="20" height="20" class="mr-8" />
@@ -183,7 +183,7 @@
               </div>
               <ng-template #jawabLainnya>
                 <div class="text-left">
-                  Lainnya - {{ additional }}
+                  {{'dte.task_verification.other' | translate}} - {{ additional }}
                 </div>
               </ng-template>
             </div>
@@ -208,14 +208,14 @@
             <div class="p-12 planogram-template" fxLayout="column" fxLayoutAlign="center center">
               <img src="{{item.planogram_image}}" class="planogram-template-img"
                 (click)="previewImage(item.planogram_image)">
-              <span class="planogram-template-caption">Template Planogram</span>
+              <span class="planogram-template-caption">{{'dte.task_verification.planogram_template' | translate}}</span>
             </div>
             <div class="item-question-img" fxLayout="column" fxLayoutAlign="center center">
               <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)" />
-              <span class="planogram-template-caption">Bukti Foto</span>
+              <span class="planogram-template-caption">{{'dte.task_verification.photo_proved' | translate}}</span>
             </div>
-            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">Correct</div>
-            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">Incorrect</div>
+            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">{{'dte.task_verification.correct' | translate}}</div>
+            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">{{'dte.task_verification.incorrect' | translate}}</div>
           </div>
 
           <div class="item-question-img" *ngIf="item.type == 'stock_check_ir'" fxLayout="column"
@@ -225,8 +225,8 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th nowrap>Product Name</th>
-                      <th nowrap>Qty</th>
+                      <th nowrap>{{'katalog_src.produk.text15' | translate}}</th>
+                      <th nowrap>{{'global.label.qry' | translate}}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -244,11 +244,11 @@
             </div>
             <div class="mb-8 item-question-img" fxLayout="column" fxLayoutAlign="center center">
               <img src="{{item.answer_image}}" class="answer-img" (click)="previewImage(item.answer_image)" />
-              <span class="planogram-template-caption">Bukti Foto</span>
+              <span class="planogram-template-caption">{{'dte.task_verification.photo_proved' | translate}}</span>
             </div>
             <!-- ambil correct/incorret dari dataSubmission.data.submissions -->
-            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">Correct</div>
-            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">Incorrect</div>
+            <div class="p-4 status-ir--green" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Correct'">{{'dte.task_verification.correct' | translate}}</div>
+            <div class="p-4 status-ir--red" *ngIf="dataSubmission.data.submissions[i].ir_verification === 'Incorrect'">{{'dte.task_verification.incorrect' | translate}}</div>
           </div>
 
           <div class="item-question-img"
@@ -260,8 +260,8 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th nowrap>IR Check</th>
-                        <th nowrap>Compliance</th>
+                        <th nowrap>{{'dte.task_verification.ir_check' | translate}}</th>
+                        <th nowrap>{{'dte.task_verification.compliance' | translate}}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -280,8 +280,8 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th nowrap>Brand</th>
-                        <th nowrap>Quantity</th>
+                        <th nowrap>{{'dte.task_verification.brand' | translate}}</th>
+                        <th nowrap>{{'dte.task_verification.qty' | translate}}</th>
                       </tr>
                     </thead>
                     <tbody *ngFor="let hvscir_item of ir_item.hasil_verifikasi">
@@ -309,11 +309,11 @@
       class="p-8">
       <div fxLayout="row wrap" fxLayoutAlign="space-between center">
         <button mat-raised-button class="primary-green" (click)="verifikasiMisi('setuju')">
-          Setujui
+          {{'dte.task_verification.do_approve' | translate}}
         </button>
 
         <button mat-raised-button class="ml-20" color="primary" (click)="verifikasiMisi('tolak')">
-          Tolak
+          {{'dte.task_verification.do_reject' | translate}}
         </button>
       </div>
     </div>

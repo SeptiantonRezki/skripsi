@@ -16,6 +16,8 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import {DialogCreateComponent} from '../dialog-create/dialog-create.component';
 import {DialogEditComponent} from '../dialog-edit/dialog-edit.component';
+import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 
 @Component({
@@ -51,7 +53,9 @@ export class ProjectListComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -77,7 +81,7 @@ export class ProjectListComponent implements OnInit {
    openDialogProjectMisi() {
     const dataProps = {
       data: {
-        title:'Project Misi',
+        title: this.translate.instant('dte.template_tugas.mission_project'),
         methodGet: 'getProject',
         methodCreate: 'createProjectMisi',
      },
@@ -97,7 +101,7 @@ export class ProjectListComponent implements OnInit {
   openDialogProjectMisiEdit(id, name, status) {
     const dataProps = {
       data: {
-        title:'Project Misi',
+        title: this.translate.instant('dte.template_tugas.mission_project'),
         methodPut: 'putProjectMisi',
         paramsId: 'project_misi_id',
         id: id,
@@ -226,10 +230,10 @@ export class ProjectListComponent implements OnInit {
   deleteProjectMisi(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Project Misi",
-      captionDialog: "Apakah anda yakin untuk menghapus Project Misi ini ?",
+      titleDialog: this.translate.instant('dte.pengaturan_attribute_misi.delete_project_mission'),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('dte.template_tugas.mission_project'), index: ""}),
       confirmCallback: this.confirmDeleteProjectMisi.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -239,7 +243,7 @@ export class ProjectListComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.ngOnInit();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 

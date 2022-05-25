@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 
 const defaultTemplateVendor = [
@@ -50,7 +51,8 @@ export class VendorTemplateMessageComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private vendorService: VendorsService
+    private vendorService: VendorsService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.vendorTemplates = [];

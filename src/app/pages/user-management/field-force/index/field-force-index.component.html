@@ -2,10 +2,10 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.field_force.page_title">
     <div class="button-row" fxLayout="row">
-      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
+      <button *ngIf="permission.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
+      <!--- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
   <!-- / HEADER -->
@@ -122,7 +122,8 @@
 
         <ngx-datatable-column [name]="ls.locale.global.label.name" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
+            <a *ngIf="permission.lihat" class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
+            <span *ngIf="!permission.lihat" class="direct-edit">{{row.fullname}} </span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -147,7 +148,7 @@
               <p class="status text-truncate h6 p-4"
                 style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
                 [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+                {{row.status == 'active' ? ls.locale.global.label.active : ls.locale.global.label.inactive}}
               </p>
             </div>
           </ng-template>

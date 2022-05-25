@@ -12,7 +12,7 @@ import {
 import { CapitalizePipe } from "./capitalize";
 import { TimeRemainingPipe } from "./time-remaining.pipe";
 import { UnderscoreToCapitalizePipe } from "./underscore-to-capitalize.pipe";
-
+import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
 @NgModule({
   declarations: [
     KeysPipe,
@@ -26,7 +26,8 @@ import { UnderscoreToCapitalizePipe } from "./underscore-to-capitalize.pipe";
     DateToMomentPipe,
     ExcludeArrayPipe,
     TimeRemainingPipe,
-    UnderscoreToCapitalizePipe
+    UnderscoreToCapitalizePipe,
+    BreadCrumbTranslatePipe
   ],
   imports: [],
   exports: [
@@ -41,7 +42,8 @@ import { UnderscoreToCapitalizePipe } from "./underscore-to-capitalize.pipe";
     DateToMomentPipe,
     ExcludeArrayPipe,
     TimeRemainingPipe,
-    UnderscoreToCapitalizePipe
+    UnderscoreToCapitalizePipe,
+    BreadCrumbTranslatePipe
   ]
 })
 export class FusePipesModule { }

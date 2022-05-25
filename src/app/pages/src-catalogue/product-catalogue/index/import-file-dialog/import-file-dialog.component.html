@@ -24,9 +24,7 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini (Maks. 10.000 Baris SKU) atau
-          <strong>Pilih File</strong>
-        </span>
+        <span matPrefix>{{'katalog_src.produk.katalog_src' | translate}}</span>
       </div>
     </div>
     <br>
@@ -38,12 +36,12 @@
         <thead>
           <tr>
             <th>SKU ID</th>
-            <th>Nama Produk</th>
-            <th>Deskripsi Produk</th>
-            <th nowrap>Ketersediaan</th>
+            <th>{{'katalog_src.produk.text15' | translate}}</th>
+            <th>{{'katalog_src.produk.text16' | translate}}</th>
+            <th nowrap>{{'katalog_src.produk.text12' | translate}}</th>
             <th>Status</th>
-            <th>Harga</th>
-            <th nowrap>Alasan Tidak Valid</th>
+            <th>{{'katalog_src.produk.text11' | translate}}</th>
+            <th nowrap>{{'global.messages.invalid_reason' | translate}}</th>
           </tr>
         </thead>
         <tbody>
@@ -58,9 +56,9 @@
               <strong>{{ item.product_description }}</strong>
             </td>
             <td>
-              {{ item.availability_text === 'in-stock' ? 'Tersedia' : 'Tidak Tersedia' }}
+              {{ item.availability_text === 'in-stock' ? ('katalog_src.produk.stock_available' | translate) : ('katalog_src.produk.stock_unavailable' | translate) }}
             </td>
-            <td>{{item.status === 'active' ? 'AKTIF' : 'TIDAK AKTIF'}}</td>
+            <td>{{item.status === 'active' ? ('global.label.active' | translate) : ('global.label.inactive' | translate) }}</td>
             <td>{{item.harga | rupiahFormater}}</td>
             <td nowrap>
               {{ item.reason || '-' }}
@@ -68,7 +66,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="9">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -77,7 +75,7 @@
   </div>
   <div class="p-24 m-0" fxLayout="row" *ngIf="!vendor_id">
     <mat-form-field fxFlex="50" class="is-light form-primary">
-      <mat-select placeholder="Nama Vendor" [formControl]="vendorCompany">
+      <mat-select placeholder="{{'katalog_src.vendor.text4' | translate}}" [formControl]="vendorCompany">
         <mat-option *ngFor="let item of listVendor" [value]="item.id">{{item.name}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -87,9 +85,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0 || isInvalid">Kirim</button>
+          [disabled]="rows.length === 0 || isInvalid">{{'global.button.send' | translate}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

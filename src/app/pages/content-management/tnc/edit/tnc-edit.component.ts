@@ -137,7 +137,7 @@ export class TncEditComponent {
         res => {
           // this.loadingIndicator = false;
           this.router.navigate(["content-management", "terms-and-condition"]);
-          this.dialogService.openSnackBar({ message: "Data berhasil diubah" });
+          this.dialogService.openSnackBar({ message: "Data berhasil diubah" }); // TODO
           window.localStorage.removeItem('detail_tnc');
         },
         err => {
@@ -146,7 +146,7 @@ export class TncEditComponent {
         }
       );
     } else {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" }); // TODO
       commonFormValidator.validateAllFields(this.formTnc);
     }
   }

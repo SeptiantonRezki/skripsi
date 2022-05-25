@@ -8,6 +8,8 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-import-audience-personalize',
@@ -74,7 +76,9 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     private audienceService: AudienceService,
     private dataService: DataService,
     private idbService: IdbService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data: any,
+    private translate: TranslateService,
   ) {
     this.rows = [];
     this.detailData = data;
@@ -141,7 +145,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
-                message: "Gagal mengimport Data!"
+                message: this.translate.instant('global.label.failed_import')
               })
               this.dialogRef.close([]);
             })
@@ -151,12 +155,12 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
             this.files = undefined;
 
             if (err.status === 404 || err.status === 500)
-              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+              this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
           })
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
         }
       },
       err => {
@@ -164,7 +168,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
       }
     );
   };
@@ -193,13 +197,13 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({
-              message: "Gagal mengimport Data!"
+              message: this.translate.instant('global.label.failed_import')
             })
             this.dialogRef.close([]);
           })
         } else {
           this.dialogService.openSnackBar({
-            message: "Gagal mengimport Data!"
+            message: this.translate.instant('global.label.failed_import')
           })
           this.dialogRef.close([]);
         }
@@ -232,20 +236,20 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
             })
           }, err => {
             this.dialogService.openSnackBar({
-              message: "Gagal mengimport Sebagian Data! pada halaman " + this.trials.join(",")
+              message: this.translate.instant('global.messages.failed_partial_import_at') + this.trials.join(",")
             })
             this.dialogRef.close([]);
           })
         }, err => {
           this.dialogService.openSnackBar({
-            message: "Sebagian Data gagal di import, pada halaman " + this.trials.join(",")
+            message: this.translate.instant('global.messages.failed_partial_import_at') + this.trials.join(",")
           })
           this.dialogRef.close([]);
         });
       } else {
         if (this.invalidData) {
           this.dialogService.openSnackBar({
-            message: "Ada kesalahan pada data. Periksa kembali data Anda"
+            message: this.translate.instant('global.label.invalid_data_double_check')
           });
         }
         
@@ -279,14 +283,14 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
           this.dialogRef.close({...this.previewData});
         })
       } else {
-        this.dialogService.openSnackBar({ message: "Ada data yang tidak valid!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.label.invalid_data') });
       }
     }
     else {
       if (this.totalData > 0) {
         this.dialogRef.close(this.allData);
       } else {
-        this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
       }
     }
   }

@@ -34,6 +34,7 @@ import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialo
 import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
 import { merge } from "rxjs/observable/merge";
 import { ImportAudiencePersonalizeComponent } from "../../import/personalize/import-audience-personalize.component";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-audience-create-personalize',
@@ -51,12 +52,12 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   rows: any[];
 
   audienceFilter: any[] = [
-    { name: "Population Blast", value: "population-blast" },
-    { name: "Recommended Panel", value: "recommended-panel" },
-  ];
+    { name: this.translate.instant('dte.audience.population_blast'), value: "population-blast" },
+    { name: this.translate.instant('dte.audience.recommended_panel'), value: "recommended-panel" },
+  ]; // TODO
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -65,15 +66,15 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     { name: "KA", value: "KA" }
   ];
   b2bActiveList: any[] = [
-    { name: "All", value: "all" },
-    { name: "Active", value: "active" },
-    { name: "Not Active", value: "inactive" },
+    { name: this.translate.instant('global.label.all_status'), value: "all" },
+    { name: this.translate.instant('global.label.active'), value: "active" },
+    { name: this.translate.instant('global.label.inactive'), value: "inactive" },
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -100,6 +101,8 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   allRowsSelected: boolean;
   isChecked: boolean = false;
   data_imported: any = [];
+  pageName = this.translate.instant('dte.audience.audience_personalize');
+  titleParam = {entity: this.pageName};
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -152,6 +155,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     private idbService: IdbService,
     private ls: LanguagesService,
     private sequencingService: SequencingService,
+    private translate: TranslateService,
     ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -995,7 +999,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formAudience);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: this.translate.instant('global.label.please_complete_data'),
       });
     }
   }
@@ -1082,7 +1086,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       } else {
         if (!this.data_imported.length) {
           this.dialogService.openSnackBar({
-            message: "Silahkan import file terlebih dahulu",
+            message: this.translate.instant('global.label.please_import_file'),
           });
           return;
         }
@@ -1116,7 +1120,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
             this.formAudience.get("est_task_compliance").setValue(res.data.est_task_compliance);
           }
           this.dialogRef.close();
-          this.dialogService.openSnackBar({message : 'Proses Check Berhasil'});
+          this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
         },
         (err) => {
           this.dialogRef.close();
@@ -1132,7 +1136,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formFilterRetailer);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: "Silakan lengkapi data terlebih dahulu!", // TODO
       });
     }
   }

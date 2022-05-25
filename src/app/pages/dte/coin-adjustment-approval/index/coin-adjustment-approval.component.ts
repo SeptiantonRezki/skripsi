@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
@@ -36,16 +37,16 @@ export class CoinAdjustmentApprovalComponent implements OnInit, OnDestroy {
   formFilter: FormGroup;
 
   statusFilter: any[] = [
-    { name: 'Urutkan Perhari', value: 'day' },
-    { name: 'Urutkan Perbulan', value: 'mounth' },
-    { name: 'Urutkan Pertahun', value: 'year' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text2'), value: 'day' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text3'), value: 'mounth' },
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text4'), value: 'year' }
   ];
 
   listStatuses: any[] = [
-    { name: 'Semua Status', value: "" },
-    { name: 'Approved', value: 'approved' },
-    { name: 'Rejected', value: 'rejected' },
-    { name: 'Pending', value: 'pending' }
+    { name: this.translate.instant('dte.pengatur_jadwal_program.text7'), value: "" },
+    { name: this.translate.instant('dte.approval_coin_adjustment.approved'), value: 'approved' },
+    { name: this.translate.instant('dte.approval_coin_adjustment.rejected'), value: 'rejected' },
+    { name: this.translate.instant('dte.approval_coin_adjustment.pending'), value: 'pending' }
   ];
 
   dialogRef: any;
@@ -62,6 +63,9 @@ export class CoinAdjustmentApprovalComponent implements OnInit, OnDestroy {
   paginationRequestor: Page = new Page();
   paginationApprover: Page = new Page();
 
+  pageName = this.translate.instant('dte.approval_coin_adjustment.text1');
+  titleParam = {entity: this.pageName};
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -70,7 +74,8 @@ export class CoinAdjustmentApprovalComponent implements OnInit, OnDestroy {
     private userIdle: IdleService,
     private dialog: MatDialog,
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];

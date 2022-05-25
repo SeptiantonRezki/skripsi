@@ -3,6 +3,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   // selector: 'app-import-audience-banner-dialog',
@@ -27,6 +28,7 @@ export class ImportAudienceBannerDialogComponent implements OnInit {
     private dialogService: DialogService,
     private bannerService: BannerService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];

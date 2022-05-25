@@ -21,26 +21,26 @@
     <form [formGroup]="formFilter" autoComplete="off">
       <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="10px">
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-          <mat-select placeholder="National" formControlName="national">
+          <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
             <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-          <mat-select placeholder="Zone" formControlName="zone" multiple>
+          <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
             <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
               Zona' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-          <mat-select placeholder="Regional" formControlName="region" multiple>
+          <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
             <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
               Regional' :
               item.code}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-          <mat-select placeholder="Area" formControlName="area" multiple>
+          <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
             <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
               Area' :
               item.code}}</mat-option>
@@ -50,7 +50,7 @@
           <mat-select
             placeholder="Opsi Penukaran"
             formControlName="status"
-          >
+          > <!-- // TODO -->
             <mat-option
               *ngFor="let item of statusList"
               [value]="item.value"
@@ -63,7 +63,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -101,13 +101,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Retailer Code" prop="code">
+        <ngx-datatable-column name="Retailer Code" prop="code"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a>{{row.code}}</a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Toko SRC" prop="name">
+        <ngx-datatable-column name="Toko SRC" prop="name"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.name}}
           </ng-template>
@@ -137,13 +137,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nominal Penukaran" prop="nominal">
+        <ngx-datatable-column name="Nominal Penukaran" prop="nominal"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.nominal | rupiahFormater }}
         </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="coin">
+        <ngx-datatable-column name="Jumlah Coin Ditukar" prop="coin"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin | rupiahFormaterWithoutRp }}
           </ng-template>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
@@ -46,6 +47,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
   saveData: Boolean = false;
   idApproval: any;
   isTSM: Boolean = false;
+  pageName = this.translate.instant('dte.approval_coin_adjustment.text1');
+  titleParam = {entity: this.pageName};
+
   constructor(
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
@@ -56,7 +60,8 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.permissionCoinAdjustment = this.roles.getRoles('principal.dtecoinadjustmentapproval');
     this.permissionNotifikasi = this.roles.getRoles('principal.dtenotifikasiapprovalcoinadjustment');
@@ -655,10 +660,10 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   takeAction(status: string) {
     const data = {
-      titleDialog: `${status === 'approved' ? 'Setujui Request Adjustment Coin' : 'Tolak Request Adjustment Coin'}`,
-      captionDialog: `Apakah anda yakin untuk ${status === 'approved' ? 'menyetujui' : 'menolak'} request adjustment coin ini ?`,
+      titleDialog: `${status === 'approved' ? this.ls.locale.dte.approval_coin_adjustment.approve : this.ls.locale.dte.approval_coin_adjustment.reject}`,
+      captionDialog: `${this.ls.locale.dte.approval_coin_adjustment.are_you_sure} ${status === 'approved' ? this.ls.locale.dte.approval_coin_adjustment.do_approve : this.ls.locale.dte.approval_coin_adjustment.do_reject} ${this.ls.locale.dte.approval_coin_adjustment.this_request_adjusment}`,
       confirmCallback: (remark) => this.confirmAction(status, remark),
-      buttonText: ['Ya, Lanjutkan', 'Batal'],
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel],
       isRemark: true,
     };
     this.dialogService.openCustomConfirmationDialog(data);
@@ -684,7 +689,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   sendNotification() {
     if (!this.permissionNotifikasi.ubah) {
-      this.dialogService.openSnackBar({ message: "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)" })
+      this.dialogService.openSnackBar({ message: this.ls.locale.dte.approval_coin_adjustment.read_only_access })
       return;
     }
     // const dialogConfig = new MatDialogConfig();
@@ -693,15 +698,15 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     // dialogConfig.disableClose = true;
     // dialogConfig.width = "450px";
     // dialogConfig.panelClass = "popup-notif";
-    // dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: 'BATAL', is_tsm: this.isTSM };
+    // dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: this.ls.locale.global.button.cancel, is_tsm: this.isTSM };
 
     // this.dialog.open(NotificationCoinAdjustmentDialogComponent, dialogConfig);
     const data = {
-      titleDialog: `Kirim Email Notifikasi`,
-      captionDialog: `Anda akan mengirimkan email notifikasi ke <b>${this.dataApproval.approver || 'Tidak Ada user yang terpilih'}</b> ?`,
+      titleDialog: this.ls.locale.global.messages.send_email_notif,
+      captionDialog: `${this.ls.locale.global.messages.send_email_notif_to} <b>${this.dataApproval.approver || this.ls.locale.global.messages.no_selected_user}</b> ?`,
       confirmCallback: () => this.confirmSubmitNotification(),
       htmlContent: true,
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

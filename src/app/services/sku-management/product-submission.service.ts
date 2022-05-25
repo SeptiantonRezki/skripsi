@@ -21,13 +21,8 @@ export class ProductSubmissionService extends BaseService {
     return this.getApi(url);
   }
 
-  putApprove(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_approve", context);
-    return this.postApi(url, body);
-  }
-
-  putDisapprove(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_disapprove", context);
+  putApproval(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_approval");
     return this.postApi(url, body);
   }
 
@@ -51,28 +46,43 @@ export class ProductSubmissionService extends BaseService {
     return this.postApi(url, body);
   }
 
-  putApprove1(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_approve_1", context);
+  putApproval1(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_approval_1");
     return this.postApi(url, body);
   }
 
-  putDisapprove1(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_disapprove_1", context);
-    return this.postApi(url, body);
-  }
-
-  putApproveDbProduct(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_approve_db_product", context);
-    return this.postApi(url, body);
-  }
-
-  putDisapproveDbProduct(body, context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "put_disapprove_db_product", context);
+  putApproval2(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_approval_2");
     return this.postApi(url, body);
   }
 
   getBarcode(id): Observable<any> {
-    const url = this.getUrl(this.namespace, "get_barcode", { product_id: id });
+    const url = this.getUrl(this.namespace, "get_barcode");
+    return this.postApi(url, { id: id });
+  }
+
+  getCategories(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_categories");
+    return this.getApi(url);
+  }
+
+  getBrands(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_brands");
+    return this.getApi(url);
+  }
+
+  getDbCategories(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_db_categories");
+    return this.getApi(url);
+  }
+
+  getDbApprovers(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_db_approvers");
+    return this.getApi(url);
+  }
+
+  getDbBrands(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_db_brands");
     return this.getApi(url);
   }
 }

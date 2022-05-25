@@ -10,6 +10,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { CourierService } from 'app/services/delivery-management/courier.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-courier-management',
@@ -43,7 +44,8 @@ export class CourierManagementComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private courierManagementService: CourierService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     // this.selected = [];
@@ -149,10 +151,10 @@ export class CourierManagementComponent implements OnInit {
   deleteUser(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Layanan Kurir",
-      captionDialog: "Apakah anda yakin untuk menghapus Layanan Kurir ini ?",
+      titleDialog: this.translate.instant('delivery_managemet.daftar_kurir.delete'),
+      captionDialog: this.translate.instant('delivery_managemet.daftar_kurir.delete_confirm'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -161,7 +163,7 @@ export class CourierManagementComponent implements OnInit {
     this.courierManagementService.delete({ courier_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getCourierList();
         this.selected = [];
@@ -200,7 +202,7 @@ export class CourierManagementComponent implements OnInit {
     this.courierManagementService.updateStatus({ courier_id: this.id }, { status: this.statusRow }).subscribe(res => {
       if (res && res.data) {
         this.dialogService.openSnackBar({
-          message: "Berhasil mengubah status kurir"
+          message: "Berhasil mengubah status kurir" // TODO
         });
       }
       this.dialogService.brodcastCloseConfirmation();

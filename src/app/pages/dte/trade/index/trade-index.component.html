@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Trade Program'">
+  <page-content-header contentTitle="{{'dte.trade_program.text1' | translate}}">
     <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','trade-program', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> BUAT
+      <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -10,11 +10,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Trade Program</h2>
+        <h2 class="pl-8">{{'dte.trade_program.text1' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input id="search" matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input id="search" matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -22,19 +22,19 @@
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" multiple>
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" multiple>
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
@@ -42,7 +42,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
@@ -50,7 +50,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
@@ -59,7 +59,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" multiple>
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
@@ -67,7 +67,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory" multiple>
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
@@ -102,48 +102,48 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Dana" prop="budget">
+        <ngx-datatable-column name="{{'dte.trade_program.balance' | translate}}" prop="budget">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.budget_format_currency}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
+        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Berakhir" prop="end_date">
+        <ngx-datatable-column name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa Coin" prop="coin_expiry_date">
+        <ngx-datatable-column name="{{'dte.trade_program.coin_expiry_date' | translate}}" prop="coin_expiry_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status_publish" [sortable]="false">
+        <ngx-datatable-column name="{{'global.label.status' | translate}}" prop="status_publish" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
                 [ngClass]="row.status_publish === 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status_publish === 'publish' ? 'Diterbitkan' : 'Tidak Diterbitkan'}}
+                {{row.status_publish === 'publish' ? ('dte.trade_program.text6' | translate) : ('dte.trade_program.text7' | translate) }}
               </p>
             </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
@@ -152,7 +152,7 @@
               <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button id="btn-delete" mat-icon-button color="primary" matTooltip="Hapus"
+              <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}"
                 [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

@@ -1,24 +1,24 @@
 <div class="content">
   <div class="p-24 add-btn-medal">
     <button style="width: 150px; margin-right: 8px;" (click)="cancel()" mat-raised-button type="button">
-      Batal
+      {{ls.locale.global.button.cancel}}
     </button>
     <button style="width: 150px" (click)="submit()" mat-raised-button type="button">
-      Simpan
+      {{ls.locale.global.button.save}}
     </button>
   </div>
   <div class="p-24">
     <form [formGroup]="formMedal" fxLayout="column wrap">
       <mat-form-field fxFlex="50" class="is-light form-primary pl-8">
-        <input matInput placeholder="Nama Medal" formControlName="namaMedal">
+        <input matInput placeholder="{{ls.locale.retailer.medal_badge.text3}}" formControlName="namaMedal">
         <mat-error *ngIf="formMedal.controls['namaMedal'].hasError('required') && formMedal.controls['namaMedal'].touched">
-          Nama Medal harus diisi.
+          {{ls.locale.retailer.medal_badge.text3}} {{ls.locale.global.messages.mandatory_text}}
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="50" class="is-light form-primary pl-8">
-        <input matInput placeholder="Deskripsi" formControlName="deskripsi">
+        <input matInput placeholder="{{ls.locale.global.label.description}}" formControlName="deskripsi">
         <mat-error *ngIf="formMedal.controls['deskripsi'].hasError('required') && formMedal.controls['deskripsi'].touched">
-          Deskripsi harus diisi.
+          {{ls.locale.global.label.description}} {{ls.locale.global.messages.mandatory_text}}
         </mat-error>
       </mat-form-field>
       <div fxFlex="50" class="img-container pl-8">
@@ -27,12 +27,12 @@
           <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
             <mat-icon class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
             <br>
-            <span matPrefix style="text-align: center;">Tarik Gambar Medal Kesini atau <strong>Pilih File</strong></span>
-            <span matPrefix style="text-align: center;">Dimensi File 410x210 Pixel. Ukuran Maks 2MB</span>
+            <span matPrefix style="text-align: center;">{{ls.locale.katalog_src.template_layout_toko.text8}}</span>
+            <span matPrefix style="text-align: center;">{{ls.locale.dte.template_tugas.text38}}</span>
           </div>
         </div>
         <mat-error *ngIf="formMedal.controls['gambar'].hasError('required') && formMedal.controls['gambar'].touched">
-          Image harus dipilih.
+          Image {{ls.locale.global.messages.mandatory_text}}
         </mat-error>
         <div *ngIf="imgMedalR" style="width: 100%; max-height: 200px">
           <div class="attachment-layout" fxLayout="column" fxLayoutAlign="center center">
@@ -41,7 +41,7 @@
             </div>
             <img class="attachment-img" id="imageView" [src]='imgMedalR'/>
             <mat-error *ngIf="imgMedal && imgMedal.size >= 2000000" class="mb-8">
-              Ukuran Maks 2MB.
+              {{ls.locale.katalog_src.produk.text6}}
             </mat-error>
           </div>
         </div>

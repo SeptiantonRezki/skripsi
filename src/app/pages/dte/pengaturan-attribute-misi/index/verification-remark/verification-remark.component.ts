@@ -16,6 +16,8 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogCreateComponent } from '../dialog-create/dialog-create.component';
 import { DialogEditComponent } from '../dialog-edit/dialog-edit.component';
+import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-verification-remark',
@@ -48,7 +50,9 @@ export class VerificationRemarkComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -74,7 +78,7 @@ export class VerificationRemarkComponent implements OnInit {
   openDialog() {     
     const dataProps = {
       data: {
-        title:'Verification Remark',
+        title: this.translate.instant('dte.pengaturan_attribute_misi.verification_remark'),
         methodGet: 'getVerificationRemark',
         methodCreate: 'createVerificationRemark',
       },
@@ -93,7 +97,7 @@ export class VerificationRemarkComponent implements OnInit {
   openDialogEdit(id, name, status) {
     const dataProps = {
       data: {
-        title:'Verification Remark',
+        title: this.translate.instant('dte.pengaturan_attribute_misi.verification_remark'),
         methodPut: 'putVerificationRemark',
         paramsId: 'id',
         id: id,
@@ -218,10 +222,10 @@ export class VerificationRemarkComponent implements OnInit {
   delete(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Verification Remark",
-      captionDialog: "Apakah anda yakin untuk menghapus Verification Remark ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.translate.instant('dte.pengaturan_attribute_misi.verification_remark') }),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', { entity: this.translate.instant('dte.pengaturan_attribute_misi.verification_remark'), index: "" }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -231,7 +235,7 @@ export class VerificationRemarkComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.ngOnInit();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 }

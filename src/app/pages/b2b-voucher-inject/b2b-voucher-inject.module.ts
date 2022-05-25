@@ -40,6 +40,7 @@ import { PanelMitraVoucherComponent } from './panel-mitra-voucher/panel-mitra-vo
 import { ImportPanelDialogComponent } from './import-panel-dialog/import-panel-dialog.component';
 import { ImportRedeemDialogComponent } from './redeem-list/import-redeem-dialog/import-redeem-dialog.component';
 import { RedeemListComponent } from './redeem-list/redeem-list.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 export const customCurrencyMaskConfig = {
   align: 'left',
@@ -129,7 +130,8 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     B2BVoucherInjectComponent,

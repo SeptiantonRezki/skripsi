@@ -19,6 +19,7 @@ import { Page } from "app/classes/laravel-pagination";
 import { Config } from 'app/classes/config';
 import { Lightbox } from 'ngx-lightbox';
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-template-create",
@@ -30,12 +31,20 @@ export class TemplateCreateComponent {
   templateTaskFormError: any;
   dialogRef: any;
   frmIsBranching: FormControl = new FormControl(false);
-  listCategoryResponse: any[] = [{ value: false, name: 'Non - Task Based Response' }, { value: true, name: 'Task Based Response' }];
+  listCategoryResponse: any[] = [
+    { value: false, name: this.translate.instant('dte.template_tugas.non_task_base_response') },
+    { value: true, name: this.translate.instant('dte.template_tugas.task_base_response') }
+  ];
   listIRType: any[] = [
-    { value: 'full-ir', name: 'Full IR' },
-    { value: 'ir-for-comply', name: 'IR for Comply' },
-    { value: 'ir-for-not-comply', name: 'IR for Not Comply' },
-    { value: 'ir-for-checking-only', name: 'IR for Checking Only' },
+    { value: 'full-ir', name: this.translate.instant('dte.template_tugas.full_ir') },
+    { value: 'ir-for-comply', name: this.translate.instant('dte.template_tugas.ir_comply') },
+    { value: 'ir-for-not-comply', name: this.translate.instant('dte.template_tugas.ir_not_comply') },
+    { value: 'ir-for-checking-only', name: this.translate.instant('dte.template_tugas.ir_checking_only') },
+  ];
+  listBlockerSubmission: any[] = [
+    { value: 'soft', name: 'Soft' },
+    { value: 'med', name: 'Medium' },
+    { value: 'hard', name: 'Hard' },
   ];
   isIRTypeError: boolean = false;
   // listKategoriToolbox: any[] = [{ value: '1', name: 'Toolbox 1' }, { value: '2', name: 'Toolbox 2' }];
@@ -60,49 +69,53 @@ export class TemplateCreateComponent {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = {...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
+
 
   listChoose: Array<any> = [
   ];
 
   listChooseOriginal: Array<any> = [
-    { name: "Jawaban Singkat", value: "text", icon: "short_text" },
-    { name: "Paragraf", value: "textarea", icon: "notes" },
-    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
-    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
-    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
-    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
-    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
-    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
-    { name: "Angka", value: "numeric", icon: "dialpad" },
-    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.short_answer'), value: "text", icon: "short_text" },
+    { name: this.translate.instant('dte.template_tugas.paragraph'), value: "textarea", icon: "notes" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_number'), value: "radio_numeric", icon: "check_box" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_short_answer'), value: "radio_text", icon: "cloud_upload" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_paragraph'), value: "radio_textarea", icon: "dialpad" },
+    { name: this.translate.instant('dte.template_tugas.check_box'), value: "checkbox", icon: "check_box" },
+    { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
+    { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
+    { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
+    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: 'UPC', value: "upc", icon: "insert_chart" },
   ];
 
   listChooseWithIr: Array<any> = [
-    { name: "Jawaban Singkat", value: "text", icon: "short_text" },
-    { name: "Paragraf", value: "textarea", icon: "notes" },
-    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
-    { name: "Pilihan Ganda & Angka", value: "radio_numeric", icon: "check_box" },
-    { name: "Pilihan Ganda & Jawaban Singkat", value: "radio_text", icon: "cloud_upload" },
-    { name: "Pilihan Ganda & Paragraf", value: "radio_textarea", icon: "dialpad" },
-    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
-    { name: "Unggah Gambar", value: "image", icon: "cloud_upload" },
-    { name: "Angka", value: "numeric", icon: "dialpad" },
-    { name: "Pilihan Tanggal", value: "date", icon: "date_range" },
-    { name: "Stock Check", value: "stock_check", icon: "insert_chart" },
-    { name: "Stock Check IR", value: "stock_check_ir", icon: "check_box" },
-    { name: "Planogram IR", value: "planogram_ir", icon: "cloud_upload" },
+    { name: this.translate.instant('dte.template_tugas.short_answer'), value: "text", icon: "short_text" },
+    { name: this.translate.instant('dte.template_tugas.paragraph'), value: "textarea", icon: "notes" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_number'), value: "radio_numeric", icon: "check_box" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_short_answer'), value: "radio_text", icon: "cloud_upload" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice_and_paragraph'), value: "radio_textarea", icon: "dialpad" },
+    { name: this.translate.instant('dte.template_tugas.check_box'), value: "checkbox", icon: "check_box" },
+    { name: this.translate.instant('global.label.upload_image'), value: "image", icon: "cloud_upload" },
+    { name: this.translate.instant('dte.template_tugas.number'), value: "numeric", icon: "dialpad" },
+    { name: this.translate.instant('dte.template_tugas.select_date'), value: "date", icon: "date_range" },
+    { name: this.translate.instant('dte.template_tugas.stock_check'), value: "stock_check", icon: "insert_chart" },
+    { name: this.translate.instant('dte.template_tugas.stock_check_ir'), value: "stock_check_ir", icon: "check_box" },
+    { name: this.translate.instant('dte.template_tugas.planogram_ir'), value: "planogram_ir", icon: "cloud_upload" },
+    { name: "UPC", value: "upc", icon: "insert_chart" },
   ];
 
   listChooseQuiz: Array<any> = [
-    { name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" },
-    { name: "Kotak Centang", value: "checkbox", icon: "check_box" },
+    { name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" },
+    { name: this.translate.instant('dte.template_tugas.check_box'), value: "checkbox", icon: "check_box" },
   ]
 
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
   isBackgroundMisi: FormControl = new FormControl(false);
+  isGuideline: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -144,19 +157,33 @@ export class TemplateCreateComponent {
   questionVideo: any[] = [];
   templateList: any[] = [];
   templateListImageIR: any[] = [];
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }
+  listContentType: any[] = [
+    { name: this.translate.instant('global.label.static_page'), value: "static_page" },
+    { name: this.translate.instant('global.label.landing_page'), value: "landing_page" },
+    { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+    { name: this.translate.instant('global.label.image'), value: "image" },
+    { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }
   ];
-  listContentTypeQuestionChild: any[] = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }
+  listContentTypeQuestionChild: any[] = [
+    { name: this.translate.instant('global.label.static_page'), value: "static_page" },
+    { name: this.translate.instant('global.label.landing_page'), value: "landing_page" },
+    { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+    { name: this.translate.instant('global.label.image'), value: "image" },
+    { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }
   ];
 
   freeTextPossibilities: any[] = [];
   frmQuiz: FormControl = new FormControl('non-quiz');
   listQuiz: any[] = [
-    { name: "Non Quiz", value: "non-quiz" },
-    { name: "Quiz", value: "quiz" },
+    { name: this.translate.instant('dte.template_tugas.text14'), value: "non-quiz" },
+    { name: this.translate.instant('dte.template_tugas.text13'), value: "quiz" },
   ]
 
   listAnswerKeys: any[] = [];
+  
+  pageName = this.translate.instant('dte.template_tugas.text1');
+  titleParam = { entity: this.pageName };
+  questionParam = this.translate.instant('dte.template_tugas.text10');
 
 
   @HostListener('window:beforeunload')
@@ -181,11 +208,21 @@ export class TemplateCreateComponent {
     private dataService: DataService,
     private productService: ProductService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.duplicateTask = this.dataService.getFromStorage('duplicate_template_task');
 
-    this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Promosi", value: "promosi" }, { name: "Pojok Modal", value: "pojok_modal" }, { name: "Katalog SRC", value: "katalog_src" }];
+    this.listLandingPage = [
+      { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+      { name: this.translate.instant('global.label..mission'), value: "misi" },
+      { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+      { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+      { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" },
+      { name: this.translate.instant('global.label.promotion'), value: "promosi" },
+      { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+      { name: this.translate.instant('global.label.src_catalog'), value: "katalog_src" }
+    ];
     this.saveData = false;
     this.templateTaskFormError = {
       name: {},
@@ -268,6 +305,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
+      image_mechanism: [],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -282,6 +320,7 @@ export class TemplateCreateComponent {
       })]),
       rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
       ir_type: [""],
+      
     });
 
     this.templateTaskForm.valueChanges.subscribe(res => {
@@ -655,6 +694,8 @@ export class TemplateCreateComponent {
         typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
         image_detail: false,
         encryption: false,
+        image_quality_detection: false,
+        blocker_submission: ["", Validators.required],
         // required: item.required,
         question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
           return this.formBuilder.group({
@@ -702,8 +743,8 @@ export class TemplateCreateComponent {
 
     let rawAddt = questions.at(idx).get('additional').value;
     let rawType = questions.at(idx).get('type').value;
-    let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
-    let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+    let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes(this.translate.instant('dte.template_tugas.other_explain')));
+    let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes(this.translate.instant('dte.template_tugas.other_explain')));
     let tempOption = {
       possibilities: null,
       additional: null
@@ -718,12 +759,12 @@ export class TemplateCreateComponent {
     }
 
 
-    this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
-    additional.push(this.formBuilder.group({ option: `Opsi ${additional.length + 1}`, next_question: '' }));
+    this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+    additional.push(this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next_question: '' }));
 
     if (rawType.includes("radio_")) {
-      this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
-      additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(rawType)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+      this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(rawType)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+      additional.push(this.formBuilder.group({ option: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(rawType)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
     }
 
     // let indexQuestionInKeys = this.listAnswerKeys.findIndex(answ => answ.indexKey === idx);
@@ -766,6 +807,17 @@ export class TemplateCreateComponent {
     }
   }
 
+  handleChangeImageDetection(index): void {
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    
+    if (questions.at(index).get("image_quality_detection").value) {
+      questions.at(index).get("blocker_submission").enable();
+    } else {
+      questions.at(index).get("blocker_submission").setValue("");
+      questions.at(index).get("blocker_submission").disable();
+    }
+  }
+
   selectedImageIR(selectedIR, template) {
     console.log('selectedIR IR', selectedIR, template);
     let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
@@ -800,6 +852,28 @@ export class TemplateCreateComponent {
     }
   }
 
+  handleChangeUPC(index, enable:boolean){
+    let questions = this.templateTaskForm.get('questions') as FormArray;
+    console.log(questions.at(index).get("upcBrandFamily"))
+    console.log(questions.at(index).get("upcCoin"))
+    
+    if (enable) {
+      questions.at(index).get("upcCodeMax").enable();
+      questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
+      questions.at(index).get("upcCoin").enable();
+      questions.at(index).get("upcCoin").setValidators([Validators.required]);
+      questions.at(index).get("upcBrandFamily").enable();
+      questions.at(index).get("upcBrandFamily").setValidators([Validators.required]);
+    } else {
+      questions.at(index).get("upcCodeMax").setValue("");
+      questions.at(index).get("upcCodeMax").disable();
+      questions.at(index).get("upcCoin").setValue("");
+      questions.at(index).get("upcCoin").disable();
+      questions.at(index).get("upcBrandFamily").setValue("");
+      questions.at(index).get("upcBrandFamily").disable();
+    }
+  }
+
   changeType(item, idx?) {
     this.checkIsIRExist();
 
@@ -819,21 +893,21 @@ export class TemplateCreateComponent {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
       let rawAddt = questions.at(idx).get('additional').value;
-      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
-      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes(this.translate.instant('dte.template_tugas.other_explain')));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes(this.translate.instant('dte.template_tugas.other_explain')));
       let tempOption = {
         possibilities: null,
         additional: null
       }
 
       if (idxOther === -1) {
-        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
-        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
+        additional.push(this.formBuilder.group({ option: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
       } else {
         tempOption['additional'] = { ...additional.at(idxOther).value };
         additional.removeAt(idxOther);
@@ -841,13 +915,13 @@ export class TemplateCreateComponent {
           tempOption['possibilities'] = { ...this.allQuestionList[idx]['possibilities'][idxOtherInPossibilities] }
           this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
         }
-        additional.push(this.formBuilder.group({ option: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
-        this.allQuestionList[idx]['possibilities'].push({ key: `Lainnya, Sebutkan (${this.checkWordingRadioFreeType(type)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
+        additional.push(this.formBuilder.group({ option: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next_question: tempOption['additional'] ? tempOption['additional']['next_question'] : '' }))
+        this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next: tempOption['possibilities'] ? tempOption['possibilities']['next'] : '', isBranching: tempOption['possibilities'] ? tempOption['possibilities']['isBranching'] : false });
       }
     } else if (!type.includes("radio_")) {
       let rawAddt = questions.at(idx).get('additional').value;
-      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes("Lainnya, Sebutkan"));
-      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes("Lainnya, Sebutkan"));
+      let idxOther = rawAddt.findIndex(addt => addt.option && addt.option.includes(this.translate.instant('dte.template_tugas.other_explain')));
+      let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes(this.translate.instant('dte.template_tugas.other_explain')));
       if (idxOther > -1) additional.removeAt(idxOther);
       if (idxOtherInPossibilities > -1) this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
     }
@@ -859,16 +933,22 @@ export class TemplateCreateComponent {
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
+    questions.at(idx).get('image_quality_detection').setValue(false);
+    this.handleChangeImageDetection(idx)
+    if(item.value.type === "upc")
+    this.handleChangeUPC(idx, true)
+    else
+    this.handleChangeUPC(idx, false)
   }
 
   checkWordingRadioFreeType(item) {
     switch (item) {
       case "radio_numeric":
-        return "Angka";
+        return this.translate.instant('dte.template_tugas.number');
       case "radio_text":
-        return "Jawaban Singkat";
+        return this.translate.instant('dte.template_tugas.short_answer');
       case "radio_textarea":
-        return "Paragraf";
+        return this.translate.instant('dte.template_tugas.paragraph');
       default:
         return null;
     }
@@ -879,7 +959,7 @@ export class TemplateCreateComponent {
   }
 
   checkIsRadioTypeWasOther(item) {
-    return item.option && item.option.includes("Lainnya, Sebutkan");
+    return item.option && item.option.includes(this.translate.instant('dte.template_tugas.other_explain'));
   }
 
   checkWording(selection) {
@@ -889,11 +969,11 @@ export class TemplateCreateComponent {
   defineQuestion(): FormGroup {
     return this.formBuilder.group({
       id: 1,
-      question: `Pertanyaan`,
+      question: this.questionParam,
       type: 'radio',
       content_typePertanyaan: "static_page",
       image_detail: false,
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       additional: this.formBuilder.array([this.createAdditional()]),
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
@@ -907,6 +987,8 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
     });
   }
 
@@ -989,6 +1071,7 @@ export class TemplateCreateComponent {
       this.questionHasNext[elem] = true;
     });
   }
+
   addQuestion(): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let newId = _.max(questions.value, function (item) { return item.id })
@@ -997,9 +1080,9 @@ export class TemplateCreateComponent {
 
     questions.push(this.formBuilder.group({
       id: newId.id + 1,
-      question: `Pertanyaan`,
+      question: this.questionParam,
       type: 'radio',
-      typeSelection: this.formBuilder.group({ name: "Pilihan Ganda", value: "radio", icon: "radio_button_checked" }),
+      typeSelection: this.formBuilder.group({ name: this.translate.instant('dte.template_tugas.multiple_choice'), value: "radio", icon: "radio_button_checked" }),
       content_typePertanyaan: 'static_page',
       image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
@@ -1016,21 +1099,28 @@ export class TemplateCreateComponent {
       question_image: [''],
       question_video: [''],
       encryption: false,
+      image_quality_detection: false,
+      blocker_submission: ["", Validators.required],
+      upcCodeMax:[""],
+      upcCoin:[""],
+      upcBrandFamily:[""]
       // others: false,
       // required: false
     }));
 
+
     this.allQuestionList.push({
       id: newId.id + 1,
-      question: `Pertanyaan`,
+      question: this.questionParam,
       is_next_question: false,
-      possibilities: [{ key: 'Opsi 1', next: '', isBranching: false }],
+      possibilities: [{ key: this.translate.instant('global.label.opsi_index', {index: 1}), next: '', isBranching: false }],
     })
     this.listDirectBelanja[questions.length - 1] = false;
     this.listProductSelected[questions.length - 1] = { product: new FormControl("") };
     this.templateList.push([]);
     this.templateListImageIR.push({ item_id: newId.id + 1 });
-    // this.listAnswerKeys.push([{ indexKey: 0, valid: false }]);
+
+    this.handleChangeImageDetection(newId.id);
   }
 
   addRejectedReason() {
@@ -1039,7 +1129,7 @@ export class TemplateCreateComponent {
   }
 
   createAdditional(): FormGroup {
-    return this.formBuilder.group({ option: 'Opsi 1', next_question: '' })
+    return this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: 1}), next_question: '' })
   }
 
   createRejectedReson(): FormGroup {
@@ -1056,7 +1146,7 @@ export class TemplateCreateComponent {
     if (this.frmIsBranching.value && this.checkIsRadioType(questions.at(idx).get('typeSelection').value['value']) && this.checkHasLinked(idx, idQUestion)) {
       // this.dialogService.openCustomDialog('Tidak Bisa Menghapus Pertanyaan', 'Pertanyaan ini terhubung sebagai Response Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.');
       this.dialogService.openSnackBar({
-        message: 'Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.'
+        message: this.translate.instant('dte.template_tugas.delete_question_connected')
       })
       return;
     }
@@ -1182,11 +1272,11 @@ export class TemplateCreateComponent {
     } else {
       this.isDetailBanner = false;
     }
-    console.log('ini is', this.isDetailBanner);
   }
   
   async submit() {
     if (this.templateTaskForm.valid) {
+      console.log(this.templateTaskForm.value)
       this.dataService.showLoading(true);
       // this.saveData = !this.saveData;
       this.saveData = true;
@@ -1209,6 +1299,7 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
+        image_mechanism: this.templateTaskForm.get('image_mechanism').value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1270,6 +1361,8 @@ export class TemplateCreateComponent {
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
+            image_quality_detection: item.image_quality_detection ? 1 : 0,
+            blocker_submission: item.blocker_submission || "",
             question_video: item.question_video || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
@@ -1317,6 +1410,13 @@ export class TemplateCreateComponent {
             mockup['question_answer'] = this.listAnswerKeys[index].map(answer => item.additional[answer] && item.additional[answer]['option'] ? item.additional[answer]['option'] : item.additional[answer]);
           }
 
+          if (item.type === "upc") {
+            mockup['max_upc_code'] = item.upcCodeMax;
+            mockup['upc_coin_conversion'] = item.upcCoin;
+            mockup['name_brand'] = item.upcBrandFamily.name;
+            mockup['code_brand'] = item.upcBrandFamily.id;
+          }
+
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
             mockup['type'] = 'stock_check_ir';
             mockup['stock_check_ir_id'] = this.templateListImageIR[index] ? this.templateListImageIR[index]['ir_code'] : null;
@@ -1341,14 +1441,14 @@ export class TemplateCreateComponent {
       
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Ada pertanyaan belum di isi, silahkan lengkapi pengisian" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.complete_question_message') });
         return;
       }
 
       if (this.isIRTemplate.value && !body.ir_type) {
         this.dataService.showLoading(false);
         this.isIRTypeError = true;
-        this.dialogService.openSnackBar({ message: "Silahkan pilih salah satu IR Type" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.please_select_ir') });
         return;
       }
 
@@ -1474,16 +1574,26 @@ export class TemplateCreateComponent {
 
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
+      const questions = this.templateTaskForm.get('questions') as FormArray;
+      
       if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
-        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
       if (this.templateTaskForm.get('image').invalid)
-        return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
-
-      if (this.templateTaskForm.get('questions').invalid)
-        return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_selected_image') });
+      if (this.templateTaskForm.get('questions').invalid) {
+        if (questions.value.length) {
+          for (const item of questions.value) {
+            if (item.image_quality_detection && !item.blocker_submission) {
+              return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_filled_blocker_submission') })
+            }
+          }
+        } else {
+          return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_created_question_min_one') })
+        }
+      }
       else
-        return this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 
@@ -1529,6 +1639,16 @@ export class TemplateCreateComponent {
         color: ''
       }
       this.uploadImageBgMisi(update);
+    }
+  }
+
+  uploadImageGuideline({images, forms}){
+    this.templateTaskForm.get('image_mechanism').setValue(forms);
+  }
+
+  onChangeGuideline(){
+    if (!this.isGuideline.value) {
+      this.uploadImageGuideline({images: [], forms: []});
     }
   }
 

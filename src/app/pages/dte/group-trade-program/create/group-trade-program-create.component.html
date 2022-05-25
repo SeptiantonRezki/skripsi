@@ -1,27 +1,26 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Group Trade Program'"></page-content-header>
+  <page-content-header contentTitle="{{'dte.group_trade_program.text10' | translate}}"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">Buat Group Trade Program</h2>
+        <h2 class="">{{'dte.group_trade_program.text10' | translate}}</h2>
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formGroupTradeProgram">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Group Trade Program">
+              <input matInput type="text" formControlName="name" placeholder="{{'dte.group_trade_program.text6' | translate}}">
               <mat-error
                 *ngIf="formGroupTradeProgram.controls['name'].hasError('required') && formGroupTradeProgram.controls['name'].touched">
-                Nama Group Trade Program harus diisi
+                {{'dte.group_trade_program.text6' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="column" style="margin-bottom: 15px;">
-            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="user_group"> Merupakan Group Trade Program Principal
-              Non HMS
+            <mat-checkbox class="mt-4 ml-4 mb-8" formControlName="user_group"> {{'dte.group_trade_program.text7' | translate}}
             </mat-checkbox>
             <!-- <div class="" fxLayout="row" fxLayoutAlign="start center">
               <strong class="font-size-16">Tipe</strong>
@@ -38,7 +37,7 @@
           </div>
           <div fxLayout="row" *ngIf="formGroupTradeProgram.get('user_group').value">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="principal" placeholder="Nama Principal">
+              <input matInput type="text" formControlName="principal" placeholder="{{'principal_partnership.principal_name' | translate}}">
             </mat-form-field>
           </div>
           <div fxLayout="column" *ngIf="formGroupTradeProgram.get('user_group').value">
@@ -48,10 +47,10 @@
               <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                 <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                 <br>
-                <span matPrefix>Tarik Gambar Kesini atau
-                  <strong>Pilih File</strong>
+                <span matPrefix>
+                  <strong>{{'dte.group_trade_program.text11' | translate}}</strong>
                 </span>
-                <span matPrefix>Ukuran 410x210 piksel, Maksimum 2mb</span>
+                <span matPrefix>{{'dte.group_trade_program.text12' | translate}} & {{'dte.group_trade_program.text13' | translate}}</span>
               </div>
             </div>
 
@@ -72,7 +71,7 @@
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
     </div>
     <a #downloadLink></a>

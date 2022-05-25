@@ -4,7 +4,7 @@
   fusePerfectScrollbar
 >
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Pengaturan Attribute Misi'">
+  <page-content-header [contentTitle]="pageName">
   </page-content-header>
   <!-- / HEADER -->
 
@@ -12,36 +12,36 @@
     <div class="table-wrapper">
       <mat-tab-group>
         <!-- KATEGORI TOOLBOX -->
-        <mat-tab label="Kategori ToolBox">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.text2' | translate}}">
           <app-list-kategori-toolbox></app-list-kategori-toolbox>
         </mat-tab>
 
         <!-- TIPE MISI -->
-        <mat-tab label="Tipe Misi">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.text3' | translate}}">
           <app-list-tipe-misi></app-list-tipe-misi>
         </mat-tab>
 
         <!-- TINGKAT internal MISI -->
-        <mat-tab label="Internal Kategori">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.text4' | translate}}">
           <app-list-internal-misi></app-list-internal-misi>
         </mat-tab>
 
         <!-- KETEGORI MISI -->
-        <mat-tab label="Kategori Misi">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.text5' | translate}}">
           <app-list-kategori-misi></app-list-kategori-misi>
         </mat-tab>
         <!-- Project -->
-        <mat-tab label="Project">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.text6' | translate}}">
           <app-project-list></app-project-list>
         </mat-tab>
 
         <!-- Verification Remark -->
-        <mat-tab label="Verification Remark">
+        <mat-tab label="{{'dte.pengaturan_attribute_misi.verification_remark' | translate}}">
           <app-verification-remark></app-verification-remark>
         </mat-tab>
 
         <!-- Copywriting -->
-        <mat-tab label="Copywriting">
+        <mat-tab label="{{'dte.template_tugas.copywriting' | translate}}">
           <app-copywriting></app-copywriting>
         </mat-tab>
       </mat-tab-group>

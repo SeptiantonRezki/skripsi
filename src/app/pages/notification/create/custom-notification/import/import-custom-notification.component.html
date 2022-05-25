@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLSX</span>
+        <span>{{ls.locale.global.label.upload_file}} XLSX</span>
       </div>
 
     </div>
@@ -24,8 +24,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+           
         </span>
       </div>
     </div>
@@ -37,13 +37,13 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>ID</th>
-            <th nowrap>Target User</th>
-            <th nowrap>Header Notification</th>
-            <th nowrap>Content Notification</th>
-            <th nowrap>Nama Halaman</th>
-            <th nowrap>Isi Halaman</th>
-            <th nowrap>Alasan Tidak Valid</th>
+            <th nowrap>{{'notification.popup_notifikasi.text2' | translate}}</th>
+            <th nowrap>{{'notification.buat_notifikasi.target_user' | translate}}</th>
+            <th nowrap>{{'notification.buat_notifikasi.text9' | translate}}</th>
+            <th nowrap>{{'notification.buat_notifikasi.text10' | translate}}</th>
+            <th nowrap>{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}</th>
+            <th nowrap>{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</th>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +72,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -85,9 +85,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="!is_valid || rows.length === 0">Kirim</button>
+          [disabled]="!is_valid || rows.length === 0">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

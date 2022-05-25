@@ -122,13 +122,13 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area"
+                <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                   (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)">
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                   (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)">
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>

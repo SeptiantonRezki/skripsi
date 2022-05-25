@@ -50,6 +50,17 @@ import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/te
 import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
 import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
+import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
+import { SkuComponent } from "./image-recognition/sku/sku.component";
+import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
+import { TemplatePlanogramComponent } from "./image-recognition/template-planogram/template-planogram.component";
+import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
+import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
+import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
+import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
+import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 
 const routes: Routes = [
   {
@@ -544,6 +555,177 @@ const routes: Routes = [
   {
     path: "publish-mission/detail/:id",
     component: PublishMisiComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/create",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/edit/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/detail/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/create",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/edit/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/detail/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/create",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/edit/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/detail/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/create",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/edit/:id",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/detail/:id",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'task-verification',
+    component: TaskVerificationComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'assignment-cart',
+    component: AssignmentCartComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment/detail/:id',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval/detail/:id',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/create',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/edit/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'sub-group-trade-program/detail/:id',
+    component: SubGroupTradeComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'coin-redemption-approval',
+    component: CoinRedemptionApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/create',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/edit/:id',
+    component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'employee-mapping/detail/:id',
+    component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
 ];

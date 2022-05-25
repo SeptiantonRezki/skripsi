@@ -12,6 +12,8 @@ import moment from 'moment';
 import { FormGroup, FormBuilder } from '../../../../../../node_modules/@angular/forms';
 import { PagesName } from 'app/classes/pages-name';
 import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-trade-index',
@@ -61,7 +63,9 @@ export class TradeIndexComponent {
     private dataService: DataService,
     private tradeProgramService: TradeProgramService,
     private formBuilder: FormBuilder,
-    private geotreeService: GeotreeService
+    private geotreeService: GeotreeService,
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     this.onLoad = true;
     this.filterArea = false;
@@ -868,10 +872,10 @@ export class TradeIndexComponent {
   deleteTp(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Trade Program",
-      captionDialog: "Apakah anda yakin untuk menghapus trade program ini ?",
+      titleDialog: this.translate.instant('dte.trade_program.text9'),
+      captionDialog: this.translate.instant('dte.trade_program.text10'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -882,7 +886,7 @@ export class TradeIndexComponent {
         this.dialogService.brodcastCloseConfirmation();
         this.getTp();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text1') });
       }
     });
   }

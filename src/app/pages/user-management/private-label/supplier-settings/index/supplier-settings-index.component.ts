@@ -10,6 +10,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { Endpoint } from '../../../../../classes/endpoint';
 import { PLStockService } from 'app/services/user-management/private-label/stock.service';
 import { Emitter } from 'app/helper/emitter.helper';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-supplier-settings-index',
@@ -52,6 +53,7 @@ export class SupplierSettingsIndexComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private emitter: Emitter,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
     this.selected = [];
@@ -92,14 +94,14 @@ export class SupplierSettingsIndexComponent implements OnInit {
         this.rows = res.data.data;
         this.loadingIndicator = false;
       } else {
-        this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+        this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
         Page.renderPagination(this.pagination, res.data);
         this.rows = [];
         this.loadingIndicator = false;
       }
     }, err => {
       console.warn(err);
-      this.dialogService.openSnackBar({ message: "Terjadi Kesalahan Pencarian" });
+      this.dialogService.openSnackBar({ message:  this.ls.locale.global.messages.text11 });
       this.loadingIndicator = false;
     });
   }

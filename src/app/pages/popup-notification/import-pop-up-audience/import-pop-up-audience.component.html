@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLS</span>
       </div>
 
     </div>
@@ -23,8 +23,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+           
         </span>
       </div>
     </div>
@@ -36,12 +36,12 @@
       <table class="table" *ngIf="dialogData.type != 'push_notification'">
         <thead>
           <tr>
-            <th nowrap>ID</th>
-            <th nowrap>Name</th>
-            <th nowrap>Kode</th>
-            <th nowrap>Owner</th>
-            <th nowrap>Tipe</th>
-            <th nowrap>Alasan Tidak Valid</th>
+            <th nowrap>{{'notification.popup_notifikasi.text2' | translate}}</th>
+            <th nowrap>{{'global.label.name' | translate}}</th>
+            <th nowrap>{{'global.label.code' | translate}}</th>
+            <th nowrap>{{'global.label.owner_name' | translate}}</th>
+            <th nowrap>{{'global.label.type' | translate}}</th>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +67,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -75,13 +75,13 @@
       <table class="table" *ngIf="dialogData.type === 'push_notification'">
         <thead>
           <tr>
-            <th nowrap>ID</th>
-            <th nowrap>Name</th>
-            <th nowrap>Kode</th>
-            <th nowrap>Owner</th>
-            <th nowrap>Tipe</th>
-            <th nowrap>Valid</th>
-            <th nowrap>Alasan Tidak Valid</th>
+            <th nowrap>{{'notification.popup_notifikasi.text2' | translate}}</th>
+            <th nowrap>{{'global.label.name' | translate}}</th>
+            <th nowrap>{{'global.label.code' | translate}}</th>
+            <th nowrap>{{'global.label.owner_name' | translate}}</th>
+            <th nowrap>{{'global.label.type' | translate}}</th>
+            <th nowrap>{{'global.label.valid' | translate}}</th>
+            <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
           </tr>
         </thead>
         <tbody>
@@ -102,7 +102,7 @@
               {{ item.type }}
             </td>
             <td nowrap>
-              {{ item.is_valid ? 'VALID' : 'TIDAK VALID' }}
+              {{ item.is_valid ? ('global.label.valid' | translate) : ('global.label.invalid' | translate) }}
             </td>
             <td nowrap>
               {{ item.reason }}
@@ -110,7 +110,7 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
+              {{ls.locale.global.messages.file_unselected_warn}}
             </td>
           </tr>
         </tbody>
@@ -123,9 +123,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-        [disabled]="isValid == false">Kirim</button>
+        [disabled]="isValid == false">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

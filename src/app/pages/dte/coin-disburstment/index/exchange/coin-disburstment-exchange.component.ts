@@ -14,6 +14,7 @@ import { IdbService } from 'app/services/idb.service';
 import { Observable, Subject } from 'rxjs';
 import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coin-disburstment-exchange',
@@ -50,15 +51,15 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
 
   groupTradePrograms: any[] = [];
   tradeOptions: any[] = [
-    { id: "all", name: "Semua" },
-    { id: "transfer bank", name: "Transfer Bank" },
-    { id: "saldo pojok bayar", name: "Saldo Pojok Bayar" }
+    { id: "all", name: this.translate.instant('global.label.all') },
+    { id: "transfer bank", name: this.translate.instant('dte.coin_disbursement.text15') },
+    { id: "saldo pojok bayar", name: this.translate.instant('dte.coin_disbursement.text16') }
   ];
   paymentStatuses: any[] = [
-    { id: "all", name: "Semua" },
-    { id: "belum terbayar", name: "Belum Terbayar" },
-    { id: "sudah dibayar", name: "Sudah Dibayar" },
-    { id: "gagal bayar", name: "Gagal Bayar" }
+    { id: "all", name: this.translate.instant('global.label.all') },
+    { id: "belum terbayar", name: this.translate.instant('dte.coin_disbursement.unpaid') },
+    { id: "sudah dibayar", name: this.translate.instant('dte.coin_disbursement.paid') },
+    { id: "gagal bayar", name: this.translate.instant('dte.coin_disbursement.failed_to_pay') }
   ];
   @ViewChild('downloadLink') downloadLink: ElementRef;
   files: File;
@@ -79,6 +80,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     private idbService: IdbService,
     private dialog: MatDialog,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.detailCoin = this.dataService.getFromStorage("detail_coin_disburstment");
 
@@ -754,7 +756,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
           this.dataService.showLoading(false);
         }, err => {
           console.warn('err', err);
-          alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
           this.dataService.showLoading(false);
         })
       }
@@ -765,7 +767,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
           this.dataService.showLoading(false);
         }, err => {
           console.warn('err', err);
-          alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
           this.dataService.showLoading(false);
         })
       }

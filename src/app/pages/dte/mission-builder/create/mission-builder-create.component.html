@@ -4,7 +4,7 @@
   fusePerfectScrollbar
 >
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Mission Builder'">
+  <page-content-header contentTitle="{{'dte.task_sequencing.text16' | translate}}">
   </page-content-header>
   <!-- / HEADER -->
 
@@ -15,17 +15,17 @@
           <mat-card style="padding: 0px; height:100%">
             <div fxLayout="column" fxLayoutGap="8px" class="stats-cards content p-12" style="margin-left: 70px; margin-right: 70px;">
               <div fxLayout="row" fxFlex="100">
-                <p fxFlex="30" class="paragraph">Nama  </p>
+                <p fxFlex="30" class="paragraph">{{'global.label.name' | translate}}  </p>
                 <p fxFlex="5" class="paragraph">:</p>
                 <p fxFlex="65" class="paragraph">{{task.name}}</p>
               </div>
               <div fxLayout="row" fxFlex="100">
-                <p fxFlex="30" class="paragraph">Trade Program </p>
+                <p fxFlex="30" class="paragraph">{{'dte.trade_program.text1' | translate}} </p>
                 <p fxFlex="5" class="paragraph">:</p>
                 <p fxFlex="65" class="paragraph">{{task.trade_creator_name}}</p>
               </div>
               <div fxLayout="row" fxFlex="100">
-                <p fxFlex="30" class="paragraph">Group Audience </p>
+                <p fxFlex="30" class="paragraph">{{'dte.task_sequencing.group_audience' | translate}} </p>
                 <p fxFlex="5" class="paragraph">:</p>
                 <p fxFlex="65" class="paragraph">{{task.trade_audience_group_name}}</p>
               </div>
@@ -36,12 +36,12 @@
           <mat-card style="padding: 0px; height:100%">
             <div fxLayout="column" fxLayoutGap="8px" class="stats-cards content p-12" style="margin-left: 100px; margin-right: 100px;">
               <div fxLayout="row" fxFlex="100">
-                <p fxFlex="30" class="paragraph">Start Date </p>
+                <p fxFlex="30" class="paragraph">{{'dte.task_sequencing.text25' | translate}} </p>
                 <p fxFlex="5" class="paragraph">:</p>
                 <p fxFlex="65" class="paragraph">{{task.start_date}}</p>
               </div>
               <div fxLayout="row" fxFlex="100">
-                <p fxFlex="30" class="paragraph">End Date </p>
+                <p fxFlex="30" class="paragraph">{{'dte.task_sequencing.text26' | translate}} </p>
                 <p fxFlex="5" class="paragraph">:</p>
                 <p fxFlex="65" class="paragraph">{{task.end_date}}</p>
               </div>
@@ -52,11 +52,11 @@
 
       <mat-grid-list cols="2" rowHeight="45px">
         <mat-grid-tile>
-        <h2>Event :</h2>
+        <h2>{{'dte.task_sequencing.text17' | translate}} :</h2>
         </mat-grid-tile>
 
         <mat-grid-tile>
-        <h2>Flow Control :</h2>
+        <h2>{{'dte.task_sequencing.text18' | translate}} :</h2>
         </mat-grid-tile>
       </mat-grid-list>
 
@@ -68,7 +68,7 @@
               mat-fab
               class="mr-2"
               color="primary"
-              matTooltip="Misi"
+              matTooltip="{{'global.label.mission' | translate}}"
               (click)="newDialog('mission')"
               [disabled]="noMission"
             >
@@ -80,7 +80,7 @@
               mat-fab
               class="mr-2"
               color="primary"
-              matTooltip="Push Notification"
+              matTooltip="{{'dte.task_sequencing.text19' | translate}}"
               (click)="newDialog('push-notification')"
               [disabled]="noPush"
             >
@@ -92,14 +92,14 @@
               mat-fab
               class="mr-2"
               color="primary"
-              matTooltip="Pop Up Notification"
+              matTooltip="{{'dte.task_sequencing.text20' | translate}}"
               (click)="newDialog('pop-up-notification')"
               [disabled]="noPopup"
             >
               <mat-icon>notifications_active</mat-icon>
             </button>
 
-            <button id="btn-coin" mat-fab class="mr-2" color="primary" matTooltip="Coin" (click)="newDialog('coin')" [disabled]="noCoin">
+            <button id="btn-coin" mat-fab class="mr-2" color="primary" matTooltip="{{'dte.task_sequencing.coin' | translate}}" (click)="newDialog('coin')" [disabled]="noCoin">
               <mat-icon>monetization_on</mat-icon>
             </button>
 
@@ -108,11 +108,11 @@
 
         <mat-grid-tile>
           <div class="button-row">
-            <button id="btn-split_decision" mat-fab class="mr-2" color="primary" matTooltip="Split Decision" (click)="newDialog('decision')" [disabled]="noDecision">
+            <button id="btn-split_decision" mat-fab class="mr-2" color="primary" matTooltip="{{'dte.task_sequencing.text22' | translate}}" (click)="newDialog('decision')" [disabled]="noDecision">
               <mat-icon>help</mat-icon>
             </button>
 
-            <button id="btn-tunggu" mat-fab class="mr-2" color="primary" matTooltip="Waktu Tunggu" (click)="newDialog('time')" [disabled]="noTime"
+            <button id="btn-tunggu" mat-fab class="mr-2" color="primary" matTooltip="{{'dte.task_sequencing.text24' | translate}}" (click)="newDialog('time')" [disabled]="noTime"
             >
               <mat-icon>access_time</mat-icon>
             </button>
@@ -122,7 +122,7 @@
               mat-fab
               class="mr-2"
               color="primary"
-              matTooltip="End"
+              matTooltip="{{'dte.task_sequencing.text23' | translate}}"
               (click)="newDialog('finish')"
               [disabled]="noFinish"
             >
@@ -140,7 +140,7 @@
           [nodes]="hierarchialGraph.nodes"
           [curve]="curve"
           [nodeWidth]=150
-          [nodeHeight]=100
+          [nodeHeight]=120
           [enableZoom]="true"
           [autoZoom]="true"
           [update$]="update$"
@@ -152,8 +152,8 @@
           </ng-template>
 
           <ng-template #nodeTemplate let-node>
-            <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="100">
-              <svg:foreignObject width="150" height="100">
+            <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="120">
+              <svg:foreignObject width="150" height="120">
                 <xhtml:div [id]="'card-'+node.data.type" class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
                   <button class="closeNode" (click)="delNode(node, $event);" *ngIf="task.is_editable === 1"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
                   <label class="activeNode" *ngIf="currentNode === node.data.component_id"><mat-icon style="font-size: 16px;">check</mat-icon></label>
@@ -168,8 +168,8 @@
                   <label class="name">{{node.label}}</label>
                   <br/>
                   <div *ngIf="node.data.type === 'decision'" fxLayoutAlign="space-between" class="yesNo">
-                    <button (click)="setYesNo(node, 'yes')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'yes' ? 'underline' : 'none'}">Yes</span></button>
-                    <button (click)="setYesNo(node, 'no')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'no' ? 'underline' : 'none'}">No</span></button>
+                    <button (click)="setYesNo(node, 'yes')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'yes' ? 'underline' : 'none'}">{{'global.label.yes' | translate}}</span></button>
+                    <button (click)="setYesNo(node, 'no')"><span [ngStyle]="{'font-size': '12px', 'text-decoration': yesNo === 'no' ? 'underline' : 'none'}">{{'global.label.no' | translate}}</span></button>
                   </div>
                 </xhtml:div>
               </svg:foreignObject>
@@ -196,7 +196,7 @@
         <div fxFlex="45">
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
-              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Budget Used : </div>
+              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">{{'dte.task_sequencing.text3' | translate}} : </div>
               <div fxFlex="40" class="h2">{{ ls.locale.global.currency_code }} {{budget}}</div>
             </div>
           </mat-card>
@@ -204,13 +204,13 @@
         <div fxFlex="45">
           <mat-card style="padding: 0px;">
             <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="stats-cards content p-12">
-              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">Total Week Duration : </div>
+              <div fxFlex="60" class="h2" style="margin-right: 0px; text-align: right;">{{'dte.task_sequencing.text4' | translate}} : </div>
               <div fxFlex="40" class="h2">{{task?.current_week}}/{{task?.total_week}}</div>
             </div>
           </mat-card>
         </div>
         <div fxFlex="10">
-          <button id="btn-submit-mission-builder" mat-raised-button type="button" class="confirmation-button" (click)="submit()">Simpan</button>
+          <button id="btn-submit-mission-builder" mat-raised-button type="button" class="confirmation-button" (click)="submit()">{{'global.button.save' | translate}}</button>
         </div>
       </div>
     </div>

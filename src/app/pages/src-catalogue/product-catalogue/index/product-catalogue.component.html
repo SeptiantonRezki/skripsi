@@ -126,10 +126,10 @@
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah Produk" (click)="directEdit(row)">
+              <button mat-icon-button color="" matTooltip="{{'global.button.edit' | translate}}" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteProduct(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}">
                 <mat-icon>delete</mat-icon>
               </button>

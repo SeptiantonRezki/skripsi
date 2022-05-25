@@ -8,6 +8,8 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { Page } from 'app/classes/laravel-pagination';
 import { CoinAdjustmentApprovalService } from 'app/services/dte/coin-adjustment-approval.service';
 import { takeUntil } from 'rxjs/operators';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: './import-tsm-coin.component.html',
@@ -56,6 +58,8 @@ export class ImportTsmCoinComponent {
     private dataService: DataService,
     private coinAdjustmentApprovalService: CoinAdjustmentApprovalService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.rows = [];
     if (data) {
@@ -207,11 +211,11 @@ export class ImportTsmCoinComponent {
     //   return;
     // }
     if (this.requestingPreview) {
-      this.dialogService.openSnackBar({ message: "Proses Request Preview Masih Berjalan!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.request_preview_onprogress') });
       return;
     }
     if (this.requestingImport) {
-      this.dialogService.openSnackBar({ message: "Proses Request Import Masih Berjalan!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.request_import_onprogress') });
       return;
     }
 
@@ -233,7 +237,7 @@ export class ImportTsmCoinComponent {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.failed_upload') })
       }
     )
   }
@@ -241,20 +245,20 @@ export class ImportTsmCoinComponent {
   submit() {
     // if (this.files) {
       if (this.formNotifikasi.invalid) {
-        this.dialogService.openSnackBar({ message: "User Notifikasi Belum Di set!" })
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.not_set_notification_user') })
         return;
       }
       if (!this.dataPreview) {
-        this.dialogService.openSnackBar({ message: "Data Preview Tidak ada!" })
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.preview_not_available') })
         return;
       }
 
       const data = {
-        titleDialog: `Konfirmasi`,
-        captionDialog: `Apakah anda yakin ingin menyimpan data ini (Notifikasi Akan langsung diproses kepada Penerima) ?`,
+        titleDialog: this.translate.instant('dte.approval_coin_adjustment.confirmation'),
+        captionDialog: this.translate.instant('dte.approval_coin_adjustment.submit_confirmation_message'),
         confirmCallback: () => this.confirmSubmit(),
         htmlContent: true,
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     // } else {
@@ -279,7 +283,7 @@ export class ImportTsmCoinComponent {
       this.dataService.showLoading(false);
       this.dialogRef.close(res);
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: "Berhasil menyimpan data dan mengirimkan Notifikasi!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.save_success_notification_sent') });
     }, (err) => {
       console.log(err);
       this.dataService.showLoading(false);

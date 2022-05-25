@@ -1,0 +1,15 @@
+pipeline{  
+       agent   {  
+          node      {  
+                 label 'jenkins-slave-2-ayo-src' 
+    
+      }
+   }
+    stages('SonarQube Code SAST') {
+        stage('check code'){
+                    steps{
+                      sh "cd $WORKSPACE && /data/jenkins/sonar/bin/sonar-scanner"
+                    }
+                }
+         }
+}     

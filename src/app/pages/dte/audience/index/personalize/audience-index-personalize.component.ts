@@ -8,6 +8,7 @@ import { AudienceService } from '../../../../../services/dte/audience.service';
 import { DataService } from '../../../../../services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-audience-index-personalize',
@@ -36,13 +37,16 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   roles: PagesName = new PagesName();
 
   offsetPagination: any;
+  pageName = this.translate.instant('dte.audience.audience_personalize');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -188,10 +192,10 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   deleteAudience(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Audience",
-      captionDialog: "Apakah anda yakin untuk menghapus audience ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.pageName}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.pageName}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -203,7 +207,7 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getAudience();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       }
     });
   }
@@ -238,24 +242,29 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   renderStatus(status, real_status, job_status) {
     switch (job_status) {
       case "failed":
-        return "Failed";
+        return this.translate.instant('global.label.failed');
       case "requesting":
-        return "Requesting";
+        return this.translate.instant('global.messages.requesting');
       case "running":
-        return "Processing";
+        return this.translate.instant('global.label.processing');
       case "done":
         switch (status) {
           case "rejected":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.rejected');
           case "pending":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.pending');
           case "approved":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.approved');
           default:
-            return "No Status"
+            // return "No Status"
+            return this.translate.instant('global.label.no_status');
         }
       default:
-        return "No Status"
+        // return "No Status"
+        return this.translate.instant('global.label.no_status');
     }
   }
 }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: './import-audience.component.html',
@@ -18,6 +20,7 @@ export class ImportAudienceComponent {
   invalidData: any;
   dialogData: any;
   counter: any = false;
+  fileType: any;
 
   typeTargeted: string;
 
@@ -26,6 +29,8 @@ export class ImportAudienceComponent {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private dataService: DataService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -34,6 +39,7 @@ export class ImportAudienceComponent {
   }
 
   ngOnInit() {
+    this.fileType = this.dialogData.fileType ? `.${this.dialogData.fileType}` : null;
   }
 
   async preview(event) {
@@ -41,8 +47,10 @@ export class ImportAudienceComponent {
     this.files = event;
 
     console.log('files info', this.files);
-    if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    console.log("DAT23", this.dialogData);
+
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
       return;
     }
 
@@ -52,11 +60,11 @@ export class ImportAudienceComponent {
     fd.append('audience', this.dialogData.audience);
     fd.append('type', this.dialogData.type);
     this.dataService.showLoading(true);
-    if(this.dialogData.api) {
+    if (this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
         res => {
           if (res) {
-            const data = res.data.audiences || res.data;
+            const data = res.data.audiences || res.data.data || res.data;
             this.rows = data;
             this.invalidData = (data || []).filter(item => !item.flag && !item.is_valid).length;
             this.dataService.showLoading(false);
@@ -65,7 +73,7 @@ export class ImportAudienceComponent {
               invalid: this.invalidData,
               valid: data.length - this.invalidData
             };
-            if(this.invalidData > 0) {
+            if (this.invalidData > 0) {
               const filterData = () => {
                 this.rows = this.rows.filter(item => item.flag || item.is_valid);
                 this.invalidData = 0;
@@ -77,27 +85,30 @@ export class ImportAudienceComponent {
                 this.dialogService.brodcastCloseConfirmation();
               };
               const data = {
-                titleDialog: `Apakah anda ingin menghapus data yang tidak valid?`,
+                titleDialog: this.translate.instant('global.messages.delete_confirm', { entity: this.translate.instant('global.label.invalid_data'), index: '' }),
                 confirmCallback: () => filterData(),
                 rejectCallback: () => {
-                  this.dialogService.openSnackBar({ message: "Silahkan unggah ulang data" });
+                  this.dialogService.openSnackBar({
+                    message: this.translate.instant("global.messages.please_reupload", { entity: this.translate.instant('global.label.data') })
+                  });
                   this.dialogService.brodcastCloseConfirmation();
                 },
-                buttonText: ['Ya', 'Tidak']
+                buttonText: [this.translate.instant('global.label.yes'), this.translate.instant('global.label.no')]
               };
               this.dialogService.openCustomConfirmationDialog(data);
             };
           } else {
-            this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.reupload_invalid') });
             this.dataService.showLoading(false);
           }
         },
         err => {
           this.dataService.showLoading(false);
           this.files = undefined;
-  
           if (err.status === 404 || err.status === 500)
-            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+            this.dialogService.openSnackBar({
+              message: this.translate.instant('global.messages.text16')
+            })
         }
       )
     };
@@ -108,7 +119,7 @@ export class ImportAudienceComponent {
       const res = this.rows.map(item => item);
       this.dialogRef.close(res);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
     }
   }
 

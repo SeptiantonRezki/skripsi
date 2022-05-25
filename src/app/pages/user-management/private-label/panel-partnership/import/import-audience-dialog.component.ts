@@ -9,6 +9,7 @@ import { Subject, forkJoin } from 'rxjs';
 import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
 import { PanelPartnershipService } from 'app/services/user-management/private-label/panel-partnership.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   // selector: 'app-import-audience-dialog',
@@ -63,6 +64,7 @@ export class ImportAudienceDialogComponent {
     private dataService: DataService,
     private idbService: IdbService,
     private panelPartnershipService: PanelPartnershipService,
+    private ls: LanguagesService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -93,7 +95,7 @@ export class ImportAudienceDialogComponent {
               this.recursiveImport();
             }, err => {
               this.dialogService.openSnackBar({
-                message: "Gagal mengimport Data!"
+                message: this.ls.locale.global.messages.text15
               })
               this.dialogRef.close([]);
             })
@@ -103,12 +105,12 @@ export class ImportAudienceDialogComponent {
             this.files = undefined;
 
             if (err.status === 404 || err.status === 500)
-              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+              this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
           })
         } else {
           this.dataService.showLoading(false);
           this.files = undefined;
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
         }
 
       },
@@ -117,7 +119,7 @@ export class ImportAudienceDialogComponent {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text16 })
       }
     )
   }
@@ -133,13 +135,13 @@ export class ImportAudienceDialogComponent {
             this.recursiveImport();
           }, err => {
             this.dialogService.openSnackBar({
-              message: "Gagal mengimport Data!"
+              message: this.ls.locale.global.messages.text15
             })
             this.dialogRef.close([]);
           })
         } else {
           this.dialogService.openSnackBar({
-            message: "Gagal mengimport Data!"
+            message: this.ls.locale.global.messages.text15
           })
           this.dialogRef.close([]);
         }
@@ -172,13 +174,13 @@ export class ImportAudienceDialogComponent {
             })
           }, err => {
             this.dialogService.openSnackBar({
-              message: "Gagal mengimport Sebagian Data! pada halaman " + this.trials.join(",")
+              message: this.ls.locale.global.messages.failed_partial_import_at+" " + this.trials.join(",")
             })
             this.dialogRef.close([]);
           })
         }, err => {
           this.dialogService.openSnackBar({
-            message: "Sebagian Data gagal di import, pada halaman " + this.trials.join(",")
+            message: this.ls.locale.global.messages.failed_partial_import_at+" " + this.trials.join(",")
           })
           this.dialogRef.close([]);
         });
@@ -221,7 +223,7 @@ export class ImportAudienceDialogComponent {
     if (this.totalData > 0) {
       this.dialogRef.close(true);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text17 });
     }
   }
 

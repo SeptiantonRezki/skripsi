@@ -108,7 +108,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Area" formControlName="area">
+                <input matInput type="text" placeholder="{{'global.area.area' | translate}}" formControlName="area">
                 <mat-error *ngIf="verticalStepperStep3.controls['area'].hasError('required') && verticalStepperStep3.controls['area'].touched ">
                   Area {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
@@ -206,7 +206,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep4.controls['role_id'].hasError('required') && verticalStepperStep4.controls['role_id'].touched">
-                  ls.locale.wholesaler.feature_role {{ ls.locale.global.messages.mandatory_text }}
+                  {{ls.locale.wholesaler.feature_role}} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
 

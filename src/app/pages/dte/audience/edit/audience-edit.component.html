@@ -1,27 +1,27 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="isDetail ? 'Detail Audience' : 'Ubah Audience'"></page-content-header>
+  <page-content-header contentTitle="{{isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.detail_entity' | translate:titleParam) }}"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">{{isDetail ? 'Detail' : 'Ubah'}} Audience</h2>
+        <h2 class="">{{isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.detail_entity' | translate:titleParam) }}</h2>
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formAudience">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Grup">
+              <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}">
               <mat-error
                 *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
-                Nama Grup harus diisi
+                {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
 
           <div fxLayout="row">
-            <label id="ts">Jenis Audience</label>
+            <label id="ts">{{'dte.audience.text5' | translate }}</label>
           </div>
 
           <div fxLayout="row">
@@ -53,24 +53,24 @@
           <div *ngIf="formAudience.get('limit').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
             class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
+              <input matInput type="number" min="0" placeholder="{{'dte.audience.text9' | translate }}" formControlName="min" numericOnly>
               <mat-error
                 *ngIf="formAudience.controls['min'].hasError('required') && formAudience.controls['min'].touched">
-                Audience Minimal harus diisi
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error *ngIf="formAudience.controls['min'].hasError('min') && formAudience.controls['min'].touched">
-                Audience Minimal tidak boleh kurang dari 0
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="45%" class="is-light form-primary">
-              <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
+              <input matInput type="number" min="0" placeholder="{{'dte.audience.text10' | translate }}" formControlName="max" numericOnly>
               <mat-error
                 *ngIf="formAudience.controls['max'].hasError('required') && formAudience.controls['max'].touched">
-                Audience Maksimal harus diisi
+                {{'dte.audience.text10' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error *ngIf="formAudience.controls['max'].hasError('min') && formAudience.controls['max'].touched">
-                Audience maksimal tidak boleh kurang dari jumlah minimal audience
+                {{'dte.audience.text10' | translate }} {{'global.label.min_audience' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -89,15 +89,13 @@
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select
                 formControlName="trade_scheduler_id"
-                placeholder="Nama Pengatur Jadwal Trade Program"
+                placeholder="{{'dte.pengatur_jadwal_program.text16' | translate }}"
                 #singleSelect
               >
                 <ngx-mat-select-search
                   [formControl]="filterScheduler"
-                  [placeholderLabel]="'Cari Jadwal Trade Program...'"
-                  [noEntriesFoundLabel]="
-                    'Tidak ada Jadwal Trade Program yang ditemukan'
-                  "
+                  placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
                 ></ngx-mat-select-search>
                 <mat-option
                   *ngFor="let item of filteredScheduler | async"
@@ -113,7 +111,7 @@
                   ) && formAudience.controls['trade_scheduler_id'].touched
                 "
               >
-                Nama Pengatur Jadwal Trade Program harus diisi
+                {{'dte.pengatur_jadwal_program.text16' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -123,16 +121,16 @@
             *ngIf="formAudience.get('type').value === 'challenge'"
           >
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select formControlName="trade_creator_id" placeholder="Nama Trade Program">
-                <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+              <mat-select formControlName="trade_creator_id" placeholder="{{'dte.trade_program.text3' | translate}}">
+                <ngx-mat-select-search [formControl]="filterTradeProgram" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formAudience.controls['trade_creator_id'].hasError('required') && formAudience.controls['trade_creator_id'].touched">
-                Nama Trade Program harus diisi
+                {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -154,26 +152,26 @@
           (click)="loadFormFilter()"
           fxFlex="20"
         >
-          Load Data
+          {{'dte.template_tugas.text24' | translate}}
         </button>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
         <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone" multiple>
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
                 item.code}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region" multiple>
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
                 :
@@ -181,7 +179,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
                 :
@@ -189,7 +187,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all' ?
                 'Semua
                 Salespoint'
@@ -198,7 +196,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district" multiple>
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
                 :
@@ -206,7 +204,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory" multiple>
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
@@ -222,7 +220,7 @@
           <!--[R]-->
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="Retail Classification"
+              placeholder="{{'dte.audience.text13' | translate}}"
               formControlName="retail_classification"
             >
               <mat-option
@@ -235,7 +233,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="SRC Classification"
+              placeholder="{{'dte.audience.text14' | translate}}"
               formControlName="src_classification"
             >
               <mat-option
@@ -248,7 +246,7 @@
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
             <mat-select
-              placeholder="SRC Type"
+              placeholder="{{'dte.audience.text15' | translate}}"
               formControlName="src_type"
             >
               <mat-option
@@ -269,16 +267,16 @@
         fxLayoutAlign="end center" class="p-16 export">
         <div fxLayout="column">
           <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
-            <mat-icon>arrow_downward</mat-icon> Import XLS
+            <mat-icon>arrow_downward</mat-icon> {{'global.label.import_entity' | translate:paramImportTranslate }}
           </button>
           <label
-          *ngIf="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status) && detailAudience.import_audience_status_type" style="font-weight: bolder; color: white;">Requesting {{(detailAudience.import_audience_status_type || '').toUpperCase()}}</label>
+          *ngIf="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status) && detailAudience.import_audience_status_type" style="font-weight: bolder; color: white;">{{'global.messages.requesting' | translate}} {{(detailAudience.import_audience_status_type || '').toUpperCase()}}</label>
         </div>
         <div fxLayout="column">
           <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
-            <mat-icon>arrow_upward</mat-icon> Export Template
+            <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
           </button>
-          <label style="color: white;">{{(exportTemplate) ? 'Downloading Template' : ' '}}</label>
+          <label style="color: white;">{{(exportTemplate) ? ('dte.audience.downloading_template' | translate) : ' '}}</label>
         </div>
       </div>
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
@@ -331,32 +329,32 @@
             <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
         <!-- <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column> -->
-        <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
-        <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'global.label.type' | translate}}" prop="classification"></ngx-datatable-column>
         <!--[R]-->
         <ngx-datatable-column
-          name="Retailer Classification"
+          name="{{'call_objective.text10' | translate}}"
           prop="retail_classification"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="SRC Classification"
+          name="{{'dte.audience.text14' | translate}}"
           prop="src_classification"
         ></ngx-datatable-column>
         <ngx-datatable-column
-          name="SRC Type"
+          name="{{'dte.audience.text15' | translate}}"
           prop="src_type"
         ></ngx-datatable-column>
         <!--[R]-->
-        <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
-        <ngx-datatable-column name="Daftar Ayo" prop="status">
+        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
-            <span *ngIf="row.status === 'not-registered'">No</span>
+            <span *ngIf="row.status === 'active' || row.status === 'inactive'">{{'global.label.yes' | translate}}</span>
+            <span *ngIf="row.status === 'not-registered'">{{'global.label.no' | translate}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <!-- <ngx-datatable-column name="Kode Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column> -->
+        <!-- <ngx-datatable-column name="{{'global.label.code' | translate}} Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column> -->
         <!-- <ngx-datatable-column name="Wilayah" prop="region_code" [sortable]="false"></ngx-datatable-column> -->
         <!-- <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column> -->
       </ngx-datatable>
@@ -365,11 +363,11 @@
     <div *ngIf="!isDetail" class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button *ngIf="!formAudience.disabled" type="button" class="confirmation-button"
         (click)="submit()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
       <button mat-raised-button *ngIf="formAudience.disabled" type="button" class="confirmation-button"
         (click)="updateAudience()" fxFlex="20" [disabled]="!ENABLE_IMPORT_IF.includes(detailAudience.import_audience_status)">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
     </div>
   </div>

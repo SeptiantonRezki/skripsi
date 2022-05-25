@@ -329,7 +329,7 @@ export class EditKPISettingComponent implements OnInit {
       titleDialog: 'Hapus KPI',
       captionDialog: `Apa Anda yakin menghapus KPI ${pos+1}?`,
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
     }
     this.indexDelete = pos;
     this.dialogService.openCustomConfirmationDialog(dialogData);

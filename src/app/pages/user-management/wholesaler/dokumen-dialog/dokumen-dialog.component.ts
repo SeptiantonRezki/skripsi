@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-dokumen-dialog',
@@ -15,6 +16,7 @@ export class DokumenDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DokumenDialogComponent>,
     public dialog: MatDialog,
+    private ls: LanguagesService,
   ) { }
 
   ngOnInit() {

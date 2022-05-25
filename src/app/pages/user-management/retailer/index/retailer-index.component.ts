@@ -15,6 +15,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-retailer-index',
@@ -68,15 +69,15 @@ export class RetailerIndexComponent {
   chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
 
-  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
-  listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
+  listAccessCashier: any[] = [{ name: this.ls.locale.global.label.all_access_cashier, value: '-1' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 1 }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 0 }];
   listStatusChatBot: any[] = [
     { name: this.ls.locale.global.label.all_status, value: '-1' },
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
   retailClassification: any[] = [
-    { name: 'Semua Tipe', value: 'all' },
+    { name: this.ls.locale.global.label.all, value: 'all' },
     { name: 'SRC', value: 'SRC' },
     { name: 'NON-SRC', value: 'NON-SRC' },
     { name: 'IMO', value: 'IMO' },
@@ -100,14 +101,14 @@ export class RetailerIndexComponent {
 
   pojok_bayar_validation: FormControl = new FormControl('');
   listPojokBayar: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'FALSE', value: '0' },
     { name: 'TRUE', value: '1' }
   ];
 
   bank_final_validation: FormControl = new FormControl('');
   listBankFinalValidation: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'FALSE', value: '0' },
     { name: 'TRUE', value: '1' }
   ];
@@ -121,7 +122,8 @@ export class RetailerIndexComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private generalService: GeneralService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -298,9 +300,9 @@ export class RetailerIndexComponent {
   getVersions(type) {
     this.generalService.getAppVersions({ type }).subscribe(res => {
       if (type === 'retailer') {
-        this.listVersionsRetailer = [{ version: 'Semua Versi' }, ...res];
+        this.listVersionsRetailer = [{ version: this.ls.locale.global.label.all_version }, ...res];
       } else {
-        this.listVersionsCashier = [{ version: 'Semua Versi' }, ...res];
+        this.listVersionsCashier = [{ version: this.ls.locale.global.label.all_version }, ...res];
       }
       console.log('res versions', res);
     })
@@ -1141,8 +1143,8 @@ export class RetailerIndexComponent {
 
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
-    if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
-    if (this.version_cashier.value === 'Semua Versi') {
+    if (this.version_retailer.value === this.ls.locale.global.label.all_version) this.pagination['retailer_version'] = null;
+    if (this.version_cashier.value === this.ls.locale.global.label.all_version) {
       this.pagination['cashier_version'] = null;
       this.pagination['is_cashier'] = null;
     }
@@ -1307,10 +1309,10 @@ export class RetailerIndexComponent {
   deleteWholesaler(id): void {
     this.id = id;
     let data = {
-      titleDialog: 'Hapus Retailer',
-      captionDialog: 'Apakah anda yakin untuk menghapus Retailer ini ?',
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.translate.instant('global.menu.retailer')}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('global.menu.retailer'), index: ''}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: [this.translate.instant('global.button.delete'), this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1319,7 +1321,7 @@ export class RetailerIndexComponent {
     this.retailerService.delete({ retailer_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getRetailerList();
       },
@@ -1435,7 +1437,7 @@ export class RetailerIndexComponent {
       if (response) {
         this.selected = response;
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           this.getRetailerList();
         }
       }

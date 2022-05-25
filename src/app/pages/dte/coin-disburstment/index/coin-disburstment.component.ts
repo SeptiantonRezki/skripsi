@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -31,12 +33,17 @@ export class CoinDisburstmentComponent implements OnInit {
   id: any;
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
+  pageName = this.translate.instant('dte.coin_disbursement.text1');
+  titleParam = {entity: this.pageName}
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
     private dataService: DataService,
     private coinDisburstmentService: CoinDisburstmentService,
-    private router: Router
+    private router: Router,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
@@ -141,10 +148,10 @@ export class CoinDisburstmentComponent implements OnInit {
   deleteCoinDisburstment(row: any) {
     this.id = row.id;
     let data = {
-      titleDialog: "Hapus Coin Disbursement",
-      captionDialog: "Apakah anda yakin untuk menghapus Coin Disbursement ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', this.titleParam),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.pageName, index: ""}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -153,7 +160,7 @@ export class CoinDisburstmentComponent implements OnInit {
     this.dataService.showLoading(true);
     this.coinDisburstmentService.delete({ coin_id: this.id }).subscribe(res => {
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({ message: "Data berhasil dihapus!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       this.dataService.showLoading(false);
       this.getCoinDisburstment();
     }, err => {
@@ -180,7 +187,7 @@ export class CoinDisburstmentComponent implements OnInit {
         this.dataService.showLoading(false);
       }, err => {
         console.warn('err', err);
-        alert('Terjadi kesalahan saat mendownload Data List Penukaran')
+        alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
         this.dataService.showLoading(false);
       })
     } catch (error) {

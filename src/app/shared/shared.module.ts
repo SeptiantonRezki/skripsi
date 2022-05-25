@@ -10,8 +10,9 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatFormFieldModule,
   MatSelectModule,
+  MatAutocompleteModule,
   MatCheckboxModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
 } from "@angular/material";
 import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.component";
 import { PageContentComponent } from "./page-content-header/page-content-header.component";
@@ -27,6 +28,8 @@ import { SelectSearchComponent } from "./select-search/select-search.component";
 import { SelectSearchDirective } from "./select-search/select-search.directive";
 import { ImportAudienceComponent } from './import-audience/import-audience.component';
 import { ngfModule } from "angular-file";
+import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -41,8 +44,11 @@ import { ngfModule } from "angular-file";
     NgxDatatableModule,
     MatCheckboxModule,
     MatToolbarModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
     ngfModule,
+    MatAutocompleteModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     ToolbarSearchComponent,
@@ -54,6 +60,7 @@ import { ngfModule } from "angular-file";
     SelectSearchComponent,
     SelectSearchDirective,
     DialogImportComponent,
+    SearchProductBarcodeComponent,
     ImportAudienceComponent,
   ],
   exports: [
@@ -65,6 +72,7 @@ import { ngfModule } from "angular-file";
     SalestreeComponent,
     SelectSearchComponent,
     DialogImportComponent,
+    SearchProductBarcodeComponent,
     ImportAudienceComponent,
   ],
   entryComponents: [

@@ -1,8 +1,8 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="isDetail ? 'Detail Tugas' : 'Ubah Tugas'">
+  <page-content-header contentTitle="{{isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.edit_entity' | translate:titleParam)}}">
     <!-- <button *ngIf="!isDetail" style="min-width: 170px;" mat-raised-button aria-label="Simpan" (click)="submit()"
-      type="button">SIMPAN</button> -->
+      type="button">{{ls.locale.global.button.save}}</button> -->
   </page-content-header>
   <!-- / HEADER -->
 
@@ -12,22 +12,22 @@
       <form class="form" [ngClass]="{'form--edit': !isDetail}" [formGroup]="templateTaskForm" name="form" (keydown.enter)="$event.preventDefault();">
         <div class="form__content mat-elevation-z4 mb-24" fxLayout="column" fxLayoutAlign="start">
           <div class="px-24 border-bottom" fxLayout="row wrap" fxLayoutAlign="space-between center" style="margin-top: 5px;">
-            <div fxFlex class="p-16 h3">Pertanyaan</div>
+            <div fxFlex class="p-16 h3">{{'dte.template_tugas.text10' | translate}}</div>
             <div fxFlex="80" fxLayoutAlign="flex-end flex-end">
               <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-                <mat-checkbox id="template-ir" [formControl]="isIRTemplate" [disabled]="this.frmQuiz.value === 'quiz'">Template IR
+                <mat-checkbox id="template-ir" [formControl]="isIRTemplate" [disabled]="this.frmQuiz.value === 'quiz'">{{'dte.template_tugas.text11' | translate}}
                 </mat-checkbox>
               </div>
               <div fxFlex class="p-16 h3" style="margin-bottom: 10px;">
-                <mat-checkbox id="shareable-link" [formControl]="shareable">Shareable Link</mat-checkbox>
+                <mat-checkbox id="shareable-link" [formControl]="shareable">{{'dte.template_tugas.text12' | translate}}</mat-checkbox>
               </div>
               <mat-form-field fxFlex="20" class="is-light form-primary" style="margin-right: 5px;">
-                <mat-select id="selectQuiz" [formControl]="frmQuiz" placeholder="Quiz" (click)="selectForm()">
+                <mat-select id="selectQuiz" [formControl]="frmQuiz" placeholder="{{'dte.template_tugas.text13' | translate}}" (click)="selectForm()">
                   <mat-option *ngFor="let item of listQuiz" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select id="selectResponseType" [formControl]="frmIsBranching" placeholder="Reponse Type" (click)="selectForm()">
+                <mat-select id="selectResponseType" [formControl]="frmIsBranching" placeholder="{{'dte.template_tugas.response_type' | translate}}" (click)="selectForm()">
                   <mat-option *ngFor="let item of listCategoryResponse" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -36,46 +36,46 @@
 
           <div class="pt-16 pr-24" fxLayout="column" fxLayoutAlign="start end" *ngIf="isIRTemplate.value">
             <mat-form-field class="is-light form-primary" style="width: 25%;">
-              <mat-select id="selectIRType" formControlName="ir_type" placeholder="IR Type" (selectionChange)="isIRTypeError = false" (click)="selectForm()">
+              <mat-select id="selectIRType" formControlName="ir_type" placeholder="{{'dte.template_tugas.ir_type' | translate}}" (selectionChange)="isIRTypeError = false" (click)="selectForm()">
                 <mat-option *ngFor="let item of listIRType" [value]="item.value">
                   {{item.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <div class="mat-error" role="alert" style="font-size: 12px; margin-top: -12px;" *ngIf="isIRTypeError">
-              Pilih salah satu IR Type
+              {{'dte.template_tugas.select_one_ir_type' | translate}}
             </div>
           </div>
 
           <div class="px-24 pb-24">
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="100" class="titleInput exportTextarea title-template" floatLabel="never">
-                <!-- <textarea matInput aria-label="Judul Tugas" (focus)="$event.target.select()" (change)="defaultValue($event, 'name', 'Judul Tugas')"
+                <!-- <textarea matInput aria-label="{{'dte.template_tugas.text25' | translate}}" (focus)="$event.target.select()" (change)="defaultValue($event, 'name', '{{'dte.template_tugas.text25' | translate}}')"
                       formControlName="name" style="font-size: 34px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                       class="titletextareaInput"></textarea> -->
-                <textarea id="judul-tugas" matInput placeholder="Judul Tugas" formControlName="name" style="font-size: 34px;"
+                <textarea id="judul-tugas" matInput placeholder="{{'dte.template_tugas.text25' | translate}}" formControlName="name" style="font-size: 34px;"
                   cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="titletextareaInput"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['name'].hasError('required') && templateTaskForm.controls['name'].touched">
-                  Judul Tugas harus diisi
+                  {{'dte.template_tugas.text25' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 5px;">
               <mat-form-field fxFlex="100" class="question is-light secondary-text">
-                <input id="nama-lain-misi" matInput style="font-size: 13px;" formControlName="other_name" placeholder="Nama Lain Misi">
+                <input id="nama-lain-misi" matInput style="font-size: 13px;" formControlName="other_name" placeholder="{{'dte.template_tugas.text6' | translate}}">
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-                <!-- <textarea matInput formControlName="description" (focus)="$event.target.select()" (change)="defaultValue($event, 'description', 'Deskripsi Tugas')"
+                <!-- <textarea matInput formControlName="description" (focus)="$event.target.select()" (change)="defaultValue($event, 'description', '{{'dte.template_tugas.text26' | translate}}')"
                       style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"></textarea> -->
-                <textarea matInput formControlName="description" [froalaEditor]="options" placeholder="Deskripsi Tugas" style="font-size: 13px;" data-froala-id="froala-tugas"></textarea>
+                <textarea matInput formControlName="description" [froalaEditor]="options" placeholder="{{'dte.template_tugas.text26' | translate}}" style="font-size: 13px;" data-froala-id="froala-tugas"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['description'].hasError('required') && templateTaskForm.controls['description'].touched">
-                  Deskripsi Tugas harus diisi
+                  {{'dte.template_tugas.text26' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -83,77 +83,76 @@
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <section class="required-section secondary-text">
                 <mat-checkbox id="tambah-material" formControlName="material" (change)="changeValue('material', 'material_description')">
-                  Tambahkan
-                  Material?</mat-checkbox>
+                  {{'dte.template_tugas.text9' | translate}}</mat-checkbox>
               </section>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-                <!-- <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', 'Jenis Material')"
+                <!-- <textarea matInput formControlName="material_description" (focus)="$event.target.select()" (change)="defaultValue($event, 'material_description', '{{'dte.template_tugas.text28' | translate}}')"
                       style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                       [disabled]="!templateTaskForm.get('material').value"></textarea> -->
-                <textarea id="jenis-material" matInput formControlName="material_description" placeholder="Jenis Material"
+                <textarea id="jenis-material" matInput formControlName="material_description" placeholder="{{'dte.template_tugas.text28' | translate}}"
                   style="font-size: 13px;" cdkTextareaAutosize #autosize="cdkTextareaAutosize" class="desctextareaInput"
                   [disabled]="!templateTaskForm.get('material').value"></textarea>
                 <mat-error
                   *ngIf="templateTaskForm.controls['material_description'].hasError('required') && templateTaskForm.controls['material_description'].touched">
-                  Jenis Material Tugas harus diisi
+                  {{'dte.template_tugas.text28' | translate}} Tugas {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="kategori_toolbox" placeholder="Pilih Kategori Toolbox" id="kategori-toolbox" (click)="selectForm('kategori-toolbox')" #singleSelect>
-                  <ngx-mat-select-search id="select-search-kategori-toolbox" [formControl]="filterLKT" [placeholderLabel]="'Cari Kategori Toolbox...'"
-                    [noEntriesFoundLabel]="'Tidak ada kategori toolbox yang ditemukan'"></ngx-mat-select-search>
+                <mat-select formControlName="kategori_toolbox" placeholder="{{'dte.template_tugas.text29' | translate}}" id="kategori-toolbox" (click)="selectForm('kategori-toolbox')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-kategori-toolbox" [formControl]="filterLKT" placeholderLabel="{{'global.label.search' | translate}} {{'dte.pengaturan_attribute_misi.text2' | translate}}"
+                    noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLKT | async" [value]="item.id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="templateTaskForm.controls['kategori_toolbox'].hasError('required') && templateTaskForm.controls['kategori_toolbox'].touched">
-                  Pilih salah satu Kategori Toolbox.
+                  {{'dte.template_tugas.text29' | translate}}.
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="tipe_misi" placeholder="Pilih Tipe Misi" id="tipe-misi" (click)="selectForm('tipe-misi')" #singleSelect>
-                  <ngx-mat-select-search id="select-search-tipe-misi" [formControl]="filterLTM" [placeholderLabel]="'Cari Tipe Misi...'"
-                    [noEntriesFoundLabel]="'Tidak ada tipe misi yang ditemukan'"></ngx-mat-select-search>
+                <mat-select formControlName="tipe_misi" placeholder="{{'dte.template_tugas.text30' | translate}}" id="tipe-misi" (click)="selectForm('tipe-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-tipe-misi" [formControl]="filterLTM" placeholderLabel="{{'global.label.search' | translate}} {{'dte.pengaturan_attribute_misi.text3' | translate}}"
+                    noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLTM | async" [value]="item.id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="templateTaskForm.controls['tipe_misi'].hasError('required') && templateTaskForm.controls['tipe_misi'].touched">
-                  Pilih salah satu Tipe Misi.
+                  {{'dte.template_tugas.text30' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="tingkat_internal_misi" placeholder="Pilih Internal Kategori Misi" id="tingkat-internal-misi" (click)="selectForm('internal-misi')" #singleSelect>
-                  <ngx-mat-select-search id="select-search-internal-misi" [formControl]="filterLTKM" [placeholderLabel]="'Cari Internal Kategori Misi...'"
-                    [noEntriesFoundLabel]="'Tidak ada tingkat Internal Kategori yang ditemukan'"></ngx-mat-select-search>
+                <mat-select formControlName="tingkat_internal_misi" placeholder="{{'dte.template_tugas.text31' | translate}}" id="tingkat-internal-misi" (click)="selectForm('internal-misi')" #singleSelect>
+                  <ngx-mat-select-search id="select-search-internal-misi" [formControl]="filterLTKM" placeholderLabel="{{'global.label.search' | translate}} {{'dte.pengaturan_attribute_misi.text4' | translate}}"
+                    noEntriesFoundLabel="{{'global.messages..data_not_found' | translate}}"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLTKM | async" [value]="item.id">
                     {{item.name}}
                   </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="templateTaskForm.controls['tingkat_internal_misi'].hasError('required') && templateTaskForm.controls['tingkat_internal_misi'].touched">
-                  Pilih salah satu Internal Kategori Misi.
+                  {{'dte.template_tugas.text31' | translate}}.
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="kategori_misi" placeholder="Pilih Kategori Misi" id="kategori-misi" (click)="selectForm('kategori-misi')" #singleSelect>
+                <mat-select formControlName="kategori_misi" placeholder="{{'dte.template_tugas.text32' | translate}}" id="kategori-misi" (click)="selectForm('kategori-misi')" #singleSelect>
                   <ngx-mat-select-search id="select-search-kategori-misi" [formControl]="filterLKM" [placeholderLabel]="'Cari Kategori Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada kategori misi yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredLKM | async" [value]="item.id">
@@ -162,14 +161,14 @@
                 </mat-select>
                 <mat-error
                   *ngIf="templateTaskForm.controls['kategori_misi'].hasError('required') && templateTaskForm.controls['kategori_misi'].touched">
-                  Pilih salah satu Kategori Misi.
+                  {{'dte.template_tugas.text32' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select formControlName="project_misi" placeholder="Pilih Project Misi" id="project-misi" (click)="selectForm('project-misi')" #singleSelect>
+                <mat-select formControlName="project_misi" placeholder="{{'dte.template_tugas.text33' | translate}}" id="project-misi" (click)="selectForm('project-misi')" #singleSelect>
                   <ngx-mat-select-search id="select-search-project-misi" [formControl]="filterProject" [placeholderLabel]="'Cari Project Misi...'"
                     [noEntriesFoundLabel]="'Tidak ada Project misi yang ditemukan'"></ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredProject | async" [value]="item.id">
@@ -178,7 +177,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="templateTaskForm.controls['project_misi'].hasError('required') && templateTaskForm.controls['project_misi'].touched">
-                  Pilih salah satu Project Misi.
+                  {{'dte.template_tugas.text33' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -192,11 +191,11 @@
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="uploadImage('master', null)">
                     <mat-icon>photo</mat-icon>
-                    <span>Ubah</span>
+                    <span>{{'global.button.edit' | translate}}</span>
                   </button>
                   <button mat-menu-item (click)="deleteImage('master', null)">
                     <mat-icon>delete</mat-icon>
-                    <span>Hapus</span>
+                    <span>{{'global.button.delete' | translate}}</span>
                   </button>
                 </mat-menu>
               </div>
@@ -206,7 +205,7 @@
             <div class="py-16" fxLayout="row" fxLayoutAlign="center start" fxFlex="1 0 auto"
               *ngIf="templateTaskForm.get('image').value">
               <mat-checkbox [(ngModel)]="isDetailBanner" [ngModelOptions]="{standalone: true}"
-                (change)="onChangeDetailBanner($event)">Set Detail Banner
+                (change)="onChangeDetailBanner($event)">{{'dte.template_tugas.set_detail_banner' | translate}}
               </mat-checkbox>
             </div>
             <div formArrayName="image_description"
@@ -214,13 +213,13 @@
               <div [formGroupName]="img">
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" *ngIf="isDetailBanner">
                   <mat-form-field fxFlex="45" class="is-light form-primary">
-                    <mat-select formControlName="content_type" placeholder="Tipe Konten"
+                    <mat-select formControlName="content_type" placeholder="{{'notification.popup_notifikasi.text15' | translate}}"
                       (selectionChange)="contentType(item.get('content_type').value)">
                       <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="item.controls['content_type'].hasError('required') && item.controls['content_type'].touched">
-                      Tipe Konten harus diisi
+                      {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -230,26 +229,26 @@
                   *ngIf="(item.get('content_type').value === 'static_page' || item.get('content_type').value === 'e_wallet') && isDetailBanner">
                   <div fxLayout="row" *ngIf="item.get('content_type').value === 'static_page'">
                     <mat-form-field fxFlex="100" class="is-light form-primary">
-                      <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
+                      <input matInput type="text" formControlName="title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                       <mat-error *ngIf="item.controls['title'].hasError('required') && item.controls['title'].touched">
-                        Nama Halaman harus diisi
+                        {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="" fxLayout="row" fxLayoutAlign="start center">
-                    <h3 class="">Isi Halaman</h3>
+                    <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
                   </div>
                   <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                   <mat-error style="padding-top: 6px !important; font-size: .86em;"
                     *ngIf="item.controls['body'].hasError('required') && item.controls['body'].touched">
-                    Isi Halaman harus diisi
+                    {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </div>
                 <!-- Landing Page -->
                 <div class="px-10" *ngIf="item.get('content_type').value === 'landing_page' && isDetailBanner">
                   <div fxLayout="row">
                     <mat-form-field fxFlex="45" class="is-light form-primary">
-                      <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
+                      <mat-select formControlName="landing_page" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                         <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                       </mat-select>
                     </mat-form-field>
@@ -259,14 +258,14 @@
                 <div class="px-10" *ngIf="item.get('content_type').value === 'iframe' && isDetailBanner ">
                   <div class="" fxLayout="row" fxLayoutAlign="start center">
                     <mat-form-field fxFlex="45" class="is-light form-primary">
-                      <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                      <input matInput type="url" formControlName="url_iframe" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                       <mat-error
                         *ngIf="item.controls['url_iframe'].hasError('required') && item.controls['url_iframe'].touched">
-                        URL harus diisi
+                        {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                       <mat-error
                         *ngIf="item.controls['url_iframe'].hasError('pattern') && item.get('url_iframe').value !== ''">
-                        URL tidak valid
+                        {{'iklan_dalam_aplikasi.spanduk_online.invalid_url' | translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -278,14 +277,14 @@
                     <div ngfDrop selectable="1" [(validDrag)]="validComboDragDefault" [(file)]="imageContentTypeDefault"
                       accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validComboDragDefault===false"
                       [class.valid-drag]="validComboDragDefault" (fileChange)="imagesContentType($event, img)">
-                      Tarik gambar kesini atau <strong>pilih file</strong>
+                      <span [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate"></span>
                     </div>
                   </div>
                   <div *ngIf="imageContentTypeDefault">
                     <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                       role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
-                        class="preview-image-content" (click)="previewImage()">Lihat gambar</span>
-                      <mat-icon matTooltip="Hapus gambar"
+                        class="preview-image-content" (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                      <mat-icon matTooltip="{{'global.label.delete_image' | translate}}"
                         class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                         (click)="deleteImgAtas()" role="img" aria-hidden="true">cancel</mat-icon>
                     </div>
@@ -303,11 +302,11 @@
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item (click)="uploadVideo('master', null)">
                     <mat-icon>videocam</mat-icon>
-                    <span>Ubah</span>
+                    <span>{{'global.button.edit' | translate}}</span>
                   </button>
                   <button mat-menu-item (click)="deleteImage('master', null)">
                     <mat-icon>delete</mat-icon>
-                    <span>Hapus</span>
+                    <span>{{'global.button.delete' | translate}}</span>
                   </button>
                 </mat-menu>
               </div>
@@ -316,7 +315,7 @@
 
             <div formArrayName="questions" *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
               <div [formGroupName]="i" class="py-24">
-                <div class="question-list" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
+                <div class="question-list" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto">
 
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
@@ -332,19 +331,19 @@
                   </mat-form-field>
 
                   <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
-                    <button mat-icon-button matTooltip="Sisipkan Video" matTooltipPosition="below"
+                    <button mat-icon-button matTooltip="{{'dte.template_tugas.place_video' | translate}}" matTooltipPosition="below"
                       class="add-image secondary-text" (click)="uploadVideo('question', i)"
                       *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                       <mat-icon class="secondary-text">videocam</mat-icon>
                     </button>
-                    <button mat-icon-button matTooltip="Sisipkan Gambar" matTooltipPosition="below"
+                    <button mat-icon-button matTooltip="{{'dte.template_tugas.place_image' | translate}}" matTooltipPosition="below"
                       class="add-image secondary-text" (click)="uploadImage('question', i)"
                       *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                       <mat-icon class="secondary-text">photo</mat-icon>
                     </button>
                   </div>
 
-                  <div fxLayout="column" fxLayoutGap="24px">
+                  <div fxLayout="column" fxLayoutGap="24px" class="ml-auto">
                     <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
                       <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
                         <mat-select-trigger>
@@ -362,16 +361,38 @@
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-
-                    <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">Encryption</mat-checkbox>
                   </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
+                  <div *ngIf="item.get('image_quality_detection').value">
+                    <mat-form-field class="is-light form-primary" style="width: 150px;">
+                      <mat-select id="selectBlockerSubmission" formControlName="blocker_submission" placeholder="{{'dte.template_tugas.blocker_submission' | translate}}">
+                        <mat-option *ngFor="let blocker of listBlockerSubmission" [value]="blocker.value">
+                          {{blocker.name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>
+                        {{'dte.template_tugas.blocker_submission' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <mat-checkbox
+                    [id]="'image_quality-'+(i)"
+                    formControlName="image_quality_detection"
+                    (change)="handleChangeImageDetection(i)"
+                    *ngIf="item.get('type').value === 'image' || item.get('type').value === 'stock_check_ir' || item.get('type').value === 'planogram' || item.get('type').value === 'planogram_ir'"
+                  >
+                  {{'dte.template_tugas.image_quality_detection' | translate}}
+                  </mat-checkbox>
+                  <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
 
                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                   <h2 fxFlex="2" style="margin-top: 12px;margin-right: 5px;">{{ i+1 }}.</h2>
                   <mat-form-field fxFlex="100" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
-                    <textarea matInput [froalaEditor]="options" formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', 'Pertanyaan', i)" [attr.data-froala-id]="'question-'+(i+1)"></textarea>
+                      <textarea matInput [froalaEditor]="options" formControlName="question" (focus)="$event.target.select()" (change)="defaultValue($event, 'questions', questionparam, i)" [attr.data-froala-id]="'question-'+(i+1)"></textarea>
                   </mat-form-field>
                 </div>
 
@@ -384,11 +405,11 @@
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item (click)="uploadImage('question', i)">
                         <mat-icon>photo</mat-icon>
-                        <span>Ubah</span>
+                        <span>{{'global.button.edit' | translate}}</span>
                       </button>
                       <button mat-menu-item (click)="deleteImage('question', i)">
                         <mat-icon>delete</mat-icon>
-                        <span>Hapus</span>
+                        <span>{{'global.button.delete' | translate}}</span>
                       </button>
                     </mat-menu>
                   </div>
@@ -397,8 +418,7 @@
                 <div class="py-16" fxLayout="row" fxLayoutAlign="start start" fxFlex="1 0 auto"
                   *ngIf="item.get('question_image').value && item.get('type').value !== 'stock_check'">
                   <mat-checkbox formControlName="question_image_detail"
-                    (change)="onChangeDetailBannerQuestion($event, i)">Set
-                    Detail Banner
+                    (change)="onChangeDetailBannerQuestion($event, i)">{{'dte.template_tugas.set_detail_banner' | translate}}
                   </mat-checkbox>
                 </div>
                 <div formArrayName="question_image_description"
@@ -407,7 +427,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
                       *ngIf="item.get('question_image_detail').value">
                       <mat-form-field fxFlex="45" class="is-light form-primary">
-                        <mat-select formControlName="content_type" placeholder="Tipe Konten">
+                        <mat-select formControlName="content_type" placeholder="{{'notification.popup_notifikasi.text15' | translate}}">
                           <mat-option *ngFor="let loop of listContentTypeQuestionChild" [value]="loop.value">{{loop.name}}
                           </mat-option>
                         </mat-select>
@@ -418,16 +438,16 @@
                       *ngIf="(itemque.value.content_type === 'static_page' || itemque.value.content_type === 'e_wallet') && item.get('question_image_detail').value">
                       <div fxLayout="row" *ngIf="itemque.value.content_type === 'static_page'">
                         <mat-form-field fxFlex="100" class="is-light form-primary">
-                          <input matInput type="text" formControlName="title" placeholder="Nama Halaman">
+                          <input matInput type="text" formControlName="title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                         </mat-form-field>
                       </div>
                       <div class="" fxLayout="row" fxLayoutAlign="start center">
-                        <h3 class="">Isi Halaman</h3>
+                        <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
                       </div>
                       <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
                       <mat-error style="padding-top: 6px !important; font-size: .86em;"
                         *ngIf="itemque.controls['body'].hasError('required') && itemque.controls['body'].touched">
-                        Isi Halaman harus diisi
+                        {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
                       </mat-error>
                     </div>
                     <!-- Landing Page -->
@@ -435,7 +455,7 @@
                       *ngIf="itemque.value.content_type === 'landing_page' && item.get('question_image_detail').value">
                       <div fxLayout="row">
                         <mat-form-field fxFlex="45" class="is-light form-primary">
-                          <mat-select formControlName="landing_page" placeholder="Jenis Landing Page">
+                          <mat-select formControlName="landing_page" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                             <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}
                             </mat-option>
                           </mat-select>
@@ -447,7 +467,7 @@
                       *ngIf="itemque.value.content_type === 'iframe' && item.get('question_image_detail').value">
                       <div class="" fxLayout="row" fxLayoutAlign="start center">
                         <mat-form-field fxFlex="45" class="is-light form-primary">
-                          <input matInput type="url" formControlName="url_iframe" placeholder="URL Link">
+                          <input matInput type="url" formControlName="url_iframe" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                         </mat-form-field>
                       </div>
                     </div>
@@ -461,14 +481,14 @@
                           [class.invalid-drag]="validComboDragQuestionChild===false"
                           [class.valid-drag]="validComboDragQuestionChild"
                           (fileChange)="imagesContentTypeQuestionChild($event, i)">
-                          Tarik gambar kesini atau <strong>pilih file</strong>
+                          <span [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate"></span>
                         </div>
                       </div>
                       <div *ngIf="itemque.value.changeImageDetailQuestionChild">
                         <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                           role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
-                            class="preview-image-content" (click)="previewImageChild(i)">Lihat gambar</span>
-                          <mat-icon matTooltip="Hapus gambar"
+                            class="preview-image-content" (click)="previewImageChild(i)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                          <mat-icon matTooltip="{{'global.label.delete_image' | translate}}"
                             class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                             (click)="deleteImg()" role="img" aria-hidden="true">cancel</mat-icon>
                         </div>
@@ -486,11 +506,11 @@
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item (click)="uploadVideo('question', i)">
                         <mat-icon>videocam</mat-icon>
-                        <span>Ubah</span>
+                        <span>{{'global.button.edit' | translate}}</span>
                       </button>
                       <button mat-menu-item (click)="deleteImage('question', i)">
                         <mat-icon>delete</mat-icon>
-                        <span>Hapus</span>
+                        <span>{{'global.button.delete' | translate}}</span>
                       </button>
                     </mat-menu>
                   </div>
@@ -499,7 +519,7 @@
                 <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                   <ng-container *ngIf="checkWording(item.get('type').value)">
                     <mat-form-field fxFlex="80" class="opsi is-light" *ngIf="templateList[i]">
-                      <mat-select placeholder="Pilih Template" (selectionChange)="selectedImageIR($event, item, i)"
+                      <mat-select placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item, i)"
                         formControlName="planogram_id">
                         <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm.id">
                           {{ itm.name }}
@@ -509,12 +529,12 @@
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
                     <mat-form-field fxFlex="60" class="question is-light">
-                      <input id="jawabanSingkat" matInput value="Teks jawaban singkat" disabled>
+                      <input id="jawabanSingkat" matInput value="{{'dte.template_tugas.short_answer_text' | translate}}" disabled>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'textarea'">
                     <mat-form-field fxFlex="80" class="question is-light">
-                      <input id="jawabanPanjang" matInput value="Teks jawaban panjang" disabled>
+                      <input id="jawabanPanjang" matInput value="{{'dte.template_tugas.long_answer_text' | translate}}" disabled>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'image'">
@@ -522,25 +542,67 @@
                       <div class="button">
                         <div fxLayout="row wrap" fxLayoutAlign="space-between center">
                           <mat-icon class="secondary-text">photo_camera</mat-icon>
-                          <span class="h5 text-center">UNGGAH BUKTI FOTO</span>
+                          <span class="h5 text-center">{{'dte.template_tugas.upload_proof_photo' | translate}}</span>
                         </div>
                       </div>
                     </div>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'date'">
                     <mat-form-field fxFlex="40" class="question is-light">
-                      <input id="inputDate" matInput type="text" value="Pilihan Tanggal" disabled>
+                      <input id="inputDate" matInput type="text" value="{{'dte.template_tugas.select_date' | translate}}" disabled>
                       <mat-icon matSuffix>date_range</mat-icon>
                     </mat-form-field>
                   </ng-container>
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'numeric'">
                     <mat-form-field fxFlex="40" class="question is-light">
-                      <input id="inputAngka" matInput type="text" value="Angka" disabled>
+                      <input id="inputAngka" matInput type="text" value="{{'dte.template_tugas.number' | translate}}" disabled>
                       <mat-icon matSuffix>dialpad</mat-icon>
                     </mat-form-field>
                   </ng-container>
+                  <ng-container *ngIf="item.get('typeSelection').value['value'] == 'upc'">
+                    <div fxLayout="column" fxFlex="100">
+                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                        <div fxFlex="30">Maksimal UPC Code yang diinput:</div>
+                        <div fxLayout="row" fxFlex="20">
+                          <mat-form-field fxFlex="100" class="question is-light">
+                            <input class="inputUPC" matInput 
+                            formControlName="upcCodeMax"
+                            type="number" min="1" 
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
+                            <mat-error>
+                              Maksimal UPC Code harus diisi
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                        <div fxFlex="30">Konversi coin per 1 kode UPC:</div>
+                        <div fxLayout="row" fxFlex="20">
+                          <mat-form-field fxFlex="100" class="question is-light">
+                            <input class="inputUPC" 
+                            formControlName="upcCoin" 
+                            matInput type="number" 
+                            min="1" 
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
+                            <mat-error>
+                              Konversi coin harus diisi
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                        <div fxLayout="row" fxFlex="50">
+                          <search-product-barcode style="width: 100%;" [inputPlaceHolder]="'Search Brand Family'" [disabled]="isDetail" [errorMessage]="'Tidak Ditemukan Brand'" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                            <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.get('questions').at(i).get('upcBrandFamily').touched && templateTaskForm.touched">
+                              Brand Family Harus diisi
+                            </mat-error>
+                          </search-product-barcode>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
                   <ng-container
-                    *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date'">
+                    *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date' && item.get('typeSelection').value['value'] !== 'upc'">
                     <div fxFlex="100" fxLayout="column">
                       <div *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                         <div formArrayName="additional"
@@ -570,14 +632,14 @@
                             <mat-form-field
                               *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                               fxFlex="48" class="opsi is-light">
-                              <mat-select formControlName="next_question" placeholder="Next Question Possibility">
-                                <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">None</mat-option>
+                              <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
+                                <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">{{'dte.template_tugas.none' | translate}}</mat-option>
                                 <mat-option
                                   *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
                                   [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
                                   <span [innerHTML]="possibility.question"></span>
                                 </mat-option>
-                                <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">Selesai</mat-option>
+                                <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">{{'global.button.finish' | translate}}</mat-option>
                               </mat-select>
                             </mat-form-field>
                             <div fxFlex="2"
@@ -592,7 +654,7 @@
                             <button id="btnRemoveOpsi"
                               *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value) && !isDetail"
                               (click)="deleteAdditional(i, j, item.get('typeSelection').value['value'])" mat-icon-button
-                              fxFlex="5" matTooltip="Hapus" matTooltipPosition="below" class="secondary-text">
+                              fxFlex="5" matTooltip="{{'global.button.delete' | translate}}" matTooltipPosition="below" class="secondary-text">
                               <mat-icon class="secondary-text">close</mat-icon>
                             </button>
                           </div>
@@ -609,9 +671,7 @@
                         </mat-radio-group> -->
                         <mat-icon id="checkboxDirectToBelanja" class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">{{
                           listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
-                          style="margin-top: 5px;margin-left: 3px;">Direct
-                          to
-                          Belanja</span>
+                          style="margin-top: 5px;margin-left: 3px;">"{{'dte.template_tugas.direct_to_shop' | translate}}"</span>
                         <!-- <div fxFlex="30" class="py-2" fxLayout="row" fxLayoutAlign="center" fxFlex="1 0 auto"
                           [formGroupName]="j">
                         </div> -->
@@ -625,7 +685,7 @@
                             <input class="option" matInput value="Lainnya..." disabled />
                           </mat-form-field>
                           <div fxFlex="10"></div>
-                          <button mat-icon-button fxFlex="5" (click)="addOthers(i)" matTooltip="Hapus" matTooltipPosition="below"
+                          <button mat-icon-button fxFlex="5" (click)="addOthers(i)" matTooltip="{{'global.button.delete' | translate}}" matTooltipPosition="below"
                             class="secondary-text">
                             <mat-icon class="secondary-text">close</mat-icon>
                           </button>
@@ -637,7 +697,7 @@
                           {{checkIsRadioType(item.get('typeSelection').value['value']) ?
                           'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
                         <div id="more-option" class="more-option">
-                          <span class="add-option" (click)="addAdditional(i)">Tambahkan opsi </span>
+                          <span class="add-option" (click)="addAdditional(i)">{{'dte.template_tugas.add_options' | translate}} </span>
                           <!-- &nbsp;{{
                             item.get('others').value ?
                             '' : 'atau' }}&nbsp;
@@ -649,7 +709,7 @@
                     </div>
                   </ng-container>
                   <div fxFlex="48" *ngIf="frmQuiz.value === 'quiz'" style="margin-left: 35px;">
-                    <span>Jumlah Koin</span>
+                    <span>{{'dte.template_tugas.add_options' | translate}}</span>
                     <mat-form-field fxFlex="25" class="question is-light" style="margin-left: 5px;">
                       <input matInput type="number" formControlName="coin" min="0">
                     </mat-form-field>
@@ -661,25 +721,33 @@
                     <div class="banner-image-template-selected">
                       <div id="banner">
                         <img [src]="templateListImageIR[i].image" alt="Gambar IR">
-                        <!-- <div class="title">{{bannerSelected.title}}</div> -->
                       </div>
                     </div>
                   </div>
-                  <div fxFlex="45" *ngIf="item.get('type').value === 'stock_check_ir'">
-                    <div class="responsive">
+
+                  <!-- STOCK CHECK IR -->
+                  <div fxFlex *ngIf="item.get('type').value === 'stock_check_ir'">
+                    <div fxFlex="45" class="banner-image-template-selected" *ngIf="templateListImageIR[i].image">
+                      <img [src]="templateListImageIR[i].image" alt="Template Stock Check IR">
+                    </div>
+                    <div fxFlex="50" class="responsive" *ngIf="!templateListImageIR[i].image">
                       <table class="table">
                         <thead>
                           <tr>
-                            <th nowrap>Product Name</th>
-                            <th nowrap>QTY</th>
+                            <th nowrap>{{'global.label.image' | translate}}</th>
+                            <th nowrap>{{'katalog_src.produk.text15' | translate}}</th>
+                            <th nowrap>{{'global.label.qty'| translate}}</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let lst of templateListImageIR[i]['check_list']">
-                            <td nowrap>
+                            <td>
+                              <img [src]="lst.IMAGE_BRAND" alt="Stock Check IR" width="100%">
+                            </td>
+                            <td>
                               {{ lst.PRODUCT_NAME }}
                             </td>
-                            <td nowrap>
+                            <td>
                               {{ lst.QUANTITY }}
                             </td>
                           </tr>
@@ -689,7 +757,7 @@
                   </div>
                 </div>
                 <div fxFlex="100" *ngIf="frmQuiz.value === 'quiz'">
-                  <p>Kunci Jawaban</p>
+                  <p>{{'dte.template_tugas.answer_key'| translate}}</p>
                   <ul class="menu-answer-key py-2" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 1 auto">
                     <li *ngFor="let addt of item.get('additional').value; let xx = index"
                       style="margin-right: 7px;cursor: pointer;"
@@ -705,7 +773,7 @@
                     <mat-checkbox formControlName="required" name="required" class="required">Wajib diisi</mat-checkbox>
                   </section>
                   <div class="freebirdFormeditorViewQuestionFooterFooterSeparator freebirdFormeditorViewQuestionFooterMedium"></div> -->
-                  <button id="btnDeleteQuestion" mat-icon-button fxFlex="5" matTooltip="Hapus" (click)="deleteQuestion(i)"
+                  <button id="btnDeleteQuestion" mat-icon-button fxFlex="5" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteQuestion(i)"
                     matTooltipPosition="below" *ngIf="!isDetail" class="secondary-text">
                     <mat-icon class="secondary-text">delete</mat-icon>
                   </button>
@@ -714,26 +782,26 @@
             </div>
 
             <div class="footer pt-48">
-              <div class="note">Alasan Menolak Pilihan</div>
+              <div class="note">{{'dte.template_tugas.text34' | translate}}</div>
               <div formArrayName="rejected_reason_choices"
                 *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
                 <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start"
                   fxFlex="1 0 auto">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <mat-select formControlName="reason" [placeholder]="'Pilih Alasan '+ (k+1)" id="reason" (click)="selectForm('reason')" #singleSelect>
-                      <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" [placeholderLabel]="'Cari Alasan...'"
-                        [noEntriesFoundLabel]="'Tidak ada Alasan yang ditemukan'"></ngx-mat-select-search>
+                    <mat-select formControlName="reason" placeholder="{{'dte.template_tugas.select_reason' | translate}} {{ k+1 }}" id="reason" (click)="selectForm('reason')" #singleSelect>
+                      <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" placeholderLabel="{{'global.label.search' | translate}}"
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                       <mat-option *ngFor="let item of filteredReason | async" [value]="item.name">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
                     <mat-error>
-                      Pilih salah satu Alasan
+                      {{'dte.template_tugas.select_one_reason' | translate}}
                     </mat-error>
                   </mat-form-field>
 
                   <button mat-icon-button fxFlex="5"
-                    *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && !isDetail" matTooltip="Hapus"
+                    *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && !isDetail" matTooltip="{{'global.button.delete' | translate}}"
                     matTooltipPosition="below" class="add-image secondary-text" (click)="deleteReason(k)">
                     <mat-icon class="secondary-text">close</mat-icon>
                   </button>
@@ -742,47 +810,68 @@
               <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
                 *ngIf="!isDetail">
                 <div class="more-option">
-                  <span id="add-option" class="add-option" (click)="addRejectedReason()">Tambahkan Alasan </span>
+                  <span id="add-option" class="add-option" (click)="addRejectedReason()">{{'dte.template_tugas.text36' | translate}} </span>
                 </div>
               </div>
             </div>
-            <!-- <pre>{{dataTemplateTask | json}}</pre> -->
           </div>
         </div>
 
         <div class="background-misi" fxLayout="column">
-          <mat-checkbox id="background-misi"
-            [formControl]="isBackgroundMisi"
-            (change)="onChangeBgMisi()"
-            [disabled]="isDetail"
-          >
-            Pengaturan Background Misi
-          </mat-checkbox>
-          <app-background-misi
-            (upload)="uploadImageBgMisi($event)"
-            [isDetail]="isDetail"
-            [judulMisi]="templateTaskForm.value.name"
-            [bgMisi]="templateTaskForm.value.background_image"
-            [colorFont]="templateTaskForm.value.background_font_color"
-            *ngIf="isBackgroundMisi.value"
-          ></app-background-misi>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-checkbox
+              id="background-misi"
+              [formControl]="isBackgroundMisi"
+              (change)="onChangeBgMisi()"
+              [disabled]="isDetail"
+            >
+              {{'dte.template_tugas.text37' | translate}}
+            </mat-checkbox>
+            <mat-checkbox
+              id="guideline"
+              [formControl]="isGuideline"
+              (change)="onChangeGuideline()"
+              [disabled]="isDetail"
+            >
+              Upload Guideline Mekanisme Program
+            </mat-checkbox>
+          </div>
+          <div *ngIf="isBackgroundMisi.value" class="mt-16">
+            <div class="mb-8">Background Misi</div>
+            <app-background-misi
+              (upload)="uploadImageBgMisi($event)"
+              [isDetail]="isDetail"
+              [judulMisi]="templateTaskForm.value.name"
+              [bgMisi]="templateTaskForm.value.background_image"
+              [colorFont]="templateTaskForm.value.background_font_color"
+            ></app-background-misi>
+          </div>
+          <div *ngIf="isGuideline.value" class="mt-16">
+            <div class="mb-8">Guideline Mekanisme Program</div>
+            <app-background-misi
+              (upload)="uploadImageGuideline($event)"
+              isMultiple="5"
+              [isDetail]="isDetail"
+              [currentFiles]="templateTaskForm.value.image_mechanism"
+            ></app-background-misi>
+          </div>
         </div>
       </form>
 
       <div class="mat-white-bg freebirdFormeditorViewFatCard p-4" fxLayout="column" *ngIf="!isDetail">
-        <button id="add-question" mat-icon-button matTooltip="Tambahkan Pertanyaan" matTooltipPosition="after" class="secondary-text"
+        <button id="add-question" mat-icon-button matTooltip="{{'dte.template_tugas.text20' | translate}}" matTooltipPosition="after" class="secondary-text"
           (click)="addQuestion()">
           <mat-icon>add_circle</mat-icon>
         </button>
         <!-- <button mat-icon-button matTooltip="Tambahkan judul dan deskripsi" matTooltipPosition="after" class="secondary-text">
           <mat-icon>text_fields</mat-icon>
         </button> -->
-        <button id="add-image" mat-icon-button matTooltip="Tambahkan Gambar" matTooltipPosition="after" class="secondary-text"
+        <button id="add-image" mat-icon-button matTooltip="{{'dte.template_tugas.text19' | translate}}" matTooltipPosition="after" class="secondary-text"
           (click)="uploadImage('master', null)">
           <mat-icon>crop_original</mat-icon>
         </button>
 
-        <button id="add-video" mat-icon-button matTooltip="Tambahkan Video" matTooltipPosition="after" class=" secondary-text"
+        <button id="add-video" mat-icon-button matTooltip="{{'dte.template_tugas.place_video' | translate}}" matTooltipPosition="after" class=" secondary-text"
           (click)="uploadVideo('master', null)">
           <mat-icon class="secondary-text">videocam</mat-icon>
         </button>
@@ -791,7 +880,7 @@
     </div>
 
     <button *ngIf="!isDetail" id="btn-simpan-tugas" class="mt-24" color="primary" style="width: 100%; max-width: 250px;" mat-raised-button aria-label="Simpan" (click)="submit()" type="button">
-      SIMPAN
+      {{ls.locale.global.button.save}}
     </button>
   </div>
 </div>

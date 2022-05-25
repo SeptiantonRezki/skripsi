@@ -3,6 +3,8 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: './import-access-cashier-dialog.component.html',
@@ -23,7 +25,9 @@ export class ImportAccessCashierDialogComponent {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private retailerService: RetailerService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.rows = [];
     this.dataService.showLoading(false);
@@ -40,7 +44,7 @@ export class ImportAccessCashierDialogComponent {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf(".xlsx") === -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLSX!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.file_extension', {type: 'XLSX'}) });
       return;
     }
 
@@ -57,7 +61,7 @@ export class ImportAccessCashierDialogComponent {
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
       }
     )
   }
@@ -70,11 +74,11 @@ export class ImportAccessCashierDialogComponent {
         this.dialogRef.close(resp);
       }, err => {
         console.log('err', err);
-        this.dialogService.openSnackBar({ message: "File Gagal di import, terjadi kesalahan saat melakukan upload!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') });
         this.dialogRef.close(null);
       });
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
     }
   }
 

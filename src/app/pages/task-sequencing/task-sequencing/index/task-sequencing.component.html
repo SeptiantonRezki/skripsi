@@ -1,10 +1,10 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Task Sequencing'">
+  <page-content-header [contentTitle]="{{'global.label.list_entity' | translate:titleParam}}">
     <div class="button-row" fxLayout="row">
       <button *ngIf="!permission?.buat" style="width: 170px;" mat-raised-button aria-label="Add" type="button"
         [routerLink]="['/task-sequencing','task-sequencing','create']">
-        <mat-icon>add</mat-icon>TAMBAH
+        <mat-icon>add</mat-icon>{{'global.button.add' | translate}}
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
       <!-- <button style="min-width: 170px;" *ngIf="selected.length > 0 && permission?.hapus" mat-raised-button type="button"
@@ -16,11 +16,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Task Sequencing Management</h2>
+        <h2 class="pl-8">{{'dte.task_sequencing.text2' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -30,7 +30,7 @@
         [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
         (sort)="onSort($event)" (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Nama" prop="fullname">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">
               <!-- {{row.fullname}} -->
@@ -38,7 +38,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Status" prop="status">
+        <ngx-datatable-column [width]="100" name="{{'global.label.status' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p class="status text-truncate h6 p-4"
@@ -50,31 +50,31 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Trade Program" prop="trade_program" [sortable]="true">
+        <ngx-datatable-column name="{{'dte.trade_program.text1' | translate}}" prop="trade_program" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- {{row.trade_program}} -->
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Total Budget Used" prop="total_budget_used" [sortable]="true">
+        <ngx-datatable-column name="{{'dte.task_sequencing.text3' | translate}}" prop="total_budget_used" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- {{row.total_budget_used}} -->
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Total Week Duration" prop="total_week_duration" [sortable]="true">
+        <ngx-datatable-column name="{{'dte.task_sequencing.text4' | translate}}" prop="total_week_duration" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- {{row.total_week_duration}} -->
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Last Update" prop="last_update" [sortable]="true">
+        <ngx-datatable-column name="{{'dte.task_sequencing.text5' | translate}}" prop="last_update" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- {{row.last_update | date:'dd/MM/yyyy HH:mm'}} -->
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Created" prop="created">
+        <ngx-datatable-column name="{{'dte.task_sequencing.text6' | translate}}" prop="created">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- {{row.created | date:'dd/MM/yyyy HH:mm'}} -->
           </ng-template>

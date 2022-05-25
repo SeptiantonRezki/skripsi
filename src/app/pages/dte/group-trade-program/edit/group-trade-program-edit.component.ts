@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-group-trade-program-edit',
@@ -17,7 +18,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
   formGroupTradeProgramError: any;
   isDetail: Boolean;
   detailGroupTradeProgram: any;
-  listStatus: any[] = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }]
+  listStatus: any[] = [{ name: this.translate.instant('global.label.active'), value: 'active' }, { name: this.translate.instant('global.label.inactive'), value: 'inactive' }]
   formStatus: FormControl = new FormControl('');
   listUserGroup: any[] = [{ name: "HMS", value: "HMS" }, { name: "NON HMS", value: "NON-HMS" }];
 
@@ -35,7 +36,8 @@ export class GroupTradeProgramEditComponent implements OnInit {
     private dialogService: DialogService,
     private groupTradeProgramService: GroupTradeProgramService,
     private activatedRoute: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     this.formGroupTradeProgramError = {
       name: {}
@@ -71,7 +73,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
   submit() {
     if (this.formGroupTradeProgram.valid) {
       if (this.files && this.files.size > 2000000) {
-        this.dialogService.openSnackBar({ message: "Ukuran Gambar Max 2mb" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('dte.group_trade_program.text13') });
         return;
       }
       this.dataService.showLoading(true);
@@ -100,7 +102,7 @@ export class GroupTradeProgramEditComponent implements OnInit {
     } else {
       commonFormValidator.validateAllFields(this.formGroupTradeProgram);
 
-      this.dialogService.openSnackBar({ message: "Silahkan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 

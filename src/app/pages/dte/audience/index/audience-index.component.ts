@@ -8,6 +8,7 @@ import { AudienceService } from '../../../../services/dte/audience.service';
 import { DataService } from '../../../../services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-audience-index',
@@ -37,13 +38,16 @@ export class AudienceIndexComponent {
   roles: PagesName = new PagesName();
 
   offsetPagination: any;
+  pageName = this.translate.instant('dte.audience.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private router: Router,
     private dialogService: DialogService,
     private audienceService: AudienceService,
     private dataService: DataService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -192,10 +196,10 @@ export class AudienceIndexComponent {
   deleteAudience(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Audience",
-      captionDialog: "Apakah anda yakin untuk menghapus audience ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.pageName}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.pageName}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -206,7 +210,7 @@ export class AudienceIndexComponent {
         this.dialogService.brodcastCloseConfirmation();
         this.getAudience();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       }
     });
   }

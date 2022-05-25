@@ -160,6 +160,19 @@ import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
+import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
+import { SkuComponent } from './image-recognition/sku/sku.component';
+import { TemplateStockCheckComponent } from './image-recognition/template-stock-check/template-stock-check.component';
+import { TaskVerificationComponent } from './task-verification-2/task-verification/task-verification.component';
+import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
+import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
+import { TranslateModule } from "@ngx-translate/core";
+import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
+import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.component';
+import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
+import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
+import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -228,6 +241,7 @@ export const MY_FORMATS = {
     NgxGraphModule,
     PipesModule,
     NgxMaskModule.forRoot(),
+    TranslateModule.forChild(),
   ],
   declarations: [
     TemplateIndexComponent,
@@ -336,6 +350,18 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
+    GroupSkuComponent,
+    SkuComponent,
+    TemplateStockCheckComponent,
+    TaskVerificationComponent,
+    AssignmentCartComponent,
+    TaskVerificationAssignmentComponent,
+    TemplatePlanogramComponent,
+    VerificationApprovalComponent,
+    SubGroupTradeComponent,
+    DataLogComponent,
+    CoinRedemptionApprovalComponent,
+    EmployeeMappingComponent,
   ],
   exports: [
     TemplateIndexComponent,

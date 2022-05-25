@@ -22,7 +22,7 @@
 
           <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <!-- <input matInput type="text" placeholder="Pilih Trade Program" (keyup)="searchTradeProgram.next($event.target.value)"
+              <!-- <input matInput type="text" placeholder="{{'dte.dte_automation.text8' | translate}}" (keyup)="searchTradeProgram.next($event.target.value)"
                 formControlName="trade_creator_id" [matAutocomplete]="tradeProgram">
               <mat-autocomplete #tradeProgram="matAutocomplete" [displayWith]="displayTpName">
                 <mat-option *ngFor="let item of filteredTpOptions | async" [value]="item">
@@ -32,10 +32,10 @@
               <mat-error *ngIf="formSchedule.controls['trade_creator_id'].hasError('required') && formSchedule.controls['trade_creator_id'].touched">
                 Trade Program harus diisi
               </mat-error> -->
-              <mat-select formControlName="trade_creator_id" placeholder="Pilih Trade Program" #singleSelect
+              <mat-select formControlName="trade_creator_id" placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelect
                 (selectionChange)="getTradeProgram()">
-                <ngx-mat-select-search [formControl]="filterTP" [placeholderLabel]="'Cari Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+                <ngx-mat-select-search [formControl]="filterTP" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
@@ -133,15 +133,15 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="45%" class="is-light form-primary">
                   <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="start_date"
-                    [min]="minDate" [max]="maxStartDateTemplate" placeholder="Tanggal Mulai"
+                    [min]="minDate" [max]="maxStartDateTemplate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
                     (dateChange)="setMinDate(i)" readonly>
                   <mat-error
                     *ngIf="item.controls['start_date'].hasError('required') && item.controls['start_date'].touched">
-                    Tanggal Mulai harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
                   </mat-error>
                   <mat-error
                     *ngIf="item.controls['start_date'].hasError('matDatepickerMax') && item.controls['start_date'].touched || item.controls['start_date'].hasError('matDatepickerMin') && item.controls['start_date'].touched">
-                    Tanggal Mulai lebih atau kurang dari tanggal pada trade program yang dipilih
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="dari">
                     <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
@@ -150,15 +150,15 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="47%" class="is-light form-primary">
                   <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="end_date"
-                    placeholder="Tanggal Berakhir" [min]="item.get('min_end_date').value" [max]="maxStartDateTemplate"
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [min]="item.get('min_end_date').value" [max]="maxStartDateTemplate"
                     (dateChange)="setStartEndDateBackup(item.value, i)" readonly>
                   <mat-error
                     *ngIf="item.controls['end_date'].hasError('required') && item.controls['end_date'].touched">
-                    Tanggal Berakhir harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} harus diisi
                   </mat-error>
                   <mat-error
                     *ngIf="item.controls['end_date'].hasError('matDatepickerMax') && item.controls['end_date'].touched || item.controls['end_date'].hasError('matDatepickerMin') && item.controls['end_date'].touched">
-                    Tanggal Berakhir lebih atau kurang dari tanggal pada trade program yang dipilih
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} lebih atau kurang dari tanggal pada trade program yang dipilih
                   </mat-error>
                   <mat-datepicker-toggle matSuffix [for]="sampai">
                     <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
@@ -216,12 +216,12 @@
                   </mat-form-field>
                   <mat-form-field fxFlex="45%" class="is-light form-primary">
                     <input matInput type="text" [value]="item.controls['start_date_backup'].value | dateToMoment"
-                      placeholder="Tanggal Mulai" disabled>
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
                   <mat-form-field fxFlex="47%" class="is-light form-primary">
                     <input matInput type="text" [value]="item.controls['end_date_backup'].value | dateToMoment"
-                      placeholder="Tanggal Berakhir" disabled>
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" disabled>
                     <mat-icon matSuffix style="color: rgba(0, 0, 0, 0.50)">date_range</mat-icon>
                   </mat-form-field>
                 </div>
@@ -273,7 +273,7 @@
 
         <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-            SIMPAN
+            {{ls.locale.global.button.save}}
           </button>
         </div>
       </form>

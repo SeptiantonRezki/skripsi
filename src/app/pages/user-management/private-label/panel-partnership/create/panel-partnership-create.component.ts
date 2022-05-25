@@ -35,8 +35,8 @@ export class PanelPartnershipCreateComponent {
   parameters: Array<string>;
   createFormError: any;
   supplierStatusList: any[] = [
-    { name: 'Status Aktif', status: 'active' },
-    { name: 'Status Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active_status, status: 'active' },
+    { name: this.ls.locale.global.label.inactive_status, status: 'inactive' }
   ];
   supplierStatusSelected: any;
 
@@ -561,7 +561,7 @@ export class PanelPartnershipCreateComponent {
       // this.idbService.getAnyOf(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -581,7 +581,7 @@ export class PanelPartnershipCreateComponent {
       // this.idbService.get(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -1180,7 +1180,7 @@ export class PanelPartnershipCreateComponent {
             console.log("result", result);
             this.onSelect({ selected: result });
             this.dialogService.openSnackBar({
-              message: "File berhasil diimport",
+              message: this.ls.locale.global.messages.text8,
             });
           });
       }

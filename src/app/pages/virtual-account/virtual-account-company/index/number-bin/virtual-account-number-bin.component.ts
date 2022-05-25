@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { VirtualAccountCompanyService } from 'app/services/virtual-account/virtual-account-company.service';
 import { VirtualAccountBinService } from 'app/services/virtual-account/virtual-account-bin.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-virtual-account-number-bin',
@@ -45,6 +46,7 @@ export class VirtualAccountNumberBinComponent implements OnInit {
     private VirtualAccountBinService: VirtualAccountBinService,
     private VirtualAccountCompanyService: VirtualAccountCompanyService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

@@ -93,7 +93,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     { name: 'Katalog SRC Only', value: 'src-catalogue' },
     { name: 'B2B & Katalog SRC', value: 'both' },
     { name: 'Private Label', value: 'private-label' },
-  ];
+  ]; // TODO
   suppliers = [
     { id: 1, name: 'PT HM SAMPOERNA' }
   ];
@@ -1013,7 +1013,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
@@ -1021,7 +1021,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
         }
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       });
@@ -1197,7 +1197,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       }
     } else {
       commonFormValidator.validateAllFields(this.formDetilVoucher);
-      this.dialogService.openSnackBar({ message: 'Lengkapi data terlebih dahulu' });
+      this.dialogService.openSnackBar({ message: 'Lengkapi data terlebih dahulu' }); // TODO
     }
   }
 
@@ -1211,7 +1211,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     } else {
       body['panels'] = this.selected.map(bsn => ({
         business_id: bsn.id,
-        nominal: bsn.nominal,
+        nominal: bsn.nominal_format_number,
         amount: bsn.amount
       }));
     }
@@ -1260,7 +1260,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   //     if (response) {
   //       if (response.data) {
   //         this.selected = response.data.map((item: any) => { return({ id: item.id })});
-  //         this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+  //         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
   //         console.log('thisSELECTED', this.selected)
   //       }
   //     }
@@ -1274,7 +1274,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
   async exportRetailer() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
-        message: 'Jumlah mitra yang dipilih tidak boleh kosong!'
+        message: this.ls.locale.global.messages.text12 // TODO
       });
       return;
     }
@@ -1360,7 +1360,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
     }
     console.log({ error });
     try {
-      alert(error ? error.error ? error.error.message : 'Terjadi Kesalahan Export' : 'Terjadi Kesalahan Export');
+      alert(error ? error.error ? error.error.message : 'Terjadi Kesalahan Export' : 'Terjadi Kesalahan Export'); // TODO
     } catch (x) {
       console.log(x);
     }
@@ -1369,7 +1369,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   importRetailer(): void {
     if (this.detailVoucher.status === 'need-approval') {
-      this.dialogService.openSnackBar({ message: 'Inject Voucher sedang di Review' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.cn_reward.b2b_voucher.voucher_on_review });
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -1385,7 +1385,7 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
       if (response) {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         // console.log('this', this.selected);
       }
     });
@@ -1407,14 +1407,14 @@ export class B2BVoucherInjectCreateComponent implements OnInit {
 
   takeAction(action) {
     if ((action.value === 'approved' || action.value === 'rejected') && !this.permission.b2b_approval) {
-      this.dialogService.openSnackBar({ message: 'Anda Tidak Memilik Hak Akses untuk Approval!' });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text19 });
       return;
     }
     const data = {
-      titleDialog: 'Ubah Status Voucher',
-      captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${action.name}?`,
+      titleDialog: this.ls.locale.global.label.edit_status_voucher,
+      captionDialog: this.ls.locale.global.messages.text20 + ` ${action.name}?`,
       confirmCallback: () => this.confirmChangeStatus(action),
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
 

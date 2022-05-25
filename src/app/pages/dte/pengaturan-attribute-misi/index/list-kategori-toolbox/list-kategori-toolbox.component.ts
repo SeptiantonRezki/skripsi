@@ -15,6 +15,8 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogToolboxEditComponent } from '../dialog-toolbox-edit/dialog-toolbox-edit.component';
+import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-list-kategori-toolbox',
@@ -51,7 +53,9 @@ export class ListKategoriToolboxComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -236,10 +240,10 @@ export class ListKategoriToolboxComponent implements OnInit {
   deleteKategoriToolbox(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Kategori Toolbox",
-      captionDialog: "Apakah anda yakin untuk menghapus Kategori Toolbox ini ?",
+      titleDialog: this.translate.instant("global.label.delete_entity", {entity: this.translate.instant('dte.pengaturan_attribute_misi.text2') }),
+      captionDialog: this.translate.instant("global.messages.delete_confirm", {entity: this.translate.instant('dte.pengaturan_attribute_misi.text2'), index: "" }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -255,7 +259,7 @@ export class ListKategoriToolboxComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.getToolbox();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 

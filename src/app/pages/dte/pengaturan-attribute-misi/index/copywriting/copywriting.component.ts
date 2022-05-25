@@ -13,6 +13,8 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogCreateComponent } from '../dialog-create/dialog-create.component';
 import { DialogEditComponent } from '../dialog-edit/dialog-edit.component';
+import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-copywriting',
@@ -45,7 +47,9 @@ export class CopywritingComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false;
     this.selected = []
@@ -71,7 +75,7 @@ export class CopywritingComponent implements OnInit {
   openDialog() {     
     const dataProps = {
       data: {
-        title:'Copywriting',
+        title: this.translate.instant('dte.template_tugas.copywriting'),
         methodGet: 'getCopywriting',
         methodCreate: 'createCopywriting',
         isColor: true,
@@ -91,7 +95,7 @@ export class CopywritingComponent implements OnInit {
   openDialogEdit(row) {
     const dataProps = {
       data: {
-        title:'Copywriting',
+        title: this.translate.instant('dte.template_tugas.copywriting'),
         methodPut: 'putCopywriting',
         paramsId: 'id',
         id: row.id,
@@ -191,10 +195,10 @@ export class CopywritingComponent implements OnInit {
   delete(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Copywriting",
-      captionDialog: "Apakah anda yakin untuk menghapus Copywriting ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', { entity: this.translate.instant('dte.template_tugas.copywriting') }),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('dte.template_tugas.copywriting'), index: ""}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -204,7 +208,7 @@ export class CopywritingComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.ngOnInit();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 }

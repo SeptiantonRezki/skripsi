@@ -8,6 +8,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { MatDialog } from '@angular/material';
 import { VoucherPrivateLabelService } from 'app/services/voucher-private-label.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 // import { voucherPrivateLabelService } from 'app/services/voucher-principal.service';
 // import { GoogleTagManagerService } from 'app/services/gtm.service';
 
@@ -47,6 +48,7 @@ export class SupplierVouchersComponent implements OnInit {
     private dataService: DataService,
     private voucherPrivateLabelService: VoucherPrivateLabelService,
     private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.selected = [];

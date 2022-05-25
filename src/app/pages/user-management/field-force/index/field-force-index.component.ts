@@ -170,7 +170,7 @@ export class FieldForceIndexComponent {
 
   getVersions() {
     this.generalService.getAppVersions({ type: 'field-force' }).subscribe(res => {
-      this.listVersions = [{ version: 'Semua Versi' }, ...res];
+      this.listVersions = [{ version: this.ls.locale.global.label.all_version }, ...res];
       console.log('res versions', res);
     })
   }
@@ -858,15 +858,10 @@ export class FieldForceIndexComponent {
   }
 
   directEdit(param?: any): void {
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: param
-    // }
-    this.dataService.setToStorage("detail_field_force", param);
-    this.router.navigate(["user-management", "field-force", "edit"]);
+    this.router.navigate(["user-management", "field-force", "edit", param.id]);
   }
 
   directDetail(param?: any): void {
-    this.dataService.setToStorage("detail_field_force", param);
-    this.router.navigate(["user-management", "field-force", "detail"]);
+    this.router.navigate(["user-management", "field-force", "detail", param.id]);
   }
 }

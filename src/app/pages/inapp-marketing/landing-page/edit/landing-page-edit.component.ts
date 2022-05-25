@@ -6,6 +6,7 @@ import { LandingPageService } from "app/services/inapp-marketing/landing-page.se
 import { Router, ActivatedRoute } from "@angular/router";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { Config } from 'app/classes/config';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: "app-landing-page-edit",
@@ -33,7 +34,8 @@ export class LandingPageEditComponent {
     private dataService: DataService,
     private landingPageService: LandingPageService,
     private router: Router,
-    private activatedRouter: ActivatedRoute
+    private activatedRouter: ActivatedRoute,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.formPageError = {

@@ -1,37 +1,37 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="(isEdit ? 'Edit' : 'Buat' ) + ' Coin Disbursement'">
+  <page-content-header contentTitle="{{ isEdit ? ('global.label.edit_entity' | translate:titleParam) : ('global.label.create_entity' | translate:titleParam)  }}">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button" *ngIf="!isEdit">
-      <mat-icon>save</mat-icon> SIMPAN
+      <mat-icon>save</mat-icon> {{ls.locale.global.button.save}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab">
-        <mat-tab label="Penukaran Coin">
+        <mat-tab label="{{'dte.coin_disbursement.coin_exchange' | translate}}">
           <div class="ayo-middle py-24" fxLayout="column">
             <form autocomplete="off" [formGroup]="formCoin">
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Nama Program Penukaran Koin" formControlName="name"
+                  <input matInput type="text" placeholder="{{'dte.coin_disbursement.text12' | translate}}" formControlName="name"
                     name="name">
                   <mat-error
                     *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
-                    Nama Program Penukaran Koin harus diisi
+                    {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="Coin Valuation, 1 Coin = " formControlName="coin_valuation" name="coin_valuation">
+                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="{{'dte.coin_disbursement.text13' | translate}}" formControlName="coin_valuation" name="coin_valuation">
                   <mat-error
                     *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
-                    Coin Valuation harus diisi
+                    {{'dte.coin_disbursement.coin_valuation' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formCoin.controls['coin_valuation'].hasError('min') && formCoin.controls['coin_valuation'].touched">
-                    Coin Valuation harus lebih dari > 0
+                    {{'dte.coin_disbursement.coin_valuation_more_than_zero' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -39,60 +39,60 @@
                 fxFlex="50%">
                 <mat-form-field fxFlex="50%" class="is-light form-primary">
                   <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
-                    placeholder="Tanggal Awal Penukaran Koin">
+                    placeholder="{{'dte.coin_disbursement.text9' | translate}}">
                   <mat-datepicker-toggle matSuffix [for]="startDate">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #startDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    Tanggal Mulai harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50%" class="is-light form-primary">
                   <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
-                    placeholder="Tanggal Berakhir Penukaran Koin">
+                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
                   <mat-datepicker-toggle matSuffix [for]="endDate">
                     <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                   </mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
                   <mat-error
                     *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    Tanggal Berakhir harus diisi
+                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
 
               <div fxLayout="row" class="px-24">
                 <mat-form-field fxFlex="48">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_id" multiple>
+                  <mat-select placeholder="{{'dte.group_trade_program.text1' | translate}}" formControlName="group_trade_id" multiple>
                     <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
-                    Group Trade Program harus diisi
+                    {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
               <div fxLayout="column" class="px-24">
-                <h4 style="font-weight: bold;">Opsi Penukaran</h4>
+                <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text14' | translate}}</h4>
                 <div fxLayout="row" fxFlex="48">
-                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">Transfer Bank</mat-checkbox>
+                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">{{'dte.coin_disbursement.text15' | translate}}</mat-checkbox>
                   <div fxFlex="1"></div>
-                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">Saldo Pojok Bayar</mat-checkbox>
+                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">{{'dte.coin_disbursement.text16' | translate}}</mat-checkbox>
                 </div>
               </div>
             </form>
           </div>
         </mat-tab>
         <!-- TIPE MISI -->
-        <mat-tab label="Target Penerima">
+        <mat-tab label="{{'dte.coin_disbursement.text17' | translate}}">
           <div class="ayo-middle py-24" fxLayout="column">
             <div fxLayout="column" class="px-24">
-              <h4 style="font-weight: bold;">Filter Audience</h4>
+              <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text18' | translate}}</h4>
               <div fxLayout="row" fxFlex="48">
-                <mat-checkbox class="example-margin" [formControl]="isTargetedRetailer">Targeted Retailer</mat-checkbox>
+                <mat-checkbox class="example-margin" [formControl]="isTargetedRetailer">{{'dte.coin_disbursement.text19' | translate}}</mat-checkbox>
               </div>
             </div>
           </div>
@@ -102,19 +102,19 @@
               fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
               <button mat-raised-button type="button" class="confirmation-button" (click)="loadFormFilter()"
                 fxFlex="20">
-                Load Data
+                {{'dte.template_tugas.text24' | translate}}
               </button>
             </div>
             <form [formGroup]="formFilter" autoComplete="off">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="National" formControlName="national">
+                  <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                     <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{ item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Zone" formControlName="zone" multiple>
+                  <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{
                       item.name === "all" ? "Semua
                       Zona" : item.code
@@ -122,7 +122,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Regional" formControlName="region" multiple>
+                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{
                       item.name === "all"
                       ? "Semua
@@ -132,7 +132,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Area" formControlName="area" multiple>
+                  <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{
                       item.name === "all" ? "Semua
                       Area" : item.code
@@ -140,7 +140,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                  <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{
                       item.name === "all"
                       ? "Semua
@@ -150,7 +150,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="District" formControlName="district" multiple>
+                  <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{
                       item.name === "all"
                       ? "Semua
@@ -160,7 +160,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="Territory" formControlName="territory" multiple>
+                  <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{
                       item.name === "all"
                       ? "Semua
@@ -176,21 +176,21 @@
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isTargetedRetailer.value === true">
                 <!--[R]-->
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="Retail Classification" formControlName="retail_classification">
+                  <mat-select placeholder="{{'dte.audience.text13' | translate}}" formControlName="retail_classification">
                     <mat-option *ngFor="let item of retailClassification" [value]="item.value">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="SRC Classification" formControlName="src_classification">
+                  <mat-select placeholder="{{'dte.audience.text14' | translate}}" formControlName="src_classification">
                     <mat-option *ngFor="let item of srcClassification" [value]="item.value">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="SRC Type" formControlName="src_type">
+                  <mat-select placeholder="{{'dte.audience.text15' | translate}}" formControlName="src_type">
                     <mat-option *ngFor="let item of srcType" [value]="item.value">
                       {{item.name}}
                     </mat-option>
@@ -205,10 +205,10 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
               <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
-                <mat-icon>arrow_downward</mat-icon> Import XLS
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
               </button>
               <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
-                <mat-icon>arrow_upward</mat-icon> Export Template
+                <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
               </button>
             </div>
             <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
@@ -234,16 +234,16 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
-              <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
-              <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'global.label.type' | translate}}" prop="classification"></ngx-datatable-column>
               <!--[R]-->
-              <ngx-datatable-column name="Retailer Classification" prop="retail_classification"></ngx-datatable-column>
-              <ngx-datatable-column name="SRC Classification" prop="src_classification"></ngx-datatable-column>
-              <ngx-datatable-column name="SRC Type" prop="src_type"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'call_objective.text10' | translate}}" prop="retail_classification"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'dte.audience.text14' | translate}}" prop="src_classification"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'dte.audience.text15' | translate}}" prop="src_type"></ngx-datatable-column>
               <!--[R]-->
-              <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
-              <ngx-datatable-column name="Daftar Ayo" prop="status">
+              <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name" [sortable]="false"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
                   <span *ngIf="row.status === 'not-registered'">No</span>
@@ -270,13 +270,13 @@
           </div>
           <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="isEdit">
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-              {{ isEdit && detailCoin.status === 'publish' ? 'UNPUBLISH' : 'SIMPAN' }}
+              {{ isEdit && detailCoin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('global.button.save' | translate) }}
             </button>
           </div>
           <a #downloadLink></a>
         </mat-tab>
 
-        <mat-tab label="List Penukaran Coin" *ngIf="isEdit && detailCoin.status === 'publish'">
+        <mat-tab label="{{'dte.coin_disbursement.coin_exchange_list' | translate}}" *ngIf="isEdit && detailCoin.status === 'publish'">
           <app-coin-disburstment-exchange></app-coin-disburstment-exchange>
         </mat-tab>
       </mat-tab-group>

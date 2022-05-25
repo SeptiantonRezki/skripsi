@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Trade Program'"></page-content-header>
+  <page-content-header contentTitle="{{'dte.trade_program.text2' | translate}}"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Buat Trade Program</h2>
+          <h2 class="">{{'dte.trade_program.text2' | translate}}</h2>
           <div>
             <mat-form-field
               [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
@@ -24,9 +24,9 @@
             <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
               <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
               <br>
-              <span matPrefix>Tarik gambar Anda kesini /
-                <strong>Pilih File</strong> berdimensi 410p x 210p.</span>
-              <span matPrefix>Besar file maksimal 2mb</span>
+              <span matPrefix>
+                <strong>{{'dte.group_trade_program.text11' | translate}}</strong> {{'dte.group_trade_program.text12' | translate}}</span>
+              <span matPrefix>{{'dte.group_trade_program.text13' | translate}}</span>
             </div>
           </div>
           <div class="py-48">
@@ -39,26 +39,37 @@
               </div>
             </div>
           </div>
+
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-            <mat-form-field fxFlex="47%" class="is-light form-primary">
+            <mat-form-field fxFlex="50" class="is-light form-primary">
               <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
                 <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="group_trade_program" placeholder="Group Trade Program" #singleSelect>
-                <ngx-mat-select-search [formControl]="filterGTP" [placeholderLabel]="'Cari Group Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Trade Program yang ditemukan'"></ngx-mat-select-search>
+              <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                  noEntriesFoundLabel="{{'dte.trade_program.group_trade_program_not_found' | translate}}"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                  noEntriesFoundLabel="{{'dte.trade_program.group_trade_program_not_found' | translate}}"></ngx-mat-select-search>
+                <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
+
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama Trade Program">
+              <input matInput type="text" formControlName="name" placeholder="{{'dte.trade_program.text3' | translate}}">
               <mat-error
                 *ngIf="formTradeProgram.controls['name'].hasError('required') && formTradeProgram.controls['name'].touched">
-                Nama Trade Program harus diisi
+                {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -66,61 +77,61 @@
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput formControlName="start_date" [min]="minDateFrom" (focus)="startDate.open()"
-                [matDatepicker]="startDate" placeholder="Tanggal Mulai" (dateChange)="setMinEndDate()">
+                [matDatepicker]="startDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" (dateChange)="setMinEndDate()">
               <mat-datepicker-toggle matSuffix [for]="startDate">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #startDate></mat-datepicker>
               <mat-error
                 *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
-                Tanggal Mulai harus diisi
+                {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
-                placeholder="Tanggal Berakhir" [min]="minDate" (dateChange)="setMinExpireDate()">
+                placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [min]="minDate" (dateChange)="setMinExpireDate()">
               <mat-datepicker-toggle matSuffix [for]="endDate">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #endDate></mat-datepicker>
               <mat-error
                 *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
-                Tanggal Berakhir harus diisi
+                {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" min="0" formControlName="budget" placeholder="Dana Trade Program">
+              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" min="0" formControlName="budget" placeholder="{{'dte.trade_program.text4' | translate}}">
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
-                Dana Trade Program harus diisi
+                {{'dte.trade_program.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
-                Dana Trade Program tidak boleh kurang dari 0
+                {{'dte.trade_program.text4' | translate}} {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} 0
               </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
               <input matInput formControlName="coin_expiry_date" [matDatepicker]="dp" (focus)="dp.open()"
-                placeholder="Tanggal Kadaluarsa Coin Trade Program" [min]="minExpireDate">
+                placeholder="{{'dte.trade_program.text5' | translate}}" [min]="minExpireDate">
               <mat-datepicker-toggle matSuffix [for]="dp">
                 <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
               </mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
               <mat-error
                 *ngIf="formTradeProgram.controls['coin_expiry_date'].hasError('required') && formTradeProgram.controls['coin_expiry_date'].touched">
-                Tanggal Kadaluarsa Coin Trade Program harus diisi
+                {{'dte.trade_program.text5' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row">
           <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-            SIMPAN
+            {{ls.locale.global.button.save}}
           </button>
         </div>
       </form>

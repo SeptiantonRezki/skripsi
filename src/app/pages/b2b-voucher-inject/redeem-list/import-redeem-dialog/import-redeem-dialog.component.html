@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLS</span> <!-- // TODO -->
       </div>
 
     </div>
@@ -23,8 +23,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+            <!-- // TODO -->
         </span>
       </div>
     </div>
@@ -37,7 +37,7 @@
         <thead>
           <tr>
             <th nowrap>Order Id Pembayaran</th>
-            <th nowrap>Tanggal</th>
+            <th nowrap>Tanggal</th> <!-- // TODO -->
           </tr>
         </thead>
         <tbody>
@@ -51,8 +51,8 @@
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
-              Tidak ada file yang dipilih
-            </td>
+              {{ls.locale.global.messages.file_unselected_warn}}
+            </td> <!-- // TODO -->
           </tr>
         </tbody>
       </table>
@@ -64,9 +64,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="(rows.length === 0)">Kirim</button>
+          [disabled]="(rows.length === 0)">{{ls.locale.global.button.send}}</button> <!-- // TODO -->
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">Batal</button> <!-- // TODO -->
       </div>
     </div>
   </div>

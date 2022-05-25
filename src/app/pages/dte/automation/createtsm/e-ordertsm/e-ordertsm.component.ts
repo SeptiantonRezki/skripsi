@@ -15,6 +15,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-e-ordertsm',
@@ -116,7 +117,8 @@ export class EOrdertsmComponent implements OnInit {
     private dialog: MatDialog,
     private audienceService: AudienceService,
     private audienceTradeProgramService: AudienceTradeProgramService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -471,7 +473,7 @@ export class EOrdertsmComponent implements OnInit {
       });
     } else {
       this.submitting = false;
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formTemp);
       commonFormValidator.validateAllFields(this.formEOrder);
     }
@@ -792,7 +794,7 @@ export class EOrdertsmComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.selected = response;
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }

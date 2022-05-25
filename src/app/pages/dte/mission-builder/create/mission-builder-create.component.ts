@@ -14,6 +14,7 @@ import { SequencingService } from '../../../../services/dte/sequencing.service';
 import moment from 'moment';
 import { DialogCoinComponent } from "./dialog-coin/dialog-coin.component";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-mission-builder-create',
@@ -62,6 +63,7 @@ export class MissionBuilderCreateComponent implements OnInit {
     private sequencingService: SequencingService,
     private dialogService: DialogService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.hierarchialGraph = {
       links: [],
@@ -92,7 +94,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       this.task.is_editable = 1;
       if (this.task == null) {
         this.dialogService.openSnackBar({
-          message: "Tidak dapat mengakses halaman ini secara langsung!!!"
+          message: this.translate.instant('dte.task_sequencing.cant_go_through')
         });
         this.router.navigate(['dte', 'task-sequencing']);
       } else {
@@ -161,19 +163,19 @@ export class MissionBuilderCreateComponent implements OnInit {
     }
     if (!validCoinNode) {
       this.dialogService.openSnackBar({
-        message: "Tidak boleh ada activity coin jika misi tidak bertipe Push to FF"
+        message: this.translate.instant('dte.task_sequencing.cant_coin_activity')
       });
     } else if (mixedVerification) {
       this.dialogService.openSnackBar({
-        message: "Kombinasi tipe verifikasi tidak diperbolehkan dalam satu task sequence"
+        message: this.translate.instant('dte.task_sequencing.invalid_combination')
       });
     } else if (this.overBudget) {
       this.dialogService.openSnackBar({
-        message: "Budget trade program tidak mencukupi!"
+        message: this.translate.instant('dte.task_sequencing.insufficient_budget')
       });
     } else if (notifValid < 0) {
       this.dialogService.openSnackBar({
-        message: "Ada notifikasi yang belum diset!"
+        message: this.translate.instant('dte.task_sequencing.notification_not_setted')
       });
     } else {
       this.dataService.showLoading(true);
@@ -322,7 +324,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'mission':
         const missionObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Mission',
+          name: this.translate.instant('global.label.mission'),
           type: 'mission',
           attribute: {
             task_template_id: null,
@@ -344,7 +346,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'decision':
         const decisionObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Split Decision',
+          name: this.translate.instant('dte.task_sequencing.text22'),
           type: 'decision',
           attribute: null,
           next_step_component: null,
@@ -357,7 +359,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'pop-up-notification':
         const popupObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Pop Up Notification',
+          name: this.translate.instant('dte.task_sequencing.text20'),
           type: 'pop-up-notification',
           attribute: {
             notification_id: null,
@@ -373,7 +375,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'push-notification':
         const pushObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Push Notification',
+          name: this.translate.instant('dte.task_sequencing.text19'),
           type: 'push-notification',
           attribute: {
             notification_id: null,
@@ -389,7 +391,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'coin':
         const coinObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Coin',
+          name: this.translate.instant('dte.task_sequencing.coin'),
           type: 'coin',
           attribute: {
             total_coin: null
@@ -404,7 +406,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'time':
         const timeObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Waiting Period',
+          name: this.translate.instant('dte.task_sequencing.text21'),
           type: 'time',
           attribute: {
             type: null,
@@ -420,7 +422,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       case 'finish':
         const finishObject = {
           component_id: parseInt(this.maxNode, 10).toString(),
-          name: 'Finish',
+          name: this.translate.instant('global.button.finish'),
           type: 'finish',
           attribute: null,
           next_step_component: null,
@@ -596,7 +598,7 @@ export class MissionBuilderCreateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: 'No',
+          label: this.translate.instant('global.label.no'),
           data: {
             linkText: 'N'
           }
@@ -611,7 +613,7 @@ export class MissionBuilderCreateComponent implements OnInit {
         const edge = {
           source: source.toString(),
           target: target.toString(),
-          label: 'Yes',
+          label: this.translate.instant('global.label.yes'),
           data: {
             linkText: 'Y'
           }
@@ -637,7 +639,7 @@ export class MissionBuilderCreateComponent implements OnInit {
       this.budget = res.data.current_budget;
       if (res.data.remaining_budget < 0) {
         this.dialogService.openSnackBar({
-          message: "Budget trade program tidak mencukupi"
+          message: this.translate.instant('dte.task_sequencing.insufficient_budget')
         });
         this.overBudget = true;
       } else {
@@ -651,7 +653,7 @@ export class MissionBuilderCreateComponent implements OnInit {
   }
 
   public getStyles(node: any): any {
-    const styles = { 'border': '1px solid #999', 'height': '100px', 'text-align': 'center', 'padding': '20px', 'font-size': '1.5rem', 'border-radius': '10px' };
+    const styles = { 'border': '1px solid #999', 'height': '120px', 'text-align': 'center', 'padding': '20px', 'font-size': '1.5rem', 'border-radius': '10px' };
     let temp = {}
     switch (node.data.type) {
       case 'mission':

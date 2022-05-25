@@ -28,6 +28,11 @@ export class SupplierCompanyCreateComponent implements OnInit {
     { name: 'Status Aktif', status: 'active' },
     { name: 'Status Non-Aktif', status: 'non-active' }
   ];
+
+  pilihAPIList: any[] = [
+    { name: 'Ya', status: 1 },
+    { name: 'Tidak', status: 0 }
+  ];
   supplierStatusSelected: any;
   products: any[];
   productVisible: boolean = true;
@@ -41,6 +46,7 @@ export class SupplierCompanyCreateComponent implements OnInit {
   isProductFound: boolean;
   isLoadingSave: boolean;
   catatan: String;
+  initialUnique: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -62,6 +68,8 @@ export class SupplierCompanyCreateComponent implements OnInit {
       alamat: ["", Validators.required],
       telepon: ["", [Validators.required, Validators.minLength(6)]],
       ponsel: ["", [Validators.required, Validators.minLength(6)]],
+      is_open_api: ["", Validators.required],
+      initial: ["", Validators.required],
       // catatan: "",
     })
     this.catatan = '';
@@ -72,13 +80,13 @@ export class SupplierCompanyCreateComponent implements OnInit {
     })
 
     this.productOptions = this.productControl.valueChanges.pipe(
-        startWith(''),
-        debounceTime(400),
-        tap(() => this.isLoadingProduct = true),
-        distinctUntilChanged(),
-        switchMap(value => this._filter(value)
-        )
+      startWith(''),
+      debounceTime(400),
+      tap(() => this.isLoadingProduct = true),
+      distinctUntilChanged(),
+      switchMap(value => this._filter(value)
       )
+    )
   }
 
   private _filter(value: string) {
@@ -140,6 +148,17 @@ export class SupplierCompanyCreateComponent implements OnInit {
     }
   }
 
+  keyPressAlphaNumeric(event) { // Only AlphaNumeric
+    var inp = String.fromCharCode(event.keyCode);
+
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
   checkError() {
     console.log('statusError', this.createForm.status)
     if (!this.createForm.get('namasupplier').valid) {
@@ -153,6 +172,10 @@ export class SupplierCompanyCreateComponent implements OnInit {
       this.createForm.get('telepon').markAsTouched({ onlySelf: true });
     } else if (!this.createForm.get('ponsel').valid) {
       this.createForm.get('ponsel').markAsTouched({ onlySelf: true });
+    } else if (!this.createForm.get('is_open_api').valid) {
+      this.createForm.get('is_open_api').markAsTouched({ onlySelf: true });
+    } else if (!this.createForm.get('initial').valid) {
+      this.createForm.get('initial').markAsTouched({ onlySelf: true });
     }
   }
 
@@ -163,13 +186,16 @@ export class SupplierCompanyCreateComponent implements OnInit {
       const products = this.products.map((item) => item.id);
       var body = {};
       if(this.router.url.indexOf('/user-management/private-label') > -1){
-         body = {
+        console.log(this.createForm.get("is_open_api").value);
+        body = {
           name: this.createForm.get("namasupplier").value,
           address: this.createForm.get("alamat").value,
           telephone: this.createForm.get("telepon").value,
           cellphone: this.createForm.get("ponsel").value,
           // note: this.createForm.get("catatan").value,
           note: this.catatanControl.value,
+          is_open_api: this.createForm.get("is_open_api").value,
+          initial: this.createForm.get("initial").value,
           products: products
         };
       }else{
@@ -180,27 +206,33 @@ export class SupplierCompanyCreateComponent implements OnInit {
           cellphone: this.createForm.get("ponsel").value,
           // note: this.createForm.get("catatan").value,
           note: this.catatanControl.value,
+          is_open_api: this.createForm.get("is_open_api").value,
+          initial: this.createForm.get("initial").value,
           // products: products
         };
       }
       this.supplierCompanyService.create(body).subscribe(res => {
-        this.dialogService.openSnackBar({
-          message: this.ls.locale.notification.popup_notifikasi.text22
-        });
-        this.createForm.reset();
-        this.catatanControl.reset();
-        if(this.router.url.indexOf('/user-management/private-label') > -1){
-          this.products = [];
-          this.router.navigate(["user-management", "private-label"]);
-        }else{
-          this.router.navigate(["user-management", "supplier-company"]);
-        }
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.createForm.reset();
+          this.catatanControl.reset();
+          if(this.router.url.indexOf('/user-management/private-label') > -1){
+            this.products = [];
+            this.router.navigate(["user-management", "private-label"]);
+          }else{
+            this.router.navigate(["user-management", "supplier-company"]);
+          }
         }, err => {
           console.log('err', err);
           this.isLoadingSave = false;
+          if(err.error.errors.initial[0] === "Isian initial sudah ada sebelumnya.") {
+            this.initialUnique = true;
+          }
           this.dialogService.openSnackBar({
-            message: err.error.message
+            message: (this.initialUnique)?  err.error.errors.initial[0] : err.error.message
           });
+          commonFormValidator.validateAllFields(this.createForm);
         }
       );
     } else {

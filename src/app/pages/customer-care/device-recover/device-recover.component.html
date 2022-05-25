@@ -1,15 +1,15 @@
 <div class="content p-24" *ngIf="business_id">
   <div fxLayout="column" fxFlex="80" *ngIf="!onRecoverDevice">
-    <h2>Daftar Staff</h2>
+    <h2>Daftar Staff</h2> <!-- // TODO -->
     <div fxLayout="column" class="preview-table">
       <table class="styled-table">
         <thead>
           <tr>
-            <th>Nama</th>
+            <th>{{ls.locale.global.label.name}}</th>
             <th>Nomor Ponsel</th>
             <th>Type</th>
             <th>Tanggal Lahir</th>
-          </tr>
+          </tr> <!-- // TODO -->
         </thead>
         <tbody>
           <tr *ngFor="let item of list_staff">
@@ -19,14 +19,14 @@
             <td>{{ item.birth_date | date: 'dd/MM/yyyy' }}</td>
           </tr>
           <tr class="active-row" *ngIf="list_staff.length === 0">
-            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ...</td>
+            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ... <!-- // TODO --></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
   <div fxLayout="column" fxFlex="80" *ngIf="!onRecoverDevice">
-    <h2>Pemulihan Perangkat</h2>
+    <h2>Pemulihan Perangkat</h2> <!-- // TODO -->
     <div fxLayout="column" class="preview-table">
       <table class="styled-table">
         <thead>
@@ -35,7 +35,7 @@
             <th>Mobile Device Info</th>
             <th>Terakhir Mencoba Akses</th>
             <th>Tindakan</th>
-          </tr>
+          </tr> <!-- // TODO -->
         </thead>
         <tbody>
           <tr *ngFor="let item of list_devices">
@@ -45,18 +45,18 @@
             <td>
               <button mat-button color="warn" [disabled]="item.status === 'whitelist'"
                 (click)="setRecoveryDevice(item)">{{ item.status === 'unwhitelist'
-                ? 'Pulihkan Perangkat' : item.status_indo }}</button>
+                ? 'Pulihkan Perangkat' : item.status_indo }} <!-- // TODO --></button>
             </td>
           </tr>
           <tr class="active-row" *ngIf="list_devices.length === 0">
-            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ...</td>
+            <td colspan="4" style="text-align: center;">Tidak Ada Data Untuk Ditampilkan ... <!-- // TODO --></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
   <div fxLayout="column" *ngIf="onRecoverDevice">
-    <h2>Pemulihan Perangkat dengan Unique Device ID: {{ unique_device_id }}</h2>
+    <h2>Pemulihan Perangkat dengan Unique Device ID: {{ unique_device_id }} <!-- // TODO --></h2>
     <form [formGroup]="formRecovery">
       <div fxLayout="row" fxFlex="50">
         <mat-form-field fxFlex="9" fxFlex.xs="30" class="is-light">
@@ -64,10 +64,10 @@
         </mat-form-field>
         <mat-form-field fxFlex="91" fxFlex.xs="70" class="is-light">
           <input matInput type="tel" min="0" formControlName="applicant_phone" placeholder="Nomor Ponsel Pemohon"
-            (keypress)="numbersOnlyValidation($event)">
+            (keypress)="numbersOnlyValidation($event)"> <!-- // TODO -->
           <mat-error
             *ngIf="formRecovery.controls['applicant_phone'].hasError('required') && formRecovery.controls['applicant_phone'].touched ">
-            Nomor Ponsel Pemohon harus diisi.
+            Nomor Ponsel Pemohon harus diisi. <!-- // TODO -->
           </mat-error>
         </mat-form-field>
       </div>
@@ -76,53 +76,53 @@
           <input matInput placeholder="Nama Pemohon" type="text" formControlName="applicant_name">
           <mat-error
             *ngIf="formRecovery.controls['applicant_name'].hasError('required') && formRecovery.controls['applicant_name'].touched ">
-            Nama Pemohon harus diisi.
+            Nama Pemohon harus diisi. <!-- // TODO -->
           </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
-          <textarea matInput name="Catatan" formControlName="description" cdkTextareaAutosize
+          <textarea matInput name="{{ls.locale.global.label.note}}" formControlName="description" cdkTextareaAutosize
             #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="15"
-            placeholder="Deskripsi"></textarea>
+            placeholder="Deskripsi"></textarea> <!-- // TODO -->
           <mat-error
             *ngIf="formRecovery.controls['description'].hasError('required') && formRecovery.controls['description'].touched ">
-            Deskripsi harus diisi.
+            Deskripsi harus diisi. <!-- // TODO -->
           </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
-          <input matInput placeholder="Kode Toko" type="text" formControlName="retailer_code">
+          <input matInput placeholder="Kode Toko" type="text" formControlName="retailer_code"> <!-- // TODO -->
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
-          <input matInput placeholder="Nama Toko" type="text" formControlName="retailer_name">
+          <input matInput placeholder="Nama Toko" type="text" formControlName="retailer_name"> <!-- // TODO -->
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
-          <input matInput placeholder="Waktu Diblokir" type="text" formControlName="blocked_time">
+          <input matInput placeholder="Waktu Diblokir" type="text" formControlName="blocked_time"> <!-- // TODO -->
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
-          <input matInput placeholder="Waktu Pemulihan Terakhir" type="text" formControlName="last_recover">
+          <input matInput placeholder="Waktu Pemulihan Terakhir" type="text" formControlName="last_recover"> <!-- // TODO -->
         </mat-form-field>
       </div>
       <div fxLayout="row">
         <mat-form-field fxFlex="50" class="is-light">
           <input matInput placeholder="Jumlah Pemulihan Untuk perangkat ini" type="number"
-            formControlName="total_recovery_device">
+            formControlName="total_recovery_device"> <!-- // TODO -->
         </mat-form-field>
       </div>
       <div class="confirm p-24" fxLayout="row" fxLayoutGap="20px">
         <button mat-raised-button type="button" class="confirmation-button" (click)="submitRecovery()" fxFlex="20">
-          PULIHKAN PERANGKAT
+          PULIHKAN PERANGKAT <!-- // TODO -->
         </button>
         <button mat-raised-button type="button" (click)="cancelRecovery()" fxFlex="20">
-          BATAL
+          BATAL <!-- // TODO -->
         </button>
       </div>
     </form>
