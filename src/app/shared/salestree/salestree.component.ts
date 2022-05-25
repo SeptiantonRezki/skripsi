@@ -17,6 +17,7 @@ export class SalestreeComponent implements OnInit {
   @Input() value: any;
   @Input() multiple: boolean = true;
   @Input() limitLevel: string;
+  @Input() disabled: boolean = false;
 
   initArea: boolean = false;
   loadingArea = new FormControl({});
@@ -196,10 +197,14 @@ export class SalestreeComponent implements OnInit {
   updateForm() {
     this.geoLevel.forEach((item, index) => {
       if (index > this.limitAreaIndex) {
-        if (this.geoList[item] && this.geoList[item].length) {
-          this.form.get(item).enable();
-        } else {
+        if (this.disabled) {
           this.form.get(item).disable();
+        } else {
+          if (this.geoList[item] && this.geoList[item].length) {
+            this.form.get(item).enable();
+          } else {
+            this.form.get(item).disable();
+          }
         }
       }
     });

@@ -43,7 +43,12 @@ export class FieldForceCreateComponent {
 
   ngOnInit() {
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
+    this.createForm();
+    this.addAreas();
+    this.setEvents();
+  }
 
+  createForm() {
     this.formUser = this.formBuilder.group(
       {
         name: ["", Validators.required],
@@ -53,7 +58,6 @@ export class FieldForceCreateComponent {
         classification: [""],
         areas: this.formBuilder.array([], Validators.required),
         type: ["", Validators.required],
-        version: [""],
         status: [true],
       },
       {
@@ -63,9 +67,9 @@ export class FieldForceCreateComponent {
         ),
       }
     );
+  }
 
-    this.addAreas();
-
+  setEvents() {
     this.formUser.get("type").valueChanges.subscribe((value: string) => {
       let level = "territory";
       if (value === "spv") level = "district";
@@ -141,7 +145,6 @@ export class FieldForceCreateComponent {
       username: this.formUser.get("username").value,
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value || null,
-      version: this.formUser.get("version").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       password: this.formUser.get("password").value,
       password_confirmation: this.formUser.get("password_confirmation").value,

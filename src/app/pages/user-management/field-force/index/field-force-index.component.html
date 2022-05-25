@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.field_force.page_title">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
+      <button *ngIf="permission.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
         <mat-icon>add</mat-icon>TAMBAH
       </button>
       <!--- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
@@ -122,7 +122,8 @@
 
         <ngx-datatable-column [name]="ls.locale.global.label.name" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
+            <a *ngIf="permission.lihat" class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
+            <span *ngIf="!permission.lihat" class="direct-edit">{{row.fullname}} </span>
           </ng-template>
         </ngx-datatable-column>
 
