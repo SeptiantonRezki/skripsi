@@ -67,7 +67,7 @@ export class FieldForceEditComponent {
         classification: [{ value: "", disabled: this.isDetail }],
         areas: this.formBuilder.array([], Validators.required),
         type: [{ value: "", disabled: this.isDetail }, Validators.required],
-        version: [{ value: "", disabled: this.isDetail }],
+        version: [{ value: "", disabled: true }],
         status: [{ value: true, disabled: this.isDetail }],
       },
       {
@@ -191,7 +191,6 @@ export class FieldForceEditComponent {
       name: this.formUser.get("name").value,
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value || null,
-      version: this.formUser.get("version").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
     };
