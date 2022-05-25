@@ -97,9 +97,6 @@ export class TradeEditComponent {
   }
 
   ngOnInit() {
-    this.getGroupTradeProgram();
-    this.getSubGroupTradeProgram();
-
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
@@ -147,6 +144,9 @@ export class TradeEditComponent {
       .subscribe(() => {
         this.filteringSGTP();
       });
+
+    this.getGroupTradeProgram();
+    this.getSubGroupTradeProgram();
 
     this.setMinEndDate('init');
     this.setMinExpireDate('init');
