@@ -505,7 +505,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     fd.append('type', 'retailer');
     fd.append('paylater_company_id', this.paylaterCompanyId);
     this.mitraSelected.map(item => {
-      fd.append('wholesaler_id', item);
+      fd.append('wholesaler_id[]', item);
     });
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
