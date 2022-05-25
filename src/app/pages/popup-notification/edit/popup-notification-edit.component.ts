@@ -14,7 +14,7 @@ import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { ReplaySubject, Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { isThisSecond } from 'date-fns';
@@ -56,6 +56,40 @@ export class PopupNotificationEditComponent {
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listTypeOfRecurrence: Object[] = [
+    { id: 'once', name: 'Aktivasi notifikasi sekali kirim' },
+    { id: 'recurring', name: 'Aktivasi notifikasi berulang' },
+  ];
+  listRecurrenceTypes: Object[] = [
+    { id: 'daily', name: 'Harian' },
+    { id: 'weekly', name: 'Mingguan' },
+    { id: 'monthly', name: 'Bulanan' },
+    { id: 'yearly', name: 'Tahunan' }
+  ];
+  listWeekDays: any[] = [
+    { id: 1, name: 'Senin' },
+    { id: 2, name: 'Selasa' },
+    { id: 3, name: 'Rabu' },
+    { id: 4, name: 'Kamis' },
+    { id: 5, name: 'Jumat' },
+    { id: 6, name: 'Sabtu' },
+    { id: 0, name: 'Minggu' }
+  ];
+  listDates: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+  listMonths: Object[] = [
+    { id: 1, name: 'Januari' },
+    { id: 2, name: 'Februari' },
+    { id: 3, name: 'Maret' },
+    { id: 4, name: 'April' },
+    { id: 5, name: 'Mei' },
+    { id: 6, name: 'Juni' },
+    { id: 7, name: 'Juli' },
+    { id: 8, name: 'Agustus' },
+    { id: 9, name: 'September' },
+    { id: 10, name: 'Oktober' },
+    { id: 11, name: 'November' },
+    { id: 12, name: 'Desember' },
+  ]
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -77,6 +111,10 @@ export class PopupNotificationEditComponent {
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
+  formWeeklyRecurrence: FormGroup;
+  formMonthlyRecurrence: FormGroup;
+  formYearlyRecurrence: FormGroup;
+  listDateChosen: FormControl = new FormControl([], Validators.required);
   formPopupErrors: any;
 
   public options: Object = Config.FROALA_CONFIG;
@@ -214,6 +252,20 @@ export class PopupNotificationEditComponent {
       is_mission_builder: this.is_mission_builder,
       product: [""],
       subscription: ["all"],
+      type_of_recurrence: ["once", Validators.required],
+      recurrence_type: ["daily", Validators.required],
+    });
+
+    this.formWeeklyRecurrence = this.formBuilder.group({});
+    this.listWeekDays.forEach(day => this.formWeeklyRecurrence.addControl(day.id, new FormControl(false)));
+
+    this.formMonthlyRecurrence = this.formBuilder.group({
+      recurrence_date: [[], Validators.required]
+    });
+
+    this.formYearlyRecurrence = this.formBuilder.group({
+      recurrence_date: [null, Validators.required],
+      recurrence_month: [null, Validators.required]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -718,8 +770,8 @@ export class PopupNotificationEditComponent {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -745,8 +797,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -775,8 +827,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -804,8 +856,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -830,7 +882,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -853,8 +906,8 @@ export class PopupNotificationEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -1046,6 +1099,28 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['user_group'].setValue(response.type);
       this.formPopupGroup.controls['content_type'].setValue(response.action);
 
+      if(response.recurring.length > 0) {
+        this.formPopupGroup.controls['type_of_recurrence'].setValue('recurring');
+        let frequency = response.recurring.map(item => item.frequency);
+        this.formPopupGroup.controls['recurrence_type'].setValue(frequency[0]);
+        if(frequency[0] == 'weekly') {
+          response.recurring.map(item => this.formWeeklyRecurrence.controls[item.day_of_week].setValue(true));
+        } else if(frequency[0] == 'monthly') {
+          this.formMonthlyRecurrence.controls['recurrence_date'].setValue(response.recurring.map(item => item.day));
+        } else if(frequency[0] == 'yearly') {
+          let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+          let chosen = response.recurring.map(item => ({
+            name: `${item.day} ${months[item.month - 1]}`,
+            date: item.day,
+            month: item.month
+          }));
+          this.listDateChosen.setValue(chosen);
+        };
+      } else {
+        this.formPopupGroup.controls['type_of_recurrence'].setValue('once');
+      };
+      
+
       if (this.detailPopup.target_audience && this.detailPopup.target_audience === 1) {
         this.formPopupGroup.controls["is_target_audience"].setValue(true);
         this.audienceSelected = this.detailPopup.audience.map(id => ({ id: id.audience_id }));
@@ -1131,39 +1206,6 @@ export class PopupNotificationEditComponent {
         // this._filterProducts()
       }
 
-      for (const { val, index } of response.areas.map((val, index) => ({ val, index }))) {
-        const response = await this.notificationService.getParentArea({ parent: val.id }).toPromise();
-        let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-
-        wilayah.push(this.formBuilder.group({
-          national: [this.getArea(response, 'national'), Validators.required],
-          zone: [this.getArea(response, 'division')],
-          region: [this.getArea(response, 'region')],
-          area: [this.getArea(response, 'area')],
-          salespoint: [this.getArea(response, 'salespoint')],
-          district: [this.getArea(response, 'district')],
-          territory: [this.getArea(response, 'teritory')],
-          list_national: this.formBuilder.array(this.listLevelArea),
-          list_zone: this.formBuilder.array([]),
-          list_region: this.formBuilder.array([]),
-          list_area: this.formBuilder.array([]),
-          list_salespoint: this.formBuilder.array([]),
-          list_district: this.formBuilder.array([]),
-          list_territory: this.formBuilder.array([])
-        }))
-
-        this.initArea(index);
-        this.initFormGroup(response, index);
-      }
-
-      if (response.areas.length === 0) {
-        this.addArea();
-      }
-
-      // if (this.detailProduct.areas.length === 0) {
-      //   this.addArea();
-      // }
-
       setTimeout(() => {
         this.onLoad = false;
       }, 500);
@@ -1174,279 +1216,6 @@ export class PopupNotificationEditComponent {
     } catch (error) {
       this.onLoad = false;
       throw error;
-    }
-  }
-
-  createArea(): FormGroup {
-    return this.formBuilder.group({
-      national: [1, Validators.required],
-      zone: [""],
-      salespoint: [""],
-      region: [""],
-      area: [""],
-      district: [""],
-      territory: [""],
-      list_national: this.formBuilder.array(this.listLevelArea),
-      list_zone: this.formBuilder.array([]),
-      list_region: this.formBuilder.array([]),
-      list_area: this.formBuilder.array([]),
-      list_salespoint: this.formBuilder.array([]),
-      list_district: this.formBuilder.array([]),
-      list_territory: this.formBuilder.array([])
-    })
-  }
-
-  addArea() {
-    let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    wilayah.push(this.createArea());
-    const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
-    this.initArea(index);
-    this.generataList('zone', 1, index, 'render');
-  }
-
-  deleteArea(idx) {
-    this.indexDelete = idx;
-    let data = {
-      titleDialog: "Hapus Salestree",
-      captionDialog: `Apakah anda yakin untuk menghapus Salestree ${idx + 1} ?`,
-      confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
-    };
-    this.dialogService.openCustomConfirmationDialog(data);
-  }
-
-  initArea(index) {
-    let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    this.areaType.map(item => {
-      switch (item.type.trim()) {
-        case 'national':
-          wilayah.at(index).get('national').disable();
-          break
-        case 'division':
-          wilayah.at(index).get('zone').disable();
-          break;
-        case 'region':
-          wilayah.at(index).get('region').disable();
-          break;
-        case 'area':
-          wilayah.at(index).get('area').disable();
-          break;
-        case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
-          break;
-        case 'district':
-          wilayah.at(index).get('district').disable();
-          break;
-        case 'territory':
-          wilayah.at(index).get('territory').disable();
-          break;
-      }
-    })
-  }
-
-  initFormGroup(response, index) {
-    response.data.map(item => {
-      let level_desc = '';
-      switch (item.level_desc.trim()) {
-        case 'national':
-          level_desc = 'zone';
-          break
-        case 'division':
-          level_desc = 'region';
-          break;
-        case 'region':
-          level_desc = 'area';
-          break;
-        case 'area':
-          level_desc = 'salespoint';
-          break;
-        case 'salespoint':
-          level_desc = 'district';
-          break;
-        case 'district':
-          level_desc = 'territory';
-          break;
-      }
-      this.generataList(level_desc, item.id, index, 'render');
-    });
-  }
-
-  async generataList(selection, id, index, type) {
-    let item: any;
-    let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    switch (selection) {
-      case 'zone':
-        const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-        let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-
-        while (list.length > 0) {
-          list.removeAt(list.length - 1);
-        }
-
-        _.clone(response || []).map(item => {
-          list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Zone' : item.name }));
-        });
-
-        if (type !== 'render') {
-          wilayah.at(index).get('region').setValue(null);
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          this.clearFormArray(index, 'list_region');
-          this.clearFormArray(index, 'list_area');
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'region':
-        item = wilayah.at(index).get('list_zone').value.length > 0 ? wilayah.at(index).get('list_zone').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Zone') {
-          const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Regional' : item.name }));
-          });
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('region').setValue('');
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          if (item.name === 'Semua Zone') {
-            this.clearFormArray(index, 'list_region');
-          }
-          this.clearFormArray(index, 'list_area');
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'area':
-        item = wilayah.at(index).get('list_region').value.length > 0 ? wilayah.at(index).get('list_region').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Regional') {
-          const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Area' : item.name }));
-          });
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('area').setValue('');
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          if (item.name === 'Semua Regional') {
-            this.clearFormArray(index, 'list_area');
-          }
-          this.clearFormArray(index, 'list_salespoint');
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'salespoint':
-        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Area') {
-          const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Salespoint' : item.name }));
-          });
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('salespoint').setValue('');
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          if (item.name === 'Semua Area') {
-            this.clearFormArray(index, 'list_salespoint');
-          }
-          this.clearFormArray(index, 'list_district');
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'district':
-        item = wilayah.at(index).get('list_salespoint').value.length > 0 ? wilayah.at(index).get('list_salespoint').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua Salespoint') {
-          const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua District' : item.name }));
-          });
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('district').setValue('');
-          wilayah.at(index).get('territory').setValue('');
-
-          if (item.name === 'Semua Salespoint') {
-            this.clearFormArray(index, 'list_district');
-          }
-          this.clearFormArray(index, 'list_territory');
-        }
-        break;
-      case 'territory':
-        item = wilayah.at(index).get('list_district').value.length > 0 ? wilayah.at(index).get('list_district').value.filter(item => item.id === id)[0] : {};
-        if (item.name !== 'Semua District') {
-          const response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
-          let list = wilayah.at(index).get(`list_${selection}`) as FormArray;
-          while (list.length > 0) {
-            list.removeAt(list.length - 1);
-          }
-          _.clone(response || []).map(item => {
-            list.push(this.formBuilder.group({ ...item, name: item.name === 'all' ? 'Semua Territory' : item.name }));
-          });
-        }
-
-        if (type !== 'render') {
-          wilayah.at(index).get('territory').setValue('');
-
-          if (item.name === 'Semua District') {
-            this.clearFormArray(index, 'list_territory');
-          }
-        }
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  getArea(response, selection) {
-    return response.data.filter(item => item.level_desc === selection).map(item => item.id)[0]
-  }
-
-  confirmDelete() {
-    let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    wilayah.removeAt(this.indexDelete);
-    this.dialogService.brodcastCloseConfirmation();
-  }
-
-  clearFormArray = (index, selection) => {
-    let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
-    let list = wilayah.at(index).get(selection) as FormArray;
-    while (list.length > 0) {
-      list.removeAt(list.length - 1);
     }
   }
 
@@ -1530,7 +1299,8 @@ export class PopupNotificationEditComponent {
         action: this.formPopupGroup.get('content_type').value,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
       if (this.imageConverted) {
@@ -1543,6 +1313,44 @@ export class PopupNotificationEditComponent {
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
       body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
+
+      if(body.recurring_type === 'recurring') {
+        body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'weekly') {
+        let recurrenceDayValues = this.formWeeklyRecurrence.value;
+        let selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]).map(item => parseInt(item));
+        if(selectedWeekDays.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+          return;
+        }
+        body['recurring_day_of_week'] = selectedWeekDays;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly') {
+        let monthlyRecurrence = this.formMonthlyRecurrence.get('recurrence_date').value;
+        if(monthlyRecurrence.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal terbit!" });
+          commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+          return;
+        }
+        body['recurring_day'] = monthlyRecurrence;
+      }
+      
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly') {
+        let yearlyRecurrence = this.listDateChosen.value;
+        if(yearlyRecurrence.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal & bulan terbit!" });
+          commonFormValidator.validateFormControl(this.listDateChosen);
+          return;
+        }
+        body['recurring_day'] = yearlyRecurrence.map(item => item.date);
+        body['recurring_month'] = yearlyRecurrence.map(item => item.month);
+      }
 
       if (body.type === 'customer') {
         let smoker_type = '';
@@ -1673,6 +1481,12 @@ export class PopupNotificationEditComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+        commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+      }
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
+        commonFormValidator.validateFormControl(this.listDateChosen);
+      }
     }
   }
 
@@ -1946,7 +1760,7 @@ export class PopupNotificationEditComponent {
     this.exportPopUpNotif = true;
     try {
       const response = await this.notificationService.exportAudience({ selected: body, audience: this.formPopupGroup.get("user_group").value }).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.exportPopUpNotif = false;
@@ -2005,16 +1819,20 @@ export class PopupNotificationEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+    dialogConfig.data = {
+      audience: this.formPopupGroup.get("user_group").value,
+      api: fd => this.notificationService['importAudience'](fd),
+      fileType: 'xlsx'
+    };
 
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.audienceSelected = this.audienceSelected.concat(response);
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });
@@ -2032,4 +1850,28 @@ export class PopupNotificationEditComponent {
     this.selectedAllId = value;
   }
 
+  removeDateChosen(value: any) {
+    this.listDateChosen.setValue(this.listDateChosen.value.filter(item => item.name !== value.name));
+  }
+
+  addRecurrenceDate() {
+    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+      let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
+      if(this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
+        this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
+      } else {
+        let dateChosen = this.listDateChosen.value;
+        dateChosen.push({
+          name: chosenValue,
+          date: this.formYearlyRecurrence.get('recurrence_date').value,
+          month: this.formYearlyRecurrence.get('recurrence_month').value
+        });
+        this.listDateChosen.setValue(dateChosen);
+      };
+    } else {
+      this.dialogService.openSnackBar({ message: 'Harap pilih tanggal dan bulan pengulangan!' });
+      commonFormValidator.validateAllFields(this.formYearlyRecurrence);
+    };
+  }
 }

@@ -11,7 +11,7 @@
     width: 100%;
   }
   th, td {
-    padding: 8px;
+    padding: 16px;
     text-align: left;
     border-bottom: 1px solid #ddd;
   }
@@ -22,7 +22,7 @@
 
   .responsive {
     overflow-x: auto;
-    max-height: 400px;
+    // max-height: 400px;
     overflow-y: auto;
     border: 1px solid #ddd;
   }

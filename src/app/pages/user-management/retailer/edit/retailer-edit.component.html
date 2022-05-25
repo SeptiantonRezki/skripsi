@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Retailer Detail'" *ngIf="!formOnly">
+  <page-content-header contentTitle="{{'retailer.detail.page_title' | translate}}" *ngIf="!formOnly">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -8,7 +8,7 @@
 
       <form [formGroup]="formRetailer">
         <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-          <h3>Detil Retailer</h3>
+          <h3>{{'retailer.detail.page_title' | translate}}</h3>
           <!-- STATUS BUSINESS -->
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
 
@@ -41,49 +41,49 @@
 
         <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Nama" type="text" formControlName="name">
+            <input matInput placeholder="{{'global.label.name' | translate}}" type="text" formControlName="name">
             <mat-error
               *ngIf="formRetailer.controls['name'].hasError('required') && formRetailer.controls['name'].touched ">
-              Nama Toko harus diisi.
+              {{'global.label.name' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput placeholder="Alamat Toko" type="address" formControlName="address">
+            <input matInput placeholder="{{'global.label.store_address' | translate}}" type="address" formControlName="address">
             <mat-error
               *ngIf="formRetailer.controls['address'].hasError('required') && formRetailer.controls['address'].touched ">
-              Alamat Toko harus diisi.
+              {{'global.label.store_address' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Kode Agen" formControlName="business_code">
+            <input matInput type="text" placeholder="{{'wholesaler.agent_code' | translate}}" formControlName="business_code">
             <mat-error
               *ngIf="formRetailer.controls['business_code'].hasError('required') && formRetailer.controls['business_code'].touched ">
-              Kode Agen harus diisi.
+              {{'wholesaler.agent_code' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="Nama Pemilik" formControlName="owner">
+            <input matInput type="text" placeholder="{{'global.label.owner_name' | translate}}" formControlName="owner">
             <mat-error
               *ngIf="formRetailer.controls['owner'].hasError('required') && formRetailer.controls['owner'].touched ">
-              Nama Pemilik harus diisi.
+              {{'global.label.owner_name' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field fxFlex="50" class="is-light form-primary">
-            <mat-select placeholder="Negara" formControlName="country" (selectionChange)="handleCountryPhone($event)">
+            <mat-select placeholder="{{'global.label.country' | translate}}" formControlName="country" (selectionChange)="handleCountryPhone($event)">
               <mat-option *ngFor="let item of countryList" [value]="item.code">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div class="ayo-middle pt-24" fxLayout="column">
           <mat-form-field *ngIf="isDetail && seePhone" class="is-light">
-            <input matInput type="text" placeholder="Nomor Ponsel" formControlName="phone">
+            <input matInput type="text" placeholder="{{'global.label.phone' | translate}}" formControlName="phone">
           </mat-form-field>
 
           <div *ngIf="!isDetail && seePhone" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <small>Nomor Ponsel</small>
+            <small>{{'global.label.phone' | translate}}</small>
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
               <mat-form-field fxFlex="7" fxFlex.xs="30" class="form-primary">
                 <input matInput [value]="country_phone" readonly>
@@ -94,7 +94,7 @@
             </div>
             <mat-error
               *ngIf="formRetailer.controls['phone'].hasError('required') && formRetailer.controls['phone'].touched ">
-              Nomor ponsel harus diisi.
+              {{'global.label.phone' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
           </div>
 
@@ -102,78 +102,78 @@
             fxLayoutAlign="space-between stretch" *ngIf="seeSalestree">
 
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="National" formControlName="national"
+              <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national"
                 matTooltip="{{getToolTipData(formRetailer.get('national').value, listLevelArea)}}">
                 <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['national'].hasError('required') && formRetailer.controls['national'].touched">
-                National harus diisi
+                {{'global.area.national' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Zone" formControlName="zone"
+              <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
                 matTooltip="{{getToolTipData(formRetailer.get('zone').value, list['zone'])}}"
                 (selectionChange)="getAudienceArea('region', formRetailer.get('zone').value)">
                 <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['zone'].hasError('required') && formRetailer.controls['zone'].touched">
-                Zone harus diisi
+                {{'global.area.zone' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Regional" formControlName="region"
+              <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
                 matTooltip="{{getToolTipData(formRetailer.get('region').value, list['region'])}}"
                 (selectionChange)="getAudienceArea('area', formRetailer.get('region').value)">
                 <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['region'].hasError('required') && formRetailer.controls['region'].touched">
-                Regional harus diisi
+                {{'global.area.regional' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area"
+              <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                 matTooltip="{{getToolTipData(formRetailer.get('area').value, list['area'])}}"
                 (selectionChange)="getAudienceArea('salespoint', formRetailer.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['area'].hasError('required') && formRetailer.controls['area'].touched">
-                Area harus diisi
+                {{'global.area.area' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint"
+              <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                 matTooltip="{{getToolTipData(formRetailer.get('salespoint').value, list['salespoint'])}}"
                 (selectionChange)="getAudienceArea('district', formRetailer.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['salespoint'].hasError('required') && formRetailer.controls['salespoint'].touched">
-                Salespoint harus diisi
+                {{'global.area.salespoint' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district"
+              <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
                 matTooltip="{{getToolTipData(formRetailer.get('district').value, list['district'])}}"
                 (selectionChange)="getAudienceArea('territory', formRetailer.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['district'].hasError('required') && formRetailer.controls['district'].touched">
-                Distrik harus diisi
+                {{'global.area.district' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory"
+              <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory"
                 matTooltip="{{getToolTipData(formRetailer.get('territory').value, list['territory'])}}">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['territory'].hasError('required') && formRetailer.controls['territory'].touched">
-                Territori harus diisi
+                {{'global.area.territory' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -182,10 +182,10 @@
             *ngIf="!onLoad && detailRetailer?.paguyuban">
 
             <mat-form-field fxFlex="20" class="is-light paguyuban">
-              <input matInput type="text" placeholder="Tergabung dalam Paguyuban" disabled>
+              <input matInput type="text" placeholder="{{'retailer.list.text1' | translate}}" disabled>
             </mat-form-field>
             <mat-form-field fxFlex="30" class="is-light paguyuban">
-              <input matInput type="text" placeholder="Nama Paguyuban" disabled
+              <input matInput type="text" placeholder="{{'retailer.list.text2' | translate}}" disabled
                 [value]="detailRetailer?.paguyuban_name">
             </mat-form-field>
 
@@ -197,7 +197,7 @@
               <input matInput type="text" placeholder="Latitude" formControlName="latitude">
               <mat-error
                 *ngIf="formRetailer.controls['latitude'].hasError('required') && formRetailer.controls['latitude'].touched ">
-                Latitude harus diisi.
+                Latitude {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -205,38 +205,38 @@
               <input matInput type="text" placeholder="Longitude" formControlName="longitude">
               <mat-error
                 *ngIf="formRetailer.controls['longitude'].hasError('required') && formRetailer.controls['longitude'].touched ">
-                Longitude harus diisi.
+                Longitude {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <mat-select placeholder="Internal Classification" formControlName="InternalClassification"
+              <mat-select placeholder="{{'retailer.list.text3' | translate}}" formControlName="InternalClassification"
                 (selectionChange)="classificationSelectionChange($event)">
                 <mat-option *ngFor="let item of listIC" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['InternalClassification'].hasError('required') && formRetailer.controls['InternalClassification'].touched ">
-                Internal Classification harus diisi
+                {{'retailer.list.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <mat-select placeholder="GSR" formControlName="gsr" (selectionChange)="gsrChange($event)">
+              <mat-select placeholder="{{'retailer.list.gsr' | translate}}" formControlName="gsr" (selectionChange)="gsrChange($event)">
                 <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['gsr'].hasError('required') && formRetailer.controls['gsr'].touched ">
-                GSR harus diisi
+                {{'retailer.list.gsr' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <mat-select placeholder="GSM PL" formControlName="gsm_pl">
+              <mat-select placeholder="{{'retailer.list.gsm_pl' | translate}}" formControlName="gsm_pl">
                 <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['gsm_pl'].hasError('required') && formRetailer.controls['gsm_pl'].touched ">
-                GSM PL harus diisi
+                {{'retailer.list.gsm_pl' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -249,7 +249,7 @@
               </mat-select>
               <mat-error
                 *ngIf="formRetailer.controls['cashier'].hasError('required') && formRetailer.controls['cashier'].touched ">
-                Akses Kasir harus diisi
+                Akses Kasir {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div> -->
@@ -259,47 +259,47 @@
               <div fxLayout="row wrap" fxFlex="50">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
                   <input matInput type="text" maxlength="16" pattern="[0-9]*" inputmode="numeric"
-                    formControlName="account_number" placeholder="Nomor Rekening Bank" numericOnly
+                    formControlName="account_number" placeholder="{{'global.label.bank_account_number' | translate}}" numericOnly
                     (keyup)="bindFormBankAccountValidator()">
                 </mat-form-field>
                 <mat-error
                   *ngIf="formBankAccount.controls['account_number'].hasError('required') && formBankAccount.controls['account_number'].touched">
-                  Nomor Rekening harus diisi.
+                  {{'global.label.bank_account_number' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </div>
               <div fxLayout="row wrap" fxFlex="40" style="margin-left: 63px;">
                 <mat-form-field fxFlex="40" class="is-light form-primary">
-                  <mat-select placeholder="PKP" [formControl]="pkp">
+                  <mat-select placeholder="{{'retailer.detail.pkp' | translate}}" [formControl]="pkp">
                     <mat-option *ngFor="let item of pkpOptions" [value]="item.key">{{ item.value }}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <!-- <mat-error
                   *ngIf="formBankAccount.controls['pkp'].hasError('required') && formBankAccount.controls['pkp'].touched">
-                  PKP harus diisi.
+                  PKP {{'global.messages.mandatory_text' | translate}}
                 </mat-error> -->
               </div>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <div fxLayout="row wrap" fxFlex="50">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <mat-select placeholder="Rekening Bank Tervalidasi" formControlName="bank_final_validation"
+                  <mat-select placeholder="{{'retailer.list.bank_account_validation' | translate}}" formControlName="bank_final_validation"
                     (selectionChange)="bindFormBankAccountValidator()">
                     <mat-option *ngFor="let item of listBankFinalValidation" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <!-- <mat-error
                   *ngIf="formRetailer.controls['bank_final_validation'].hasError('required') && formRetailer.controls['bank_final_validation'].touched ">
-                  Rekening Bank Tervalidasi harus diisi
+                  Rekening Bank Tervalidasi {{'global.messages.mandatory_text' | translate}}
                 </mat-error> -->
               </div>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <div fxLayout="row wrap" fxFlex="55">
                 <mat-form-field fxFlex="91" class="is-light form-primary">
-                  <mat-select formControlName="bank_name" placeholder="Nama Bank" #singleSelect
+                  <mat-select formControlName="bank_name" placeholder="{{'global.label.bank_name' | translate}}" #singleSelect
                     (selectionChange)="bindFormBankAccountValidator()">
-                    <ngx-mat-select-search [formControl]="filterBank" [placeholderLabel]="'Cari Nama Bank...'"
-                      [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'">
+                    <ngx-mat-select-search [formControl]="filterBank" placeholderLabel="{{'global.label.search' | translate}} {{'global.label.bank_name' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found'}}">
                     </ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
                       {{item.name}}
@@ -308,7 +308,7 @@
                 </mat-form-field>
                 <mat-error
                   *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
-                  Nama Bank harus diisi.
+                  {{'global.label.bank_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <div fxFlex="1" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
                   <button mat-icon-button color="" (click)="clearBankName()">
@@ -318,46 +318,46 @@
               </div>
               <div fxLayout="row wrap" fxFlex="40" *ngIf="pkp.value === 1">
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput placeholder="NPWP" [formControl]="npwp">
+                  <input matInput placeholder="{{'global.label.tax_number' | translate}}" [formControl]="npwp">
                 </mat-form-field>
                 <!-- <mat-error
                   *ngIf="formBankAccount.controls['npwp'].hasError('required') && formBankAccount.controls['npwp'].touched">
-                  NPWP harus diisi.
+                  NPWP {{'global.messages.mandatory_text' | translate}}
                 </mat-error> -->
               </div>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <input matInput placeholder="Nama pada Rekening Bank" formControlName="account_name"
+                <input matInput placeholder="{{'global.label.bank_account_name' | translate}}" formControlName="account_name"
                   (keyup)="bindFormBankAccountValidator()">
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['account_name'].hasError('required') && formBankAccount.controls['account_name'].touched">
-                Nama pada Rekening Bank harus diisi.
+                {{'global.label.bank_account_name' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </div>
             <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <input matInput placeholder="Cabang" formControlName="branch" (keyup)="bindFormBankAccountValidator()">
+                <input matInput placeholder="{{'global.label.bank_branch' | translate}}" formControlName="branch" (keyup)="bindFormBankAccountValidator()">
               </mat-form-field>
               <mat-error
                 *ngIf="formBankAccount.controls['branch'].hasError('required') && formBankAccount.controls['branch'].touched">
-                Cabang Bank harus diisi.
+                {{'global.label.bank_branch' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </div>
           </div>
 
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="40" class="is-light form-primary">
-              <input matInput placeholder="Apps Version AYO SRC Toko" formControlName="version_retailer">
+              <input matInput placeholder="{{'retailer.list.apps_version_ayo_toko' | translate}}" formControlName="version_retailer">
             </mat-form-field>
             <mat-form-field fxFlex="40" class="is-light form-primary" style="margin-left: 30px;">
-              <input matInput placeholder="Apps Version AYO SRC Kasir" formControlName="version_cashier">
+              <input matInput placeholder="{{'retailer.list.apps_version_ayo_cashier' | translate}}" formControlName="version_cashier">
             </mat-form-field>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-form-field fxFlex="20" class="is-light form-primary">
-              <mat-select formControlName="is_chat_bot" placeholder="Chatbot">
+              <mat-select formControlName="is_chat_bot" placeholder="{{'global.label.chat_bot' | translate}}">
                 <mat-option [value]="statusChatBot.value" *ngFor="let statusChatBot of listStatusChatBot">
                   {{statusChatBot.name}}
                 </mat-option>
@@ -365,24 +365,24 @@
             </mat-form-field>
             <div>
               <mat-label>
-                Order Online:
+                {{'retailer.list.text4' | translate}}:
               </mat-label>
               <mat-radio-group formControlName="order_online" class="radio-group pb-16" fxLayout="row wrap">
-                <mat-radio-button class="radio-button" [value]="1">Ya</mat-radio-button>
-                <mat-radio-button class="radio-button" [value]="0">Tidak</mat-radio-button>
+                <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
+                <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
               </mat-radio-group>
             </div>
 
           </div>
 
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-            <h3>Detail Akun Pojok Bayar</h3>
+            <h3>{{'retailer.detail.detail_pojok_bayar_account' | translate}}</h3>
           </div>
 
           <div class="table-wrapper" style="box-shadow: none !important; border: 1px solid #e3e3e3;">
             <ngx-datatable class="material" [rows]="detailRetailer?.detail_pojok_bayar" [columnMode]="'force'"
               [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5">
-              <ngx-datatable-column name="Nomor Handphone Pojok Bayar" prop="no_pojok_bayar">
+              <ngx-datatable-column name="{{'global.label.phone' | translate}} {{'retailer.detail.pojok_bayar' | translate}}" prop="no_pojok_bayar">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <div class="name-container">{{row.no_pojok_bayar || '-'}}</div>
                 </ng-template>
@@ -412,29 +412,29 @@
           </div>
 
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-            <h3>Daftar Consumer</h3>
+            <h3>{{'retailer.list.text5' | translate}}</h3>
           </div>
 
           <div class="table-wrapper" style="box-shadow: none !important; border: 1px solid #e3e3e3;">
             <ngx-datatable class="material" [rows]="detailRetailer?.customers" [columnMode]="'force'"
               [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5">
-              <ngx-datatable-column name="Nama Consumer" prop="fullname"></ngx-datatable-column>
-              <ngx-datatable-column name="Nomor Ponsel" prop="phone">
+              <ngx-datatable-column name="{{'retailer.list.text8' | translate}}" prop="fullname"></ngx-datatable-column>
+              <ngx-datatable-column name="{{'global.label.phone' | translate}}" prop="phone">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <div class="name-container">{{row.phone || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Email" prop="email">
+              <ngx-datatable-column name="{{'global.label.email' | translate}}" prop="email">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <div class="name-container">{{row.email || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Kota" [sortable]="false" prop="city">
+              <ngx-datatable-column name="{{'global.label.city' | translate}}" [sortable]="false" prop="city">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <div class="name-container">{{row.city_name || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Provinsi" [sortable]="false" prop="province">
+              <ngx-datatable-column name="{{'global.label.province' | translate}}" [sortable]="false" prop="province">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                   <div class="name-container">{{row.province_name || '-'}}</div>
                 </ng-template>
@@ -446,28 +446,28 @@
             [formGroup]="formRefferalCode" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Referral Code yang diinput" formControlName="ref_code">
+                <input matInput placeholder="{{'retailer.list.text6' | translate}}" formControlName="ref_code">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Customer Code" formControlName="customer_code">
+                <input matInput placeholder="{{'retailer.list.text7' | translate}}" formControlName="customer_code">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Customer Name" formControlName="customer_name">
+                <input matInput placeholder="{{'retailer.list.text8' | translate}}" formControlName="customer_name">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
-                <input matInput placeholder="Customer Type" formControlName="customer_type">
+                <input matInput placeholder="{{'retailer.list.text9' | translate}}" formControlName="customer_type">
               </mat-form-field>
             </div>
             <div fxLayout="row wrap" fxFlex="55">
               <mat-form-field fxFlex="91" class="is-light form-primary">
                 <input matInput [matDatepicker]="date" (focus)="date.open()" formControlName="date_ref_code"
-                  placeholder="Tanggal input Referral Code">
+                  placeholder="{{'retailer.list.text10' | translate}}">
                 <mat-datepicker-toggle matSuffix [for]="date">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                 </mat-datepicker-toggle>
@@ -478,7 +478,7 @@
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
               fxFlex="20" (click)="submit()">
-              SIMPAN
+              {{'global.button.save' | translate}}
             </button>
           </div>
 

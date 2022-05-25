@@ -13,14 +13,14 @@
       fxLayoutAlign="space-between center"
       class="top-table pt-8"
     >
-      <h2 class="pl-8">Copywriting</h2>
+      <h2 class="pl-8">{{'dte.template_tugas.copywriting' | translate}}</h2>
       <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
           <input
             id="search"
             matInput
-            placeholder="Cari"
+            placeholder="{{ls.locale.global.label.search}}"
             (keyup)="keyUp.next($event.target.value)"
             autocomplete="off"
           />
@@ -48,7 +48,7 @@
       (sort)="onSort($event)"
       (select)="onSelect($event)"
     >
-      <ngx-datatable-column name="Nama" prop="name">
+      <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
         <ng-template
           ngx-datatable-cell-template
           let-row="row"

@@ -168,6 +168,6 @@ export class TaskVerificationService extends BaseService {
 
   exportTrueTsm(body?): Observable<any> {
     const url = this.getUrl(this.namespace, 'exportTrueTsm');
-    return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
 }

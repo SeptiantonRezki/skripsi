@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 
 @Component({
@@ -23,7 +24,9 @@ export class ImportListWholesalerComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private wholesalerService: WholesalerService,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private ls: LanguagesService,
+    ) {
       this.rows = [];
       this.dataService.showLoading(false);
     }

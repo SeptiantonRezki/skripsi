@@ -17,8 +17,10 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject } from 'rxjs';
-import { ImportAudienceBannerDialogComponent } from '../import-audience-banner-dialog/import-audience-banner-dialog.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { InappMarketingValidator } from '../../InappMarketing.validator';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-banner-edit',
@@ -44,32 +46,74 @@ export class BannerEditComponent {
 
   lvl: any[];
   minDate: any;
-  listStatus: any[] = [{ name: 'Status Aktif', value: 'publish' }, { name: 'Status Non Aktif', value: 'draft' }];
-  listUserGroup: any[] = [{ name: 'Retailer', value: 'retailer' }, { name: 'Customer', value: 'customer' }];
-  listUserGroupType: any[] = [{ name: 'SRC', value: 'src' }, { name: 'WS Downline', value: 'ws_downline' }];
-  listContentType: any[] = [{ name: 'Static Page', value: 'static_page' }, { name: 'Landing Page', value: 'landing_page' }, { name: 'Iframe', value: 'iframe' }, { name: 'Image', value: 'image' }, { name: 'Unlinked', value: 'unlinked' }, { name: 'E-Wallet', value: 'e_wallet' },
-  { name: 'Link to Web Browser', value: 'link_web' }
+  listStatus: any[] = [
+    { name: this.translate.instant('global.label.active_status'), value: 'publish' },
+    { name: this.translate.instant('global.label.inactive_status'), value: 'draft' }
+  ];
+  listUserGroup: any[] = [
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text11'), value: "retailer" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text12'), value: "customer" }
+  ];
+  listUserGroupType: any[] = [
+    { name: this.translate.instant('global.label.src'), value: "src" },
+    { name: this.translate.instant('global.label.ws_downline'), value: "ws_downline" }
+  ];
+  listContentType: any[] = [
+    { name: this.translate.instant('global.label.static_page'), value: "static_page" },
+    { name: this.translate.instant('global.label.landing_page'), value: "landing_page" },
+    { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+    { name: this.translate.instant('global.label.image'), value: "image" },
+    { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+    { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
+    { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }
   ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-  listJenisKonsumen: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Terverifikasi', value: 'verified' }];
-  listSubscription: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Berlangganan', value: 'yes' }, { name: 'Tidak Berlangganan', value: 'no' }];
-  listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
-  listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
+  listJenisKonsumen: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "all" },
+    { name: this.translate.instant('global.label.verified'), value: "verified" }
+  ];
+  listSubscription: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "all" },
+    { name: this.translate.instant('global.label.subscribe'), value: "yes" },
+    { name: this.translate.instant('global.label.unsubscribe'), value: "no" }
+  ];
+  listSmoker: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "both" },
+    { name: this.translate.instant('global.label.smoking'), value: "yes" },
+    { name: this.translate.instant('global.label.not_smoke'), value: "no" }
+  ];
+  listGender: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "both" },
+    { name: this.translate.instant('global.label.male'), value: "male" },
+    { name: this.translate.instant('global.label.female'), value: "female" }
+  ];
   listAge: any[] = [{ name: '18+', value: '18+' }, { name: '< 18', value: '18-' }];
   
-  listTypeBanner: any[] = [{ name: 'In-App Banner', value: 'in-app-banner' }, { name: 'Info Terkini', value: 'info-terkini' }, { name: 'Aktivasi Konsumen', value: 'aktivasi-konsumen' }];
-  listTypeBannerConsumer: any[] = [{name:'In App Banner',value:'in-app-banner'},{name:'Toko Terdekat',value:'toko-terdekat'},{name:'Info SRC',value:'info-src'},{name:'Flying Button',value:'flying-button'}];
+  listTypeBanner: any[] = [
+    { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
+  ];
+  listTypeBannerConsumer: any[] = [
+    {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
+    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value:"toko-terdekat"},
+    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value:"info-src"},
+    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value:"flying-button"}
+  ];
   listProfile = [
-    { name: 'Ubah Profil', value: 'ubah_profil' },
-    { name: 'Toko Langganan', value: 'toko_langganan' },
-    { name: 'Lokasi Tersimpan', value: 'lokasi_tersimpan' },
-    { name: 'Bantuan', value: 'bantuan' },
-    { name: 'Pengaturan Privasi', value: 'pengaturan_privasi' },
+    { name: this.translate.instant('global.label.update_profile'), value: "ubah_profil" },
+    { name: this.translate.instant('global.label.subscription_store'), value: "toko_langganan" },
+    { name: this.translate.instant('global.label.saved_location'), value: "lokasi_tersimpan" },
+    { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+    { name: this.translate.instant('global.label.privacy_settings'), value: "pengaturan_privasi" },
   ];
   listCustomerBanners: any[] = [];
-  listEmployee: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Employee Only', value: 'yes' }];
+  listEmployee: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "all" },
+    { name: this.translate.instant('global.label.employee_only'), value: "yes" }
+  ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
   templateBannerList: any[];
@@ -121,6 +165,12 @@ export class BannerEditComponent {
   area_id_list: any = [];
   lastLevel: any;
   dialogRef: any;
+  
+  pageName = this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1')
+
+  titleParam = {
+    entity: this.pageName
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -132,7 +182,9 @@ export class BannerEditComponent {
     private formBuilder: FormBuilder,
     private _lightbox: Lightbox,
     private geotreeService: GeotreeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.detailBanner = dataService.getFromStorage('detail_banner');
@@ -144,26 +196,27 @@ export class BannerEditComponent {
 
     if (this.detailBanner.user_group === 'retailer') {
       this.listLandingPage = [
-        { name: 'Belanja', value: 'belanja' },
-        { name: 'Misi', value: 'misi' },
-        { name: 'Pelanggan', value: 'pelanggan' },
-        { name: 'Bantuan', value: 'bantuan' },
-        { name: 'Profil Saya', value: 'profil_saya' },
-        { name: 'Pojok Modal', value: 'pojok_modal' },
-        { name: 'SRC Katalog', value: 'src_katalog' },
-        { name: 'Pojok Bayar', value: 'pojok_bayar' }];
+        { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+        { name: this.translate.instant('global.label.mission'), value: "misi" },
+        { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+        { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+        { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" },
+        { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+        { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
+        { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+      ];
     } else {
       this.listLandingPage = [
-        { name: 'Pesan Antar', value: 'pesan_antar' },
-        { name: 'Terdekat', value: 'terdekat' },
-        { name: 'Main Bareng', value: 'main_bareng' },
-        { name: 'Tantangan', value: 'tantangan' },
-        { name: 'Peluang', value: 'peluang' },
-        { name: 'Pojok Modal', value: 'pojok_modal' },
-        { name: 'Profil Saya', value: 'profil_saya' },
-        { name: 'Bantuan', value: 'bantuan' },
-        { name: 'Kupon', value: 'kupon' },
-        { name: 'Voucher', value: 'voucher_kupon' },
+        { name: this.translate.instant('cn_reward.b2c_voucher.text26'), value: "pesan_antar" },
+        { name: this.translate.instant('global.label.nearby'), value: "terdekat" },
+        { name: this.translate.instant('global.label.play_together'), value: "main_bareng" },
+        { name: this.translate.instant('global.label.challenge'), value: "tantangan" },
+        { name: this.translate.instant('global.label.opportunity'), value: "peluang" },
+        { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+        { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" },
+        { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+        { name: this.translate.instant('global.label.coupon'), value: "kupon" },
+        { name: this.translate.instant('global.label.voucher'), value: "voucher_kupon" },
       ];
     }
 
@@ -270,28 +323,34 @@ export class BannerEditComponent {
       this.selected.splice(0, this.selected.length);
       this.audienceSelected = [];
       if (res === 'retailer') {
-        this.listLandingPage = [{ name: 'Belanja', value: 'belanja' }, { name: 'Misi', value: 'misi' }, { name: 'Pelanggan', value: 'pelanggan' }, { name: 'Bantuan', value: 'bantuan' }, { name: 'Profil Saya', value: 'profil_saya' },
-        { name: 'Pojok Modal', value: 'pojok_modal' },
-        { name: 'SRC Katalog', value: 'src_katalog' },
-        { name: 'Pojok Bayar', value: 'pojok_bayar' }];
+        this.listLandingPage = [
+          { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+          { name: this.translate.instant('global.label.mission'), value: "misi" },
+          { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+          { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+          { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" },
+          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+          { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
+          { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+        ];
         this.formBannerGroup.controls['age_consumer_from'].disable();
         this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       } else {
         this.listLandingPage = [
-          { name: 'Pesan Antar', value: 'pesan_antar' },
-          { name: 'Terdekat', value: 'terdekat' },
-          { name: 'Main Bareng', value: 'main_bareng' },
-          { name: 'Tantangan', value: 'tantangan' },
-          { name: 'Peluang', value: 'peluang' },
-          { name: 'Pojok Modal', value: 'pojok_modal' },
-          { name: 'Profil Saya', value: 'profil_saya' },
-          { name: 'Bantuan', value: 'bantuan' },
-          { name: 'Kupon', value: 'kupon' },
-          { name: 'Voucher', value: 'voucher_kupon' },
+          { name: this.translate.instant('cn_reward.b2c_voucher.text26'), value: "pesan_antar" },
+          { name: this.translate.instant('global.label.nearby'), value: "terdekat" },
+          { name: this.translate.instant('global.label.play_together'), value: "main_bareng" },
+          { name: this.translate.instant('global.label.challenge'), value: "tantangan" },
+          { name: this.translate.instant('global.label.opportunity'), value: "peluang" },
+          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+          { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" },
+          { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+          { name: this.translate.instant('global.label.coupon'), value: "kupon" },
+          { name: this.translate.instant('global.label.voucher'), value: "voucher_kupon" },
         ];
-        this.listContentType.push({ name: 'E-Wallet', value: 'e_wallet' });
+        this.listContentType.push({ name: this.translate.instant('global.label.ewallet'), value: 'e_wallet' });
         if (!this.isDetail) {
           this.formBannerGroup.controls['age_consumer_from'].enable();
           this.formBannerGroup.controls['age_consumer_to'].enable();
@@ -620,8 +679,8 @@ export class BannerEditComponent {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -647,8 +706,8 @@ export class BannerEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -677,8 +736,8 @@ export class BannerEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -706,8 +765,8 @@ export class BannerEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -732,7 +791,8 @@ export class BannerEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -755,8 +815,8 @@ export class BannerEditComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -997,10 +1057,10 @@ export class BannerEditComponent {
   deleteArea(idx) {
     this.indexDelete = idx;
     let data = {
-      titleDialog: 'Hapus Geotree',
-      captionDialog: `Apakah anda yakin untuk menghapus Geotree ${idx + 1} ?`,
+      titleDialog: this.translate.instant('global.message.delete_data', { entity: this.translate.instant('global.area.geotree') }),
+      captionDialog: this.translate.instant('global.message.delete_confirm', { entity: this.translate.instant('global.area.geotree'), index: idx+1 }),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1396,7 +1456,9 @@ export class BannerEditComponent {
 
         let same = this.findDuplicate(areas.map(item => item.value));
         if (same.length > 0) {
-          return this.dialogService.openSnackBar({ message: 'Terdapat duplikat sales tree, mohon periksa kembali data anda!' });
+          return this.dialogService.openSnackBar({
+            message: this.translate.instant('global.label.duplicate_data', { entity: this.translate.instant('global.label.salestree') })
+          });
         }
 
         areas.map(item => {
@@ -1443,7 +1505,7 @@ export class BannerEditComponent {
         res => {
           this.loadingIndicator = false;
           this.router.navigate(['advertisement', 'banner']);
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' });
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
         },
         err => {
           // this.dialogService.openSnackBar({ message: err.error.message });
@@ -1454,11 +1516,11 @@ export class BannerEditComponent {
     } else {
       let msg;
       if (this.formBannerGroup.invalid) {
-        msg = 'Silakan lengkapi data terlebih dahulu!';
+        msg = this.translate.instant('global.label.please_complete_data');
       } else if (!this.bannerSelected) {
-        msg = 'Gambar spanduk belum dipilih!';
+        msg = this.translate.instant('global.label.no_selected_image', { type: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1') });
       } else {
-        msg = 'Silakan lengkapi data terlebih dahulu!';
+        msg = this.translate.instant('global.label.please_complete_data');
       }
 
       this.dialogService.openSnackBar({ message: msg });
@@ -1785,7 +1847,7 @@ export class BannerEditComponent {
   async export() {
     let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'exportAudience' : 'exportCustomerAudience';
     if (this.audienceSelected.length === 0) {
-      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di ekspor!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.select_data_to_export', { entity: this.translate.instant('dte.audience.text1') }) });
       return;
     }
     this.dataService.showLoading(true);
@@ -1852,16 +1914,20 @@ export class BannerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formBannerGroup.get('user_group').value };
+    dialogConfig.data = {
+      audience: this.formBannerGroup.get('user_group').value,
+      api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd),
+      fileType: 'xls'
+    };
 
-    this.dialogRef = this.dialog.open(ImportAudienceBannerDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.audienceSelected = response;
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

@@ -118,9 +118,9 @@ import { ImportAudienceDialogComponent } from "./private-label/panel-partnership
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
 import { DokumenDialogComponent } from './wholesaler/dokumen-dialog/dokumen-dialog.component';
 import { ImportListWholesalerComponent } from './wholesaler/import-list-wholesaler/import-list-wholesaler.component';
-import { RcaAgentComponent } from './rca-agent/rca-agent.component';
-import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
-import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
+// import { RcaAgentComponent } from './rca-agent/rca-agent.component';
+// import { RcaAgentCreateComponent } from './rca-agent/create/rca-agent-create.component';
+// import { RcaAgentEditComponent } from './rca-agent/edit/rca-agent-edit.component';
 import { VoucherPrincipalDetailTabComponent } from "./supplier-vouchers/detail/voucher-principal-detail-tab/voucher-principal-detail-tab.component";
 import { VoucherPrincipalDetailComponent } from "./supplier-vouchers/detail/voucher-principal-detail.component";
 import { OrderToMitraHubComponent } from './private-label/order-to-mitra-hub/order-to-mitra-hub.component';

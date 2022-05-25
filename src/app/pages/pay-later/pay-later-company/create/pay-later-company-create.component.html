@@ -12,10 +12,10 @@
         <form autocomplete="off" [formGroup]="formCompany">
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <input matInput type="text" formControlName="name" placeholder="Nama">
+              <input matInput type="text" formControlName="name" placeholder="{{ls.locale.global.label.name}}">
               <mat-error
                 *ngIf="formCompany.controls['name'].hasError('required') && formCompany.controls['name'].touched">
-                Nama harus diisi
+                {{ls.locale.global.label.name}} harus diisi
               </mat-error>
             </mat-form-field>
           </div>
@@ -114,7 +114,7 @@
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
       <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-        SIMPAN
+        {{ls.locale.global.button.save}}
       </button>
     </div>
     <a #downloadLink></a>

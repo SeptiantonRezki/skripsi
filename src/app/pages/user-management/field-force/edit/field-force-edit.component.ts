@@ -6,6 +6,7 @@ import { DataService } from 'app/services/data.service';
 import { FieldForceService } from 'app/services/user-management/field-force.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import * as _ from 'underscore';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-field-force-edit',
@@ -22,8 +23,8 @@ export class FieldForceEditComponent {
 
   detailFF: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" }
   ];
 
   listClassification: any = [
@@ -51,6 +52,7 @@ export class FieldForceEditComponent {
     private dialogService: DialogService,
     private dataService: DataService,
     private fieldforceService: FieldForceService,
+    private ls: LanguagesService
   ) {
     this.formdataErrors = {
       status: {},

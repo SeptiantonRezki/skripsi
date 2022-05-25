@@ -34,6 +34,7 @@ import { DialogPanelBlastComponent } from "../../dialog/dialog-panel-blast/dialo
 import { DialogProcessComponent } from "../../dialog/dialog-process/dialog-process.component";
 import { merge } from "rxjs/observable/merge";
 import { ImportAudiencePersonalizeComponent } from "../../import/personalize/import-audience-personalize.component";
+import { TranslateService } from "@ngx-translate/core";
 
 
 @Component({
@@ -54,10 +55,10 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   audienceFilter: any[] = [
     { name: "Population Blast", value: "population-blast" },
     { name: "Recommended Panel", value: "recommended-panel" },
-  ];
+  ]; // TODO
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -71,10 +72,10 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     { name: "Not Active", value: "inactive" },
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -110,6 +111,8 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     area: false,
   };
   previewAudienceList: any[];
+  pageName = this.translate.instant('dte.audience.audience_personalize');
+  titleParam = {entity: this.pageName};
 
   public filterScheduler: FormControl = new FormControl();
   public filteredScheduler: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -156,6 +159,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     private idbService: IdbService,
     private ls: LanguagesService,
     private sequencingService: SequencingService,
+    private translate: TranslateService,
     ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1030,7 +1034,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formAudience);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: "Silakan lengkapi data terlebih dahulu!",// TODO
       });
     }
   }
@@ -1138,7 +1142,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       } else {
         if (!this.data_imported.length) {
           this.dialogService.openSnackBar({
-            message: "Silahkan import file terlebih dahulu",
+            message: "Silahkan import file terlebih dahulu",// TODO
           });
           return;
         }
@@ -1172,7 +1176,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
             this.formAudience.get("est_task_compliance").setValue(res.data.est_task_compliance);
           }
           this.dialogRef.close();
-          this.dialogService.openSnackBar({message : 'Proses Check Berhasil'});
+          this.dialogService.openSnackBar({message : 'Proses Check Berhasil'});// TODO
         },
         (err) => {
           this.dialogRef.close();
@@ -1188,7 +1192,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       commonFormValidator.validateAllFields(this.formFilterRetailer);
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: "Silakan lengkapi data terlebih dahulu!",// TODO
       });
     }
   }

@@ -50,6 +50,12 @@ import { TemplateEditPersonalizeComponent } from "./template/edit/personalize/te
 import { AudienceCreatePersonalizeComponent } from "./audience/create/personalize/audience-create-personalize.component";
 import { PublishMisiComponent } from "./publish-misi/publish-misi.component";
 import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/audience-edit-personalize.component";
+import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
+import { SkuComponent } from "./image-recognition/sku/sku.component";
+import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
+import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
+import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
+import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
 
 const routes: Routes = [
   {
@@ -544,6 +550,98 @@ const routes: Routes = [
   {
     path: "publish-mission/detail/:id",
     component: PublishMisiComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/create",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/edit/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand-group/detail/:id",
+    component: GroupSkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/create",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/edit/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "master-brand/detail/:id",
+    component: SkuComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/create",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/edit/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-stock-check/detail/:id",
+    component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'task-verification',
+    component: TaskVerificationComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'assignment-cart',
+    component: AssignmentCartComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment',
+    component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-assignment/detail/:id',
+    component: TaskVerificationAssignmentComponent,
     canActivate: [PageGuard]
   },
 ];

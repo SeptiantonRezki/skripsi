@@ -17,6 +17,7 @@ import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { OrdertoSupplierService } from 'app/services/user-management/private-label/orderto-supplier.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-orderto-supplier-index',
@@ -27,13 +28,13 @@ export class OrdertoSupplierIndexComponent implements OnInit {
   onLoad: boolean;
   formFilter: FormGroup;
   statusFilter: any[] = [
-    { name: 'Semua Status', value: '' },
-    { name: 'Pesanan Baru', value: 'baru' },
-    { name: 'Pesanan Dibatalkan', value: 'dibatalkan' },
-    { name: 'Pesanan Diproses', value: 'diproses' },
-    { name: 'Pesanan Dikirim', value: 'dikirim' },
-    { name: 'Pesanan Diterima', value: 'diterima' },
-    { name: 'Pesanan Selesai', value: 'selesai' },
+    { name: this.ls.locale.global.label.all + ' Status', value: '' },
+    { name: this.ls.locale.global.order_status.new_order, value: 'baru' },
+    { name: this.ls.locale.global.order_status.canceled_order, value: 'dibatalkan' },
+    { name: this.ls.locale.global.order_status.process_order, value: 'diproses' },
+    { name: this.ls.locale.global.order_status.send_order, value: 'dikirim' },
+    { name: this.ls.locale.global.order_status.received_order, value: 'diterima' },
+    { name: this.ls.locale.global.order_status.completed_order, value: 'selesai' },
   ];
   generatePO: GeneratePO = new GeneratePO();
 
@@ -75,9 +76,11 @@ export class OrdertoSupplierIndexComponent implements OnInit {
     private convertRp: RupiahFormaterWithoutRpPipe,
     private wholesalerService: WholesalerService,
     private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");
+    this.permission = this.roles.getRoles('principal.supplierorder');
   }
 
   ngOnInit() {

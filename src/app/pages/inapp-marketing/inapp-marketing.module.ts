@@ -8,6 +8,7 @@ import { BannerEditComponent } from "./banner/edit/banner-edit.component";
 import { LandingPageIndexComponent } from "./landing-page/index/landing-page-index.component";
 import { LandingPageCreateComponent } from "./landing-page/create/landing-page-create.component";
 import { LandingPageEditComponent } from "./landing-page/edit/landing-page-edit.component";
+import { PromoMandiriComponent } from "./promo-mandiri/promo-mandiri.component";
 import { FuseSharedModule } from "@fuse/shared.module";
 import { SharedModule } from "app/shared/shared.module";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
@@ -45,6 +46,7 @@ import { LightboxModule } from 'ngx-lightbox';
 import { ImportAudienceBannerDialogComponent } from './banner/import-audience-banner-dialog/import-audience-banner-dialog.component';
 import { BannerSortingComponent } from './banner-sorting/banner-sorting.component';
 import { DndModule } from 'ngx-drag-drop';
+import { TranslateModule } from "@ngx-translate/core";
 
 export const MY_FORMATS = {
   parse: {
@@ -86,6 +88,7 @@ export const MY_FORMATS = {
     DndModule,
     MatListModule,
     MatCardModule,
+    TranslateModule.forChild(),
   ],
   declarations: [
     BannerIndexComponent,
@@ -95,7 +98,8 @@ export const MY_FORMATS = {
     LandingPageCreateComponent,
     LandingPageEditComponent,
     ImportAudienceBannerDialogComponent,
-    BannerSortingComponent
+    BannerSortingComponent,
+    PromoMandiriComponent,
   ],
   exports: [
     BannerIndexComponent,

@@ -19,7 +19,7 @@
           <div class="pl-16" fxFlex="60" fxLayoutAlign="start center" [formGroup]="formFilter">
 
             <mat-form-field fxFlex="100">
-              <mat-select placeholder="Penggunaan Voucher" formControlName="type">
+              <mat-select placeholder="Penggunaan Voucher" formControlName="type"> <!-- // TODO -->
                 <mat-option *ngFor="let ops of opsiVoucherList" [value]="ops.value"><strong>{{ ops.name }}</strong>
                 </mat-option>
               </mat-select>
@@ -32,7 +32,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
           </mat-form-field>
         </div>
       </div>
@@ -47,14 +47,14 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Penggunaan Voucher" prop="type_indo">
+        <ngx-datatable-column name="Penggunaan Voucher" prop="type_indo"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a> -->
             {{row.type_indo}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count">
+        <ngx-datatable-column name="Jumlah Panel Retailer" prop="panel_retailer_count"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.panel_retailer_count}}
           </ng-template>

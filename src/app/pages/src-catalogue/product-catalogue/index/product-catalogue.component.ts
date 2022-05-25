@@ -11,6 +11,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CatalogueProductImportFileDialogComponent } from './import-file-dialog/import-file-dialog.component';
 import { serviceServer, server } from '../../../../../environments/environment';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -50,7 +51,8 @@ export class ProductCatalogueComponent implements OnInit {
     private productCatalogueService: ProductCatalogueService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -171,10 +173,10 @@ export class ProductCatalogueComponent implements OnInit {
   deleteProduct(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Produk",
-      captionDialog: "Apakah anda yakin untuk menghapus Produk ini ?",
+      titleDialog: this.translate.instant('manajemen_barang_sku.produk_kasir.text8'),
+      captionDialog: this.translate.instant('manajemen_barang_sku.produk_kasir.text10'),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant("global.button.delete"), this.translate.instant("global.button.cancel")]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -183,7 +185,7 @@ export class ProductCatalogueComponent implements OnInit {
     this.productCatalogueService.delete({ product_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant("global.messages.text1")});
 
         this.getProductCatalogue();
       },
@@ -220,7 +222,7 @@ export class ProductCatalogueComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.getProductCatalogue();
       }
     });
@@ -229,12 +231,12 @@ export class ProductCatalogueComponent implements OnInit {
   deleteAll() {
 
     let data = {
-      titleDialog: "Hapus Semua SKU",
-      captionDialog: "Apakah Anda Yakin untuk menghapus semua list SKU Anda?",
+      titleDialog: this.translate.instant("katalog_src.produk.text3"),
+      captionDialog: this.translate.instant("katalog_src.produk.delete_all_sku"),
       tickbox: true,
-      tickboxCaption: "Apakah anda yakin akan menghapus SEMUA PRODUK? Pastikan anda sudah backup data produk anda dengan Export Excel di halaman produk.",
+      tickboxCaption: this.translate.instant("katalog_src.produk.delete_all_sku"),
       confirmCallback: this.confirmDeleteAll.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -243,7 +245,7 @@ export class ProductCatalogueComponent implements OnInit {
     this.productCatalogueService.deleteAll().subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant("global.messages.text1")});
 
         this.getProductCatalogue();
       },
@@ -253,7 +255,7 @@ export class ProductCatalogueComponent implements OnInit {
   }
 
   renderStockName(stockName) {
-    return stockName === 'in-stock' ? 'Tersedia' : 'Tidak Tersedia';
+    return stockName === 'in-stock' ? this.translate.instant('katalog_src.produk.stock_available') : this.translate.instant('katalog_src.produk.stock_unavailable');
   }
 
 }

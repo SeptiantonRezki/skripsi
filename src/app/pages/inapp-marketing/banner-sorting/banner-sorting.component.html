@@ -3,7 +3,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'Pengaturan Urutan In-App Banner'">
     <button style="width: 170px" (click)="submit()" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> SIMPAN
+      <mat-icon>add</mat-icon> {{ls.locale.global.button.save}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -15,7 +15,7 @@
       <form autocomplete="off" [formGroup]="formSortBanner" fxLayout="row" class="p-24" fxLayoutAlign="start center">
 
           <div class="">
-            <strong class="font-size-16">Tipe Spanduk: </strong>
+            <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' | translate}}: </strong>
           </div>
           <mat-radio-group formControlName="type_banner" class="radio-group" fxLayout="row wrap">
             <mat-radio-button class="radio-button" [value]="item.value" *ngFor="let item of listTypeBanner">
@@ -66,7 +66,7 @@
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -107,7 +107,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama" prop="name">
+        <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name">{{row.name}}</span>
           </ng-template>

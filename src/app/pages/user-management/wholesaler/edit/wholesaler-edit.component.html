@@ -157,7 +157,7 @@
           </div>
 
           <div [formGroup]="formDoc" class="ayo-middle pt-24" fxLayout="column">
-            <div fxLayout="row" fxFlex="100">
+            <div *ngIf="permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
                 <input matInput placeholder="{{ ls.locale.wholesaler.ktp_number }}" type="text" formControlName="ktp">
               </mat-form-field>
@@ -174,7 +174,7 @@
                 </button>
               </div>
             </div>
-            <div fxLayout="row" fxFlex="100">
+            <div *ngIf="permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
               <mat-form-field class="is-light" fxFlex="30">
                 <input matInput placeholder="{{ ls.locale.wholesaler.tax_number }}" type="text" formControlName="npwp">
               </mat-form-field>
@@ -191,10 +191,21 @@
                 </button>
               </div>
             </div>
+            <div *ngIf="!permissionSupplierOrder.document" fxLayout="row" fxFlex="100">
+              <div class="is-light py-24" fxFlex="30"><strong>KTP / NPWP</strong></div>
+              <div fxFlex="2"></div>
+              <div class="confirm btn-confirm py-24" fxLayout="row" fxFlex="50">
+                <div fxFlex="2"></div>
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="40"
+                  (click)="cekDokumenAkses()">
+                  {{ ls.locale.wholesaler.grant_access }}
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Area" formControlName="area_code">
+                <input matInput type="text" placeholder="{{'global.area.area' | translate}}" formControlName="area_code">
                 <mat-error *ngIf="formWs.controls['area_code'].hasError('required') && formWs.controls['area_code'].touched ">
                   Area {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
@@ -233,28 +244,28 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Area" formControlName="area"
+              <mat-select placeholder="{{ ls.locale.global.area.area }}" formControlName="area"
                 matTooltip="{{getToolTipData(formWs.get('area').value, list['area'])}}"
                 (selectionChange)="getAudienceArea('salespoint', formWs.get('area').value)">
                 <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error *ngIf="formWs.controls['area'].hasError('required') && formWs.controls['area'].touched">
-                Area {{ ls.locale.global.messages.mandatory_text }}
+                {{ ls.locale.global.area.area }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Salespoint" formControlName="salespoint"
+              <mat-select placeholder="{{ ls.locale.global.area.salespoint }}" formControlName="salespoint"
                 matTooltip="{{getToolTipData(formWs.get('salespoint').value, list['salespoint'])}}"
                 (selectionChange)="getAudienceArea('district', formWs.get('salespoint').value)">
                 <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formWs.controls['salespoint'].hasError('required') && formWs.controls['salespoint'].touched">
-                Salespoint {{ ls.locale.global.messages.mandatory_text }}
+                {{ ls.locale.global.area.salespoint }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="District" formControlName="district"
+              <mat-select placeholder="{{ ls.locale.global.area.district }}" formControlName="district"
                 matTooltip="{{getToolTipData(formWs.get('district').value, list['district'])}}"
                 (selectionChange)="getAudienceArea('territory', formWs.get('district').value)">
                 <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name}}</mat-option>
@@ -265,7 +276,7 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="31%" class="is-light form-primary">
-              <mat-select placeholder="Territory" formControlName="territory"
+              <mat-select placeholder="{{ ls.locale.global.area.territory }}" formControlName="territory"
                 matTooltip="{{getToolTipData(formWs.get('territory').value, list['territory'])}}">
                 <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>

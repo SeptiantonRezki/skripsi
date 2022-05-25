@@ -21,6 +21,7 @@ import { QiscusService } from "app/services/qiscus.service";
 import { PagesName } from "app/classes/pages-name";
 import * as _ from 'underscore';
 import { WholesalerService } from "app/services/user-management/wholesaler.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-orderto-supplier-detail',
@@ -88,6 +89,7 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
     private ordertoSupplierService: OrdertoSupplierService,
     private qs: QiscusService,
     private wholesalerService: WholesalerService,
+    private ls: LanguagesService,
   ) {
     this.permission = this.roles.getRoles('principal.supplierorder');
     // console.log('roles',this.permission);
@@ -183,7 +185,8 @@ export class OrdertoSupplierDetailComponent implements OnInit, OnDestroy {
           else this.orderStatuses = [];
           this.statusLogs = res.order_status_logs;
           this.statusForm = this.formBuilder.group({
-            newStatus: ""
+            newStatus: "",
+            reject_reason: ""
           });
 
           this.productsForm = this.formBuilder.group({

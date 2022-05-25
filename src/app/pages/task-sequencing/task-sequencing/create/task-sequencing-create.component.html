@@ -19,7 +19,7 @@
           <div fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="start">
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama" formControlName="nama">
+              <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="nama">
               <mat-error
                 *ngIf="taskSequenceForm.controls['nama'].hasError('required') && taskSequenceForm.controls['nama'].touched ">
                 Nama harus diisi.
@@ -27,7 +27,7 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
+              <!-- <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
               <mat-select formControlName="trade_program" placeholder="Pilih Group Trade Program" id="trade_program" #singleSelect>
@@ -64,7 +64,7 @@
 
             <mat-form-field fxFlex="100" class="is-light">
               <input matInput (focus)="startDate.open()" [max]="maxDateTask" [min]="minDateTask"
-                [matDatepicker]="startDate" placeholder="Pilih Tanggal Mulai" formControlName="startDate">
+                [matDatepicker]="startDate" placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="startDate">
               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
               <mat-datepicker #startDate></mat-datepicker>
               <mat-error class="mt-8 px-24"
@@ -75,7 +75,7 @@
 
             <mat-form-field fxFlex="100" class="is-light">
               <input matInput (focus)="endDate.open()" [max]="maxDateTask" [min]="minDateTask"
-                [matDatepicker]="endDate" placeholder="Pilih Tanggal Berakhir" formControlName="endDate">
+                [matDatepicker]="endDate" placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="endDate">
               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
               <mat-datepicker #endDate></mat-datepicker>
               <mat-error class="mt-8 px-24"

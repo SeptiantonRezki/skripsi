@@ -2,7 +2,7 @@
   <div class="p-24 add-btn-medal">
     <button style="width: 170px" (click)="openCreateMedal()" mat-raised-button
       type="button">
-      Buat Medal
+      {{ls.locale.retailer.medal_badge.text5}}
     </button>
   </div>
   <div>
@@ -12,17 +12,17 @@
         [reorderable]="reorderable" [count]="rows.length" [limit]="50" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Medal" prop="name" [sortable]="true">
+        <ngx-datatable-column name="{{ls.locale.retailer.medal_badge.text3}}" prop="name" [sortable]="true">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Deskripsi" prop="description" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.description}}" prop="description" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.description || '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tanggal Dibuat" prop="created_at" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.created_at}}" prop="created_at" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.created_at | date: 'dd/mm/yyyy HH:mm' }}</span>
           </ng-template>
@@ -37,7 +37,7 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Tindakan" [sortable]="false">
+        <ngx-datatable-column name="{{ls.locale.global.label.action}}" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button mat-icon-button matTooltip="Edit" (click)="openEditMedal(row)">

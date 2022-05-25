@@ -31,9 +31,9 @@ export class WholesalerEditComponent {
 
   detailWholesaler: any;
   listStatus: any[] = [
-    { name: "Status Aktif", value: "active" },
-    { name: "Status Non Aktif", value: "inactive" },
-    { name: "Status Belum Terdaftar", value: "not-registered" }
+    { name: this.ls.locale.global.label.active_status, value: "active" },
+    { name: this.ls.locale.global.label.inactive_status, value: "inactive" },
+    { name: this.ls.locale.global.label.unregistered_status, value: "not-registered" }
   ];
   listGsw: any[] = [{ name: 'ON', value: 'on' }, { name: 'OFF', value: 'off' }];
   countryList: any[] = [];
@@ -54,6 +54,7 @@ export class WholesalerEditComponent {
   bankAccountLength: number = 0;
 
   permission: any;
+  permissionSupplierOrder: any;
   roles: PagesName = new PagesName();
   seeStatus: boolean = true;
   seeProfile: boolean = true;
@@ -81,6 +82,7 @@ export class WholesalerEditComponent {
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
+    this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {
       name: {},
       address: {},
@@ -255,32 +257,32 @@ export class WholesalerEditComponent {
     this.areaFromLogin.map(item => {
       switch (item.type.trim()) {
         case 'national':
-          this.formWs.get('national').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('national').disable();
+          this.formWs.get('national').setValue(item.id);
           break
         case 'division':
-          this.formWs.get('zone').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('zone').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'region':
-          this.formWs.get('region').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('region').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'area':
-          this.formWs.get('area').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('area').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'salespoint':
-          this.formWs.get('salespoint').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('salespoint').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'district':
-          this.formWs.get('district').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('district').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
         case 'territory':
-          this.formWs.get('territory').disable();
-          // this.formWs.get('national').setValue(item.id);
+          // this.formWs.get('territory').disable();
+          this.formWs.get('national').setValue(item.id);
           break;
       }
     })
@@ -514,7 +516,7 @@ export class WholesalerEditComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: "Pemberian Akses Ke Supplier" };
+    dialogConfig.data = { isAccess: true, access: this.detailWholesaler.supplier_document_access, title: this.ls.locale.wholesaler.grant_access_supplier };
 
     this.dialogRef = this.dialog.open(DokumenDialogComponent, dialogConfig);
 

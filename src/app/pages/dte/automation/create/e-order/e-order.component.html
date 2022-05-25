@@ -28,10 +28,10 @@
 
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <input matInput type="text" formControlName="audienceName" placeholder="Nama Grup">
+                <input matInput type="text" formControlName="audienceName" placeholder="{{'dte.audience.text4' | translate }}">
                 <mat-error
                   *ngIf="formEOrder.controls['audienceName'].hasError('required') && formEOrder.controls['audienceName'].touched">
-                  Nama Grup harus diisi
+                  {{'dte.audience.text4' | translate }} harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -47,24 +47,24 @@
             <div *ngIf="formEOrder.get('type').value === 'limit'" fxLayout="row wrap" fxLayout.lt-md="column"
               class="py-16" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="number" min="0" placeholder="Audience Minimal" formControlName="min" numericOnly>
+                <input matInput type="number" min="0" placeholder="{{'dte.audience.text9' | translate }}" formControlName="min" numericOnly>
                 <mat-error
                   *ngIf="formEOrder.controls['min'].hasError('required') && formEOrder.controls['min'].touched">
-                  Audience Minimal harus diisi
+                  {{'dte.audience.text9' | translate }} harus diisi
                 </mat-error>
                 <mat-error *ngIf="formEOrder.controls['min'].hasError('min') && formEOrder.controls['min'].touched">
-                  Audience Minimal tidak boleh kurang dari 0
+                  {{'dte.audience.text9' | translate }} tidak boleh kurang dari 0
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="number" min="0" placeholder="Audience Maksimal" formControlName="max" numericOnly>
+                <input matInput type="number" min="0" placeholder="{{'dte.audience.text10' | translate }}" formControlName="max" numericOnly>
                 <mat-error
                   *ngIf="formEOrder.controls['max'].hasError('required') && formEOrder.controls['max'].touched">
-                  Audience Maksimal harus diisi
+                  {{'dte.audience.text10' | translate }} harus diisi
                 </mat-error>
                 <mat-error *ngIf="formEOrder.controls['max'].hasError('min') && formEOrder.controls['max'].touched">
-                  Audience maksimal tidak boleh kurang dari jumlah minimal audience
+                  {{'dte.audience.text10' | translate }} tidak boleh kurang dari jumlah minimal audience
                 </mat-error>
               </mat-form-field>
             </div>
@@ -77,12 +77,12 @@
           fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
 
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone"
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
               (selectionChange)="getAudienceArea('region', formFilter.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Zona' :
@@ -90,7 +90,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region"
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
               (selectionChange)="getAudienceArea('area', formFilter.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Regional'
@@ -99,7 +99,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area"
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
               (selectionChange)="getAudienceArea('salespoint', formFilter.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Area'
@@ -108,7 +108,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Salespoint" formControlName="salespoint"
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
               (selectionChange)="getAudienceArea('district', formFilter.get('salespoint').value)">
               <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">{{item.name === 'all' ?
                 'Semua
@@ -118,7 +118,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="District" formControlName="district"
+            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
               (selectionChange)="getAudienceArea('territory', formFilter.get('district').value)">
               <mat-option *ngFor="let item of list['district']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 District'
@@ -127,7 +127,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="Territory" formControlName="territory">
+            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory">
               <mat-option *ngFor="let item of list['territory']" [value]="item.id">{{item.name === 'all' ? 'Semua
                 Territori'
                 :
@@ -160,18 +160,18 @@
               (change)="onCheckboxChangeFn($event)"></mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Penjual" prop="name"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
         <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column>
-        <ngx-datatable-column name="Kode" prop="code"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
         <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
-        <ngx-datatable-column name="Field Force" prop="ff_name" [sortable]="false"></ngx-datatable-column>
-        <ngx-datatable-column name="Daftar Ayo" prop="status">
+        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
             <span *ngIf="row.status === 'not-registered'">No</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kode Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'global.label.code' | translate}} Divisi" prop="division_code" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Wilayah" prop="region_code" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"></ngx-datatable-column>
       </ngx-datatable>
@@ -180,14 +180,14 @@
       <h3 class="text-bold">Durasi</h3>
       <div fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+          <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
             formControlName="startDate">
           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field fxFlex="45%" class="is-light form-primary">
-          <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="Tanggal Berakhir"
+          <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}"
             formControlName="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate></mat-datepicker>
@@ -246,9 +246,9 @@
       </span>
       <div fxLayout="row">
         <mat-form-field fxFlex="45" class="is-light form-primary">
-          <mat-select placeholder="Pilih Trade Program" #singleSelectTradeProgram formControlName="trade_program_id">
-            <ngx-mat-select-search [formControl]="filterTradeProgram" [placeholderLabel]="'Cari Trade Program...'"
-              [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'"></ngx-mat-select-search>
+          <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" #singleSelectTradeProgram formControlName="trade_program_id">
+            <ngx-mat-select-search [formControl]="filterTradeProgram" placeholderLabel="{{'global.label.search' | translate}}"
+              noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
             <mat-option *ngFor="let item of filteredTradeProgram | async" [value]="item.id">
               {{item.name}}
             </mat-option>
@@ -258,7 +258,7 @@
       <div class="confirm pt-24 pb-24" fxLayout="row">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
           [disabled]="coinRewardInvalid || submitting">
-          SIMPAN
+          {{ls.locale.global.button.save}}
         </button>
       </div>
     </div>

@@ -14,7 +14,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { ReplaySubject, Subject } from 'rxjs';
 import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ImportPopUpAudienceComponent } from '../import-pop-up-audience/import-pop-up-audience.component';
+import { ImportAudienceComponent } from 'app/shared/import-audience/import-audience.component';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import { CustomerService } from 'app/services/user-management/customer.service';
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
@@ -25,6 +25,7 @@ import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service
 import { PagesName } from 'app/classes/pages-name';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-popup-notification-create',
@@ -57,6 +58,40 @@ export class PopupNotificationCreateComponent {
   listGender: any[] = [{ name: "Semua", value: "both" }, { name: "Laki-laki", value: "male" }, { name: "Perempuan", value: "female" }];
   listSmoker: any[] = [{ name: "Semua", value: "both" }, { name: "Merokok", value: "yes" }, { name: "Tidak Merokok", value: "no" }];
   listEmployee: any[] = [{ name: "Semua", value: "all" }, { name: "Employee Only", value: "yes" }];
+  listTypeOfRecurrence: Object[] = [
+    { id: 'once', name: 'Aktivasi notifikasi sekali kirim' },
+    { id: 'recurring', name: 'Aktivasi notifikasi berulang' },
+  ];
+  listRecurrenceTypes: Object[] = [
+    { id: 'daily', name: 'Harian' },
+    { id: 'weekly', name: 'Mingguan' },
+    { id: 'monthly', name: 'Bulanan' },
+    { id: 'yearly', name: 'Tahunan' }
+  ];
+  listWeekDays: any[] = [
+    { id: 1, name: 'Senin' },
+    { id: 2, name: 'Selasa' },
+    { id: 3, name: 'Rabu' },
+    { id: 4, name: 'Kamis' },
+    { id: 5, name: 'Jumat' },
+    { id: 6, name: 'Sabtu' },
+    { id: 0, name: 'Minggu' }
+  ];
+  listDates: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+  listMonths: Object[] = [
+    { id: 1, name: 'Januari' },
+    { id: 2, name: 'Februari' },
+    { id: 3, name: 'Maret' },
+    { id: 4, name: 'April' },
+    { id: 5, name: 'Mei' },
+    { id: 6, name: 'Juni' },
+    { id: 7, name: 'Juli' },
+    { id: 8, name: 'Agustus' },
+    { id: 9, name: 'September' },
+    { id: 10, name: 'Oktober' },
+    { id: 11, name: 'November' },
+    { id: 12, name: 'Desember' },
+  ]
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -78,6 +113,10 @@ export class PopupNotificationCreateComponent {
   customAge: Boolean;
 
   formPopupGroup: FormGroup;
+  formWeeklyRecurrence: FormGroup;
+  formMonthlyRecurrence: FormGroup;
+  formYearlyRecurrence: FormGroup;
+  listDateChosen: FormControl = new FormControl([], Validators.required);
   formPopupErrors: any;
   audienceSelected: any[] = [];
 
@@ -108,6 +147,7 @@ export class PopupNotificationCreateComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+  Country: any = '';
 
   listContentWallet: any[] = [];
 
@@ -115,6 +155,8 @@ export class PopupNotificationCreateComponent {
   private _onDestroy = new Subject<void>();
   permission: any;
   roles: PagesName = new PagesName();
+  
+  pageName = this.translate.instant('notification.popup_notifikasi.page_name');
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -132,7 +174,8 @@ export class PopupNotificationCreateComponent {
     private geotreeService: GeotreeService,
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private bannerService: BannerService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -209,7 +252,21 @@ export class PopupNotificationCreateComponent {
       is_mission_builder: this.is_mission_builder,
       product: [""],
       subscription: ["all"],
+      type_of_recurrence: ["once", Validators.required],
+      recurrence_type: ["daily", Validators.required],
     })
+
+    this.formWeeklyRecurrence = this.formBuilder.group({});
+    this.listWeekDays.forEach(day => this.formWeeklyRecurrence.addControl(day.id, new FormControl(false)));
+
+    this.formMonthlyRecurrence = this.formBuilder.group({
+      recurrence_date: [[], Validators.required]
+    });
+
+    this.formYearlyRecurrence = this.formBuilder.group({
+      recurrence_date: [null, Validators.required],
+      recurrence_month: [null, Validators.required]
+    });
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -220,6 +277,16 @@ export class PopupNotificationCreateComponent {
       district: [""],
       territory: [""]
     })
+
+    if(this.ls.selectedLanguages == 'id'){
+      this.Country ='ID';
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.Country = 'KH';
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.Country ='PH';
+    }
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
@@ -694,8 +761,8 @@ export class PopupNotificationCreateComponent {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -721,8 +788,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -751,8 +818,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -780,8 +847,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -806,7 +873,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -829,8 +897,8 @@ export class PopupNotificationCreateComponent {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -1042,29 +1110,29 @@ export class PopupNotificationCreateComponent {
   initArea(index) {
     let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
     this.areaType.map(item => {
-      switch (item.type.trim()) {
-        case 'national':
-          wilayah.at(index).get('national').disable();
-          break
-        case 'division':
-          wilayah.at(index).get('zone').disable();
-          break;
-        case 'region':
-          wilayah.at(index).get('region').disable();
-          break;
-        case 'area':
-          wilayah.at(index).get('area').disable();
-          break;
-        case 'salespoint':
-          wilayah.at(index).get('salespoint').disable();
-          break;
-        case 'district':
-          wilayah.at(index).get('district').disable();
-          break;
-        case 'territory':
-          wilayah.at(index).get('territory').disable();
-          break;
-      }
+      // switch (item.type.trim()) {
+      //   case 'national':
+      //     wilayah.at(index).get('national').disable();
+      //     break
+      //   case 'division':
+      //     wilayah.at(index).get('zone').disable();
+      //     break;
+      //   case 'region':
+      //     wilayah.at(index).get('region').disable();
+      //     break;
+      //   case 'area':
+      //     wilayah.at(index).get('area').disable();
+      //     break;
+      //   case 'salespoint':
+      //     wilayah.at(index).get('salespoint').disable();
+      //     break;
+      //   case 'district':
+      //     wilayah.at(index).get('district').disable();
+      //     break;
+      //   case 'territory':
+      //     wilayah.at(index).get('territory').disable();
+      //     break;
+      // }
     })
   }
 
@@ -1363,7 +1431,9 @@ export class PopupNotificationCreateComponent {
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value
+        country: this.Country,
+        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
       if (body.type === 'retailer') {
@@ -1372,6 +1442,44 @@ export class PopupNotificationCreateComponent {
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
       body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
+      
+      if(body.recurring_type === 'recurring') {
+        body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'weekly') {
+        let recurrenceDayValues = this.formWeeklyRecurrence.value;
+        let selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]).map(item => parseInt(item));
+        if(selectedWeekDays.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
+          return;
+        }
+        body['recurring_day_of_week'] = selectedWeekDays;
+      }
+
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly') {
+        let monthlyRecurrence = this.formMonthlyRecurrence.get('recurrence_date').value;
+        if(monthlyRecurrence.length == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal terbit!" });
+          commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+          return;
+        }
+        body['recurring_day'] = monthlyRecurrence;
+      }
+      
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly') {
+        let yearlyRecurrence = this.listDateChosen.value;
+        if(yearlyRecurrence == 0) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal & bulan terbit!" });
+          commonFormValidator.validateFormControl(this.listDateChosen);
+          return;
+        }
+        body['recurring_day'] = yearlyRecurrence.map(item => item.date);
+        body['recurring_month'] = yearlyRecurrence.map(item => item.month);
+      }
 
       if (body.type === 'customer') {
         let smoker_type = '';
@@ -1501,6 +1609,12 @@ export class PopupNotificationCreateComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
+      if(this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+        commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
+      }
+      if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
+        commonFormValidator.validateFormControl(this.listDateChosen);
+      }
     }
   }
 
@@ -1971,7 +2085,7 @@ export class PopupNotificationCreateComponent {
     try {
       const response = await this.notificationService.exportAudience({ selected: body, audience: this.formPopupGroup.get("user_group").value }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `PopUpNotification_${this.formPopupGroup.get("user_group").value}_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.exportAccessCashier = false;
@@ -2030,16 +2144,20 @@ export class PopupNotificationCreateComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { audience: this.formPopupGroup.get("user_group").value };
+    dialogConfig.data = {
+      audience: this.formPopupGroup.get("user_group").value,
+      api: fd => this.notificationService['importAudience'](fd),
+      fileType: 'xlsx'
+    };
 
-    this.dialogRef = this.dialog.open(ImportPopUpAudienceComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         this.audienceSelected = this.audienceSelected.concat(response);
         this.onSelect({ selected: this.audienceSelected });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });
@@ -2055,5 +2173,30 @@ export class PopupNotificationCreateComponent {
 
   getSelectedAllId(value: any) {
     this.selectedAllId = value;
+  }
+
+  removeDateChosen(value: any) {
+    this.listDateChosen.setValue(this.listDateChosen.value.filter(item => item.name !== value.name));
+  }
+
+  addRecurrenceDate() {
+    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+      let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
+      if(this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
+        this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
+      } else {
+        let dateChosen = this.listDateChosen.value;
+        dateChosen.push({
+          name: chosenValue,
+          date: this.formYearlyRecurrence.get('recurrence_date').value,
+          month: this.formYearlyRecurrence.get('recurrence_month').value
+        });
+        this.listDateChosen.setValue(dateChosen);
+      };
+    } else {
+      this.dialogService.openSnackBar({ message: 'Harap pilih tanggal dan bulan pengulangan!' });
+      commonFormValidator.validateAllFields(this.formYearlyRecurrence);
+    };
   }
 }

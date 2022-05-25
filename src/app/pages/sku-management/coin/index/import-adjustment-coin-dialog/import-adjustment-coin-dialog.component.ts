@@ -5,6 +5,7 @@ import { CoinService } from 'app/services/sku-management/coin.service';
 import { DataService } from 'app/services/data.service';
 import { FormControl } from '@angular/forms';
 import { SequencingService } from 'app/services/dte/sequencing.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   // selector: 'app-import-adjustment-coin-dialog',
@@ -32,6 +33,7 @@ export class ImportAdjustmentCoinDialogComponent implements OnInit {
     private coinService: CoinService,
     private sequencingService: SequencingService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];

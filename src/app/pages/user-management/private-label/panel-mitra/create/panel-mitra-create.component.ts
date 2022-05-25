@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import moment from 'moment';
 
 import { ImportPanelMitraDialogComponent } from '../dialog-import/import-panel-mitra-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-panel-mitra-create',
@@ -85,6 +86,7 @@ export class PanelMitraCreateComponent implements OnInit {
     private geotreeService: GeotreeService,
     private router: Router,
     private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.onLoad = false;
     this.selected = [];
@@ -1071,7 +1073,7 @@ export class PanelMitraCreateComponent implements OnInit {
       if (response) {
         if (response.data) {
           this.selected = response.data.map((item: any) => ({ id: item.id, isHub: item.is_hub ? true : false }));
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           console.log('thisSELECTED', this.selected);
         }
       }

@@ -49,7 +49,7 @@
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
-      <input id="end-date" matInput formControlName="end_date" placeholder="Tanggal Berakhir" [matDatepicker]="end_date"
+      <input id="end-date" matInput formControlName="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [matDatepicker]="end_date"
         (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly />
       <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
       <mat-datepicker #end_date></mat-datepicker>

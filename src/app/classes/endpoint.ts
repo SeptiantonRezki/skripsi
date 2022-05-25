@@ -18,6 +18,7 @@ const AYO_API = environment.server;
 // const AYO_API_SERVICE = environment.server_service;
 const AYO_API_SERVICE = serviceServer;
 const type_api = "principal";
+// dummy comment
 
 export class Endpoint {
   getUrl(namespace, key, context) {
@@ -57,6 +58,8 @@ export class Endpoint {
         check_user_status: `${AYO_API_SERVICE(SERVER.user)}/oauth/check/user-status`,
         get_user_cognito_ad: `${AYO_API_SERVICE(SERVER.user)}/oauth/cognito/get-user`,
         encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt`,
+        dynamic_pricing_encrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/encrypt-dynamic-pricing`,
+        dynamic_pricing_decrypted_token: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/token/decrypt-dynamic-pricing`
       },
       area: {
         child_filter: `${AYO_API_SERVICE(SERVER.area)}/api/v1/area/childrens-filter`,
@@ -90,6 +93,8 @@ export class Endpoint {
         brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
         brand_parameters: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brand_parameters`,
         trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives`,
+        ecosystem_params: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_parameters`,
+        ecosystem_brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_brands`,
       },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
@@ -225,6 +230,7 @@ export class Endpoint {
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-id/${context.parent}`,
         export: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/export/csv`,
         import: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/import/csv`,
+        export2: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/export/report`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
           }&status=active`,
         generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
@@ -241,19 +247,23 @@ export class Endpoint {
         preview_import: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/preview-import`,
       },
       product_submission: {
-        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product`,
-        get_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}`,
-        put_approve: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}/approve`,
-        put_disapprove: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/product/${context.product_id}/disapprove`,
-        get_db: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product`,
-        get_db_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}`,
-        put_approve_1: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/approve-1`,
-        put_disapprove_1: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/disapprove-1`,
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions`,
+        get_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions/${context.product_id}`,
+        put_approval: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions/approval`,
+        get_db: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions`,
+        get_db_detail: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/${context.product_id}`,
+        put_approval_1: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/approval-1`,
+        put_approval_2: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/approval-2`,
         put_approve_db_product: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/approve-produk-db`,
         put_disapprove_db_product: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/disapprove-produk-db`,
         get_user: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/submissions/db-product/approval-setting/users`,
         put_user: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/submissions/db-product/approval-setting/save`,
-        get_barcode: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/submissions/db-product/${context.product_id}/generate-barcode`,
+        get_barcode: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/generate-barcode`,
+        get_categories: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions/categories`,
+        get_brands: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions/brands`,
+        get_db_categories: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/categories`,
+        get_db_approvers: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/approvers`,
+        get_db_brands: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/brands`,
       },
       template_task: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
@@ -409,15 +419,15 @@ export class Endpoint {
         update_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         delete_popup: `${AYO_API}/api/${type_api}/pop-up-notification/${context.popup_notif_id}`,
         get_audience: `${AYO_API}/api/${type_api}/pop-up-notification/audience`,
-        export_audience: `${AYO_API}/api/principal/pop-up-notification/audience/export`,
-        import_audience: `${AYO_API}/api/principal/pop-up-notification/audience/import`,
+        export_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/pop-up-notifications/target-audiences/export`,
+        import_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/pop-up-notifications/target-audiences/preview-import`,
         get_pn_audience: `${AYO_API}/api/${type_api}/notification/audience`,
         get_pn_audience_ids: `${AYO_API}/api/${type_api}/notification/audience-ids`,
-        export_pn_audience: `${AYO_API}/api/principal/notification/audience/export`,
-        import_pn_audience: `${AYO_API}/api/principal/notification/audience/import`,
+        export_pn_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/target-audiences/export`,
+        import_pn_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/target-audiences/preview-import`,
         get_custom: `${AYO_API}/api/principal/customized-notification/target-detail`,
-        preview_import: `${AYO_API}/api/principal/customized-notification/target-detail/preview`,
-        export_custom: `${AYO_API}/api/principal/customized-notification/target-detail/export`,
+        preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/customized-notifications/target-details/preview-import`,
+        export_custom: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/notifications/customized-notifications/target-details/export`,
         create_custom: `${AYO_API}/api/principal/customized-notification`,
         show_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,
         delete_custom: `${AYO_API}/api/principal/customized-notification/${context.notification_id}`,

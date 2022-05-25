@@ -39,7 +39,7 @@
           <div fxFlex="1 0 auto" fxLayout="column" fxLayoutAlign="start">
 
             <!--<mat-form-field fxFlex="100" class="is-light">
-              <input matInput type="text" placeholder="Nama Trade Program" formControlName="namaTrade">
+              <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" formControlName="namaTrade">
               <mat-error
                 *ngIf="taskSequenceForm.controls['namaTrade'].hasError('required') && taskSequenceForm.controls['namaTrade'].touched ">
                 Nama Trade harus diisi.
@@ -54,23 +54,23 @@
               </mat-error>
             </mat-form-field>-->
             <mat-form-field fxFlex="100" class="is-light">
-              <input id="input-nama" matInput type="text" placeholder="Nama" formControlName="name"
+              <input id="input-nama" matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name"
                 [readonly]="data?.is_editable === 0">
               <mat-error
                 *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
-                Nama harus diisi.
+                {{ls.locale.global.label.name}} harus diisi.
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light form-primary">
-              <!-- <mat-select placeholder="Pilih Trade Program" formControlName="trade_program" id="trade_program">
+              <!-- <mat-select placeholder="{{'dte.dte_automation.text8' | translate}}" formControlName="trade_program" id="trade_program">
                 <mat-option *ngFor="let item of programs" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
               <mat-select [disabled]="data?.is_editable === 0" formControlName="trade_creator_id"
-                placeholder="Pilih Trade Program" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)"
+                placeholder="{{'dte.dte_automation.text8' | translate}}" id="tradeCreatorId" (click)="selectForm('trade')" (selectionChange)="selectChange($event)"
                 #singleSelect>
-                <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" [placeholderLabel]="'Cari Trade Program...'"
-                  [noEntriesFoundLabel]="'Tidak ada Trade Program yang ditemukan'" [clearSearchInput]="false">
+                <ngx-mat-select-search id="select-search-trade" [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false">
                 </ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
                   {{item.name}}
@@ -104,7 +104,7 @@
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
-                placeholder="Pilih Tanggal Mulai" formControlName="start_date" [readonly]="data?.is_editable === 0">
+                placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
               <mat-datepicker #start_date [disabled]="data?.is_editable === 0"></mat-datepicker>
@@ -116,7 +116,7 @@
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
-                placeholder="Pilih Tanggal Berakhir" formControlName="end_date" [readonly]="data?.is_editable === 0">
+                placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="end_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
               <mat-datepicker #end_date [disabled]="data?.is_editable === 0"></mat-datepicker>

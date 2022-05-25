@@ -26,12 +26,12 @@
           <div class="">
             <div fxLayout="row">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="Tipe Konten">
+                <mat-select formControlName="content_type" placeholder="{{'notification.popup_notifikasi.text15' | translate}}">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
-                  Tipe Konten harus diisi
+                  {{'notification.popup_notifikasi.text15' | translate}} harus diisi
                 </mat-error>
               </mat-form-field>
             </div>
@@ -40,7 +40,7 @@
           <div>
             <div fxLayout="row" fxLayoutGap="20px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="Tanggal Mulai"
+                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
                   formControlName="recurrence_start_date" [min]="minStartDate">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
@@ -115,13 +115,13 @@
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column [width]="200" name="Nama Halaman" prop="static_page_title">
+          <ngx-datatable-column [width]="200" name="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}" prop="static_page_title">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.static_page_title}}
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column [width]="200" name="Isi Halaman" prop="static_page_body">
+          <ngx-datatable-column [width]="200" name="{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}" prop="static_page_body">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.static_page_body}}
             </ng-template>
@@ -130,7 +130,7 @@
         
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
           <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled]="actionType == 'detail-custom'">
-            SIMPAN
+            {{ls.locale.global.button.save}}
           </button>
         </div>
       </form>

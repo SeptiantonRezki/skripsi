@@ -10,7 +10,7 @@
     <form autocomplete="off" [formGroup]="formDesignVoucher">
 
       <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center">
-        <span class="text-bold">Pilih Template Voucher</span>
+        <span class="text-bold">Pilih Template Voucher</span> <!-- // TODO -->
       </div>
       <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="20px"
         fxLayoutGap.lt-md="0px">
@@ -36,8 +36,8 @@
             <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
             <br>
             <span matPrefix>Tarik gambar voucher Anda kesini /
-              <strong>Pilih File</strong> berdimensi 410px x 210px</span>
-            <span matPrefix>Besar file maksimal 2MB</span>
+              <strong>Pilih File</strong> berdimensi 410px x 210px</span> <!-- // TODO -->
+            <span matPrefix>Besar file maksimal 2MB</span> <!-- // TODO -->
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
           </div>
         </div> -->
         <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
-          <span class="text-bold">Contoh Tampilan Voucher</span>
+          <span class="text-bold">Contoh Tampilan Voucher</span> <!-- // TODO -->
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
           *ngIf="bannerSelected">
@@ -69,7 +69,7 @@
       </div>
       <div *ngIf="!bannerSelected && detailVoucher?.image_url" class="pt-16 px-24">
         <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
-          <span class="text-bold">Contoh Tampilan Spanduk</span>
+          <span class="text-bold">Contoh Tampilan Spanduk</span> <!-- // TODO -->
         </div>
         <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <div class="banner-image-template-selected">
@@ -79,13 +79,13 @@
       </div>
       <div class="px-24">
         <div class="" fxLayout="row" fxLayoutAlign="start center">
-          <h3 class="">Isi Halaman</h3>
+          <h3 class="">Isi Halaman</h3> <!-- // TODO -->
         </div>
         <textarea *ngIf="!isDetail && detailVoucher?.is_enable_design" [froalaEditor]="options" (froalaInit)="initialize($event)" formControlName="body" class="pb-4" fxFlex="100"></textarea>
         <textarea matInput *ngIf="isDetail" formControlName="body" class="pb-4" fxFlex="100" [disabled]="disableForm"></textarea>
         <mat-error style="padding-top: 6px !important; font-size: .86em;"
           *ngIf="formDesignVoucher.controls['body'].hasError('required') && formDesignVoucher.controls['body'].touched">
-          Isi Halaman harus diisi
+          Isi Halaman harus diisi <!-- // TODO -->
         </mat-error>
       </div>
 
@@ -94,8 +94,8 @@
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center" *ngIf="!isDetail && detailVoucher?.is_enable_design">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onUpdate()" [disabled]="disableForm">
-        SIMPAN
-      </button>
+        {{ls.locale.global.button.save}}
+      </button> <!-- // TODO -->
     </div>
 
   </div>

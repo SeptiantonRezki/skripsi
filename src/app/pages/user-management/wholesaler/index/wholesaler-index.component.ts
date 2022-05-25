@@ -54,7 +54,7 @@ export class WholesalerIndexComponent {
   // 2 geotree property
   endArea: String;
   lastLevel: any;
-  listGsw: any[] = [{ name: 'Semua GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
+  listGsw: any[] = [{ name: this.ls.locale.global.label.all + ' GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
 
   /** shared component */
   // @Input() customExportImport = false;
@@ -323,10 +323,15 @@ export class WholesalerIndexComponent {
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
+        this.dataService.showLoading(true);
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.dataService.showLoading(true);
+          this.list[this.parseArea(selection)] = res.data;
+          
+            this.dataService.showLoading(false);
+          
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -350,17 +355,21 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              this.dataService.showLoading(false);
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['region'] = [];
+          this.dataService.showLoading(false);
         }
         this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
@@ -380,17 +389,21 @@ export class WholesalerIndexComponent {
           })[0] : {};
           console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              this.dataService.showLoading(false);
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['area'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('area').setValue('');
@@ -409,17 +422,21 @@ export class WholesalerIndexComponent {
           })[0] : {};
           console.log('item', item);
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              this.dataService.showLoading(false);
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['salespoint'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('salespoint').setValue('');
@@ -435,16 +452,21 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              this.dataService.showLoading(false);
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['district'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('district').setValue('');
@@ -458,18 +480,22 @@ export class WholesalerIndexComponent {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
           if (item && item.name && item.name !== 'all') {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              this.dataService.showLoading(false);
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
           } else {
-            this.list[selection] = []
+            this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list['territory'] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get('territory').setValue('');
@@ -933,7 +959,7 @@ export class WholesalerIndexComponent {
     this.dataService.showLoading(true);
     const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`;
     try {
-      const response = await this.wholesalerService.exportWholesalerlist(context).toPromise();
+      const response = await this.wholesalerService.exportWholesalerNew(this.pagination,context).toPromise();
       console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       // this.downloadLink.nativeElement.href = response;
@@ -988,7 +1014,7 @@ export class WholesalerIndexComponent {
       if (response) {
         this.selected = response;
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           // this.getRetailerList();
         }
       }

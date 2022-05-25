@@ -468,9 +468,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ?
-            res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ?
+          //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -496,9 +496,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ?
-                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ?
+              //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -527,9 +527,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ?
-                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ?
+              //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -557,9 +557,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ?
-                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ?
+              //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -584,8 +584,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ?
-                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              // this.list[selection] = expectedArea.length > 0 ?
+              //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
               // fd = null
             });
           } else {
@@ -608,9 +609,9 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ?
-                res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ?
+              //   res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -654,10 +655,10 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   takeAction(status: string) {
     const data = {
-      titleDialog: `${status === 'approved' ? 'Setujui Request Adjustment Coin' : 'Tolak Request Adjustment Coin'}`,
-      captionDialog: `Apakah anda yakin untuk ${status === 'approved' ? 'menyetujui' : 'menolak'} request adjustment coin ini ?`,
+      titleDialog: `${status === 'approved' ? this.ls.locale.dte.approval_coin_adjustment.approve : this.ls.locale.dte.approval_coin_adjustment.reject}`,
+      captionDialog: `${this.ls.locale.dte.approval_coin_adjustment.are_you_sure} ${status === 'approved' ? this.ls.locale.dte.approval_coin_adjustment.do_approve : this.ls.locale.dte.approval_coin_adjustment.do_reject} ${this.ls.locale.dte.approval_coin_adjustment.this_request_adjusment}`,
       confirmCallback: (remark) => this.confirmAction(status, remark),
-      buttonText: ['Ya, Lanjutkan', 'Batal'],
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel],
       isRemark: true,
     };
     this.dialogService.openCustomConfirmationDialog(data);
@@ -683,7 +684,7 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
 
   sendNotification() {
     if (!this.permissionNotifikasi.ubah) {
-      this.dialogService.openSnackBar({ message: "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)" })
+      this.dialogService.openSnackBar({ message: this.ls.locale.dte.approval_coin_adjustment.read_only_access })
       return;
     }
     // const dialogConfig = new MatDialogConfig();
@@ -692,15 +693,15 @@ export class CoinAdjustmentApprovalDetailComponent implements OnInit {
     // dialogConfig.disableClose = true;
     // dialogConfig.width = "450px";
     // dialogConfig.panelClass = "popup-notif";
-    // dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: 'BATAL', is_tsm: this.isTSM };
+    // dialogConfig.data = { id: this.idApproval, positive_text: 'SIMPAN', negative_text: this.ls.locale.global.button.cancel, is_tsm: this.isTSM };
 
     // this.dialog.open(NotificationCoinAdjustmentDialogComponent, dialogConfig);
     const data = {
-      titleDialog: `Kirim Email Notifikasi`,
-      captionDialog: `Anda akan mengirimkan email notifikasi ke <b>${this.dataApproval.approver || 'Tidak Ada user yang terpilih'}</b> ?`,
+      titleDialog: this.ls.locale.global.messages.send_email_notif,
+      captionDialog: `${this.ls.locale.global.messages.send_email_notif_to} <b>${this.dataApproval.approver || this.ls.locale.global.messages.no_selected_user}</b> ?`,
       confirmCallback: () => this.confirmSubmitNotification(),
       htmlContent: true,
-      buttonText: ['Ya, Lanjutkan', 'Batal']
+      buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

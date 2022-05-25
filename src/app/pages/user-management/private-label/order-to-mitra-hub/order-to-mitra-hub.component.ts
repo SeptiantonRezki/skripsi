@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DateAdapter } from '@angular/material';
 import { Endpoint } from 'app/classes/endpoint';
 import { OrderToMitraHubService } from 'app/services/user-management/private-label/order-to-mitra-hub.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-order-to-mitra-hub',
@@ -25,13 +26,13 @@ export class OrderToMitraHubComponent implements OnInit {
   onLoad: boolean;
   formFilter: FormGroup;
   statusFilter: any[] = [
-    { name: 'Semua Status', value: '' },
-    { name: 'Pesanan Baru', value: 'baru' },
-    { name: 'Pesanan Dibatalkan', value: 'dibatalkan' },
-    { name: 'Pesanan Diproses', value: 'diproses' },
-    { name: 'Pesanan Dikirim', value: 'dikirim' },
-    { name: 'Pesanan Diterima', value: 'diterima' },
-    { name: 'Pesanan Selesai', value: 'selesai' },
+    { name: this.ls.locale.global.label.all + ' Status', value: '' },
+    { name: this.ls.locale.global.order_status.new_order, value: 'baru' },
+    { name: this.ls.locale.global.order_status.canceled_order, value: 'dibatalkan' },
+    { name: this.ls.locale.global.order_status.process_order, value: 'diproses' },
+    { name: this.ls.locale.global.order_status.send_order, value: 'dikirim' },
+    { name: this.ls.locale.global.order_status.received_order, value: 'diterima' },
+    { name: this.ls.locale.global.order_status.completed_order, value: 'selesai' },
   ];
   generatePO: GeneratePO = new GeneratePO();
 
@@ -67,6 +68,7 @@ export class OrderToMitraHubComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     private convertRp: RupiahFormaterWithoutRpPipe,
+    private ls: LanguagesService,
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");

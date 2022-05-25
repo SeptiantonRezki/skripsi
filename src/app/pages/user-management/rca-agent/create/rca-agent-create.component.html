@@ -67,7 +67,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area" multiple>
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
               <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id"
                 [disabled]="disableCheckboxArea(item, 'area')">{{item.name === 'all' ?
                 'Semua
@@ -77,24 +77,24 @@
             </mat-select>
           </mat-form-field>
           <!-- <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="National" formControlName="national">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
               <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Zone" formControlName="zone"
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
               (selectionChange)="getAudienceArea('region', formRcaAgent.get('zone').value)">
               <mat-option *ngFor="let item of list['zone']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Regional" formControlName="region"
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
               (selectionChange)="getAudienceArea('area', formRcaAgent.get('region').value)">
               <mat-option *ngFor="let item of list['region']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="31%" class="is-light form-primary">
-            <mat-select placeholder="Area" formControlName="area"
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
               (selectionChange)="getAudienceArea('salespoint', formRcaAgent.get('area').value)">
               <mat-option *ngFor="let item of list['area']" [value]="item.id">{{item.name}}</mat-option>
             </mat-select>

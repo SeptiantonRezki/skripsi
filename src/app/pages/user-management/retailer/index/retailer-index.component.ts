@@ -68,15 +68,15 @@ export class RetailerIndexComponent {
   chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
 
-  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: 'Status Aktif', value: 'active' }, { name: 'Status Non Aktif', value: 'inactive' }];
-  listAccessCashier: any[] = [{ name: 'Semua Akses Kasir', value: '-1' }, { name: 'Ya', value: 1 }, { name: 'Tidak', value: 0 }];
+  listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
+  listAccessCashier: any[] = [{ name: this.ls.locale.global.label.all_access_cashier, value: '-1' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 1 }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 0 }];
   listStatusChatBot: any[] = [
     { name: this.ls.locale.global.label.all_status, value: '-1' },
     { name: "OFF", value: 0 },
     { name: "ON", value: 1 }
   ]
   retailClassification: any[] = [
-    { name: 'Semua Tipe', value: 'all' },
+    { name: this.ls.locale.global.label.all, value: 'all' },
     { name: 'SRC', value: 'SRC' },
     { name: 'NON-SRC', value: 'NON-SRC' },
     { name: 'IMO', value: 'IMO' },
@@ -100,14 +100,14 @@ export class RetailerIndexComponent {
 
   pojok_bayar_validation: FormControl = new FormControl('');
   listPojokBayar: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'FALSE', value: '0' },
     { name: 'TRUE', value: '1' }
   ];
 
   bank_final_validation: FormControl = new FormControl('');
   listBankFinalValidation: any[] = [
-    { name: 'Semua Status', value: 'all' },
+    { name: this.ls.locale.global.label.all_status, value: 'all' },
     { name: 'FALSE', value: '0' },
     { name: 'TRUE', value: '1' }
   ];
@@ -298,9 +298,9 @@ export class RetailerIndexComponent {
   getVersions(type) {
     this.generalService.getAppVersions({ type }).subscribe(res => {
       if (type === 'retailer') {
-        this.listVersionsRetailer = [{ version: 'Semua Versi' }, ...res];
+        this.listVersionsRetailer = [{ version: this.ls.locale.global.label.all_version }, ...res];
       } else {
-        this.listVersionsCashier = [{ version: 'Semua Versi' }, ...res];
+        this.listVersionsCashier = [{ version: this.ls.locale.global.label.all_version }, ...res];
       }
       console.log('res versions', res);
     })
@@ -483,12 +483,15 @@ export class RetailerIndexComponent {
         if (this.dataService.getFromStorage('zone') && this.dataService.getFromStorage('zone').length > 0) {
           this.list[this.parseArea(selection)] = this.dataService.getFromStorage('zone');
           this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
+          this.dataService.showLoading(false);
         } else {
+          this.dataService.showLoading(true);
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-            // this.list[this.parseArea(selection)] = res.data;
-            this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
+            this.list[this.parseArea(selection)] = res.data;
+            // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.dataService.showLoading(false);
+           
             // fd = null
           });
         }
@@ -516,17 +519,21 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-                // this.list[selection] = res.data;
-                this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                this.list[selection] = res.data;
+                this.dataService.showLoading(false);
+                // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
-              this.list[selection] = []
+              this.list[selection] = [];
+              this.dataService.showLoading(false);
             }
           } else {
             this.list['region'] = [];
+            this.dataService.showLoading(false);
           }
           this.formFilter.get('region').setValue('');
           this.dataService.setToStorage('selected_region', '');
@@ -553,17 +560,21 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('area hitted', selection, item, this.list['region']);
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-                // this.list[selection] = res.data;
-                this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                this.list[selection] = res.data;
+                this.dataService.showLoading(false);
+                // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
-              this.list[selection] = []
+              this.list[selection] = [];
+              this.dataService.showLoading(false);
             }
           } else {
             this.list['area'] = [];
+            this.dataService.showLoading(false);
           }
           this.formFilter.get('area').setValue('');
         }
@@ -587,17 +598,21 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('item', item);
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-                // this.list[selection] = res.data;
-                this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                this.list[selection] = res.data;
+                this.dataService.showLoading(false);
+                // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
-              this.list[selection] = []
+              this.list[selection] = [];
+              this.dataService.showLoading(false);
             }
           } else {
             this.list['salespoint'] = [];
+            this.dataService.showLoading(false);
           }
           this.formFilter.get('salespoint').setValue('');
         }
@@ -618,16 +633,21 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-                this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                this.list[selection] = res.data;
+                this.dataService.showLoading(false);
+                // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
-              this.list[selection] = []
+              this.list[selection] = [];
+              this.dataService.showLoading(false);
             }
           } else {
             this.list['district'] = [];
+            this.dataService.showLoading(false);
           }
           this.formFilter.get('district').setValue('');
         }
@@ -646,18 +666,22 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
+              this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-                // this.list[selection] = res.data;
-                this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+                this.list[selection] = res.data;
+                this.dataService.showLoading(false);
+                // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
                 // fd = null
               });
             } else {
-              this.list[selection] = []
+              this.list[selection] = [];
+              this.dataService.showLoading(false);
             }
           } else {
             this.list['territory'] = [];
+            this.dataService.showLoading(false);
           }
         }
         break;
@@ -1026,7 +1050,7 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
-    this.dataService.showLoading(true);
+    
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
@@ -1117,8 +1141,8 @@ export class RetailerIndexComponent {
 
 
     // if (this.pagination['cashier_version']) this.pagination['is_cashier'] = true;
-    if (this.version_retailer.value === 'Semua Versi') this.pagination['retailer_version'] = null;
-    if (this.version_cashier.value === 'Semua Versi') {
+    if (this.version_retailer.value === this.ls.locale.global.label.all_version) this.pagination['retailer_version'] = null;
+    if (this.version_cashier.value === this.ls.locale.global.label.all_version) {
       this.pagination['cashier_version'] = null;
       this.pagination['is_cashier'] = null;
     }
@@ -1185,7 +1209,7 @@ export class RetailerIndexComponent {
         });
 
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        
       },
       err => {
         console.error(err);
@@ -1286,7 +1310,7 @@ export class RetailerIndexComponent {
       titleDialog: 'Hapus Retailer',
       captionDialog: 'Apakah anda yakin untuk menghapus Retailer ini ?',
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1411,7 +1435,7 @@ export class RetailerIndexComponent {
       if (response) {
         this.selected = response;
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
           this.getRetailerList();
         }
       }

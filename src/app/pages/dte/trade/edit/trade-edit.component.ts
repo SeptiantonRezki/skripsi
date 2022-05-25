@@ -11,6 +11,7 @@ import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-trade-edit',
@@ -33,7 +34,7 @@ export class TradeEditComponent {
   saveData: Boolean;
 
   isDetail: Boolean;
-  statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
+  statusTP: any[] = [{ name: this.translate.instant('dte.trade_program.text6'), value: 'publish' }, { name: this.translate.instant('dte.trade_program.text7'), value: 'unpublish' }]
   listGroupTradeProgram: any[] = [];
   private _onDestroy = new Subject<void>();
   filteredGTpOptions: Observable<string[]>;
@@ -68,6 +69,7 @@ export class TradeEditComponent {
     private activatedRoute: ActivatedRoute,
     private groupTradeProgramService: GroupTradeProgramService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -184,7 +186,7 @@ export class TradeEditComponent {
   }
 
   submit(): void {
-    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2mb!' })
+    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: this.translate.instant('dte.group_trade_program.text13') })
 
     if (this.formTradeProgram.valid) {
       this.saveData = !this.saveData;
@@ -212,7 +214,7 @@ export class TradeEditComponent {
 
       this.tradeProgramService.put(fd, { trade_program_id: this.detailFormTrade.id }).subscribe(
         res => {
-          this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' });
+          this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text2') });
           this.router.navigate(['dte', 'trade-program']);
         },
         err => {
@@ -220,7 +222,7 @@ export class TradeEditComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formTradeProgram);
     }
   }
@@ -241,7 +243,7 @@ export class TradeEditComponent {
 
     this.tradeProgramService.put(body, { trade_program_id: this.detailFormTrade.id }).subscribe(
       res => {
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text2') });
         this.router.navigate(['dte', 'trade-program']);
       },
       err => {

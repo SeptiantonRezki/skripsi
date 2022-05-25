@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Admin Principal'">
+  <page-content-header [contentTitle]="ls.locale.admin_principal.create_title">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
@@ -13,38 +13,46 @@
 
           <form [formGroup]="verticalStepperStep1">
 
-            <ng-template matStepLabel>Informasi Dasar</ng-template>
+            <ng-template matStepLabel>{{ls.locale.admin_principal.text1}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="nama">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="nama">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['nama'].hasError('required') && verticalStepperStep1.controls['nama'].touched ">
-                  Nama harus diisi.
+                  {{ls.locale.global.label.name}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Username" formControlName="username">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.username}}" formControlName="username">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['username'].hasError('required') && verticalStepperStep1.controls['username'].touched ">
-                  Username harus diisi.
+                  {{ls.locale.global.label.username}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="email" placeholder="Alamat Email" formControlName="email">
+                <input matInput type="email" placeholder="{{ls.locale.global.label.email}}" formControlName="email">
                 <mat-error
                   *ngIf="verticalStepperStep1.controls['email'].hasError('required') && verticalStepperStep1.controls['email'].touched ">
-                  Alamat email harus diisi.
+                  {{ls.locale.global.label.username}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select formControlName="country" placeholder="{{ls.locale.global.label.country}}" (selectionChange)="ClearForm()">
+                    <!-- <mat-option value="en">
+                        <div>English</div>
+                    </mat-option> -->
+                    <mat-option *ngFor="let item of Country" [value]="item.code">{{item.name}}</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step1()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -54,199 +62,972 @@
 
         <mat-step [stepControl]="wilayah">
           <form [formGroup]="wilayah">
-            <ng-template matStepLabel>Area</ng-template>
+            <div formArrayName="areas">
+              <div class="row" *ngFor="let area of wilayah.get('areas').controls; let i = index"
+        [formGroupName]="i">
+        <ng-template matStepLabel>{{ ls.locale.global.area.area }}</ng-template>
+            <!-- <div *ngIf="i == 1" class="mb-16" style="background: #3a3a3a;color: white;padding: 0 24px;max-height: 50%;height: 32px;place-content: center space-between;align-items: center;margin: 0;width: 114%;margin: auto;left: 0px;flex-direction: row;box-sizing: border-box;display: flex;margin-top: 11px;margin-left: -24px;" fxLayout="row"
+            fxLayoutAlign="space-between center">
+            <div fxFlex="50">
+              <h3 class="">&nbsp;</h3>
+            </div> -->
+            
+          <!-- </div> -->
+          <div  class="mb-16" style="background: #3a3a3a;color: white;padding: 0 24px;max-height: 50%;height: 32px;place-content: center space-between;align-items: center;margin: 0;width: 100%;margin: auto;position: absolute;left: 0;margin-top: -22px;" fxLayout="row"
+            fxLayoutAlign="space-between center">
+            <div fxFlex="50">
+              <h3 class="" style="position: absolute; left: 5px;">{{ ls.locale.global.area.area }} {{i+1}}</h3>
+              <h3 class="">&nbsp;</h3>
+            </div>
+            
+            <div class="pt-24" fxLayout="row" style="place-content: flex-end;z-index: 999;position: relative;width: fit-content;margin-left: auto;margin-right: 0;margin-top: -15px;padding-top: unset !important;">
+              <div >
+                
+                <button class="float-right" id="id{{i}}" mat-icon-button color="primary" aria-label="Remove/clear"
+                    (click)="removeOrClearEmail(i)" matTooltip="Remove" >
+                  <mat-icon style="
+                  color: white;
+                  background-color: #dc1e2d;
+                  height: 24px;
+                  margin-top: 15px;
+                  border-radius: 2px;
+                  margin-left: 10px;
+              ">delete</mat-icon>
+                </button>
+                
+              </div>
+              
+            </div>
+            <div  class="pt-24" fxLayout="row" style="place-content: flex-end;margin-top: -40px;margin-right: 50px;align-items: flex-end; margin-left: auto;position: absolute;left: 349px;padding-top: unset !important;">
+              <div >
+                <button class="float-right" id="{{i}}" mat-icon-button color="primary" aria-label="Add"
+                    (click)="addEmailFormGroup(i)" matTooltip="Add" *ngIf="i < 9">
+                  <mat-icon style="
+                  color: white;
+                  background-color: #dc1e2d;
+                  height: 24px;
+                  margin-top: 28px;
+                  border-radius: 2px;
+              ">add</mat-icon>
+                </button>
+                
+              </div>
+              </div>
+          </div>
 
-
-            <div fxFlex="1 0 auto" fxLayout="column">
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national" id="area1_national">
+          <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 0">
+            <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
-                  *ngIf="wilayah.controls['national'].hasError('required') && wilayah.controls['national'].touched">
-                  National harus diisi
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone"
-                  (selectionChange)="getAudienceArea('region', wilayah.get('zone').value)" id="area1_zone">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
                   <mat-option *ngFor="let item of list['zone']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="wilayah.controls['zone'].hasError('required') && wilayah.controls['zone'].touched">
-                  Zone harus diisi
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region"
-                  (selectionChange)="getAudienceArea('area', wilayah.get('region').value)" id="area1_region">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
                   <mat-option *ngFor="let item of list['region']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
-                  *ngIf="wilayah.controls['region'].hasError('required') && wilayah.controls['region'].touched">
-                  Regional harus diisi
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area"
-                  (selectionChange)="getAudienceArea('salespoint', wilayah.get('area').value)" id="area1_area">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
                   <mat-option *ngFor="let item of list['area']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="wilayah.controls['area'].hasError('required') && wilayah.controls['area'].touched">
-                  Area harus diisi
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
-                  (selectionChange)="getAudienceArea('district', wilayah.get('salespoint').value)"
-                  id="area1_salespoint">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                >
                   <mat-option *ngFor="let item of list['salespoint']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
-                  *ngIf="wilayah.controls['salespoint'].hasError('required') && wilayah.controls['salespoint'].touched">
-                  Salespoint harus diisi
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district"
-                  (selectionChange)="getAudienceArea('territory', wilayah.get('district').value)" id="area1_district">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
                   <mat-option *ngFor="let item of list['district']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
-                  *ngIf="wilayah.controls['district'].hasError('required') && wilayah.controls['district'].touched">
-                  Distrik harus diisi
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 1">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory" id="area1_territory">
-                  <mat-option *ngFor="let item of list['territory']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list2['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list2['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
-                  *ngIf="wilayah.controls['territory'].hasError('required') && wilayah.controls['territory'].touched">
-                  Territori harus diisi
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list2['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list2['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list2['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list2['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div>
-
-            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
-              <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
-              </button>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 2">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list3['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list3['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list3['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list3['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list3['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list3['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
             </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 3">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list4['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list4['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list4['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list4['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list4['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list4['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 4">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list5['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list5['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list5['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list5['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list5['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list5['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 5">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list6['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list6['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list6['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list6['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list6['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list6['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 6">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list7['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list7['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list7['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list7['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list7['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list7['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 7">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list8['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list8['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list8['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list8['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list8['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list8['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 8">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list9['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list9['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list9['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list9['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list9['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list9['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1 0 auto" fxLayout="column" *ngIf="i == 9">
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-top: 20px;">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" (selectionChange)="getAudienceArea('zone', area.get('national').value, i)">
+                  <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['national']?.hasError('required') && wilayah.controls['national'].touched">
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
+                  (selectionChange)="getAudienceArea('region', area.get('zone').value, i)" >
+                  <mat-option *ngFor="let item of list10['zone']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['zone']?.hasError('required') && wilayah.controls['zone'].touched">
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.regional}}" formControlName="region"
+                  (selectionChange)="getAudienceArea('area', area.get('region').value, i)" >
+                  <mat-option *ngFor="let item of list10['region']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['region']?.hasError('required') && wilayah.controls['region'].touched">
+                  {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
+                  (selectionChange)="getAudienceArea('salespoint', area.get('area').value, i)" >
+                  <mat-option *ngFor="let item of list10['area']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="wilayah.controls['area']?.hasError('required') && wilayah.controls['area'].touched">
+                  {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.salespoint}}" formControlName="salespoint"
+                  (selectionChange)="getAudienceArea('district', area.get('salespoint').value, i)"
+                  >
+                  <mat-option *ngFor="let item of list10['salespoint']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['salespoint']?.hasError('required') && wilayah.controls['salespoint'].touched">
+                  {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary">
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
+                  (selectionChange)="getAudienceArea('territory', area.get('district').value, i)" >
+                  <mat-option *ngFor="let item of list10['district']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['district']?.hasError('required') && wilayah.controls['district'].touched">
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light form-primary" style="padding-bottom: 10px;">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" >
+                  <mat-option *ngFor="let item of list10['territory']" [value]="item.id">
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="wilayah.controls['territory']?.hasError('required') && wilayah.controls['territory'].touched">
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- <div class="pt-24" fxLayout="row" style="place-content: flex-end;z-index: 999;position: relative;width: fit-content;margin-left: auto;margin-right: 0;margin-top: -15px;padding-top: unset !important;">
+              <div >
+                
+                <button class="float-right" mat-icon-button color="primary" aria-label="Remove/clear"
+                (click)="removeOrClearEmail(i)" matTooltip="Remove" >
+                <mat-icon style="
+                color: white;
+                background-color: #dc1e2d;
+                height: 24px;
+                margin-top: 8px;
+                border-radius: 2px;
+            ">delete</mat-icon>
+                </button>
+                
+              </div>
+              
+            </div> -->
+            </div>
+          </div>
           </form>
+          <!-- <div *ngIf="this.wilayah.getRawValue().areas.length > 1" class="pt-24" fxLayout="row" style="place-content: flex-end;margin-top: -40px;margin-right: 50px;align-items: flex-end; margin-left: auto;position: absolute;left: 349px;padding-top: unset !important;">
+            <div >
+              <button class="float-right" mat-icon-button color="primary" aria-label="Add"
+                  (click)="addEmailFormGroup()" matTooltip="Add" *ngIf="this.wilayah.getRawValue().areas.length < 10">
+                  <mat-icon style="
+                color: white;
+                background-color: #dc1e2d;
+                height: 24px;
+                margin-top: 8px;
+                border-radius: 2px;
+            ">add</mat-icon>
+              </button>
+              
+            </div>
+            
+          </div> -->
+          <!-- <div *ngIf="this.wilayah.getRawValue().areas.length == 1" class="pt-24" fxLayout="row" style="place-content: flex-end;margin-top: -24px;margin-right: 50px;align-items: flex-end; margin-left: auto;left: 349px;">
+            <div >
+              <button class="float-right" mat-icon-button color="primary" aria-label="Add"
+                  (click)="addEmailFormGroup()" matTooltip="Add" *ngIf="this.wilayah.getRawValue().areas.length < 10">
+                  <mat-icon style="
+                color: white;
+                background-color: #dc1e2d;
+                height: 24px;
+                margin-top: 8px;
+                border-radius: 2px;
+            ">add</mat-icon>
+              </button>
+              
+            </div>
+            
+          </div> -->
+          <button mat-raised-button matStepperNext type="button" class="confirmation-button">
+            {{ls.locale.global.button.next}}
+          </button>
         </mat-step>
 
-        <mat-step [stepControl]="wilayah_2">
+        <!-- <mat-step [stepControl]="wilayah_2">
           <form [formGroup]="wilayah_2">
             <ng-template matStepLabel>Area 2</ng-template>
 
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="National" formControlName="national" id="area2_national">
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="national" id="area2_national">
                   <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['national'].hasError('required') && wilayah_2.controls['national'].touched">
-                  National harus diisi
+                  {{ls.locale.global.area.national}}{{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Zone" formControlName="zone"
+                <mat-select placeholder="{{ls.locale.global.area.zone}}" formControlName="zone"
                   (selectionChange)="getAudienceArea2('region', wilayah_2.get('zone').value)" id="area2_zone">
                   <mat-option *ngFor="let item of list2['zone']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Zona' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.zone : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['zone'].hasError('required') && wilayah_2.controls['zone'].touched">
-                  Zone harus diisi
+                  {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Regional" formControlName="region"
+                <mat-select placeholder="{{ls.locale.global.area.national}}" formControlName="region"
                   (selectionChange)="getAudienceArea2('area', wilayah_2.get('region').value)" id="area2_region">
                   <mat-option *ngFor="let item of list2['region']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Regional' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.regional : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['region'].hasError('required') && wilayah_2.controls['region'].touched">
-                  Regional harus diisi
+                  Regional {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Area" formControlName="area"
+                <mat-select placeholder="{{ls.locale.global.area.area}}" formControlName="area"
                   (selectionChange)="getAudienceArea2('salespoint', wilayah_2.get('area').value)" id="area2_area">
                   <mat-option *ngFor="let item of list2['area']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Area' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.area : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['area'].hasError('required') && wilayah_2.controls['area'].touched">
-                  Area harus diisi
+                  Area {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Salespoint" formControlName="salespoint"
+                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                   (selectionChange)="getAudienceArea2('district', wilayah_2.get('salespoint').value)"
                   id="area2_salespoint">
                   <mat-option *ngFor="let item of list2['salespoint']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Salespoint' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.salespoint : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['salespoint'].hasError('required') && wilayah_2.controls['salespoint'].touched">
-                  Salespoint harus diisi
+                  Salespoint {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="District" formControlName="district"
+                <mat-select placeholder="{{ls.locale.global.area.district}}" formControlName="district"
                   (selectionChange)="getAudienceArea2('territory', wilayah_2.get('district').value)"
                   id="area2_district">
                   <mat-option *ngFor="let item of list2['district']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua District' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.district : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['district'].hasError('required') && wilayah_2.controls['district'].touched">
-                  Distrik harus diisi
+                  {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <mat-select placeholder="Territory" formControlName="territory" id="area2_territory">
+                <mat-select placeholder="{{ls.locale.global.area.territory}}" formControlName="territory" id="area2_territory">
                   <mat-option *ngFor="let item of list2['territory']" [value]="item.id">
-                    {{item.name === 'all' ? 'Semua Territory' : item.name}}</mat-option>
+                    {{item.name === 'all' ? ls.locale.global.label.all + ' '+ ls.locale.global.area.territory : item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="wilayah_2.controls['territory'].hasError('required') && wilayah_2.controls['territory'].touched">
-                  Territori harus diisi
+                  {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
             </div>
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
           </form>
-        </mat-step>
+        </mat-step> -->
 
         <mat-step [stepControl]="verticalStepperStep2">
 
           <form [formGroup]="verticalStepperStep2">
 
-            <ng-template matStepLabel>Level Akses Peran</ng-template>
+            <ng-template matStepLabel>{{ls.locale.admin_principal.text2}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <mat-form-field fxFlex="100" class="is-light">
-                <mat-select placeholder="Peran" formControlName="role">
+                <mat-select placeholder="{{ls.locale.admin_principal.text3}}" formControlName="role">
                   <mat-option *ngFor="let item of listRole" [value]="item.id">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="verticalStepperStep2.controls['role'].hasError('required') && verticalStepperStep2.controls['role'].touched">
-                  Role harus diisi
+                  {{ls.locale.admin_principal.text3}} {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
               </mat-form-field>
 
@@ -256,7 +1037,7 @@
 
             <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
               <button mat-raised-button matStepperNext (click)="step2()" type="button" class="confirmation-button">
-                Lanjut
+                {{ls.locale.global.button.next}}
               </button>
             </div>
 
@@ -266,19 +1047,19 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
-            Apakah anda yakin untuk menyelesaikan isian ini ?
+            {{ls.locale.paguyuban.text5}}
           </div>
 
           <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
-              Kembali
+              {{ls.locale.global.button.back}}
             </button>
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
-                Selesai
+                {{ls.locale.global.button.finish}}
               </ng-container>
               <ng-container *ngIf="submitting == true">
                 <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>

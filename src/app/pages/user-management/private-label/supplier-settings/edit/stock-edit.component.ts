@@ -12,6 +12,7 @@ import { Emitter } from 'app/helper/emitter.helper';
 import { PLStockService } from 'app/services/user-management/private-label/stock.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-stock-edit',
@@ -67,6 +68,7 @@ export class StockEditComponent implements OnInit, OnDestroy {
     private emitter: Emitter,
     private dataService: DataService,
     private geotreeService: GeotreeService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.isLoadingSave = false;

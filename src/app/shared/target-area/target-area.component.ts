@@ -16,6 +16,7 @@ import { AreaService } from "app/services/area.service";
 import { DataService } from "app/services/data.service";
 import { DialogService } from "app/services/dialog.service";
 import { GeotreeService } from "app/services/geotree.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 import { Observable, Subject } from "rxjs";
 import { DialogImportComponent } from "./dialog-import/dialog-import.component";
 
@@ -51,6 +52,7 @@ export class TargetAreaComponent implements OnInit {
   rows: any[] = [];
   selected: any[] = [];
   isSelectedAll: boolean = false;
+  defaultSelectedAll: boolean = false;
 
   dialogRef: any;
 
@@ -70,7 +72,8 @@ export class TargetAreaComponent implements OnInit {
     private areaService: AreaService,
     private dataService: DataService,
     public dialogService: DialogService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     this.keyUp
       .debounceTime(500)
@@ -101,7 +104,12 @@ export class TargetAreaComponent implements OnInit {
 
     const areas = data.areas.currentValue;
     if (areas.length) {
-      this.onSelect({ selected: areas });
+      const areasId = areas.map(({id}) => id);
+      if (areasId.length == 1 && areasId[0] == 1) {
+        this.defaultSelectedAll = true;
+      } else {
+        this.onSelect({ selected: areas });
+      };
     }
   }
 
@@ -141,8 +149,9 @@ export class TargetAreaComponent implements OnInit {
         this.rows = res.data ? res.data : [];
         Page.renderPagination(this.pagination, res);
 
-        if (this.isSelectedAll) {
+        if (this.isSelectedAll || this.defaultSelectedAll) {
           this.onSelect({ selected: res.data });
+          this.defaultSelectedAll = false;
         }
       });
   }

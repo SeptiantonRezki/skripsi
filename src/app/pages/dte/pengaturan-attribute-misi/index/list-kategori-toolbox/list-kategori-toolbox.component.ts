@@ -15,6 +15,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogToolboxEditComponent } from '../dialog-toolbox-edit/dialog-toolbox-edit.component';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-list-kategori-toolbox',
@@ -51,7 +52,8 @@ export class ListKategoriToolboxComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []

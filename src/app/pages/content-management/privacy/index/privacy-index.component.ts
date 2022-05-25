@@ -139,10 +139,10 @@ export class PrivacyIndexComponent {
   deletePage(id): void {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Kebijakan Privasi",
-      captionDialog: "Apakah anda yakin untuk menghapus data kebijakan privasi ini ?",
+      titleDialog: "Hapus Kebijakan Privasi", // TODO
+      captionDialog: "Apakah anda yakin untuk menghapus data kebijakan privasi ini ?", // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: ["Hapus", "Batal"] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -151,7 +151,7 @@ export class PrivacyIndexComponent {
     this.privacyService.delete({ content_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" }); // TODO
 
         this.getPrivacy();
       },

@@ -141,6 +141,7 @@ fuse-main
 
 .ngx-datatable {
   .datatable-body {
+    min-height: 48px;
     .progress-linear {
       display: block;
       position: relative;
@@ -1301,4 +1302,10 @@ a {
   .material-icons {
     color: #bdbdbd;
   }
+}
+
+.mat-error-block {
+  font-size: 12px;
+  margin-top: -16px;
+  padding-bottom: 16px;
 }

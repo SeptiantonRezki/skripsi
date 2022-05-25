@@ -287,8 +287,8 @@ export class PanelMitraVoucherComponent implements OnInit {
         // area = this.formFilter.get(selection).value;
         this.geotreeService.getChildFilterArea(fd).subscribe(res => {
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          // this.list[this.parseArea(selection)] = res.data;
-          this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+          this.list[this.parseArea(selection)] = res.data;
+          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
           // fd = null
         });
@@ -314,8 +314,8 @@ export class PanelMitraVoucherComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -344,8 +344,8 @@ export class PanelMitraVoucherComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -373,8 +373,8 @@ export class PanelMitraVoucherComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -399,7 +399,8 @@ export class PanelMitraVoucherComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
             });
           } else {
@@ -422,8 +423,8 @@ export class PanelMitraVoucherComponent implements OnInit {
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              // this.list[selection] = res.data;
-              this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
+              this.list[selection] = res.data;
+              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
               // fd = null
             });
@@ -540,7 +541,7 @@ export class PanelMitraVoucherComponent implements OnInit {
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
         } else {
-          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
@@ -548,7 +549,7 @@ export class PanelMitraVoucherComponent implements OnInit {
         }
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       })
@@ -717,7 +718,7 @@ export class PanelMitraVoucherComponent implements OnInit {
   async exportMitra() {
     if (this.selected.length === 0) {
       this.dialogService.openSnackBar({
-        message: 'Jumlah mitra yang dipilih tidak boleh kosong!'
+        message: this.ls.locale.global.messages.text12 // TODO
       })
       return;
     }
@@ -786,7 +787,7 @@ export class PanelMitraVoucherComponent implements OnInit {
 
   importMitra(): void {
     if (this.statusVoucher === 'need-approval') {
-      this.dialogService.openSnackBar({ message: "Inject Voucher sedang di Review" });
+      this.dialogService.openSnackBar({ message: this.ls.locale.cn_reward.b2b_voucher.voucher_on_review });
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -802,7 +803,7 @@ export class PanelMitraVoucherComponent implements OnInit {
       if (response) {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         console.log('this', this.selected)
       }
     });

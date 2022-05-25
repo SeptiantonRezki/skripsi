@@ -18,7 +18,7 @@
             <div fxFlex="1 0 auto" fxLayout="column">
 
               <mat-form-field fxFlex="100" class="is-light">
-                <input matInput type="text" placeholder="Nama" formControlName="name">
+                <input matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name">
                 <mat-error *ngIf="verticalStepperStep1.controls['name'].hasError('required') && verticalStepperStep1.controls['name'].touched ">
                   Nama harus diisi.
                 </mat-error>
@@ -77,7 +77,7 @@
 
         <mat-step>
 
-          <ng-template matStepLabel>Selesai</ng-template>
+          <ng-template matStepLabel>{{'global.button.finish' | translate}}</ng-template>
 
           <div class="h2" fxLayout="row" fxLayoutAlign="center center">
             Apakah anda yakin untuk menyelesaikan isian ini ?

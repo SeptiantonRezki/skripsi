@@ -7,6 +7,7 @@ import { TemplateTaskService } from '../../../../../services/dte/template-task.s
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -39,6 +40,7 @@ export class DiaglogMisiComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateTaskService: TemplateTaskService,
     private dialogService: DialogService,
+    private ls: LanguagesService,
   ) { }
 
 
@@ -74,6 +76,15 @@ export class DiaglogMisiComponent implements OnInit {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMissionOther();
+      });
+
+    this.form.get('coin_verification').valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe((value) => {
+        if (value > 0) {
+          !this.form.get('verifikasiFF').value ? this.form.get('verifikasi').patchValue(true) : null;
+        }
       });
 
     if (this.data !== null) {

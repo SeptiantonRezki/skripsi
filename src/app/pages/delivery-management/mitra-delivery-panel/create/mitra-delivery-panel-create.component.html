@@ -9,16 +9,16 @@
         <div class="ayo-middle" fxLayout="row" style="margin-top: 25px;">
           <div fxLayout="row wrap" fxLayoutAlign="start" fxFlex="89">
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-              <mat-select placeholder="Pilih Kurir" formControlName="courier">
+              <mat-select placeholder="{{'delivery_management.panel_mitra.select_courier' | translate}}" formControlName="courier"> <!-- // TODO -->
                 <mat-option *ngFor="let cr of listCourier" [value]="cr.id">{{ cr.name }}</mat-option>
               </mat-select>
               <mat-error class="mt-8 px-24"
                 *ngIf="formPanelMitra.controls['courier'].hasError('required') && formPanelMitra.controls['courier'].touched">
-                Jenis Kurir {{ ls.locale.global.messages.mandatory_text }}
+                {{'delivery_management.panel_mitra.courier_type' | translate}} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex="25" class="orders dropdown" style="margin-right: 10px;">
-              <mat-select placeholder="Pilih Layanan" formControlName="service">
+              <mat-select placeholder="{{'delivery_management.panel_mitra.select_service' | translate}}" formControlName="service"> <!-- // TODO -->
                 <mat-option *ngFor="let service of listCourierServices" [value]="service.id">{{ service.name }}
                 </mat-option>
               </mat-select>
@@ -163,12 +163,12 @@
                 {{row.classification ? row.classification : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false">
+            <ngx-datatable-column name="Kode Divisi" prop="division" [sortable]="false"> <!-- // TODO -->
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.division ? row.division : '-'}}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false">
+            <ngx-datatable-column name="Wilayah" prop="region" [sortable]="false"> <!-- // TODO -->
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.region ? row.region : '-'}}
               </ng-template>

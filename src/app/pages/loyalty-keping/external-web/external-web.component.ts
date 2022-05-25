@@ -2,9 +2,9 @@ import { HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { ActivatedRoute, Router, UrlSegment } from "@angular/router";
-import { PagesName } from "app/classes/pages-name";
-import { AuthenticationService } from "app/services/authentication.service";
-import { environment } from "environments/environment";
+import { PagesName } from "../../../classes/pages-name";
+import { AuthenticationService } from "../../../services/authentication.service";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: "loyalty-keping-external-web",

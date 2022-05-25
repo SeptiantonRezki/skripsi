@@ -3,7 +3,7 @@
   <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
     <mat-icon>search</mat-icon>
     <mat-form-field autoComplete="off" class="is-light tab-search">
-      <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)">
+      <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
     </mat-form-field>
   </div>
 </div>
@@ -12,12 +12,12 @@
     <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
       fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="National" formControlName="national">
+        <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
           <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Zone" formControlName="zone" multiple>
+        <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
             'Semua
             Zona' :
@@ -25,7 +25,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Regional" formControlName="region" multiple>
+        <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all' ?
             'Semua
             Regional'
@@ -34,7 +34,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Area" formControlName="area" multiple>
+        <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
             'Semua
             Area'
@@ -43,7 +43,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+        <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name === 'all'
             ?
             'Semua
@@ -53,7 +53,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="District" formControlName="district" multiple>
+        <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name === 'all' ?
             'Semua
             District'
@@ -62,7 +62,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="12%" class="is-light form-primary">
-        <mat-select placeholder="Territory" formControlName="territory" multiple>
+        <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
           <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name === 'all' ?
             'Semua
             Territori'

@@ -7,6 +7,7 @@ import { SupplierCompanyService } from 'app/services/user-management/private-lab
 import { UserSupplierService } from 'app/services/user-management/private-label/user-supplier.service';
 import { DialogService } from 'app/services/dialog.service';
 import { commonFormValidator } from "../../../../../classes/commonFormValidator";
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-user-supplier-edit',
@@ -28,8 +29,8 @@ export class UserSupplierEditComponent implements OnInit {
   userSupplierStatusSelected: any;
   userSupplierId: any;
   userSupplierStatusList: any[] = [
-    { name: 'Aktif', status: 'active' },
-    { name: 'Non-Aktif', status: 'inactive' }
+    { name: this.ls.locale.global.label.active, status: 'active' },
+    { name: this.ls.locale.global.label.inactive, status: 'inactive' }
   ];
 
   constructor(
@@ -39,6 +40,7 @@ export class UserSupplierEditComponent implements OnInit {
     private userSupplierService: UserSupplierService,
     private dialogService: DialogService,
     private router: Router,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
     this.isLoadingSave = false;

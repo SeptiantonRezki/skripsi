@@ -1,6 +1,6 @@
 <div [formGroup]="formGeo" fxLayout="row" fxLayoutGap="24px" class="px-24">
   <mat-form-field fxFlex="20%" class="is-light form-primary">
-    <mat-select placeholder="National" formControlName="national" multiple>
+    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national" multiple>
       <mat-option *ngFor="let item of geoList.national" [value]="item.id">{{
         item.code
       }}</mat-option>
@@ -8,7 +8,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="20%" class="is-light form-primary">
     <mat-select
-      placeholder="Zone"
+      placeholder="{{'global.area.zone' | translate}}"
       formControlName="division"
       (selectionChange)="getLevel('division')"
       multiple
@@ -32,7 +32,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="20%" class="is-light form-primary">
     <mat-select
-      placeholder="Area"
+      placeholder="{{'global.area.area' | translate}}"
       formControlName="area"
       multiple
       (selectionChange)="getLevel('area')"
@@ -45,7 +45,7 @@
   <div fxFlex="20%" class="search-field">
     <input
       matInput
-      placeholder="Cari"
+      placeholder="{{ls.locale.global.label.search}}"
       (keyup)="keyUp.next($event.target.value)"
       autocomplete="off"
     />

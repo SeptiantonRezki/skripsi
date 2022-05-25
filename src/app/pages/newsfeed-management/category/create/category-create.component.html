@@ -30,7 +30,7 @@
           <div formArrayName="link" *ngFor="let item of formCategoryGroup.get('link')['controls']; let i = index;">
             <div [formGroupName]="i" fxLayout="row">
               <mat-form-field fxFlex="100%" class="is-light form-primary">
-                <input matInput type="url" formControlName="url" placeholder="URL Link">
+                <input matInput type="url" formControlName="url" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error *ngIf="item.controls['url'].hasError('required') && item.controls['url'].touched">
                   URL {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>

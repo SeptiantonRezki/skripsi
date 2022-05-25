@@ -29,14 +29,14 @@
 
                 <div fxFlex.xs="100" fxLayout.xs="column" fxLayoutAlign.xs="start" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
-                    <span>Pilih dari</span>
+                    <span>{{ls.locale.cn_reward.b2b_voucher.text18}}</span>
                     <mat-checkbox class="mt-4 ml-4 mb-8" [formControl]="isB2CVoucher"
                       (change)="onChangeIsB2CVoucher($event)">
-                      B2C Voucher</mat-checkbox>
+                      {{ls.locale.cn_reward.b2c_voucher.text1}}</mat-checkbox>
                   </div>
                   <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
                     <mat-form-field fxFlex="100" class="mt-8">
-                      <mat-select placeholder="Penggunaan Voucher" formControlName="opsiVoucher">
+                      <mat-select placeholder="{{ls.locale.cn_reward.b2c_voucher.text25}}" formControlName="opsiVoucher">
                         <mat-option *ngFor="let ovl of opsiVoucherList" [value]="ovl.value">{{ ovl.name }}</mat-option>
                       </mat-select>
                     </mat-form-field>
@@ -44,10 +44,10 @@
                 </div>
 
                 <mat-form-field fxFlex="50" class="is-light">
-                  <input matInput type="text" placeholder="Nama Voucher" formControlName="name">
+                  <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text2}}" formControlName="name">
                   <mat-error
                     *ngIf="formDetilVoucher.controls['name'].hasError('required') && formDetilVoucher.controls['name'].touched ">
-                    Nama Voucher harus diisi.
+                    {{ls.locale.cn_reward.b2b_voucher.text2}} {{ls.locale.global.messages.mandatory_text}}
                   </mat-error>
                 </mat-form-field>
 
@@ -56,22 +56,22 @@
                     <mat-form-field class="is-light">
                       <input matInput type="text" [mask]="ls.locale.global.input_mask_b2b" [thousandSeparator]="ls.locale.global.input_separator" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency">
                       <mat-error>
-                        Nilai Penukaran untuk 1 Koin harus diisi.
+                        {{ls.locale.cn_reward.b2b_voucher.text20}} {{ls.locale.global.messages.mandatory_text}}
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <mat-form-field fxFlex="20" class="is-light">
-                    <input matInput type="number" placeholder="Jumlah Koin" formControlName="coin">
+                    <input matInput type="number" placeholder="{{ls.locale.cn_reward.b2b_voucher.text21}}" formControlName="coin">
                     <mat-error
                       *ngIf="formDetilVoucher.controls['coin'].hasError('required') && formDetilVoucher.controls['coin'].touched ">
-                      Jumlah Koin harus diisi.
+                      {{ls.locale.cn_reward.b2b_voucher.text21}} {{ls.locale.global.messages.mandatory_text}}
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="20" class="is-light">
-                    <input matInput type="number" placeholder="Nilai Voucher" formControlName="voucher" readonly>
+                    <input matInput type="number" placeholder="{{ls.locale.cn_reward.b2c_voucher.text21}}" formControlName="voucher" readonly> 
                     <mat-error
                       *ngIf="formDetilVoucher.controls['voucher'].hasError('required') && formDetilVoucher.controls['voucher'].touched ">
-                      Nilai Voucher harus diisi.
+                      {{ls.locale.cn_reward.b2c_voucher.text21}} {{ls.locale.global.messages.mandatory_text}} 
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -79,23 +79,23 @@
                 <div fxFlex.xs="100" fxLayout.xs="column" fxFlex="50" fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
                     <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                      placeholder="Tanggal Mulai" formControlName="startDate" [min]="minDateVoucher">
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="startDate" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                     <mat-datepicker #startPicker></mat-datepicker>
                     <mat-error class="mt-8 px-24"
                       *ngIf="formDetilVoucher.controls['startDate'].hasError('required') && formDetilVoucher.controls['startDate'].touched">
-                      Tanggal awal harus diisi.
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{ls.locale.global.messages.mandatory_text}}
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field fxFlex="50" class="is-light form-primary">
                     <input matInput (focus)="endDate.open()" [min]="minDateVoucher" [matDatepicker]="endDate"
-                      placeholder="Tanggal Berakhir" formControlName="endDate">
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="endDate">
                     <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
                     <mat-error class="mt-8 px-24"
                       *ngIf="formDetilVoucher.controls['endDate'].hasError('required') && formDetilVoucher.controls['endDate'].touched">
-                      Tanggal berakhir harus diisi.
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{ls.locale.global.messages.mandatory_text}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -103,60 +103,59 @@
                 <div fxFlex.xs="100" fxLayout.xs="column" fxFlex="50" fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
                     <input matInput (focus)="voucherPicker.open()" [matDatepicker]="voucherPicker"
-                      placeholder="Tanggal Voucher Dibagikan" formControlName="voucherDate" [min]="minDateVoucher">
+                      placeholder="{{ls.locale.cn_reward.b2b_voucher.text22}}" formControlName="voucherDate" [min]="minDateVoucher">
                     <mat-datepicker-toggle matSuffix [for]="voucherPicker"></mat-datepicker-toggle>
                     <mat-datepicker #voucherPicker></mat-datepicker>
                     <mat-error class="mt-8 px-24"
                       *ngIf="formDetilVoucher.controls['voucherDate'].hasError('required') && formDetilVoucher.controls['voucherDate'].touched">
-                      Tanggal Voucher Dibagikan harus diisi.
+                      {{ls.locale.cn_reward.b2b_voucher.text22}} {{ls.locale.global.messages.mandatory_text}}
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field fxFlex="50" class="is-light form-primary">
                     <input matInput (focus)="voucherExpiry.open()" [min]="minDateVoucher"
-                      [matDatepicker]="voucherExpiry" placeholder="Tanggal Kadaluarsa Voucher"
+                      [matDatepicker]="voucherExpiry" placeholder="{{ls.locale.cn_reward.b2b_voucher.text23}}" 
                       formControlName="voucherExpiry">
                     <mat-datepicker-toggle matSuffix [for]="voucherExpiry"></mat-datepicker-toggle>
                     <mat-datepicker #voucherExpiry></mat-datepicker>
                     <mat-error class="mt-8 px-24"
                       *ngIf="formDetilVoucher.controls['voucherExpiry'].hasError('required') && formDetilVoucher.controls['voucherExpiry'].touched">
-                      Tanggal berakhirTanggal Kadaluarsa Voucher harus diisi.
+                      {{ls.locale.cn_reward.b2b_voucher.text23}} {{ls.locale.global.messages.mandatory_text}}
                     </mat-error>
                   </mat-form-field>
                 </div>
 
                 <mat-form-field fxFlex="50">
-                  <mat-select placeholder="Group Trade Program" formControlName="group_trade_program" multiple
+                  <mat-select placeholder="{{ls.locale.dte.group_trade_program.text1}}" formControlName="group_trade_program" multiple
                     *ngIf="!isB2CVoucher.value">
                     <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
                   </mat-select>
-                  <mat-select placeholder="Group Trade Program B2C" formControlName="group_trade_program" multiple
+                  <mat-select placeholder="{{ls.locale.dte.group_trade_program.text1}} B2C" formControlName="group_trade_program" multiple
                     *ngIf="isB2CVoucher.value">
                     <mat-option *ngFor="let item of voucherB2CList" [value]="item.id">{{ item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50" class="isLight">
-                  <textarea matInput name="Catatan" formControlName="note" cdkTextareaAutosize
+                  <textarea matInput name="{{ls.locale.global.label.note}}" formControlName="note" cdkTextareaAutosize
                     #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="15"
-                    placeholder="Catatan"></textarea>
+                    placeholder="{{ls.locale.global.label.note}}"></textarea>
                 </mat-form-field>
 
                 <div fxFlex="50">
-                  <h4 style="font-weight: bold;">Batasan</h4>
+                  <h4 style="font-weight: bold;">{{ls.locale.cn_reward.b2b_voucher.text25}}</h4>
                 </div>
 
                 <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
                   <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'b2b' || formDetilVoucher.get('opsiVoucher').value == 'both'">
                     <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
-                      <span class="opsi-type">Produk B2B</span>
+                      <span class="opsi-type">{{ls.locale.cn_reward.b2b_voucher.text28}}</span>
                       <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                         <div fxFlex="100">
                           <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
-                            style="margin-right: 25px;">Batasi dengan Produk
+                            style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                           </mat-checkbox>
-                          <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">Batasi
-                            Dengan Kategori</mat-checkbox>
+                          <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
                         </div>
                       </div>
                       <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product').value" class="mt-12">
@@ -166,7 +165,7 @@
                             {{product.name}}
                             <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
                           </mat-chip>
-                          <input matInput type="text" #productInput placeholder="Batasan Berdasarkan Produk"
+                          <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
                             (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
                             [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             (matChipInputTokenEnd)="add($event)">
@@ -179,11 +178,11 @@
                         </mat-autocomplete>
                       </mat-form-field>
                       <mat-form-field fxFlex="100" *ngIf="!formDetilVoucher.get('limit_by_product').value">
-                        <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                        <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
                       </mat-form-field>
 
                       <mat-form-field fxFlex="100">
-                        <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category" multiple>
+                        <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
                           <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                         </mat-select>
                       </mat-form-field>
@@ -191,14 +190,13 @@
                   </div>
                   <div fxFlex="50" fxLayout="column" *ngIf="formDetilVoucher.get('opsiVoucher').value == 'src-catalogue' || formDetilVoucher.get('opsiVoucher').value == 'both'">
                     <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
-                      <span class="opsi-type">SRC Katalog</span>
+                      <span class="opsi-type">SRC Katalog</span> <!-- // TODO -->
                       <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                         <div fxFlex="100">
                           <mat-checkbox formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
-                            style="margin-right: 25px;">Batasi dengan Produk
+                            style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                           </mat-checkbox>
-                          <mat-checkbox formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">Batasi
-                            Dengan Kategori</mat-checkbox>
+                          <mat-checkbox formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
                         </div>
                       </div>
                       <mat-form-field fxFlex="100" *ngIf="formDetilVoucher.get('limit_by_product_srcc').value" class="mt-12">
@@ -208,7 +206,7 @@
                             {{product.name}}
                             <mat-icon matChipRemove *ngIf="removable" (click)="removeSRCC(product.sku_id)">cancel</mat-icon>
                           </mat-chip>
-                          <input matInput type="text" #productInputSRCC placeholder="Batasan Berdasarkan Produk"
+                          <input matInput type="text" #productInputSRCC placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
                             (input)="keyUpProductSRCC.next($event.target.value)" [formControl]="product_srcc" [matAutocomplete]="auto"
                             [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                             (matChipInputTokenEnd)="addSRCC($event)">
@@ -221,11 +219,11 @@
                         </mat-autocomplete>
                       </mat-form-field>
                       <mat-form-field fxFlex="100" *ngIf="!formDetilVoucher.get('limit_by_product_srcc').value">
-                        <input matInput type="text" placeholder="Batasan Berdasarkan Produk" [disabled]="true">
+                        <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
                       </mat-form-field>
                       
                       <mat-form-field fxFlex="100">
-                        <mat-select placeholder="Batasan Berdasarkan Kategori" formControlName="category_srcc" multiple>
+                        <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category_srcc" multiple>
                           <mat-option *ngFor="let cat of listCategoriesSRCC" [value]="cat.id">{{ cat.name }}</mat-option>
                         </mat-select>
                       </mat-form-field>
@@ -237,7 +235,7 @@
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start">
                 <button mat-raised-button type="button" class="confirmation-button" *ngIf="whyYouCantSeeMe()"
                   fxFlex="30" fxFlex.gt-xs="20" (click)="onSaveDetail()">
-                  SIMPAN
+                  {{ls.locale.global.button.save}}
                 </button>
                 <ng-container *ngIf="checkForNonApprover()">
                   <button *ngFor="let item of listStatuses" mat-raised-button type="button"
@@ -248,7 +246,7 @@
                 </ng-container>
                 <button mat-raised-button type="button" *ngIf="detailVoucher && detailVoucher.status === 'published'"
                   fxFlex="20" style="margin-left: 10px;" disabled>
-                  PUBLISHED
+                  {{ls.locale.cn_reward.b2b_voucher.published}}
                 </button>
               </div>
             </form>
@@ -280,12 +278,12 @@
                 <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center"
                   fxLayoutGap="20px">
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="National" formControlName="national">
+                    <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
                       <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="Zone" formControlName="zone" multiple>
+                    <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name ===
                         'all' ? 'Semua
                         Zona' :
@@ -293,7 +291,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="Regional" formControlName="region" multiple>
+                    <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name
                         === 'all' ? 'Semua
                         Regional' :
@@ -301,7 +299,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="Area" formControlName="area" multiple>
+                    <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name ===
                         'all' ? 'Semua
                         Area' :
@@ -309,7 +307,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="Salespoint" formControlName="salespoint" multiple>
+                    <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">
                         {{item.name === 'all' ? 'Semua
                         Salespoint' :
@@ -317,7 +315,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="District" formControlName="district" multiple>
+                    <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name
                         === 'all' ? 'Semua
                         District' :
@@ -325,7 +323,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select placeholder="Territory" formControlName="territory" multiple>
+                    <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
                       <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name
                         === 'all' ? 'Semua
                         Territory' :
@@ -336,7 +334,7 @@
                   <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon>search</mat-icon>
                     <mat-form-field class="is-light tab-search">
-                      <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+                      <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
                     </mat-form-field>
                   </div>
                 </div>
@@ -398,12 +396,12 @@
                     <span class="row-address">{{row.coin || 0}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text5 }}" prop="coin" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false">
+                <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text6 }}" prop="coin" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                     <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
                   </ng-template>

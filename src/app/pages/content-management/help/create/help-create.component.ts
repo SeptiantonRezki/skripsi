@@ -92,6 +92,16 @@ export class HelpCreateComponent {
     // this.getListCategory();
     this.getListUser();
     this.getCountryList();
+    if(this.ls.selectedLanguages == 'id'){
+      this.formHelp.get('country').setValue('ID');
+    }
+    else if(this.ls.selectedLanguages == 'km'){
+      this.formHelp.get('country').setValue('KH');
+    }
+    else if(this.ls.selectedLanguages == 'en-ph'){
+      this.formHelp.get('country').setValue('PH');
+    }
+    this.formHelp.controls['country'].disable();
   }
 
   add(event: MatChipInputEvent): void {
@@ -235,9 +245,9 @@ export class HelpCreateComponent {
       } else {
         let msg;
         if (this.formHelp.invalid)
-          msg = "Silahkan lengkapi data terlebih dahulu!";
+          msg = "Silahkan lengkapi data terlebih dahulu!"; // TODO
         else if (this.files && this.files.size >= 500000)
-          msg = "Ukuran gambar tidak boleh melebihi 500KB!";
+          msg = "Ukuran gambar tidak boleh melebihi 500KB!"; // TODO
 
         this.dialogService.openSnackBar({ message: msg });
         commonFormValidator.validateAllFields(this.formHelp);

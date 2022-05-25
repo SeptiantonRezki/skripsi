@@ -47,7 +47,7 @@ export class AudienceCreateComponent {
   listType: any[] = [
     { name: "Batasi Audience", value: "limit" },
     { name: "Pilih Semua", value: "pick-all" },
-  ];
+  ]; // TODO
   tsmScheduler: any[] = [
     { name: "TSM", value: "tsm" },
     { name: "Scheduler", value: "scheduler" },
@@ -62,7 +62,7 @@ export class AudienceCreateComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" }
-  ];
+  ]; // TODO
   srcClassification: any[] = [
     { name: "Semua Tipe", value: "all" }
   ];
@@ -644,7 +644,9 @@ export class AudienceCreateComponent {
     switch (this.parseArea(selection)) {
       case "zone":
         // area = this.formFilter.get(selection).value;
+        this.dataService.showLoading(true);
         this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
+          this.dataService.showLoading(true);
           // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] =
@@ -653,6 +655,10 @@ export class AudienceCreateComponent {
                   expectedArea.map((eArea) => eArea.id).includes(dt.id)
                 )
               : res.data;
+              
+                
+                this.dataService.showLoading(false);
+              
 
           // fd = null
         });
@@ -684,6 +690,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -693,13 +700,16 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
             this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list["region"] = [];
+          this.dataService.showLoading(false);
         }
         this.formFilter.get("region").setValue("");
         this.formFilter.get("area").setValue("");
@@ -722,6 +732,7 @@ export class AudienceCreateComponent {
               : {};
           console.log("area hitted", selection, item, this.list["region"]);
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -731,13 +742,16 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
             this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list["area"] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get("area").setValue("");
@@ -759,6 +773,7 @@ export class AudienceCreateComponent {
               : {};
           console.log("item", item);
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -768,13 +783,16 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
             this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list["salespoint"] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get("salespoint").setValue("");
@@ -793,6 +811,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               this.list[selection] =
@@ -801,13 +820,16 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
               // fd = null
             });
           } else {
             this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list["district"] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get("district").setValue("");
@@ -824,6 +846,7 @@ export class AudienceCreateComponent {
                 })[0]
               : {};
           if (item && item.name && item.name !== "all") {
+            this.dataService.showLoading(true);
             this.geotreeService.getChildFilterArea(fd).subscribe((res) => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
               // this.list[selection] = res.data;
@@ -833,14 +856,17 @@ export class AudienceCreateComponent {
                       expectedArea.map((eArea) => eArea.id).includes(dt.id)
                     )
                   : res.data;
+                  this.dataService.showLoading(false);
 
               // fd = null
             });
           } else {
             this.list[selection] = [];
+            this.dataService.showLoading(false);
           }
         } else {
           this.list["territory"] = [];
+          this.dataService.showLoading(false);
         }
 
         this.formFilter.get("territory").setValue("");
@@ -928,7 +954,7 @@ export class AudienceCreateComponent {
   }
 
   getRetailer() {
-    this.dataService.showLoading(true);
+    
     this.pagination.per_page = 25;
     this.pagination.sort = "name";
     this.pagination.sort_type = "asc";
@@ -1046,7 +1072,7 @@ export class AudienceCreateComponent {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data;
         this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+        // this.dataService.showLoading(false);
       },
       (err) => {
         this.dataService.showLoading(false);
@@ -1065,7 +1091,7 @@ export class AudienceCreateComponent {
       // this.idbService.getAnyOf(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -1085,7 +1111,7 @@ export class AudienceCreateComponent {
       // this.idbService.get(rows).then(result => {
       //   console.log('result', result);
       //   this.selected = result;
-      //   this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+      //   this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       // })
 
       this.loadingIndicator = false;
@@ -1536,14 +1562,14 @@ export class AudienceCreateComponent {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
+          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`, // TODO
         });
       }
       else if (limit && selectedRetailer > max) {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
+          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`, // TODO
         });
       }
 
@@ -1606,7 +1632,7 @@ export class AudienceCreateComponent {
             return this.dialogService.openSnackBar({
               message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
                 res.selisih
-              )}!`,
+              )}!`, // TODO
             });
           }
 
@@ -1730,12 +1756,12 @@ export class AudienceCreateComponent {
 
       if (this.formAudience.valid && this.selected.length === 0) {
         return this.dialogService.openSnackBar({
-          message: "Belum ada Audience yang dipilih!",
+          message: "Belum ada Audience yang dipilih!", // TODO
         });
       }
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!",
+        message: "Silakan lengkapi data terlebih dahulu!", // TODO
       });
     }
   }
@@ -1815,10 +1841,10 @@ export class AudienceCreateComponent {
       if (response) {
         
         // this.importAudienceResult = {...response};
-        this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         this.router.navigate(["dte", "audience"]);
         // this.selected = response;
-        // this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+        // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
       // this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });

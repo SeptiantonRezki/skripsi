@@ -16,7 +16,7 @@
             <a class="nav-link" (click)="redirectToPrivacy()"
                 routerLinkActive="active" matRipple>
                 <mat-icon class="nav-link-icon" >help_outline</mat-icon>
-                <span class="nav-link-title">Kebijakan Privasi</span>
+                <span class="nav-link-title">{{ ls.locale.left_navigation.leftnav1 }}</span>
             </a>
         </div>
         
@@ -24,7 +24,7 @@
             <a class="nav-link" [routerLink]="['syarat-ketentuan']"
                 routerLinkActive="active" matRipple>
                 <mat-icon class="nav-link-icon" >help_outline</mat-icon>
-                <span class="nav-link-title">Syarat & Ketentuan</span>
+                <span class="nav-link-title">{{ ls.locale.left_navigation.leftnav2 }}</span>
             </a>
         </div>
 
@@ -32,7 +32,7 @@
             <a class="nav-link" id="onetrust-pc-btn-handler"
                 routerLinkActive="active" matRipple>
                 <mat-icon class="nav-link-icon" >storage</mat-icon>
-                <span class="nav-link-title">Pengaturan Kuki</span>
+                <span class="nav-link-title">{{ ls.locale.left_navigation.leftnav3 }}</span>
             </a>
         </div>
         

@@ -13,6 +13,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { B2CVoucherService } from 'app/services/b2c-voucher.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { ConfirmationPublishDialogComponent } from './confirmation-publish-dialog/confirmation-publish-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-preview-voucher',
@@ -46,6 +47,7 @@ export class PreviewVoucherComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
+    private ls: LanguagesService,
   ) {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[0].path === 'detail' ? true : false;
@@ -68,7 +70,7 @@ export class PreviewVoucherComponent implements OnInit {
 
   saveAndApproval(msg='') {
     if(!this.detailVoucher.action.is_allowed) {
-      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });// TODO
     } else {
       this.updateStatusVoucher('', msg);
     };
@@ -76,13 +78,13 @@ export class PreviewVoucherComponent implements OnInit {
 
   approveReject(str='Approve') {
     if(!this.detailVoucher.action.is_allowed) {
-      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' }); // TODO
     } else {
       let data = {
-        titleDialog: "Ubah Status Voucher",
-        captionDialog: `Apakah anda yakin untuk merubah status voucher ini menjadi ${str}?`,
+        titleDialog: this.ls.locale.global.label.edit_status_voucher,
+        captionDialog: `${this.ls.locale.global.messages.text20.replace('{{ status }}', str)}?`,
         confirmCallback: str === 'Approve' ? this.approveVoucher.bind(this) : this.rejectVoucher.bind(this),
-        buttonText: ["Ya, Lanjutkan", "Batal"]
+        buttonText: [this.ls.locale.global.button.yes_continue, this.ls.locale.global.button.cancel] // TODO
       };
       this.dialogService.openCustomConfirmationDialog(data);
     };
@@ -100,16 +102,16 @@ export class PreviewVoucherComponent implements OnInit {
 
   confirmUpdateStatusVoucher() {
     if(!this.detailVoucher.action.is_allowed) {
-      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' });
+      this.dialogService.openSnackBar({ message: 'Anda tidak dapat melakukan tindakan ini' }); // TODO
     } else {
       if (this.detailVoucher) {
         const data = {
-          titleDialog: 'Apakah anda yakin untuk melakukan Publish B2C Voucher berikut ?',
+          titleDialog: 'Apakah anda yakin untuk melakukan Publish B2C Voucher berikut ?', // TODO
           captionDialog: null,
           confirmCallback: this.updateStatusVoucher.bind(this),
           dataSubmit: this.detailVoucher.preview_submit,
           listRadio: this.detailVoucher.preview_submit,
-          buttonText: ['Publish', 'Batal']
+          buttonText: ['Publish', this.ls.locale.global.button.cancel] // TODO
         };
         this.confirmationPublishDialogReference = this.dialog.open(
           ConfirmationPublishDialogComponent,
@@ -127,7 +129,7 @@ export class PreviewVoucherComponent implements OnInit {
     const status = this.detailVoucher.status !== 'need_approval' ? this.detailVoucher.action.next_status[0] : stat;
     this.b2cVoucherService.updateStatus({ voucher_id: this.detailVoucher.id }, { status: status }).subscribe((res: any) => {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: `${msg || status} berhasil!` });
+      this.dialogService.openSnackBar({ message: `${msg || status} berhasil!` }); // TODO
       this.onRefresh.emit();
       this.confirmationPublishDialogReference.close();
     }, (err: any) => {

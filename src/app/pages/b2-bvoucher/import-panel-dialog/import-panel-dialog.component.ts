@@ -4,6 +4,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { MitraPanelService } from 'app/services/delivery-management/mitra-panel.service';
 import { DataService } from 'app/services/data.service';
 import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-import-panel-dialog',
@@ -19,6 +20,7 @@ export class ImportPanelDialogComponent implements OnInit {
   rows: any[];
   validData: any[];
   dialogData: any;
+  isValid: any;
 
   typeTargeted: string;
 
@@ -28,6 +30,7 @@ export class ImportPanelDialogComponent implements OnInit {
     private dialogService: DialogService,
     private b2bService: BtoBVoucherService,
     private dataService: DataService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
   ) {
     this.rows = [];
@@ -44,7 +47,7 @@ export class ImportPanelDialogComponent implements OnInit {
 
     console.log('files info', this.files);
     if (this.files.name.indexOf(".xls") === -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" }); // TODO
       return;
     }
 
@@ -60,17 +63,23 @@ export class ImportPanelDialogComponent implements OnInit {
         this.b2bService.previewImport({ voucher_id: this.dialogData.voucher_id, type: this.dialogData.type }).subscribe(preview => {
           console.log('preview res', preview);
           this.rows = preview.data;
+          if(preview.is_valid == false)
+          this.isValid = false;
           this.dataService.showLoading(false);
+          
         }, err => {
           this.dataService.showLoading(false);
         })
       },
       err => {
+        // if(err.error.status == false ){
+        //   this.dialogService.openRedSnackBar({ message: err.error.message })
+        // }
         this.dataService.showLoading(false);
         this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." }) // TODO
       }
     )
   }
@@ -89,7 +98,7 @@ export class ImportPanelDialogComponent implements OnInit {
       //   })
       this.dialogRef.close(this.rows);
     } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages }); // TODO
     }
   }
 

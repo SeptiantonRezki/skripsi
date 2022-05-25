@@ -189,7 +189,7 @@ export class HelpEditComponent {
           body: res.data.body,
           country: res.data.country_code
         });
-
+        this.formHelp.controls['country'].disable()
         this.keywords = res.data.keyword ? JSON.parse(res.data.keyword) : [];
       },
       err => {
@@ -277,9 +277,9 @@ export class HelpEditComponent {
       } else {
         let msg;
         if (this.formHelp.invalid)
-          msg = "Silahkan lengkapi data terlebih dahulu!";
+          msg = "Silahkan lengkapi data terlebih dahulu!"; // TODO
         else if (this.files && this.files.size >= 500000)
-          msg = "Ukuran gambar tidak boleh melebihi 500KB!";
+          msg = "Ukuran gambar tidak boleh melebihi 500KB!"; // TODO
 
         this.dialogService.openSnackBar({ message: msg });
         commonFormValidator.validateAllFields(this.formHelp);

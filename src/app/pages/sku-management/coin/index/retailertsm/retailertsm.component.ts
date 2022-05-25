@@ -10,6 +10,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { TsmImportAdjustmenCoinDialogComponent } from '../tsm-import-adjustmen-coin-dialog/tsm-import-adjustmen-coin-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-retailertsm',
@@ -56,7 +57,8 @@ export class RetailertsmComponent implements OnInit {
     private formBuilder: FormBuilder,
     private coinService: CoinService,
     private geotreeService: GeotreeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ls: LanguagesService
   ) {
     this.onLoad = true;
 
@@ -973,7 +975,7 @@ export class RetailertsmComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         }
       }
     });

@@ -157,7 +157,7 @@ export class LanguageSetupComponent implements OnInit {
         titleDialog: 'Hapus Language',
         captionDialog: `Apa Anda yakin menghapus Language ${row.name}?`,
         confirmCallback: this.delete.bind(this, row, true),
-        buttonText: ['Hapus', 'Batal']
+        buttonText: ['Hapus', this.ls.locale.global.button.cancel]
       }
       this.dialogService.openCustomConfirmationDialog(dialogData);
     }

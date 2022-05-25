@@ -13,6 +13,7 @@ import { ImportCoinComponent } from '../import-coin/import-coin.component';
 import { PagesName } from 'app/classes/pages-name';
 import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-schedule-program-detail',
@@ -66,7 +67,8 @@ export class ScheduleProgramDetailComponent {
     private dialogService: DialogService,
     private scheduleTradeProgramService: ScheduleTradeProgramService,
     private dataService: DataService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.permission = this.roles.getRoles('principal.importcoin');
     console.log(this.permission);
@@ -259,7 +261,7 @@ export class ScheduleProgramDetailComponent {
         )
       }
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 

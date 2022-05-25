@@ -104,8 +104,17 @@
                   </tr> -->
                   <tr *ngFor="let item of statusLogs">
                     <td class="w-200">
-                      <div [class]="'status text-truncate h6 p-4 status-order mat-' + item.status + '-color'">
-                        {{(item.status.replace('-', ' ')).toUpperCase()}}
+                      <div [class]="'status text-truncate h6 p-4 status-order mat-' + item.status + '-color'" style="text-transform: uppercase;">
+                        <!-- {{(item.status.replace('-', ' ')).toUpperCase()}} -->
+                        {{ (item.status === 'baru' ) ? ('global.order_status.new_order' | translate) : '' }}
+                        {{ (item.status === 'dibatalkan' ) ? ('global.order_status.canceled_order' | translate) : '' }}
+                        {{ (item.status === 'diproses' ) ? ('global.order_status.process_order' | translate) : '' }}
+                        {{ (item.status === 'dikirim' ) ? ('global.order_status.send_order' | translate) : '' }}
+                        {{ (item.status === 'diterima' ) ? ('global.order_status.received_order' | translate) : '' }}
+                        {{ (item.status === 'selesai' ) ? ('global.order_status.completed_order' | translate) : '' }}
+                        {{ (item.status === 'diserahkan' ) ? ('global.order_status.handed_over' | translate) : '' }}
+                        {{ (item.status === 'dalam-pengiriman' ) ? ('global.order_status.on_delivery' | translate) : '' }}
+                        {{ (!['baru', 'dibatalkan', 'diproses', 'dikirim', 'diterima', 'selesai', 'diserahkan', 'dalam-pengiriman'].includes(item.status) ) ? item.status.replace('-', ' ').toUpperCase() : '' }}
                       </div>
                     </td>
                     <td class="w-200">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</td>
@@ -158,7 +167,7 @@
             </div>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">local_shipping_outline</mat-icon>
-              <div class="h2 secondary-text">Status Pengiriman</div>
+              <div class="h2 secondary-text">{{'katalog_src.lihat_pesanan.delivery_status'}}</div>
             </div>
             <div class="customer">
               <table class="simple">

@@ -1,9 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Produk'">
+  <page-content-header [contentTitle]="pageName">
     <button style="min-width: 170px;" [routerLink]="['/sku-management', 'product', 'create']" mat-raised-button
       aria-label="Produk" type="button">
-      <mat-icon>add</mat-icon>TAMBAH PRODUK
+      <mat-icon>add</mat-icon>{{'global.label.add_entity' | translate:titleParam }}
     </button>
     <!-- <button style="min-width: 170px;" mat-raised-button type="button" class="is-danger">HAPUS</button> -->
   </page-content-header>
@@ -16,19 +16,23 @@
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxLayoutAlign="end center" class="p-16 export">
         <button (click)="import()" mat-raised-button type="button" class="is-danger">
-          <mat-icon>arrow_downward</mat-icon> Import XLS
+          <mat-icon>arrow_downward</mat-icon> {{'global.label.import_entity' | translate:fileTypeParam }}
         </button>
-        <a #downloadLink></a>
+        <!-- <a #downloadLink></a>
         <button (click)="export()" mat-raised-button type="button" class="is-danger">
           <mat-icon>arrow_upward</mat-icon> Export XLS
+        </button> -->
+        <a #downloadLink></a>
+        <button (click)="exportn()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> {{'global.label.export_entity' | translate:fileTypeParam }}
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-        <h2 class="pl-8">Daftar Produk</h2>
+        <h2 class="pl-8">{{'manajemen_barang_sku.produk.text2' | translate}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -56,24 +60,24 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Produk" prop="name">
+        <ngx-datatable-column name="{{'manajemen_barang_sku.produk.text4' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" [routerLink]="['/sku-management', 'product', 'detail', row.id]">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Barcode" prop="barcode"></ngx-datatable-column>
-        <ngx-datatable-column name="Perusahaan" prop="brand_name"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'manajemen_barang_sku.produk.text5' | translate}}" prop="barcode"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'manajemen_barang_sku.produk.text6' | translate}}" prop="brand_name"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="88" name="Kategori" prop="category_name"></ngx-datatable-column>
+        <ngx-datatable-column [width]="88" name="{{'manajemen_barang_sku.produk.text13' | translate}}" prop="category_name"></ngx-datatable-column>
 
-        <ngx-datatable-column [width]="88" name="Pin Up Product" prop="status_pin_up">
+        <ngx-datatable-column [width]="88" name="{{'manajemen_barang_sku.produk.text7' | translate}}" prop="status_pin_up">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name">{{row.status_pin_up === 1 ? 'YA' : '-'}}</span>
+            <span class="row-name">{{row.status_pin_up === 1 ? ('global.label.yes' | translate) : '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="88" name="Prioritas Produk" prop="priority_product"></ngx-datatable-column>
-        <ngx-datatable-column [width]="68" name="Status" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="88" name="{{'manajemen_barang_sku.produk.text8' | translate}}" prop="priority_product"></ngx-datatable-column>
+        <ngx-datatable-column [width]="68" name="{{'manajemen_barang_sku.produk.text16' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="name-container pl-12">
@@ -82,14 +86,14 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="88" name="Produk Pilihan SRC" prop="is_promo_src">
+        <ngx-datatable-column [width]="88" name="{{'manajemen_barang_sku.produk.text9' | translate}}" prop="is_promo_src">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container pl-12">
               <mat-icon *ngIf="row.is_promo_src === 1" class="active-icon mat-green-600-bg s-18">check</mat-icon>
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="80" name="Produk Prinsipal" prop="is_promo_src">
+        <ngx-datatable-column [width]="80" name="{{'manajemen_barang_sku.produk.text10' | translate}}" prop="is_promo_src">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container pl-12">
               <mat-icon *ngIf="row.is_private_label === 1" class="active-icon mat-green-600-bg s-18">check</mat-icon>
@@ -97,19 +101,19 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="Detail Produk"
+              <button mat-icon-button *ngIf="!permission?.ubah" color="" matTooltip="{{'breadcrumbs.product.detail' | translate}}"
                 [routerLink]="['/sku-management', 'product', 'detail', row.id]">
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="Ubah Produk"
+              <button mat-icon-button *ngIf="permission?.ubah" color="" matTooltip="{{'breadcrumbs.product.edit' | translate}}"
                 [routerLink]="['/sku-management', 'product', 'edit', row.id]">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" matTooltip="Hapus Produk" (click)="deleteProduct(row.id)"
+              <button mat-icon-button color="primary" matTooltip="{{'breadcrumbs.product.delete' | translate}}" (click)="deleteProduct(row.id)"
                 [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>

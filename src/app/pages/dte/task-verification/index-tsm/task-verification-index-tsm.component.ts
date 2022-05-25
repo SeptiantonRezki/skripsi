@@ -12,6 +12,8 @@ import { IdleService } from 'app/services/idle.service';
 import { TaskVerificationService } from 'app/services/dte/task-verification.service';
 import { ConfirmDialogTsmComponent } from '../dialog/confirm-dialog-tsm/confirm-dialog-tsm.component';
 import { SequencingService } from 'app/services/dte/sequencing.service';
+import * as CryptoJS from 'crypto-js';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-verification-index-tsm',
@@ -64,7 +66,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     private userIdle: IdleService,
     private taskVerificationService: TaskVerificationService,
     private dialog: MatDialog,
-    private sequencingService: SequencingService
+    private sequencingService: SequencingService,
+    private ls: LanguagesService,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
@@ -209,10 +212,8 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
     });
   }
 
-  export(item) {
+  async export(item) {
     this.dataService.showLoading({ show: true });
-
-    let response: any = { rand: "" };
 
     let params = {
       task_sequencing_management_id: item.task_sequencing_management_id,
@@ -221,33 +222,33 @@ export class TaskVerificationIndexTsmComponent implements OnInit {
       last: "true"
     }
 
-    this.taskVerificationService.exportTrueTsm(params).subscribe(response => {
-      if (response.data && response.status) {
-        setTimeout(() => {
-          this.downloadLink.nativeElement.href = response.data;
-          this.downloadLink.nativeElement.click();
-          this.dataService.showLoading(false);
-        }, 500);
-      }
-    }, err => {
-      this.dataService.showLoading(false);
-    })
+    try {
+      const response = await this.taskVerificationService.exportTrueTsm(params).toPromise();    
+      const newBlob = new Blob([response], { type: 'application/zip' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
 
-    // masih belum tahu untuk apa ...
-    // this.sequencingService.export(params).subscribe(
-    //   (response) => {
-    //     console.log('response tsm bund', response)
-    //     if (response.data && response.status) {
-    //       setTimeout(() => {
-    //         this.downloadLink.nativeElement.href = response.data;
-    //         this.downloadLink.nativeElement.click();
-    //         this.dataService.showLoading(false);
-    //       }, 500);
-    //     }
-    //   }, (error) => {
-    //     this.dataService.showLoading(false);
-    //   }
-    // )
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encrypTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      link.download = `Export_${item.task_sequencing_management_name}-${encrypTime}.zip`;
+      
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
+      this.dataService.showLoading(false);
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
+      throw error;
+    }
   }
 
   setPage(pageInfo) {

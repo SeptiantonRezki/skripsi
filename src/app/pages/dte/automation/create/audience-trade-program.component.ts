@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-audience-trade-program',
@@ -67,7 +68,8 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     private audienceTradeProgramService: AudienceTradeProgramService,
     private dialogService: DialogService,
     private router: Router,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     // const selectedTab = dataService.getFromStorage("selected_tab");
     this.selectedTab = 0;
@@ -89,7 +91,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       extra_coin: [0],
       brand_combination: ["or"],
       notif: [""],
-      skus: this.formBuilder.array([this.createFormSku()])
+      skus: this.formBuilder.array([this.createFormSkusd()])
     });
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
@@ -192,6 +194,52 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     });
     let value = new ReplaySubject<any[]>(1);
 
+    formItem
+      .valueChanges
+      .pipe(
+        debounceTime(300),
+        tap(() => this.searching = true),
+        switchMap(value => {
+          console.log('val', value);
+          if (value.formFilterSku == null || value.formFilterSku == "") {
+            this.searching = false;
+            return [];
+          }
+          console.log('after', value);
+          return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+            .pipe(
+              finalize(() => this.searching = false)
+            )
+        })
+      ).subscribe(res => {
+        console.log('res', res, formItem.controls['filteredSku'].value);
+        // this.filteredSku.next(res.data);
+        formItem.controls['filteredSku'].value.next(res.data);
+        // value.next(res.data);
+        // this.litSkus.push(value);
+        // this.filteredSku.next(this.litSkus);
+      });
+    return formItem;
+  }
+
+  createFormSkusd() {
+    const formItem = this.formBuilder.group({
+      formSku: [""],
+      formFilterSku: [""],
+      filteredSku: [new ReplaySubject<any[]>(1)]
+    });
+    let value = new ReplaySubject<any[]>(1);
+    this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
+      // console.log('resnew', res, formItem.controls['filteredSku'].value);
+      // console.log('resnew345', this.formFilterSku);
+       this.formFilterSku.setValue('1');
+        // this.filteredSku.next(res.data);.setValue('');
+        // console.log('resnew35', this.formAutomation.get('skus').value);
+        formItem.controls['filteredSku'].value.next(res.data);
+    }, error => {
+      
+      alert(error);
+    })
     formItem
       .valueChanges
       .pipe(
@@ -326,7 +374,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
       });
     } else {
       this.submitting = false;
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formAutomation);
       // commonFormValidator.validateAllFields(this.formAutomation);
     }

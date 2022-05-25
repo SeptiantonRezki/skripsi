@@ -10,6 +10,7 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { takeUntil } from 'rxjs/operators';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-trade-create',
@@ -28,7 +29,7 @@ export class TradeCreateComponent {
   validComboDrag: boolean;
   valueChange: Boolean;
   saveData: Boolean;
-  statusTP: any[] = [{ name: 'Terbitkan', value: 'publish' }, { name: 'Tidak Diterbitkan', value: 'unpublish' }]
+  statusTP: any[] = [{ name: this.translate.instant('dte.trade_program.text6'), value: 'publish' }, { name: this.translate.instant('dte.trade_program.text7'), value: 'unpublish' }]
 
   private _onDestroy = new Subject<void>();
   filteredGTpOptions: Observable<string[]>;
@@ -62,7 +63,8 @@ export class TradeCreateComponent {
     private dialogService: DialogService,
     private tradeProgramService: TradeProgramService,
     private groupTradeProgramService: GroupTradeProgramService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.adapter.setLocale('id');
     this.minDateFrom = moment();
@@ -157,7 +159,7 @@ export class TradeCreateComponent {
   }
 
   submit(): void {
-    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2mb!' })
+    if (this.files && this.files.size > 2000000) return this.dialogService.openSnackBar({ message: this.translate.instant('dte.group_trade_program.text13') })
 
     if (this.formTradeProgram.valid) {
       this.saveData = !this.saveData;
@@ -191,7 +193,7 @@ export class TradeCreateComponent {
         }
       )
     } else {
-      this.dialogService.openSnackBar({ message: 'Silakan lengkapi data terlebih dahulu!' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formTradeProgram);
     }
   }

@@ -9,6 +9,7 @@ import moment from 'moment';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { takeUntil } from 'rxjs/operators';
 import { ListAudienceDialogComponent } from '../dialog/list-audience-dialog.component';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-schedule-program-edit',
@@ -68,7 +69,8 @@ export class ScheduleProgramEditComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private scheduleTradeProgramService: ScheduleTradeProgramService
+    private scheduleTradeProgramService: ScheduleTradeProgramService,
+    private ls: LanguagesService,
   ) {
     activatedRoute.url.subscribe(param => {
       this.idScheduler = param[2].path;

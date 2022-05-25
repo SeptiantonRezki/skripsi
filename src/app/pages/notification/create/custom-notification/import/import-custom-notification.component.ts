@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation, Inject } 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { NotificationService } from 'app/services/notification.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class ImportCustomNotificationComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private notificationService: NotificationService,
+    private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
     this.rows = [];
@@ -48,10 +50,11 @@ export class ImportCustomNotificationComponent implements OnInit {
         this.dataService.showLoading(false);
         console.log('preview => ', res);
         if (res && res.data) {
-          this.rows = res.data;
-          this.is_valid = res.is_valid;
+          const data = res.data || res;
+          this.rows = data.data;
+          this.is_valid = data.is_valid;
 
-          if (!res.is_valid) {
+          if (!data.is_valid) {
             this.dialogService.openSnackBar({ message: "File yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
 
             // meletakkan row yang error ke posisi atas

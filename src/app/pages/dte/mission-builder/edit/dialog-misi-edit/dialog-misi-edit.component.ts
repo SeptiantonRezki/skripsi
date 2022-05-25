@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
+import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
   selector: 'app-dialog-misi-edit',
@@ -44,6 +45,7 @@ export class DialogMisiEditComponent implements OnInit {
     private templateTaskService: TemplateTaskService,
     private dialogService: DialogService,
     private dataService: DataService,
+    private ls: LanguagesService,
   ) { }
 
   ngOnInit() {
@@ -78,6 +80,15 @@ export class DialogMisiEditComponent implements OnInit {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringMissionOther();
+      });
+
+    this.form.get('coin_verification').valueChanges
+      .debounceTime(500)
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe((value) => {
+        if (value > 0) {
+          !this.form.get('verifikasiFF').value ? this.form.get('verifikasi').patchValue(true) : null;
+        }
       });
 
     if (this.data !== null) {

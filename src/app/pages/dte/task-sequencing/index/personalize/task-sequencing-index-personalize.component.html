@@ -6,7 +6,7 @@
     <mat-icon>add</mat-icon> BUAT
   </button>
   <mat-form-field appearance="standard">
-    <mat-label>Cari</mat-label>
+    <mat-label>{{'global.label.search' | translate}}</mat-label>
     <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off" [disabled]="!permission.lihat">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
@@ -17,7 +17,7 @@
   [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
   (sort)="onSort($event)" (select)="onSelect($event)" *ngIf="permission.lihat">
 
-  <ngx-datatable-column [width]="200" name="Nama" prop="name">
+  <ngx-datatable-column [width]="200" name="{{ls.locale.global.label.name}}" prop="name">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
     </ng-template>

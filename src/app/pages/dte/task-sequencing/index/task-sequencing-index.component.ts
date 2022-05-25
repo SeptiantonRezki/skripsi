@@ -11,6 +11,9 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { SequencingService } from 'app/services/dte/sequencing.service';
 import { IdleService } from 'app/services/idle.service';
+import moment from 'moment';
+import * as CryptoJS from 'crypto-js';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-task-sequencing-index',
@@ -47,7 +50,8 @@ export class TaskSequencingIndexComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private sequencingService: SequencingService,
-    private userIdle: IdleService
+    private userIdle: IdleService,
+    private ls: LanguagesService
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -325,7 +329,12 @@ export class TaskSequencingIndexComponent implements OnInit {
         const url= window.URL.createObjectURL(newBlob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `Export_${item.name}_${new Date().toLocaleString()}.zip`;
+
+        const timestamp = new Date().getTime();
+        const getTime = moment(timestamp).format("HHmmss");
+        const encrypTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+        link.download = `Export_${item.name}-${encrypTime}.zip`;
+        
         // this is necessary as link.click() does not work on the latest firefox
         link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
   

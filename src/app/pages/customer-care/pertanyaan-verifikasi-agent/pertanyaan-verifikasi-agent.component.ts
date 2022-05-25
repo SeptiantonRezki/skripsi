@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Page } from 'app/classes/laravel-pagination';
 import { CustomerCareService } from 'app/services/customer-care.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 import { Subject, Observable } from 'rxjs';
 
 @Component({
@@ -26,6 +27,7 @@ export class PertanyaanVerifikasiAgentComponent implements OnInit {
     private dataService: DataService,
     private customerCareService: CustomerCareService,
     private router: Router,
+    private ls: LanguagesService,
   ) {
     this.keyUp.debounceTime(1000)
       .distinctUntilChanged()

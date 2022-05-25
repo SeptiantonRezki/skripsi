@@ -1,12 +1,12 @@
 <div fxLayout="row" fxLayoutAlign="start center" class="top-table pt-8">
-  <h2 class="pl-8">Daftar Tugas Personalize</h2>
+  <h2 class="pl-8">{{'dte.template_tugas.list_task_personalize' | translate}}</h2>
 </div>
 <div class="mx-12" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
   <button id="btn-buatTugas" style="width: 170px" [routerLink]="['/dte','template-task', 'create-personalize']" mat-raised-button type="button" class="confirmation-button">
-    <mat-icon>add</mat-icon> BUAT
+    <mat-icon>add</mat-icon> {{'global.button.create'}}
   </button>
   <mat-form-field appearance="standard">
-    <mat-label>Cari</mat-label>
+    <mat-label>{{'global.label.search' | translate}}</mat-label>
     <input id="search" matInput (keyup)="keyUp.next($event.target.value)" autocomplete="off">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
@@ -14,31 +14,31 @@
 <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="p-16"
   fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
   <mat-form-field fxFlex="12%" class="is-light form-primary">
-    <mat-select placeholder="Kategory Toolbox" [(ngModel)]="filterKategoryToolbox" name="Kategory"
+    <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text2' | translate}}" [(ngModel)]="filterKategoryToolbox" name="{{'global.label.category' | translate}}"
       [ngModelOptions]="{standalone: true}">
       <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriToolbox"> {{lsCat.name}} </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field fxFlex="12%" class="is-light form-primary">
-    <mat-select placeholder="Tipe Misi" [(ngModel)]="filterTipeMisi" name="filterTipeMisi"
+    <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text3' | translate}}" [(ngModel)]="filterTipeMisi" name="filterTipeMisi"
       [ngModelOptions]="{standalone: true}">
       <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTipeMisi"> {{lsCat.name}} </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field fxFlex="12%" class="is-light form-primary">
-    <mat-select placeholder="Internal Kategori" [(ngModel)]="filterInternalMisi" name="filterInternalMisi"
+    <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text4' | translate}}" [(ngModel)]="filterInternalMisi" name="filterInternalMisi"
       [ngModelOptions]="{standalone: true}">
       <mat-option [value]="lsCat.id" *ngFor="let lsCat of listTingkatinternalMisi"> {{lsCat.name}} </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field fxFlex="12%" class="is-light form-primary">
-    <mat-select placeholder="Kategory Misi" [(ngModel)]="filterKategoryMisi" name="filterKategoryMisi"
+    <mat-select placeholder="{{'dte.pengaturan_attribute_misi.text5' | translate}}" [(ngModel)]="filterKategoryMisi" name="filterKategoryMisi"
       [ngModelOptions]="{standalone: true}">
       <mat-option [value]="lsCat.id" *ngFor="let lsCat of listKategoriMisi"> {{lsCat.name}} </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field fxFlex="12%" class="is-light form-primary">
-    <mat-select placeholder="Project Misi" [(ngModel)]="filterProjectMisi" name="filterProjectMisi"
+    <mat-select placeholder="{{'dte.template_tugas.mission_project' | translate}}" [(ngModel)]="filterProjectMisi" name="filterProjectMisi"
       [ngModelOptions]="{standalone: true}">
       <mat-option [value]="lsCat.id" *ngFor="let lsCat of listProjectMisi"> {{lsCat.name}} </mat-option>
     </mat-select>
@@ -46,11 +46,11 @@
   <div class="confirm p-10" fxLayout="row" fxLayoutGap="20px">
     <button mat-raised-button type="button" class="publish-button" (click)="reset()" style="width: 170px"
       style="height: 50px">
-      Reset
+      {{'dte.template_tugas.text23' | translate}}
     </button>
     <button mat-raised-button type="button" class="confirmation-button" (click)="load()" style="width: 170px"
       style="height: 50px">
-      Load Data
+      {{'dte.template_tugas.text24' | translate}}
     </button>
   </div>
 </div>
@@ -73,19 +73,19 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="200" name="Nama" prop="name">
+  <ngx-datatable-column [width]="200" name="{{ls.locale.global.label.name}}" prop="name">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span class="row-name" (click)="directDetail(row)">{{row.name}}</span>
     </ng-template>
   </ngx-datatable-column>
   
-  <ngx-datatable-column [width]="200" name="Nama Lain Misi">
+  <ngx-datatable-column [width]="200" name="{{'dte.template_tugas.text6' | translate}}">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <p *ngFor="let item of row.children">{{item.other_name}}</p>
     </ng-template>
   </ngx-datatable-column>
   
-  <ngx-datatable-column [width]="150" name="Copywriting" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.template_tugas.copywriting' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="py-24" fxLayout="column" fxLayoutGap="8px">
         <div class="row__copywrite" *ngFor="let item of row.children" [ngStyle]="{'background-color': item.toolbox_copywrite ? item.toolbox_copywrite.color : 'transparent'}">
@@ -95,40 +95,40 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Kategory Toolbox" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.pengaturan_attribute_misi.text2' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span>{{row.toolbox.name}}</span>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Tipe Misi" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.pengaturan_attribute_misi.text3' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span>{{row.toolbox_type.name}}</span>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Internal Kategori" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.pengaturan_attribute_misi.text4' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span>{{row.toolbox_internal.name}}</span>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Kategori Misi" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.pengaturan_attribute_misi.text5' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span>{{row.toolbox_categories.name}}</span>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Project Misi" headerClass="textright">
+  <ngx-datatable-column [width]="150" name="{{'dte.template_tugas.mission_project' | translate}}" headerClass="textright">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <span>{{row.toolbox_project.name}}</span>
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column [width]="150" name="Tindakan" headerClass="textright" [sortable]="false">
+  <ngx-datatable-column [width]="150" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
       <div class="button-row" style="margin-left: -10px">
-        <button id="btn-duplicate" mat-icon-button color="" matTooltip="Duplikat" (click)="duplicate(row)">
+        <button id="btn-duplicate" mat-icon-button color="" matTooltip="{{'dte.template_tugas.text8' | translate}}" (click)="duplicate(row)">
           <mat-icon class="secondary-text">content_copy</mat-icon>
         </button>
         <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
@@ -137,7 +137,7 @@
         <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
           <mat-icon class="secondary-text">edit</mat-icon>
         </button>
-        <button id="btn-delete" mat-icon-button color="primary" matTooltip="Hapus" (click)="deleteTemplateTask(row.id)"
+        <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteTemplateTask(row.id)"
           [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
           <mat-icon>delete</mat-icon>
         </button>

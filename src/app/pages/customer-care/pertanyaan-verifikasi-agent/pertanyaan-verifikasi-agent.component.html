@@ -11,16 +11,16 @@
       
       <!-- SEARCH -->
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Pertanyaan Verifikasi Agent</h2>
+        <h2 class="pl-8">Daftar Pertanyaan Verifikasi Agent</h2> <!-- // TODO -->
         <div fxLayout="column">
 
           <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
             <mat-icon>search</mat-icon>
             <mat-form-field class="is-light tab-search">
-              <input matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
             </mat-form-field>
           </div>
-          <label for="" style="color: grey; font-size: smaller;">Nama Pemilik Toko/Nama Toko/Kode Toko/Nomor Ponsel</label>
+          <label for="" style="color: grey; font-size: smaller;">Nama Pemilik Toko/Nama Toko/Kode Toko/Nomor Ponsel <!-- // TODO --></label>
 
         </div>
       </div> <!--/ SEARCH -->
@@ -42,75 +42,75 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode Pesanan Transaksi Terakhir" prop="kode_pesanan" [width]="250">
+        <ngx-datatable-column name="Kode Pesanan Transaksi Terakhir" prop="kode_pesanan" [width]="250"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directDetail(row)">{{row.kode_pesanan}}
             </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="false">
+        <ngx-datatable-column name="Nama Toko" prop="name" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.name || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Kode Toko" prop="code" [sortable]="false">
+        <ngx-datatable-column name="Kode Toko" prop="code" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.code || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false">
+        <ngx-datatable-column name="Nama Pemilik" prop="owner" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.owner || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Alamat" prop="address_line1" [sortable]="false">
+        <ngx-datatable-column name="Alamat" prop="address_line1" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.address_line1 || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Area" prop="area_code" [sortable]="false">
+        <ngx-datatable-column name="Area" prop="area_code" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code || '-'}}
           </ng-template>
         </ngx-datatable-column>
         
-        <ngx-datatable-column name="Nomer Ponsel" prop="phone" [sortable]="false">
+        <ngx-datatable-column name="Nomer Ponsel" prop="phone" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.phone || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status Pelanggan" prop="status_indo" [sortable]="false">
+        <ngx-datatable-column name="Status Pelanggan" prop="status_indo" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <p class="status text-truncate h6 p-4"
               style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
               [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-              {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+              {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}} <!-- // TODO -->
             </p>
             <!-- {{row.status_indo || '-'}} -->
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tipe Pelanggan" prop="classification" [sortable]="false">
+        <ngx-datatable-column name="Tipe Pelanggan" prop="classification" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.classification || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Transaksi Terakhir" prop="tanggal_transaksi" [sortable]="false" [width]="250">
+        <ngx-datatable-column name="Tanggal Transaksi Terakhir" prop="tanggal_transaksi" [sortable]="false" [width]="250"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.tanggal_transaksi || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Total SKU Transaksi Terakhir" prop="total_sku" [sortable]="false" [width]="250">
+        <ngx-datatable-column name="Total SKU Transaksi Terakhir" prop="total_sku" [sortable]="false" [width]="250"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.total_sku || '-'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Total Transaksi Terakhir" prop="total_transaksi" [sortable]="false" [width]="250">
+        <ngx-datatable-column name="Total Transaksi Terakhir" prop="total_transaksi" [sortable]="false" [width]="250"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.total_transaksi || 0 | rupiahFormater}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false"> <!-- // TODO -->
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">

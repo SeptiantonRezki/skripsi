@@ -99,7 +99,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
     { name: 'Referral and Verified', value: 'referral-and-verified' },
     { name: 'Referral or Verified', value: 'referral-or-verified' },
     { name: 'Pesan Antar', value: 'coo'},
-    // { name: 'Keping Langganan', value: 'loyalty'}
+    { name: 'Keping Langganan', value: 'loyalty'}
   ];
 
   _data: any = null;
@@ -968,7 +968,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
           this.dataService.showLoading(false);
       }, err => {
         console.warn(err);
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' }); // TODO
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
       });
@@ -1167,7 +1167,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
       let same = this.findDuplicate(areas.map(item => item.value));
       if (same.length > 0) {
-        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" });
+        return this.dialogService.openSnackBar({ message: "Terdapat duplikat sales tree, mohon periksa kembali data anda!" }); // TODO
       }
 
       bodyArea['area_id'] = [];
@@ -1224,7 +1224,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
   async exportCustomer() {
     if (this.selected.length === 0) {
-      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di export!' });
+      this.dialogService.openSnackBar({ message: 'Pilih audience untuk di export!' }); // TODO
       return;
     }
     this.dataService.showLoading(true);
@@ -1293,7 +1293,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       if (response) {
         this.onSelect({ selected: response });
         if (response.data) {
-          this.dialogService.openSnackBar({ message: 'File berhasil diimport' });
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         }
       }
     });
@@ -1329,10 +1329,10 @@ export class PanelConsumerVoucherComponent implements OnInit {
   deleteArea(idx: number) {
     this.indexDelete = idx;
     const data = {
-      titleDialog: 'Hapus Salestree',
-      captionDialog: `Apakah anda yakin untuk menghapus Salestree ${idx + 1} ?`,
+      titleDialog: 'Hapus Salestree', // TODO
+      captionDialog: `Apakah anda yakin untuk menghapus Salestree ${idx + 1} ?`, // TODO
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', 'Batal']
+      buttonText: ['Hapus', this.ls.locale.global.button.cancel] // TODO
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }

@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { Emitter } from 'app/helper/emitter.helper';
 import { PayMethodService } from 'app/services/user-management/private-label/pay-method.service';
 import { DataService } from 'app/services/data.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
 
 @Component({
   selector: 'app-pay-method-edit',
@@ -44,6 +45,7 @@ export class PayMethodEditComponent implements OnInit {
     private router: Router,
     private emitter: Emitter,
     private dataService: DataService,
+    private ls: LanguagesService,
   ) {
     this.onLoad = true;
     this.isLoadingSave = false;

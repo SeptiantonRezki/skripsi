@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah File XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLS</span>
       </div>
 
     </div>
@@ -24,8 +24,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>Tarik File Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+           
         </span>
       </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="responsive" *ngIf="!requestingPreview">
       <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
 
-        <ngx-datatable-column name="Penjual" prop="name">
+        <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
             {{ row.name }}
           </ng-template>
@@ -56,7 +56,7 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Kode" prop="code">
+        <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.code }}
           </ng-template>
@@ -68,13 +68,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Field Force" prop="ff_name">
+        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.ff_name }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Daftar Ayo" prop="registered">
+        <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="registered">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.registered }}
           </ng-template>
@@ -98,7 +98,7 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Alasan Tidak Valid" prop="reason">
+        <ngx-datatable-column name="{{ls.locale.global.messages.invalid_reason}}" prop="reason">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.reason ? row.reason : '-' }}
           </ng-template>
@@ -112,9 +112,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport || invalidData">Kirim</button>
+          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport || invalidData">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

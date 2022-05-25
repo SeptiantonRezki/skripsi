@@ -8,6 +8,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { VendorsService } from 'app/services/src-catalogue/vendors.service';
 import { Config } from 'app/classes/config';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-catalogue-create',
@@ -33,7 +34,7 @@ export class ProductCatalogueCreateComponent implements OnInit {
   validComboDrag: Boolean;
 
   vendor_id: any;
-  public options: Object = Config.FROALA_CUSTOM_TITLE_CONFIG("Deskripsi Produk");
+  public options: Object = Config.FROALA_CUSTOM_TITLE_CONFIG(this.translate.instant('katalog_src.produk.text16'));
 
   constructor(
     private router: Router,
@@ -42,7 +43,8 @@ export class ProductCatalogueCreateComponent implements OnInit {
     private dialogService: DialogService,
     private productCatalogueService: ProductCatalogueService,
     private vendorService: VendorsService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     let profile = this.dataService.getDecryptedProfile();
     if (profile) this.vendor_id = profile.vendor_company_id;

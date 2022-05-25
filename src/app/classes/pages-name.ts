@@ -70,13 +70,13 @@ export class PagesName {
       "/sku-management/coin": "principal.manajemenkoin.lihat",
       "/sku-management/coin/detail-retailer/": "principal.manajemenkoin.lihat",
       "/sku-management/coin/detail-trade-program/": "principal.manajemenkoin.lihat",
-      // "/loyalty-keping/catalogues": "principal.katalog_keping.lihat",
-      // "/loyalty-keping/redeems": "principal.riwayat_penukaran_keping.lihat",
-      // "/loyalty-keping/sources": "principal.riwayat_pendapatan_keping.lihat",
-      // "/loyalty-keping/settings/stars": "principal.pengaturan_keping_bintang_ke_keping.lihat",
-      // "/loyalty-keping/settings/coo": "principal.pengaturan_keping_pesan_antar.lihat",
-      // "/loyalty-keping/settings/cashier": "principal.pengaturan_keping_belanja_langsung.lihat",
-      // "/loyalty-keping/resets": "principal.reset_keping.lihat",
+      "/loyalty-keping/catalogues": "principal.katalog_keping.lihat",
+      "/loyalty-keping/redeems": "principal.riwayat_penukaran_keping.lihat",
+      "/loyalty-keping/sources": "principal.riwayat_pendapatan_keping.lihat",
+      "/loyalty-keping/settings/stars": "principal.pengaturan_keping_bintang_ke_keping.lihat",
+      "/loyalty-keping/settings/coo": "principal.pengaturan_keping_pesan_antar.lihat",
+      "/loyalty-keping/settings/cashier": "principal.pengaturan_keping_belanja_langsung.lihat",
+      "/loyalty-keping/resets": "principal.reset_keping.lihat",
       "/notifications/push-notification": "principal.notifikasi.lihat",
       "/notifications/push-notification/create": "principal.notifikasi.buat",
       "/notifications/popup-notification": "principal.popupnotification.lihat",
@@ -125,6 +125,20 @@ export class PagesName {
       "/dte/publish-mission": "principal.dtepublishmission.buat",
       "/dte/publish-mission/edit/": "principal.dtepublishmission.ubah",
       "/dte/publish-mission/detail/": "principal.dtepublishmission.lihat",
+
+      "/dte/master-brand-group": "principal.dte_image_recognition_master_brand_group.lihat",
+      "/dte/master-brand-group/create": "principal.dte_image_recognition_master_brand_group.buat",
+      "/dte/master-brand-group/edit/": "principal.dte_image_recognition_master_brand_group.ubah",
+      "/dte/master-brand-group/detail/": "principal.dte_image_recognition_master_brand_group.lihat",
+      "/dte/master-brand": "principal.dte_image_recognition_master_brand.lihat",
+      "/dte/master-brand/create": "principal.dte_image_recognition_master_brand.buat",
+      "/dte/master-brand/edit/": "principal.dte_image_recognition_master_brand.ubah",
+      "/dte/master-brand/detail/": "principal.dte_image_recognition_master_brand.lihat",
+      "/dte/template-stock-check": "principal.dte_image_recognition_stock_check.lihat",
+      "/dte/template-stock-check/create": "principal.dte_image_recognition_stock_check.buat",
+      "/dte/template-stock-check/edit/": "principal.dte_image_recognition_stock_check.ubah",
+      "/dte/template-stock-check/detail/": "principal.dte_image_recognition_stock_check.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
@@ -155,6 +169,11 @@ export class PagesName {
       "/user-management/countries/create": "principal.countries.buat",
       "/user-management/countries/edit/": "principal.countries.ubah",
       "/user-management/countries/detail/": "principal.countries.lihat",
+      "/advertisement/promo-mandiri": "principal.promomandiri.lihat",
+      "/dte/task-verification": "principal.dtenewtaskverification.lihat",
+      "/dte/assignment-cart": "principal.dteassignmentcart.lihat",
+      "/dte/verification-assignment": "principal.dteverificationassignment.lihat",
+      "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
     }
     return PAGES[name];
   }
@@ -194,6 +213,7 @@ export class PagesName {
 
     if (name.indexOf('supplierorder') > -1) {
       roles['chat'] = filterPermission.filter(item => item.indexOf('chat_transaksi') >= 0)[0];
+      roles['document'] = filterPermission.filter(item => item.indexOf('document') >= 0)[0];
     }
     if (name.indexOf("src_katalog_coin") > -1) {
       roles['approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]

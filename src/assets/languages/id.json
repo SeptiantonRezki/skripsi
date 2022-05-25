@@ -94,7 +94,76 @@
       "all_district": "Semua Kecamatan",
       "owner_information": "Informasi Pemilik",
       "upload_image": "Unggah Gambar",
-      "updated_by": "Diperbarui Oleh"
+      "updated_by": "Diperbarui Oleh",
+      "all_access_cashier": "Semua Akses Kasir",
+      "cashier_access": "Akses Kasir",
+      "store_type": "Tipe Toko",
+      "code": "Kode",
+      "yes": "Ya",
+      "no": "Tidak",
+      "src": "SRC",
+      "ws_downline": "WS Downline",
+      "static_page": "Static Page",
+      "landing_page": "Landing Page",
+      "iframe": "Iframe",
+      "image": "Image",
+      "unlinked": "Unlinked",
+      "ewallet": "E-Wallet",
+      "link_to_browser": "Link to Web Browser",
+      "verified": "Terverifikasi",
+      "subscribe": "Berlangganan",
+      "unsubscribe": "Tidak Berlangganan",
+      "smoking": "Merokok",
+      "not_smoke": "Tidak Merokok",
+      "male": "Laki-laki",
+      "female": "Perempuan",
+      "inapp_banner": "In-App Banner",
+      "update_profile": "Ubah Profil",
+      "subscription_store": "Toko Langganan",
+      "saved_location": "Lokasi Tersimpan",
+      "privacy_settings": "Pengaturan Privasi",
+      "employee_only": "Employee Only",
+      "mission": "Misi",
+      "customer": "Pelanggan",
+      "my_profile": "Profil Saya",
+      "capital_corner": "Pojok Modal",
+      "src_catalog": "SRC Katalog",
+      "pay_corner": "Pojok Bayar",
+      "nearby": "Terdekat",
+      "play_together": "Main Bareng",
+      "challenge": "Tantangan",
+      "opportunity": "Peluang",
+      "coupon": "Kupon",
+      "voucher": "Voucher",
+      "please_complete_data": "Silakan lengkapi data terlebih dahulu!",
+      "no_selected_image": "Gambar {{type}} belum dipilih!",
+      "no_selected_content": "Konten image belum dipilih",
+      "duplicate_data": "Terdapat duplikat {{entity}}, mohon periksa kembali data anda!",
+      "salestree": "Sales Tree",
+      "select_data_to_export": "Pilih {{entity}} untuk di ekspor!",
+      "invalid_data": "Data tidak valid",
+      "data": "Data",
+      "type": "Tipe",
+      "valid": "Valid",
+      "invalid": "Tidak Valid",
+      "total": "Total",
+      "edit_entity": "Ubah {{entity}}",
+      "detail_entity": "Detail {{entity}}",
+      "add_entity": "Tambah {{entity}}",
+      "delete_entity": "Hapus {{entity}}",
+      "create_entity": "Buat {{entity}}",
+      "product": "Produk",
+      "promotion": "Promosi",
+      "import_entity": "Import {{entity}}",
+      "export_entity": "Export {{entity}}",
+      "import_sku_innerhtml": "Tarik File Kesini (Maks. 10.000 Baris SKU) atau <strong>Pilih File</strong>",
+      "copy_link": "Salin Link",
+      "generate_link": "GENERATE LINK",
+      "discount": "Diskon",
+      "delete_image": "Hapus gambar",
+      "qry": "QTY",
+      "list_entity": "Daftar {{entity}}",
+      "all_type": "Semua Tipe"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -108,7 +177,8 @@
       "delivery_ready": "Siap Dikirim",
       "pickup_ready": "Siap Diambil",
       "on_delivery": "Dalam Pengiriman",
-      "not_paid_off": "Belum Lunas"
+      "not_paid_off": "Belum Lunas",
+      "handed_over": "Pesanan Diserahkan"
     },
     "button": {
       "save": "Simpan",
@@ -126,7 +196,11 @@
       "import": "Import",
       "export": "Export",
       "deactivate": "Non Aktifkan",
-      "update_status": "PERBARUI STATUS"
+      "update_status": "PERBARUI STATUS",
+      "yes_continue": "Ya, lanjutkan",
+      "no_cancel": "Tidak, batalkan",
+      "create": "BUAT",
+      "check": "CHECK"
     },
     "area": {
       "national": "National",
@@ -174,7 +248,23 @@
       "text29": "Apakah anda yakin untuk menghapus Salestree {{ index }}?",
       "text30": "Kata Sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
       "export_option": "atau pilih Eksport File sebagai acuan File Anda.",
-      "invalid_email": "Email Tidak Valid"
+      "invalid_email": "Email Tidak Valid",
+      "throttle_message_forgot_password": "Anda sudah melakukan request reset password sebanyak lebih dari 5x, silahkan coba kembali besok",
+      "network_error": "Terjadi kesalahan, koneksi anda terputus atau internet anda sedang bermasalah!",
+      "not_found": "Data tidak valid / tidak ditemukan",
+      "invalid_credential": "Email / kata sandi yang Anda masukkan salah",
+      "error": "Terjadi Kesalahan",
+      "invalid_reason": "Alasan Tidak Valid",
+      "send_email_notif": "Kirim Email Notifikasi",
+      "send_email_notif_to": "Anda akan mengirimkan email notifikasi ke",
+      "no_selected_user": "Tidak Ada user yang terpilih",
+      "failed_partial_import_at": "Gagal mengimport Sebagian Data! pada halaman ",
+      "delete_data": "Hapus {{entity}}",
+      "delete_confirm": "Apakah anda yakin untuk menghapus {{entity}} {{index}} ?",
+      "file_extension": "Ekstensi File wajib {{type}}!",
+      "please_reupload": "Silahkan unggah ulang {{entity}}",
+      "reupload_invalid": "Data {{entity}} tidak Valid, mohon mengunggah ulang.",
+      "failed_upload_reffer_export": "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda, atau pilih Eksport File sebagai acuan File Anda."
     }
   },
   "login": {
@@ -280,7 +370,8 @@
     "text16": "Tidak ada admin principal yang dipilih",
     "text17": "Detil Admin",
     "text18": "Nama Pengguna",
-    "text19": "Admin Detil"
+    "text19": "Admin Detil",
+    "create_title": "Buat Admin Principal"
   },
   "field_force": {
     "page_title": "Daftar Field Force",
@@ -311,7 +402,15 @@
     "view_document": "Lihat Dokumen",
     "grant_access": "Lihat Pemberian Akses",
     "has_branch": "Mempunyai Toko Cabang",
-    "total_branch": "Jumlah Toko Cabang"
+    "total_branch": "Jumlah Toko Cabang",
+    "area": "Area",
+    "grant_access_supplier": "Pemberian Akses Ke Supplier",
+    "id_access": "Akses KTP",
+    "tax_access": "Akses NPWP",
+    "no_document": "Tidak Ada Dokumen yang Ditampilkan",
+    "card": "Kartu",
+    "number": "Nomor",
+    "copy_number": "Salin Nomor"
   },
   "retailer": {
     "list": {
@@ -325,7 +424,13 @@
       "text7": "Customer Code",
       "text8": "Customer Name",
       "text9": "Customer Type",
-      "text10": "Tanggal Input Referral Code"
+      "text10": "Tanggal Input Referral Code",
+      "apps_version_ayo_toko": "Apps Version AYO SRC Toko",
+      "apps_version_ayo_cashier": "Apps Version AYO SRC Kasir",
+      "pojok_bayar_validation": "Pojok Bayar Validation",
+      "bank_account_validation": "Rekening Bank Tervalidasi",
+      "gsr": "GSR",
+      "gsm_pl": "GSM PL"
     },
     "medal_badge": {
       "text1": "Medal",
@@ -335,7 +440,17 @@
       "text5": "Buat Medal",
       "text6": "Apakah anda yakin untuk menghapus Medal ini",
       "text7": "Kategori Medal"
-    }
+    },
+    "create": {
+      "page_title": "Buat Retailer"
+    },
+    "detail": {
+      "page_title": "Detil Retailer",
+      "pkp": "PKP",
+      "detail_pojok_bayar_account": "Detail Akun Pojok Bayar",
+      "pojok_bayar": "Pojok Bayar"
+    },
+    "excel_download_info": "Sistem sedang membuat file excel untuk anda download. Jika file excel sudah dibuat akan segera kami infokan via email."
   },
   "paguyuban": {
     "page_title": "Daftar Paguyuban",
@@ -346,7 +461,9 @@
     "text3": "Konfirmasi Kata Sandi Tidak Sesuai",
     "text4": "Kata sandi harus memiliki 8 karakter, serta mengandung huruf besar dan huruf kecil",
     "text5": "Apakah anda yakin untuk menyelesaikan isian ini?",
-    "detail": "Detil Paguyuban"
+    "detail": "Detil Paguyuban",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Paguyuban ini ?",
+    "no_selected": "Tidak ada paguyuban yang dipilih"
   },
   "customer": {
     "text1": "Customer",
@@ -363,7 +480,9 @@
     "text1": "Principal Partnership",
     "text2": "Daftar Undian YBKS",
     "text3": "Nama Grup",
-    "principal_name": "Nama Principal"
+    "principal_name": "Nama Principal",
+    "delete": "Hapus Principal Partnership",
+    "delete_confirm": "Apakah anda yakin untuk menghapus principal partnership ini ?"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -381,7 +500,10 @@
     "text13": "Field Force",
     "text14": "Daftar AYO",
     "text15": "Update",
-    "text16": "Load Data"
+    "text16": "Load Data",
+    "name_2_char": "Nama harus lebih dari 2 karakter",
+    "delete": "Hapus Objective",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Objective ini ?"
   },
   "produk_prinsipal": {
     "text1": "Produk Prinsipal",
@@ -429,7 +551,16 @@
     "text43": "Uang Tunai",
     "text44": "Data Berhasil Disimpan",
     "text45": "Area geotree yang dipilih tidak boleh kosong",
-    "text46": "Order GSR"
+    "text46": "Order GSR",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Perusahaan ini?",
+    "phone_min": "Minimal Nomor Telepon 6 angka",
+    "phone_min_2": "Minimal Nomor Ponsel 10 angka",
+    "delete_panel_mitra": "Hapus Panel Mitra",
+    "delete_panel_mitra_confirm": "Apakah anda yakin untuk menghapus Panel Mitra ini?",
+    "division_code": "Kode Divisi",
+    "order_to_supplier": "Order ke Supplier",
+    "order_to_hub": "Order ke Mitra Hub",
+    "detail_order": "Detail Pesanan"
   },
   "strategic_partnership": {
     "text1": "Strategic Partnership",
@@ -437,7 +568,12 @@
     "text3": "Jumlah Audience",
     "text4": "Status Program",
     "text5": "Judul Partnership",
-    "text6": "Detail Mechanism"
+    "text6": "Detail Mechanism",
+    "list": "Daftar Panel Partnership",
+    "name": "Nama Partnership",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Partnership ini ?",
+    "status_changed": "Berhasil mengubah status",
+    "status_unchanged": "Gagal mengubah status"
   },
   "principal_notes_for_retailer": {
     "text": "Principal Notes For Retaailer"
@@ -463,7 +599,11 @@
       "text4": "Nama Vendor",
       "text5": "Alamat Vendor",
       "text6": "Tipe Vendor",
-      "text7": "Internal Classification"
+      "text7": "Internal Classification",
+      "delete": "Hapus Vendor",
+      "delete_confirm": "Apakah anda yakin untuk menghapus Vendor ini ?",
+      "force_delete": "Hapus Vendor secara Paksa",
+      "force_delete_confirm": "Apakah anda yakin untuk menghapus Vendor ini ? Dikarenakan Vendor memiliki Pesanan yang sedang berjalan"
     },
     "pengguna": {
       "text1": "Pengguna",
@@ -500,7 +640,14 @@
       "text26": "Estimasi Pengiriman",
       "text27": "Estimasi Pengiriman Minimal 0 Hari",
       "text28": "Estimasi Pengiriman Maksimal 31 Hari",
-      "day": "Hari"
+      "day": "Hari",
+      "update_all_price": "PERBARUI SEMUA HARGA",
+      "shopping_voucher": "Voucher Belanja",
+      "total_order_value": "Total Nilai Pemesanan",
+      "wholesaler_customer_code": "Customer Code Mitra",
+      "hub_customer_code": "Customer Code Mitra Hub",
+      "wholesaler_hub_name": "Nama Mitra Hub",
+      "delivery_status": "Status Pengiriman"
     },
     "produk": {
       "text1": "Produk Katalog SRC",
@@ -525,7 +672,12 @@
       "text20": "Status Produk",
       "text21": "Baru bergabung menjadi SRC ?",
       "text22": "Ingin meningkatkan penjualan toko ?",
-      "text23": "Ingin mengembangkan usaha lebih besar lagi ?"
+      "text23": "Ingin mengembangkan usaha lebih besar lagi ?",
+      "delete_all_sku": "Apakah Anda Yakin untuk menghapus semua list SKU Anda?",
+      "delete_all_sku_confirm": "Apakah anda yakin akan menghapus SEMUA PRODUK? Pastikan anda sudah backup data produk anda dengan Export Excel di halaman produk.",
+      "stock_available": "Tersedia",
+      "stock_unavailable": "Tidak Tersedia",
+      "import_file": "Tarik File Kesini (Maks. 10.000 Baris SKU) atau Pilih File"
     }
   },
   "iklan_dalam_aplikasi": {
@@ -558,7 +710,39 @@
       "text25": "Promo",
       "text26": "Target Audience",
       "text27": "Simpan Sebagai Draft",
-      "text28": "Simpan dan Kirim"
+      "text28": "Simpan dan Kirim",
+      "news": "Info Terkini",
+      "nearby_store": "Toko Terdekat",
+      "delete_banner": "Hapus Spanduk",
+      "delete_banner_confirm": "Apakah anda yakin untuk menghapus spanduk ini ?",
+      "src_info": "Info SRC",
+      "flying_button": "Flying Button",
+      "consumer_activation": "Aktivasi Konsumen",
+      "view_banner": "Lihat Spanduk",
+      "edit_banner": "Ubah Spanduk",
+      "available_from": "Berlaku dari tanggal",
+      "available_to": "Berlaku dari tanggal",
+      "import_image": "Tarik gambar spanduk iklan Anda kesini / <strong>Pilih File</strong> berdimensi 410p x 210p.",
+      "banner_title": "Tulisan Utama / Teks Utama / Isi Promosi",
+      "banner_type": "Tipe Spanduk",
+      "subscription_status": "Status Berlangganan",
+      "cannot_less_than": "Tidak boleh kurang dari",
+      "minimum_max_age": "minimal batasan umur yg telah di isi",
+      "image_inapp_chat_consumer": "Image Untuk In-App Chat ke Konsumen",
+      "content_page_inapp_chat_consumer": "Isi Halaman Untuk In-App Chat ke Konsumen",
+      "wallet_type": "Tipe Wallet",
+      "text_button": "Teks Button",
+      "landing_page_type": "Jenis Landing Page",
+      "my_profile_page": "Halaman Profil Saya",
+      "invalid_url": "URL tidak valid",
+      "drag_image": "Tarik gambar kesini atau <strong>pilih file</strong>",
+      "view_image": "Lihat gambar",
+      "retailer_type": "Tipe Retailer",
+      "target_area": "Target Area",
+      "as_draft": "SEBAGAI DRAF",
+      "and_send": "DAN KIRIM",
+      "shopping": "Belanja",
+      "title_dialot_open_reminder": "Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material <i class='italic'>Brand HM Sampoerna</i> atau materi <i class='italic'>promosi tembakau lainnya</i> hanya diperuntukkan untuk Tipe Consumer '<b>Merokok</b>'. Apakah anda yakin untuk simpan dan kirim ?"
     }
   },
   "delivery_management": {
@@ -589,12 +773,22 @@
       "text23": "Batas Waktu Menerima Pesan Tidak Valid Gunakan Format HH:MM (ex: 17:00)",
       "text24": "Nomor Kontak Tidak Valid, Nomor Kontak harus berupa angka",
       "text25": "Batas Waktu Menerima Pesanan (HH:MM)",
-      "text26": "Ubah Kurir"
+      "text26": "Ubah Kurir",
+      "text27": "Apakah kamu yakin ingin mengubah status Kurir ini ?",
+      "delete": "Hapus Layanan Kurir",
+      "delete_confirm": "Apakah anda yakin untuk menghapus Layanan Kurir ini ?",
+      "new_service": "Layanan Baru",
+      "invalid_delivery_time": "Format Waktu Layanan Tidak Valid"
     },
     "panel_mitra": {
       "text1": "Panel Mitra",
       "text2": "Jenis Layanan",
-      "text3": "Jumlah Mitra"
+      "text3": "Jumlah Mitra",
+      "set_partner_panel": "ATUR PANEL MITRA",
+      "select_courier": "Pilih Kurir",
+      "courier_type": "Jenis Kurir",
+      "selected_partner": "Mitra Terpilih",
+      "select_service": "Pilih Layanan"
     }
   },
   "manajemen_barang_sku": {
@@ -618,7 +812,35 @@
       "text16": "Status Produk",
       "text17": "Link Produk",
       "text18": "Jenis Produk",
-      "text19": "Produk Pilihan Pojok Modal"
+      "text19": "Produk Pilihan Pojok Modal",
+      "product_other_name": "Nama Lain Produk",
+      "pinup_duration": "Durasi Pin Up",
+      "end_date": "Tanggal Selesai",
+      "time_period": "Periode Waktu",
+      "add_packaging": "Tambah Kemasan",
+      "packaging": "Kemasan",
+      "amount_per_package": "Jumlah per Kemasan",
+      "product_price_after_discount": "Harga Produk Setelah Potongan Harga",
+      "packaging_name": "Nama Kemasan",
+      "min_1": "min. 1",
+      "max_1000": "maks. 1000",
+      "cannot_more_than_product_price": "Tidak boleh melebihi harga produk",
+      "date_today": "tanggal hari ini",
+      "max_image_size": "Ukuran 800x800 piksel, Maksimum 2mb",
+      "product_image": "Gambar Produk",
+      "online_available_product": "Produk tersedia online",
+      "family_code": "Kode Family",
+      "smallest_packaging": "Kemasan Terkecil",
+      "total_selected_partner": "Jumlah Mitra Terpilih",
+      "select_partner": "Pilih Mitra",
+      "min_qty": "Minimum Qty",
+      "product_link": "Link Product",
+      "more_than_start_date": "Harus lebih lama dari tanggal mulai",
+      "special_rate": "Special Rate",
+      "success_generate_link": "Link Berhasil dibuat!",
+      "success_copy_link": "Link Product Disalin!",
+      "isolated_partner": "Product ini masih terasosiasi dengan panel Mitra",
+      "max_image_size_data": "Ukuran gambar tidak boleh melebihi {{size}}"
     },
     "manajemen_koin": {
       "text1": "Manajemen Koin",
@@ -712,7 +934,52 @@
       "text36": "Tambahkan Alasan",
       "text37": "Pengaturan Background Misi",
       "text38": "Ukuran 410x210 Pixel, Maksimum 2MB",
-      "text39": "Silakan Lengkapi Data Terlebih Dahulu"
+      "text39": "Silakan Lengkapi Data Terlebih Dahulu",
+      "mission_project": "Project Misi",
+      "personalize": "Personalize",
+      "list_task_personalize": "Daftar Tugas Personalize",
+      "copywriting": "Copywriting",
+      "response_type": "Reponse Type",
+      "ir_type": "IR Type",
+      "select_one_ir_type": "Pilih salah satu IR Type",
+      "set_detail_banner": "Set Detail Banner",
+      "place_video": "Sisipkan Video",
+      "place_image": "Sisipkan Gambar",
+      "encryption": "Encryption",
+      "select_template": "Pilih Template",
+      "short_answer_text": "Teks jawaban singkat",
+      "long_answer_text": "Teks jawaban panjang",
+      "upload_proof_photo": "UNGGAH BUKTI FOTO",
+      "select_date": "Pilihan Tanggal",
+      "number": "Angka",
+      "next_question_posibility": "Next Question Possibility",
+      "none": "None",
+      "direct_to_shop": "Direct to Belanja",
+      "add_options": "Tambahkan opsi",
+      "coin_amount": "Jumlah Koin",
+      "answer_key": "Kunci Jawaban",
+      "select_one_reason": "Pilih salah satu Alasan",
+      "short_answer": "Jawaban Singkat",
+      "paragraph": "Paragraf",
+      "multiple_choice": "Pilihan Ganda",
+      "multiple_choice_and_number": "Pilihan Ganda & Angka",
+      "multiple_choice_and_short_answer": "Pilihan Ganda & Jawaban Singkat",
+      "multiple_choice_and_paragraph": "Pilihan Ganda & Paragraf",
+      "check_box": "Kotak Centang",
+      "stock_check": "Stock Check",
+      "stock_check_ir": "Stock Check IR",
+      "planogram_ir": "Planogram IR",
+      "full_ir": "Full IR",
+      "ir_comply": "IR for Comply",
+      "ir_not_comply": "IR for Not Comply",
+      "ir_checking_only": "IR for Checking Only",
+      "non_task_base_response": "Non - Task Based Response",
+      "task_base_response": "Task Based Response",
+      "delete_question_connected": "Pertanyaan ini terhubung sebagai Respon Pertanyaan lain, Silahkan mengubah Next Question yang bersangkutan.",
+      "other_explain": "Lainnya, Sebutkan",
+      "complete_question_message": "Ada pertanyaan belum di isi, silahkan lengkapi pengisian",
+      "please_select_ir": "Silahkan pilih salah satu IR Type",
+      "updated_data": "Data Berhasil Diubah"
     },
     "group_trade_program": {
       "text1": "Group Trade Program",
@@ -721,7 +988,13 @@
       "text4": "Nama Prinsipal Non HMS",
       "text5": "Ubah Group Trade Program",
       "text6": "Nama Group Trade Program",
-      "text7": "Merupakan Group Trade Program Non HMS"
+      "text7": "Merupakan Group Trade Program Principal Non HMS",
+      "text8": "Hapus Group Trade Program",
+      "text9": "Apakah anda yakin untuk menghapus data syarat & ketentuan ini?",
+      "text10": "Buat Group Trade Program",
+      "text11": "Tarik Gambar Kesini atau Pilih File",
+      "text12": "Ukuran 410x210 Pixel",
+      "text13": "Gambar Maksimal 2 mb"
     },
     "trade_program": {
       "text1": "Trade Program",
@@ -733,7 +1006,8 @@
       "text7": "Tidak diterbitkan",
       "text8": "Trade Program Sedang Berjalan",
       "text9": "Hapus Trade Program",
-      "text10": "Apakah anda yakin untuk menghapus trade program ini?"
+      "text10": "Apakah anda yakin untuk menghapus trade program ini?",
+      "group_trade_program_not_found": "Tidak ada Group Trade Program yang ditemukan"
     },
     "pengatur_jadwal_program": {
       "text1": "Pengatur Jadwal Trade Program",
@@ -782,9 +1056,24 @@
       "text4": "Jumlah SRC",
       "text5": "Total Koin Yang Terkirim",
       "text6": "Tanggal Request",
-      "text7": "Tanggal Approval"
+      "text7": "Tanggal Approval",
+      "approve": "Setujui Request Adjustment Coin",
+      "reject": "Tolak Request Adjustment Coin",
+      "are_you_sure": "Apakah anda yakin untuk",
+      "this_request_adjusment": "request adjustment coin ini ?",
+      "do_approve": "menyetujui",
+      "do_reject": "menolak",
+      "read_only_access": "Kamu hanya memiliki akses untuk melihat Tombol Notifikasi, tidak dapat mengirimkan Notifikasi! (permission.ubah)"
     },
     "audience": {
+      "audience_personalize": "Audience Personalize",
+      "b2b_active": "B2B Active",
+      "delete_audience_group": "Hapus Audience Grup",
+      "estimated_success": "Estimated Task Success",
+      "fixed_panel": "Fixed Panel",
+      "panel_blast": "Panel Blast",
+      "publish_mission": "Publish Misi",
+      "select_publish_mission": "Pilih Publish Misi",
       "text1": "Audience",
       "text2": "Jumlah Pengguna",
       "text3": "Status Persetujuan Audience",
@@ -800,7 +1089,8 @@
       "text13": "Retail Classification",
       "text14": "SRC Classification",
       "text15": "SRC Type",
-      "text16": "Daftar AYO"
+      "text16": "Daftar AYO",
+      "total_required_panel": "Total Required Panel"
     },
     "distribution_list": {
       "text": "Distribution List"
@@ -932,7 +1222,7 @@
       "text17": "Penggunaan Voucher",
       "text18": "Pilih dari",
       "text19": "Nama Voucher",
-      "text20": "Nilai Penukaramn Untuk 1 Koin",
+      "text20": "Nilai Penukaran Untuk 1 Koin",
       "text21": "Jumlah Koin",
       "text22": "Tanggal Voucher Dibagikan",
       "text23": "Tanggal kedaluarsa Voucher",
@@ -942,7 +1232,9 @@
       "text27": "Batasi dengan Kategori",
       "text28": "Produk B2B",
       "text29": "Batasan Berdasarkan Produk",
-      "text30": "Batasan Berdasarkan Kategori"
+      "text30": "Batasan Berdasarkan Kategori",
+      "published": "PUBLISHED",
+      "voucher_on_review": "Voucher sedang di Review"
     },
     "b2c_voucher": {
       "text1": "B2C Voucher",
@@ -1097,9 +1389,16 @@
       "text16": "Filter Pengguna",
       "text17": "Target Audience",
       "text18": "Hapus Notifikasi",
-      "text19": "Apakah anda yakin untuk menghapus notifikasi ini?"
+      "text19": "Apakah anda yakin untuk menghapus notifikasi ini?",
+      "title": "Buat Popup Notifikasi",
+      "repeat_pattern": "Pola Pengulangan",
+      "selected_date": "Tanggal & Bulan Terpilih",
+      "date_month_repeatation": "Tanggal & bulan pengulangan",
+      "date_repeatation": "Tanggal pengulangan",
+      "month_repeatation": "Bulan pengulangan"
     },
     "popup_notifikasi": {
+      "page_name": "Popup Notifikasi",
       "text1": "Daftar Popup Notifikasi",
       "text2": "ID",
       "text3": "Judul Popup Notifikasi",
@@ -1122,7 +1421,8 @@
       "text20": "Hapus Popup Notifikasi",
       "text21": "Notifikasi Journey Builder",
       "text22": "Data Berhasil Disimpan",
-      "text23": "Apakah anda yakin untuk menghapus popup notifikasi ini?"
+      "text23": "Apakah anda yakin untuk menghapus popup notifikasi ini?",
+      "time": "Waktu"
     }
   },
   "manajemen_konten": {
@@ -1286,7 +1586,8 @@
   "rca_agent": {
     "page_title": "RCA Agent",
     "index_title": "Daftar RCA Agent",
-    "email_validation": "Pastikan Email dan username sesuai dengan Akun SSO anda."
+    "email_validation": "Pastikan Email dan username sesuai dengan Akun SSO anda.",
+    "delete_confirm": "Apakah anda yakin untuk menghapus RCA Agent ini ?"
   },
   "rca_grouping": {
     "page_title": "Grouping Pelanggan",
@@ -1368,5 +1669,181 @@
     "on_validation": "File JSON sedang dalam proses validasi",
     "validation_success": "Validasi Berhasil, silahkan Upload data",
     "validate": "VALIDATE"
+  },
+  "voucher_private_label": {
+    "store_count": "Jumlah Toko",
+    "store_redeem_voucher": "Toko Menukarkan Voucher",
+    "voucher_unused_value": "Nilai Voucher Belum Terpakai",
+    "voucher_used_value": "Nilai Voucher Ditukarkan",
+    "voucher_release_date": "Tanggal Voucher Dibagikan"
+  },
+  "notes_retailer": {
+    "list": "Daftar Notes untuk Retailer",
+    "name": "Nama Notes",
+    "description": "Description Notes",
+    "status": "Status Notes"
+  },
+  "store_layout_template": {
+    "delete": "Hapus Store Layout Template",
+    "delete_confirm": "Apakah anda yakin untuk menghapus Store Layout Template ini ?"
+  },
+  "breadcrumbs": {
+    "device_management": {
+      "index": "Perangkat dipulihkan dan Pengaturan"
+    },
+    "help": {
+      "index": "Manajemen Bantuan",
+      "create": "Buat Topik Bantuan",
+      "edit": "Ubah Topik Bantuan"
+    },
+    "adminprincipal": {
+      "index": "Daftar Admin Principal",
+      "create": "Buat Admin Principal",
+      "edit": "Ubah Admin Principal",
+      "detail": "Detail Admin Principal"
+    },
+    "fieldforce": {
+      "index": "Daftar Field Force",
+      "create": "Buat Field Force",
+      "edit": "Ubah Field Force",
+      "detail": "Detail Field Force"
+    },
+    "wholesaler": {
+      "index": "Daftar Wholesaler",
+      "create": "Buat Wholesaler",
+      "edit": "Ubah Wholesaler",
+      "detail": "Detail Wholesaler"
+    },
+    "retailer": {
+      "index": "Daftar Retailer",
+      "create": "Buat Retailer",
+      "edit": "Ubah Retailer",
+      "detail": "Detail Retailer"
+    },
+    "medal_badge": {
+      "index": "Medal & Badge"
+    },
+    "customer": {
+      "index": "Daftar Consumer",
+      "detail": "Detail Consumer"
+    },
+    "pengajuan_src": {
+      "index": "Daftar Pengajuan SRC",
+      "create": "Buat Pengajuan SRC",
+      "edit": "Ubah Pengajuan SRC",
+      "detail": "Detail Pengajuan SRC"
+    },
+    "partnership": {
+      "index": "Daftar Principal Partnership",
+      "create": "Buat Principal Partnership",
+      "edit": "Ubah Principal Partnership",
+      "detail": "Detail Principal Partnership"
+    },
+    "panelpartnership": {
+      "strategic_partnership": "Strategic Partnership",
+      "index": "Panel Partnership",
+      "create": "Create",
+      "edit": "Ubah"
+    },
+    "privatelabel": {
+      "index": "Produk Prinsipal",
+      "suppliercompany": {
+        "index": "Perusahaan",
+        "create": "Create Perusahaan",
+        "edit": "Ubah Perusahaan",
+        "detail": "Detail Perusahaan"
+      },
+      "usersupplier": {
+        "index": "User Perusahaan",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "panelmitra": {
+        "index": "Panel Mitra",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "ordertosupplier": {
+        "index": "Order dari Mitra",
+        "create": "Create",
+        "edit": "Ubah",
+        "detail": "Detail"
+      },
+      "suppliersettings": {
+        "index": "Pengaturan",
+        "stock": "Stock",
+        "stock_edit": "Edit",
+        "payment_method": "Metode Pembayaran",
+        "payment_method_edit": "Edit"
+      },
+      "suppliervouchers": {
+        "index": "Voucher Private Label"
+      }
+    },
+    "banner": {
+      "index": "Spanduk Online",
+      "create": "Buat Spanduk Online",
+      "edit": "Ubah Spanduk Online",
+      "detail": "Detail Spanduk Online",
+      "sorting": "Pengaturan In-App Banner"
+    },
+    "landingpage": {
+      "index": "Halaman Tujuan",
+      "create": "Buat Halaman Tujuan",
+      "edit": "Ubah Halaman Tujuan"
+    },
+    "product": {
+      "index": "Daftar Produk",
+      "create": "Tambah Produk",
+      "edit": "Ubah Produk",
+      "detail": "Detail Produk",
+      "delete": "Hapus Produk"
+    },
+    "productcashier": {
+      "index": "Daftar Produk Kasir",
+      "create": "Tambah Produk Kasir",
+      "edit": "Ubah Produk",
+      "detail": "Detail Produk",
+      "submission": "Produk Diajukan",
+      "submission_detail": "Detail Produk Submission"
+    },
+    "dbsubmission": {
+      "index": "Pengajuan Produk DB",
+      "detail": "Detail Produk Diajukan",
+      "approval": "Pengaturan Approval"
+    },
+    "reward": {
+      "index": "Katalog Hadiah",
+      "create": "Buat Katalog Hadiah",
+      "edit": "Ubah Katalog Hadiah"
+    },
+    "rewardhistory": {
+      "index": "Riwayat Penukaaran"
+    },
+    "coin": {
+      "index": "Manajemen Koin",
+      "trade": "Detail Trade Program",
+      "retailer": "Detail Retailer"
+    },
+    "courier_management": {
+      "index": "Daftar Kurir",
+      "create": "Buat Layanan Kurir",
+      "edit": "Ubah Layanan Kurir",
+      "detail": "Detail Layanan Kurir"
+    },
+    "group_trade_program": {
+      "index": "Group Trade Program",
+      "create": "Buat Group Trade Program",
+      "edit": "Ubah Group Trade Program",
+      "detail": "Detail Group Trade Program"
+    },
+    "trade_program": {
+      "index": "Trade Program",
+      "create": "Buat Trade Program",
+      "edit": "Ubah Trade Program",
+      "detail": "Detail Trade Program"
+    }
   }
 }

@@ -225,43 +225,43 @@ export const brConfig = {
       {
         type: "current",
         url: "/user-management/admin-principal",
-        name: "Daftar Admin Principal"
+        name: "breadcrumbs.adminprincipal.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/admin-principal",
-        name: "Daftar Admin Principal"
+        name: "breadcrumbs.adminprincipal.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Admin Principal"
+        name: "breadcrumbs.adminprincipal.create"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/admin-principal",
-        name: "Daftar Admin Principal"
+        name: "breadcrumbs.adminprincipal.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Admin Principal"
+        name: "breadcrumbs.adminprincipal.edit"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/admin-principal",
-        name: "Daftar Admin Principal"
+        name: "breadcrumbs.adminprincipal.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Admin Principal"
+        name: "breadcrumbs.adminprincipal.detail"
       }
     ]
   },
@@ -270,31 +270,31 @@ export const brConfig = {
       {
         type: "current",
         url: "/user-management/field-force",
-        name: "Daftar Field Force"
+        name: "breadcrumbs.fieldforce.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/field-force",
-        name: "Daftar Field Force"
+        name: "breadcrumbs.fieldforce.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Field Force"
+        name: "breadcrumbs.fieldforce.create"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/field-force",
-        name: "Daftar Field Force"
+        name: "breadcrumbs.fieldforce.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Field Force"
+        name: "breadcrumbs.fieldforce.edit"
       }
     ]
     ,
@@ -302,12 +302,12 @@ export const brConfig = {
       {
         type: "parent",
         url: "/user-management/field-force",
-        name: "Daftar Field Force"
+        name: "breadcrumbs.fieldforce.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Field Force"
+        name: "breadcrumbs.fieldforce.detail"
       }
     ]
   },
@@ -406,43 +406,43 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Wholesaler"
+        name: "breadcrumbs.wholesaler.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/wholesaler",
-        name: "Daftar Wholesaler"
+        name: "breadcrumbs.wholesaler.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Wholesaler"
+        name: "breadcrumbs.wholesaler.create"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/wholesaler",
-        name: "Daftar Wholesaler"
+        name: "breadcrumbs.wholesaler.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Wholesaler"
+        name: "breadcrumbs.wholesaler.edit"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/wholesaler",
-        name: "Daftar Wholesaler"
+        name: "breadcrumbs.wholesaler.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Wholesaler"
+        name: "breadcrumbs.wholesaler.detail"
       }
     ]
   },
@@ -451,50 +451,50 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Retailer"
+        name: "breadcrumbs.retailer.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/retailer",
-        name: "Daftar Retailer"
+        name: "breadcrumbs.retailer.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Retailer"
+        name: "breadcrumbs.retailer.create"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/retailer",
-        name: "Daftar Retailer"
+        name: "breadcrumbs.retailer.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Retailer"
+        name: "breadcrumbs.retailer.edit"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/retailer",
-        name: "Daftar Retailer"
+        name: "breadcrumbs.retailer.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Retailer"
+        name: "breadcrumbs.retailer.detail"
       }
     ],
     medalBadge: [
       {
         type: "current",
         url: "",
-        name: "Medal & Badge"
+        name: "breadcrumbs.medal_badge.index"
       }
     ],
   },
@@ -503,19 +503,19 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Consumer"
+        name: "breadcrumbs.customer.index"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/customer",
-        name: "Daftar Consumer"
+        name: "breadcrumbs.customer.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Consumer"
+        name: "breadcrumbs.customer.detail"
       }
     ]
   },
@@ -524,43 +524,43 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/pengajuan-src",
-        name: "Daftar Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.create"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/pengajuan-src",
-        name: "Daftar Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.detail"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/pengajuan-src",
-        name: "Daftar Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Pengajuan SRC"
+        name: "breadcrumbs.pengajuan_src.edit"
       }
     ]
   },
@@ -569,43 +569,43 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Daftar Principal Partnership"
+        name: "breadcrumbs.partnership.index"
       }
     ],
     create: [
       {
         type: "parent",
         url: "/user-management/principal-partnership",
-        name: "Daftar Principal Partnership"
+        name: "breadcrumbs.partnership.index"
       },
       {
         type: "current",
         url: "",
-        name: "Buat Principal Partnership"
+        name: "breadcrumbs.partnership.create"
       }
     ],
     edit: [
       {
         type: "parent",
         url: "/user-management/principal-partnership",
-        name: "Daftar Principal Partnership"
+        name: "breadcrumbs.partnership.index"
       },
       {
         type: "current",
         url: "",
-        name: "Ubah Principal Partnership"
+        name: "breadcrumbs.partnership.edit"
       }
     ],
     detail: [
       {
         type: "parent",
         url: "/user-management/principal-partnership",
-        name: "Daftar Principal Partnership"
+        name: "breadcrumbs.partnership.index"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Principal Partnership"
+        name: "breadcrumbs.partnership.detail"
       }
     ]
   },
@@ -615,46 +615,46 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/panel-partnership",
-          name: "Strategic Partnership"
+          name: "breadcrumbs.panelpartnership.strategic_partnership"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Partnership"
+          name: "breadcrumbs.panelpartnership.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/panel-partnership",
-          name: "Strategic Partnership"
+          name: "breadcrumbs.panelpartnership.strategic_partnership"
         },
         {
           type: "parent",
           url: "/user-management/panel-partnership",
-          name: "Panel Partnership"
+          name: "breadcrumbs.panelpartnership.index"
         },
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "breadcrumbs.panelpartnership.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/panel-partnership",
-          name: "Strategic Partnership"
+          name: "breadcrumbs.panelpartnership.strategic_partnership"
         },
         {
           type: "parent",
           url: "/user-management/panel-partnership",
-          name: "Panel Partnership"
+          name: "breadcrumbs.panelpartnership.index"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.panelpartnership.edit"
         }
       ],
     },
@@ -663,63 +663,63 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "current",
           url: "",
-          name: "Perusahaan"
+          name: "breadcrumbs.privatelabel.suppliercompany.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Perusahaan"
+          name: "breadcrumbs.privatelabel.suppliercompany.index"
         },
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "breadcrumbs.privatelabel.suppliercompany.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Perusahaan"
+          name: "breadcrumbs.privatelabel.suppliercompany.index"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.suppliercompany.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/private-label",
-          name: "Perusahaan"
+          name: "breadcrumbs.privatelabel.suppliercompany.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "breadcrumbs.privatelabel.suppliercompany.detail"
         }
       ]
     },
@@ -728,63 +728,63 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "current",
           url: "",
-          name: "User Perusahaan"
+          name: "breadcrumbs.privatelabel.usersupplier.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Perusahaan"
+          name: "breadcrumbs.privatelabel.usersupplier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "breadcrumbs.privatelabel.usersupplier.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Perusahaan"
+          name: "breadcrumbs.privatelabel.usersupplier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.usersupplier.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-user",
-          name: "User Perusahaan"
+          name: "breadcrumbs.privatelabel.usersupplier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "breadcrumbs.privatelabel.usersupplier.detail"
         }
       ]
     },
@@ -793,63 +793,63 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "current",
           url: "",
-          name: "Panel Mitra"
+          name: "breadcrumbs.privatelabel.panelmitra.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Panel Mitra"
+          name: "breadcrumbs.privatelabel.panelmitra.index"
         },
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "breadcrumbs.privatelabel.panelmitra.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Panel Mitra"
+          name: "breadcrumbs.privatelabel.panelmitra.index"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.panelmitra.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-panel-mitra",
-          name: "Panel Mitra"
+          name: "breadcrumbs.privatelabel.panelmitra.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "breadcrumbs.privatelabel.panelmitra.detail"
         }
       ]
     },
@@ -858,46 +858,46 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "current",
           url: "",
-          name: "Order dari Mitra"
+          name: "breadcrumbs.privatelabel.ordertosupplier.index"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Order dari Mitra"
+          name: "breadcrumbs.privatelabel.ordertosupplier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.ordertosupplier.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-order",
-          name: "Order dari Mitra"
+          name: "breadcrumbs.privatelabel.ordertosupplier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "breadcrumbs.privatelabel.ordertosupplier.detail"
         }
       ]
     },
@@ -906,46 +906,46 @@ export const brConfig = {
         {
           type: "parent",
           url: "/user-management/supplier-settings",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "current",
           url: "",
-          name: "Pengaturan"
+          name: "breadcrumbs.privatelabel.suppliersettings.index"
         }
       ],
       stockEdit: [
         {
           type: "parent",
           url: "/user-management/supplier-settings",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-settings",
-          name: "Stock"
+          name: "breadcrumbs.privatelabel.suppliersettings.stock"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.suppliersettings.stock_edit"
         }
       ],
       paymentMethodEdit: [
         {
           type: "parent",
           url: "/user-management/supplier-settings",
-          name: "Produk Prinsipal"
+          name: "breadcrumbs.privatelabel.index"
         },
         {
           type: "parent",
           url: "/user-management/supplier-settings",
-          name: "Metode Pembayaran"
+          name: "breadcrumbs.privatelabel.suppliersettings.payment_method"
         },
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "breadcrumbs.privatelabel.suppliersettings.payment_method_edit"
         }
       ],
     },
@@ -954,7 +954,7 @@ export const brConfig = {
         {
           type: "current",
           url: "/user-management/supplier-vouchers",
-          name: "Voucher Private Label"
+          name: "breadcrumbs.privatelabel.suppliervouchers.index"
         }
       ],
     }
@@ -965,55 +965,55 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Spanduk Online"
+          name: "breadcrumbs.banner.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/advertisement/banner",
-          name: "Spanduk Online"
+          name: "breadcrumbs.banner.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Spanduk Online"
+          name: "breadcrumbs.banner.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/advertisement/banner",
-          name: "Spanduk Online"
+          name: "breadcrumbs.banner.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Spanduk Online"
+          name: "breadcrumbs.banner.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/advertisement/banner",
-          name: "Spanduk Online"
+          name: "breadcrumbs.banner.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Spanduk Online"
+          name: "breadcrumbs.banner.detail"
         }
       ],
       sorting: [
         {
           type: "parent",
           url: "/advertisement/banner",
-          name: "Spanduk Online"
+          name: "breadcrumbs.banner.index"
         },
         {
           type: "current",
           url: "",
-          name: "Pengaturan In-App Banner"
+          name: "breadcrumbs.banner.sorting"
         }
       ]
     },
@@ -1022,31 +1022,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Halaman Tujuan"
+          name: "breadcrumbs.landingpage.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/advertisement/landing-page",
-          name: "Halaman Tujuan"
+          name: "breadcrumbs.landingpage.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Halaman Tujuan"
+          name: "breadcrumbs.landingpage.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/advertisement/landing-page",
-          name: "Halaman Tujuan"
+          name: "breadcrumbs.landingpage.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Halaman Tujuan"
+          name: "breadcrumbs.landingpage.edit"
         }
       ]
     }
@@ -1057,43 +1057,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Daftar Produk"
+          name: "breadcrumbs.product.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/sku-management/product",
-          name: "Daftar Produk"
+          name: "breadcrumbs.product.index"
         },
         {
           type: "current",
           url: "",
-          name: "Tambah Produk"
+          name: "breadcrumbs.product.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/sku-management/product",
-          name: "Daftar Produk"
+          name: "breadcrumbs.product.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Produk"
+          name: "breadcrumbs.product.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/sku-management/product",
-          name: "Daftar Produk"
+          name: "breadcrumbs.product.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Produk"
+          name: "breadcrumbs.product.detail"
         }
       ]
     },
@@ -1102,67 +1102,67 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Daftar Produk Kasir",
+          name: "breadcrumbs.productcashier.index",
         }
       ],
       create: [
         {
           type: "parent",
           url: "/sku-management/product-cashier",
-          name: "Daftar Produk Kasir"
+          name: "breadcrumbs.productcashier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Tambah Produk"
+          name: "breadcrumbs.productcashier.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/sku-management/product-cashier",
-          name: "Daftar Produk Kasir"
+          name: "breadcrumbs.productcashier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Produk"
+          name: "breadcrumbs.productcashier.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/sku-management/product-cashier",
-          name: "Daftar Produk Kasir"
+          name: "breadcrumbs.productcashier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Produk"
+          name: "breadcrumbs.productcashier.detail"
         }
       ],
       submission: [
         {
           type: "parent",
           url: "/sku-management/product-cashier",
-          name: "Daftar Produk Kasir"
+          name: "breadcrumbs.productcashier.index"
         },
         {
           type: "current",
           url: "",
-          name: "Produk Diajukan"
+          name: "breadcrumbs.productcashier.submission"
         }
       ],
       submissionDetail: [
         {
           type: "parent",
           url: "/sku-management/product-cashier/submission",
-          name: "Produk Diajukan"
+          name: "breadcrumbs.productcashier.submission"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Produk"
+          name: "breadcrumbs.productcashier.submission_detail"
         }
       ],
     },
@@ -1171,31 +1171,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Pengajuan Produk DB",
+          name: "breadcrumbs.dbsubmission.index",
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/sku-management/db-product-submission",
-          name: "Pengajuan Produk DB"
+          name: "breadcrumbs.dbsubmission.indexB"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Produk Diajukan"
+          name: "breadcrumbs.dbsubmission.detail"
         }
       ],
       approval: [
         {
           type: "parent",
           url: "/sku-management/db-product-submission",
-          name: "Pengajuan Produk DB"
+          name: "breadcrumbs.dbsubmission.indexB"
         },
         {
           type: "current",
           url: "",
-          name: "Pengaturan Approval"
+          name: "breadcrumbs.dbsubmission.approval"
         }
       ],
     },
@@ -1204,31 +1204,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Katalog Hadiah"
+          name: "breadcrumbs.reward.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/sku-management/reward",
-          name: "Katalog Hadiah"
+          name: "breadcrumbs.reward.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Katalog Hadiah"
+          name: "breadcrumbs.reward.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/sku-management/reward",
-          name: "Katalog Hadiah"
+          name: "breadcrumbs.reward.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Katalog Hadiah"
+          name: "breadcrumbs.reward.edit"
         }
       ]
     },
@@ -1237,7 +1237,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Riwayat Penukaaran"
+          name: "breadcrumbs.rewardhistory.index"
         }
       ]
     },
@@ -1246,31 +1246,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Manajemen Koin"
+          name: "breadcrumbs.coin.index"
         }
       ],
       trade: [
         {
           type: "parent",
           url: "/sku-management/coin",
-          name: "Manajemen Koin"
+          name: "breadcrumbs.coin.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.coin.trade"
         }
       ],
       retailer: [
         {
           type: "parent",
           url: "/sku-management/coin",
-          name: "Manajemen Koin"
+          name: "breadcrumbs.coin.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Retailer"
+          name: "breadcrumbs.coin.retailer"
         }
       ]
     }
@@ -1281,43 +1281,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Daftar Kurir"
+          name: "breadcrumbs.courier_management.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/delivery/courier",
-          name: "Daftar Kurir"
+          name: "breadcrumbs.courier_management.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Layanan Kurir"
+          name: "breadcrumbs.courier_management.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/delivery/courier",
-          name: "Daftar Kurir"
+          name: "breadcrumbs.courier_management.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Layanan Kurir"
+          name: "breadcrumbs.courier_management.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/delivery/courier",
-          name: "Daftar Kurir"
+          name: "breadcrumbs.courier_management.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Layanan Kurir"
+          name: "breadcrumbs.courier_management.detail"
         }
       ]
     },
@@ -1550,43 +1550,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Trade Program"
+          name: "breadcrumbs.trade_program.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/dte/trade-program",
-          name: "Trade Program"
+          name: "breadcrumbs.trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Trade Program"
+          name: "breadcrumbs.trade_program.detail"
         }
       ]
     },
@@ -1799,43 +1799,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Group Trade Program"
+          name: "breadcrumbs.group_trade_program.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Group Trade Program"
+          name: "breadcrumbs.group_trade_program.edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/dte/group-trade-program",
-          name: "Group Trade Program"
+          name: "breadcrumbs.group_trade_program.index"
         },
         {
           type: "current",
           url: "",
-          name: "Detail Group Trade Program"
+          name: "breadcrumbs.group_trade_program.detail"
         }
       ]
     },
@@ -2068,31 +2068,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Manajemen Bantuan"
+          name: "breadcrumbs.help.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/content-management/help",
-          name: "Manajemen Bantuan"
+          name: "breadcrumbs.help.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Topik Bantuan"
+          name: "breadcrumbs.help.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/content-management/help",
-          name: "Manajemen Bantuan"
+          name: "breadcrumbs.help.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Topik Bantuan"
+          name: "breadcrumbs.help.edit"
         }
       ]
     },
@@ -3135,9 +3135,75 @@ export const brConfig = {
       {
         type: "current",
         url: "/device-management/recovery",
-        name: "Perangkat dipulihkan dan Pengaturan"
+        name: "breadcrumbs.device_management.index"
       }
     ],
+  },
+  kpi: {
+    list: [
+      {
+        type: "current",
+        url: "",
+        name: "Daftar KPI Group"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/kpisetting/kpi-groups-list",
+        name: "Daftar KPI Group"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Create KPI Setting"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/kpisetting/kpi-groups-list",
+        name: "Daftar KPI Group"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit KPI Setting"
+      }
+    ]
+  },
+  notes_retailer: {
+    list: [
+      {
+        type: "current",
+        url: "",
+        name: "Notes Retailer"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/notesretailer/notes-retailer-list",
+        name: "Notes Retailer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Create Notes"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/notesretailer/notes-retailer-list",
+        name: "Notes Retailer"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Edit Notes"
+      }
+    ]
   },
   remote_call_activation: {
     grouping_pelanggan: [
