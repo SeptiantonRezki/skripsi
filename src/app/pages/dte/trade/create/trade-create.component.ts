@@ -85,9 +85,6 @@ export class TradeCreateComponent {
   }
 
   ngOnInit() {
-    this.getGroupTradeProgram();
-    this.getSubGroupTradeProgram();
-
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
@@ -118,6 +115,9 @@ export class TradeCreateComponent {
       .subscribe(() => {
         this.filteringSGTP();
       });
+
+    this.getGroupTradeProgram();
+    this.getSubGroupTradeProgram();
     
     setTimeout(() => {
       document.getElementById("trade-create").getElementsByTagName("input")[0].id = "upload-file-trade";
