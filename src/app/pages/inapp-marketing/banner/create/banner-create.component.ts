@@ -1382,7 +1382,7 @@ export class BannerCreateComponent {
           
         });
         fd.append('target_audiences[]', JSON.stringify(this.audienceSelected.map(aud => aud.id)));
-        body['target_audiences[]'] = this.audienceSelected.map(aud => aud.id);
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
       
         // fd['target_audiences[]'] = this.audienceSelected.map(aud => aud.id);
       } else {
