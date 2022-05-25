@@ -58,7 +58,6 @@ export class FieldForceCreateComponent {
         classification: [""],
         areas: this.formBuilder.array([], Validators.required),
         type: ["", Validators.required],
-        version: [""],
         status: [true],
       },
       {
@@ -146,7 +145,6 @@ export class FieldForceCreateComponent {
       username: this.formUser.get("username").value,
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value || null,
-      version: this.formUser.get("version").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       password: this.formUser.get("password").value,
       password_confirmation: this.formUser.get("password_confirmation").value,
