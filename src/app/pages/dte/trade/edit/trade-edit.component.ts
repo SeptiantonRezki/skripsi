@@ -41,6 +41,10 @@ export class TradeEditComponent {
   public filterGTP: FormControl = new FormControl();
   public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
+  listSubGroupTradeProgram: any[] = [];
+  public filterSGTP: FormControl = new FormControl();
+  public filteredSGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     // insert logic to check if there are pending changes here;
@@ -94,6 +98,8 @@ export class TradeEditComponent {
 
   ngOnInit() {
     this.getGroupTradeProgram();
+    this.getSubGroupTradeProgram();
+
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
@@ -101,7 +107,8 @@ export class TradeEditComponent {
       budget: ['', [Validators.required, Validators.min(0)]],
       coin_expiry_date: ['', Validators.required],
       status: ['', Validators.required],
-      group_trade_program_id: [""]
+      group_trade_program_id: [""],
+      sub_group_trade_program_id: [""],
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -115,7 +122,10 @@ export class TradeEditComponent {
       budget: Number(this.detailFormTrade.budget),
       coin_expiry_date: this.detailFormTrade.coin_expiry_date,
       status: this.detailFormTrade.status_publish,
-      group_trade_program_id: this.detailFormTrade.trade_creator_group_id ? this.detailFormTrade.trade_creator_group_id : ''
+      group_trade_program_id: this.detailFormTrade.trade_creator_group_id ? this.detailFormTrade.trade_creator_group_id : '',
+
+      // TODO: SESUAIKAN DENGAN KEY BE
+      sub_group_trade_program_id: this.detailFormTrade.xxx ? this.detailFormTrade.xxx : '',
     })
 
     if (this.detailFormTrade.status === 'active') {
@@ -132,6 +142,12 @@ export class TradeEditComponent {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringGTP();
+      });
+
+    this.filterSGTP.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringSGTP();
       });
 
     this.setMinEndDate('init');
@@ -163,6 +179,32 @@ export class TradeEditComponent {
       this.listGroupTradeProgram = res.data ? res.data.data : [];
       this.filteredGTP.next(this.listGroupTradeProgram.slice());
     })
+  }
+
+  getSubGroupTradeProgram() {
+    // TODO: UBAH API
+    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
+      this.listSubGroupTradeProgram = res.data ? res.data.data : [];
+      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
+    })
+  }
+
+  filteringSGTP() {
+    if (!this.listSubGroupTradeProgram) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterSGTP.value;
+    if (!search) {
+      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredSGTP.next(
+      this.listSubGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   setMinEndDate(init?) {
@@ -210,6 +252,9 @@ export class TradeEditComponent {
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
       fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program_id').value);
+
+      // TODO: SESUAIKAN DENGAN KEY BE
+      fd.append('____', this.formTradeProgram.get('sub_group_trade_program_id').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.put(fd, { trade_program_id: this.detailFormTrade.id }).subscribe(
