@@ -2359,7 +2359,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc, area_ids, is_smoking
+        verification, send_sfmc, area_ids, is_smoking, date
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2396,6 +2396,8 @@ export class NotificationCreateComponent {
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       frm.controls['area_ids'].setValue(area_ids);
+      frm.controls['date'].setValue(moment(date.split(' ')[0]));
+      frm.controls['time'].setValue(date.split(' ')[1]);
       if (area_ids.length > 0 && !area_ids.includes(1)) {
         frm.controls['is_target_area'].setValue(true);
         this.areasInit = frm.controls['area_ids'].value.map(item => ({ id: item }));
