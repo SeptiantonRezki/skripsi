@@ -49,17 +49,16 @@ export class ImportAudienceComponent {
     console.log('files info', this.files);
     console.log("DAT23", this.dialogData);
 
-    // if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
-    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
-    //   return;
-    // }
+    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
+      return;
+    }
 
     let fd = new FormData();
 
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     fd.append('type', this.dialogData.type);
-    console.log("fgbx231xcfvxz")
     this.dataService.showLoading(true);
     if (this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
