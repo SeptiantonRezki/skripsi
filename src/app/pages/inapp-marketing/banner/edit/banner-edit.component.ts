@@ -1570,7 +1570,7 @@ export class BannerEditComponent {
         });
         fd.append('target_audiences[]', JSON.stringify(this.audienceSelected.map(aud => aud.id)));
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
-        this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
+        this.bannerService.put(body, { banner_id: this.detailBanner.id }).subscribe(
           res => {
             this.loadingIndicator = false;
             this.router.navigate(['advertisement', 'banner']);
