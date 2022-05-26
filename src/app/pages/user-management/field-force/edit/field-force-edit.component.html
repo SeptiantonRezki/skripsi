@@ -18,29 +18,42 @@
           fxLayoutGap="16px"
         >
           <mat-form-field class="is-light form-primary">
-            <input matInput formControlName="name" placeholder="Nama" />
+            <input
+              matInput
+              formControlName="name"
+              [placeholder]="locale.global.label.name"
+            />
             <mat-error
               *ngIf="
                 formUser.get('name').hasError('required') &&
                 formUser.get('name').touched
               "
             >
-              Nama harus diisi
+              {{ locale.global.label.name }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="is-light form-primary">
-            <input matInput formControlName="username" placeholder="Username" />
+            <input
+              matInput
+              formControlName="username"
+              [placeholder]="locale.global.label.username"
+            />
             <mat-error
               *ngIf="
                 formUser.get('username').hasError('required') &&
                 formUser.get('username').touched
               "
             >
-              Username harus diisi
+              {{ locale.global.label.username }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="is-light form-primary">
-            <mat-select formControlName="type" placeholder="Tipe">
+            <mat-select
+              formControlName="type"
+              [placeholder]="locale.global.label.type"
+            >
               <mat-option [value]="type.id" *ngFor="let type of listType">{{
                 type.name
               }}</mat-option>
@@ -51,13 +64,17 @@
                 formUser.get('type').touched
               "
             >
-              Tipe harus dipilih
+              {{ locale.global.label.type }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
-          <mat-form-field class="is-light form-primary">
+          <mat-form-field
+            *ngIf="formUser.get('type').value === 'field-force'"
+            class="is-light form-primary"
+          >
             <mat-select
               formControlName="classification"
-              placeholder="Classification"
+              [placeholder]="locale.global.label.classification"
             >
               <mat-option
                 [value]="classification.id"
@@ -71,11 +88,16 @@
                 formUser.get('classification').touched
               "
             >
-              Classification harus dipilih
+              {{ locale.global.label.classification }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="is-light form-primary">
-            <input matInput formControlName="version" placeholder="Apps Version" />
+            <input
+              matInput
+              formControlName="version"
+              [placeholder]="locale.field_force.app_version"
+            />
           </mat-form-field>
         </div>
         <div
@@ -90,7 +112,7 @@
               matInput
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              placeholder="Kata Sandi Baru"
+              [placeholder]="locale.field_force.text2"
             />
             <mat-icon matSuffix (click)="showPassword = !showPassword">{{
               showPassword ? "visibility" : "visibility_off"
@@ -101,15 +123,16 @@
                 formUser.get('password').touched
               "
             >
-              Kata Sandi Baru harus diisi
+              {{ locale.field_force.text2 }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
             <mat-error
               *ngIf="
-                formUser.get('password').hasError('minlength') &&
+                formUser.get('password').hasError('pattern') &&
                 formUser.get('password').touched
               "
             >
-              Kata Sandi Baru minimal 8 karakter
+              {{ locale.global.messages.text30 }}
             </mat-error>
           </mat-form-field>
           <mat-form-field class="is-light form-primary">
@@ -117,7 +140,7 @@
               matInput
               [type]="showConfirmPassword ? 'text' : 'password'"
               formControlName="password_confirmation"
-              placeholder="Konfirmasi Kata Sandi baru"
+              [placeholder]="locale.field_force.text3"
             />
             <mat-icon
               matSuffix
@@ -132,7 +155,8 @@
                 formUser.get('password_confirmation').touched
               "
             >
-              Konfirmasi Kata Sandi Baru harus diisi
+              {{ locale.field_force.text3 }}
+              {{ locale.global.messages.mandatory_text }}
             </mat-error>
             <mat-error
               *ngIf="
@@ -140,14 +164,18 @@
                 formUser.get('password_confirmation').touched
               "
             >
-              Konfirmasi Kata Sandi Baru tidak sesuai
+              {{ locale.field_force.text3 }}
+              {{ locale.global.label.invalid }}
             </mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" class="pb-32">
           <mat-slide-toggle formControlName="status">
+            {{ locale.global.label.status }}
             {{
-              formUser.get("status").value ? "Aktif" : "Tidak Aktif"
+              formUser.get("status").value
+                ? locale.global.label.active
+                : locale.global.label.inactive
             }}</mat-slide-toggle
           >
         </div>
@@ -162,8 +190,10 @@
           class="px-24 py-16"
           style="background: #3a3a3a"
         >
-          <div style="font-size: 18px; color: white">Geotree {{ i + 1 }}</div>
-          <div *ngIf="!isDetail" ffxLayoutGap="20px">
+          <div style="font-size: 18px; color: white">
+            {{ locale.global.area.geotree }} {{ i + 1 }}
+          </div>
+          <div fxLayoutGap="20px">
             <button
               *ngIf="
                 formUser.get('areas').value.length === 1 ||
@@ -200,7 +230,8 @@
               formUser.get('areas').at(i).get('area_id').hasError('required') &&
               formUser.get('areas').touched
             "
-            >Geotree harus dilengkapi</mat-error
+            >{{ locale.global.area.geotree }}
+            {{ locale.global.messages.mandatory_text }}</mat-error
           >
         </div>
       </div>
@@ -218,7 +249,7 @@
         fxFlex="20"
         (click)="submit()"
       >
-        Update
+        {{ locale.global.button.save }}
       </button>
     </div>
   </div>
