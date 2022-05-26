@@ -1254,7 +1254,9 @@ export class BannerCreateComponent {
       }
       else if(body.content_type === "spesific_product_b2b"){
         fd.append("barcode", this.formBannerGroup.get("barcode").value.id)
+        body['barcode'] = this.formBannerGroup.get("barcode").value.id;
         fd.append("name_product", this.formBannerGroup.get("barcode").value.name)
+        body['name_product'] = this.formBannerGroup.get("barcode").value.name;
       }else{}
 
       if (body.user_group === 'retailer') {
@@ -1283,7 +1285,7 @@ export class BannerCreateComponent {
         }
         if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
           fd.append("profile", this.formBannerGroup.get("profile").value);
-          
+          body['profile'] = this.formBannerGroup.get("profile").value;
         }
         fd.append('subscription', this.formBannerGroup.get('subscription').value);
         body['subscription'] = this.formBannerGroup.get('subscription').value;
