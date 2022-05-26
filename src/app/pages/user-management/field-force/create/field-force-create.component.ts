@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import { LanguagesService } from "app/services/languages/languages.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-field-force-create",
@@ -31,6 +32,8 @@ export class FieldForceCreateComponent {
 
   limitLevel: string = "territory";
 
+  locale: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
@@ -38,8 +41,11 @@ export class FieldForceCreateComponent {
     private router: Router,
     private dataService: DataService,
     private activatedRoute: ActivatedRoute,
-    private ls: LanguagesService
-  ) {}
+    private ls: LanguagesService,
+    private trans: TranslateService
+  ) {
+    this.locale = this.ls.locale;
+  }
 
   ngOnInit() {
     this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
@@ -53,9 +59,18 @@ export class FieldForceCreateComponent {
       {
         name: ["", Validators.required],
         username: ["", Validators.required],
-        password: ["", [Validators.required, Validators.minLength(8)]],
-        password_confirmation: ["", Validators.required],
-        classification: [""],
+        password: [
+          "",
+          [
+            Validators.required,
+            Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.{8,}).*$"),
+          ],
+        ],
+        password_confirmation: [
+          { value: "", disabled: true },
+          Validators.required,
+        ],
+        classification: [{ value: "", disabled: true }],
         areas: this.formBuilder.array([], Validators.required),
         type: ["", Validators.required],
         status: [true],
@@ -75,14 +90,25 @@ export class FieldForceCreateComponent {
       if (value === "spv") level = "district";
       if (value === "asm") level = "area";
       if (value === "field-force") {
+        this.formUser.get("classification").enable();
         commonFormValidator.validators(this.formUser, "classification", [
           Validators.required,
         ]);
       } else {
+        this.formUser.get("classification").setValue("");
+        this.formUser.get("classification").disable();
         commonFormValidator.validators(this.formUser, "classification");
       }
       this.limitLevel = level;
       this.resetAreas();
+    });
+
+    this.formUser.get("password").valueChanges.subscribe((value: string) => {
+      if (value) {
+        this.formUser.get("password_confirmation").enable();
+      } else {
+        this.formUser.get("password_confirmation").disable();
+      }
     });
   }
 
@@ -98,10 +124,19 @@ export class FieldForceCreateComponent {
   dialogRemoveAreas(index: number) {
     this.removeIndex = index;
     let data = {
-      titleDialog: "Hapus Geotree",
-      captionDialog: "Apakah anda yakin untuk menghapus Geotree ini ?",
+      titleDialog:
+        this.locale.global.button.delete +
+        " " +
+        this.locale.global.area.geotree,
+      captionDialog: this.trans.instant("global.messages.delete_confirm", {
+        entity: this.locale.global.area.geotree,
+        index: "",
+      }),
       confirmCallback: this.removeAreas.bind(this),
-      buttonText: ["Hapus", "Batal"],
+      buttonText: [
+        this.locale.global.button.delete,
+        this.locale.global.button.cancel,
+      ],
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -144,7 +179,7 @@ export class FieldForceCreateComponent {
       name: this.formUser.get("name").value,
       username: this.formUser.get("username").value,
       type: this.formUser.get("type").value,
-      classification: this.formUser.get("classification").value || null,
+      classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       password: this.formUser.get("password").value,
       password_confirmation: this.formUser.get("password_confirmation").value,
@@ -159,7 +194,9 @@ export class FieldForceCreateComponent {
       },
       () => {
         this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: "Terjadi kesalahan" });
+        this.dialogService.openSnackBar({
+          message: this.locale.global.messages.error,
+        });
       }
     );
   }

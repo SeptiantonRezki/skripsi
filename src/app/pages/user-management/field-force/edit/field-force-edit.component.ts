@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { DataService } from "app/services/data.service";
 import { LanguagesService } from "app/services/languages/languages.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-field-force-edit",
@@ -31,6 +32,8 @@ export class FieldForceEditComponent {
 
   limitLevel: string = "territory";
 
+  locale: any;
+
   pageId: string;
   isDetail: boolean;
   initDetail: boolean = false;
@@ -42,8 +45,10 @@ export class FieldForceEditComponent {
     private router: Router,
     private dataService: DataService,
     private activatedRoute: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private trans: TranslateService
   ) {
+    this.locale = this.ls.locale;
     this.activatedRoute.url.subscribe((params) => {
       this.pageId = params[2].path;
       this.isDetail = params[1].path === "detail" ? true : false;
@@ -62,9 +67,12 @@ export class FieldForceEditComponent {
       {
         name: [{ value: "", disabled: true }],
         username: [{ value: "", disabled: true }],
-        password: [""],
-        password_confirmation: [""],
-        classification: [{ value: "", disabled: this.isDetail }],
+        password: [
+          "",
+          Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.{8,}).*$"),
+        ],
+        password_confirmation: [{ value: "", disabled: true }],
+        classification: [{ value: "", disabled: true }],
         areas: this.formBuilder.array([], Validators.required),
         type: [{ value: "", disabled: this.isDetail }, Validators.required],
         version: [{ value: "", disabled: true }],
@@ -109,10 +117,13 @@ export class FieldForceEditComponent {
       if (value === "spv") level = "district";
       if (value === "asm") level = "area";
       if (value === "field-force") {
+        this.formUser.get("classification").enable();
         commonFormValidator.validators(this.formUser, "classification", [
           Validators.required,
         ]);
       } else {
+        this.formUser.get("classification").setValue("");
+        this.formUser.get("classification").disable();
         commonFormValidator.validators(this.formUser, "classification");
       }
       this.limitLevel = level;
@@ -121,10 +132,12 @@ export class FieldForceEditComponent {
 
     this.formUser.get("password").valueChanges.subscribe((value: string) => {
       if (value) {
+        this.formUser.get("password_confirmation").enable();
         commonFormValidator.validators(this.formUser, "password_confirmation", [
           Validators.required,
         ]);
       } else {
+        this.formUser.get("password_confirmation").disable();
         commonFormValidator.validators(this.formUser, "password_confirmation");
       }
     });
@@ -144,10 +157,19 @@ export class FieldForceEditComponent {
   dialogRemoveAreas(index: number) {
     this.removeIndex = index;
     let data = {
-      titleDialog: "Hapus Geotree",
-      captionDialog: "Apakah anda yakin untuk menghapus Geotree ini ?",
+      titleDialog:
+        this.locale.global.button.delete +
+        " " +
+        this.locale.global.area.geotree,
+      captionDialog: this.trans.instant("global.messages.delete_confirm", {
+        entity: this.locale.global.area.geotree,
+        index: "",
+      }),
       confirmCallback: this.removeAreas.bind(this),
-      buttonText: ["Hapus", "Batal"],
+      buttonText: [
+        this.locale.global.button.delete,
+        this.locale.global.button.cancel,
+      ],
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -190,7 +212,7 @@ export class FieldForceEditComponent {
       _method: "PUT",
       name: this.formUser.get("name").value,
       type: this.formUser.get("type").value,
-      classification: this.formUser.get("classification").value || null,
+      classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
     };
@@ -211,7 +233,9 @@ export class FieldForceEditComponent {
         },
         () => {
           this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({ message: "Terjadi kesalahan" });
+          this.dialogService.openSnackBar({
+            message: this.locale.global.messages.error,
+          });
         }
       );
   }
