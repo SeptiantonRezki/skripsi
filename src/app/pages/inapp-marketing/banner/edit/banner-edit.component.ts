@@ -1358,7 +1358,8 @@ export class BannerEditComponent {
 
   async submit(status?: string) {
     console.log(this.formBannerGroup)
-    if ((this.formBannerGroup.valid && this.bannerSelected == undefined) || (this.formBannerGroup.valid && this.bannerSelected)) {
+    console.log(this.bannerSelected);
+    if ((this.formBannerGroup.valid && this.bannerSelected == undefined) || (this.formBannerGroup.valid && this.bannerSelected) || (this.formBannerGroup.valid == false)) {
 
       if (this.bannerSelected) {
         this.dataService.showLoading(true);
