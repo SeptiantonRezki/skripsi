@@ -107,6 +107,7 @@ export class FieldForceCreateComponent {
       if (value) {
         this.formUser.get("password_confirmation").enable();
       } else {
+        this.formUser.get("password_confirmation").setValue("");
         this.formUser.get("password_confirmation").disable();
       }
     });

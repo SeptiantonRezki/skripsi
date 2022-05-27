@@ -106,9 +106,16 @@
               formControlName="password"
               [placeholder]="locale.login.text3"
             />
-            <mat-icon matSuffix (click)="showPassword = !showPassword">{{
-              showPassword ? "visibility" : "visibility_off"
-            }}</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              [disableRipple]="true"
+              (click)="showPassword = !showPassword"
+            >
+              <mat-icon>{{
+                showPassword ? "visibility" : "visibility_off"
+              }}</mat-icon>
+            </button>
             <mat-error
               *ngIf="
                 formUser.get('password').hasError('required') &&
@@ -134,13 +141,16 @@
               formControlName="password_confirmation"
               [placeholder]="locale.global.label.confirm_password"
             />
-            <mat-icon
+            <button
+              mat-icon-button
               matSuffix
+              [disableRipple]="true"
               (click)="showConfirmPassword = !showConfirmPassword"
-              >{{
-                showConfirmPassword ? "visibility" : "visibility_off"
-              }}</mat-icon
             >
+              <mat-icon>{{
+                showConfirmPassword ? "visibility" : "visibility_off"
+              }}</mat-icon>
+            </button>
             <mat-error
               *ngIf="
                 formUser.get('password_confirmation').hasError('required') &&
