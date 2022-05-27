@@ -19,7 +19,7 @@
       <!-- <button mat-raised-button type="button" color="primary">
         Kelola ls.locale.global.label.cashier_access
       </button> disabled tiket CDE-2572-dissable-mass-upload -->
-      <button *ngIf="permission.export" (click)="downloadBank()" mat-raised-button type="button" class="is-danger">
+      <button *ngIf="permission.export" (click)="downloadBankAccount()" mat-raised-button type="button" class="is-danger">
         <mat-icon>arrow_downward</mat-icon> Download Bank Account
       </button>
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
