@@ -345,4 +345,8 @@
   width: 100%;
   max-width: 640px;
   min-height: 150px;
+
+  @media (max-width: 1800px) {
+    max-width: none;
+  }
 }

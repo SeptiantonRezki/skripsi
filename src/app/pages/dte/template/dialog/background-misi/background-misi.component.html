@@ -1,41 +1,45 @@
 <div class="card-misi">
   <!-- <mat-card-content> -->
-    <div class="pt-24 m-0">
-      
-      <div id="bg-misi" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="image/*"
-        [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="onSelectFile($event)" *ngIf="!isDetail">
-        <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-          <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
-          <br>
-          <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
-          </span>
-          <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
-        </div>
+  <div class="m-0">
+
+    <!-- SINGLE IMAGE -->
+    <div id="bg-misi" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="onSelectFile($event)" *ngIf="!isDetail && !isMultiple">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
+        </span>
+        <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
       </div>
-  
-      <div *ngIf="bgMisi && isSize" class="pt-48 pb-16">
-        <div>
-          <div class="deleteBanner" *ngIf="!isDetail">
-            <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
-          </div>
-          <div class="" fxLayout="row" fxLayoutGap="32px">
-            <div id="preview-bg-misi" class="preview-bg-misi" [ngStyle]="{color: colorFont}">
+    </div>
+    <div *ngIf="bgMisi && isSize" class="pt-48 pb-16">
+      <div>
+        <div class="deleteBanner" *ngIf="!isDetail">
+          <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+        </div>
+        <div class="" fxLayout="row" fxLayoutGap="32px">
+          <div id="preview-bg-misi" class="preview-bg-misi" [ngStyle]="{color: colorFont}">
 
-              <div class="previewBanner" [ngStyle]="{'background-image': 'url(' + bgMisi + ')'}"></div>
+            <div class="previewBanner" [ngStyle]="{'background-image': 'url(' + bgMisi + ')'}"></div>
 
-              <div class="preview-bg-misi__wrapper" fxLayout="column" fxLayoutGap="16px">
-                <div fxLayout="row" fxLayoutAlign="space-between">
-                  <div fxLayoutAlign="start center" fxLayoutGap="8px">
-                    <img class="preview-bg-misi__icon" src="../../../../../../assets/images/ayo/new_coin.png" srcset="../../../../../../assets/images/ayo/new_coin.png 2x">
-                    <span>100</span>
-                  </div>
-                  <div fxLayout="row" fxLayoutAlign=" center">
-                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="50px" height="25px" viewBox="0 0 7017.000000 3509.000000" preserveAspectRatio="xMidYMid meet">
-                      <metadata>
-                        Created by potrace 1.16, written by Peter Selinger 2001-2019
-                      </metadata>
-                      <g transform="translate(0.000000,3509.000000) scale(0.100000,-0.100000)" [ngStyle]="{fill: colorFont}" stroke="none">
-                        <path d="M30290 26315 l0 -8775 19940 0 19940 0 0 8775 0 8775 -19940 0
+            <div class="preview-bg-misi__wrapper" fxLayout="column" fxLayoutGap="16px">
+              <div fxLayout="row" fxLayoutAlign="space-between">
+                <div fxLayoutAlign="start center" fxLayoutGap="8px">
+                  <img class="preview-bg-misi__icon" src="../../../../../../assets/images/ayo/new_coin.png"
+                    srcset="../../../../../../assets/images/ayo/new_coin.png 2x">
+                  <span>100</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign=" center">
+                  <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="50px" height="25px"
+                    viewBox="0 0 7017.000000 3509.000000" preserveAspectRatio="xMidYMid meet">
+                    <metadata>
+                      Created by potrace 1.16, written by Peter Selinger 2001-2019
+                    </metadata>
+                    <g transform="translate(0.000000,3509.000000) scale(0.100000,-0.100000)"
+                      [ngStyle]="{fill: colorFont}" stroke="none">
+                      <path d="M30290 26315 l0 -8775 19940 0 19940 0 0 8775 0 8775 -19940 0
                         -19940 0 0 -8775z m32685 6885 c1755 -82 2952 -398 3650 -963 365 -295 629
                         -728 839 -1375 260 -801 403 -1810 468 -3302 26 -598 14 -2015 -22 -2720 -106
                         -2040 -419 -3409 -936 -4100 -95 -128 -177 -215 -293 -311 -645 -541 -1786
@@ -51,32 +55,32 @@
                         126 239 322 615 435 835 254 495 344 660 593 1090 108 187 596 1032 1084 1878
                         l889 1537 1513 0 c833 0 1514 -2 1514 -4 0 -2 -1131 -1888 -2512 -4192 l-2513
                         -4189 -5 -2595 -5 -2595 -1285 0 -1285 0 -5 2595 -5 2595 -2442 4188 c-1344
-                        2303 -2443 4190 -2443 4192 0 3 672 5 1493 5 l1493 0 1051 -1837z"/>
-                        <path d="M61225 30990 c-626 -29 -1110 -90 -1490 -187 -196 -50 -319 -94 -470
+                        2303 -2443 4190 -2443 4192 0 3 672 5 1493 5 l1493 0 1051 -1837z" />
+                      <path d="M61225 30990 c-626 -29 -1110 -90 -1490 -187 -196 -50 -319 -94 -470
                         -168 -209 -103 -335 -217 -415 -375 -266 -530 -405 -2202 -387 -4680 6 -763
                         12 -968 42 -1405 71 -1005 218 -1643 445 -1937 203 -263 689 -441 1465 -538
                         444 -55 837 -74 1535 -74 707 -1 1051 18 1495 80 729 102 1200 297 1400 579
                         265 373 412 1302 466 2950 14 438 14 1807 0 2265 -46 1482 -167 2375 -377
-                        2781 -211 409 -837 614 -2134 700 -205 13 -1334 20 -1575 9z"/>
-                        <path d="M38947 30945 c-120 -363 -2237 -6858 -2243 -6880 l-6 -25 2317 0
-                        c2091 0 2317 2 2311 16 -6 16 -2325 7001 -2330 7019 -1 6 -23 -53 -49 -130z"/>
-                        <path d="M5262 33649 l-1442 -1431 0 -1859 0 -1859 1450 0 1450 0 0 1845 0
+                        2781 -211 409 -837 614 -2134 700 -205 13 -1334 20 -1575 9z" />
+                      <path d="M38947 30945 c-120 -363 -2237 -6858 -2243 -6880 l-6 -25 2317 0
+                        c2091 0 2317 2 2311 16 -6 16 -2325 7001 -2330 7019 -1 6 -23 -53 -49 -130z" />
+                      <path d="M5262 33649 l-1442 -1431 0 -1859 0 -1859 1450 0 1450 0 0 1845 0
                         1845 6660 0 6660 0 0 -1845 0 -1845 1445 0 1445 0 -1 1863 0 1862 -1437 1427
-                        -1437 1427 -6676 0 -6676 1 -1441 -1431z"/>
-                        <path d="M0 25352 l0 -1377 2498 -2498 2497 -2497 1433 1433 1432 1432 -2443
-                        2443 -2442 2442 -1488 0 -1487 0 0 -1378z"/>
-                        <path d="M7593 25013 l1717 -1718 1432 1432 1433 1433 -285 285 -285 285
-                        -2865 0 -2865 0 1718 -1717z"/>
-                        <path d="M7592 19137 l-7592 -7592 0 -2864 0 -2864 7402 7399 c4072 4069 8777
-                        8775 10457 10457 l3054 3057 -2864 0 -2864 0 -7593 -7593z"/>
-                        <path d="M11912 14824 l-11912 -11906 0 -1459 0 -1459 1413 0 1412 0 11958
-                        11958 11957 11957 0 1408 0 1407 -1458 0 -1458 0 -11912 -11906z"/>
-                        <path d="M0 18197 l0 -2862 333 -333 c182 -182 337 -332 342 -332 6 0 654 644
+                        -1437 1427 -6676 0 -6676 1 -1441 -1431z" />
+                      <path d="M0 25352 l0 -1377 2498 -2498 2497 -2497 1433 1433 1432 1432 -2443
+                        2443 -2442 2442 -1488 0 -1487 0 0 -1378z" />
+                      <path d="M7593 25013 l1717 -1718 1432 1432 1433 1433 -285 285 -285 285
+                        -2865 0 -2865 0 1718 -1717z" />
+                      <path d="M7592 19137 l-7592 -7592 0 -2864 0 -2864 7402 7399 c4072 4069 8777
+                        8775 10457 10457 l3054 3057 -2864 0 -2864 0 -7593 -7593z" />
+                      <path d="M11912 14824 l-11912 -11906 0 -1459 0 -1459 1413 0 1412 0 11958
+                        11958 11957 11957 0 1408 0 1407 -1458 0 -1458 0 -11912 -11906z" />
+                      <path d="M0 18197 l0 -2862 333 -333 c182 -182 337 -332 342 -332 6 0 654 644
                         1440 1430 l1430 1430 -1765 1765 c-971 971 -1768 1765 -1772 1765 -5 0 -8
-                        -1288 -8 -2863z"/>
-                        <path d="M16225 10500 l-10500 -10500 2865 0 2865 0 7643 7643 7642 7642 0
-                        2858 c0 1571 -3 2857 -8 2857 -4 0 -4732 -4725 -10507 -10500z"/>
-                        <path d="M62900 14429 c-1704 -113 -3215 -731 -4410 -1805 -150 -134 -471
+                        -1288 -8 -2863z" />
+                      <path d="M16225 10500 l-10500 -10500 2865 0 2865 0 7643 7643 7642 7642 0
+                        2858 c0 1571 -3 2857 -8 2857 -4 0 -4732 -4725 -10507 -10500z" />
+                      <path d="M62900 14429 c-1704 -113 -3215 -731 -4410 -1805 -150 -134 -471
                         -460 -591 -599 -301 -349 -562 -716 -792 -1115 -102 -177 -300 -575 -377 -760
                         -586 -1391 -745 -2987 -445 -4478 133 -659 338 -1251 640 -1847 802 -1582
                         2143 -2770 3820 -3387 640 -235 1363 -383 2095 -428 214 -13 753 -13 995 0
@@ -89,8 +93,8 @@
                         -157 1757 -607 2651 -1392 91 -80 134 -112 143 -106 11 8 808 923 935 1074
                         108 127 218 327 273 494 55 166 70 265 70 471 0 221 -14 317 -74 496 -81 245
                         -191 421 -380 609 -140 141 -201 185 -445 325 -966 555 -2050 853 -3365 925
-                        -214 12 -907 11 -1090 -1z"/>
-                        <path d="M36585 14419 c-2030 -121 -3600 -1130 -4198 -2699 -184 -483 -267
+                        -214 12 -907 11 -1090 -1z" />
+                      <path d="M36585 14419 c-2030 -121 -3600 -1130 -4198 -2699 -184 -483 -267
                         -962 -267 -1540 1 -1427 473 -2393 1510 -3085 648 -432 1494 -761 2950 -1145
                         783 -207 1052 -284 1425 -410 970 -329 1399 -637 1514 -1086 33 -129 46 -314
                         33 -452 -28 -288 -129 -504 -326 -698 -290 -284 -735 -452 -1345 -505 -176
@@ -104,8 +108,8 @@
                         -7 349 24 469 200 769 1218 1123 2537 883 805 -147 1674 -529 2619 -1151 173
                         -114 236 -151 242 -141 4 7 177 258 383 558 236 342 396 584 430 651 205 400
                         216 877 31 1299 -107 246 -308 484 -533 634 -54 36 -177 104 -273 150 -1107
-                        532 -2348 802 -3658 795 -146 -1 -329 -6 -406 -10z"/>
-                        <path d="M43660 7174 l0 -7055 853 4 c820 3 856 4 949 25 220 48 442 143 615
+                        532 -2348 802 -3658 795 -146 -1 -329 -6 -406 -10z" />
+                      <path d="M43660 7174 l0 -7055 853 4 c820 3 856 4 949 25 220 48 442 143 615
                         265 113 79 291 257 370 370 123 175 219 397 265 614 l23 108 3 1613 3 1612
                         1202 0 1202 -1 770 -1151 c1565 -2340 1804 -2695 1872 -2773 181 -209 437
                         -378 703 -463 128 -41 228 -60 368 -72 143 -12 2872 -14 2872 -2 0 5 -765
@@ -117,35 +121,69 @@
                         -608 2057 -1503 34 -172 45 -290 45 -490 0 -336 -57 -612 -182 -873 -44 -93
                         -202 -334 -277 -422 -71 -82 -214 -205 -336 -286 -257 -172 -574 -295 -915
                         -355 -319 -56 -227 -53 -2052 -57 l-1688 -4 0 2001 0 2000 1601 0 c1020 0
-                        1653 -4 1747 -11z"/>
-                        <path d="M24745 10720 l-1430 -1430 1705 -1705 c938 -938 1708 -1705 1712
+                        1653 -4 1747 -11z" />
+                      <path d="M24745 10720 l-1430 -1430 1705 -1705 c938 -938 1708 -1705 1712
                         -1705 5 0 8 1286 8 2858 l0 2857 -278 278 c-152 152 -279 277 -282 277 -3 0
-                        -649 -644 -1435 -1430z"/>
-                        <path d="M20427 6402 l-1427 -1427 2488 -2488 2487 -2487 1383 0 1382 0 0
+                        -649 -644 -1435 -1430z" />
+                      <path d="M20427 6402 l-1427 -1427 2488 -2488 2487 -2487 1383 0 1382 0 0
                         1483 0 1482 -2433 2433 c-1337 1337 -2437 2432 -2442 2432 -6 0 -652 -642
-                        -1438 -1428z"/>
-                        <path d="M16117 2092 c-785 -785 -1427 -1432 -1427 -1437 0 -6 145 -155 323
+                        -1438 -1428z" />
+                      <path d="M16117 2092 c-785 -785 -1427 -1432 -1427 -1437 0 -6 145 -155 323
                         -333 l322 -322 2863 0 c1574 0 2862 3 2862 8 0 8 -3502 3512 -3510 3512 -3 0
-                        -647 -642 -1433 -1428z"/>
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-                <div fxLayout="column" fxLayoutAlign="space-between" fxFlex="1 0 auto">
-                  <div>{{judulMisi}}</div>
-                  <div>{{'dte.template_tugas.expiry_date_template' | translate}}</div>
+                        -647 -642 -1433 -1428z" />
+                    </g>
+                  </svg>
                 </div>
               </div>
+              <div fxLayout="column" fxLayoutAlign="space-between" fxFlex="1 0 auto">
+                <div>{{judulMisi}}</div>
+                <div>{{'dte.template_tugas.expiry_date_template' | translate}}</div>
+              </div>
             </div>
+          </div>
 
-            <!-- Memilih warna font -->
-            <div class="pt-16" fxLayout="column" fxLayoutGap="8px" *ngIf="!isDetail">
-              <span>{{'dte.template_tugas.font_color_settings' | translate}} :</span>
-              <input id="color-font" type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
-            </div>
+          <!-- Memilih warna font -->
+          <div class="pt-16" fxLayout="column" fxLayoutGap="8px" *ngIf="!isDetail">
+            <span>{{'dte.template_tugas.font_color_settings' | translate}} :</span>
+            <input id="color-font" type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
           </div>
         </div>
       </div>
     </div>
+
+    <!-- MULTIPLE IMAGE -->
+    <div id="guideline__drop" ngfDrop [multiple]="isMultiple" [selectable]="isMultiple" class="rectangle-16"
+      [(validDrag)]="validComboDrag" [(files)]="selectedFiles" accept="image/*"
+      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="onSelectFileMultiple($event)" *ngIf="!isDetail && isMultiple">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
+        <br>
+        <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
+        <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
+      </div>
+    </div>
+    <form name="form" [formGroup]="guidelineForm" (keydown.enter)="$event.preventDefault();">
+      <div *ngIf="currentFiles.length" class="pt-24 pb-24 guideline__wrapper">
+        <div formArrayName="guideline" *ngFor="let item of currentFiles; let index = index">
+          <div [formGroupName]="index" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+            <div class="guideline__container">
+              <div *ngIf="!isDetail">
+                <mat-icon style="cursor: pointer;" (click)="removeImageGuideline(index)">cancel_outline</mat-icon>
+              </div>
+              <img [src]="item.image_url" class="guidelineBanner" alt="guideline">
+            </div>
+            <div class="guideline__deskripsi">
+              <mat-form-field class="example-full-width guideline__deskripsi" appearance="fill">
+                <mat-label>{{'global.label.description' | translate}}</mat-label>
+                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="{{'global.label.description' | translate}}"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
 
 </div>

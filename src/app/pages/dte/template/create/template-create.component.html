@@ -731,13 +731,28 @@
         </div>
   
         <div class="background-misi" fxLayout="column">
-          <mat-checkbox id="background-misi" [formControl]="isBackgroundMisi" (change)="onChangeBgMisi()">
-            {{'dte.template_tugas.text37' | translate}}
-          </mat-checkbox>
-          <app-background-misi
-          (upload)="uploadImageBgMisi($event)"
-          [judulMisi]="templateTaskForm.value.name"
-          *ngIf="isBackgroundMisi.value"></app-background-misi>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-checkbox id="background-misi" [formControl]="isBackgroundMisi" (change)="onChangeBgMisi()">
+              {{'dte.template_tugas.text37' | translate}}
+            </mat-checkbox>
+            <mat-checkbox id="guideline" [formControl]="isGuideline" (change)="onChangeGuideline()">
+              Upload Guideline Mekanisme Program
+            </mat-checkbox>
+          </div>
+          <div *ngIf="isBackgroundMisi.value" class="mt-16">
+            <div class="mb-8">Background Misi</div>
+            <app-background-misi
+              (upload)="uploadImageBgMisi($event)"
+              [judulMisi]="templateTaskForm.value.name"
+            ></app-background-misi>
+          </div>
+          <div *ngIf="isGuideline.value" class="mt-16">
+            <div class="mb-8">Guideline Mekanisme Program</div>
+            <app-background-misi
+              (upload)="uploadImageGuideline($event)"
+              isMultiple="5"
+            ></app-background-misi>
+          </div>
         </div>
       </form>
   

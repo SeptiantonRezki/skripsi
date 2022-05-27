@@ -195,7 +195,8 @@
       "video_size_limit": "Ukuran Video melebihi batas maks 50MB",
       "size": "Ukuran",
       "select": "Pilih",
-      "opsi_index": "Opsi {{index}}"
+      "opsi_index": "Opsi {{index}}",
+      "max_count_image": "Maksimal {{count}} gambar"
     },
     "order_status": {
       "new_order": "Pesanan Baru",

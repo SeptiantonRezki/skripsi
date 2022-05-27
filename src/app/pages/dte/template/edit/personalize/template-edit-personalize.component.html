@@ -836,7 +836,7 @@
 
 
           <!-- Alasan Menolak -->
-          <div class="footer">
+          <div class="footer mb-48">
             <div class="template-task__header mb-24">{{'dte.template_tugas.text34' | translate}}</div>
             <div formArrayName="rejected_reason_choices"
               *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
@@ -862,6 +862,22 @@
             </div>
             <div class="more-option" *ngIf="!isDetail">
               <span id="add-option" class="add-option" (click)="addRejectedReason()">{{'dte.template_tugas.text36' | translate}} </span>
+            </div>
+          </div>
+
+          <!-- Guideline Mekanisme -->
+          <div class="background-misi" fxLayout="column">
+            <mat-checkbox id="guideline" [formControl]="isGuideline" (change)="onChangeGuideline()">
+              Upload Guideline Mekanisme Program
+            </mat-checkbox>
+            <div *ngIf="isGuideline.value" class="mt-16">
+              <div class="mb-8">Guideline Mekanisme Program</div>
+              <app-background-misi
+                (upload)="uploadImageGuideline($event)"
+                isMultiple="5"
+                [isDetail]="isDetail"
+                [currentFiles]="templateTaskForm.value.image_mechanism"
+              ></app-background-misi>
             </div>
           </div>
         </form>

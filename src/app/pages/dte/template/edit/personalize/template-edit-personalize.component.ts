@@ -111,6 +111,9 @@ export class TemplateEditPersonalizeComponent implements OnInit {
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
   isBackgroundMisi: FormControl = new FormControl(false);
+  isGuideline: FormControl = new FormControl(false);
+  image_mechanism_list: any[] = [];
+  image_mechanism_text_list: any[] = [];
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -306,16 +309,13 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
-      // other_name: [""],
-      // description: ["", Validators.required],
       kategori_toolbox: ["", Validators.required],
       tipe_misi: ["", Validators.required],
       tingkat_internal_misi: ["", Validators.required],
       kategori_misi: ["", Validators.required],
       project_misi: ["", Validators.required],
       image: [""],
-      // background_image: [""],
-      // background_font_color: [""],
+      image_mechanism: [],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -376,6 +376,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
     this.frmQuiz.setValue(this.detailTask.is_quiz === 1 ? 'quiz' : 'non-quiz');
+    this.templateTaskForm.get('image_mechanism').setValue(Object.values(this.detailTask.task_template_image) || []);
+    this.isGuideline.setValue(Object.values(this.detailTask.task_template_image).length ? true : false);
 
     if (this.detailTask['image_description'] === undefined) {
       this.detailTask['image_description'].map(item => {
@@ -1534,6 +1536,82 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
   }
 
+  getImageData(file: any) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(file);
+    })
+  }
+
+  uploadImageGuideline({images, forms}){
+    const initialImages = Object.values(this.detailTask.task_template_image);
+
+    // filter mana saja yang berubah
+    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
+
+    // memisahkan yang berubah dengan yang tidak
+    let imagesFile = [];
+    let newIndex = [];
+    let changedByTextIndex = [];
+    images.forEach((item: any, index) => {
+      if (item instanceof File) {
+        imagesFile.push(this.getImageData(item));
+        newIndex.push(index);
+      } else if (item.description !== forms[index].description) {
+        changedByTextIndex.push(index);
+      };
+    });
+    
+    Promise.all(imagesFile)
+      .then((data) => data.map((item, idx) => {
+        if (changed[idx] && changed[idx].hasOwnProperty('id')) {
+          // EDIT
+          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
+        } else {
+          // ADD
+          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
+        }
+      }))
+      .then((data) => {
+        if (changed.length > data.length) {
+          const newDatas = [];
+
+          // HAPUS
+          changed.map((item, idx) => {
+            if (data[idx] && data[idx].hasOwnProperty('id')){
+              newDatas.push(data[idx]);
+            } else {
+              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
+            }
+          });
+
+          return newDatas;
+        } else return data
+      })
+      .then((data) => {
+        this.image_mechanism_list = data;
+      });
+    
+    let newText = [];
+    changedByTextIndex.forEach(index => {
+      newText.push({
+        task_template_image_id: images[index].id,
+        file: "",
+        description: forms[index].description,
+      });
+    });
+    this.image_mechanism_text_list = newText;
+  }
+
+  onChangeGuideline(){
+    if (!this.isGuideline.value) {
+      this.uploadImageGuideline({images: [], forms: []});
+    }
+  }
+
   deleteImage(type, idx) {
     switch (type) {
       case 'master':
@@ -1648,6 +1726,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
       let children: any[] = this.templateTaskForm.get('children').value;
+      let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
 
       questions.map((item, index) => {
         questions[index].question = this.html2text(item.question);
@@ -1667,13 +1746,10 @@ export class TemplateEditPersonalizeComponent implements OnInit {
         task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
         task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
         name: this.templateTaskForm.get('name').value,
-        // other_name: this.templateTaskForm.get('other_name').value,
-        // description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
-        // background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
-        // background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
+        image_mechanism: new_image_mechanism || [],
         video: this.detailTask.video ? this.detailTask.video : '',
         image_detail: this.isDetailBanner ? 1 : 0,
         is_branching: this.frmIsBranching.value ? 1 : 0,

@@ -111,6 +111,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   shareable: FormControl = new FormControl(false);
   isIRTemplate: FormControl = new FormControl(false);
   isBackgroundMisi: FormControl = new FormControl(false);
+  isGuideline: FormControl = new FormControl(false);
 
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
@@ -299,16 +300,13 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
 
     this.templateTaskForm = this.formBuilder.group({
       name: ["", Validators.required],
-      // other_name: [""],
-      // description: ["", Validators.required],
       kategori_toolbox: ["", Validators.required],
       tipe_misi: ["", Validators.required],
       tingkat_internal_misi: ["", Validators.required],
       kategori_misi: ["", Validators.required],
       project_misi: ["", Validators.required],
       image: [""],
-      // background_image: [""],
-      // background_font_color: [""],
+      image_mechanism: [],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -1342,6 +1340,16 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     }
   }
 
+  uploadImageGuideline({images, forms}){
+    this.templateTaskForm.get('image_mechanism').setValue(forms);
+  }
+
+  onChangeGuideline(){
+    if (!this.isGuideline.value) {
+      this.uploadImageGuideline({images: [], forms: []});
+    }
+  }
+
   deleteImage(type, idx) {
     switch (type) {
       case 'master':
@@ -1477,13 +1485,10 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         task_toolbox_categories_id: this.templateTaskForm.get('kategori_misi').value,
         task_toolbox_project_id: this.templateTaskForm.get('project_misi').value,
         name: this.templateTaskForm.get('name').value,
-        // other_name: this.templateTaskForm.get('other_name').value,
-        // description: this.templateTaskForm.get('description').value,
         material: this.templateTaskForm.get('material').value ? 'yes' : 'no',
         material_description: this.templateTaskForm.get('material').value ? this.templateTaskForm.get('material_description').value : '',
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
-        // background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
-        // background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
+        image_mechanism: this.templateTaskForm.get('image_mechanism').value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
