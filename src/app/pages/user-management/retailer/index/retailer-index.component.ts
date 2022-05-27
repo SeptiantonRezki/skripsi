@@ -15,6 +15,7 @@ import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-retailer-index',
@@ -412,7 +413,7 @@ export class RetailerIndexComponent {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== '') {
+      if (areaSelected[0].value) {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
@@ -1210,11 +1211,6 @@ export class RetailerIndexComponent {
           this.canRequestExport = res.data.can_request;
         });
 
-        this.retailerService.exportBankAccount().subscribe(res => {
-          console.log('Status Export :', res);
-          this.resultExportBank = res.data.result;
-        });
-
         this.loadingIndicator = false;
         
       },
@@ -1224,6 +1220,15 @@ export class RetailerIndexComponent {
         this.dataService.showLoading(false);
       }
     );
+  }
+
+  downloadBankAccount() {
+    this.dataService.showLoading(true);
+    this.retailerService.exportBankAccount().subscribe(res => {
+      let filename = `Export-Retailer-Coin-Disbursement-${moment(new Date()).format('YYYY-MM-DD-hh-mm-ss')}.xlsx`;
+      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+    });
   }
 
   ngOnDestroy(){
