@@ -137,6 +137,7 @@ export class FieldForceEditComponent {
           Validators.required,
         ]);
       } else {
+        this.formUser.get("password_confirmation").setValue("");
         this.formUser.get("password_confirmation").disable();
         commonFormValidator.validators(this.formUser, "password_confirmation");
       }
