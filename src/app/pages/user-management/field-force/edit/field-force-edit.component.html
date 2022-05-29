@@ -203,7 +203,7 @@
           <div style="font-size: 18px; color: white">
             {{ locale.global.area.geotree }} {{ i + 1 }}
           </div>
-          <div fxLayoutGap="20px">
+          <div *ngIf="!isDetail" fxLayoutGap="20px">
             <button
               *ngIf="
                 formUser.get('areas').value.length === 1 ||
