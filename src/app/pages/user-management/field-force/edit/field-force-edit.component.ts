@@ -116,7 +116,7 @@ export class FieldForceEditComponent {
       let level = "territory";
       if (value === "spv") level = "district";
       if (value === "asm") level = "area";
-      if (value === "field-force") {
+      if (value === "field-force" && !this.isDetail) {
         this.formUser.get("classification").enable();
         commonFormValidator.validators(this.formUser, "classification", [
           Validators.required,

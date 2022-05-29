@@ -229,7 +229,7 @@ export class SalestreeComponent implements OnInit {
     this.geoLevel.forEach((item) => {
       let lastLevel = this.form.get(item).value;
       if (lastLevel && !Array.isArray(lastLevel)) lastLevel = [lastLevel];
-      if (!lastLevel.length) return false;
+      if (!lastLevel || !lastLevel.length) return false;
       levelId = lastLevel;
       levelKey = item;
     });
