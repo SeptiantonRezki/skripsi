@@ -5,11 +5,11 @@
     type="button"
     (click)="openDialogTipeMisi()"
   >
-    <mat-icon>add</mat-icon> BUAT
+    <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
   </button>
   <div class="table-wrapper">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-      <h2 class="pl-8">Tipe Misi</h2>
+      <h2 class="pl-8">{{'dte.pengaturan_attribute_misi.text3' | translate}}</h2>
       <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
@@ -31,19 +31,19 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [width]="100" name="Status" prop="status">
+      <ngx-datatable-column [width]="100" name="{{'global.label.status' | translate}}" prop="status">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <div class="name-container">
             <p class="status text-truncate h6 p-4"
               style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;"
               [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-              {{row.status == 'active' ? 'Aktif' : 'Tidak Aktif'}}
+              {{row.status == 'active' ? ('global.label.active' | translate) : ('global.label.inactive' | translate) }}
             </p>
           </div>
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [width]="130" name="Tindakan" headerClass="textright" [sortable]="false">
+      <ngx-datatable-column [width]="130" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
           style="justify-content: center !important">
           <div class="button-row" style="margin-left: -10px">
@@ -58,7 +58,7 @@
               <mat-icon>delete</mat-icon>
             </button> -->
             <button mat-icon-button color="primary"
-              matTooltip="Hapus Tipe Misi" [disabled]="row.status === 'active'" (click)="deleteTipeMisi(row.id)">
+              matTooltip="{{'dte.pengaturan_attribute_misi.delete_mission_type' | translate}}" [disabled]="row.status === 'active'" (click)="deleteTipeMisi(row.id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

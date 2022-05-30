@@ -299,7 +299,7 @@
                   <mat-select formControlName="bank_name" placeholder="{{'global.label.bank_name' | translate}}" #singleSelect
                     (selectionChange)="bindFormBankAccountValidator()">
                     <ngx-mat-select-search [formControl]="filterBank" placeholderLabel="{{'global.label.search' | translate}} {{'global.label.bank_name' | translate}}"
-                      noEntriesFoundLabel="{{'global.messages.data_not_found'}}">
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}">
                     </ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
                       {{item.name}}

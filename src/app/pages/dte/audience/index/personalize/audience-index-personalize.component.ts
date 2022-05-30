@@ -242,24 +242,29 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   renderStatus(status, real_status, job_status) {
     switch (job_status) {
       case "failed":
-        return "Failed";
+        return this.translate.instant('global.label.failed');
       case "requesting":
-        return "Requesting";
+        return this.translate.instant('global.messages.requesting');
       case "running":
-        return "Processing";
+        return this.translate.instant('global.label.processing');
       case "done":
         switch (status) {
           case "rejected":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.rejected');
           case "pending":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.pending');
           case "approved":
-            return real_status;
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.approved');
           default:
-            return "No Status"
+            // return "No Status"
+            return this.translate.instant('global.label.no_status');
         }
       default:
-        return "No Status"
+        // return "No Status"
+        return this.translate.instant('global.label.no_status');
     }
   }
 }

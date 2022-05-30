@@ -24,6 +24,7 @@ export class DialogCreateComponent implements OnInit {
   condition: boolean;
   loadingIndicator: Boolean;
   isColor: boolean;
+  titleParam = {entity: this.dataProps.title};
 
   constructor(
     private router: Router,

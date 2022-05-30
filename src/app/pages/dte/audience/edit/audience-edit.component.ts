@@ -33,12 +33,12 @@ export class AudienceEditComponent {
   listScheduler: Array<any>;
   listTradePrograms: any[];
   rows: any[];
-  listType: any[] = [{ name: 'Batasi Audience', value: 'limit' }, { name: 'Pilih Semua', value: 'pick-all' }]; // TODO
-  tsmScheduler: any[] = [{ name: "TSM", value: "tsm" }, { name: "Scheduler", value: "scheduler" },];
-  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }]; // TODO
+  listType: any[] = [{ name: this.translate.instant('dte.audience.text7'), value: 'limit' }, { name: this.translate.instant('dte.audience.text8'), value: 'pick-all' }]; // TODO
+  tsmScheduler: any[] = [{ name: "TSM", value: "tsm" }, { name: this.translate.instant('dte.audience.text6'), value: "scheduler" },];
+  listAudienceType: any[] = [{ name: this.translate.instant('dte.audience.text11'), value: 'mission' }, { name: this.translate.instant('dte.audience.text12'), value: 'challenge' }]; // TODO
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -47,10 +47,10 @@ export class AudienceEditComponent {
     { name: "KA", value: "KA" }
   ];
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -118,6 +118,8 @@ export class AudienceEditComponent {
 
     return true;
   }
+
+  paramImportTranslate = {entity: 'XLS'};
 
   constructor(
     private router: Router,
@@ -1215,13 +1217,13 @@ export class AudienceEditComponent {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`,
+          message: this.translate.instant('dte.audience.min_audience', {min: min}),
         });
       } else if (limit && selectedRetailer > max) {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`,
+          message: this.translate.instant('dte.audience.max_audience', {max: max}),
         });
       }
       // Audience Type = TSM, Type = any
@@ -1281,9 +1283,7 @@ export class AudienceEditComponent {
             this.loadingIndicator = false;
             this.dataService.showLoading(false);
             return this.dialogService.openSnackBar({
-              message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
-                res.selisih
-              )}!`,
+              message: this.translate.instant('dte.audience.max_funds', {funds: this.rupiahFormater.transform(res.selisih) }),
             });
           }
 
@@ -1557,7 +1557,7 @@ export class AudienceEditComponent {
       commonFormValidator.validateAllFields(this.formAudience);
 
       if (this.formAudience.valid && this.selected.length === 0) {
-        return this.dialogService.openSnackBar({ message: 'Belum ada Audience yang dipilih!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.audience.please_select_audience') });
       }
       return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
@@ -1588,13 +1588,13 @@ export class AudienceEditComponent {
       const max = audience['max'];
 
       if (limit && selectedRetailer < min)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih kurang dari ${min} Audience` });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.audience.min_audience', {min: min}) });
       else if (limit && selectedRetailer > max)
-        return this.dialogService.openSnackBar({ message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience` });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.audience.max_audience', {max: max}) });
 
       this.audienceService.validateBudget(budget).subscribe(res => {
         if (res.selisih < 0)
-          return this.dialogService.openSnackBar({ message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(res.selisih)}!` })
+          return this.dialogService.openSnackBar({ message: this.translate.instant('dte.audience.max_funds', {funds: this.rupiahFormater.transform(res.selisih) }) })
 
         let body = {
           _method: 'PUT',
@@ -1624,7 +1624,7 @@ export class AudienceEditComponent {
         this.saveData = !this.saveData;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           res => {
-            this.dialogService.openSnackBar({ message: 'Data Berhasil Diubah' })
+            this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.updated_data') })
             this.router.navigate(['dte', 'audience']);
             window.localStorage.removeItem('detail_audience');
           },
@@ -1635,7 +1635,7 @@ export class AudienceEditComponent {
         )
       })
     } else {
-      return this.dialogService.openSnackBar({ message: 'Belum ada Audience yang dipilih!' });
+      return this.dialogService.openSnackBar({ message: this.translate.instant('dte.audience.please_select_audience') });
     }
   }
 

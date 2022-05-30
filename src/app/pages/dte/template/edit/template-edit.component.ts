@@ -67,7 +67,7 @@ export class TemplateEditComponent {
   public filteredProject: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterReason: FormControl = new FormControl();
   public filteredReason: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public options: Object = Config.FROALA_CONFIG;
+  public options: Object = { ...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
 
   listChoose: Array<any> = [
@@ -1699,17 +1699,17 @@ export class TemplateEditComponent {
         return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
       if (this.templateTaskForm.get('image').invalid)
-        return this.dialogService.openSnackBar({ message: 'Gambar untuk template tugas belum dipilih!' });
+        return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_selected_image') });
 
       if (this.templateTaskForm.get('questions').invalid) {
         if (questions.value.length) {
           for (const item of questions.value) {
             if (item.image_quality_detection && !item.blocker_submission) {
-              return this.dialogService.openSnackBar({ message: 'Blocker Submission belum diisi' })
+              return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_filled_blocker_submission') })
             }
           }
         } else {
-          return this.dialogService.openSnackBar({ message: 'Pertanyaan belum dibuat, minimal ada satu pertanyaan!' })
+          return this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.not_created_question_min_one') })
         }
       }
       else

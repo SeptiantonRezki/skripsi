@@ -1967,31 +1967,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Pop-up Notifikasi"
+          name: "breadcrumbs.popup_notifikasi.index"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/notifications/popup-notification",
-          name: "Pop-up Notifikasi"
+          name: "breadcrumbs.popup_notifikasi.index"
         },
         {
           type: "current",
           url: "",
-          name: "Buat Pop-up Notifikasi"
+          name: "breadcrumbs.popup_notifikasi.create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/notifications/popup-notification",
-          name: "Pop-up Notifikasi"
+          name: "breadcrumbs.popup_notifikasi.index"
         },
         {
           type: "current",
           url: "",
-          name: "Ubah Pop-up Notifikasi"
+          name: "breadcrumbs.popup_notifikasi.edit"
         }
       ],
     }

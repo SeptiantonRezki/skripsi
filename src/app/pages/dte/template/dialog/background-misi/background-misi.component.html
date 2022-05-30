@@ -9,10 +9,9 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>
-        <span matPrefix>Tarik Gambar Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
         </span>
-        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2MB</span>
+        <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
       </div>
     </div>
     <div *ngIf="bgMisi && isSize" class="pt-48 pb-16">
@@ -138,14 +137,14 @@
               </div>
               <div fxLayout="column" fxLayoutAlign="space-between" fxFlex="1 0 auto">
                 <div>{{judulMisi}}</div>
-                <div>Batas waktu hingga : 02 Juli 2021</div>
+                <div>{{'dte.template_tugas.expiry_date_template' | translate}}</div>
               </div>
             </div>
           </div>
 
           <!-- Memilih warna font -->
           <div class="pt-16" fxLayout="column" fxLayoutGap="8px" *ngIf="!isDetail">
-            <span>Pengaturan warna font :</span>
+            <span>{{'dte.template_tugas.font_color_settings' | translate}} :</span>
             <input id="color-font" type="color" name="colorFont" [(ngModel)]="colorFont" (change)="submit()">
           </div>
         </div>
@@ -160,10 +159,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon id="icon-upload-image" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>
-        <span matPrefix>Tarik Gambar Kesini atau
-          <strong>Pilih File</strong>
-        </span>
-        <span matPrefix>Maksimum 2MB</span>
+        <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
+        <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
       </div>
     </div>
     <form name="form" [formGroup]="guidelineForm" (keydown.enter)="$event.preventDefault();">
@@ -178,8 +175,8 @@
             </div>
             <div class="guideline__deskripsi">
               <mat-form-field class="example-full-width guideline__deskripsi" appearance="fill">
-                <mat-label>Deskripsi</mat-label>
-                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="Isi Deskripsi"></textarea>
+                <mat-label>{{'global.label.description' | translate}}</mat-label>
+                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="{{'global.label.description' | translate}}"></textarea>
               </mat-form-field>
             </div>
           </div>

@@ -10,7 +10,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group>
-        <mat-tab label="Default">
+        <mat-tab label="{{'dte.task_sequencing.default' | translate}}">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
             <h2 class="pl-8">{{'dte.template_tugas.text3' | translate}}</h2>
           </div>
@@ -96,7 +96,7 @@
                 <span class="row-name">{{row.other_name}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="200" name="Deskripsi" headerClass="textright" prop="description">
+            <ngx-datatable-column [width]="200" name="{{'global.label.description' | translate}}" headerClass="textright" prop="description">
             </ngx-datatable-column>
             <ngx-datatable-column [width]="100" name="{{'dte.pengaturan_attribute_misi.text2' | translate}}" headerClass="textright" prop="task_toolbox_name">
             </ngx-datatable-column>

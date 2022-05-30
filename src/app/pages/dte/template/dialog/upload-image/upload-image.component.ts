@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, ViewEncapsulation, ViewChild, ElementRef } f
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatMenuTrigger } from '@angular/material';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'app/services/dialog.service';
 
 @Component({
@@ -28,6 +29,7 @@ export class UploadImageComponent {
     private router: Router,
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
+    private translate: TranslateService,
   ) {
     this.fileType = data.fileType;
    }
@@ -66,9 +68,9 @@ export class UploadImageComponent {
       
     } else {
       if (this.fileType == 'image') {
-        this.dialogService.openSnackBar({ message: 'Ukuran gambar melebihi 2MB'})
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.image_size_limit', {size: '2MB'}) })
       } else {
-        this.dialogService.openSnackBar({ message: 'Ukuran video melebihi 50MB'})
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.video_size_limit', {size: '50MB'}) })
       }
     }
   }

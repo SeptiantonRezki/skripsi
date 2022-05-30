@@ -14,6 +14,7 @@ import { IdleService } from 'app/services/idle.service';
 import moment from 'moment';
 import * as CryptoJS from 'crypto-js';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-task-sequencing-index',
@@ -42,6 +43,8 @@ export class TaskSequencingIndexComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  pageName = this.translate.instant('dte.task_sequencing.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private http: HttpClient,
@@ -51,7 +54,8 @@ export class TaskSequencingIndexComponent implements OnInit {
     private dataService: DataService,
     private sequencingService: SequencingService,
     private userIdle: IdleService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = false; // temporarily set to false to show the dummy table
     this.selected = []
@@ -209,10 +213,10 @@ export class TaskSequencingIndexComponent implements OnInit {
   deleteTaskSequencing(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Task Sequencing",
-      captionDialog: "Apakah anda yakin untuk menghapus task sequencing ini ?",
+      titleDialog: this.translate.instant('global.messages.delete_data', {entity: this.translate.instant('dte.task_sequencing.text1')}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('dte.task_sequencing.text1'), index: ""}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.delete')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -222,7 +226,7 @@ export class TaskSequencingIndexComponent implements OnInit {
       this.dialogService.brodcastCloseConfirmation();
       this.getSequencing();
 
-      this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
     });
   }
 

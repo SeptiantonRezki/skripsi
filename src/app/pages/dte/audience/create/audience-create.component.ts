@@ -29,6 +29,7 @@ import { environment } from "environments/environment";
 import { GeotreeService } from "app/services/geotree.service";
 import { IdbService } from "app/services/idb.service";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-audience-create",
@@ -45,17 +46,17 @@ export class AudienceCreateComponent {
   listRetailer: any;
   rows: any[];
   listType: any[] = [
-    { name: "Batasi Audience", value: "limit" },
-    { name: "Pilih Semua", value: "pick-all" },
+    { name: this.translate.instant('dte.audience.text7'), value: "limit" },
+    { name: this.translate.instant('dte.audience.text8'), value: "pick-all" },
   ]; // TODO
   tsmScheduler: any[] = [
     { name: "TSM", value: "tsm" },
-    { name: "Scheduler", value: "scheduler" },
+    { name: this.translate.instant('dte.audience.text6'), value: "scheduler" },
   ];
-  listAudienceType: any[] = [{ name: 'Misi', value: 'mission' }, { name: 'Tantangan', value: 'challenge' }];
+  listAudienceType: any[] = [{ name: this.translate.instant('dte.audience.text11'), value: 'mission' }, { name: this.translate.instant('dte.audience.text12'), value: 'challenge' }];
 
   retailClassification: any[] = [
-    { name: "Semua Tipe", value: "all" },
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
     { name: "SRC", value: "SRC" },
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "IMO", value: "IMO" },
@@ -64,10 +65,10 @@ export class AudienceCreateComponent {
     { name: "KA", value: "KA" }
   ]; // TODO
   srcClassification: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
   srcType: any[] = [
-    { name: "Semua Tipe", value: "all" }
+    { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
   selected = [];
@@ -143,6 +144,9 @@ export class AudienceCreateComponent {
     return true;
   }
 
+  pageName = this.translate.instant('dte.audience.text1');
+  titleParam = {entity: this.pageName};
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -154,7 +158,8 @@ export class AudienceCreateComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private idbService: IdbService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.exportTemplate = false;
     this.saveData = false;
@@ -1562,14 +1567,14 @@ export class AudienceCreateComponent {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih kurang dari ${min} Audience`, // TODO
+          message: this.translate.instant('dte.audience.min_audience', {min: min}),
         });
       }
       else if (limit && selectedRetailer > max) {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         return this.dialogService.openSnackBar({
-          message: `Jumlah Audience yang dipilih melebihi dari ${max} Audience`, // TODO
+          message: this.translate.instant('dte.audience.max_audience', {max: max}),
         });
       }
 
@@ -1630,9 +1635,7 @@ export class AudienceCreateComponent {
             this.loadingIndicator = false;
             this.dataService.showLoading(false);
             return this.dialogService.openSnackBar({
-              message: `Jumlah Dana Permintaan melebihi dari Jumlah Dana Trade Program, Selisih Dana : ${this.rupiahFormater.transform(
-                res.selisih
-              )}!`, // TODO
+              message: this.translate.instant('dte.audience.max_funds', {funds: this.rupiahFormater.transform(res.selisih) }), // TODO
             });
           }
 
@@ -1756,12 +1759,12 @@ export class AudienceCreateComponent {
 
       if (this.formAudience.valid && this.selected.length === 0) {
         return this.dialogService.openSnackBar({
-          message: "Belum ada Audience yang dipilih!", // TODO
+          message: this.translate.instant('dte.audience.please_select_audience'),
         });
       }
 
       return this.dialogService.openSnackBar({
-        message: "Silakan lengkapi data terlebih dahulu!", // TODO
+        message: this.translate.instant('global.label.please_complete_data'),
       });
     }
   }

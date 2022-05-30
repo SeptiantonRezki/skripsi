@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DataService } from 'app/services/data.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface ComponentCanDeactivate {
   canDeactivate: () => boolean | Observable<boolean>;
@@ -18,7 +19,7 @@ export class DteGuard implements CanActivate {
 
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private translate: TranslateService,) { }
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
     // if there are no pending changes, just allow deactivation; else confirm first
     return component.canDeactivate() ?
@@ -42,14 +43,14 @@ export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate
     }
 
     if (window.localStorage.getItem('isImport') == 'false' || !window.localStorage.getItem('isImport') || window.localStorage.getItem("isReactChanged") === "true"){
-      const leave = confirm('Perhatian: Data Anda belum tersimpan. Tekan Cancel untuk kembali dan lakukan simpan terlebih dahulu, atau tekan OK untuk meninggalkan halaman ini.');
+      const leave = confirm(this.translate.instant('dte.audience.confirm_leave'));
       if (leave) {
         window.localStorage.removeItem('isReactChanged');
         window.localStorage.removeItem('duplicate_template_task');
         return true;
       }
     }else{
-      alert("File berhasil diimport, tekan OK untuk kembali ke menu awal.");
+      alert(this.translate.instant('dte.audience.file_import_success_press_ok'));
       window.localStorage.removeItem('duplicate_template_task');
       return true;
     }

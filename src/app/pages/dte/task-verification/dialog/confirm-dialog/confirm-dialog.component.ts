@@ -8,6 +8,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { environment } from 'environments/environment';
 import { Lightbox } from 'ngx-lightbox';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   templateUrl: './confirm-dialog.component.html',
@@ -20,8 +21,8 @@ export class ConfirmDialogComponent implements OnInit {
   onLoad: boolean;
   verificationConfirm: FormControl = new FormControl();
   reasonConfirm: FormControl = new FormControl();
-  listConfirm: any[] = [{ name: 'Setujui', value: 'setuju' }, { name: 'Tolak', value: 'tolak' }];
-  listReason: any[] = [{ name: 'Alasan 1', value: 'alasan1' }, { name: 'Alasan 2', value: 'alasan2' }];
+  listConfirm: any[] = [{ name: this.translate.instant('dte.task_verification.do_approve'), value: 'setuju' }, { name: this.translate.instant('dte.task_verification.do_reject'), value: 'tolak' }];
+  listReason: any[] = [{ name: this.translate.instant('dte.task_verification.reason_index', {index: 1}), value: 'alasan1' }, { name: this.translate.instant('dte.task_verification.reason_index', {index: 2}), value: 'alasan2' }];
   isDisagree: boolean;
   reason: any;
   jumlahMisi: any;
@@ -39,6 +40,7 @@ export class ConfirmDialogComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private _lightbox: Lightbox,
+    private translate: TranslateService,
   ) {
     this.isDisagree = null;
     this.jumlahMisi = 0;
@@ -116,7 +118,7 @@ export class ConfirmDialogComponent implements OnInit {
         })) : [];
         if (dataSubmission_.data.image) {
           if (dataSubmission_.data.image.indexOf('http') < 0) {
-            dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image;
+            dataSubmission_.data.image = 'https://d1fcivyo6xvcac.cloudfront.net/' + dataSubmission_.data.image; // TODO: move base url to config
           }
         }
 
@@ -145,7 +147,7 @@ export class ConfirmDialogComponent implements OnInit {
           if (item.type === 'radio_numeric' || item.type == 'radio_text' || item.type == 'radio_textarea') {
             if (!item.additional.includes(item.answer[0])) {
               let newAdditional = [...item.additional];              
-              newAdditional[newAdditional.length - 1] = `Lainnya - ${item.answer[0]}`;
+              newAdditional[newAdditional.length - 1] = `${this.translate.instant('dte.task_verification.other')} - ${item.answer[0]}`;
               item.additional = newAdditional;
             }
           }
@@ -183,7 +185,7 @@ export class ConfirmDialogComponent implements OnInit {
       this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
-      alert('Terjadi Kesalahan saat verifikasi misi');
+      alert(this.translate.instant('dte.task_verification.verify_mission_error'));
     });
   }
 
@@ -198,7 +200,7 @@ export class ConfirmDialogComponent implements OnInit {
       this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
-      alert('Terjadi Kesalahan saat release coin');
+      alert(this.translate.instant('dte.task_verification.release_coin_error'));
     });
   }
 
@@ -215,7 +217,7 @@ export class ConfirmDialogComponent implements OnInit {
       this.dialogRef.close('data');
     }, err => {
       this.dataService.showLoading(false);
-      alert('Terjadi Kesalahan saat release coin');
+      alert(this.translate.instant('dte.task_verification.release_coin_error'));
     });
   }
 
@@ -224,19 +226,19 @@ export class ConfirmDialogComponent implements OnInit {
     if (statusConfirm === 'setuju') {
       console.log('SETUJU')
       const data = {
-        titleDialog: 'Apakah anda yakin untuk menyetujui misi ini?',
+        titleDialog: this.translate.instant('dte.task_verification.approve_confirm_message'),
         captionDialog: null,
         confirmCallback: this.confirmVerifikasiMisi.bind(this),
-        buttonText: ["Setujui", "Batal"]
+        buttonText: [this.translate.instant('dte.task_verification.do_approve'), this.translate.instant('global.button.cancel')]
       };
       this.dialogService.openCustomConfirmationDialog(data);
     } else {
       console.log('TOLAK');
       const data = {
-        titleDialog: 'Silahkan isi alasan penolakan',
+        titleDialog: this.translate.instant('dte.task_verification.fill_reject_reason'),
         captionDialog: null,
         confirmCallback: this.confirmVerifikasiMisi.bind(this),
-        buttonText: ["Tolak", "Batal"],
+        buttonText: [this.translate.instant('dte.task_verification.do_reject'), this.translate.instant('global.button.cancel')],
         isDisagree: true,
         listRadio: this.listReason
       };

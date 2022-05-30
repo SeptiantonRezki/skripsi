@@ -20,7 +20,7 @@
   </mat-form-field>
   <mat-form-field fxFlex="20%" class="is-light form-primary">
     <mat-select
-      placeholder="Region"
+      placeholder="{{'global.area.regional' | translate}}"
       formControlName="region"
       (selectionChange)="getLevel('region')"
       multiple
@@ -67,7 +67,7 @@
       class="is-danger"
       (click)="import()"
     >
-      <mat-icon>arrow_downward</mat-icon> Import XLS
+      <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
     </button>
     <button
       mat-raised-button
@@ -75,7 +75,7 @@
       class="is-danger"
       (click)="export()"
     >
-      <mat-icon>arrow_upward</mat-icon> Export XLS
+      <mat-icon>arrow_upward</mat-icon> {{'global.button.export' | translate}} XLS
     </button>
     <a #downloadLink></a>
   </div>
@@ -135,22 +135,22 @@
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column
-      name="Code"
+      name="{{'global.label.code' | translate}}"
       prop="code"
       [sortable]="false"
     ></ngx-datatable-column>
-    <ngx-datatable-column name="Region" prop="region" [sortable]="false">
+    <ngx-datatable-column name="{{'global.area.regional' | translate}}" prop="region" [sortable]="false">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{ row.region ? row.region : "-" }}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Zone" prop="zone" [sortable]="false">
+    <ngx-datatable-column name="{{'global.area.zone' | translate}}" prop="zone" [sortable]="false">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         {{ row.zone ? row.zone : "-" }}
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column
-      name="Tipe"
+      name="{{'global.label.type' | translate}}"
       prop="type"
       [sortable]="false"
     ></ngx-datatable-column>

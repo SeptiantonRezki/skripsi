@@ -38,7 +38,7 @@
                   placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}">
                 <mat-error
                   *ngIf="createForm.controls['startDate'].hasError('required') && createForm.controls['startDate'].touched">
-                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_mulai">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -50,7 +50,7 @@
                   placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}">
                 <mat-error
                   *ngIf="createForm.controls['endDate'].hasError('required') && createForm.controls['endDate'].touched">
-                  {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text'}}
+                  {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="tanggal_berakhir">
                   <mat-icon matDatepickerToggleIcon>date_range</mat-icon>

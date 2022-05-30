@@ -108,7 +108,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Dana" prop="budget">
+        <ngx-datatable-column name="{{'dte.trade_program.balance' | translate}}" prop="budget">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.budget_format_currency}}
           </ng-template>
@@ -126,13 +126,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tanggal Kadaluarsa Coin" prop="coin_expiry_date">
+        <ngx-datatable-column name="{{'dte.trade_program.coin_expiry_date' | translate}}" prop="coin_expiry_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status_publish" [sortable]="false">
+        <ngx-datatable-column name="{{'global.label.status' | translate}}" prop="status_publish" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
@@ -143,7 +143,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
               <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">

@@ -148,6 +148,7 @@ export class PopupNotificationIndexComponent {
       }),
       captionDialog: this.translate.instant('global.messages.delete_confirm', {
         entity: this.pageName,
+        index: ''
       }),
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]

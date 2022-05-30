@@ -1,14 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="(isDetail ? 'Detil' : 'Ubah') + ' Task Sequence'">
+  <page-content-header contentTitle="{{ isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.edit_entity' | translate:titleParam) }}">
     <div class="button-row" fxLayout="row">
       <div fxLayout="column">
         <button id="btn-export-coin" mat-raised-button style="border: 1px solid; margin-right: 10px" (click)="export()" [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)">
           <mat-icon>arrow_upward</mat-icon>
-          EXPORT COIN
+          {{'dte.task_sequencing.export_coin' | translate}}
         </button>
-        <label *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)" style="margin: 0px 0 0 15px;">Requesting File</label>
-        <a id="btnDownloadFile" *ngIf="taskSequenceForm.get('export_coin_status').value === 'done' && taskSequenceForm.get('export_coin_result').value" [href]="taskSequenceForm.get('export_coin_result').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Download File</a>
+        <label *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('export_coin_status').value)" style="margin: 0px 0 0 15px;">{{'dte.task_sequencing.requesting_file' | translate}}</label>
+        <a id="btnDownloadFile" *ngIf="taskSequenceForm.get('export_coin_status').value === 'done' && taskSequenceForm.get('export_coin_result').value" [href]="taskSequenceForm.get('export_coin_result').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">{{'global.button.download_file' | translate}}</a>
         <!-- <label style="margin: 0px 0 0 15px;">Download File</label> -->
       </div>
       <a #downloadLink></a>
@@ -16,10 +16,10 @@
         <button id="btn-import-coin" mat-raised-button style="border: 1px solid" (click)="checkReminder()" *ngIf="!isDetail"
         [disabled]="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value)">
           <mat-icon>arrow_downward</mat-icon>
-          IMPORT COIN
+          {{'dte.task_sequencing.import_coin' | translate}}
         </button>
         <label
-          *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value) && taskSequenceForm.get('import_coin_status_type').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">Requesting {{taskSequenceForm.get('import_coin_status_type').value.toUpperCase()}}</label>
+          *ngIf="!ENABLE_EXPORT_IF.includes(taskSequenceForm.get('import_coin_status').value) && taskSequenceForm.get('import_coin_status_type').value" style="margin: 10px 0 0 15px; font-weight: bolder; color: white;">{{'global.messages.requesting' | translate}} {{taskSequenceForm.get('import_coin_status_type').value.toUpperCase()}}</label>
       </div>
     </div>
   </page-content-header>
@@ -30,7 +30,7 @@
       <img fxFlex="30" [src]="'assets/images/ayo/tsm.png'" style="max-width: 30%; margin-top: 3rem">
       <div fxFlex="40">
         <div fxLayout="row" fxLayoutAlign="space-between">
-          <span class="h1"><strong>{{ isDetail ? 'Detil' : 'Ubah' }} Task Sequence</strong></span>
+          <span class="h1"><strong>{{ isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.edit_entity' | translate:titleParam) }}</strong></span>
         </div>
         <form name="form" [formGroup]="taskSequenceForm" (keydown.enter)="$event.preventDefault();">
 
@@ -42,7 +42,7 @@
               <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" formControlName="namaTrade">
               <mat-error
                 *ngIf="taskSequenceForm.controls['namaTrade'].hasError('required') && taskSequenceForm.controls['namaTrade'].touched ">
-                Nama Trade harus diisi.
+                Nama Trade {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -50,7 +50,7 @@
               <input matInput type="text" placeholder="Budget" formControlName="budget">
               <mat-error
                 *ngIf="taskSequenceForm.controls['budget'].hasError('required') && taskSequenceForm.controls['budget'].touched ">
-                Budget harus diisi.
+                Budget {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>-->
             <mat-form-field fxFlex="100" class="is-light">
@@ -58,7 +58,7 @@
                 [readonly]="data?.is_editable === 0">
               <mat-error
                 *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
-                {{ls.locale.global.label.name}} harus diisi.
+                {{ls.locale.global.label.name}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -78,7 +78,7 @@
               </mat-select>
               <mat-error
                 *ngIf="taskSequenceForm.controls['trade_creator_id'].hasError('required') && taskSequenceForm.controls['trade_creator_id'].touched">
-                Pilih salah satu trade program.
+                {{'dte.task_sequencing.select_trade_program' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -86,9 +86,9 @@
               <!-- <mat-select placeholder="Pilih Group Audience" formControlName="group_audience" id="group_audience">
                 <mat-option *ngFor="let item of audiences" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select [disabled]="data?.is_editable === 0"  formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
-                <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'" [clearSearchInput]="false">
+              <mat-select [disabled]="data?.is_editable === 0"  formControlName="trade_audience_group_id" placeholder="{{'dte.task_sequencing.text10' | translate}}" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
+                <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false">
                 </ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTA | async" [value]="item.id">
                   {{item.name}}
@@ -96,39 +96,39 @@
               </mat-select>
               <mat-error
                 *ngIf="taskSequenceForm.controls['trade_audience_group_id'].hasError('required') && taskSequenceForm.controls['trade_audience_group_id'].touched">
-                Pilih salah satu group audience.
+                {{'dte.task_sequencing.select_group_audience' | translate}}
               </mat-error>
             </mat-form-field>
 
-            <h3 class="h3"><strong>Masa Berlaku Task Sequence</strong></h3>
+            <h3 class="h3"><strong>{{'dte.task_sequencing.text13' | translate}}</strong></h3>
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
-                placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date" [readonly]="data?.is_editable === 0">
+                placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" formControlName="start_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
               <mat-datepicker #start_date [disabled]="data?.is_editable === 0"></mat-datepicker>
               <mat-error class="mt-8 px-24"
                 *ngIf="taskSequenceForm.controls['start_date'].hasError('required') && taskSequenceForm.controls['start_date'].touched">
-                Tanggal mulai harus diisi.
+                {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
-                placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="end_date" [readonly]="data?.is_editable === 0">
+                placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" formControlName="end_date" [readonly]="data?.is_editable === 0">
               <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
               <mat-datepicker #end_date [disabled]="data?.is_editable === 0"></mat-datepicker>
               <mat-error class="mt-8 px-24"
                 *ngIf="taskSequenceForm.controls['end_date'].hasError('required') && taskSequenceForm.controls['end_date'].touched">
-                Tanggal berakhir harus diisi.
+                {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
             <button id="{{isDetail ? 'btn-detail' : 'btn-edit'}}" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
               [disabled]="taskSequenceForm.controls['name'].invalid || taskSequenceForm.controls['trade_creator_id'].invalid || taskSequenceForm.controls['trade_audience_group_id'].invalid || taskSequenceForm.controls['start_date'].invalid || taskSequenceForm.controls['end_date'].invalid"
               [routerLink]="['/dte','mission-builder',(isDetail ? 'detail' : 'edit')]">
-              {{ isDetail ? 'CEK DETIL' : 'SUBMIT' }}
+              {{ isDetail ? ('dte.task_sequencing.check_detail' | translate) : ('global.button.submit' | translate) }}
             </button>
 
           </div>

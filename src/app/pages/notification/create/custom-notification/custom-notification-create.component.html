@@ -1,19 +1,19 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Customized Push Notification'">
+  <page-content-header contentTitle="{{'notification.custom_notifikasi.page_name' | translate}}">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <form autocomplete="off" [formGroup]="formNotification">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-          <h2 class="">Buat Customized Push Notification</h2>
+          <h2 class="">{{'notification.custom_notifikasi.page_name' | translate}}</h2>
         </div>
         <div class="ayo-middle" fxLayout="column">
           <div class="pb-16">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
-                <strong>Grup Pengguna</strong>
+                <strong>{{'notification.buat_notifikasi.text4' | translate}}</strong>
               </h3>
             </div>
             <mat-radio-group formControlName="user_group" class="radio-group" (change)="selectChange($event)">
@@ -31,7 +31,7 @@
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['content_type'].hasError('required') && formNotification.controls['content_type'].touched">
-                  {{'notification.popup_notifikasi.text15' | translate}} harus diisi
+                  {{'notification.popup_notifikasi.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -46,17 +46,17 @@
                 <mat-datepicker #startPicker></mat-datepicker>
                 <mat-error
                   *ngIf="formNotification.controls['recurrence_start_date'].hasError('required') && formNotification.controls['recurrence_start_date'].touched">
-                  Tanggal mulai harus diisi.
+                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field fxFlex="30" class="is-light form-primary">
-                <input matInput formControlName="recurrence_time" placeholder="Waktu Terbit" [ngxTimepicker]="time" [format]="24" readonly/>
+                <input matInput formControlName="recurrence_time" placeholder="{{'notification.buat_notifikasi.release_time' | translate}}" [ngxTimepicker]="time" [format]="24" readonly/>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #time></ngx-material-timepicker>
                 <mat-error
                   *ngIf="formNotification.controls['recurrence_time'].hasError('required') && formNotification.controls['recurrence_time'].touched">
-                  Waktu terbit harus diisi
+                  {{'notification.buat_notifikasi.release_time' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -65,10 +65,10 @@
 
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px" fxLayoutAlign="end center" class="p-16 export">
           <button mat-raised-button type="button" class="is-danger" (click)="export()">
-            <mat-icon>arrow_upward</mat-icon> Export template
+            <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
           </button>
           <button mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
-            <mat-icon>arrow_downward</mat-icon> Import template
+            <mat-icon>arrow_downward</mat-icon> {{'global.label.import_template' | translate}}
           </button>
         </div>
 
@@ -91,25 +91,25 @@
           (sort)="onSort($event)"
         >
 
-          <ngx-datatable-column [width]="100" name="ID" prop="id">
+          <ngx-datatable-column [width]="100" name="{{'notification.popup_notifikasi.text2' | translate}}" prop="id">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.id}}
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column [width]="200" name="Target User" prop="target_user">
+          <ngx-datatable-column [width]="200" name="{{'notification.buat_notifikasi.target_user' | translate}}" prop="target_user">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.target_user}}
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column [width]="200" name="Header Notification" prop="header_notification">
+          <ngx-datatable-column [width]="200" name="{{'notification.buat_notifikasi.text9' | translate}}" prop="header_notification">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.header_notification}}
             </ng-template>
           </ngx-datatable-column>
 
-          <ngx-datatable-column [width]="200" name="Content Notification" prop="content_notification">
+          <ngx-datatable-column [width]="200" name="{{'notification.buat_notifikasi.text10' | translate}}" prop="content_notification">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               {{row.content_notification}}
             </ng-template>
