@@ -158,7 +158,8 @@ export class TradeCreateComponent {
 
   getSubGroupTradeProgram() {
     this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
-      this.listSubGroupTradeProgram = res.data ? res.data.data : [];
+      const data = res.data ? res.data.data.filter((item: any) => item.status === "active") : [];
+      this.listSubGroupTradeProgram = data;
       this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
     })
   }
