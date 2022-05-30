@@ -18,17 +18,16 @@ export class SubGroupTradeComponent implements OnInit {
   loading = true;
   permission: any;
   roles: PagesName = new PagesName();
-  formSaveData: boolean = true;
+  formIsDirty: boolean = false;
 
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
-    return this.formSaveData;
+    return !this.formIsDirty;
   }
 
   @HostListener("window:message", ["$event"])
   onMessage({ data }) {
-    console.log(data);
-    if (data.type === "form") this.formSaveData = data.saveData;
+    if (data.type === "form") this.formIsDirty = data.isDirty;
     if (data.type === "redirect") this.router.navigate(data.path.split("/"));
   }
 
