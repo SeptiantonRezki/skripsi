@@ -273,7 +273,7 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
-      barcode:["", Validators.required]
+      barcode:[""]
     })
 
     this.formFilter = this.formBuilder.group({
@@ -1125,8 +1125,9 @@ export class BannerCreateComponent {
     } else {
       this.formBannerGroup.controls['url_iframe'].disable();
     }
-
+    this.formBannerGroup.get("barcode").setValue("");
     if(value === "spesific_product_b2b"){
+      this.formBannerGroup.get("barcode").setValidators([Validators.required]);
       this.formBannerGroup.controls['barcode'].enable()
     }else{
       this.formBannerGroup.controls['barcode'].setValue("")
@@ -1255,6 +1256,7 @@ export class BannerCreateComponent {
       else if(body.content_type === "spesific_product_b2b"){
         fd.append("barcode", this.formBannerGroup.get("barcode").value.id)
         body['barcode'] = this.formBannerGroup.get("barcode").value.id;
+        this.formBannerGroup.controls['barcode'].enable();
         fd.append("name_product", this.formBannerGroup.get("barcode").value.name)
         body['name_product'] = this.formBannerGroup.get("barcode").value.name;
       }else{}
