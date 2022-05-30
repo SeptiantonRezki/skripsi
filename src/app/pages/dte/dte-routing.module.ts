@@ -686,17 +686,20 @@ const routes: Routes = [
   {
     path: 'sub-group-trade-program',
     component: SubGroupTradeComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'sub-group-trade-program/create',
     component: SubGroupTradeComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'sub-group-trade-program/edit/:id',
     component: SubGroupTradeComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'sub-group-trade-program/detail/:id',
