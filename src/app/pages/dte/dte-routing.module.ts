@@ -714,17 +714,20 @@ const routes: Routes = [
   {
     path: 'employee-mapping',
     component: EmployeeMappingComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'employee-mapping/create',
     component: EmployeeMappingComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'employee-mapping/edit/:id',
     component: EmployeeMappingComponent,
-    canActivate: [PageGuard]
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'employee-mapping/detail/:id',
