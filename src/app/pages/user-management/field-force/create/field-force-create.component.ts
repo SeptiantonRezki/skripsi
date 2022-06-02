@@ -26,8 +26,6 @@ export class FieldForceCreateComponent {
   ];
   areaFromLogin: any;
   formUser: FormGroup;
-  showPassword: boolean = false;
-  showConfirmPassword: boolean = false;
   removeIndex: number;
 
   limitLevel: string = "territory";
@@ -55,33 +53,14 @@ export class FieldForceCreateComponent {
   }
 
   createForm() {
-    this.formUser = this.formBuilder.group(
-      {
-        name: ["", Validators.required],
-        username: ["", Validators.required],
-        password: [
-          "",
-          [
-            Validators.required,
-            Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.{8,}).*$"),
-          ],
-        ],
-        password_confirmation: [
-          { value: "", disabled: true },
-          Validators.required,
-        ],
-        classification: [{ value: "", disabled: true }],
-        areas: this.formBuilder.array([], Validators.required),
-        type: ["", Validators.required],
-        status: [true],
-      },
-      {
-        validator: commonFormValidator.isEqual(
-          "password",
-          "password_confirmation"
-        ),
-      }
-    );
+    this.formUser = this.formBuilder.group({
+      name: ["", Validators.required],
+      username: ["", Validators.required],
+      classification: [{ value: "", disabled: true }],
+      areas: this.formBuilder.array([], Validators.required),
+      type: ["", Validators.required],
+      status: [true],
+    });
   }
 
   setEvents() {
@@ -101,15 +80,6 @@ export class FieldForceCreateComponent {
       }
       this.limitLevel = level;
       this.resetAreas();
-    });
-
-    this.formUser.get("password").valueChanges.subscribe((value: string) => {
-      if (value) {
-        this.formUser.get("password_confirmation").enable();
-      } else {
-        this.formUser.get("password_confirmation").setValue("");
-        this.formUser.get("password_confirmation").disable();
-      }
     });
   }
 
@@ -182,8 +152,6 @@ export class FieldForceCreateComponent {
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
-      password: this.formUser.get("password").value,
-      password_confirmation: this.formUser.get("password_confirmation").value,
       status: this.formUser.get("status").value ? "active" : "inactive",
     };
     this.dataService.showLoading(true);
