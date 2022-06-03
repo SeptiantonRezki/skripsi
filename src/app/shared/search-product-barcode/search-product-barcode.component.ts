@@ -77,6 +77,7 @@ export class SearchProductBarcodeComponent implements OnInit {
     }
     if (!search) {
       this.filteredOptions = [];
+      this.filteredOptions = this.initData;
       return;
     }
     this.isFetching = true;
