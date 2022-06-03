@@ -202,6 +202,7 @@
          // get_audience: `${AYO_API_SERVICE(SERVER.banner)}/api/v1/banner/${type_api}/banner/audience`,
          get_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences`,
          export_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/export`,
+         test_import_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/importtest`,
          import_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/general/business/list-audiences/import`,
          get_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience`,
          export_c_audience: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-audience/export`,
