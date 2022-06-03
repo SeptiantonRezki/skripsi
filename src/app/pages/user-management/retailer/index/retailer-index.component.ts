@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 
 @Component({
   selector: 'app-retailer-index',
@@ -36,10 +37,12 @@ export class RetailerIndexComponent {
   exportAccessCashier: boolean;
   canRequestExport = true;
   resultExport = null;
+  resultExportBank = null;
 
   keyUp = new Subject<string>();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadBankLink') downloadBankLink: ElementRef;
   @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -412,7 +415,7 @@ export class RetailerIndexComponent {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== '') {
+      if (areaSelected[0].value) {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
@@ -1221,6 +1224,15 @@ export class RetailerIndexComponent {
     );
   }
 
+  downloadBankAccount() {
+    this.dataService.showLoading(true);
+    this.retailerService.exportBankAccount().subscribe(res => {
+      let filename = `Export-Retailer-Coin-Disbursement-${moment(new Date()).format('YYYY-MM-DD-hh-mm-ss')}.xlsx`;
+      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+    });
+  }
+
   ngOnDestroy(){
     this.dataService.setToStorage('selected_zone', []);
     this.dataService.setToStorage('selected_region', []);
@@ -1392,6 +1404,11 @@ export class RetailerIndexComponent {
   download() {
     this.downloadLink.nativeElement.href = this.resultExport;
     this.downloadLink.nativeElement.click();
+  }
+
+  downloadBank() {
+    this.downloadBankLink.nativeElement.href = this.resultExportBank;
+    this.downloadBankLink.nativeElement.click();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {

@@ -12,7 +12,7 @@ import {
   MatSelectModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
 } from "@angular/material";
 import { ToolbarSearchComponent } from "./toolbar-search/toolbar-search.component";
 import { PageContentComponent } from "./page-content-header/page-content-header.component";
@@ -47,6 +47,7 @@ import { TranslateModule } from "@ngx-translate/core";
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     ngfModule,
+    MatAutocompleteModule,
     TranslateModule.forChild(),
   ],
   declarations: [

@@ -48,19 +48,19 @@ export class ImportAudienceComponent {
 
     console.log('files info', this.files);
     console.log("DAT23", this.dialogData);
-    
-    if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
-      return;
-    }
+
+    // if (this.dialogData.fileType && this.files.name.indexOf(`.${this.dialogData.fileType}`) == -1) {
+    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.file_extension', { type: this.dialogData.fileType.toUpperCase() }) });
+    //   return;
+    // }
 
     let fd = new FormData();
-  
+
     fd.append('file', this.files);
     fd.append('audience', this.dialogData.audience);
     fd.append('type', this.dialogData.type);
     this.dataService.showLoading(true);
-    if(this.dialogData.api) {
+    if (this.dialogData.api) {
       this.dialogData.api(fd).subscribe(
         res => {
           if (res) {
@@ -73,7 +73,7 @@ export class ImportAudienceComponent {
               invalid: this.invalidData,
               valid: data.length - this.invalidData
             };
-            if(this.invalidData > 0) {
+            if (this.invalidData > 0) {
               const filterData = () => {
                 this.rows = this.rows.filter(item => item.flag || item.is_valid);
                 this.invalidData = 0;

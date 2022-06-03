@@ -1,9 +1,10 @@
-<mat-form-field fxLayout="row wrap" class="is-light form-primary search-product-barcode">
+<mat-form-field fxLayout="row wrap" [hideRequiredMarker]="true" class="is-light form-primary search-product-barcode">
   <input
     matInput
-    placeholder="Barcode Produk"
+    [placeholder]="inputPlaceHolder"
     [formControl]="search"
     [matAutocomplete]="auto"
+    required
     #searchInput
   />
   <mat-autocomplete
@@ -14,8 +15,8 @@
     <mat-option *ngFor="let item of filteredOptions" [value]="item.id">
       {{ item.name }} - {{item.id}}
     </mat-option>
-    <mat-option *ngIf="!isLoading() && !filteredOptions.length" disabled>
-      Tidak ada produk yang ditemukan
+    <mat-option *ngIf="search.value && !isLoading() && !filteredOptions.length" disabled>
+      {{errorMessage}}
     </mat-option>
     <mat-option *ngIf="isLoading()" disabled>
       <div class="spinner">
