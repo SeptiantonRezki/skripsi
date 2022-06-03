@@ -1998,6 +1998,32 @@ export class BannerCreateComponent {
     });
   }
 
+  testimport(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {
+      type: this.formBannerGroup.get("group_type").value,
+      audience: this.formBannerGroup.get("user_group").value,
+      api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importTestAudience' : 'importCustomerAudience'](fd),
+      fileType: 'xls'
+    };
+
+    this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.audienceSelected = response;
+        this.onSelect({ selected: this.audienceSelected });
+        if (response.data) {
+          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+        }
+      }
+    });
+  }
+
   getSelectedArea(value: any) {
     this.selectedArea = value;
   }
