@@ -385,6 +385,7 @@
                   >
                     Image Quality Detection
                   </mat-checkbox>
+                  <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">QRCode</mat-checkbox>
                   <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
 

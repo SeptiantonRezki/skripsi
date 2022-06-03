@@ -882,7 +882,8 @@ export class TemplateEditComponent {
         ),
         upcCodeMax:item.max_upc_code ? [item.max_upc_code, Validators.required] : "",
         upcCoin:item.upc_coin_conversion? [item.upc_coin_conversion, Validators.required] : "",
-        upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : ""
+        upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : "",
+        qrCode: item.qrcode_on_off
       }));
       
       this.handleChangeImageDetection(index);
@@ -1104,6 +1105,7 @@ export class TemplateEditComponent {
       questions.at(index).get("upcCoin").disable();
       questions.at(index).get("upcBrandFamily").setValue("");
       questions.at(index).get("upcBrandFamily").disable();
+      questions.at(index).get("qrCode").setValue(false);
     }
   }
 
@@ -1232,6 +1234,7 @@ export class TemplateEditComponent {
       upcCodeMax:["",],
       upcCoin:["",],
       upcBrandFamily:["",],
+      qrCode:[false,],
     }))
 
     this.allQuestionList.push({
@@ -1549,6 +1552,7 @@ export class TemplateEditComponent {
             mockup['upc_coin_conversion'] = item.upcCoin;
             mockup['name_brand'] = item.upcBrandFamily.name;
             mockup['code_brand'] = item.upcBrandFamily.id;
+            mockup['qrcode_on_off'] = item.qrCode;
           }
 
           if (item.type === 'planogram_ir') {

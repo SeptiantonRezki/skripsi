@@ -938,6 +938,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       questions.at(index).get("upcCOin").disable();
       questions.at(index).get("upcBrandFamily").setValue("");
       questions.at(index).get("upcBrandFamily").disable();
+      questions.at(index).get("upcCode").setValue(false);
     }
   }
 
@@ -1163,6 +1164,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       upcCodeMax:["",],
       upcCoin:[""],
       upcBrandFamily:[""],
+      qrCode:[false]
       // others: false,
       // required: false
     }));
@@ -1641,6 +1643,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
             mockup['upc_coin_conversion'] = item.upcCoin;
             mockup['name_brand'] = item.upcBrandFamily.name;
             mockup['code_brand'] = item.upcBrandFamily.id;
+            mockup['qrcode_on_off'] = item.qrCode;
           }
 
           if (item.type === 'planogram_ir' && this.templateListImageIR[index]['ir_id']) {

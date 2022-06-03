@@ -852,8 +852,6 @@ export class TemplateCreateComponent {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    console.log(questions.at(index).get("upcBrandFamily"))
-    console.log(questions.at(index).get("upcCoin"))
     
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
@@ -869,6 +867,7 @@ export class TemplateCreateComponent {
       questions.at(index).get("upcCoin").disable();
       questions.at(index).get("upcBrandFamily").setValue("");
       questions.at(index).get("upcBrandFamily").disable();
+      questions.at(index).get("qrCode").setValue(false);
     }
   }
 
@@ -1101,7 +1100,8 @@ export class TemplateCreateComponent {
       blocker_submission: ["", Validators.required],
       upcCodeMax:[""],
       upcCoin:[""],
-      upcBrandFamily:[""]
+      upcBrandFamily:[""],
+      qrCode:[false]
       // others: false,
       // required: false
     }));
@@ -1413,6 +1413,7 @@ export class TemplateCreateComponent {
             mockup['upc_coin_conversion'] = item.upcCoin;
             mockup['name_brand'] = item.upcBrandFamily.name;
             mockup['code_brand'] = item.upcBrandFamily.id;
+            mockup['qrcode_on_off'] = item.qrCode;
           }
 
           if (item.type === 'stock_check_ir' && this.templateListImageIR[index]['ir_id']) {
