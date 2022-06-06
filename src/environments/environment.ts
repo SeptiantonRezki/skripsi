@@ -28,7 +28,7 @@ export const getDynamicBranding = (): any => {
         image: environment.cambodia_image,
         image_2x: environment.cambodia_image_2x,
         navbar_icon: environment.cambodia_image,
-        navbar_icon_2x: environment.cambodia_image_2x
+        navbar_icon_2x: environment.cambodia_image_2x,
       }
     default: {
       return {
@@ -36,7 +36,7 @@ export const getDynamicBranding = (): any => {
         image: environment.image,
         image_2x: environment.image_2x,
         navbar_icon: "assets/images/ayo/Horizontal_(Alt_White)@2x.png",
-        navbar_icon_2x: "assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x"
+        navbar_icon_2x: "assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x",
       }
     }
   }
