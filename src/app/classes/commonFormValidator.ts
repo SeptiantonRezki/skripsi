@@ -4,7 +4,9 @@ import {
   FormGroup,
   Validators,
   FormControl,
-  FormArray
+  FormArray,
+  ValidatorFn,
+  ValidationErrors
 } from "@angular/forms";
 
 export class commonFormValidator {
@@ -88,5 +90,34 @@ export class commonFormValidator {
       console.log('ist oke ?');
       return null;
     }
+  }
+
+  public static markAllAsTouched(formGroup: FormGroup): void {
+    (Object as any).values(formGroup.controls).forEach((control: any) => {
+      control.markAsTouched();
+      if (control.controls) {
+        this.markAllAsTouched(control);
+      }
+    });
+  }
+
+  public static isEqual(control1: string, control2: string): ValidatorFn {
+    return (control: AbstractControl): null => {
+      const form = control as FormGroup;
+      const controlValue1 = form.get(control1).value;
+      const controlValue2 = form.get(control2).value;
+
+      if (controlValue1 && controlValue2 && controlValue1 !== controlValue2) {
+        form.get(control2).setErrors({ notEqual: true });
+      }
+
+      return null;
+    };
+  }
+
+  public static validators(form: AbstractControl, field: string, rules?: any) {
+    if (rules) form.get(field).setValidators(rules);
+    else form.get(field).clearValidators();
+    form.get(field).updateValueAndValidity();
   }
 }
