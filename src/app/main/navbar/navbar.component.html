@@ -5,7 +5,10 @@
     <div class="navbar-header">
 
       <div class="logo">
-        <img class="logo-icon" src="assets/images/ayo/Horizontal_(Alt_White)@2x.png" srcset="assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x">
+        <img *ngIf="branding.locale !== 'km'" class="logo-icon" src="assets/images/ayo/Horizontal_(Alt_White)@2x.png"
+          srcset="assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x">
+        <img *ngIf="branding.locale === 'km'" class="logo-icon" [src]="branding?.navbar_icon"
+          [srcset]="branding?.navbar_icon_2x" style="height: 55px;width: 55px;">
       </div>
 
       <button mat-icon-button class="toggle-button-navbar" (click)="toggleSidebarFolded()" fxHide.lt-lg>

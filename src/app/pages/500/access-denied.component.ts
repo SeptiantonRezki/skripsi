@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FuseConfigService } from "@fuse/services/config.service";
-import { environment } from "environments/environment";
+import { environment, getDynamicBranding } from "environments/environment";
 
 @Component({
   selector: "app-access-denied",
@@ -9,6 +9,7 @@ import { environment } from "environments/environment";
 })
 export class AccessDeniedComponent {
   environment: any;
+  branding: any;
   constructor(private fuseConfig: FuseConfigService) {
     this.fuseConfig.setConfig({
       layout: {
@@ -19,5 +20,6 @@ export class AccessDeniedComponent {
     });
 
     this.environment = environment;
+    this.branding = getDynamicBranding();
   }
 }

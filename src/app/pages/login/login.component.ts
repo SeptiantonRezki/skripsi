@@ -9,7 +9,7 @@ import { commonFormValidator } from "../../classes/commonFormValidator";
 import { DialogService } from "../../services/dialog.service";
 import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from 'crypto-js';
-import { environment } from "environments/environment";
+import { environment, getDynamicBranding } from "environments/environment";
 import { IdleService } from "../../services/idle.service";
 import { GeneralService } from "app/services/general.service";
 import * as _ from 'underscore';
@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
   password: any;
   userlogin: any;
   environment: any;
+  branding: any;
 
   showPassword = false;
   showExternalUserFields = false;
@@ -84,6 +85,7 @@ export class LoginComponent implements OnInit {
     this.rememberMe.setValue(false);
 
     this.environment = environment;
+    this.branding = getDynamicBranding();
   }
 
   ngOnInit() {
@@ -129,7 +131,7 @@ export class LoginComponent implements OnInit {
       );
     });
 
-    this.countrySetupService.getOptionCountry().subscribe(({data}) => {
+    this.countrySetupService.getOptionCountry().subscribe(({ data }) => {
       // console.log({res});
       this.COUNTRIES = data;
     });
