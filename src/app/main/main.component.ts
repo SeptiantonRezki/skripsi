@@ -7,7 +7,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 
 import { navigation } from 'app/navigation/navigation';
 import { DataService } from 'app/services/data.service';
-import { environment } from 'environments/environment';
+import { environment, getDynamicBranding } from 'environments/environment';
 import { Emitter } from 'app/helper/emitter.helper';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GeneralService } from "app/services/general.service";
@@ -27,6 +27,7 @@ export class FuseMainComponent implements OnDestroy {
     showLoading: Boolean;
     showProgress: Boolean;
     environment: any;
+    branding: any;
     chatIsOpen: boolean;
     listenOnLangChange: any;
 
@@ -65,6 +66,7 @@ export class FuseMainComponent implements OnDestroy {
 
         this.navigation = navigation;
         this.environment = environment;
+        this.branding = getDynamicBranding();
         this.emitter.listenChatIsOpenQ.subscribe((value) => {
             // console.log('wehhhh', value);
             this.chatIsOpen = value;
@@ -83,7 +85,7 @@ export class FuseMainComponent implements OnDestroy {
         });
 
         this.listenOnLangChange = this.translate.onLangChange.subscribe((res: any) => {
-            if (res && res.translations ) {
+            if (res && res.translations) {
                 this.ls.locale = res.translations;
             }
         });
