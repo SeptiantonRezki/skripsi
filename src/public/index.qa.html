@@ -10,8 +10,9 @@
   <meta name="keywords" content="HMS AYO SRC">
   <meta name="author" content="PT. SRC Indonesia Sembilan">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https://*.google-analytics.com https://*.doubleclick.net https://*.src.id https://*.googleapis.com https://*.google.com https://*.cookielaw.org https://*.gstatic.com https://*.googletagmanager.com https://*.amazonaws.com https://*.w3.org https://www.pmiprivacy.com https://i2.wp.com/www.solidcolore.com https://*.firebaseio.com https://*.qiscus.com https://api.whatsapp.com https://*.ytimg.com https://*.cloudfront.net *.amazoncognito.com; connect-src 'self' 'unsafe-inline' ws: wss: wss://*.firebaseio.com wss://*.qiscus.com:1886 https://*.qiscus.com https://*.src.id https://*.google-analytics.com https://*.google.com https://*.cookielaw.org https://*.doubleclick.net https://*.googleapis.com">
-  
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https://*.google-analytics.com https://*.doubleclick.net https://*.src.id https://*.googleapis.com https://*.google.com https://*.cookielaw.org https://*.gstatic.com https://*.googletagmanager.com https://*.amazonaws.com https://*.w3.org https://www.pmiprivacy.com https://i2.wp.com/www.solidcolore.com https://*.firebaseio.com https://*.qiscus.com https://api.whatsapp.com https://*.ytimg.com https://*.cloudfront.net *.amazoncognito.com; connect-src 'self' 'unsafe-inline' ws: wss: wss://*.firebaseio.com wss://*.qiscus.com:1886 https://*.qiscus.com https://*.src.id https://*.google-analytics.com https://*.google.com https://*.cookielaw.org https://*.doubleclick.net https://*.googleapis.com">
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="assets/icons/meteocons/style.css" rel="stylesheet">
@@ -218,8 +219,10 @@
     <div class="center">
 
       <div class="logo">
-        <img src="assets/images/ayo/AYO_SRC_(Alt_White).png" style="width: 160px; margin: 0 auto;"
-          srcset="assets/images/ayo/AYO_SRC_(Alt_White)@2x.png 2x">
+        <!-- <img src="assets/images/ayo/AYO_SRC_(Alt_White).png" style="width: 160px; margin: 0 auto;"
+          srcset="assets/images/ayo/AYO_SRC_(Alt_White)@2x.png 2x"> -->
+        <img id="image_loading_logo" style="width: 160px; margin: 0 auto;">
+
       </div>
 
       <!-- Material Design Spinner -->
@@ -256,5 +259,17 @@
 </body>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5bW8GWFDn3WscWt9axCLFQ_3rc5_HPDg"></script>
 <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDnmG7joNQJDuSD0mIG_uEfayqE4x5RCw"></script> -->
+<script>
+  let user_country = window.localStorage.getItem("user_country") || "id";
+  let image_logo = document.querySelector("#image_loading_logo");
+
+  if (user_country === 'km') {
+    image_logo.setAttribute("src", "assets/images/louk/louk_new.png");
+    image_logo.setAttribute("srcset", "assets/images/louk/louk_new.png 2x");
+  } else {
+    image_logo.setAttribute("src", "assets/images/ayo/icon/dev_white.png");
+    image_logo.setAttribute("srcset", "assets/images/ayo/icon/dev_white@2x.png 2x");
+  }
+</script>
 
 </html>
