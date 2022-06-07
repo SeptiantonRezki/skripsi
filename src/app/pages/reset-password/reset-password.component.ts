@@ -10,7 +10,7 @@ import {
   ActivatedRoute,
   Params
 } from "../../../../node_modules/@angular/router";
-import { environment } from "environments/environment";
+import { environment, getDynamicBranding } from "environments/environment";
 import { DataService } from "app/services/data.service";
 import { LanguagesService } from "app/services/languages/languages.service";
 
@@ -29,6 +29,7 @@ export class ResetPasswordComponent implements OnInit {
   showConfirmPassword = false;
 
   environment: any;
+  branding: any;
   status: any;
 
   constructor(
@@ -74,6 +75,7 @@ export class ResetPasswordComponent implements OnInit {
       });
 
     this.environment = environment;
+    this.branding = getDynamicBranding();
   }
 
   ngOnInit() {

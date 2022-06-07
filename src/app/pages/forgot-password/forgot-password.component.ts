@@ -10,7 +10,7 @@ import {
   ActivatedRoute,
   Params
 } from "../../../../node_modules/@angular/router";
-import { environment } from "environments/environment";
+import { environment, getDynamicBranding } from "environments/environment";
 import { LanguagesService } from "app/services/languages/languages.service";
 
 @Component({
@@ -23,6 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordFormErrors: any;
 
   environment: any;
+  branding: any;
 
   constructor(
     private fuseConfig: FuseConfigService,
@@ -45,6 +46,7 @@ export class ForgotPasswordComponent implements OnInit {
     };
 
     this.environment = environment;
+    this.branding = getDynamicBranding();
   }
 
   ngOnInit() {
