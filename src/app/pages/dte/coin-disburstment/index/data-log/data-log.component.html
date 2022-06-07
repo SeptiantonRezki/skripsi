@@ -13,43 +13,23 @@
   [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
   (page)="setPage($event)" (sort)="onSort($event)">
 
-  // TODO: UBAH semua prop
-  <ngx-datatable-column [width]="200" name="Program Name" prop="name">
+  <ngx-datatable-column [width]="100" name="ID Cron" prop="id"></ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="Tanggal Cron" prop="date"></ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="Program Name" prop="trade_program_name"></ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="WBS" prop="sub_group_trade_program_wbs"></ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="Budget Owner Name" prop="approver_name">
   </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="Salestree" prop="retailer_menukarkan_koin">
+  <ngx-datatable-column [width]="200" name="Budget Approval Status" prop="status">
   </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="WBS" prop="jml_koin_yang_sudah_ditukar">
+  <ngx-datatable-column [width]="200" name="Payment Status" prop="status_payment">
   </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="Number Row" prop="jml_src_yang_menukar_saldo_pojok_bayar">
-  </ngx-datatable-column>
-  <ngx-datatable-column [width]="200" name="Total Value" prop="jml_src_yang_menukar_transfer_bank">
-  </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="PIC" prop="jml_coin_yang_ditukar_saldo_pojok_bayar">
-  </ngx-datatable-column>
-
-  <ngx-datatable-column [sortable]="false" name="Status" prop="status">
+  <ngx-datatable-column [width]="200" name="Total Value" prop="total_value">
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-      <div class="name-container">
-        <p class="status text-truncate h6 p-4 status-order mat-green-800-bg" style="text-transform: capitalize;"
-          *ngIf="row.status == 'publish'">
-          {{row.status}}
-        </p>
-        <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg" style="text-transform: capitalize;"
-          *ngIf="row.status == 'unpublish'">
-          {{row.status}}
-        </p>
-        <p class="status text-truncate h6 p-4 status-order mat-orange-900-bg" style="text-transform: capitalize;"
-          *ngIf="row.status == 'draft'">
-          {{row.status}}
-        </p>
-      </div>
+      <span>{{ row.total_value | rupiahFormaterWithoutRp }}</span>
     </ng-template>
   </ngx-datatable-column>
-
-  <ngx-datatable-column [width]="200" name="Progress" prop="jml_coin_yang_ditukar_saldo_pojok_bayar">
+  <ngx-datatable-column [width]="200" name="Total Request" prop="total_request">
+  </ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="Progress" prop="payment_progress">
   </ngx-datatable-column>
 </ngx-datatable>
