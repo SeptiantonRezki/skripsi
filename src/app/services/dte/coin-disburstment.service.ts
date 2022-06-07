@@ -72,4 +72,9 @@ export class CoinDisburstmentService extends BaseService {
     return this.postApi(url, body);
   }
 
+  getDataLog(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'data_log_get');
+    return this.getApi(url, queryParams);
+  }
+
 }

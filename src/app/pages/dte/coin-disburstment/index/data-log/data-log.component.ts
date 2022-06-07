@@ -70,11 +70,12 @@ export class DataLogComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    // TODO: UBAH API
-    this.coinDisburstmentService.get(this.pagination).subscribe(
+    this.coinDisburstmentService.getDataLog(this.pagination).subscribe(
       res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
+        console.log('res', res);
+        
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data.data;
         this.onLoad = false;
         this.loadingIndicator = false;
       }, err => {
@@ -96,10 +97,9 @@ export class DataLogComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    // TODO: UBAH API
-    this.coinDisburstmentService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.coinDisburstmentService.getDataLog(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
       this.loadingIndicator = false;
     });
   }
@@ -114,10 +114,9 @@ export class DataLogComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    // TODO: UBAH API
-    this.coinDisburstmentService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.coinDisburstmentService.getDataLog(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
       this.loadingIndicator = false;
     });
   }
@@ -135,10 +134,9 @@ export class DataLogComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    // TODO: UBAH API
-    this.coinDisburstmentService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+    this.coinDisburstmentService.getDataLog(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data.data;
       this.loadingIndicator = false;
     });
   }
