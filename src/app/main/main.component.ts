@@ -35,6 +35,8 @@ export class FuseMainComponent implements OnDestroy {
     gtmUrl: string = "https://www.googletagmanager.com/ns.html?id=GTM-WPLNLPW"
     urlSafe: SafeResourceUrl;
 
+    isDownloadPage: boolean = false;
+
     @HostBinding('attr.fuse-layout-mode') layoutMode;
 
     constructor(
@@ -72,6 +74,10 @@ export class FuseMainComponent implements OnDestroy {
 
         this.isShowGTM = environment.show_gtm;
         this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.gtmUrl);
+
+        // HIDE SIDEBAR AND TOOLBAR FOR DOWNLOAD NEEDS
+        const isParams = window.location.search !== "";
+        this.isDownloadPage = (isParams && window.location.href.includes("download")) || false;
     }
 
     ngOnInit() {
