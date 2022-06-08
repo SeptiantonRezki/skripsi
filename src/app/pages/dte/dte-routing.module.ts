@@ -676,6 +676,10 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: 'coin-redemption-approval/download',
+    component: CoinRedemptionApprovalComponent,
+  },
+  {
     path: 'employee-mapping',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard],
