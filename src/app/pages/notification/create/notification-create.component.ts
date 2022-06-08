@@ -22,6 +22,7 @@ import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-notification-create',
@@ -227,7 +228,8 @@ export class NotificationCreateComponent {
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
     private ls: LanguagesService,
-    private bannerService: BannerService
+    private bannerService: BannerService,
+    private translate:TranslateService
   ) {
     this.multipleImageContentType = [];
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -408,7 +410,7 @@ export class NotificationCreateComponent {
       } else if(res === 'tsm'){
         this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }];
       } else{
-        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
+        this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Landing Page", value: "landing_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, {name:this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
         
       }
 

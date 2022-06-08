@@ -94,16 +94,14 @@
               </div>
             </div>
           </div>
-
           <!-- spesifik produk b2b -->
           <div fxLayout="row" *ngIf=" formNotification.controls['user_group'].value === 'retailer' && formNotification.get('content_type').value === 'spesific_product_b2b'">
-              <search-product-barcode [errorMessage]="'Tidak ada produk ditemukan'" [inputPlaceHolder]="'Cari Produk'" fxFlex="45" [value]="formNotification.controls['barcode'].value" (onChange)="handleSearchProduct($event)" [disabled]="this.actionType === 'detail'">
+              <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate" [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45" [value]="formNotification.controls['barcode'].value" (onChange)="handleSearchProduct($event)" [disabled]="this.actionType === 'detail'">
                 <mat-error
                 *ngIf="formNotification.controls['barcode'].hasError('required') && formNotification.controls['barcode'].touched">
                 <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
                 translate}} -->
-                
-                Barcode Produk Harus diisi
+               {{'search_product_component.error_form' | translate}}
               </mat-error>
               </search-product-barcode>
           </div>

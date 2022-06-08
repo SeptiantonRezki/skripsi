@@ -24,6 +24,7 @@ import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service
 import { PagesName } from 'app/classes/pages-name';
 import { BannerService } from 'app/services/inapp-marketing/banner.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-popup-notification-edit',
@@ -172,7 +173,8 @@ export class PopupNotificationEditComponent {
     private geotreeService: GeotreeService,
     private b2bInjectVoucherService: B2BVoucherInjectService,
     private bannerService: BannerService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService
   ) {
     this.adapter.setLocale('id');
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
@@ -402,7 +404,7 @@ export class PopupNotificationEditComponent {
       }
 
       if (res === 'retailer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, {name:this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
