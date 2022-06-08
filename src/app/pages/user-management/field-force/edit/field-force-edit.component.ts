@@ -26,8 +26,6 @@ export class FieldForceEditComponent {
   ];
   areaFromLogin: any;
   formUser: FormGroup;
-  showPassword: boolean = false;
-  showConfirmPassword: boolean = false;
   removeIndex: number;
 
   limitLevel: string = "territory";
@@ -63,28 +61,15 @@ export class FieldForceEditComponent {
   }
 
   createForm() {
-    this.formUser = this.formBuilder.group(
-      {
-        name: [{ value: "", disabled: true }],
-        username: [{ value: "", disabled: true }],
-        password: [
-          "",
-          Validators.pattern("(?=.*[a-z])(?=.*[A-Z])(?=.{8,}).*$"),
-        ],
-        password_confirmation: [{ value: "", disabled: true }],
-        classification: [{ value: "", disabled: true }],
-        areas: this.formBuilder.array([], Validators.required),
-        type: [{ value: "", disabled: this.isDetail }, Validators.required],
-        version: [{ value: "", disabled: true }],
-        status: [{ value: true, disabled: this.isDetail }],
-      },
-      {
-        validator: commonFormValidator.isEqual(
-          "password",
-          "password_confirmation"
-        ),
-      }
-    );
+    this.formUser = this.formBuilder.group({
+      name: [{ value: "", disabled: this.isDetail }, Validators.required],
+      username: [{ value: "", disabled: this.isDetail }, Validators.required],
+      classification: [{ value: "", disabled: true }],
+      areas: this.formBuilder.array([], Validators.required),
+      type: [{ value: "", disabled: this.isDetail }, Validators.required],
+      version: [{ value: "", disabled: true }],
+      status: [{ value: true, disabled: this.isDetail }],
+    });
   }
 
   getDetails() {
@@ -128,19 +113,6 @@ export class FieldForceEditComponent {
       }
       this.limitLevel = level;
       if (this.initDetail) this.resetAreas();
-    });
-
-    this.formUser.get("password").valueChanges.subscribe((value: string) => {
-      if (value) {
-        this.formUser.get("password_confirmation").enable();
-        commonFormValidator.validators(this.formUser, "password_confirmation", [
-          Validators.required,
-        ]);
-      } else {
-        this.formUser.get("password_confirmation").setValue("");
-        this.formUser.get("password_confirmation").disable();
-        commonFormValidator.validators(this.formUser, "password_confirmation");
-      }
     });
   }
 
@@ -212,17 +184,12 @@ export class FieldForceEditComponent {
     let body = {
       _method: "PUT",
       name: this.formUser.get("name").value,
+      username: this.formUser.get("username").value,
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
     };
-    if (this.formUser.get("password").value) {
-      body["password"] = this.formUser.get("password").value;
-      body["password_confirmation"] = this.formUser.get(
-        "password_confirmation"
-      ).value;
-    }
     this.dataService.showLoading(true);
     this.fieldForcePrincipal
       .put(body, { fieldforce_id: this.pageId })
