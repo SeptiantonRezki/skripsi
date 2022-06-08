@@ -57,7 +57,7 @@
       "inactive": "Inactive",
       "search": "Search",
       "today": "Today",
-      "all": "Semua",
+      "all": "All",
       "delete_retailer": "Delete Retailer",
       "delete_wholesaler": "Delete Wholesaler",
       "delete_voucher": "Delete Voucher",
@@ -94,7 +94,110 @@
       "all_district": "All District",
       "owner_information": "Owner Information",
       "upload_image": "Upload Image",
-      "updated_by": "Updated By"
+      "updated_by": "Updated By",
+      "all_access_cashier": "All Cashier Access",
+      "cashier_access": "Cashier Access",
+      "store_type": "Store Type",
+      "code": "Code",
+      "yes": "Yes",
+      "no": "No",
+      "src": "SRC",
+      "ws_downline": "WS Downline",
+      "static_page": "Static Page",
+      "landing_page": "Landing Page",
+      "iframe": "iframes",
+      "image": "images",
+      "unlinked": "Unlinked",
+      "ewallet": "E-Wallet",
+      "link_to_browser": "Link to Web Browser",
+      "verified": "Verified",
+      "subscribe": "Subscribe",
+      "unsubscribe": "Unsubscribe",
+      "smoking": "Smoking",
+      "not_smoke": "No Smoking",
+      "male": "male",
+      "female": "girl",
+      "inapp_banner": "In-App Banner",
+      "update_profile": "Change Profile",
+      "subscription_store": "Subscription Store",
+      "saved_location": "Saved Location",
+      "privacy_settings": "Privacy Settings",
+      "employee_only": "Employee Only",
+      "mission": "Mission",
+      "customer": "Customer",
+      "my_profile": "My Profile",
+      "capital_corner": "Capital Corner",
+      "src_catalog": "SRC Catalog",
+      "pay_corner": "Pay Corner",
+      "nearby": "Nearby",
+      "play_together": "Play Together",
+      "challenge": "Challenge",
+      "opportunity": "Opportunity",
+      "coupon": "Coupon",
+      "voucher": "Vouchers",
+      "please_complete_data": "Please complete the data first!",
+      "no_selected_image": "The {{type}} image has not been selected!",
+      "no_selected_content": "The image content has not been selected",
+      "duplicate_data": "There is a duplicate {{entity}}, please check your data again!",
+      "salestree": "Salestree",
+      "select_data_to_export": "Select {{entity}} to export!",
+      "invalid_data": "Invalid data",
+      "data": "Data",
+      "type": "Type",
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "total": "Total",
+      "edit_entity": "Change {{entity}}",
+      "detail_entity": "Details {{entity}}",
+      "add_entity": "Add {{entity}}",
+      "delete_entity": "Delete {{entity}}",
+      "create_entity": "Create {{entity}}",
+      "product": "Product",
+      "import_entity": "Import {{entity}}",
+      "export_entity": "Export {{entity}}",
+      "import_sku_innerhtml": "Drag File Here (Max. 10,000 SKU Rows) or <strong>Select File</strong>",
+      "copy_link": "Copy Link",
+      "generate_link": "GENERATE LINK",
+      "discount": "Discount",
+      "delete_image": "Delete image",
+      "qry": "QTY",
+      "promotion": "Promotion",
+      "list_entity": "List {{entity}}",
+      "all_type": "All types",
+      "consumer": "Consumer",
+      "failed": "Failed",
+      "processing": "Processing",
+      "no_status": "No Status",
+      "please_import_file": "Please import the file first",
+      "checking_success": "Check Process Successful",
+      "min_audience": "should not be less than the minimum number of audiences",
+      "failed_import": "Failed to import Data!",
+      "invalid_data_double_check": "There was an error in the data. Please check your data again",
+      "import_template": "Import Template",
+      "all_zone": "All Zones",
+      "all_regional": "All Regional",
+      "all_area": "All Area",
+      "all_salespoint": "All Salespoint",
+      "all_district2": "All Districts",
+      "all_territory": "All Territory",
+      "no_selected_video_content": "Video content has not been selected",
+      "drag_video_or_select": "Drag Video here or <strong>select file</strong>",
+      "month": "Month",
+      "select_area_to_export":"Select area to export!",
+      "please_recheck": "Please check again",
+      "file": "files",
+      "you_uploaded": "what you uploaded!",
+      "area_code": "Area Code",
+      "upload": "Uploads",
+      "video": "Videos",
+      "image2": "Image",
+      "format_video_landscape": "MP4 Format, Landscape video, Maximum 50MB",
+      "video_size_limit": "Video size exceeds 50MB max limit",
+      "size": "Size",
+      "select": "Select",
+      "opsi_index": "Options {{index}}",
+      "max_count_image": "Maximum {{count}} images",
+			"spesific_product_b2b":"B2B Product Specific"
     },
     "order_status": {
       "new_order": "New Order",
@@ -108,7 +211,8 @@
       "delivery_ready": "Ready to Ship",
       "pickup_ready": "Ready To Pick Up",
       "on_delivery": "In Delivery",
-      "not_paid_off": "Not yet paid off"
+      "not_paid_off": "Not yet paid off",
+      "handed_over": "Order Submitted"
     },
     "button": {
       "save": "Save",
@@ -127,8 +231,13 @@
       "export": "Export",
       "deactivate": "Deactivate",
       "update_status": "UPDATE STATUS",
-			"yes_continue": "Yes, continue",
-			"no_cancel": "No, cancel"
+      "yes_continue": "Yes, continue",
+      "no_cancel": "No, cancel",
+      "create": "CREATE",
+      "check": "CHECK",
+      "filter": "FILTERS",
+      "submit": "SUBMIT",
+      "download_file": "Download File"
     },
     "area": {
       "national": "National",
@@ -176,7 +285,63 @@
       "text29": "Are you sure you want to delete Sales tree {{ index }}?",
       "text30": "Password must be 8 characters long, and contain both uppercase and lowercase letters",
       "export_option": "or select Export File as your File reference.",
-      "invalid_email": "Invalid Email"
+      "invalid_email": "Invalid Email",
+      "throttle_message_forgot_password": "You have requested a password reset more than 5 times, please try again tomorrow",
+      "network_error": "An error occurred, your connection is lost or your internet is having problems!",
+      "not_found": "Invalid data / not found",
+      "invalid_credential": "Invalid Email / Password you entered",
+      "error": "An error occurred",
+      "invalid_reason": "Invalid Reason",
+      "send_email_notif": "Send Notification Email",
+      "send_email_notif_to": "You will send a notification email to",
+      "no_selected_user": "No user selected",
+      "failed_partial_import_at": "Failed to import Partial Data! on page ",
+      "delete_data": "Delete {{entity}}",
+      "delete_confirm": "Are you sure you want to delete {{entity}} {{index}} ?",
+      "file_extension": "Required File Extension {{type}}!",
+      "please_reupload": "Please re-upload {{entity}}",
+      "reupload_invalid": "Invalid {{entity}} data, please re-upload.",
+      "failed_upload_reffer_export": "Upload failed, the uploaded file did not match. Please double check your file, or select Export File as your File reference.",
+      "requesting": "Requesting",
+      "image_size_limit": "Image size exceeds {{size}}",
+      "video_size_limit": "Video size exceeds {{size}}"
+    },
+    "calendar": {
+      "april": "april",
+      "august": "August",
+      "daily": "Daily",
+      "december": "December",
+      "february": "February",
+      "friday": "Friday",
+      "january": "January",
+      "july": "July",
+      "june": "June",
+      "march": "March",
+      "may": "May",
+      "monday": "Monday",
+      "monthly": "Monthly",
+      "november": "November",
+      "october": "October",
+      "saturday": "Saturday",
+      "september": "september",
+      "sunday": "Sunday",
+      "thursday": "Thursday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "weekly": "Weekly",
+      "yearly": "Annual",
+      "jan_s": "Jan",
+      "feb_s": "Feb",
+      "mar_s": "Mar",
+      "apr_s": "Apr",
+      "may_s": "May",
+      "jun_s": "Jun",
+      "jul_s": "Jul",
+      "aug_s": "Aug",
+      "sep_s": "Sep",
+      "oct_s": "Oct",
+      "nov_s": "Nov",
+      "dec_s": "Dec"
     }
   },
   "login": {
@@ -202,6 +367,12 @@
     "text6": "This application already uses Single Sign On. You can reset the password in Password Manager.",
     "text7": "Password reset was successful, please login again",
     "text8": "Password with password confirmation does not match"
+  },
+  "forgot_password": {
+    "text1": "Forgot Password",
+    "text2": "Back to",
+    "text3": "Login",
+    "text4": "Email is required"
   },
   "dashboard": {
     "dashboard1": "Welcome to Dashboard"
@@ -276,7 +447,8 @@
     "text16": "No principal admin selected",
     "text17": "Admin Details",
     "text18": "Username",
-    "text19": "Admin Detail"
+    "text19": "Admin Detail",
+    "create_title": "Create Admin Principal"
   },
   "field_force": {
     "page_title": "Field Force List",
@@ -308,10 +480,18 @@
     "grant_access": "View Grant Access",
     "has_branch": "Has a Branch Store",
     "total_branch": "Number of Branch Stores",
-    "area": "Area"
+    "area": "Area",
+    "grant_access_supplier": "Grant Access To Supplier",
+    "id_access": "Access ID",
+    "tax_access": "Akses TAX Number",
+    "no_document": "No Document Displayed",
+    "card": "Card",
+    "number": "Number",
+    "copy_number": "Copy Number"
   },
   "retailer": {
     "list": {
+      "page_title": "Retailer List",
       "text1": "Join in the Community",
       "text2": "Community Name",
       "text3": "Internal Classification",
@@ -321,7 +501,13 @@
       "text7": "Customer Code",
       "text8": "Customer’s Name",
       "text9": "Customer Type",
-      "text10": "Referral Code Input Date"
+      "text10": "Referral Code Input Date",
+      "apps_version_ayo_toko": "Apps Version AYO SRC Toko",
+      "apps_version_ayo_cashier": "Apps Version AYO SRC Kasir",
+      "pojok_bayar_validation": "corner Pay Validation",
+      "bank_account_validation": "Validated Bank Account",
+      "gsr": "GSR",
+      "gsm_pl": "GSM PL"
     },
     "medal_badge": {
       "text1": "Medal",
@@ -331,7 +517,17 @@
       "text5": "Create Medal",
       "text6": "Are you sure you want to delete this Medal",
       "text7": "Medal Category"
-    }
+    },
+    "create": {
+      "page_title": "Create a Retailer"
+    },
+    "detail": {
+      "page_title": "Retailer Details",
+      "pkp": "pkp",
+      "detail_pojok_bayar_account": "Pojok Pay account details",
+      "pojok_bayar": "Pay-corner"
+    },
+    "excel_download_info": "The system is creating an excel file for you to download. If the excel file has been created, we will immediately inform via email."
   },
   "paguyuban": {
     "page_title": "Paguyuban List",
@@ -342,7 +538,9 @@
     "text3": "Mismatch Password Confirmation",
     "text4": "Password must be 8 characters long, and contains both uppercase and lowercase letters",
     "text5": "Are you sure to complete this field?",
-    "detail": "Paguyuban Detail"
+    "detail": "Paguyuban Detail",
+    "delete_confirm": "Are you sure you want to delete this community?",
+    "no_selected": "No community has been selected"
   },
   "customer": {
     "text1": "Customer",
@@ -359,7 +557,9 @@
     "text1": "Main Partnership",
     "text2": "Register YBKS Lottery",
     "text3": "Group Name",
-    "principal_name": "Principal Name"
+    "principal_name": "Principal Name",
+    "delete": "Delete Principal Partnership",
+    "delete_confirm": "Are you sure you want to delete this principal partnership?"
   },
   "call_objective": {
     "text1": "Call Objective",
@@ -377,7 +577,10 @@
     "text13": "Field Force",
     "text14": "Register AYO",
     "text15": "Update",
-    "text16": "Load Data"
+    "text16": "Load Data",
+    "name_2_char": "Name must be longer than 2 characters",
+    "delete": "Delete Objective",
+    "delete_confirm": "Are you sure you want to delete this Objective ?"
   },
   "produk_prinsipal": {
     "text1": "Main Products",
@@ -425,7 +628,16 @@
     "text43": "Cash",
     "text44": "Data Saved Successfully",
     "text45": "The selected geotree area cannot be empty",
-    "text46": "Order GSR"
+    "text46": "Order GSR",
+    "delete_confirm": "Are you sure you want to delete this Company?",
+    "phone_min": "Minimum 6 digit Phone Number",
+    "phone_min_2": "Minimum 10 digits Mobile Number",
+    "delete_panel_mitra": "Delete Partner Panel",
+    "delete_panel_mitra_confirm": "Are you sure you want to delete this Partner Panel?",
+    "division_code": "Division Code",
+    "order_to_supplier": "Order to Supplier",
+    "order_to_hub": "Order to Partner Hub",
+    "detail_order": "Order Details"
   },
   "strategic_partnership": {
     "text1": "Strategic Partnerships",
@@ -433,7 +645,12 @@
     "text3": "Number of Audience",
     "text4": "Program Status",
     "text5": "Partnership Title",
-    "text6": "Mechanism Details"
+    "text6": "Mechanism Details",
+    "list": "Partnership Panel List",
+    "name": "Partnership Name",
+    "delete_confirm": "Are you sure you want to delete this partnership?",
+    "status_changed": "Successfully changing status",
+    "status_unchanged": "Failed to change status"
   },
   "principal_notes_for_retailer": {
     "text": "Main Notes for Retailer"
@@ -459,7 +676,11 @@
       "text4": "Vendor’s Name",
       "text5": "Vendor Address",
       "text6": "Vendor Type",
-      "text7": "Internal Classification"
+      "text7": "Internal Classification",
+      "delete": "Remove Vendor",
+      "delete_confirm": "Are you sure you want to delete this Vendor?",
+      "force_delete": "Forcibly Remove Vendor",
+      "force_delete_confirm": "Are you sure you want to delete this Vendor? Because the Vendor has an ongoing Order"
     },
     "pengguna": {
       "text1": "Users",
@@ -496,7 +717,14 @@
       "text26": "Estimated Delivery",
       "text27": "Estimated Delivery Minimum 0 Days",
       "text28": "Estimated Delivery Maximum 31 Days",
-      "day": "Day's"
+      "day": "Day's",
+      "update_all_price": "UPDATE ALL PRICES",
+      "shopping_voucher": "Shopping Voucher",
+      "total_order_value": "Total Order Value",
+      "wholesaler_customer_code": "Partner Customer Code",
+      "hub_customer_code": "Hub Partner Customer Code",
+      "wholesaler_hub_name": "Hub Partner Name",
+      "delivery_status": "Delivery Status"
     },
     "produk": {
       "text1": "SRC Catalog Products",
@@ -521,7 +749,12 @@
       "text20": "Product Status",
       "text21": "Just joined the SRC?",
       "text22": "Want to increase store sales?",
-      "text23": "Want to develop a bigger business?"
+      "text23": "Want to develop a bigger business?",
+      "delete_all_sku": "Are you sure you want to delete all your SKU lists?",
+      "delete_all_sku_confirm": "Are you sure you want to delete ALL PRODUCTS? Make sure you have backed up your product data with Export Excel on the product page.",
+      "stock_available": "Available",
+      "stock_unavailable": "Not Available",
+      "import_file": "Drag File Here (Max. 10,000 SKU Rows) or Select File"
     }
   },
   "iklan_dalam_aplikasi": {
@@ -554,7 +787,39 @@
       "text25": "Promo",
       "text26": "Target Audience",
       "text27": "Save As Draft",
-      "text28": "Save and Send"
+      "text28": "Save and Send",
+      "news": "Latest Info",
+      "nearby_store": "Nearby Store",
+      "delete_banner": "Delete Banner",
+      "delete_banner_confirm": "Are you sure you want to delete this banner ?",
+      "src_info": "SRC info",
+      "flying_button": "Flying Button",
+      "consumer_activation": "Consumer Activation",
+      "view_banner": "View Banner",
+      "edit_banner": "Change Banner",
+      "available_from": "Valid from date",
+      "available_to": "Valid until date",
+      "import_image": "Drag your ad banner image here / <strong>Select File</strong> with dimensions 410p x 210p.",
+      "banner_title": "Main Post/Main Text/Promotional Content",
+      "banner_type": "Banner Type",
+      "subscription_status": "Subscription Status",
+      "cannot_less_than": "Can't be less than",
+      "minimum_max_age": "minimum age limit that has been filled in",
+      "image_inapp_chat_consumer": "Image For In-App Chat to Consumer",
+      "content_page_inapp_chat_consumer": "Page Contents For In-App Chat to Consumers",
+      "wallet_type": "Wallet Type",
+      "text_button": "Button Text",
+      "landing_page_type": "Landing Page Type",
+      "my_profile_page": "My Profile Page",
+      "invalid_url": "Invalid URL",
+      "drag_image": "Drag image here or <strong>select file</strong>",
+      "view_image": "View image",
+      "retailer_type": "Retailer Type",
+      "target_area": "Target Area",
+      "as_draft": "AS A DRAFT",
+      "and_send": "AND SEND",
+      "shopping": "Shopping",
+      "title_dialot_open_reminder": "Make sure all parameters are filled in correctly. Banners containing <i class='italic'>Brand HM Sampoerna</i> material or other <i class='italic'>tobacco promotion materials</i> only for Consumer Type '<b>Smoking</b>'. Are you sure to save and send?"
     }
   },
   "delivery_management": {
@@ -586,12 +851,21 @@
       "text24": "Invalid Contact Number, Contact Number must be a number",
       "text25": "Deadline for Receiving Orders (HH:MM)",
       "text26": "Change Courier",
-      "text27": "Are you sure you want to change this Courier status?"
+      "text27": "Are you sure you want to change this Courier status?",
+      "delete": "Delete Courier Service",
+      "delete_confirm": "Are you sure you want to delete this Courier Service ?",
+      "new_service": "New Service",
+      "invalid_delivery_time": "Invalid Service Time Format"
     },
     "panel_mitra": {
       "text1": "Partner Panel ",
       "text2": "Service Type",
-      "text3": "Number of Partners"
+      "text3": "Number of Partners",
+      "set_partner_panel": "SET UP PARTNER PANEL",
+      "select_courier": "Select Courier",
+      "courier_type": "Courier Type",
+      "selected_partner": "Selected Partner",
+      "select_service": "Select Service"
     }
   },
   "manajemen_barang_sku": {
@@ -615,7 +889,35 @@
       "text16": "Product Status",
       "text17": "Product Link",
       "text18": "Product Type",
-      "text19": "Pojok Modal Products Selection"
+      "text19": "Pojok Modal Products Selection",
+      "product_other_name": "Other Product Name",
+      "pinup_duration": "Pin Up Duration",
+      "end_date": "Complete Date",
+      "time_period": "Time Period",
+      "add_packaging": "Add Packaging",
+      "packaging": "Packaging",
+      "amount_per_package": "Amount per Pack",
+      "product_price_after_discount": "Product Price After Discount",
+      "packaging_name": "Packaging Name",
+      "min_1": "min. 1",
+      "max_1000": "max. 1000",
+      "cannot_more_than_product_price": "Must not exceed product price",
+      "date_today": "today's date",
+      "max_image_size": "Size 800x800 pixels, Maximum 2mb",
+      "product_image": "Product Image",
+      "online_available_product": "Product is available online",
+      "family_code": "Family Code",
+      "smallest_packaging": "Smallest packaging",
+      "total_selected_partner": "Number of Selected Partners",
+      "select_partner": "Select Partner",
+      "min_qty": "Minimum Qty",
+      "product_link": "Product Link",
+      "more_than_start_date": "Must be later than start date",
+      "special_rate": "Special Rate",
+      "success_generate_link": "Link created successfully!",
+      "success_copy_link": "Product Link Copied!",
+      "isolated_partner": "This product is still associated with the Partners panel",
+      "max_image_size_data": "Image size cannot exceed {{size}}"
     },
     "manajemen_koin": {
       "text1": "Coins Management",
@@ -668,7 +970,20 @@
       "text9": "Toolbox Category Name",
       "text10": "Choose Status",
       "text11": "Are you sure you want to delete this Toolbox Category?",
-      "text12": "Delete Toolbox Category"
+      "text12": "Delete Toolbox Category",
+      "verification_remark": "Verification Remark",
+      "delete_mission_type": "Delete Mission Type",
+      "edit_mission_type": "Edit Mission Type",
+      "mission_type_name": "Mission Type Name",
+      "delete_internal_category": "Delete Internal Category",
+      "internal_category_name": "Internal Category Name",
+      "internal_category_name_exists": "Internal Category name already exists, please enter another name",
+      "copywriting_color": "Copywriting color",
+      "delete_mission_category": "Delete Mission Category",
+      "category_mission_name": "Mission Category Name",
+      "delete_project_mission": "Delete Mission Project",
+      "delete_verification_remark": "Remove Verification Remark",
+      "delete_copywriting": "Delete Copywriting"
     },
     "template_tugas": {
       "text1": "Task Template",
@@ -709,7 +1024,76 @@
       "text36": "Add Reason",
       "text37": "Mission Background Settings",
       "text38": "Size 410x210 Pixels, Maximum 2MB",
-      "text39": "Please Complete the Data First"
+      "text39": "Please Complete the Data First",
+      "mission_project": "Mission Project",
+      "personalize": "Personalize",
+      "list_task_personalize": "Personalize To-do List",
+      "copywriting": "Copywriting",
+      "response_type": "Reponse Type",
+      "ir_type": "IR Type",
+      "select_one_ir_type": "Select an IR Type",
+      "set_detail_banner": "Set Banner Details",
+      "place_video": "Insert Video",
+      "place_image": "Insert Image",
+      "encryption": "Encryption",
+      "select_template": "Select Template",
+      "short_answer_text": "Short answer text",
+      "long_answer_text": "Long answer text",
+      "upload_proof_photo": "UPLOAD PHOTO PROOF",
+      "select_date": "Date Selection",
+      "number": "Number",
+      "next_question_posibility": "Next Question Possibility",
+      "none": "None",
+      "direct_to_shop": "Direct to Shopping",
+      "add_options": "Add options",
+      "coin_amount": "Coins Amount",
+      "answer_key": "Answer Key",
+      "select_one_reason": "Choose a Reason",
+      "short_answer": "Short Answer",
+      "paragraph": "Paragraph",
+      "multiple_choice": "Multiple Choice",
+      "multiple_choice_and_number": "Multiple Choice & Number",
+      "multiple_choice_and_short_answer": "Multiple Choice & Short Answer",
+      "multiple_choice_and_paragraph": "Multiple Choice & Paragraph",
+      "check_box": "Checkbox",
+      "stock_check": "Stock Check",
+      "stock_check_ir": "Stock Check IR",
+      "planogram_ir": "IR planogram",
+      "full_ir": "Full IR",
+      "ir_comply": "IR for Comply",
+      "ir_not_comply": "IR for Not Comply",
+      "ir_checking_only": "IR for Checking Only",
+      "non_task_base_response": "Non - Task Based Response",
+      "task_base_response": "Task Based Response",
+      "delete_question_connected": "This question is connected as Response to another Question, Please change the corresponding Next Question.",
+      "other_explain": "Other, Mention",
+      "complete_question_message": "There is a question that has not been filled in, please complete it",
+      "please_select_ir": "Please select an IR Type",
+      "updated_data": "Data Modified Successfully",
+      "select_reason": "Select Reason",
+      "not_selected_image": "The image for the task template has not been selected!",
+      "not_filled_blocker_submission": "Blocker Submission has not been filled",
+      "not_created_question_min_one": "The question has not been created, there is at least one question!",
+      "not_created_copywriting": "Copywriting has not been created, there must be at least one Copywriting",
+      "please_complete_copywriting_setup": "Please complete the Copywriting Set-Up",
+      "task_personalize": "Personalize Task",
+      "template_name": "Template Name",
+      "select_mision_type": "Select a Mission Type",
+      "internal_mission_category": "Internal Mission Category",
+      "internal_category_mission_notfound": "No Internal category mission found",
+      "add_copywriting": "Add copywriting",
+      "copywriting_info": "Use <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... as parameters in the <strong>Title Mission</strong> and <strong>Mission Description</strong>",
+      "mission_title": "Mission Title",
+      "mission_description": "Mission Description",
+      "mission_cover": "Mission Cover",
+      "parameter_not_required": "No need to use parameters",
+      "visual_header": "Visual Header",
+      "question_list": "Question List",
+      "question_list_info": "Use <strong>##1</strong>, <strong>##2</strong>, <strong>##3</strong>,... as parameters in the <strong>Title Question</strong>",
+      "blocker_submission": "Blocker Submission",
+      "image_quality_detection": "Image Quality Detection",
+      "expiry_date_template": "Deadline until : 02 July 2021",
+      "font_color_settings": "Font color settings"
     },
     "group_trade_program": {
       "text1": "Trade Program Group",
@@ -718,7 +1102,15 @@
       "text4": "Non HMS Main Name",
       "text5": "Change Trade Program group",
       "text6": "Trade Program Group Name",
-      "text7": "Is a Non-HMS Trade Program Group"
+      "text7": "Is a Non-HMS Principal Group Trade Program",
+      "text8": "Delete Trade Program Group",
+      "text9": "Are you sure you want to delete these terms & conditions data?",
+      "text10": "Create a Trade Program Group",
+      "text11": "Drag Image Here or Select File",
+      "text12": "Size 410x210 Pixels",
+      "text13": "Image Maximum 2 mb",
+      "program_name": "Program Name",
+      "audience_name": "Audience Name"
     },
     "trade_program": {
       "text1": "Trade Program",
@@ -730,7 +1122,10 @@
       "text7": "Unpublished",
       "text8": "Ongoing Trade Program",
       "text9": "Remove Trade Program",
-      "text10": " Are you sure you want to delete this trade program?"
+      "text10": " Are you sure you want to delete this trade program?",
+      "group_trade_program_not_found": "No Group Trade Program found",
+      "balance": "Funds",
+      "coin_expiry_date": "Coin Expiration Date"
     },
     "pengatur_jadwal_program": {
       "text1": "Trade Program Scheduler",
@@ -779,9 +1174,61 @@
       "text4": "Number of SRC",
       "text5": "Total Coins Sent",
       "text6": "Request Date",
-      "text7": "Approval Date"
+      "text7": "Approval Date",
+      "approve": "Approve Request Adjustment Coin",
+      "reject": "Reject Request Adjustment Coin",
+      "are_you_sure": "Are you sure to",
+      "this_request_adjusment": "request this adjustment coin ?",
+      "do_approve": "approve",
+      "do_reject": "reject",
+      "read_only_access": "You only have access to view Notification Buttons, can't send Notifications! (permission.change)",
+      "export_approval_coin_adjustment": "Export Approval Coin Adjustment",
+      "tsm_title": "Approval Coin Adjustment TSM",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "pending": "Pending",
+      "approval_history": "Approval History",
+      "send_notif": "SEND NOTIFICATION",
+      "scheduler_name": "Scheduler Name",
+      "total_coin_inject": "Total Coin/Inject",
+      "approval_requested_date": "Request Approval Date",
+      "retailer_name": "Retailer Name",
+      "total_coin": "Total Coin Amount",
+      "total_coin_group_trade_program": "Amount of Coin Group Trade Program",
+      "total_adjustment_coin": "Amount of Adjustment Coin",
+      "approve_button": "APPROVE",
+      "reject_button": "REJECT",
+      "person": "Person",
+      "retailer_id": "Retailer ID",
+      "retailer_status": "Retailer Status",
+      "current_coin_total": "Current Coin (Total)",
+      "current_coin_group": "Current Coin (Group Trade Program)",
+      "coin_adjusted": "Coin Adjusted",
+      "reason": "Reason",
+      "coin_adjustment_reason": "Coin Adjustment Reason",
+      "approval": "Approval",
+      "receiver_name": "Recipient Username",
+      "search_user_name": "Search Username ...",
+      "user_not_found": "User Not found!",
+      "receiver_email": "Recipient Email",
+      "request_preview_onprogress": "Request Preview is still running!",
+      "request_import_onprogress": "Request Import Process Still Running!",
+      "failed_upload": "Upload failed, the uploaded file did not match. Please check your file again.",
+      "not_set_notification_user": "Notification User Not Set!",
+      "preview_not_available": "No Preview Data!",
+      "confirmation": "Confirm",
+      "submit_confirmation_message": "Are you sure you want to save this data (Notification Will be processed directly to Recipient) ?",
+      "save_success_notification_sent": "Successfully saving data and sending Notification!"
     },
     "audience": {
+      "audience_personalize": "Audience Personalize",
+      "b2b_active": "B2B Active",
+      "delete_audience_group": "Hapus Audience Grup",
+      "estimated_success": "Estimated Task Success",
+      "fixed_panel": "Fixed Panel",
+      "panel_blast": "Panel Blast",
+      "publish_mission": "Publish Misi",
+      "select_publish_mission": "Select Publish Mission",
       "text1": "Audience",
       "text2": "Number of Users",
       "text3": "Audience Approval Status",
@@ -797,7 +1244,24 @@
       "text13": "Retail Classification",
       "text14": "SRC Classification",
       "text15": "SRC Type",
-      "text16": "Register AYO"
+      "text16": "Register AYO",
+      "total_required_panel": "Total Required Panel",
+      "downloading_template": "Downloading Template",
+      "population_blast": "Population Blast",
+      "recommended_panel": "Recommended Panel",
+      "min_audience": "Number of selected Audiences is less than {{min}} Audience",
+      "max_audience": "Number of selected Audience is more than {{max}} Audience",
+      "max_funds": "Amount of Request Fund exceeds Trade Program Fund Amount, Fund Difference : {{funds}}!",
+      "please_select_audience": "No Audience selected yet!",
+      "on_process_data": "Data is Processing",
+      "please_wait": "Please wait 5 - 10 minutes",
+      "back_to_dashboard": "Back to Dashboard",
+      "cancel_check": "Cancel Check",
+      "blasted_time": "Blasted Time",
+      "error_validation": "Error Validation",
+      "failed_preview": "Data preview failed",
+      "confirm_leave": "Attention: Your data has not been saved. Press Cancel to go back and save first, or press OK to leave this page.",
+      "file_import_success_press_ok": "File was imported successfully, press OK to return to the start menu."
     },
     "distribution_list": {
       "text": "Distribution List"
@@ -872,7 +1336,43 @@
       "text41": "Total Budget Used",
       "text42": "Total Week Duration",
       "text43": "There are unset notifications yet",
-      "text44": "Mission Template Task section is mandatory"
+      "text44": "Mission Template Task section is mandatory",
+      "default": "Default",
+      "request_file": "Request File",
+      "export_task_sequencing": "Export Task Sequencing",
+      "edit_task_sequencing": "Edit Task Sequencing",
+      "delete_task_sequencing": "Delete Task Sequencing",
+      "personalize_management": "Personalize Management",
+      "view_permission_denied": "Do not have access View Publish Mission",
+      "export_coin": "EXPORT COIN",
+      "import_coin": "IMPORT COIN",
+      "requesting_file": "Requesting File",
+      "select_trade_program": "Select a trade program",
+      "select_group_audience": "Select an audience group",
+      "check_detail": "CHECK DETAILS",
+      "coin_adjustment_confirm": "The last coin adjustment has been made for this Task Sequencing on {{date}}. Do you want to continue this submission process?",
+      "requesting_preview": "Requesting Preview",
+      "task_sequencing_personalize": "Task Sequencing Personalize",
+      "group_audience": "Group Audience",
+      "coin": "Coins",
+      "cant_go_through": "Unable to access this page directly!!!",
+      "cant_coin_activity": "There can be no activity coins if the mission is not of type Push to FF",
+      "invalid_combination": "Combination of verification types is not allowed in one task sequence",
+      "insufficient_budget": "Insufficient trade program budget!",
+      "notification_not_setted": "There are unset notifications!",
+      "reward_non_coin": "Reward Reward (Non Coin)",
+      "description": "Description",
+      "reward_description": "Reward Description",
+      "popup_notif_settings": "Pop-up Notification Settings",
+      "select_popup_notif": "Select Pop Up Notification",
+      "push_notif_settings": "Push Notification Settings",
+      "waiting_time_settings": "Waiting Time Settings",
+      "day": "Day",
+      "week": "Sunday",
+      "hour": "Hour",
+      "select_branch": "Select Branch",
+      "yes_branch": "Yes Branch",
+      "no_branch": "No Branch"
     },
     "task_verification": {
       "text1": "Task Verification",
@@ -882,7 +1382,62 @@
       "text5": "Compliance Rate",
       "text6": "Mission Period",
       "text7": "Audience Group",
-      "text8": "Coin Status"
+      "text8": "Coin Status",
+      "mission_verif_non_tsm": "Non-TSM Mission Verification",
+      "mission_name_or_task_template": "Mission Name/Task Template",
+      "change_schedule": "Change Scheduling Date",
+      "mission_export": "Mission Export",
+      "verified_all": "Verified All",
+      "coin_release": "Release Coin",
+      "do_approve": "Approve",
+      "do_reject": "Reject",
+      "reason_index": "Reason {{index}}",
+      "confirm_verif": "Are you sure you want to verify ({{mission_amount}}) this mission?",
+      "confirm_send_coin": "Are you sure you want to send coins for this mission (Total {{total_src}} SRC)?",
+      "confirm_send_coin_2": "Are you sure you want to send coins for SRC {{name}} - {{code}}?",
+      "deadline": "Deadlines",
+      "coin_will_receive": "Coins to be earned",
+      "planogram_template": "Planogram Template",
+      "photo_proved": "Photo Proof",
+      "ir_check": "IR Check",
+      "compliance": "Compliance",
+      "brand": "Brand",
+      "qty": "Quantity",
+      "other": "Other",
+      "verify_mission_error": "An error occurred during mission verification",
+      "release_coin_error": "An error occurred during coin release",
+      "approve_confirm_message": "Are you sure you want to accept this mission?",
+      "fill_reject_reason": "Please fill in the reason for rejection",
+      "mission_verification_tsm": "TSM Mission Verification",
+      "task_sequencing_name": "Task Sequencing Management Name",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "audience_group": "Audience / Group",
+      "view_list_audience": "View audience list",
+      "template_task_backup": "Task (Backup) Template",
+      "download_failed": "An error occurred downloading the mission",
+      "backup": "Backup",
+      "mission_status": "Mission Status",
+      "retailer_id": "Retailer Id",
+      "customer_code": "Customer Code",
+      "division": "Division",
+      "submit_mission_date": "Mission Submit Date",
+      "wib": "WIB",
+      "not_submited": "Not Submitted",
+      "submitted": "Submitted",
+      "sent": "Sent",
+      "not_sent": "Not Sent",
+      "checked_by_ir": "Checked By IR",
+      "checking": "checking",
+      "weekly": "Every Sunday",
+      "every_two_weeks": "Every 2 Weeks",
+      "nothing": "None",
+      "h_plus": "H+{{value}}",
+      "import_expired_message": "Unable to adjust coin because scheduler trade program status has been",
+      "detail_mission_verification": "Mission Verification Details",
+      "detail_mission_verification_tsm": "TSM Mission Verification Details",
+      "reblast_type": "Reblast Type",
+      "list_audience_group": "List of Audiences / Groups"
     },
     "coin_disbursement": {
       "text1": "Coins Disbursement",
@@ -904,7 +1459,27 @@
       "text17": "Targeted Recipient",
       "text18": "Filter Audience",
       "text19": "Targeted Retailer",
-      "text20": "Change Coins Disbursement"
+      "text20": "Change Coins Disbursement",
+      "export_detail": "Export Details",
+      "download_list_failed": "An error occurred downloading the Redemption List Data",
+      "coin_exchange_list": "Coin Exchange List",
+      "export_detail_by_trade_program": "Export Details by trade program",
+      "retailer_code": "Retailer Code",
+      "src_store": "SRC store",
+      "exchange_nominal": "Exchange Amount",
+      "payment_amount": "Payment Amount",
+      "unpaid": "Unpaid",
+      "paid": "Paid already",
+      "failed_to_pay": "Failed to Pay",
+      "pay_corner_account": "Pay Corner Account",
+      "failed_upload_inconsistent_name": "Upload failed, Uploaded Redemption Program Name did not match.",
+      "failed_upload_invalid_file": "Upload failed, the uploaded file did not match. Please check your file again.",
+      "coin_valuation": "Coin Valuation",
+      "coin_valuation_more_than_zero": "Coin Valuation must be more than > 0",
+      "coin_exchange": "Coin Exchange",
+      "please_select_exchange_options": "Please select one of the Exchange Options!",
+      "please_select_target_receiver": "There are no Selected Retailers in Target Recipient yet!",
+      "please_fill_form": "Complete Form Fill!"
     }
   },
   "cn_reward": {
@@ -939,7 +1514,9 @@
       "text27": "Restrict by Category",
       "text28": "B2B Products",
       "text29": "Restrictions by Product",
-      "text30": "Restrictions by Category"
+      "text30": "Restrictions by Category",
+      "published": "PUBLISHED",
+      "voucher_on_review": "Voucher is currently under review"
     },
     "b2c_voucher": {
       "text1": "B2C Vouchers",
@@ -1075,6 +1652,7 @@
   },
   "notification": {
     "text": "Notifications",
+    "customize_push_notification": "Custom Notification",
     "buat_notifikasi": {
       "text1": "Notifications List",
       "text2": "Notification Content Type",
@@ -1094,9 +1672,42 @@
       "text16": "Users Filter",
       "text17": "Target Audience",
       "text18": "Remove Notification",
-      "text19": " Are you sure you want to delete this notification?"
+      "text19": " Are you sure you want to delete this notification?",
+      "title": "Create Notification Popup",
+      "repeat_pattern": "Repeat Pattern",
+      "selected_date": "Selected Date & Month",
+      "date_month_repeatation": "Repeat date & month",
+      "date_repeatation": "Repeat date",
+      "month_repeatation": "Repeat month",
+      "send_period": "Shipping Period",
+      "release_time": "Rise Time",
+      "send_every": "Sent every",
+      "notification_type": "Notification Type",
+      "repeat_types": "Repeat Type",
+      "create_custom_notification": "Create Customized Notification",
+      "target_user": "Target User",
+      "max_30_char": "Maximum 30 characters",
+      "birthday_notif_activation": "Birthday notification activation",
+      "birthday_notif_18": "Activate 18th birthday notification",
+      "send_as_notif": "Send As Notification",
+      "send_as_message": "Send As Message",
+      "message1": "Start date cannot be before today!",
+      "message2": "The end date must be after the start date!",
+      "message3": "Please check the uploaded data again.",
+      "message4": "One-time notifications cannot be edited, because they were sent instantly when created.",
+      "not_end": "Not ending",
+      "end_after": "End after",
+      "ended_at": "Ended on",
+      "repeat_at": "Repeat to",
+      "consumer_type": "Consumer Type",
+      "employee": "Employee",
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
     },
     "popup_notifikasi": {
+      "page_name": "Notification Popup",
       "text1": "Popup Notifications List",
       "text2": "ID",
       "text3": "Popup Notification Title",
@@ -1119,7 +1730,22 @@
       "text20": "Remove Popup Notification",
       "text21": "Journey Builder Notification",
       "text22": "Data Saved Successfully",
-      "text23": " Are you sure you want to remove this popup notification?"
+      "text23": " Are you sure you want to remove this popup notification?",
+      "text24": "VALID",
+      "text25": "INVALID",
+      "time": "Time",
+      "label1": "One send notification activation",
+      "label2": "Repeat notification activation",
+      "message1": "Please select at least one publication day!",
+      "message2": "Please select at least one issue date!",
+      "message3": "Please select at least one date & month of publication!",
+      "message4": "Target Area must be selected!",
+      "message5": "Please select the repeat date and month!",
+      "new_product": "New Product",
+      "date_selected": "The repeat date and month have been selected."
+    },
+    "custom_notifikasi": {
+      "page_name": "Create Customized Push Notification"
     }
   },
   "manajemen_konten": {
@@ -1283,7 +1909,8 @@
   "rca_agent": {
     "page_title": "RCA Agent",
     "index_title": "RCA Agent List",
-    "email_validation": "Make sure the Email and username match your SSO Account."
+    "email_validation": "Make sure the Email and username match your SSO Account.",
+    "delete_confirm": "Are you sure you want to delete this RCA Agent?"
   },
   "rca_grouping": {
     "page_title": "Customer Grouping",
@@ -1352,8 +1979,8 @@
     "export_file": "Export File",
     "name": "Name",
     "select_file": "Select File",
-    "upload_retailer": "Upload Reseller",
-    "upload_wholesaler": "Upload Partner",
+    "upload_retailer": "Upload Retailer",
+    "upload_wholesaler": "Upload Wholesaler",
     "upload_principal": "Upload Principal",
     "no_selected_file": "Unselected File",
     "upload_json_file": "Upload JSON File",
@@ -1364,6 +1991,192 @@
     "validation_error": "Validation Failed, try again and make sure your file is correct",
     "on_validation": "The JSON file is in the process of being validated",
     "validation_success": "Successful validation, please upload data",
-    "validation": "VALIDATION"
+    "validate": "VALIDATE"
+  },
+  "voucher_private_label": {
+    "store_count": "Number of Stores",
+    "store_redeem_voucher": "Store Redeem Voucher",
+    "voucher_unused_value": "Unused Voucher Value",
+    "voucher_used_value": "Voucher Value Redeem",
+    "voucher_release_date": "Date of Voucher Distributed"
+  },
+  "notes_retailer": {
+    "list": "List of Notes for Retailers",
+    "name": "Notes Name",
+    "description": "Description Notes",
+    "status": "Status of Notes"
+  },
+  "store_layout_template": {
+    "delete": "Delete Store Layout Template",
+    "delete_confirm": "Are you sure you want to delete this Store Layout Template ?"
+  },
+  "breadcrumbs": {
+    "device_management": {
+      "index": "Device restored and Settings"
+    },
+    "help": {
+      "index": "Help Management",
+      "create": "Create Help Topic",
+      "edit": "Change Help Topic"
+    },
+    "adminprincipal": {
+      "index": "Admin Principal List",
+      "create": "Create Admin Principal",
+      "edit": "Change Admin Principal",
+      "detail": "Admin Principal Details"
+    },
+    "fieldforce": {
+      "index": "Field Force List",
+      "create": "Create Field Force",
+      "edit": "Change Field Force",
+      "detail": "Field Force Details"
+    },
+    "wholesaler": {
+      "index": "Wholesalers List",
+      "create": "Create Wholesaler",
+      "edit": "Change Wholesaler",
+      "detail": "Wholesale details"
+    },
+    "retailer": {
+      "index": "Retailers List",
+      "create": "Create Retailer",
+      "edit": "Change Retailer",
+      "detail": "Retailer Details"
+    },
+    "medal_badge": {
+      "index": "Medals & Badges"
+    },
+    "customer": {
+      "index": "Consumer List",
+      "detail": "Consumer details"
+    },
+    "pengajuan_src": {
+      "index": "SRC Submission List",
+      "create": "Create SRC Submission",
+      "edit": "Change SRC Submission",
+      "detail": "SRC Submission Details"
+    },
+    "partnership": {
+      "index": "Principal Partnership List",
+      "create": "Create Principal Partnership",
+      "edit": "Change Principal Partnership",
+      "detail": "Principal Partnership details"
+    },
+    "panelpartnership": {
+      "strategic_partnership": "Strategic Partnership",
+      "index": "Partnership Panel",
+      "create": "Create",
+      "edit": "Change"
+    },
+    "privatelabel": {
+      "index": "Principal Products",
+      "suppliercompany": {
+        "index": "Company",
+        "create": "Create Company",
+        "edit": "Change Company",
+        "detail": "Company Details"
+      },
+      "usersupplier": {
+        "index": "Company Users",
+        "create": "Create",
+        "edit": "Change",
+        "detail": "Details"
+      },
+      "panelmitra": {
+        "index": "Partner Panel",
+        "create": "Create",
+        "edit": "Change",
+        "detail": "Details"
+      },
+      "ordertosupplier": {
+        "index": "Order from Partner",
+        "create": "Create",
+        "edit": "Change",
+        "detail": "Details"
+      },
+      "suppliersettings": {
+        "index": "Settings",
+        "stock": "Stock",
+        "stock_edit": "Edit",
+        "payment_method": "Payment Method",
+        "payment_method_edit": "Edit"
+      },
+      "suppliervouchers": {
+        "index": "Private Label Voucher"
+      }
+    },
+    "banner": {
+      "index": "Online Banner",
+      "create": "Create Banner Online",
+      "edit": "Change Online Banner",
+      "detail": "Online Banner Details",
+      "sorting": "In-App Banner Settings"
+    },
+    "landingpage": {
+      "index": "Destination Page",
+      "create": "Create Destination Page",
+      "edit": "Change Destination Page"
+    },
+    "product": {
+      "index": "Product List",
+      "create": "Add Product",
+      "edit": "Change Product",
+      "detail": "Product Details",
+      "delete": "Delete Product"
+    },
+    "productcashier": {
+      "index": "Cashier Product List",
+      "create": "Add Cashier Product",
+      "edit": "Change Product",
+      "detail": "Product Details",
+      "submission": "Product Submitted",
+      "submission_detail": "Submission Product Details"
+    },
+    "dbsubmission": {
+      "index": "DB Product Submission",
+      "detail": "Product Details Submitted",
+      "approval": "Approval Settings"
+    },
+    "reward": {
+      "index": "Gift Catalog",
+      "create": "Create Gift Catalog",
+      "edit": "Change Gift Catalog"
+    },
+    "rewardhistory": {
+      "index": "Exchange History"
+    },
+    "coin": {
+      "index": "Coin Management",
+      "trade": "Trade Program Details",
+      "retailer": "Retailer Details"
+    },
+    "courier_management": {
+      "index": "Courier List",
+      "create": "Create Courier Service",
+      "edit": "Change Courier Service",
+      "detail": "Courier Service Details"
+    },
+    "group_trade_program": {
+      "index": "Group Trade Program",
+      "create": "Create a Trade Program Group",
+      "edit": "Change Trade Program Group",
+      "detail": "Trade Program Group Details"
+    },
+    "trade_program": {
+      "index": "Trade Program",
+      "create": "Create a Trade Program",
+      "edit": "Change Trade Program",
+      "detail": "Trade Program Details"
+    },
+    "popup_notifikasi": {
+      "index": "Notification Pop-ups",
+      "create": "Create Notification Pop-up",
+      "edit": "Change Notification Pop-up"
+    }
+  },
+  "search_product_component":{
+    "placeholder":"Search Products",
+    "error_message":"No products found",
+    "error_form":"Product Barcode Required"
   }
 }

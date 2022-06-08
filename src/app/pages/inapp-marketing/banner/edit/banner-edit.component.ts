@@ -66,7 +66,7 @@ export class BannerEditComponent {
     { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
     { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
     { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" },
-    { name: "Spesifik Produk B2B", value: "spesific_product_b2b" }
+    { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" }
   ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];

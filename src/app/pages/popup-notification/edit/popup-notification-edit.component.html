@@ -384,12 +384,12 @@
           <!-- b2b product -->
           <div class="pb-24 px-24" *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'spesific_product_b2b'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
-              <search-product-barcode fxFlex="45" [errorMessage]="'Tidak ada produk ditemukan'" [inputPlaceHolder]="'Cari Produk'" [value]="formPopupGroup.get('barcode').value" (onChange)="handleSearchProduct($event)">
+              <search-product-barcode fxFlex="45" [errorMessage]="'search_product_component.error_message' | translate" [inputPlaceHolder]="'search_product_component.placeholder' | translate" [value]="formPopupGroup.get('barcode').value" (onChange)="handleSearchProduct($event)">
                 <mat-error
                 *ngIf="formPopupGroup.controls['barcode'].hasError('required') && formPopupGroup.controls['barcode'].touched">
                 <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
                 translate}} -->
-                Barcode Produk Harus diisi
+                {{'search_product_component.error_form' | translate}}
               </mat-error>
               </search-product-barcode>
             </div>
