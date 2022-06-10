@@ -564,7 +564,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
+        get_sub_group_trade: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/sub-group`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
       },
       PLSupplierCompany: {
         getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
@@ -1015,7 +1016,8 @@ export class Endpoint {
         export_detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export-detail`,
         download: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/download`,
         preview_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/preview`,
-        import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`
+        import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`,
+        data_log_get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption-approval/dataLog`,
       },
       feature_level: {
         list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level`,

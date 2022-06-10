@@ -3,14 +3,14 @@
     <div id="fuse-main-content">
 
         <!-- TOOLBAR: Above -->
-        <ng-container *ngIf="fuseSettings.layout.toolbar === 'above'">
+        <ng-container *ngIf="fuseSettings.layout.toolbar === 'above' && !isDownloadPage">
             <fuse-toolbar class="above toolbar-main"></fuse-toolbar>
         </ng-container>
         <!-- / TOOLBAR: Above -->
 
         <!-- NAVBAR: Top -->
         <fuse-navbar layout="horizontal" class="top-navbar" fxHide fxShow.gt-md
-            [ngClass]="fuseSettings.colorClasses.navbar" *ngIf="fuseSettings.layout.navigation === 'top'">
+            [ngClass]="fuseSettings.colorClasses.navbar" *ngIf="fuseSettings.layout.navigation === 'top' && !isDownloadPage">
         </fuse-navbar>
         <!-- / NAVBAR: Top -->
 
@@ -19,7 +19,7 @@
             <!-- NAVBAR: Left -->
             <fuse-sidebar [name]="'navbar'" [folded]="fuseSettings.layout.navigationFolded" [lockedOpen]="'gt-md'"
                 class="left-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
-                *ngIf="fuseSettings.layout.navigation === 'left' || fuseSettings.layout.navigation === 'top'">
+                *ngIf="(fuseSettings.layout.navigation === 'left' || fuseSettings.layout.navigation === 'top') && !isDownloadPage">
                 <fuse-navbar layout="vertical"></fuse-navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Left -->
@@ -27,7 +27,7 @@
             <div class="content-wrapper">
 
                 <!-- TOOLBAR: Below -->
-                <ng-container *ngIf="fuseSettings.layout.toolbar === 'below'">
+                <ng-container *ngIf="fuseSettings.layout.toolbar === 'below' && !isDownloadPage">
                     <fuse-toolbar class="below toolbar-main"
                         [ngStyle]="{'background-image': 'url(' + environment?.backgroundImage  + ')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}">
                     </fuse-toolbar>
@@ -40,7 +40,7 @@
             <!-- NAVBAR: Right -->
             <fuse-sidebar [name]="'navbar'" [align]="'right'" [folded]="fuseSettings.layout.navigationFolded"
                 [lockedOpen]="'gt-md'" class="right-navbar" [ngClass]="fuseSettings.colorClasses.navbar"
-                *ngIf="fuseSettings.layout.navigation === 'right'">
+                *ngIf="fuseSettings.layout.navigation === 'right' && !isDownloadPage">
                 <fuse-navbar layout="vertical"></fuse-navbar>
             </fuse-sidebar>
             <!-- / NAVBAR: Right -->
@@ -49,19 +49,19 @@
     </div>
 
     <!-- QUICK PANEL -->
-    <mat-sidenav fuseMatSidenavHelper="quick-panel" position="end">
+    <mat-sidenav fuseMatSidenavHelper="quick-panel" position="end" *ngIf="!isDownloadPage">
         <fuse-quick-panel></fuse-quick-panel>
     </mat-sidenav>
     <!-- / QUICK PANEL -->
 
 </mat-sidenav-container>
-<fuse-chat *ngIf="chatIsOpen">
+<fuse-chat *ngIf="chatIsOpen && !isDownloadPage">
 </fuse-chat>
-<div class="loading" *ngIf="showLoading">
+<div class="loading" *ngIf="showLoading && !isDownloadPage">
     <div *ngIf="progress" style="position: relative; top: 60%;" fxLayout="column" fxLayoutAlign="center center">
         <progress-bar style="width: 600px;" [progress]="progress" [color]="'#dc1e2d'"></progress-bar>
     </div>
 </div>
 
-<iframe *ngIf="isShowGTM" [src]="urlSafe" height="0" width="0" style="display:none;visibility:hidden">
+<iframe *ngIf="isShowGTM && !isDownloadPage" [src]="urlSafe" height="0" width="0" style="display:none;visibility:hidden">
 </iframe>

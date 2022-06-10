@@ -167,6 +167,10 @@ import { TaskVerificationComponent } from './task-verification-2/task-verificati
 import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 import { TranslateModule } from "@ngx-translate/core";
+import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.component';
+import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
+import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
+import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -350,6 +354,10 @@ export const MY_FORMATS = {
     TaskVerificationComponent,
     AssignmentCartComponent,
     TaskVerificationAssignmentComponent,
+    SubGroupTradeComponent,
+    DataLogComponent,
+    CoinRedemptionApprovalComponent,
+    EmployeeMappingComponent,
   ],
   exports: [
     TemplateIndexComponent,
