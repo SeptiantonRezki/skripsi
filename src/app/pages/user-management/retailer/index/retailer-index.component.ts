@@ -1223,10 +1223,24 @@ export class RetailerIndexComponent {
   }
 
   downloadBankAccount() {
+    let data = {
+      titleDialog: "Download Bank Account",
+      captionDialog: "Apakah Anda ingin export dengan remark ?",
+      confirmCallback: () => this.confirmDownloadBankAccount("yes"),
+      rejectCallback: () => this.confirmDownloadBankAccount("no"),
+      buttonText: ["Ya", "Tidak"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDownloadBankAccount(remark) {
     this.dataService.showLoading(true);
-    this.retailerService.exportBankAccount().subscribe(res => {
+    this.retailerService.exportBankAccount({remark: remark}).subscribe(res => {
       let filename = `Export-Retailer-Coin-Disbursement-${moment(new Date()).format('YYYY-MM-DD-hh-mm-ss')}.xlsx`;
       this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err', err);
       this.dataService.showLoading(false);
     });
   }
