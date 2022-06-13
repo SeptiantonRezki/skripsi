@@ -1127,7 +1127,7 @@ export class BannerCreateComponent {
     }
     this.formBannerGroup.get("barcode").setValue("");
     if(value === "spesific_product_b2b"){
-      this.formBannerGroup.get("barcode").setValidators([Validators.required]);
+      this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()
     }else{
       this.formBannerGroup.controls['barcode'].setValue("")
@@ -1183,9 +1183,9 @@ export class BannerCreateComponent {
   }
 
   async submit(status?: string) {
-    console.log(this.formBannerGroup.valid, this.formBannerGroup.controls['barcode']);
+    // console.log(this.formBannerGroup.valid, this.formBannerGroup.controls['barcode']);
     let invalids = this.findInvalidControls();
-    console.log('invalid form', invalids);
+    // console.log('invalid form', invalids);
     if(this.onLoad == false)
     if (this.formBannerGroup.valid && this.bannerSelected) {
       this.onLoad = true;

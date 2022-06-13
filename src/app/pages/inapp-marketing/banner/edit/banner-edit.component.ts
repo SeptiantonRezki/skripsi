@@ -929,7 +929,7 @@ export class BannerEditComponent {
 
     if (this.detailBanner.target_page.type === 'spesific_product_b2b') {
       this.formBannerGroup.get('barcode').setValue({id:this.detailBanner.target_page.product_info.barcode, name:this.detailBanner.target_page.product_info.name});
-    console.log( this.formBannerGroup.get('barcode').value)
+      this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
     }
 
     if (this.detailBanner.target_page.type === 'iframe' || this.detailBanner.target_page.type === 'link_web') {
@@ -1651,7 +1651,7 @@ export class BannerEditComponent {
     }
     this.formBannerGroup.get("barcode").setValue("");
     if(value === "spesific_product_b2b"){
-      this.formBannerGroup.get("barcode").setValidators([Validators.required]);
+      this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()
     }else{
       this.formBannerGroup.controls['barcode'].setValue("")
