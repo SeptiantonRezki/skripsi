@@ -256,7 +256,7 @@ export class PopupNotificationEditComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     });
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -419,10 +419,7 @@ export class PopupNotificationEditComponent {
         }
 
         if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
-          this.formPopupGroup.controls['barcode'].enable();
-        }
-
-        if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode'].setValidators([Validators.required])
           this.formPopupGroup.controls['barcode'].enable();
         }
 
@@ -572,8 +569,8 @@ export class PopupNotificationEditComponent {
       }
 
       if (value === "spesific_product_b2b") {
-        this.formPopupGroup.controls['barcode'].enable();
         this.formPopupGroup.get("barcode").setValidators([Validators.required]);
+        this.formPopupGroup.controls['barcode'].enable();
       }
 
       if (value === "e_wallet") {
