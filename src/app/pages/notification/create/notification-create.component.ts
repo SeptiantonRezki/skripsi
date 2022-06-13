@@ -415,7 +415,7 @@ export class NotificationCreateComponent {
       } else if(res === "tsm") {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
       }else {
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
