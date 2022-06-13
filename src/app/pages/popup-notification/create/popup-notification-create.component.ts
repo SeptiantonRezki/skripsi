@@ -438,7 +438,7 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}
+          { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
