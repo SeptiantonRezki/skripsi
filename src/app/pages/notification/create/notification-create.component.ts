@@ -313,7 +313,7 @@ export class NotificationCreateComponent {
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -1798,8 +1798,8 @@ export class NotificationCreateComponent {
     }
 
     if (value === 'spesific_product_b2b') {
-      this.formNotification.controls['barcode'].enable();
       this.formNotification.get('barcode').setValidators([Validators.required]);
+      this.formNotification.controls['barcode'].enable();
     } else {
       this.formNotification.controls['barcode'].setValue("");
       this.formNotification.controls['barcode'].disable();
