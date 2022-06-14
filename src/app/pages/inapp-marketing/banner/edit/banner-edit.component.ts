@@ -1375,44 +1375,70 @@ export class BannerEditComponent {
 
       let fd = new FormData();
       fd.append('_method', 'PUT');
+      body['_method'] ='PUT';
       fd.append('name', this.formBannerGroup.get('name').value);
+      body['name'] = this.formBannerGroup.get('name').value;
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
+      body['from'] = moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD');
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
+      body['to'] = moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD');
       fd.append('enable', this.formBannerGroup.get('enable').value);
+      body['enable'] = this.formBannerGroup.get('enable').value;
       fd.append('status', this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status);
+      body['status'] = this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status;
       fd.append('user_group', this.formBannerGroup.get('user_group').value);
+      body['user_group'] = this.formBannerGroup.get('user_group').value;
       fd.append('promo', this.formBannerGroup.get('promo').value);
+      body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
+        body['image'] = this.imageConverted;
       }
 
       if (body.content_type === 'static_page') {
         fd.append('title', this.formBannerGroup.get('title').value);
+        body['title'] = this.formBannerGroup.get('title').value;
         fd.append('body', this.formBannerGroup.get('body').value);
+        body['body'] = this.formBannerGroup.get('body').value;
       } else if (body.content_type === 'landing_page') {
         fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
+        body['landing_page'] = this.formBannerGroup.get('landing_page').value;
       } else if (body.content_type === 'iframe') {
         fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+        body['iframe'] = this.formBannerGroup.get('url_iframe').value;
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
+        body['transfer_token'] = this.formBannerGroup.get('transfer_token').value;
       } else if (body.content_type === 'image') {
         if (this.imageContentTypeFromDetail) {
-          if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
+          if (this.imageContentTypeBase64){
+            fd.append('content_image', this.imageContentTypeBase64);
+            body['content_image'] = this.imageContentTypeBase64;
+          } 
         } else {
-          if (this.imageContentTypeBase64) fd.append('content_image', this.imageContentTypeBase64);
+          if (this.imageContentTypeBase64){fd.append('content_image', this.imageContentTypeBase64);
+          body['content_image'] = this.imageContentTypeBase64;
+        }
           else return this.dialogService.openSnackBar({ message: 'Konten image belum dipilih' });
         }
       } else if (body.content_type === 'e_wallet') {
         fd.append('body', this.formBannerGroup.get('body').value);
+        body['body'] = this.formBannerGroup.get('body').value;
         fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
+        body['content_wallet'] = this.formBannerGroup.get('content_wallet').value;
         fd.append('button_text', this.formBannerGroup.get('button_text').value);
+        body['button_text'] = this.formBannerGroup.get('button_text').value;
       } else if (body.content_type === 'link_web') {
         fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
+        body['url_link'] = this.formBannerGroup.get('url_iframe').value;
         fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
+        body['transfer_token'] = this.formBannerGroup.get('transfer_token').value;
       } else if (body.content_type === 'spesific_product_b2b') {
         fd.append('barcode', this.formBannerGroup.get('barcode').value.id);
+        body['barcode'] = this.formBannerGroup.get('barcode').value.id;
         fd.append('name_product', this.formBannerGroup.get('barcode').value.name);
+        body['name_product'] = this.formBannerGroup.get('barcode').value.name;
       }
       else {
 
@@ -1420,31 +1446,46 @@ export class BannerEditComponent {
 
       if (body.user_group === 'retailer') {
         fd.append('age', this.formBannerGroup.get('age').value);
+        body['age'] = this.formBannerGroup.get('age').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
+        body['type_banner'] = this.formBannerGroup.get('type_banner').value;
       }
 
       if (body.user_group === 'customer') {
         fd.append('gender', this.formBannerGroup.get('gender').value);
+        body['gender'] = this.formBannerGroup.get('gender').value;
         fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
+        body['age_from'] = this.formBannerGroup.get('age_consumer_from').value;
         fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+        body['age_to'] = this.formBannerGroup.get('age_consumer_to').value;
         fd.append('employee', this.formBannerGroup.get('employee').value);
+        body['employee'] = this.formBannerGroup.get('employee').value;
         fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+        body['smoker'] = this.formBannerGroup.get('is_smoker').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
+        body['type_banner'] = this.formBannerGroup.get('type_banner').value;
         if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
           fd.append('verification', this.formBannerGroup.get('verification').value);
+          body['verification'] = this.formBannerGroup.get('verification').value;
         }
         if (this.formBannerGroup.get('content_type').value === 'landing_page' && this.formBannerGroup.get('landing_page').value === 'profil_saya') {
           fd.append('profile', this.formBannerGroup.get('profile').value);
+          body['profile'] = this.formBannerGroup.get('profile').value;
         }
         fd.append('subscription', this.formBannerGroup.get('subscription').value);
+        body['subscription'] = this.formBannerGroup.get('subscription').value;
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
         fd.append('banner_customer_id', this.formBannerGroup.get('banner_customer_id').value);
+        body['banner_customer_id'] = this.formBannerGroup.get('banner_customer_id').value;
         fd.append('banner_customer_body', this.formBannerGroup.get('banner_customer_body').value);
+        body['banner_customer_body'] = this.formBannerGroup.get('banner_customer_body').value;
       } else {
         fd.append('banner_customer_id', null);
+        body['banner_customer_id'] = null;
         fd.append('banner_customer_body', null);
+        body['banner_customer_body'] = null;
       }
 
       if (this.formBannerGroup.get('is_target_area').value) {
@@ -1458,6 +1499,7 @@ export class BannerEditComponent {
           console.log(ids);
           ids.forEach((item) => {
             fd.append('areas[]', item);
+            body['areas[]'] = item;
           });
         }
       } else {
@@ -1487,17 +1529,21 @@ export class BannerEditComponent {
           if (body.user_group === 'retailer') {
             if (this.formBannerGroup.controls['group_type'].value === 'src') {
               fd.append('areas[src][]', item.value);
+              body['areas[src][]'] = item.value;
             } else {
               fd.append('areas[ws_downline][]', item.value);
+              body['areas[ws_downline][]'] = item.value;
             }
           } else {
             fd.append('areas[]', item.value);
+            body['areas[]'] = item.value;
           }
         })
       }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
+        body['image'] = this.imageConverted;
       }
 
       // this.typeArea.map(type => {
@@ -1512,28 +1558,46 @@ export class BannerEditComponent {
 
       if (body.user_group === 'retailer') {
         fd.append('business_type', this.formBannerGroup.controls['group_type'].value);
+        body['business_type'] = this.formBannerGroup.controls['group_type'].value;
       }
 
       if (this.formBannerGroup.get('is_target_audience').value) {
         fd.append('target_audience', '1');
+        body['target_audience'] = '1';
         this.audienceSelected.map(aud => {
-          fd.append('target_audiences[]', aud.id)
+          // fd.append('target_audiences[]', aud.id)
+          // body['target_audiences[]'] = '1';
         });
+        fd.append('target_audiences[]', JSON.stringify(this.audienceSelected.map(aud => aud.id)));
+        body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
+        this.bannerService.put(body, { banner_id: this.detailBanner.id }).subscribe(
+          res => {
+            this.loadingIndicator = false;
+            this.router.navigate(['advertisement', 'banner']);
+            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
+          },
+          err => {
+            // this.dialogService.openSnackBar({ message: err.error.message });
+            this.loadingIndicator = false;
+          }
+        );
       } else {
         fd.append('target_audience', '0');
+        body['target_audience'] = '0';
+        this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
+          res => {
+            this.loadingIndicator = false;
+            this.router.navigate(['advertisement', 'banner']);
+            this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
+          },
+          err => {
+            // this.dialogService.openSnackBar({ message: err.error.message });
+            this.loadingIndicator = false;
+          }
+        );
       }
 
-      this.bannerService.put(fd, { banner_id: this.detailBanner.id }).subscribe(
-        res => {
-          this.loadingIndicator = false;
-          this.router.navigate(['advertisement', 'banner']);
-          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
-        },
-        err => {
-          // this.dialogService.openSnackBar({ message: err.error.message });
-          this.loadingIndicator = false;
-        }
-      );
+      
 
     } else {
       let msg;
