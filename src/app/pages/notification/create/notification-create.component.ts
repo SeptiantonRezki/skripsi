@@ -313,7 +313,7 @@ export class NotificationCreateComponent {
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -415,7 +415,7 @@ export class NotificationCreateComponent {
       } else if(res === "tsm") {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
       }else {
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}];
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -1798,8 +1798,8 @@ export class NotificationCreateComponent {
     }
 
     if (value === 'spesific_product_b2b') {
-      this.formNotification.controls['barcode'].enable();
       this.formNotification.get('barcode').setValidators([Validators.required]);
+      this.formNotification.controls['barcode'].enable();
     } else {
       this.formNotification.controls['barcode'].setValue("");
       this.formNotification.controls['barcode'].disable();
@@ -2387,7 +2387,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc, area_ids, is_smoking,
+        verification, send_sfmc, area_ids, is_smoking, date
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2425,6 +2425,8 @@ export class NotificationCreateComponent {
       frm.controls['status'].setValue(status);
       frm.controls['verification'].setValue(verification);
       frm.controls['area_ids'].setValue(area_ids);
+      frm.controls['date'].setValue(moment(date.split(' ')[0]));
+      frm.controls['time'].setValue(date.split(' ')[1]);
       if (area_ids.length > 0 && !area_ids.includes(1)) {
         frm.controls['is_target_area'].setValue(true);
         this.areasInit = frm.controls['area_ids'].value.map(item => ({ id: item }));

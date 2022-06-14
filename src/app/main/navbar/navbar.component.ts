@@ -28,6 +28,7 @@ import { NotificationService } from "app/services/notification.service";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { DialogService } from "app/services/dialog.service";
 import { StorageHelper } from "app/helper/storage.helper";
+import { getDynamicBranding } from "environments/environment";
 
 @Component({
   selector: "fuse-navbar",
@@ -62,6 +63,7 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
   navigationServiceWatcher: Subscription;
   fusePerfectScrollbarUpdateTimeout;
   profile: any;
+  branding: any;
 
   constructor(
     private sidebarService: FuseSidebarService,
@@ -85,6 +87,9 @@ export class FuseNavbarComponent implements OnInit, OnDestroy {
 
     // Default layout
     this.layout = "vertical";
+
+    this.branding = getDynamicBranding();
+    console.log('this branding', this.branding)
   }
   @HostListener('document:click', ['$event'])
   documentClick(event: Event): void {

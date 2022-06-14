@@ -1,183 +1,233 @@
-<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <!-- HEADER -->
+<div class="page-layout simple fullwidth" fxLayout="column">
   <page-content-header [contentTitle]="ls.locale.field_force.page_title">
     <div class="button-row" fxLayout="row">
-      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" [routerLink]="['/user-management','field-force','create']">
+      <button
+        *ngIf="permission.buat"
+        mat-raised-button
+        aria-label="Login"
+        type="button"
+        [routerLink]="['/user-management', 'field-force', 'create']"
+      >
         <mat-icon>add</mat-icon>TAMBAH
       </button>
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
-  <!-- / HEADER -->
-
-  <div class="content p-24" *ngIf="!onLoad">
-    <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{ ls.locale.field_force.page_title }}</h2>
-        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-          <mat-icon>search</mat-icon>
-          <mat-form-field class="is-light tab-search">
-            <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)"
-              autocomplete="off">
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <div [formGroup]="formFilter">
+        <div fxLayout="row" fxLayoutGap="24px grid" class="pt-24 px-24">
+          <div fxFlex="80">
+            <salestree
+              [limit]="areaFromLogin"
+              (areaWithKey)="getAreaIds($event)"
+            ></salestree>
+          </div>
+          <mat-form-field class="is-light" fxFlex="20">
+            <input
+              matInput
+              [placeholder]="ls.locale.global.label.search"
+              (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off"
+            />
+            <mat-icon matSuffix style="font-size: 20px">search</mat-icon>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="24px grid" class="pt-24 pb-16 px-24">
+          <mat-form-field fxFlex="20" class="is-light form-primary">
+            <mat-select
+              [placeholder]="ls.locale.field_force.app_version"
+              formControlName="version"
+            >
+              <mat-option
+                *ngFor="let item of listVersions"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="20" class="is-light form-primary">
+            <mat-select
+              [placeholder]="ls.locale.global.label.status"
+              formControlName="status"
+            >
+              <mat-option
+                *ngFor="let item of listStatus"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="20" class="is-light form-primary">
+            <mat-select
+              [placeholder]="ls.locale.global.label.classification"
+              formControlName="classification"
+            >
+              <mat-option
+                *ngFor="let item of listClassification"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
+            </mat-select>
           </mat-form-field>
         </div>
       </div>
-      <form [formGroup]="formFilter" autoComplete="off">
-        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.national" formControlName="national">
-              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.zone" formControlName="zone" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua
-                Zona' :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.regional" formControlName="region" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
-                ? 'Semua
-                Regional'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.area" formControlName="area" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua
-                Area'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.salespoint" formControlName="salespoint" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
-                'all' ?
-                'Semua
-                Salespoint'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.district" formControlName="district" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
-                'all' ? 'Semua
-                District'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.area.territory" formControlName="territory" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
-                'all' ? 'Semua
-                Territori'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-          style="margin-bottom: 25px;">
-          <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.field_force.app_version" [formControl]="version">
-              <mat-option *ngFor="let item of listVersions" [value]="item.version">{{item.version}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.label.status" [formControl]="status">
-              <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="20" class="is-light form-primary">
-            <mat-select [placeholder]="ls.locale.global.label.classification" [formControl]="clasification">
-              <mat-option *ngFor="let item of listClasification" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
-
-        <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
-          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
-          </ng-template>
-
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected"></mat-checkbox>
-          </ng-template>
-        </ngx-datatable-column> -->
-
-        <ngx-datatable-column [name]="ls.locale.global.label.name" prop="fullname">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.fullname}} </a>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [name]="ls.locale.global.label.username" prop="username" summary-template="activeCell">
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Clasification" prop="clasification" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.classification}}</ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column [name]="ls.locale.global.area.territory" prop="area_code" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.area_code}}</ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [name]="ls.locale.field_force.app_version" prop="version" summary-template="activeCell"
-          [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version || '-'}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [width]="100" [name]="ls.locale.global.label.status" prop="status">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="name-container">
-              <p class="status text-truncate h6 p-4"
-                style="min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px;"
-                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status == 'active' ? ls.locale.global.label.active : ls.locale.global.label.inactive}}
-              </p>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [name]="ls.locale.global.label.last_login" prop="last_login" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.last_login | date:'dd/MM/yyyy HH:mm'}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column [width]="98" [name]="ls.locale.global.label.action" headerClass="textright"
-          [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
-            <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-              <button mat-icon-button color="primary" (click)="deleteFf(row.id)"
-                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable>
+      <div
+        *ngIf="onLoad"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        class="py-48"
+      >
+        <mat-spinner
+          [strokeWidth]="6"
+          [diameter]="50"
+          color="accent"
+        ></mat-spinner>
+      </div>
+      <div *ngIf="!onLoad">
+        <ngx-datatable
+          class="material"
+          style="border-top: 1px solid #e3e3e3"
+          [rows]="rows"
+          [loadingIndicator]="loadingIndicator"
+          [columnMode]="'force'"
+          [offset]="offsetPagination"
+          [headerHeight]="48"
+          [footerHeight]="56"
+          [rowHeight]="'auto'"
+          [scrollbarH]="true"
+          [reorderable]="reorderable"
+          [count]="pagination.total"
+          [limit]="pagination.per_page"
+          [externalPaging]="true"
+          [externalSorting]="true"
+          (page)="setPage($event)"
+          (sort)="onSort($event)"
+        >
+          <ngx-datatable-column
+            width="250"
+            [name]="ls.locale.global.label.name"
+            prop="fullname"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span
+                class="row-name"
+                [routerLink]="[
+                  '/user-management',
+                  'field-force',
+                  'detail',
+                  row.id
+                ]"
+                >{{ row.fullname }}</span
+              >
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [name]="ls.locale.global.label.username"
+            [sortable]="false"
+            prop="username"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Classification"
+            [sortable]="false"
+            prop="classification"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            [name]="ls.locale.global.area.territory"
+            [sortable]="false"
+            prop="area_code"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            [name]="ls.locale.field_force.app_version"
+            [sortable]="false"
+            prop="version"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+              >{{ row.version || "-" }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [width]="115"
+            [name]="ls.locale.global.label.status"
+            prop="status"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div
+                class="table-btn-label"
+                [ngClass]="
+                  row.status === 'active' ? 'label-green' : 'label-red'
+                "
+              >
+                {{
+                  row.status === "active"
+                    ? ls.locale.global.label.active
+                    : ls.locale.global.label.inactive
+                }}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            width="180"
+            [name]="ls.locale.global.label.last_login"
+            [sortable]="false"
+            prop="last_login"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              {{ row.last_login | date: "dd/MM/yyyy HH:mm" }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [sortable]="false"
+            [name]="ls.locale.global.label.action"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <div class="button-row" style="white-space: nowrap">
+                <button
+                  mat-icon-button
+                  color=""
+                  matTooltip="Ubah"
+                  [disabled]="!permission.ubah"
+                  [routerLink]="[
+                    '/user-management',
+                    'field-force',
+                    'edit',
+                    row.id
+                  ]"
+                >
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Hapus"
+                  [disabled]="!permission.hapus"
+                  (click)="delete(row.id)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
     </div>
   </div>
 </div>

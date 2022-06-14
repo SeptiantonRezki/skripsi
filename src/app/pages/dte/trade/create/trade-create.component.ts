@@ -35,6 +35,8 @@ export class TradeCreateComponent {
   filteredGTpOptions: Observable<string[]>;
   public filterGTP: FormControl = new FormControl();
   public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterSGTP: FormControl = new FormControl();
+  public filteredSGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
 
   @HostListener('window:beforeunload')
@@ -55,6 +57,7 @@ export class TradeCreateComponent {
   }
 
   listGroupTradeProgram: any[] = [];
+  listSubGroupTradeProgram: any[] = [];
 
   constructor(
     private router: Router,
@@ -82,7 +85,6 @@ export class TradeCreateComponent {
   }
 
   ngOnInit() {
-    this.getGroupTradeProgram();
     this.formTradeProgram = this.formBuilder.group({
       name: ['', Validators.required],
       start_date: ['', Validators.required],
@@ -90,7 +92,8 @@ export class TradeCreateComponent {
       budget: ['', [Validators.required, Validators.min(0)]],
       coin_expiry_date: ['', Validators.required],
       status: ['publish', Validators.required],
-      group_trade_program: [""]
+      group_trade_program: [""],
+      sub_group_trade_program: [""],
     })
 
     this.formTradeProgram.valueChanges.subscribe(() => {
@@ -106,6 +109,15 @@ export class TradeCreateComponent {
       .subscribe(() => {
         this.filteringGTP();
       });
+
+    this.filterSGTP.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringSGTP();
+      });
+
+    this.getGroupTradeProgram();
+    this.getSubGroupTradeProgram();
     
     setTimeout(() => {
       document.getElementById("trade-create").getElementsByTagName("input")[0].id = "upload-file-trade";
@@ -142,6 +154,32 @@ export class TradeCreateComponent {
       this.listGroupTradeProgram = res.data ? res.data.data : [];
       this.filteredGTP.next(this.listGroupTradeProgram.slice());
     })
+  }
+
+  getSubGroupTradeProgram() {
+    this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
+      const data = res.data ? res.data.data.filter((item: any) => item.status === "active") : [];
+      this.listSubGroupTradeProgram = data;
+      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
+    })
+  }
+  
+  filteringSGTP() {
+    if (!this.listSubGroupTradeProgram) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterSGTP.value;
+    if (!search) {
+      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredSGTP.next(
+      this.listSubGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   setMinEndDate() {
@@ -181,6 +219,7 @@ export class TradeCreateComponent {
       fd.append('coin_expiry_date', body.coin_expiry_date);
       fd.append('status', body.status);
       fd.append('trade_creator_group_id', this.formTradeProgram.get('group_trade_program').value);
+      fd.append('trade_creator_sub_group_id', this.formTradeProgram.get('sub_group_trade_program').value);
       if (this.files) fd.append('image', this.files);
 
       this.tradeProgramService.create(fd).subscribe(

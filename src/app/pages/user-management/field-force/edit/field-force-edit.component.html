@@ -1,182 +1,187 @@
-<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
-  <!-- HEADER -->
-  <page-content-header [contentTitle]="'Field Force Detail'">
-  </page-content-header>
-  <!-- / HEADER -->
-  <div class="content" *ngIf="!onLoad">
-    <div class="ayo-main-wrapper mat-white-bg p-0 m-24" fxLayout="column">
-
-      <form [formGroup]="formFF">
-        <div class="ayo-top px-24" fxLayout="row" fxLayoutAlign="space-between center">
-          <h3 class="font-weight-700">Detil Field Force</h3>
-          <mat-form-field
-            [class]="formFF.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
-            <mat-select formControlName="status">
-              <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <page-content-header
+    [contentTitle]="isDetail ? 'Detail Field Force' : 'Ubah Field Force'"
+  ></page-content-header>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <form
+        [formGroup]="formUser"
+        fxLayout="row wrap"
+        fxLayout.lt-md="column"
+        fxLayoutGap="24px grid"
+        class="p-24"
+      >
+        <div
+          fxLayout="column"
+          fxFlex="50"
+          fxFlex.lt-md="100"
+          fxLayoutGap="16px"
+        >
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              formControlName="name"
+              [placeholder]="locale.global.label.name"
+            />
+            <mat-error
+              *ngIf="
+                formUser.get('name').hasError('required') &&
+                formUser.get('name').touched
+              "
+            >
+              {{ locale.global.label.name }}
+              {{ locale.global.messages.mandatory_text }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              formControlName="username"
+              [placeholder]="locale.global.label.username"
+            />
+            <mat-error
+              *ngIf="
+                formUser.get('username').hasError('required') &&
+                formUser.get('username').touched
+              "
+            >
+              {{ locale.global.label.username }}
+              {{ locale.global.messages.mandatory_text }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <mat-select
+              formControlName="type"
+              [placeholder]="locale.global.label.type"
+            >
+              <mat-option [value]="type.id" *ngFor="let type of listType">{{
+                type.name
+              }}</mat-option>
             </mat-select>
+            <mat-error
+              *ngIf="
+                formUser.get('type').hasError('required') &&
+                formUser.get('type').touched
+              "
+            >
+              {{ locale.global.label.type }}
+              {{ locale.global.messages.mandatory_text }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            *ngIf="formUser.get('type').value === 'field-force'"
+            class="is-light form-primary"
+          >
+            <mat-select
+              formControlName="classification"
+              [placeholder]="locale.global.label.classification"
+            >
+              <mat-option
+                [value]="classification.id"
+                *ngFor="let classification of listClassification"
+                >{{ classification.name }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                formUser.get('classification').hasError('required') &&
+                formUser.get('classification').touched
+              "
+            >
+              {{ locale.global.label.classification }}
+              {{ locale.global.messages.mandatory_text }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="is-light form-primary">
+            <input
+              matInput
+              formControlName="version"
+              [placeholder]="locale.field_force.app_version"
+            />
           </mat-form-field>
         </div>
-        <div class="ayo-middle pt-24" fxLayout="column">
-
-          <mat-form-field fxFlex="100" class="is-light px-24">
-            <input matInput placeholder="{{ls.locale.global.label.name}}" type="text" formControlName="fullname">
-          </mat-form-field>
-          <mat-form-field fxFlex="100" class="is-light px-24">
-            <input matInput placeholder="Username" type="text" formControlName="username">
-          </mat-form-field>
-          <mat-form-field fxFlex="50" class="is-light px-24">
-            <input matInput placeholder="Apps Version" formControlName="version">
-          </mat-form-field>
-          <mat-form-field fxFlex="50" class="is-light px-24">
-            <mat-select placeholder="{{ 'global.label.classification' | translate}}" formControlName="classification">
-              <mat-option [value]="classification.name" *ngFor="let classification of listClassification">{{classification.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div class="" formArrayName="wilayah" *ngFor="let wil of formFF.get('wilayah')['controls']; let i = index;">
-            <div [formGroupName]="i">
-              <div class="mb-16 wilayah" fxLayout="row" fxLayoutAlign="space-between center">
-                <div fxFlex="50">
-                  <h3 class="">{{'global.area.geotree'| translate}} {{i+1}}</h3>
-                </div>
-                <div *ngIf="!isDetail" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
-                  fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                  <button
-                    *ngIf="formFF.get('wilayah').value.length === 1 || i === (formFF.get('wilayah').value.length - 1)"
-                    mat-raised-button type="button" (click)="addWilayah()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button *ngIf="formFF.get('wilayah').value.length > 1" mat-raised-button color="primary" type="button"
-                    (click)="deleteWilayah(i)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-              <div class="pb-8 px-24" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px"
-                fxLayoutGap.lt-md="0px" fxLayoutAlign="space-between stretch">
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national"
-                    matTooltip="{{getToolTipData(wil.get('national').value, wil.controls['list_national'].value)}}">
-                    <mat-option *ngFor="let item of wil.controls['list_national'].value" [value]="item.id">{{item.name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="wil.controls['national'].hasError('required') && wil.controls['national'].touched">
-                    {{ls.locale.global.area.national}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone"
-                    matTooltip="{{getToolTipData(wil.get('zone').value, wil.controls['list_zone'].value)}}"
-                    (selectionChange)="generataList('region', wil.get('zone').value, i, 'selection')">
-                    <mat-option *ngFor="let item of wil.controls['list_zone'].value" [value]="item.id">{{item.name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="wil.controls['zone'].hasError('required') && wil.controls['zone'].touched">
-                    {{ls.locale.global.area.zone}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region"
-                    matTooltip="{{getToolTipData(wil.get('region').value, wil.controls['list_region'].value)}}"
-                    (selectionChange)="generataList('area', wil.get('region').value, i, 'selection')">
-                    <mat-option *ngFor="let item of wil.controls['list_region'].value" [value]="item.id">{{item.name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="wil.controls['region'].hasError('required') && wil.controls['region'].touched">
-                    {{ls.locale.global.area.regional}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
-                    matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
-                    (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
-                    <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">{{item.name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                    {{ls.locale.global.area.area}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
-                    matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
-                    (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
-                    <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
-                      {{item.name}}</mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                    {{ls.locale.global.area.salespoint}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district"
-                    matTooltip="{{getToolTipData(wil.get('district').value, wil.controls['list_district'].value)}}"
-                    (selectionChange)="generataList('territory', wil.get('district').value, i, 'selection')">
-                    <mat-option *ngFor="let item of wil.controls['list_district'].value" [value]="item.id">{{item.name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="wil.controls['district'].hasError('required') && wil.controls['district'].touched">
-                    {{ls.locale.global.area.district}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-                <mat-form-field fxFlex="31%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory"
-                    matTooltip="{{getToolTipData(wil.get('territory').value, wil.controls['list_territory'].value)}}">
-                    <mat-option *ngFor="let item of wil.controls['list_territory'].value" [value]="item.id">
-                      {{item.name}}</mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="wil.controls['territory'].hasError('required') && wil.controls['territory'].touched">
-                    {{ls.locale.global.area.territory}} {{ls.locale.global.messages.mandatory_text}}
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="!isDetail" class="px-24">
-            <div fxLayout="row" class="pt-16" fxLayoutAlign="start center">
-              <h2 class="">{{ls.locale.field_force.text1}}</h2>
-            </div>
-
-            <div fxLayout="row">
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" *ngIf="showPassword" formControlName="password"
-                  placeholder="{{ls.locale.field_force.text2}}">
-                <input matInput type="password" *ngIf="!showPassword" formControlName="password"
-                  placeholder="{{ls.locale.field_force.text2}}">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
-                  (click)="showPassword = !showPassword">
-                  <mat-icon *ngIf="!showPassword">remove_red_eye</mat-icon>
-                  <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-            <div fxLayout="row">
-              <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" *ngIf="showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="{{ls.locale.field_force.text3}}">
-                <input matInput type="password" *ngIf="!showConfirmPassword" formControlName="password_confirmation"
-                  placeholder="{{ls.locale.field_force.text3}}">
-                <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
-                  (click)="showConfirmPassword = !showConfirmPassword">
-                  <mat-icon *ngIf="!showConfirmPassword">remove_red_eye</mat-icon>
-                  <mat-icon *ngIf="showConfirmPassword">visibility_off</mat-icon>
-                </button>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div *ngIf="!isDetail" class="confirm btn-confirm px-24 py-48" fxLayout="row" fxLayoutGap="25px">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-              {{ls.locale.global.button.save}}
-            </button>
-          </div>
-
+        <div fxFlex="100" class="pb-32">
+          <mat-slide-toggle formControlName="status">
+            {{ locale.global.label.status }}
+            {{
+              formUser.get("status").value
+                ? locale.global.label.active
+                : locale.global.label.inactive
+            }}</mat-slide-toggle
+          >
         </div>
       </form>
+      <div
+        fxLayout="column"
+        *ngFor="let areas of formUser.get('areas')['controls']; let i = index"
+      >
+        <div
+          fxLayoutGap="20px"
+          fxLayoutAlign="space-between center"
+          class="px-24 py-16"
+          style="background: #3a3a3a"
+        >
+          <div style="font-size: 18px; color: white">
+            {{ locale.global.area.geotree }} {{ i + 1 }}
+          </div>
+          <div *ngIf="!isDetail" fxLayoutGap="20px">
+            <button
+              *ngIf="
+                formUser.get('areas').value.length === 1 ||
+                i === formUser.get('areas').value.length - 1
+              "
+              mat-raised-button
+              type="button"
+              (click)="addAreas()"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+            <button
+              *ngIf="formUser.get('areas').value.length > 1"
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="dialogRemoveAreas(i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="p-24">
+          <salestree
+            [value]="formUser.get('areas').at(i).get('areas').value"
+            [limit]="areaFromLogin"
+            [limitLevel]="limitLevel"
+            [multiple]="false"
+            (areaWithKey)="getAreaIds($event, i)"
+            [disabled]="isDetail"
+          ></salestree>
+          <mat-error
+            *ngIf="
+              formUser.get('areas').at(i).get('area_id').hasError('required') &&
+              formUser.get('areas').touched
+            "
+            >{{ locale.global.area.geotree }}
+            {{ locale.global.messages.mandatory_text }}</mat-error
+          >
+        </div>
+      </div>
     </div>
-
+    <div
+      *ngIf="!isDetail"
+      class="confirm btn-confirm pt-24 pb-24"
+      fxLayout="row"
+      fxLayoutGap="25px"
+    >
+      <button
+        mat-raised-button
+        type="button"
+        class="confirmation-button"
+        fxFlex="20"
+        (click)="submit()"
+      >
+        {{ locale.global.button.save }}
+      </button>
+    </div>
   </div>
 </div>

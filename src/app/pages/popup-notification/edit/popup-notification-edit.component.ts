@@ -263,7 +263,7 @@ export class PopupNotificationEditComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:["", Validators.required]
+      barcode:[""]
     });
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -431,7 +431,7 @@ export class PopupNotificationEditComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          {name:"Spesifik Produk B2B", value:"spesific_product_b2b"}
+          { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
@@ -454,10 +454,7 @@ export class PopupNotificationEditComponent {
         }
 
         if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
-          this.formPopupGroup.controls['barcode'].enable();
-        }
-
-        if (this.formPopupGroup.controls['content_type'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode'].setValidators([Validators.required])
           this.formPopupGroup.controls['barcode'].enable();
         }
 
@@ -607,8 +604,8 @@ export class PopupNotificationEditComponent {
       }
 
       if (value === "spesific_product_b2b") {
-        this.formPopupGroup.controls['barcode'].enable();
         this.formPopupGroup.get("barcode").setValidators([Validators.required]);
+        this.formPopupGroup.controls['barcode'].enable();
       }
 
       if (value === "e_wallet") {

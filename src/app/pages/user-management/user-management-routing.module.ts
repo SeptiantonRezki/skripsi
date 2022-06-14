@@ -123,19 +123,19 @@ const routes: Routes = [
     },
     canActivate: [PageGuard]
   },
-  // {
-  //   path: "field-force/create",
-  //   component: FieldForceCreateComponent,
-  //   data: {
-  //     breadcrumbs: brConfig.fieldforce.create
-  //   },
-  //   resolve: {
-  //     listLevel: ListLevelFFResolver
-  //   },
-  //   canActivate: [PageGuard]
-  // },
   {
-    path: "field-force/edit",
+    path: "field-force/create",
+    component: FieldForceCreateComponent,
+    data: {
+      breadcrumbs: brConfig.fieldforce.create
+    },
+    resolve: {
+      listLevel: ListLevelFFResolver
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "field-force/edit/:id",
     component: FieldForceEditComponent,
     data: {
       breadcrumbs: brConfig.fieldforce.edit
@@ -146,7 +146,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "field-force/detail",
+    path: "field-force/detail/:id",
     component: FieldForceEditComponent,
     data: {
       breadcrumbs: brConfig.fieldforce.detail
