@@ -93,8 +93,8 @@ export class Endpoint {
         brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
         brand_parameters: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brand_parameters`,
         trade_program_objectives: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/trade_program_objectives`,
-        ecosystem_params: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_parameters`,
-        ecosystem_brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/ecosystem_brands`,
+        ecosystem_params: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/master/ecosystem_parameters`,
+        ecosystem_brands: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/master/ecosystem_brands`,
       },
       admin_principal: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/principal`,
