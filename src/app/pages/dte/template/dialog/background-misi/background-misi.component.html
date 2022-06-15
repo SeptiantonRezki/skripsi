@@ -176,8 +176,8 @@
             </div>
             <div class="guideline__deskripsi">
               <mat-form-field class="example-full-width guideline__deskripsi" appearance="fill">
-                <mat-label>Deskripsi</mat-label>
-                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="Isi Deskripsi"></textarea>
+                <mat-label>{{'global.label.description' | translate}}</mat-label>
+                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="{{'global.label.description' | translate}}"></textarea>
               </mat-form-field>
             </div>
           </div>

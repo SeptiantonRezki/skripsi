@@ -115,7 +115,7 @@ export class BackgroundMisiComponent implements OnInit {
     let newFile = [];
 
     if (this.currentFiles.length === Number(this.isMultiple)) {
-      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.max_count_image', {count: this.isMultiple}) });
       this.selectedFiles = [];
       return;
     }
@@ -127,12 +127,12 @@ export class BackgroundMisiComponent implements OnInit {
         newFile.push(item);
       }
     });
-    if (isOverSize) this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2MB'});
+    if (isOverSize) this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.image_size_limit', {size: '2MB'}) });
 
     const restImage = Number(this.isMultiple) - this.currentFiles.length;
     if (restImage < newFile.length) {
       newFile = newFile.slice(0, restImage);
-      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.max_count_image', {count: this.isMultiple}) });
     }
 
     newFile.forEach(item => {
