@@ -582,20 +582,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
                 if(val.id == item['id']){
                   console.log('SAME', val.id);
                   if(!val.whitelist){ // unwhitelist
-                    //filteredSrcX.splice(index, 1);
-                    //this.removeDataArr(val.id);
-
-                    let data_index = res.data.src.map(x => {
-                      return x['business_id'];
-                    }).indexOf(val.id);
-                    console.log('DATA', data_index);
-                    filteredSrcX.splice(data_index, 1);
-
-
                     responseX.splice(i, 1); // splice from responseX
-                    // // filteredSrcX.push(...responseX[i]);
-                    // filteredSrcX.splice(index, 1); // splice from filteredSrcX
-                    console.log('deleted', index);
+                    // filteredSrcX.push(...responseX[i]);
+                    filteredSrcX.splice(index, 1); // splice from filteredSrcX
+                    // console.log('deleted', index);
                   }else{
                     responseX.splice(i, 1);
                   }
@@ -614,18 +604,6 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
-  }
-
-  removeDataArr (id_data){
-    console.log('id', id_data)
-    this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
-      let data_index = res.data.src.map(x => {
-        return x['business_id'];
-      }).indexOf(id_data);
-      console.log('DATA', data_index);
-      res.data.src.splice(data_index, 1);
-    })
-    
   }
   
 
