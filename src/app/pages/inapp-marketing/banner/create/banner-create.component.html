@@ -52,7 +52,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="20%" class="is-light form-primary">
               <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="to"
-                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}" [min]="minDate">
+                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}" [min]="minDate">
               <mat-error
                 *ngIf="formBannerGroup.controls['to'].hasError('required') && formBannerGroup.controls['to'].touched">
                 {{'iklan_dalam_aplikasi.spanduk_online.available_to' | translate}} {{'global.messages.mandatory_text' |
@@ -150,7 +150,8 @@
             <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
               <div class="pb-16 px-24">
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
-                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' | translate}}</strong>
+                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' |
+                    translate}}</strong>
                 </div>
                 <mat-radio-group formControlName="type_banner" class="radio-group">
                   <mat-radio-button class="radio-button" *ngFor="let item of listTypeBanner" [value]="item.value">
@@ -162,7 +163,8 @@
             <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'customer'">
               <div class="pb-16 px-24">
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
-                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' | translate}}</strong>
+                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.banner_type' |
+                    translate}}</strong>
                 </div>
                 <mat-radio-group formControlName="type_banner" class="radio-group">
                   <mat-radio-button class="radio-button" *ngFor="let item of listTypeBannerConsumer"
@@ -189,12 +191,14 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="employee" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}">
+                  <mat-select formControlName="employee"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}">
                     <mat-option *ngFor="let item of listEmployee" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formBannerGroup.controls['employee'].hasError('required') && formBannerGroup.controls['employee'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}{{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -203,12 +207,14 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="is_smoker" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}}">
+                  <mat-select formControlName="is_smoker"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}}">
                     <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formBannerGroup.controls['is_smoker'].hasError('required') && formBannerGroup.controls['is_smoker'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} {{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -217,12 +223,14 @@
             <div class="px-24" *ngIf="formBannerGroup.get('is_smoker').value !== 'yes'">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="verification" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
+                  <mat-select formControlName="verification"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
                     <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formBannerGroup.controls['verification'].hasError('required') && formBannerGroup.controls['verification'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -231,7 +239,8 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="subscription" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
+                  <mat-select formControlName="subscription"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
                     <mat-option *ngFor="let item of listSubscription" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
@@ -259,25 +268,31 @@
               </div>
               <div class="" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="15" class="is-light form-primary">
-                  <input matInput type="number" formControlName="age_consumer_from" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}">
+                  <input matInput type="number" formControlName="age_consumer_from"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}">
                   <mat-error
                     *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('required') && formBannerGroup.controls['age_consumer_from'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}} {{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('min') && formBannerGroup.get('age_consumer_from').touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{formBannerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}}
+                    {{formBannerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="15" class="is-light form-primary">
-                  <input matInput type="number" formControlName="age_consumer_to" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}">
+                  <input matInput type="number" formControlName="age_consumer_to"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}">
                   <mat-error
                     *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('required') && formBannerGroup.controls['age_consumer_to'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}} {{'global.messages.mandatory_text' |
+                    translate}}
                   </mat-error>
                   <mat-error
                     *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('min') && formBannerGroup.get('age_consumer_to').touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{'iklan_dalam_aplikasi.spanduk_online.minimum_max_age' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.minimum_max_age' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -298,13 +313,15 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="banner_customer_id" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.image_inapp_chat_consumer' | translate}}">
+                  <mat-select formControlName="banner_customer_id"
+                    placeholder="{{'iklan_dalam_aplikasi.spanduk_online.image_inapp_chat_consumer' | translate}}">
                     <mat-option *ngFor="let item of listCustomerBanners" [value]="item.id">{{item.id}} - {{item.name}}
                     </mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formBannerGroup.controls['banner_customer_id'].hasError('required') && formBannerGroup.controls['banner_customer_id'].touched">
-                    {{'iklan_dalam_aplikasi.spanduk_online.image_inapp_chat_consumer' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    {{'iklan_dalam_aplikasi.spanduk_online.image_inapp_chat_consumer' | translate}}
+                    {{'global.messages.mandatory_text' | translate}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -317,7 +334,8 @@
                 fxFlex="100"></textarea>
               <mat-error style="padding-top: 6px !important; font-size: .86em;"
                 *ngIf="formBannerGroup.controls['banner_customer_body'].hasError('required')">
-                {{'iklan_dalam_aplikasi.spanduk_online.content_page_inapp_chat_consumer' | translate}} {{'global.messages.mandatory_text' | translate}}
+                {{'iklan_dalam_aplikasi.spanduk_online.content_page_inapp_chat_consumer' | translate}}
+                {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </div>
           </div>
@@ -325,13 +343,15 @@
           <div class="px-24">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_type" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text22' | translate}}"
+                <mat-select formControlName="content_type"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text22' | translate}}"
                   (selectionChange)="contentType(formBannerGroup.get('content_type').value)">
                   <mat-option *ngFor="let item of listContentType" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formBannerGroup.controls['content_type'].hasError('required') && formBannerGroup.controls['content_type'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text22' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text22' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -342,22 +362,26 @@
             *ngIf="(formBannerGroup.get('content_type').value === 'static_page' || formBannerGroup.get('content_type').value === 'e_wallet')">
             <div fxLayout="row" *ngIf="formBannerGroup.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input matInput type="text" formControlName="title" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
+                <input matInput type="text" formControlName="title"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                 <mat-error
                   *ngIf="formBannerGroup.controls['title'].hasError('required') && formBannerGroup.controls['title'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
             <!-- Content Wallet -->
             <div fxLayout="row" *ngIf="formBannerGroup.get('content_type').value === 'e_wallet'">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="content_wallet" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}}">
+                <mat-select formControlName="content_wallet"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}}">
                   <mat-option *ngFor="let item of listContentWallet" [value]="item.id">{{item.app_name}}</mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formBannerGroup.controls['content_wallet'].hasError('required') && formBannerGroup.controls['content_wallet'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.wallet_type' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -365,10 +389,12 @@
             <!-- Button Text for Wallet -->
             <div fxLayout="row" *ngIf="formBannerGroup.get('content_type').value === 'e_wallet'">
               <mat-form-field fxFlex="45%" class="is-light form-primary">
-                <input matInput type="text" formControlName="button_text" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
+                <input matInput type="text" formControlName="button_text"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}}">
                 <mat-error
                   *ngIf="formBannerGroup.controls['button_text'].hasError('required') && formBannerGroup.controls['button_text'].touched">
-                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  {{'iklan_dalam_aplikasi.spanduk_online.text_button' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
                 </mat-error>
                 <!-- Show Error for Max Length -->
                 <mat-error
@@ -385,7 +411,8 @@
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formBannerGroup.controls['body'].hasError('required') && formBannerGroup.controls['body'].touched">
-              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
+              {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
+              translate}}
             </mat-error>
           </div>
 
@@ -393,7 +420,8 @@
           <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="landing_page" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
+                <mat-select formControlName="landing_page"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -404,7 +432,8 @@
             *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'profil_saya'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="profile" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.my_profile_page' | translate}}">
+                <mat-select formControlName="profile"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.my_profile_page' | translate}}">
                   <mat-option *ngFor="let item of listProfile" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -420,7 +449,8 @@
             *ngIf="formBannerGroup.get('content_type').value === 'iframe' || formBannerGroup.get('content_type').value === 'link_web'">
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <input matInput type="url" formControlName="url_iframe" placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
+                <input matInput type="url" formControlName="url_iframe"
+                  placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
                 <mat-error
                   *ngIf="formBannerGroup.controls['url_iframe'].hasError('required') && formBannerGroup.controls['url_iframe'].touched">
                   URL {{'global.messages.mandatory_text' | translate}}
@@ -439,13 +469,15 @@
             <div fxFlex="30" class="px-24 inline-block">
               <div ngfDrop selectable="1" [(validDrag)]="validComboDrag" [(file)]="imageContentType" accept="image/*"
                 class="well my-drop-zone" [class.invalid-drag]="validComboDrag===false"
-                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)" [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
+                [class.valid-drag]="validComboDrag" (fileChange)="imagesContentType($event)"
+                [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
               </div>
             </div>
             <div *ngIf="imageContentType">
               <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                 role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
-                  class="preview-image-content" (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                  class="preview-image-content"
+                  (click)="previewImage()">{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
                 <mat-icon matTooltip="{{'global.label.delete_image' | translate}}"
                   class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                   matchipremove="" role="img" aria-hidden="true">cancel</mat-icon>
@@ -468,7 +500,8 @@
 
             <div class="pb-16 px-24" *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
               <div class="" fxLayout="row" fxLayoutAlign="start center">
-                <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.retailer_type' | translate}}</strong>
+                <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.retailer_type' |
+                  translate}}</strong>
               </div>
               <mat-radio-group formControlName="group_type" class="radio-group">
                 <mat-radio-button class="radio-button" *ngFor="let item of listUserGroupType" [value]="item.value">
@@ -499,9 +532,11 @@
           </div>
           <div fxLayout="row" fxLayoutGap="24px" class="pb-24 px-24">
             <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
-              formControlName="is_target_audience">{{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
+              formControlName="is_target_audience">{{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}
+            </mat-checkbox>
             <mat-checkbox *ngIf="formBannerGroup.get('user_group').value === 'customer'" class="mt-4 ml-4 mb-8"
-              (change)="isTargetArea($event)" formControlName="is_target_area">{{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
+              (change)="isTargetArea($event)" formControlName="is_target_area">
+              {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
           </div>
           <ng-container *ngIf="formBannerGroup.get('is_target_area').value === true">
             <target-area (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)"
@@ -542,7 +577,8 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field fxFlex="12%" class="is-light form-primary">
-                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+                <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
+                  multiple>
                   <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
                     === 'all' ?
                     'Semua
