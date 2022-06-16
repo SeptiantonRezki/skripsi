@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-pay-later-panel-src-edit',
@@ -565,13 +566,68 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(response => {
-      if (response) {
-        this.onSelect({ selected: response });
+    this.dialogRef.afterClosed().subscribe(responseX => {
+      if (responseX) {
+        let filteredSrcX = [];
+        let listArray = [];
+
+        this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+          if (res && res.data) {
+            filteredSrcX = res.data.src.map((mtr) => {
+              return { id: mtr['business_id'] };
+            });
+            console.log('data_all', filteredSrcX);
+            listArray = filteredSrcX.map((item, index) => {
+              responseX.filter((val,i) => {
+                if(val.id == item['id']){
+                  console.log('SAME', val.id);
+                  if(!val.whitelist){ // unwhitelist
+                    //filteredSrcX.splice(index, 1);
+                    //this.removeDataArr(val.id);
+
+                    let data_index = res.data.src.map(x => {
+                      return x['business_id'];
+                    }).indexOf(val.id);
+                    console.log('DATA', data_index);
+                    filteredSrcX.splice(data_index, 1);
+
+
+                    responseX.splice(i, 1); // splice from responseX
+                    // // filteredSrcX.push(...responseX[i]);
+                    // filteredSrcX.splice(index, 1); // splice from filteredSrcX
+                    console.log('deleted', index);
+                  }else{
+                    responseX.splice(i, 1);
+                  }
+                }
+              });
+            });
+            
+          }
+
+          filteredSrcX.push(...responseX);
+          console.log(filteredSrcX);
+          this.onSelect({ selected: res && res.data && res.data.src ? filteredSrcX : [] });
+        }, err => {
+        })
+        this.onSelect({ selected: responseX });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }
+
+  removeDataArr (id_data){
+    console.log('id', id_data)
+    this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+      let data_index = res.data.src.map(x => {
+        return x['business_id'];
+      }).indexOf(id_data);
+      console.log('DATA', data_index);
+      res.data.src.splice(data_index, 1);
+    })
+    
+  }
+  
 
   handleError(error) {
     console.log('Here')
