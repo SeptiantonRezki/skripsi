@@ -39,7 +39,8 @@
           <div fxLayout="row" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="20%" class="is-light form-primary">
               <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="from"
-                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.available_from' | translate}}" (dateChange)="setMinDate()">
+                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.available_from' | translate}}"
+                (dateChange)="setMinDate()">
               <mat-error
                 *ngIf="formBannerGroup.controls['from'].hasError('required') && formBannerGroup.controls['from'].touched">
                 {{'iklan_dalam_aplikasi.spanduk_online.available_from' | translate}} {{'global.messages.mandatory_text'
@@ -52,7 +53,7 @@
             </mat-form-field>
             <mat-form-field fxFlex="20%" class="is-light form-primary">
               <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="to"
-                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.available_to' | translate}}" [min]="minDate">
+                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}" [min]="minDate">
               <mat-error
                 *ngIf="formBannerGroup.controls['to'].hasError('required') && formBannerGroup.controls['to'].touched">
                 {{'iklan_dalam_aplikasi.spanduk_online.available_to' | translate}} {{'global.messages.mandatory_text' |
@@ -359,14 +360,16 @@
           <!-- spesifik produk b2b -->
           <div class="pb-24 px-24" *ngIf="formBannerGroup.get('content_type').value === 'spesific_product_b2b'">
             <div fxLayout="row">
-                <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate" [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45" (onChange)="handleSearchProduct($event)">
-                  <mat-error
+              <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate"
+                [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45"
+                (onChange)="handleSearchProduct($event)">
+                <mat-error
                   *ngIf="formBannerGroup.controls['barcode'].hasError('required') && formBannerGroup.controls['barcode'].touched">
                   <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
                   translate}} -->
                   {{'search_product_component.error_form' | translate}}
                 </mat-error>
-                </search-product-barcode>
+              </search-product-barcode>
             </div>
           </div>
           <!-- Static Page -->
