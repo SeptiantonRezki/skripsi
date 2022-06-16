@@ -584,17 +584,24 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
                   if(!val.whitelist){ // unwhitelist
                     responseX.splice(i, 1); // splice from responseX
                     this.removeDataArr(val.id); // remove from myArrSRC
+                    console.log('MMM', val.id);
                   }else{
                     responseX.splice(i, 1);
-                  }
-                }else{
-                  if(!val.whitelist){ // unwhitelist
-                    responseX.splice(i, 1);
+                    console.log('NNN', val.id);
                   }
                 }
+                // if(!val.whitelist){
+                //   if(val.id != item['id']){
+                //     responseX.splice(i, 1);
+                //     this.removeDataArr(val.id);
+                //     console.log('1', val.id);
+                //   }
+                // }
               });
             });
           }
+          console.log('data-arr', this.myArrSRC);
+          console.log('data-response', responseX);
           this.myArrSRC.push(...responseX);
           this.onSelect({ selected: res && res.data && res.data.src ? this.myArrSRC : [] });
         }, err => {
