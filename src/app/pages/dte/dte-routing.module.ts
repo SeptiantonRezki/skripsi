@@ -650,6 +650,24 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "check-image-planogram",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "check-image-planogram/create",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "check-image-planogram/detail/:id",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
     path: 'task-verification',
     component: TaskVerificationComponent,
     canActivate: [PageGuard]

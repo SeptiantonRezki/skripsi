@@ -168,6 +168,7 @@ import { AssignmentCartComponent } from './task-verification-2/assignment-cart/a
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 import { TranslateModule } from "@ngx-translate/core";
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -352,6 +353,7 @@ export const MY_FORMATS = {
     AssignmentCartComponent,
     TaskVerificationAssignmentComponent,
     TemplatePlanogramComponent,
+    CheckImageComponent,
   ],
   exports: [
     TemplateIndexComponent,
