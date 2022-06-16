@@ -571,7 +571,6 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       if (responseX) {
         let filteredSrcX = [];
         let listArray = [];
-        
 
         this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
           if (res && res.data) {
@@ -579,15 +578,17 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
               return { id: mtr['business_id'] };
             });
             this.myArrSRC.push(...filteredSrcX);
-            console.log('data_all', filteredSrcX);
             listArray = filteredSrcX.map((item, index) => {
               responseX.filter((val,i) => {
                 if(val.id == item['id']){
-                  console.log('SAME', val.id);
                   if(!val.whitelist){ // unwhitelist
                     responseX.splice(i, 1); // splice from responseX
                     this.removeDataArr(val.id); // remove from myArrSRC
                   }else{
+                    responseX.splice(i, 1);
+                  }
+                }else{
+                  if(!val.whitelist){ // unwhitelist
                     responseX.splice(i, 1);
                   }
                 }
@@ -595,7 +596,6 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
             });
           }
           this.myArrSRC.push(...responseX);
-          console.log(this.myArrSRC);
           this.onSelect({ selected: res && res.data && res.data.src ? this.myArrSRC : [] });
         }, err => {
         })
