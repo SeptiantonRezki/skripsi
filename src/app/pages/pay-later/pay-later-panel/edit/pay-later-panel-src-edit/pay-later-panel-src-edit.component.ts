@@ -64,6 +64,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
   _data: any = null;
   mitraSelected: any[] = [];
   paylaterCompanyId: any;
+  myArrSRC: any[] = [];
 
   @Input()
   set data(event: any) {
@@ -570,12 +571,14 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       if (responseX) {
         let filteredSrcX = [];
         let listArray = [];
+        
 
         this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
           if (res && res.data) {
             filteredSrcX = res.data.src.map((mtr) => {
               return { id: mtr['business_id'] };
             });
+            this.myArrSRC.push(...filteredSrcX);
             console.log('data_all', filteredSrcX);
             listArray = filteredSrcX.map((item, index) => {
               responseX.filter((val,i) => {
@@ -583,27 +586,35 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
                   console.log('SAME', val.id);
                   if(!val.whitelist){ // unwhitelist
                     responseX.splice(i, 1); // splice from responseX
-                    // filteredSrcX.push(...responseX[i]);
-                    filteredSrcX.splice(index, 1); // splice from filteredSrcX
-                    // console.log('deleted', index);
+                    this.removeDataArr(val.id); // remove from myArrSRC
                   }else{
                     responseX.splice(i, 1);
                   }
                 }
               });
             });
-            
           }
-
-          filteredSrcX.push(...responseX);
-          console.log(filteredSrcX);
-          this.onSelect({ selected: res && res.data && res.data.src ? filteredSrcX : [] });
+          this.myArrSRC.push(...responseX);
+          console.log(this.myArrSRC);
+          this.onSelect({ selected: res && res.data && res.data.src ? this.myArrSRC : [] });
         }, err => {
         })
         this.onSelect({ selected: responseX });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
+  }
+
+  removeDataArr (id_data){
+    console.log('id', id_data)
+    //this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+      let data_index = this.myArrSRC.map(x => {
+        return x.id;
+      }).indexOf(id_data);
+      console.log('DATA', data_index);
+      this.myArrSRC.splice(data_index, 1);
+    //})
+    
   }
   
 
