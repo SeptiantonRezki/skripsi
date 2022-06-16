@@ -45,6 +45,7 @@
             <th nowrap>Area</th>
             <th nowrap>Valid</th>
             <th nowrap>{{ls.locale.global.messages.invalid_reason}}</th>
+            <th nowrap>Whitelist</th>
           </tr>
         </thead>
         <tbody>
@@ -75,6 +76,9 @@
             </td>
             <td nowrap>
               {{ !item.valid ? item.message : '-' }}
+            </td>
+            <td nowrap>
+              {{ (item.whitelist) ? 'Ya' : 'Tidak' }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">
