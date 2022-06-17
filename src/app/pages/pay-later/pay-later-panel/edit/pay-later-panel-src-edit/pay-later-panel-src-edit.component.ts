@@ -567,54 +567,51 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(responseX => {
-      if (responseX) {
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
         let filteredSrcX = [];
-        let listArray = [];
-        
-
+        let newArray = [];
+        let dataFiltered = [];
+        // reverse an array
+        let reverse_array = response.slice().reverse();
+        let responseX =  reverse_array.filter((value, index, self) => 
+        self.findIndex(v => v.id === value.id) === index
+      );
         this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
           if (res && res.data) {
             filteredSrcX = res.data.src.map((mtr) => {
               return { id: mtr['business_id'] };
             });
             this.myArrSRC.push(...filteredSrcX);
-            console.log('data_all', filteredSrcX);
-            listArray = filteredSrcX.map((item, index) => {
-              responseX.filter((val,i) => {
-                if(val.id == item['id']){
-                  console.log('SAME', val.id);
-                  if(!val.whitelist){ // unwhitelist
-                    responseX.splice(i, 1); // splice from responseX
-                    this.removeDataArr(val.id); // remove from myArrSRC
-                  }else{
-                    responseX.splice(i, 1);
-                  }
+            // if data contain unwhitelist then remove from response data
+              responseX.filter((v,i) => {
+                if(!v.whitelist){ // = 0
+                  // deleted from default array data
+                  this.removeDataArr(v.id);
+                }else{
+                  newArray.push(...[{id: v.id}]);
                 }
-              });
             });
+            
+            newArray.push(...this.myArrSRC);
+            const ids = newArray.map(o => o.id);
+            // filter multiple data id
+            dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1))
           }
-          this.myArrSRC.push(...responseX);
-          console.log(this.myArrSRC);
-          this.onSelect({ selected: res && res.data && res.data.src ? this.myArrSRC : [] });
+          this.onSelect({ selected: res && res.data && res.data.src ? dataFiltered : [] });
         }, err => {
-        })
-        this.onSelect({ selected: responseX });
+        });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }
 
   removeDataArr (id_data){
-    console.log('id', id_data)
-    //this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
-      let data_index = this.myArrSRC.map(x => {
-        return x.id;
-      }).indexOf(id_data);
-      console.log('DATA', data_index);
-      this.myArrSRC.splice(data_index, 1);
-    //})
-    
+    this.myArrSRC.map(x => {
+      if(x.id == id_data){
+        this.myArrSRC.splice(this.myArrSRC.indexOf(x), 1);
+      }
+    });
   }
   
 
