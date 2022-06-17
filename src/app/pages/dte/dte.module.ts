@@ -173,6 +173,7 @@ import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.compon
 import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
+import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -362,6 +363,7 @@ export const MY_FORMATS = {
     DataLogComponent,
     CoinRedemptionApprovalComponent,
     EmployeeMappingComponent,
+    CheckImageComponent,
   ],
   exports: [
     TemplateIndexComponent,
