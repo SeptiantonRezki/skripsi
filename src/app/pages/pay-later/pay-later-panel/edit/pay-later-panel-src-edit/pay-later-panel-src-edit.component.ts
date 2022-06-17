@@ -567,12 +567,16 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
-    this.dialogRef.afterClosed().subscribe(responseX => {
-      if (responseX) {
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
         let filteredSrcX = [];
         let newArray = [];
         let dataFiltered = [];
-
+        // reverse an array
+        let reverse_array = response.slice().reverse();
+        let responseX =  reverse_array.filter((value, index, self) => 
+        self.findIndex(v => v.id === value.id) === index
+      );
         this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
           if (res && res.data) {
             filteredSrcX = res.data.src.map((mtr) => {
@@ -605,7 +609,6 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
   removeDataArr (id_data){
     this.myArrSRC.map(x => {
       if(x.id == id_data){
-        console.log(x.id);
         this.myArrSRC.splice(this.myArrSRC.indexOf(x), 1);
       }
     });
