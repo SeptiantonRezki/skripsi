@@ -57,6 +57,7 @@ import { TemplatePlanogramComponent } from "./image-recognition/template-planogr
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
+import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 
 const routes: Routes = [
   {
@@ -651,19 +652,19 @@ const routes: Routes = [
   },
   {
     path: "check-image-planogram",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   {
     path: "check-image-planogram/create",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   {
     path: "check-image-planogram/detail/:id",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
