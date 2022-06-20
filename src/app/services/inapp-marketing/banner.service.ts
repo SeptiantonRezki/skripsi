@@ -65,11 +65,6 @@ export class BannerService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
-  importTestAudience(body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "test_import_audience");
-    return this.postApi(url, body);
-  }
-
   importAudience(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "import_audience");
     return this.postApi(url, body);
