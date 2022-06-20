@@ -61,6 +61,7 @@ import { VerificationApprovalComponent } from "./task-verification-2/verificatio
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 
 const routes: Routes = [
   {
@@ -655,19 +656,19 @@ const routes: Routes = [
   },
   {
     path: "check-image-planogram",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   {
     path: "check-image-planogram/create",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
   {
     path: "check-image-planogram/detail/:id",
-    component: TemplatePlanogramComponent,
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
