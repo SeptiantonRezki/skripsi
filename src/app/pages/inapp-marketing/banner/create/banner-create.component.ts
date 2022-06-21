@@ -94,7 +94,8 @@ export class BannerCreateComponent {
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" },
+    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker, value: "ticker" }
   ];
   listTypeBannerConsumer: any[] = [
     {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
@@ -113,6 +114,11 @@ export class BannerCreateComponent {
   listEmployee: any[] = [
     { name: this.translate.instant('global.label.all'), value: "all" },
     { name: this.translate.instant('global.label.employee_only'), value: "yes" }
+  ];
+  listKategori: any[] = [
+    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_red, value: "red" },
+    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_blue, value: "blue" },
+    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_yellow, value: "yellow" }
   ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
@@ -273,7 +279,8 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
-      barcode:[""]
+      barcode:[""],
+      kategori: null,
     })
 
     this.formFilter = this.formBuilder.group({
@@ -1266,6 +1273,10 @@ export class BannerCreateComponent {
         body['age'] = this.formBannerGroup.get('age').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
+        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+          fd.append('kategori', this.formBannerGroup.get('kategori').value);
+          body['kategori'] = this.formBannerGroup.get('kategori').value;
+        }
       }
 
       if (body.user_group === 'customer') {
