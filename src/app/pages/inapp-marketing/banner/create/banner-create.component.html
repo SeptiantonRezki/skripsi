@@ -70,11 +70,11 @@
               <strong>Audience</strong>
             </h3>
           </div> -->
-          <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center">
+          <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
             <span class="text-bold">{{'iklan_dalam_aplikasi.spanduk_online.text9' | translate}}</span>
           </div>
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="20px"
-            fxLayoutGap.lt-md="0px">
+            fxLayoutGap.lt-md="0px" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
             <div fxFlex="45" class="pb-24" *ngFor="let item of templateBannerList">
               <span>{{item.name}}</span>
               <div
@@ -112,7 +112,7 @@
           </div> -->
           <div *ngIf="bannerSelected" class="pt-16 px-24" formGroupName="banner_selected">
             <div *ngIf="bannerSelected['id'] !== 6">
-              <div fxLayout="row">
+              <div fxLayout="row" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
                   <input matInput type="text" formControlName="title"
                     placeholder="{{'iklan_dalam_aplikasi.spanduk_online.banner_title' | translate}}">
@@ -124,7 +124,7 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               *ngIf="bannerSelected">
-              <div fxFlex="45">
+              <div fxFlex="45" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
                 <div class="banner-image-template-selected">
                   <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class"
                     [title]="bannerSelected.name">
