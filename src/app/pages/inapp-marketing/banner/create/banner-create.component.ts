@@ -1163,7 +1163,7 @@ export class BannerCreateComponent {
   }
 
   openReminder() {
-    if(this.formBannerGroup.valid && this.bannerSelected) {
+    if(this.formBannerGroup.valid &&(this.bannerSelected || this.formBannerGroup.get('type_banner').value === 'ticker')) {
       let data = {
         htmlContent: true,
         captionDialog: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.title_dialot_open_reminder'),
@@ -1193,16 +1193,22 @@ export class BannerCreateComponent {
     // console.log(this.formBannerGroup.valid, this.formBannerGroup.controls['barcode']);
     let invalids = this.findInvalidControls();
     // console.log('invalid form', invalids);
+
+
+console.log("FORM VALID", this.formBannerGroup.valid);
+console.log("BANNERSel", this.bannerSelected);
+    
     if(this.onLoad == false)
-    if (this.formBannerGroup.valid && this.bannerSelected) {
+    if (this.formBannerGroup.valid && (this.bannerSelected || this.formBannerGroup.get('type_banner').value === 'ticker')) {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.dialogService.brodcastCloseConfirmation();
+      if(this.formBannerGroup.get('type_banner').value != 'ticker'){
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
         this.dataService.showLoading(false);
       });
-
+    }
       let body = {
         user_group: this.formBannerGroup.get('user_group').value,
         content_type: this.formBannerGroup.get('content_type').value
@@ -1211,8 +1217,10 @@ export class BannerCreateComponent {
       let fd = new FormData();
       fd.append('name', this.formBannerGroup.get('name').value);
       body['name'] = this.formBannerGroup.get('name').value;
+      if(this.formBannerGroup.get('type_banner').value != 'ticker'){
       fd.append('image', this.imageConverted);
       body['image'] = this.imageConverted;
+      }
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
       body['from'] = moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD');
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
