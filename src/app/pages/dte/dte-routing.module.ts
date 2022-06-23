@@ -53,12 +53,14 @@ import { AudienceEditPersonalizeComponent } from "./audience/edit/personalize/au
 import { GroupSkuComponent } from "./image-recognition/group-sku/group-sku.component";
 import { SkuComponent } from "./image-recognition/sku/sku.component";
 import { TemplateStockCheckComponent } from "./image-recognition/template-stock-check/template-stock-check.component";
+import { TemplatePlanogramComponent } from "./image-recognition/template-planogram/template-planogram.component";
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 
 const routes: Routes = [
   {
@@ -624,6 +626,48 @@ const routes: Routes = [
   {
     path: "template-stock-check/detail/:id",
     component: TemplateStockCheckComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/create",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/edit/:id",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "template-planogram/detail/:id",
+    component: TemplatePlanogramComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "check-image-planogram",
+    component: CheckImageComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "check-image-planogram/create",
+    component: CheckImageComponent,
+    canDeactivate: [PendingChangesGuard],
+    canActivate: [PageGuard]
+  },
+  {
+    path: "check-image-planogram/detail/:id",
+    component: CheckImageComponent,
     canDeactivate: [PendingChangesGuard],
     canActivate: [PageGuard]
   },
