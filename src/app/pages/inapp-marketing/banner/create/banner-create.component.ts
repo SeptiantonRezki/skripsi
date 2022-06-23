@@ -1281,8 +1281,8 @@ console.log("BANNERSel", this.bannerSelected);
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
         if(this.formBannerGroup.get('type_banner').value === 'ticker'){
-          fd.append('kategori', this.formBannerGroup.get('kategori').value);
-          body['kategori'] = this.formBannerGroup.get('kategori').value;
+          fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
+          body['type_ticker'] = this.formBannerGroup.get('kategori').value;
         }
       }
 
