@@ -819,7 +819,11 @@
       "as_draft": "SEBAGAI DRAF",
       "and_send": "DAN KIRIM",
       "shopping": "Belanja",
-      "title_dialot_open_reminder": "Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material <i class='italic'>Brand HM Sampoerna</i> atau materi <i class='italic'>promosi tembakau lainnya</i> hanya diperuntukkan untuk Tipe Consumer '<b>Merokok</b>'. Apakah anda yakin untuk simpan dan kirim ?"
+      "title_dialot_open_reminder": "Pastikan seluruh parameter sudah terisi dengan benar. Spanduk yang mengandung unsur material <i class='italic'>Brand HM Sampoerna</i> atau materi <i class='italic'>promosi tembakau lainnya</i> hanya diperuntukkan untuk Tipe Consumer '<b>Merokok</b>'. Apakah anda yakin untuk simpan dan kirim ?",
+      "ticker": "Ticker",
+      "ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
+      "ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
+      "ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
     }
   },
   "delivery_management": {

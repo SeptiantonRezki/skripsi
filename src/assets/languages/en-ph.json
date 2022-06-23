@@ -819,7 +819,11 @@
       "as_draft": "AS A DRAFT",
       "and_send": "AND SEND",
       "shopping": "Shopping",
-      "title_dialot_open_reminder": "Make sure all parameters are filled in correctly. Banners containing <i class='italic'>Brand HM Sampoerna</i> material or other <i class='italic'>tobacco promotion materials</i> only for Consumer Type '<b>Smoking</b>'. Are you sure to save and send?"
+      "title_dialot_open_reminder": "Make sure all parameters are filled in correctly. Banners containing <i class='italic'>Brand HM Sampoerna</i> material or other <i class='italic'>tobacco promotion materials</i> only for Consumer Type '<b>Smoking</b>'. Are you sure to save and send?",
+      "ticker": "Ticker",
+      "ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
+      "ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
+      "ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
     }
   },
   "delivery_management": {

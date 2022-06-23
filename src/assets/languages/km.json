@@ -819,7 +819,11 @@
 			"as_draft": "ជា DRAFT",
 			"and_send": "AND SEND",
 			"shopping": "ដើរទិញឥវ៉ាន់",
-			"title_dialot_open_reminder": "ត្រូវប្រាកដថាប៉ារ៉ាម៉ែត្រទាំងអស់ត្រូវបានបំពេញយ៉ាងត្រឹមត្រូវ។ បដាដែលមានសម្ភារៈ <i class='italic'>ម៉ាក HM Sampoerna</i> ឬ <i class='italic'>សម្ភារៈផ្សព្វផ្សាយថ្នាំជក់</i> ផ្សេងទៀតតែប៉ុណ្ណោះ សម្រាប់អ្នកប្រើប្រាស់ប្រភេទ '<b>ជក់បារី</b>'។ តើអ្នកប្រាកដក្នុងការរក្សាទុក និងផ្ញើមែនទេ?"
+			"title_dialot_open_reminder": "ត្រូវប្រាកដថាប៉ារ៉ាម៉ែត្រទាំងអស់ត្រូវបានបំពេញយ៉ាងត្រឹមត្រូវ។ បដាដែលមានសម្ភារៈ <i class='italic'>ម៉ាក HM Sampoerna</i> ឬ <i class='italic'>សម្ភារៈផ្សព្វផ្សាយថ្នាំជក់</i> ផ្សេងទៀតតែប៉ុណ្ណោះ សម្រាប់អ្នកប្រើប្រាស់ប្រភេទ '<b>ជក់បារី</b>'។ តើអ្នកប្រាកដក្នុងការរក្សាទុក និងផ្ញើមែនទេ?",
+			"ticker": "Ticker",
+      		"ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
+      		"ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
+      		"ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
 		}
 	},
 	"delivery_management": {
