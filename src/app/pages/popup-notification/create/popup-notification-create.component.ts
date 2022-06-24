@@ -155,7 +155,7 @@ export class PopupNotificationCreateComponent {
   private _onDestroy = new Subject<void>();
   permission: any;
   roles: PagesName = new PagesName();
-  
+
   pageName = this.translate.instant('notification.popup_notifikasi.page_name');
 
   constructor(
@@ -278,14 +278,14 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
-    if(this.ls.selectedLanguages == 'id'){
-      this.Country ='ID';
+    if (this.ls.selectedLanguages == 'id') {
+      this.Country = 'ID';
     }
-    else if(this.ls.selectedLanguages == 'km'){
+    else if (this.ls.selectedLanguages == 'km') {
       this.Country = 'KH';
     }
-    else if(this.ls.selectedLanguages == 'en-ph'){
-      this.Country ='PH';
+    else if (this.ls.selectedLanguages == 'en-ph') {
+      this.Country = 'PH';
     }
 
     this.bannerService.getListWallet().subscribe(res => {
@@ -335,9 +335,16 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "Image", value: "image" },
+        { name: "Unlinked", value: "unlinked" },
+        { name: "Static Page", value: "static-page" },
+        ];
         if (this.permission.new_product) {
-          this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }];
+          this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
+          { name: "Unlinked", value: "unlinked" }];
+        }
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
         }
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
@@ -365,7 +372,7 @@ export class PopupNotificationCreateComponent {
           { name: "Static Page", value: "static-page" },
           { name: "Landing Page", value: "landing-page" },
           { name: "Iframe", value: "iframe" },
-          { name: "Image",value:"image" },
+          { name: "Image", value: "image" },
           { name: "Unlinked", value: "unlinked" },
           { name: "E-Wallet", value: "e_wallet" },
           { name: "Link to Web browser", value: "link_to_web_browser" }
@@ -398,7 +405,7 @@ export class PopupNotificationCreateComponent {
         if (this.formPopupGroup.controls['content_type'].value === "link_to_web_browser") {
           this.formPopupGroup.get("url_web").enable();
         }
-  
+
         if (this.formPopupGroup.controls['content_type'].value === "e_wallet") {
           this.formPopupGroup.get("content_wallet").enable();
           this.formPopupGroup.get("body_wallet").enable();
@@ -407,7 +414,8 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'retailer') {
-        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }];
+        this.listContentType = [{ name: "Static Page", value: "static-page" }, { name: "Landing Page", value: "landing-page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" },
+        { name: "Unlinked", value: "unlinked" }];
         this.listLandingPage = [{ name: "Belanja", value: "belanja" }, { name: "Misi", value: "misi" }, { name: "Pelanggan", value: "pelanggan" }, { name: "Bantuan", value: "bantuan" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Pojok Modal", value: "pojok_modal" }];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
@@ -1442,15 +1450,15 @@ export class PopupNotificationCreateComponent {
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
       body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
-      
-      if(body.recurring_type === 'recurring') {
+
+      if (body.recurring_type === 'recurring') {
         body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
       }
 
-      if(this.formPopupGroup.get('recurrence_type').value === 'weekly') {
+      if (this.formPopupGroup.get('recurrence_type').value === 'weekly') {
         let recurrenceDayValues = this.formWeeklyRecurrence.value;
         let selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]).map(item => parseInt(item));
-        if(selectedWeekDays.length == 0) {
+        if (selectedWeekDays.length == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Harap pilih minimal satu hari terbit!" });
           return;
@@ -1458,9 +1466,9 @@ export class PopupNotificationCreateComponent {
         body['recurring_day_of_week'] = selectedWeekDays;
       }
 
-      if(this.formPopupGroup.get('recurrence_type').value === 'monthly') {
+      if (this.formPopupGroup.get('recurrence_type').value === 'monthly') {
         let monthlyRecurrence = this.formMonthlyRecurrence.get('recurrence_date').value;
-        if(monthlyRecurrence.length == 0) {
+        if (monthlyRecurrence.length == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal terbit!" });
           commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
@@ -1468,10 +1476,10 @@ export class PopupNotificationCreateComponent {
         }
         body['recurring_day'] = monthlyRecurrence;
       }
-      
-      if(this.formPopupGroup.get('recurrence_type').value === 'yearly') {
+
+      if (this.formPopupGroup.get('recurrence_type').value === 'yearly') {
         let yearlyRecurrence = this.listDateChosen.value;
-        if(yearlyRecurrence == 0) {
+        if (yearlyRecurrence == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Harap pilih minimal satu tanggal & bulan terbit!" });
           commonFormValidator.validateFormControl(this.listDateChosen);
@@ -1609,10 +1617,10 @@ export class PopupNotificationCreateComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
-      if(this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+      if (this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
         commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
       }
-      if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
+      if (this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
         commonFormValidator.validateFormControl(this.listDateChosen);
       }
     }
@@ -2180,10 +2188,10 @@ export class PopupNotificationCreateComponent {
   }
 
   addRecurrenceDate() {
-    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
-      let months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    if (this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+      let months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
       const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
-      if(this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
+      if (this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
         this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
       } else {
         let dateChosen = this.listDateChosen.value;
