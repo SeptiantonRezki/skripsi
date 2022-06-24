@@ -2267,7 +2267,6 @@ export class PopupNotificationCreateComponent {
   }
 
   addRecurrenceDate() {
-<<<<<<< HEAD
     if (this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
       let months = [
         this.translate.instant('global.calendar.jan_s'),
@@ -2286,13 +2285,6 @@ export class PopupNotificationCreateComponent {
       const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
       if (this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
         this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.date_selected') });
-=======
-    if (this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
-      let months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-      const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
-      if (this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
-        this.dialogService.openSnackBar({ message: 'Tanggal dan bulan pengulangan sudah dipilih.' });
->>>>>>> 1f5674d087c6c18bc440e78ec60752d42d2fb046
       } else {
         let dateChosen = this.listDateChosen.value;
         dateChosen.push({
