@@ -95,7 +95,7 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" },
-    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker, value: "ticker" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker'), value: "ticker" }
   ];
   listTypeBannerConsumer: any[] = [
     {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
@@ -116,9 +116,9 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.employee_only'), value: "yes" }
   ];
   listKategori: any[] = [
-    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_red, value: "red" },
-    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_blue, value: "blue" },
-    { name: this.ls.locale.iklan_dalam_aplikasi.spanduk_online.ticker_yellow, value: "yellow" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow" }
   ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
