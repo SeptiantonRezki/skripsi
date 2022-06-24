@@ -11,76 +11,124 @@
       <mat-tab-group [selectedIndex]="selectedTab">
         <mat-tab label="{{'dte.coin_disbursement.coin_exchange' | translate}}">
           <div class="ayo-middle py-24" fxLayout="column">
-            <form autocomplete="off" [formGroup]="formCoin">
-              <div fxLayout="row" class="px-24">
-                <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" placeholder="{{'dte.coin_disbursement.text12' | translate}}" formControlName="name"
-                    name="name">
-                  <mat-error
-                    *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
-                    {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
-                  </mat-error>
-                </mat-form-field>
+            <form autocomplete="off" [formGroup]="formCoin" fxLayout="row" fxLayoutGap="16px">
+              <div fxFlex="50%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="text" placeholder="{{'dte.coin_disbursement.text12' | translate}}" formControlName="name"
+                      name="name">
+                    <mat-error
+                      *ngIf="formCoin.controls['name'].hasError('required') && formCoin.controls['name'].touched">
+                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="{{'dte.coin_disbursement.text13' | translate}}" formControlName="coin_valuation" name="coin_valuation">
+                    <mat-error
+                      *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
+                      {{'dte.coin_disbursement.coin_valuation' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                    <mat-error
+                      *ngIf="formCoin.controls['coin_valuation'].hasError('min') && formCoin.controls['coin_valuation'].touched">
+                      {{'dte.coin_disbursement.coin_valuation_more_than_zero' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
+                      placeholder="{{'dte.coin_disbursement.text9' | translate}}">
+                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+  
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
+                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+  
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="{{'dte.group_trade_program.text1' | translate}}"
+                      formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)"
+                    >
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="column" class="px-24">
+                  <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text14' | translate}}</h4>
+                  <div fxLayout="row">
+                    <mat-checkbox class="example-margin" [formControl]="isTransferBank">{{'dte.coin_disbursement.text15' | translate}}</mat-checkbox>
+                    <div fxFlex="1"></div>
+                    <mat-checkbox class="example-margin" [formControl]="isPojokBayar">{{'dte.coin_disbursement.text16' | translate}}</mat-checkbox>
+                  </div>
+                </div>
               </div>
-              <div fxLayout="row" class="px-24">
-                <mat-form-field fxFlex="48" class="is-light form-primary">
-                  <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" placeholder="{{'dte.coin_disbursement.text13' | translate}}" formControlName="coin_valuation" name="coin_valuation">
-                  <mat-error
-                    *ngIf="formCoin.controls['coin_valuation'].hasError('required') && formCoin.controls['coin_valuation'].touched">
-                    {{'dte.coin_disbursement.coin_valuation' | translate}} {{'global.messages.mandatory_text' | translate}}
-                  </mat-error>
-                  <mat-error
-                    *ngIf="formCoin.controls['coin_valuation'].hasError('min') && formCoin.controls['coin_valuation'].touched">
-                    {{'dte.coin_disbursement.coin_valuation_more_than_zero' | translate}}
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-                fxFlex="50%">
-                <mat-form-field fxFlex="50%" class="is-light form-primary">
-                  <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
-                    placeholder="{{'dte.coin_disbursement.text9' | translate}}">
-                  <mat-datepicker-toggle matSuffix [for]="startDate">
-                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
-                  </mat-datepicker-toggle>
-                  <mat-datepicker #startDate></mat-datepicker>
-                  <mat-error
-                    *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
-                  </mat-error>
-                </mat-form-field>
 
-                <mat-form-field fxFlex="50%" class="is-light form-primary">
-                  <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
-                    placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
-                  <mat-datepicker-toggle matSuffix [for]="endDate">
-                    <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
-                  </mat-datepicker-toggle>
-                  <mat-datepicker #endDate></mat-datepicker>
-                  <mat-error
-                    *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
-                    {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
-                  </mat-error>
-                </mat-form-field>
-              </div>
+              <div fxLayout="column" fxFlex class="p-8 m-16">
+                <span>Prioritas</span>
 
-              <div fxLayout="row" class="px-24">
-                <mat-form-field fxFlex="48">
-                  <mat-select placeholder="{{'dte.group_trade_program.text1' | translate}}" formControlName="group_trade_id" multiple>
-                    <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
-                    {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <div fxLayout="column" class="px-24">
-                <h4 style="font-weight: bold;">{{'dte.coin_disbursement.text14' | translate}}</h4>
-                <div fxLayout="row" fxFlex="48">
-                  <mat-checkbox class="example-margin" [formControl]="isTransferBank">{{'dte.coin_disbursement.text15' | translate}}</mat-checkbox>
-                  <div fxFlex="1"></div>
-                  <mat-checkbox class="example-margin" [formControl]="isPojokBayar">{{'dte.coin_disbursement.text16' | translate}}</mat-checkbox>
+                <div formArrayName="priorities" *ngFor="let item of formCoin.get('priorities')['controls']; let priorities_index=index;">
+                  <div [formGroupName]="priorities_index" class="priority__content">
+                    <span fxFlex="25px">{{ priorities_index+1 }}.</span>
+                    <mat-form-field fxFlex="200px" id="contoh-id">
+                      <mat-select
+                        id="group_id"
+                        formControlName="group_id"
+                        placeholder="{{'dte.group_trade_program.text1' | translate}}"
+                        [disabled]="!priority_list.length"
+                      >
+                        <mat-option *ngFor="let item of priority_list" [value]="item.id" [disabled]="isPriorityUsed(item.id)">
+                          {{item.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <div>
+                      <button
+                        mat-icon-button
+                        matTooltip="{{'global.button.add' | translate}}"
+                        matTooltipPosition="below"
+                        (click)="addPriority(priorities_index)"
+                        [disabled]="!priority_list.length"
+                      >
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        matTooltip="{{'global.button.delete' | translate}}"
+                        matTooltipPosition="below"
+                        (click)="removePriority(priorities_index)"
+                        *ngIf="formCoin.get('priorities').length > 1"
+                      >
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
