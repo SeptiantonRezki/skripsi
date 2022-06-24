@@ -24,10 +24,12 @@ export class BannerIndexComponent {
     TERDEKAT: 'toko-terdekat',
     INFO_SRC: 'info-src',
     FBTN: 'flying-button',
+    TICKER: 'ticker',
   };
 
   rows: any[];
   infoTerkiniRows: any[];
+  tickerRows: any[];
   terdekatRows: any[];
   infoSRCRows: any[];
   fbtnRows: any[];
@@ -39,6 +41,7 @@ export class BannerIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   infoTerkiniPagination: Page = new Page();
+  tickerPagination: Page = new Page();
   terdekatPagination: Page = new Page();
   infoSRCPagination: Page = new Page();
   fbtnPagination: Page = new Page();
@@ -63,6 +66,10 @@ export class BannerIndexComponent {
   infoTerkiniLoadingIndicator = true;
   infoTerkiniOnLoad: boolean;
   infoTerkiniOffsetPagination: any;
+
+  tickerLoadingIndicator = true;
+  tickerOnLoad: boolean;
+  tickerOffsetPagination: any;
 
   // TOKO TERDEKAT
   terdekatLoadingIndicator = true;
@@ -118,6 +125,7 @@ export class BannerIndexComponent {
 
   ngOnInit() {
     this.getBanner();
+    this.getTicker();
     this.getInfoTerkini();
     this.getTerdekat();
     this.getInfoSRC();
@@ -149,6 +157,33 @@ export class BannerIndexComponent {
       }
     );
   }
+
+  getTicker() {
+    const page = this.dataService.getFromStorage("banner_ticker_page");
+    const sort_type = this.dataService.getFromStorage("banner_ticker_sort_type");
+    const sort = this.dataService.getFromStorage("banner_ticker_sort");
+
+    this.tickerPagination.page = page;
+    this.tickerPagination.sort_type = sort_type;
+    this.tickerPagination.sort = sort;
+    this.tickerPagination.type_banner = this.TYPE_BANNER.TICKER;
+    this.tickerPagination.per_page = 5;
+
+    this.tickerOffsetPagination = page ? (page - 1) : 0;
+
+    this.bannerService.get(this.tickerPagination).subscribe(
+      res => {
+        Page.renderPagination(this.tickerPagination, res);
+        this.tickerRows = res.data;
+        this.tickerOnLoad = false;
+        this.tickerLoadingIndicator = false;
+      },
+      err => {
+        this.tickerOnLoad = false;
+      }
+    );
+  }
+
   getInfoTerkini() {
     const page = this.dataService.getFromStorage("banner_info_terkini_page");
     const sort_type = this.dataService.getFromStorage("banner_info_terkini_sort_type");
@@ -318,6 +353,26 @@ export class BannerIndexComponent {
     });
   }
 
+
+  setPageTicker(pageInfo) {
+    this.tickerOffsetPagination = pageInfo.offset;      
+    this.tickerLoadingIndicator = true;
+
+    if (this.tickerPagination['search']) {
+      this.tickerPagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("banner_ticker_page", pageInfo.offset + 1);
+      this.tickerPagination.page = this.dataService.getFromStorage("banner_ticker_page");
+    }
+
+    this.bannerService.get(this.tickerPagination).subscribe(res => {
+      Page.renderPagination(this.tickerPagination, res);
+      this.tickerRows = res.data;
+
+      this.tickerLoadingIndicator = false;
+    });
+  }
+
   setPageTerdekat(pageInfo) {
     this.terdekatOffsetPagination = pageInfo.offset;      
     this.terdekatLoadingIndicator = true;
@@ -426,6 +481,25 @@ export class BannerIndexComponent {
       this.infoTerkiniLoadingIndicator = false;
     });
   }
+
+  onSortTicker(event) {
+    this.tickerPagination.sort = event.column.prop;
+    this.tickerPagination.sort_type = event.newValue;
+    this.tickerPagination.page = 1;
+    this.tickerLoadingIndicator = true;
+
+    this.dataService.setToStorage("banner_ticker_page", this.tickerPagination.page);
+    this.dataService.setToStorage("banner_ticker_sort_type", event.column.prop);
+    this.dataService.setToStorage("banner_ticker_sort", event.newValue);
+
+    this.bannerService.get(this.tickerPagination).subscribe(res => {
+      Page.renderPagination(this.tickerPagination, res);
+      this.tickerRows = res.data;
+
+      this.tickerLoadingIndicator = false;
+    });
+  }
+
   onSortTerdekat(event) {
     this.terdekatPagination.sort = event.column.prop;
     this.terdekatPagination.sort_type = event.newValue;
@@ -521,6 +595,7 @@ export class BannerIndexComponent {
   }
 
   directEdit(param?: any): void {
+    console.log("PARAMS++++", param)
     this.dataService.setToStorage("detail_banner", param);
     this.router.navigate(["advertisement", "banner", "edit"]);
   }
@@ -572,6 +647,29 @@ export class BannerIndexComponent {
     });
 
   }
+
+  updateFilterTicker(keyword) {
+
+    this.tickerLoadingIndicator = true;
+    this.tickerPagination.search = keyword;
+
+    if (keyword) {
+      this.tickerPagination.page = 1;
+      this.tickerOffsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.tickerPagination.page = page;
+      this.tickerOffsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.bannerService.get(this.tickerPagination).subscribe(res => {
+      Page.renderPagination(this.tickerPagination, res);
+      this.tickerRows = res.data;
+      this.tickerLoadingIndicator = false;
+    });
+
+  }
+
   updateFilterTerdekat(keyword) {
 
     this.terdekatLoadingIndicator = true;
