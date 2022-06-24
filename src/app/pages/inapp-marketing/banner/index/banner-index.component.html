@@ -109,22 +109,22 @@
   </div>
 
 <!--/ Ticker -->
-  <div class="content p-24" *ngIf="!onLoad">
+  <div class="content p-24" *ngIf="!tickerOnLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
         <h2 class="pl-8">{{ 'iklan_dalam_aplikasi.spanduk_online.ticker' | translate }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput [placeholder]="ls.locale.global.label.search"  (keyup)="_onSearch.next({keyword: $event.target.value, searchType: TYPE_BANNER.TICKER})" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-        [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
-        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
-        (sort)="onSort($event)">
+      <ngx-datatable class="material" [rows]="tickerRows" [loadingIndicator]="tickerLoadingIndicator" [columnMode]="'force'"
+        [offset]="tickerOffsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="tickerPagination.total"
+        [limit]="tickerPagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPageTicker($event)"
+        (sort)="onSortTicker($event)">
 
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
           <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
