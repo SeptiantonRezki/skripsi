@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Audience'"></page-content-header>
+  <page-content-header contentTitle="{{'global.label.create_entity' | translate:titleParam}}"></page-content-header>
   <!-- / HEADER -->
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">Buat Audience</h2> <!-- // TODO -->
+        <h2 class="">{{'global.label.create_entity' | translate:titleParam}}</h2>
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formAudience">
@@ -17,20 +17,20 @@
                 type="text"
                 formControlName="name"
                 placeholder="{{'dte.audience.text4' | translate }}"
-              /> <!-- // TODO -->
+              />
               <mat-error
                 *ngIf="
                   formAudience.controls['name'].hasError('required') &&
                   formAudience.controls['name'].touched
                 "
               >
-                {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
+                {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
 
           <div fxLayout="row">
-            <label id="ts">{{'dte.audience.text5' | translate }} <!-- // TODO --></label>
+            <label id="ts">{{'dte.audience.text5' | translate }}</label>
           </div>
 
           <div fxLayout="row">
@@ -75,14 +75,14 @@
                 placeholder="{{'dte.audience.text9' | translate }}"
                 formControlName="min"
                 numericOnly
-              /> <!-- // TODO -->
+              />
               <mat-error
                 *ngIf="
                   formAudience.controls['min'].hasError('required') &&
                   formAudience.controls['min'].touched
                 "
               >
-                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error
                 *ngIf="
@@ -90,7 +90,7 @@
                   formAudience.controls['min'].touched
                 "
               >
-                {{'dte.audience.text9' | translate }} tidak boleh kurang dari 0 <!-- // TODO -->
+                {{'dte.audience.text9' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -102,14 +102,14 @@
                 placeholder="{{'dte.audience.text10' | translate }}"
                 formControlName="max"
                 numericOnly
-              /> <!-- // TODO -->
+              />
               <mat-error
                 *ngIf="
                   formAudience.controls['max'].hasError('required') &&
                   formAudience.controls['max'].touched
                 "
               >
-                {{'dte.audience.text10' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
+                {{'dte.audience.text10' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error
                 *ngIf="
@@ -117,8 +117,7 @@
                   formAudience.controls['max'].touched
                 "
               >
-                {{'dte.audience.text10' | translate }} tidak boleh kurang dari jumlah minimal
-                audience <!-- // TODO -->
+                {{'dte.audience.text10' | translate }} {{'global.label.min_audience' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -163,7 +162,7 @@
                   ) && formAudience.controls['trade_scheduler_id'].touched
                 "
               >
-                {{'dte.pengatur_jadwal_program.text16' | translate }} {{'global.messages.mandatory_text'}} <!-- // TODO -->
+                {{'dte.pengatur_jadwal_program.text16' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -177,14 +176,12 @@
                 formControlName="trade_creator_id"
                 placeholder="{{'dte.trade_program.text3' | translate}}"
                 #singleSelect
-              > <!-- // TODO -->
+              >
                 <ngx-mat-select-search
                   [formControl]="filterTradeProgram"
                   placeholderLabel="{{'global.label.search' | translate}}"
-                  [noEntriesFoundLabel]="
-                    'Tidak ada Trade Program yang ditemukan'
-                  "
-                ></ngx-mat-select-search> <!-- // TODO -->
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                ></ngx-mat-select-search>
                 <mat-option
                   *ngFor="let item of filteredTradeProgram | async"
                   [value]="item.id"
@@ -199,7 +196,7 @@
                   ) && formAudience.controls['trade_creator_id'].touched
                 "
               >
-                {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text'}} <!-- // TODO -->
+                {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
           </div>
@@ -414,12 +411,12 @@
             class="is-danger"
             (click)="importAudience()"
           >
-            <mat-icon>arrow_downward</mat-icon> Import XLS
+            <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
           </button>
           <label 
             *ngIf="!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type"
             style="font-weight: bolder; color: white;">
-            Requesting {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
+            {{'global.label.requesting' | translate}} {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
           </label>
           
         </div>
@@ -430,9 +427,9 @@
             class="is-danger"
             (click)="exportAudience()"
           >
-            <mat-icon>arrow_upward</mat-icon> Export Template
+            <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
           </button>
-          <label *ngIf="exportTemplate" style="color: white;">Downloading Template</label>
+          <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
         </div>
         
       </div>
@@ -539,7 +536,7 @@
         ></ngx-datatable-column> -->
         <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column> <!-- // TODO -->
         <ngx-datatable-column
-          name="Tipe"
+          name="{{'global.label.type' | translate}}"
           prop="classification"
         ></ngx-datatable-column>
         <!--[R]-->
@@ -608,7 +605,7 @@
       <label 
         *ngIf="!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type"
         style="font-weight: bolder; color: gray; font-style: italic;">
-        Requesting {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
+        {{'global.label.requesting' | translate}} {{(importingDataStatus.import_audience_status_type || '').toUpperCase()}}
       </label>
 
       </div>

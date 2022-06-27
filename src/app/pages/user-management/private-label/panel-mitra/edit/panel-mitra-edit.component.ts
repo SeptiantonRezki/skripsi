@@ -1155,7 +1155,8 @@ export class PanelMitraEditComponent implements OnInit {
         const body = {
           wholesaler_id: this.selected.map((item) => item.id),
           is_hub: this.selected.filter((item: any) => item.isHub === true).map((item: any) => item.id),
-          area: area
+          area: area,
+          panel_mitra_id: parseInt(this.panelMitraId),
         };
 
         try {

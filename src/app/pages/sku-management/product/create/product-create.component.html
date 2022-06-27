@@ -35,7 +35,7 @@
                   </mat-error>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
-                  <input matInput type="text" placeholder="Barcode" formControlName="barcode" readonly>
+                  <input matInput type="text" placeholder="{{'manajemen_barang_sku.produk.text5' | translate}}" formControlName="barcode" readonly>
                 </mat-form-field>
                 <mat-form-field fxFlex="100" class="is-light form-primary">
                   <!-- <mat-select placeholder="{{'manajemen_barang_sku.produk.text6' | translate}}" formControlName="brand">
@@ -45,7 +45,7 @@
                   </mat-select> -->
                   <mat-select formControlName="brand" placeholder="{{'manajemen_barang_sku.produk.text6' | translate}}" #singleSelect>
                     <ngx-mat-select-search [formControl]="filterBrand" placeholderLabel="{{'global.label.search' | translate}}"
-                      noEntriesFoundLabel="{{'global.messages.data_not_found'}}"></ngx-mat-select-search>
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                     <mat-option *ngFor="let item of filteredBrand | async" [value]="item.id">
                       {{item.name}}
                     </mat-option>
@@ -373,7 +373,7 @@
                                       <input matInput type="text" formControlName="packaging">
                                       <mat-error style="font-size: .8em"
                                         *ngIf="item.controls['packaging'].hasError('required') && item.controls['packaging'].touched">
-                                        {{'manajemen_barang_sku.produk.packaging_name'}} {{'global.messages.mandatory_text' | translate}}
+                                        {{'manajemen_barang_sku.produk.packaging_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                                       </mat-error>
                                     </mat-form-field>
                                   </div>

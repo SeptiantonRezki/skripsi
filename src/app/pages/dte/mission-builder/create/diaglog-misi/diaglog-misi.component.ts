@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -41,6 +42,7 @@ export class DiaglogMisiComponent implements OnInit {
     private templateTaskService: TemplateTaskService,
     private dialogService: DialogService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) { }
 
 
@@ -384,7 +386,7 @@ export class DiaglogMisiComponent implements OnInit {
   submit(form: any) {
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
-      this.dialogService.openSnackBar({ message: 'Keterangan Reward harus diisi' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.task_sequencing.reward_description') + ' ' + this.translate.instant('global.messages.mandatory_text') });
       return;
     }
 
@@ -414,7 +416,7 @@ export class DiaglogMisiComponent implements OnInit {
       component_id: this.data.data.component_id,
       task_sequencing_management_id: this.data.data.task_sequencing_management_id,
       task_template_id: this.data.data.task_template_id,
-      name: 'Mission',
+      name: this.translate.instant('global.label.mission'),
       type: 'mission',
       attribute: form.value,
       next_step_component: this.data.data.next_step_component,

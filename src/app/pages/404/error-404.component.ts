@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { FuseConfigService } from "@fuse/services/config.service";
-import { environment } from "environments/environment";
+import { environment, getDynamicBranding } from "environments/environment";
 
 @Component({
   selector: "fuse-error-404",
@@ -10,6 +10,7 @@ import { environment } from "environments/environment";
 })
 export class FuseError404Component {
   environment: any;
+  branding: any;
   constructor(private fuseConfig: FuseConfigService) {
     this.fuseConfig.setConfig({
       layout: {
@@ -20,5 +21,6 @@ export class FuseError404Component {
     });
 
     this.environment = environment;
+    this.branding = getDynamicBranding();
   }
 }

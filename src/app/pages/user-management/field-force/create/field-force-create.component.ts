@@ -1,39 +1,36 @@
 import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray
-} from "../../../../../../node_modules/@angular/forms";
-import { FieldForceService } from "../../../../services/user-management/field-force.service";
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FieldForceService } from "app/services/user-management/field-force.service";
 import { DialogService } from "app/services/dialog.service";
-import {
-  Router,
-  ActivatedRoute
-} from "../../../../../../node_modules/@angular/router";
-import { commonFormValidator } from "app/classes/commonFormValidator";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { DataService } from '../../../../services/data.service';
+import { DataService } from "app/services/data.service";
+import { LanguagesService } from "app/services/languages/languages.service";
+import { commonFormValidator } from "app/classes/commonFormValidator";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-field-force-create",
   templateUrl: "./field-force-create.component.html",
-  styleUrls: ["./field-force-create.component.scss"]
+  styleUrls: ["./field-force-create.component.scss"],
 })
 export class FieldForceCreateComponent {
-  // Vertical Stepper
-  verticalStepperStep1: FormGroup;
-  verticalStepperStep2: FormGroup;
-  formArea: FormGroup;
+  listType: any = [
+    { id: "asm", name: "Manager" },
+    { id: "spv", name: "Supervisor" },
+    { id: "field-force", name: "Field Force" },
+  ];
+  listClassification: any = [
+    { id: "ree", name: "REE" },
+    { id: "wee", name: "WEE" },
+  ];
+  areaFromLogin: any;
+  formUser: FormGroup;
+  removeIndex: number;
 
-  verticalStepperStep1Errors: any;
-  verticalStepperStep2Errors: any;
+  limitLevel: string = "territory";
 
-  listLevel: Array<any>;
-  submitting: Boolean;
-  ObjectArea: any = [];
-
-  area: Array<any>;
+  locale: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,172 +38,135 @@ export class FieldForceCreateComponent {
     private dialogService: DialogService,
     private router: Router,
     private dataService: DataService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private ls: LanguagesService,
+    private trans: TranslateService
   ) {
-    this.submitting = false;
-    this.verticalStepperStep1Errors = {
-      name: {},
-      username: {}
-    };
-    this.verticalStepperStep2Errors = {
-      level_desc: {}
-    };
-
-    this.listLevel = this.activatedRoute.snapshot.data["listLevel"].data;
-
-    this.area = dataService.getDecryptedProfile()['area_type'];
-    console.log(this.area);
-
+    this.locale = this.ls.locale;
   }
 
   ngOnInit() {
+    this.areaFromLogin = this.dataService.getDecryptedProfile()["areas"];
+    this.createForm();
+    this.addAreas();
+    this.setEvents();
+  }
 
-    this.verticalStepperStep1 = this.formBuilder.group({
+  createForm() {
+    this.formUser = this.formBuilder.group({
       name: ["", Validators.required],
-      username: ["", Validators.required]
-    });
-
-    this.verticalStepperStep2 = this.formBuilder.group({
-      level_desc: ["", Validators.required],
-      area: this.formBuilder.array([])
-    });
-
-    this.verticalStepperStep1.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(
-        this.verticalStepperStep1,
-        this.verticalStepperStep1Errors
-      );
-    });
-
-    this.verticalStepperStep2.valueChanges.subscribe(() => {
-      commonFormValidator.parseFormChanged(
-        this.verticalStepperStep2,
-        this.verticalStepperStep2Errors
-      );
+      username: ["", Validators.required],
+      classification: [{ value: "", disabled: true }],
+      areas: this.formBuilder.array([], Validators.required),
+      type: ["", Validators.required],
+      status: [true],
     });
   }
 
-  createFormArea(): FormGroup {
-    return this.formBuilder.group({
-      placeHolder: ["", Validators.required],
-      packaging_amount: ["", Validators.required],
-      level: ["", Validators.required],
-      price: ["", Validators.required],
-      price_discount: "",
-      price_discount_expires_at: ""
+  setEvents() {
+    this.formUser.get("type").valueChanges.subscribe((value: string) => {
+      let level = "territory";
+      if (value === "spv") level = "district";
+      if (value === "asm") level = "area";
+      if (value === "field-force") {
+        this.formUser.get("classification").enable();
+        commonFormValidator.validators(this.formUser, "classification", [
+          Validators.required,
+        ]);
+      } else {
+        this.formUser.get("classification").setValue("");
+        this.formUser.get("classification").disable();
+        commonFormValidator.validators(this.formUser, "classification");
+      }
+      this.limitLevel = level;
+      this.resetAreas();
     });
   }
 
-  selectionChange(event) {
-    this.fieldForcePrincipal
-      .getListChildren({ level_desc: event.value })
-      .subscribe(res => {
-        let ObjectArea = {
-          data: res.data,
-          title: "Zone",
-          required: true
-        };
-
-        this.ObjectArea.splice(0, this.ObjectArea.length);
-        this.ObjectArea.push(ObjectArea);
-
-        let area = this.verticalStepperStep2.get("area") as FormArray;
-        while (area.length > 0) {
-          area.removeAt(area.length - 1);
-        }
-        area.push(
-          this.formBuilder.group({
-            [ObjectArea["title"]]: ["", Validators.required]
-          })
-        );
-      });
+  addAreas() {
+    let areas = this.formUser.get("areas") as FormArray;
+    areas.push(
+      this.formBuilder.group({
+        area_id: [""],
+      })
+    );
   }
 
-  onSelect(param) {
-    this.fieldForcePrincipal
-      .getListOtherChildren({ parent_id: param.event.value.id })
-      .subscribe(res => {
-        let area = this.verticalStepperStep2.get("area") as FormArray;
+  dialogRemoveAreas(index: number) {
+    this.removeIndex = index;
+    let data = {
+      titleDialog:
+        this.locale.global.button.delete +
+        " " +
+        this.locale.global.area.geotree,
+      captionDialog: this.trans.instant("global.messages.delete_confirm", {
+        entity: this.locale.global.area.geotree,
+        index: "",
+      }),
+      confirmCallback: this.removeAreas.bind(this),
+      buttonText: [
+        this.locale.global.button.delete,
+        this.locale.global.button.cancel,
+      ],
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
 
-        if (res["status"] === false || param.event.value.name === "all") {
-          if (param.index !== this.ObjectArea.length - 1) {
-            this.ObjectArea.splice(param.index + 1, this.ObjectArea.length);
-            area.controls.splice(param.index + 1, area.length);
+  removeAreas() {
+    let areas = this.formUser.get("areas") as FormArray;
+    areas.removeAt(this.removeIndex);
+    this.dialogService.brodcastCloseConfirmation();
+  }
 
-            while (area.length > this.ObjectArea.length) {
-              if (param.index + 1 === area.length) return;
-              area.removeAt(area.length - 1);
-            }
-          }
+  resetAreas() {
+    let areas = this.formUser.get("areas") as FormArray;
+    while (areas.length) areas.removeAt(0);
+    this.addAreas();
+  }
 
-          let arrayFinal = area.controls.map(item => item);
-
-          this.verticalStepperStep2.setControl(
-            "area",
-            this.formBuilder.array(arrayFinal)
-          );
-
-          return;
+  getAreaIds(obj: any, i: number) {
+    const [id, key, onClick] = obj;
+    const areas = this.formUser.get("areas") as FormArray;
+    const area = areas.at(i).get("area_id");
+    area.setValue(id);
+    if (key !== this.limitLevel) {
+      setTimeout(() => {
+        if (onClick) {
+          area.markAsDirty();
+          area.markAsTouched();
         }
-
-        let ObjectArea = {
-          data: res,
-          title: res[0]["level_desc"]
-        };
-
-        if (param.index !== this.ObjectArea.length - 1) {
-          this.ObjectArea.splice(param.index + 1, this.ObjectArea.length);
-          area.controls.splice(param.index + 1, area.length);
-        }
-
-        this.ObjectArea.push(ObjectArea);
-
-        while (area.length > this.ObjectArea.length) {
-          if (param.index + 1 === area.length) return;
-          area.removeAt(area.length - 1);
-        }
-
-        let available = area.controls
-          .map(item => Object.keys(item.value))
-          .filter(item => item[0] === res[0]["level_desc"])[0];
-
-        if (available && available.length > 0) return;
-
-        area.push(
-          this.formBuilder.group({
-            [ObjectArea["title"]]: ["", Validators.required]
-          })
-        );
-      });
+        area.setErrors({ required: true });
+      }, 0);
+    }
   }
 
   submit() {
-    // if (this.verticalStepperStep1.valid && this.verticalStepperStep2.valid) {
-    //   this.submitting = true;
-    //   let body = {
-    //     name: this.verticalStepperStep1.get("nama").value,
-    //     email: this.verticalStepperStep1.get("email").value,
-    //     role_id: this.verticalStepperStep2.get("role").value
-    //   };
-    //   this.fieldForcePrincipal.create(body).subscribe(
-    //     res => {
-    //       this.dialogService.openSnackBar({
-    //         message: "Data Berhasil Disimpan"
-    //       });
-    //       this.router.navigate(["user-management", "admin-principal"]);
-    //     },
-    //     err => {
-    //       this.submitting = false;
-    //     }
-    //   );
-    // } else {
-    //   commonFormValidator.validateAllFields(this.verticalStepperStep1);
-    //   commonFormValidator.validateAllFields(this.verticalStepperStep2);
-    // }
-    console.log(
-      this.verticalStepperStep2.get("area").value[
-        this.verticalStepperStep2.get("area").value.length - 1
-      ]
+    if (!this.formUser.valid) {
+      commonFormValidator.markAllAsTouched(this.formUser);
+      return;
+    }
+    let areas = this.formUser.get("areas") as FormArray;
+    let body = {
+      name: this.formUser.get("name").value,
+      username: this.formUser.get("username").value,
+      type: this.formUser.get("type").value,
+      classification: this.formUser.get("classification").value,
+      areas: areas.value.map(({ area_id }) => area_id[0]),
+      status: this.formUser.get("status").value ? "active" : "inactive",
+    };
+    this.dataService.showLoading(true);
+    this.fieldForcePrincipal.create(body).subscribe(
+      () => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: "Berhasil dibuat" });
+        this.router.navigate(["user-management", "field-force"]);
+      },
+      () => {
+        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({
+          message: this.locale.global.messages.error,
+        });
+      }
     );
   }
 }

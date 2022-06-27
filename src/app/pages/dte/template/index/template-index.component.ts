@@ -11,6 +11,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { async } from '@angular/core/testing';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-template-index',
@@ -60,6 +61,7 @@ export class TemplateIndexComponent implements OnInit {
     private templateTaskService: TemplateTaskService,
     private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -446,10 +448,10 @@ export class TemplateIndexComponent implements OnInit {
   deleteTemplateTask(id) {
     this.id = id;
     let data = {
-      titleDialog: "Hapus Template Tugas",
-      captionDialog: "Apakah anda yakin untuk menghapus template tugas ini ?",
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.translate.instant('dte.template_tugas.text1')}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('dte.template_tugas.text1'), index: ''}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ["Hapus", "Batal"]
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -460,7 +462,7 @@ export class TemplateIndexComponent implements OnInit {
         this.dialogService.brodcastCloseConfirmation();
         this.getTemplateTask();
 
-        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
       }
     });
   }

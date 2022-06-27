@@ -5,7 +5,7 @@
     type="button"
     (click)="openDialog()"
   >
-    <mat-icon>add</mat-icon> BUAT
+    <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
   </button>
   <div class="table-wrapper">
     <div
@@ -58,7 +58,7 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Warna" prop="color">
+      <ngx-datatable-column name="{{'dte.pengaturan_attribute_misi.copywriting_color' | translate}}" prop="color">
         <ng-template
           ngx-datatable-cell-template
           let-row="row"
@@ -70,7 +70,7 @@
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column [width]="100" name="Status" prop="status">
+      <ngx-datatable-column [width]="100" name="{{'global.label.status' | translate}}" prop="status">
         <ng-template
           ngx-datatable-cell-template
           let-row="row"
@@ -91,7 +91,7 @@
                 row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'
               "
             >
-              {{ row.status == "active" ? "Aktif" : "Tidak Aktif" }}
+              {{ row.status == "active" ? ('global.label.active' | translate) : ('global.label.inactive' | translate) }}
             </p>
           </div>
         </ng-template>
@@ -99,7 +99,7 @@
 
       <ngx-datatable-column
         [width]="130"
-        name="Tindakan"
+        name="{{'global.label.action' | translate}}"
         headerClass="textright"
         [sortable]="false"
       >
@@ -121,7 +121,7 @@
             <button
               mat-icon-button
               color="primary"
-              matTooltip="Hapus Copywriting"
+              matTooltip="{{'dte.pengaturan_attribute_misi.delete_copywriting' | translate}}"
               [disabled]="row.status === 'active'"
               (click)="delete(row.id)"
             >

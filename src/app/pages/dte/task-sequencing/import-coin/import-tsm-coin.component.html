@@ -32,7 +32,7 @@
     <br>
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
       <div fxFlex>
-        <span for="" style="font-weight: bolder;">Requesting Preview</span>
+        <span for="" style="font-weight: bolder;">{{'dte.task_sequencing.requesting_preview' | translate}}</span>
         <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
       </div>
     </div>
@@ -42,55 +42,55 @@
       [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
       [selectionType]="'checkbox'" [count]="previewPagination.total" [limit]="previewPagination.per_page"
       [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
-      <ngx-datatable-column name="Nama Group Trade Program" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.group_trade_program.text6' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.group_trade_program_name}}
         </ng-template>
       </ngx-datatable-column>
       
-      <ngx-datatable-column name="Nama Program" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.group_trade_program.program_name' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.trade_program_name}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Nama Audience" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.group_trade_program.audience_name' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.audience_name}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Nama Retailer" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.retailer_name' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.name}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Status Retailer" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.retailer_status' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.status}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Current Coin (Total)" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.current_coin_total' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.current_coin}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Current Coin (Group Trade Program)" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.current_coin_group' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.current_coin_group_trade_program}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Coin Adjusted" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.coin_adjusted' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.preview.coin}}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Alasan" prop="trade_creator_name">
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.reason' | translate}}" prop="trade_creator_name">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           {{row.flag_reason}}
         </ng-template>
@@ -103,11 +103,11 @@
   <div class="border-top">
     <div fxLayout="row" style="margin-left: 16px;margin-top: 5px;">
       <mat-form-field fxFlex="50" class="is-light form-primary">
-        <textarea id="alasanAdjustmentCoin" matInput rows="2" placeholder="Alasan Adjusment Coin" [formControl]="textReason"></textarea>
+        <textarea id="alasanAdjustmentCoin" matInput rows="2" placeholder="{{'dte.approval_coin_adjustment.coin_adjustment_reason' | translate}}" [formControl]="textReason"></textarea>
       </mat-form-field>
     </div>
     <div fxLayout="column" fxFlex="80" style="border: 1px solid #ddd;" class="approval p-8 m-16">
-      <span class="approval__title">Approval</span>
+      <span class="approval__title">{{'dte.approval_coin_adjustment.approval' | translate}}</span>
       <form [formGroup]="formNotifikasi">
         <div formArrayName="approval" *ngFor="let item of formNotifikasi.get('approval')['controls']; let idx=index;">
           <div [formGroupName]="idx" class="approval__content">
@@ -115,7 +115,7 @@
             <mat-form-field fxFlex="200px" id="contoh-id">
               <mat-select
                 formControlName="name"
-                placeholder="Nama User Penerima"
+                placeholder="{{'dte.approval_coin_adjustment.receiver_name' | translate}}"
                 id="name"
                 (click)="selectForm('UserPenerima')"
                 (selectionChange)="selectChangeReceiver($event, idx)"
@@ -125,8 +125,8 @@
                 <ngx-mat-select-search
                   id="selectSearchUserPenerima"
                   [formControl]="filterUserNames"
-                  [placeholderLabel]="'Cari Nama User ...'"
-                  [noEntriesFoundLabel]="'User Tidak ditemukan!'"
+                  placeholderLabel="{{'dte.approval_coin_adjustment.search_user_name' | translate}}"
+                  noEntriesFoundLabel="{{'dte.approval_coin_adjustment.user_not_found' | translate}}"
                 >
                 </ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredUserNames | async" [value]="item.id" [disabled]="isApprovalUsed(item.id)">
@@ -135,12 +135,12 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field fxFlex="200px">
-              <input id="emailPenerima" matInput type="text" placeholder="Email Penerima" formControlName="email" name="email">
+              <input id="emailPenerima" matInput type="text" placeholder="{{'dte.approval_coin_adjustment.receiver_email' | translate}}" formControlName="email" name="email">
             </mat-form-field>
             <div>
               <button
                 mat-icon-button
-                matTooltip="Tambah"
+                matTooltip="{{'global.button.add' | translate}}"
                 matTooltipPosition="below"
                 (click)="addApproval(idx)"
               >
@@ -148,7 +148,7 @@
               </button>
               <button
                 mat-icon-button
-                matTooltip="Hapus"
+                matTooltip="{{'global.button.delete' | translate}}"
                 matTooltipPosition="below"
                 (click)="removeApproval(idx)"
                 *ngIf="formNotifikasi.get('approval').length > 1"
@@ -166,7 +166,7 @@
         <button id="btn-submit-import" type="button" mat-raised-button color="primary" (click)="submit()"
           [disabled]="rows.length === 0 || !isValid || requestingPreview || loadingIndicator || importing || requestingImport">{{ls.locale.global.button.send}}</button>
         <button id="btnBatalImportCoin" type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

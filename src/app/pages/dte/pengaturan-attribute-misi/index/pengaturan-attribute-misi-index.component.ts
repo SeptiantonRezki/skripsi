@@ -18,6 +18,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { PagesName } from 'app/classes/pages-name';
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { DialogToolboxEditComponent } from './dialog-toolbox-edit/dialog-toolbox-edit.component';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-pengaturan-attribute-misi-index",
@@ -50,6 +51,8 @@ export class PengaturanAttributeMisiIndexComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
+  pageName = this.translate.instant('dte.pengaturan_attribute_misi.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     public Dialog: MatDialog,
@@ -58,7 +61,8 @@ export class PengaturanAttributeMisiIndexComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private dataService: DataService,
-    private pengaturanAttributeMisiService: PengaturanAttributeMisiService
+    private pengaturanAttributeMisiService: PengaturanAttributeMisiService,
+    private translate: TranslateService,
   ) {
 
   }

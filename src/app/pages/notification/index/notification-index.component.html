@@ -1,14 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Notifikasi'">
+  <page-content-header contentTitle="{{'global.label.list_entity' | translate:titleParam}}">
     <div class="button-row" fxLayout="row">
       <button mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/notifications', 'push-notification', 'create-custom']">
-        <mat-icon>add</mat-icon>Buat Customized Push Notification
+        <mat-icon>add</mat-icon>{{'global.label.create_entity' | translate:customNotifParam}}
       </button>
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/notifications', 'push-notification', 'create']">
-        <mat-icon>add</mat-icon>BUAT
+        <mat-icon>add</mat-icon>{{'global.button.create' | translate}}
       </button>
     </div>
   </page-content-header>
@@ -17,11 +17,11 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">Daftar Notifikasi</h2>
+        <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input matInput placeholder="{{'global.label.search' | translate}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
           </mat-form-field>
         </div>
       </div>
@@ -42,31 +42,31 @@
         (sort)="onSort($event)"
         (select)="onSelect($event)">
 
-        <ngx-datatable-column name="Tipe Content Notification" prop="notification_content_type">
+        <ngx-datatable-column name="{{'notification.buat_notifikasi.text2' | translate}}" prop="notification_content_type">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.notification_content_type}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Judul Notifikasi" prop="title">
+        <ngx-datatable-column name="{{'notification.buat_notifikasi.text3' | translate}}" prop="title">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <!-- <span class="row-name" (click)="directEdit(row)">{{row.title}}</span> -->
             <a class="direct-edit" (click)="directEdit(row)">{{row.title}}</a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Grup Pengguna" prop="type">
+        <ngx-datatable-column name="{{'notification.buat_notifikasi.text4' | translate}}" prop="type">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.type | toCapitalize}}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Halaman Tujuan" prop="static_page_slug"></ngx-datatable-column>
+        <ngx-datatable-column name="{{'notification.buat_notifikasi.text5' | translate}}" prop="static_page_slug"></ngx-datatable-column>
 
         <ngx-datatable-column name="{{'global.label.created_at' | translate}}" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.created_at | date: 'dd/MM/yyyy
             HH:mm:ss'}}</ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="50" name="Tindakan" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="50" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
             <div class="button-row pl-8">
               <button mat-icon-button color="primary" matTooltip="Hapus Notifikasi" (click)="deleteNotif(row.id)" [disabled]="row.notification_content_type === 'general'">

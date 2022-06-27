@@ -14,7 +14,32 @@ export const environment = {
   SRC_KATALOG_KOIN_BASE_IFRAME_URL: 'https://hms-react.src.id',
   STREAMLIT: 'https://dynamicpricing.api.src.id',
   REACT_BASE_URL: 'https://hms-react.src.id',
+  cambodia_image: "assets/images/louk/louk_new.png",
+  cambodia_image_2x: "assets/images/louk/louk_new.png 2x",
 };
+
+export const getDynamicBranding = (): any => {
+  let user_country = window.localStorage.getItem("user_country") || "id";
+  switch (user_country) {
+    case "km":
+      return {
+        locale: user_country,
+        image: environment.cambodia_image,
+        image_2x: environment.cambodia_image_2x,
+        navbar_icon: environment.cambodia_image,
+        navbar_icon_2x: environment.cambodia_image_2x
+      }
+    default: {
+      return {
+        locale: user_country,
+        image: environment.image,
+        image_2x: environment.image_2x,
+        navbar_icon: "assets/images/ayo/Horizontal_(Alt_White)@2x.png",
+        navbar_icon_2x: "assets/images/ayo/Horizontal_(Alt_White)@2x.png 2x"
+      }
+    }
+  }
+}
 
 export const serviceServer = (server) => {
   return `https://${server}.api.src.id`;

@@ -9,8 +9,8 @@ export class PagesName {
       "/user-management/admin-principal/detail/": "principal.adminprincipal.lihat",
       "/user-management/field-force": "principal.fieldforce.lihat",
       "/user-management/field-force/create": "principal.fieldforce.buat",
-      "/user-management/field-force/edit": "principal.fieldforce.ubah",
-      "/user-management/field-force/detail": "principal.fieldforce.lihat",
+      "/user-management/field-force/edit/": "principal.fieldforce.ubah",
+      "/user-management/field-force/detail/": "principal.fieldforce.lihat",
       "/user-management/wholesaler": "principal.wholesaler.lihat",
       "/user-management/wholesaler/create": "principal.wholesaler.buat",
       "/user-management/wholesaler/edit": "principal.wholesaler.ubah",
@@ -174,6 +174,16 @@ export class PagesName {
       "/dte/assignment-cart": "principal.dteassignmentcart.lihat",
       "/dte/verification-assignment": "principal.dteverificationassignment.lihat",
       "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
+
+      "/dte/sub-group-trade-program": "principal.dtesubgrouptradeprogram.lihat",
+      "/dte/sub-group-trade-program/create": "principal.dtesubgrouptradeprogram.buat",
+      "/dte/sub-group-trade-program/edit/": "principal.dtesubgrouptradeprogram.ubah",
+      "/dte/sub-group-trade-program/detail/": "principal.dtesubgrouptradeprogram.lihat",
+      "/dte/coin-redemption-approval": "principal.dtecoinredemptionapproval.lihat",
+      "/dte/employee-mapping": "principal.dteemployeemapping.lihat",
+      "/dte/employee-mapping/create": "principal.dteemployeemapping.buat",
+      "/dte/employee-mapping/edit/": "principal.dteemployeemapping.ubah",
+      "/dte/employee-mapping/detail/": "principal.dteemployeemapping.lihat",
     }
     return PAGES[name];
   }

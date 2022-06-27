@@ -37,10 +37,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th nowrap>Kode Agen</th>
-            <th nowrap>Akses Kasir</th>
-            <th nowrap>Chatbot</th>
-            <th nowrap>GSM PL</th>
+            <th nowrap>{{'wholesaler.agent_code' | translate}}</th>
+            <th nowrap>{{'global.label.cashier_access' | translate}}</th>
+            <th nowrap>{{'global.label.chat_bot'}}</th>
+            <th nowrap>{{'retailer.list.gsm_pl' | translate}}</th>
           </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
         <button type="button" mat-raised-button color="primary" (click)="submit()"
           [disabled]="rows.length === 0">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">Batal</button>
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
     </div>
   </div>

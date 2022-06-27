@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Daftar Audience / Grup ({{data.name}})</span>
+        <span>{{'dte.task_verification.list_audience_group' | translate}} ({{data.name}})</span>
       </div>
 
     </div>
@@ -24,11 +24,11 @@
       [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [sorts]="[{prop: 'name', dir: 'asc'}]">
       <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
       <ngx-datatable-column name="{{'global.label.code' | translate}}" prop="code"></ngx-datatable-column>
-      <ngx-datatable-column name="Tipe" prop="classification"></ngx-datatable-column>
+      <ngx-datatable-column name="{{'global.label.type' | translate}}" prop="classification"></ngx-datatable-column>
       <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          <span *ngIf="row.status === 'active' || row.status === 'inactive'">Yes</span>
-          <span *ngIf="row.status === 'not-registered'">No</span>
+          <span *ngIf="row.status === 'active' || row.status === 'inactive'">{{'global.label.yes' | translate}}</span>
+          <span *ngIf="row.status === 'not-registered'">{{'global.label.no' | translate}}</span>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>

@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PayLaterPanelImportDialogComponent } from '../../pay-later-panel-import-dialog/pay-later-panel-import-dialog.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-pay-later-panel-src-edit',
@@ -63,6 +64,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
   _data: any = null;
   mitraSelected: any[] = [];
   paylaterCompanyId: any;
+  myArrSRC: any[] = [];
 
   @Input()
   set data(event: any) {
@@ -503,6 +505,10 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       fd.append('business_id[]', item.id);
     })
     fd.append('type', 'retailer');
+    fd.append('paylater_company_id', this.paylaterCompanyId);
+    this.mitraSelected.map(item => {
+      fd.append('wholesaler_id[]', item);
+    });
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
@@ -563,11 +569,51 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.onSelect({ selected: response });
+        let filteredSrcX = [];
+        let newArray = [];
+        let dataFiltered = [];
+        // reverse an array
+        let reverse_array = response.slice().reverse();
+        let responseX =  reverse_array.filter((value, index, self) => 
+        self.findIndex(v => v.id === value.id) === index
+      );
+        this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+          if (res && res.data) {
+            filteredSrcX = res.data.src.map((mtr) => {
+              return { id: mtr['business_id'] };
+            });
+            this.myArrSRC.push(...filteredSrcX);
+            // if data contain unwhitelist then remove from response data
+              responseX.filter((v,i) => {
+                if(!v.whitelist){ // = 0
+                  // deleted from default array data
+                  this.removeDataArr(v.id);
+                }else{
+                  newArray.push(...[{id: v.id}]);
+                }
+            });
+            
+            newArray.push(...this.myArrSRC);
+            const ids = newArray.map(o => o.id);
+            // filter multiple data id
+            dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1))
+          }
+          this.onSelect({ selected: res && res.data && res.data.src ? dataFiltered : [] });
+        }, err => {
+        });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
     });
   }
+
+  removeDataArr (id_data){
+    this.myArrSRC.map(x => {
+      if(x.id == id_data){
+        this.myArrSRC.splice(this.myArrSRC.indexOf(x), 1);
+      }
+    });
+  }
+  
 
   handleError(error) {
     console.log('Here')

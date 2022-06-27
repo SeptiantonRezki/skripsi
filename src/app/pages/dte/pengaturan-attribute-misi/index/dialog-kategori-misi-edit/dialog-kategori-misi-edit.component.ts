@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Subject, Observable, ReplaySubject } from "rxjs";
 import { PengaturanAttributeMisiService } from 'app/services/dte/pengaturan-attribute-misi.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dialog-kategori-misi-edit',
@@ -30,6 +31,8 @@ export class DialogKategoriMisiEditComponent implements OnInit {
 
   nameChange = false;
   statusChange = false;
+  pageName = this.translate.instant('dte.pengaturan_attribute_misi.text5');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private router: Router,
@@ -41,7 +44,8 @@ export class DialogKategoriMisiEditComponent implements OnInit {
     private dialogService: DialogService,
     private audienceService: AudienceService,
     @Inject(MAT_DIALOG_DATA) data,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.name = data.name;
     this.id = data.id;

@@ -8,6 +8,7 @@ import { takeUntil } from "rxjs/operators";
 import moment from 'moment';
 import { Page } from 'app/classes/laravel-pagination';
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-task-sequencing-create",
@@ -31,12 +32,15 @@ export class TaskSequencingCreateComponent implements OnInit {
   public filteredGTA: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   pagination: Page = new Page();
+  pageName = this.translate.instant('dte.task_sequencing.text1');
+  titleParam = {entity: this.pageName};
 
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private sequencingService: SequencingService,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {}
 
   ngOnInit() {

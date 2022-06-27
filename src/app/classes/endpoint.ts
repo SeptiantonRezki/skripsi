@@ -112,6 +112,7 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force`,
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
+        detail: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/${type_api}/user/field-force/${context.fieldforce_id}`,
       },
       wholesaler: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler`,
@@ -160,7 +161,8 @@ export class Endpoint {
         import_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/preview`,
         store_access_cashier: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/flag-cashier`,
         request_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/request-export`,
-        status_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/status-export`
+        status_export_cashier: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/retailer/status-export`,
+        export_bank_account: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/retailer-coin-disbursement/export`,
       },
       paguyuban: {
         get: `${AYO_API_SERVICE(SERVER.community)}/api/v1/community/principal/paguyuban`,
@@ -233,6 +235,8 @@ export class Endpoint {
         export2: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/export/report`,
         products_sku_bank: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product?search=${context.param
           }&status=active`,
+        product_barcodes: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product?search=${context.param}`,
+        product_code: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/list/all-by-code?search=${context.param}`,
         generate_link: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/product/generate-link`
       },
       product_cashier: {
@@ -560,7 +564,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`
+        get_sub_group_trade: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/sub-group`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/creator/group/${context.group_id}`,
       },
       PLSupplierCompany: {
         getList: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/private-label/supplier-company`,
@@ -687,8 +692,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
       },
       PLPayMethod: {
-        getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran`,
-        update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
+        getList: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran`,
+        update: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
       },
       PLStock: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock`,
@@ -1011,7 +1016,8 @@ export class Endpoint {
         export_detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export-detail`,
         download: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/download`,
         preview_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/preview`,
-        import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`
+        import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`,
+        data_log_get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption-approval/dataLog`,
       },
       feature_level: {
         list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level`,

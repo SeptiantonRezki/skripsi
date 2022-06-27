@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'app/services/dialog.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
@@ -27,6 +28,7 @@ export class BackgroundMisiComponent implements OnInit {
   
   constructor(
     private dialogService: DialogService,
+    private translate: TranslateService,
     private formBuilder: FormBuilder,
   ) {}
 
@@ -91,7 +93,7 @@ export class BackgroundMisiComponent implements OnInit {
       else{
         this.isSize = false;
         this.upload.emit({image: '', color: ''});
-        this.dialogService.openSnackBar({ message: 'Ukuran gambar melebihi 2MB'});
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.image_size_limit', {size: '2MB'}) });
       }
     }
   }
@@ -113,7 +115,7 @@ export class BackgroundMisiComponent implements OnInit {
     let newFile = [];
 
     if (this.currentFiles.length === Number(this.isMultiple)) {
-      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.max_count_image', {count: this.isMultiple}) });
       this.selectedFiles = [];
       return;
     }
@@ -125,12 +127,12 @@ export class BackgroundMisiComponent implements OnInit {
         newFile.push(item);
       }
     });
-    if (isOverSize) this.dialogService.openSnackBar({ message: 'Ukuran gambar maksimal 2MB'});
+    if (isOverSize) this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.image_size_limit', {size: '2MB'}) });
 
     const restImage = Number(this.isMultiple) - this.currentFiles.length;
     if (restImage < newFile.length) {
       newFile = newFile.slice(0, restImage);
-      this.dialogService.openSnackBar({ message: `Maksimal ${this.isMultiple} gambar`});
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.max_count_image', {count: this.isMultiple}) });
     }
 
     newFile.forEach(item => {

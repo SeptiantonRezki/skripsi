@@ -1,17 +1,17 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Coin Disbursement'">
+  <page-content-header contentTitle="{{'global.label.list_entity' | translate:titleParam}}">
     <button style="width: 170px" [routerLink]="['/dte','coin-disbursement', 'create']" mat-raised-button type="button">
-      <mat-icon>add</mat-icon> BUAT
+      <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
     </button>
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group>
-        <mat-tab label="Coin Disbursement">
+        <mat-tab label="{{'dte.coin_disbursement.text1' | translate}}">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-            <h2 class="pl-8">Coin Disbursement</h2>
+            <h2 class="pl-8">{{'dte.coin_disbursement.text1' | translate}}</h2>
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -25,78 +25,81 @@
             [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
             (page)="setPage($event)" (sort)="onSort($event)">
 
-            <ngx-datatable-column [width]="200" name="Nama Program Penukaran" prop="name" [flexGrow]="3">
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text2' | translate}}" prop="name" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span class="row-name" (click)="directEdit(row)">{{row.name}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" name="Retailer Menukarkan Koin" prop="retailer_menukarkan_koin">
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text3' | translate}}" prop="retailer_menukarkan_koin">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" name="Jumlah Koin yang sudah ditukarkan"
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text4' | translate}}"
               prop="jml_koin_yang_sudah_ditukar">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" name="Jumlah SRC yang menukar Saldo Pojok Bayar"
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text5' | translate}}"
               prop="jml_src_yang_menukar_saldo_pojok_bayar">
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="200" name="Jumlah SRC yang menukar Transfer Bank"
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text6' | translate}}"
               prop="jml_src_yang_menukar_transfer_bank">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" name="Jumlah SRC yang ditukar Saldo Pojok Bayar"
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text7' | translate}}"
               prop="jml_coin_yang_ditukar_saldo_pojok_bayar">
             </ngx-datatable-column>
-            <ngx-datatable-column [width]="200" name="Jumlah SRC yang ditukar Transfer Bank"
+            <ngx-datatable-column [width]="200" name="{{'dte.coin_disbursement.text8' | translate}}"
               prop="jml_coin_yang_ditukar_transfer_bank">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Tanggal Awal Penukaran Koin" prop="created_at"
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{'dte.coin_disbursement.text9' | translate}}" prop="created_at"
               [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.created_at | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin"
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{'dte.coin_disbursement.text10' | translate}}"
               prop="end_date" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.end_date | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Status" prop="status" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'global.label.status' | translate}}" prop="status" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="name-container">
                   <p class="status text-truncate h6 p-4 status-order mat-green-800-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'publish'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text8' | translate}}
                   </p>
                   <p class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'unpublish'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text9' | translate}}
                   </p>
                   <p class="status text-truncate h6 p-4 status-order mat-orange-900-bg"
                     style="text-transform: capitalize;" *ngIf="row.status == 'draft'">
-                    {{row.status}}
+                    <!-- {{row.status}} -->
+                    {{'dte.pengatur_jadwal_program.text10' | translate}}
                   </p>
                 </div>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ngx-datatable-column [width]="250" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
                   <button type="button" mat-icon-button [disabled]="!row.retailer_menukarkan_koin"
-                    matTooltip="Export Detail" (click)="download(row.id)">
+                    matTooltip="{{'dte.coin_disbursement.export_detail' | translate}}" (click)="download(row.id)">
                     <mat-icon *ngIf="row.retailer_menukarkan_koin" class="orange-500-fg">save_alt</mat-icon>
                     <mat-icon *ngIf="!row.retailer_menukarkan_koin" class="secondary-text">save_alt</mat-icon>
                   </button>
                   <button mat-icon-button color="" (click)="directEdit(row)">
                     <mat-icon class="secondary-text">edit</mat-icon>
                   </button>
-                  <button type="button" mat-icon-button color="primary" matTooltip="Hapus Coin Disbursement"
+                  <button type="button" mat-icon-button color="primary" matTooltip="{{'global.label.delete_entity' | translate:titleParam}}"
                     (click)="deleteCoinDisburstment(row)">
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -104,6 +107,9 @@
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
+        </mat-tab>
+        <mat-tab label="Data Log">
+          <app-data-log></app-data-log>
         </mat-tab>
       </mat-tab-group>
     </div>

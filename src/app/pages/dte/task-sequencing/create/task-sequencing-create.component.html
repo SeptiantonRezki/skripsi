@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Buat Task Sequence'">
+  <page-content-header contentTitle="{{'global.label.create_entity' | translate:titleParam}}">
     <div class="button-row" fxLayout="row">
 
     </div>
@@ -11,7 +11,7 @@
     <div fxLayout="row" fxLayoutAlign="space-around">
       <img fxFlex="30" [src]="'assets/images/ayo/tsm.png'" style="max-width: 30%; margin-top: 3rem">
       <div fxFlex="40">
-        <span class="h1"><strong>Buat Task Sequence</strong></span>
+        <span class="h1"><strong>{{'global.label.create_entity' | translate:titleParam}}</strong></span>
         <form name="form" [formGroup]="taskSequenceForm" (keydown.enter)="$event.preventDefault();">
 
           <!-- <ng-template matStepLabel>Informasi Dasar</ng-template> -->
@@ -22,7 +22,7 @@
               <input matInput type="text" placeholder="{{'dte.trade_program.text3' | translate}}" formControlName="namaTrade">
               <mat-error
                 *ngIf="taskSequenceForm.controls['namaTrade'].hasError('required') && taskSequenceForm.controls['namaTrade'].touched ">
-                Nama Trade harus diisi.
+                Nama Trade {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -30,7 +30,7 @@
               <input matInput type="text" placeholder="Budget" formControlName="budget">
               <mat-error
                 *ngIf="taskSequenceForm.controls['budget'].hasError('required') && taskSequenceForm.controls['budget'].touched ">
-                Budget harus diisi.
+                Budget {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>-->
 
@@ -38,7 +38,7 @@
               <input id="input-nama" matInput type="text" placeholder="{{ls.locale.global.label.name}}" formControlName="name">
               <mat-error
                 *ngIf="taskSequenceForm.controls['name'].hasError('required') && taskSequenceForm.controls['name'].touched ">
-                {{ls.locale.global.label.name}} harus diisi.
+                {{ls.locale.global.label.name}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -55,7 +55,7 @@
               </mat-select>
               <mat-error
                 *ngIf="taskSequenceForm.controls['trade_creator_id'].hasError('required') && taskSequenceForm.controls['trade_creator_id'].touched">
-                Pilih salah satu trade program.
+                {{'dte.task_sequencing.select_trade_program' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -63,45 +63,45 @@
               <!-- <mat-select placeholder="Pilih Group Audience" formControlName="group_audience" id="group_audience">
                 <mat-option *ngFor="let item of audiences" [value]="item.id">{{item.name}}</mat-option>
               </mat-select> -->
-              <mat-select formControlName="trade_audience_group_id" placeholder="Pilih Group Audience" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
-                <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" [placeholderLabel]="'Cari Group Trade Audience...'"
-                  [noEntriesFoundLabel]="'Tidak ada Group Audience yang ditemukan'" [clearSearchInput]="false"></ngx-mat-select-search>
+              <mat-select formControlName="trade_audience_group_id" placeholder="{{'dte.task_sequencing.text10' | translate}}" id="tradeAudienceGroupId" (click)="selectForm('audience')" (selectionChange)="selectChangeAudince($event)" #singleSelect>
+                <ngx-mat-select-search id="select-search-audience" [formControl]="filterGTA" placeholderLabel="{{'global.label.search' | translate}}"
+                  noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false"></ngx-mat-select-search>
                 <mat-option *ngFor="let item of filteredGTA | async" [value]="item.id">
                   {{item.name}}
                 </mat-option>
               </mat-select>
               <mat-error
                 *ngIf="taskSequenceForm.controls['trade_audience_group_id'].hasError('required') && taskSequenceForm.controls['trade_audience_group_id'].touched">
-                Pilih salah satu group audience.
+                {{'dte.task_sequencing.select_group_audience' | translate}}
               </mat-error>
             </mat-form-field>
 
-            <h3 class="h3"><strong>Masa Berlaku Task Sequence</strong></h3>
+            <h3 class="h3"><strong>{{'dte.task_sequencing.text13' | translate}}</strong></h3>
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate"
-                [matDatepicker]="start_date" placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date">
+                [matDatepicker]="start_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="start_date">
               <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
               <mat-datepicker #start_date></mat-datepicker>
               <mat-error class="mt-8 px-24"
                 *ngIf="taskSequenceForm.controls['start_date'].hasError('required') && taskSequenceForm.controls['start_date'].touched">
-                Tanggal mulai harus diisi.
+                {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
               <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate"
-                [matDatepicker]="end_date" placeholder="Pilih {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="end_date">
+                [matDatepicker]="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="end_date">
               <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
               <mat-datepicker #end_date></mat-datepicker>
               <mat-error class="mt-8 px-24"
                 *ngIf="taskSequenceForm.controls['end_date'].hasError('required') && taskSequenceForm.controls['end_date'].touched">
-                Tanggal berakhir harus diisi.
+                {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
             </mat-form-field>
 
             <button id="btnSubmitTaskSequencing" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled]="taskSequenceForm.valid === false" [routerLink]="['/dte','mission-builder','create']">
-              SUBMIT
+              {{'global.button.submit' | translate}}
             </button>
 
           </div>

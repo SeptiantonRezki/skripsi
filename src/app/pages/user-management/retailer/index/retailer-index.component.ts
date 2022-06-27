@@ -15,6 +15,8 @@ import { GeotreeService } from 'app/services/geotree.service';
 import * as _ from 'lodash';
 import { GeneralService } from 'app/services/general.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 
 @Component({
   selector: 'app-retailer-index',
@@ -35,10 +37,12 @@ export class RetailerIndexComponent {
   exportAccessCashier: boolean;
   canRequestExport = true;
   resultExport = null;
+  resultExportBank = null;
 
   keyUp = new Subject<string>();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadBankLink') downloadBankLink: ElementRef;
   @ViewChild('activeCell')
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -121,7 +125,8 @@ export class RetailerIndexComponent {
     private dialog: MatDialog,
     private geotreeService: GeotreeService,
     private generalService: GeneralService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     this.selected = [];
@@ -410,7 +415,7 @@ export class RetailerIndexComponent {
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== '') {
+      if (areaSelected[0].value) {
         areaSelected[0].value.map(ar => {
           fd.append('area_id[]', ar);
         })
@@ -1219,6 +1224,29 @@ export class RetailerIndexComponent {
     );
   }
 
+  downloadBankAccount() {
+    let data = {
+      titleDialog: "Download Bank Account",
+      captionDialog: "Apakah Anda ingin export dengan remark ?",
+      confirmCallback: () => this.confirmDownloadBankAccount("yes"),
+      rejectCallback: () => this.confirmDownloadBankAccount("no"),
+      buttonText: ["Ya", "Tidak"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDownloadBankAccount(remark) {
+    this.dataService.showLoading(true);
+    this.retailerService.exportBankAccount({remark: remark}).subscribe(res => {
+      let filename = `Export-Retailer-Coin-Disbursement-${moment(new Date()).format('YYYY-MM-DD-hh-mm-ss')}.xlsx`;
+      this.downLoadFile(res, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err', err);
+      this.dataService.showLoading(false);
+    });
+  }
+
   ngOnDestroy(){
     this.dataService.setToStorage('selected_zone', []);
     this.dataService.setToStorage('selected_region', []);
@@ -1307,10 +1335,10 @@ export class RetailerIndexComponent {
   deleteWholesaler(id): void {
     this.id = id;
     let data = {
-      titleDialog: 'Hapus Retailer',
-      captionDialog: 'Apakah anda yakin untuk menghapus Retailer ini ?',
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity: this.translate.instant('global.menu.retailer')}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity: this.translate.instant('global.menu.retailer'), index: ''}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', this.ls.locale.global.button.cancel]
+      buttonText: [this.translate.instant('global.button.delete'), this.ls.locale.global.button.cancel]
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
@@ -1319,7 +1347,7 @@ export class RetailerIndexComponent {
     this.retailerService.delete({ retailer_id: this.id }).subscribe(
       res => {
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') });
 
         this.getRetailerList();
       },
@@ -1390,6 +1418,11 @@ export class RetailerIndexComponent {
   download() {
     this.downloadLink.nativeElement.href = this.resultExport;
     this.downloadLink.nativeElement.click();
+  }
+
+  downloadBank() {
+    this.downloadBankLink.nativeElement.href = this.resultExportBank;
+    this.downloadBankLink.nativeElement.click();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {

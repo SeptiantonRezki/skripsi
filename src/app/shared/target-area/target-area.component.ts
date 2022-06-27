@@ -10,6 +10,7 @@ import {
 } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialog, MatDialogConfig } from "@angular/material";
+import { TranslateService } from "@ngx-translate/core";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
 import { AreaService } from "app/services/area.service";
@@ -74,6 +75,7 @@ export class TargetAreaComponent implements OnInit {
     public dialogService: DialogService,
     public dialog: MatDialog,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.keyUp
       .debounceTime(500)
@@ -276,7 +278,7 @@ export class TargetAreaComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.dialogService.openSnackBar({ message: "File berhasil diimport" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text8') });
         this.onSelect({ selected: res });
       }
     });
@@ -285,7 +287,7 @@ export class TargetAreaComponent implements OnInit {
   async export() {
     if (!this.selected.length) {
       this.dialogService.openSnackBar({
-        message: "Pilih area untuk di ekspor!",
+        message: this.translate.instant('global.label.select_area_to_export'),
       });
       return;
     }

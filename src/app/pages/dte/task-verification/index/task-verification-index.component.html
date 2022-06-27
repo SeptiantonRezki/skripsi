@@ -1,17 +1,17 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Verifikasi Misi'">
+  <page-content-header [contentTitle]="pageName">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">List Verifikasi Misi</h2>
+        <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
       </div>
       <mat-tab-group>
-        <mat-tab label="Non-TSM">
+        <mat-tab label="{{'manajemen_barang_sku.manajemen_koin.text2' | translate}}">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-            <h2 class="pl-8">Verifikasi Misi Non-TSM</h2>
+            <h2 class="pl-8">{{'dte.task_verification.mission_verif_non_tsm' | translate}}</h2>
             <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
               <mat-icon>search</mat-icon>
               <mat-form-field autoComplete="off" class="is-light tab-search">
@@ -29,7 +29,7 @@
               </mat-form-field>
               <div fxFlex="1"></div>
               <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
-                <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="Dari Tanggal"
+                <input matInput #from [matDatepicker]="dari" (focus)="dari.open()" placeholder="{{'dte.pengatur_jadwal_program.text5' | translate}}"
                   formControlName="start_date" (dateChange)="setMinDate(formFilter.get('start_date').value)" readonly>
                 <button mat-button *ngIf="formFilter.get('start_date').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="formFilter.get('start_date').setValue('')">
@@ -43,7 +43,7 @@
               <div fxFlex="1"></div>
               <mat-form-field fxFlex="16" floatLabel="never" class="orders datepicker is-light">
                 <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-                  placeholder="Sampai Tanggal" formControlName="end_date" readonly>
+                  placeholder="{{'dte.pengatur_jadwal_program.text6' | translate}}" formControlName="end_date" readonly>
                 <button mat-button *ngIf="formFilter.get('end_date').value" matSuffix mat-icon-button aria-label="Clear"
                   (click)="formFilter.get('end_date').setValue('')">
                   <mat-icon>close</mat-icon>
@@ -61,7 +61,7 @@
               </mat-form-field>
               <div fxFlex="1"></div>
               <div class="button-row pb-16">
-                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">FILTER</button>
+                <button mat-raised-button style="width: 150px" color="primary" (click)="updateFilter()">{{'global.button.filter' | translate}}</button>
               </div>
             </div>
           </form>
@@ -71,7 +71,7 @@
             [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
             (page)="setPage($event)" (sort)="onSort($event)">
 
-            <ngx-datatable-column [width]="220" [sortable]="false" name="Nama Pengatur Jadwal Program"
+            <ngx-datatable-column [width]="220" [sortable]="false" name="{{'dte.pengatur_jadwal_program.text16' | translate}}"
               prop="nama_pengatur_jadwal_program" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <!-- <span class="row-name" [routerLink]="['/dte', 'schedule-trade-program', 'detail', row.id]"> -->
@@ -81,63 +81,66 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Trade Program" prop="nama_trade_program" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'dte.trade_program.text1' | translate}}" prop="nama_trade_program" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="195" [sortable]="false" name="Nama Group Trade Program"
+            <ngx-datatable-column [width]="195" [sortable]="false" name="{{'dte.group_trade_program.text6' | translate}}"
               prop="nama_grup_trade_program" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="Nama Misi/Template Tugas" prop="nama_template"
+            <ngx-datatable-column [width]="190" [sortable]="false" name="{{'dte.task_verification.mission_name_or_task_template' | translate}}" prop="nama_template"
               [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="190" [sortable]="false" name="{{'dte.template_tugas.text6' | translate}}/Template Tugas"
+            <ngx-datatable-column [width]="190" [sortable]="false" name="{{'dte.template_tugas.text6' | translate}}/{{'dte.template_tugas.text1'}}"
               prop="other_name_template" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Verification Rate" prop="verification_rate" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'dte.task_verification.text4' | translate}}" prop="verification_rate" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Compliance Rate" prop="compliance_rate" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'dte.task_verification.text5' | translate}}" prop="compliance_rate" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="200" [sortable]="false" name="Periode Misi" prop="start_date" [flexGrow]="3">
+            <ngx-datatable-column [width]="200" [sortable]="false" name="{{'dte.task_verification.text6' | translate}}" prop="start_date" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <span>{{row.start_date | dateToMoment}} s/d {{ row.end_date | dateToMoment}}</span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [sortable]="false" name="Audience Group" prop="nama_audience_group" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'dte.task_verification.text7' | translate}}" prop="nama_audience_group" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="165" [sortable]="false" name="Status" prop="status_scheduler" [flexGrow]="3">
+            <ngx-datatable-column [width]="165" [sortable]="false" name="{{'global.label.status' | translate}}" prop="status_scheduler" [flexGrow]="3">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="name-container">
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-green-800-bg"
                     style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'publish'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text8' | translate}}
                   </p>
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-yellow-900-bg"
                     style="text-transform: uppercase;" *ngIf="row.status_scheduler == 'draft'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text10' | translate}}
                   </p>
                   <p id="'status" class="status text-truncate h6 p-4 status-order mat-red-900-bg" style="text-transform: uppercase;"
                     *ngIf="row.status_scheduler == 'unpublish'">
-                    {{row.status_scheduler}}
+                    <!-- {{row.status_scheduler}} -->
+                    {{'dte.pengatur_jadwal_program.text9' | translate}}
                   </p>
                 </div>
               </ng-template>
             </ngx-datatable-column>
 
 
-            <ngx-datatable-column [sortable]="false" name="Status Coin" prop="status_coin" [flexGrow]="3">
+            <ngx-datatable-column [sortable]="false" name="{{'dte.task_verification.text8' | translate}}" prop="status_coin" [flexGrow]="3">
             </ngx-datatable-column>
 
-            <ngx-datatable-column [width]="250" name="Tindakan" headerClass="textright" [sortable]="false">
+            <ngx-datatable-column [width]="250" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
-                  <button id="btn-lihat" type="button" mat-icon-button color="" matTooltip="Lihat"
+                  <button id="btn-lihat" type="button" mat-icon-button color="" matTooltip="{{'dte.pengatur_jadwal_program.text13' | translate}}"
                     [routerLink]="['/dte', 'taskverification', 'detail', row.id, row.scheduler_templates_id]"
                     [disabled]="!permissionVerifikasiMisi?.lihat">
                     <mat-icon class="secondary-text">assignment</mat-icon>
@@ -145,21 +148,21 @@
                   <button id="btn-ubah" type="button" mat-icon-button color=""
                     [routerLink]="['/dte', 'taskverification', 'edit', row.id]"
                     [disabled]="row?.status_berjalan !== 'no' || !permission?.ubah"
-                    matTooltip="Ubah Tanggal Penjadwalan">
+                    matTooltip="{{'dte.task_verification.change_schedule' | translate}}">
                     <mat-icon class="secondary-text">update</mat-icon>
                   </button>
                   <button id="btn-export" type="button" mat-icon-button color="" [disabled]="row.status_scheduler !== 'publish'"
-                    matTooltip="Export Misi" (click)="export(row)">
+                    matTooltip="{{'dte.task_verification.mission_export' | translate}}" (click)="export(row)">
                     <mat-icon *ngIf="row.status_scheduler == 'publish'" class="orange-500-fg">save_alt</mat-icon>
                     <mat-icon *ngIf="row.status_scheduler !== 'publish'" class="secondary-text">save_alt</mat-icon>
                   </button>
-                  <button id="btn-verified" type="button" mat-icon-button color="" matTooltip="Verified All"
+                  <button id="btn-verified" type="button" mat-icon-button color="" matTooltip="{{'dte.task_verification.verified_all' | translate}}"
                     (click)="openConfirmDialog(row, 'Verification All Mission')"
                     [disabled]="isDisableVerification(row)">
                     <mat-icon *ngIf="!isDisableVerification(row)" class="orange-500-fg">assignment_turned_in</mat-icon>
                     <mat-icon *ngIf="isDisableVerification(row)" class="secondary-text">assignment_turned_in</mat-icon>
                   </button>
-                  <button id="btn-release" type="button" mat-icon-button color="" matTooltip="Release Coin"
+                  <button id="btn-release" type="button" mat-icon-button color="" matTooltip="{{'dte.task_verification.coin_release' | translate}}"
                     (click)="openConfirmDialog(row, 'Release Coin On Index')" [disabled]="isDisableReleaseCoin(row)">
                     <mat-icon *ngIf="!isDisableReleaseCoin(row)" class="orange-500-fg">call_made</mat-icon>
                     <mat-icon *ngIf="isDisableReleaseCoin(row)" class="secondary-text">call_made</mat-icon>
@@ -177,7 +180,7 @@
         </mat-tab>
 
         <!-- TIPE MISI -->
-        <mat-tab label="TSM">
+        <mat-tab label="{{'manajemen_barang_sku.manajemen_koin.text3' | translate}}">
           <app-task-verification-index-tsm></app-task-verification-index-tsm>
         </mat-tab>
       </mat-tab-group>

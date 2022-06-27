@@ -22,6 +22,7 @@ import { TemplateTaskService } from 'app/services/dte/template-task.service';
 import { P } from '@angular/core/src/render3';
 import { ImportCustomNotificationComponent } from './import/import-custom-notification.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-notification-create',
@@ -38,8 +39,8 @@ export class CustomNotificationCreateComponent implements OnInit {
   areaFromLogin;
   minStartDate: any = new Date();
 
-  listContentType: any[] = [{ name: "Static Page", value: "static_page" }];
-  listUserGroup: any[] = [{ name: "Retailer", value: "retailer" }, { name: "Customer", value: "customer" }];
+  listContentType: any[] = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }];
+  listUserGroup: any[] = [{ name: this.translate.instant('global.menu.retailer'), value: "retailer" }, { name: this.translate.instant('customer.text1'), value: "customer" }];
 
   audienceSelected: any[] = [];
 
@@ -70,6 +71,8 @@ export class CustomNotificationCreateComponent implements OnInit {
 
   _typeOfRecurrence: string;
   _recurrenceType: string;
+  pageName = this.translate.instant('notification.text');
+  titleParam = {entity: this.pageName}
 
   @Input() get typeOfRecurrence(): string {
     return this._typeOfRecurrence
@@ -102,7 +105,8 @@ export class CustomNotificationCreateComponent implements OnInit {
     private geotreeService: GeotreeService,
     private taskTemplateService: TemplateTaskService,
     private route: ActivatedRoute,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -199,7 +203,7 @@ export class CustomNotificationCreateComponent implements OnInit {
 
   async submit() {    
     if (!this.formNotification.valid) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formNotification);
       return;
     }
@@ -211,13 +215,13 @@ export class CustomNotificationCreateComponent implements OnInit {
       startDate = moment(startDateStr)
 
       if(!this.idNotif && !startDate.isSameOrAfter(moment(), 'day')) {
-        this.dialogService.openSnackBar({ message: "Tanggal mulai tidak boleh sebelum hari ini!" });
+        this.dialogService.openSnackBar({ message: this.translate.instant('notification.buat_notifikasi.message1') });
         return;
       }
     }
 
     if (!this.rows.length) {
-      this.dialogService.openSnackBar({ message: "Silakan lengkapi data terlebih dahulu!" });
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
       commonFormValidator.validateAllFields(this.formNotification);
       return;
     }

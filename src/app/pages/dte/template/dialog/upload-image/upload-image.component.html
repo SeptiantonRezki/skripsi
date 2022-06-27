@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>Unggah {{fileType == 'video' ? 'Video' : 'Gambar'}}</span>
+        <span>{{'global.label.upload' | translate}} {{fileType == 'video' ? ('global.label.video' | translate) : ('global.label.image2' | translate)}}</span>
       </div>
 
     </div>
@@ -23,10 +23,9 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon id="btnUploadImage" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>
-        <span matPrefix>Tarik Gambar Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix [innerHTML]="('iklan_dalam_aplikasi.spanduk_online.drag_image' | translate)">
         </span>
-        <span matPrefix>Ukuran 410x210 piksel, Maksimum 2MB</span>
+        <span matPrefix>{{'dte.template_tugas.text38' | translate}}</span>
       </div>
     </div>
     <div id="upload-video" ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" accept="video/mp4"
@@ -34,10 +33,9 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center" >
         <mat-icon id="btnUploadVideo" class="secondary-text s-48">add_photo_alternate_outline</mat-icon>
         <br>
-        <span matPrefix>Tarik Video Kesini atau
-          <strong>Pilih File</strong>
+        <span matPrefix [innerHTML]="('global.label.drag_video_or_select' | translate)">
         </span>
-        <span matPrefix>Format MP4, Video landscape, Maksimum 50MB</span>
+        <span matPrefix>{{'global.label.format_video_landscape' | translate}}</span>
       </div>
     </div>
 
@@ -53,10 +51,10 @@
       <div class="">
         <video [src]="url" *ngIf="format==='video' && url" height="200" controls></video>
         <div fxLayout="column">
-          <div>name: {{files.name? files.name : '-'}}</div>
-          <div>type: {{files.type? files.type : '-'}}</div>
-          <div>size: {{files.size? files.size/1000000 + ' MB' : '-'}}</div>
-          <mat-error *ngIf="files.size > 50000000">Ukuran Video melebihi batas maks 50MB</mat-error>
+          <div>{{'global.label.name' | translate}}: {{files.name? files.name : '-'}}</div>
+          <div>{{'global.label.type' | translate}}: {{files.type? files.type : '-'}}</div>
+          <div>{{'global.label.size' | translate}}: {{files.size? files.size/1000000 + ' MB' : '-'}}</div>
+          <mat-error *ngIf="files.size > 50000000">{{'global.label.video_size_limit' | translate}}</mat-error>
         </div>
       </div>
     </div>
@@ -66,8 +64,8 @@
     <div class="p-16">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxFlex="1 0 auto">
-        <button id="btnPilihUpload" type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">Pilih</button>
-        <button id="btnBatalUpload" type="button" mat-stroked-button color="primary" (click)="onSelectFile(files)">Batal</button> 
+        <button id="btnPilihUpload" type="button" mat-raised-button color="primary" (click)="submit()" [disabled]="!files">{{'global.label.select' | translate}}</button>
+        <button id="btnBatalUpload" type="button" mat-stroked-button color="primary" (click)="onSelectFile(files)">{{'global.button.cancel' | translate}}</button> 
         <!-- dialogRef.close() -->
       </div>
     </div>

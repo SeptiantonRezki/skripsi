@@ -90,4 +90,9 @@ export class RetailerService extends BaseService {
     const url = this.getUrl(this.namespace, "store_access_cashier");
     return this.postApi(url, body);
   }
+
+  exportBankAccount(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_bank_account");
+    return this.getBlobAsJsonApi(url, body);
+  }
 }
