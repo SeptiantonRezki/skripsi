@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
@@ -8,7 +8,10 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import moment from 'moment';
+import * as CryptoJS from 'crypto-js';
 import { Observable, Subject } from 'rxjs';
+import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
 
 @Component({
   selector: 'app-data-log',
@@ -29,7 +32,8 @@ export class DataLogComponent implements OnInit {
   pagination: Page = new Page();
   offsetPagination: any;
   id: any;
-  @ViewChild('downloadLink') downloadLink: ElementRef;
+  dialogRef: any;
+  @ViewChild('downloadDataLog') downloadDataLog: ElementRef;
 
   constructor(
     private dialogService: DialogService,
@@ -38,6 +42,7 @@ export class DataLogComponent implements OnInit {
     private coinDisburstmentService: CoinDisburstmentService,
     private router: Router,
     private ls: LanguagesService,
+    private dialog: MatDialog,
   ) {
     this.adapter.setLocale('id');
     this.rows = [];
@@ -139,5 +144,57 @@ export class DataLogComponent implements OnInit {
       this.rows = res.data.data;
       this.loadingIndicator = false;
     });
+  }
+
+  onDocUpload() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {type: "data_log"};
+
+    this.dialogRef = this.dialog.open(ImportExchangeCoinComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {});
+  }
+
+  async download(row) {
+    const formData = new FormData();
+    formData.append("cd_approval_id", row.id);
+
+    if (row.status_user === "pic") formData.append("access_type", row.status_user);
+    
+    try {
+      this.dataService.showLoading(true);
+      
+      const response = await this.coinDisburstmentService.dataLogExport(formData).toPromise();
+      
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encrypTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      link.download = `Export_DataLog-${encrypTime}.xlsx`;
+      
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+      
+      this.dataService.showLoading(false);
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar(error);
+      throw error;
+    }
   }
 }
