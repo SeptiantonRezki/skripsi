@@ -7,6 +7,11 @@
     </mat-form-field>
   </div>
 </div>
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button type="button" class="is-danger mr-24 mb-24" (click)="onDocUpload()">
+    <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+  </button>
+</div>
 <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
   [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
@@ -14,6 +19,7 @@
   (page)="setPage($event)" (sort)="onSort($event)">
 
   <ngx-datatable-column [width]="100" name="ID Cron" prop="id"></ngx-datatable-column>
+  <ngx-datatable-column [width]="200" name="ID Coin Disbursement" prop="coin_disbursement_id"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="Tanggal Cron" prop="date"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="Program Name" prop="trade_program_name"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="WBS" prop="sub_group_trade_program_wbs"></ngx-datatable-column>
@@ -32,4 +38,15 @@
   </ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="Progress" prop="payment_progress">
   </ngx-datatable-column>
+
+  <ngx-datatable-column [width]="150" name="Tindakan" headerClass="textright" [sortable]="false">
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value" style="justify-content: center !important">
+      <div class="button-row">
+        <button id="btn-export" type="button" mat-icon-button color="" matTooltip="Export" (click)="download(row)">
+          <mat-icon class="orange-500-fg">save_alt</mat-icon>
+        </button>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
 </ngx-datatable>
+<a #downloadDataLog></a>

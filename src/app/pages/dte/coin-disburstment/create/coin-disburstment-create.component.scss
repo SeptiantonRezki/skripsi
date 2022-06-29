@@ -2,4 +2,9 @@
   .export {
     background-color: #3a3a3a !important;
   }
+  .priority__content{
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+  }
 }

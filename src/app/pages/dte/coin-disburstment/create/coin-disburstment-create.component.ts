@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Page } from 'app/classes/laravel-pagination';
@@ -95,6 +95,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   detailCoin: any;
   pageName = this.translate.instant('dte.coin_disbursement.text1');
   titleParam = {entity: this.pageName}
+
+  priority_list: any[] = [];
+  
   constructor(
     private dataService: DataService,
     private dialogService: DialogService,
@@ -160,8 +163,13 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       start_date: [null, Validators.required],
       end_date: [null, Validators.required],
       group_trade_id: ["", Validators.required],
-      status: ["draft"]
+      status: ["draft"],
+      priorities: this.formBuilder.array([])
     });
+
+    if (!this.isEdit) {
+      this.addPriority(-1);
+    }
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -229,10 +237,6 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         delete this.pagination['classification'];
       }
     });
-
-    if (this.isEdit) {
-      this.getDetail();
-    }
   }
 
   ngOnDestroy() {
@@ -246,17 +250,28 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
   getDetail() {
     this.dataService.showLoading(true);
+    let priorities = this.formCoin.get('priorities') as FormArray;
+
     this.coinDisburstmentService.getDetail({ coin_id: this.detailCoin.id }).subscribe(res => {
-      console.log('res', res);
       this.detailCoin = res.data;
-      this.formCoin.setValue({
-        name: this.detailCoin.name,
-        coin_valuation: this.detailCoin.coin_valuation,
-        start_date: this.detailCoin.start_date,
-        end_date: this.detailCoin.end_date,
-        status: this.detailCoin.status,
-        group_trade_id: this.detailCoin.group.map(grp => grp.trade_creator_group_id),
-      });
+
+      this.formCoin.get('name').setValue(this.detailCoin.name);
+      this.formCoin.get('coin_valuation').setValue(this.detailCoin.coin_valuation);
+      this.formCoin.get('start_date').setValue(this.detailCoin.start_date);
+      this.formCoin.get('end_date').setValue(this.detailCoin.end_date);
+      this.formCoin.get('status').setValue(this.detailCoin.status);
+      this.formCoin.get('group_trade_id').setValue(this.detailCoin.group.map(group => {
+        this.priority_list.push({id: group.trade_creator_group_id, name: group.name});
+        return group.trade_creator_group_id;
+      }));
+
+      if (this.detailCoin.group_priorities) {
+        this.detailCoin.group_priorities.map((list) => {
+          return priorities.push(this.formBuilder.group({ group_id: list.group_trade_program_id }));
+        });
+      } else {
+        this.addPriority(-1);
+      }
 
       if (this.detailCoin.targeted_audience === 1) this.isTargetedRetailer.setValue(true);
       if (this.detailCoin.opsi_penukaran === 'transfer bank') this.isTransferBank.setValue(true);
@@ -1141,6 +1156,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   getGroupTradeProgram() {
     this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
       this.groupTradePrograms = res.data ? res.data.data : [];
+
+      if (this.isEdit) {
+        this.getDetail();
+      }
     })
   }
 
@@ -1158,6 +1177,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
       this.dataService.showLoading(true);
       let opsiPenukaran = this.getOpsiPenukaranValue();
+      let priorities = this.formCoin.get('priorities').value;
+
       let body = {
         name: this.formCoin.get("name").value,
         coin_valuation: this.formCoin.get("coin_valuation").value,
@@ -1165,7 +1186,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         end_date: moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD"),
         opsi_penukaran: opsiPenukaran,
         status: args && args === 'publish' ? 'publish' : (args && args === 'unpublish' ? 'unpublish' : 'draft'),
-        targeted_audience: this.isTargetedRetailer.value ? "1" : "0"
+        targeted_audience: this.isTargetedRetailer.value ? "1" : "0",
+        group_trade_id_priorities: priorities.filter(list => list.group_id !== "").map(item => item.group_id),
       }
 
       let fd = new FormData();
@@ -1197,6 +1219,11 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
           });
         }
         fd.append('classification', this.pagination['classification']);
+      }
+      if (body["group_trade_id_priorities"].length) {
+        body["group_trade_id_priorities"].forEach(id => {
+          fd.append('group_trade_id_priorities[]', id);
+        })
       }
 
       if (this.isEdit) {
@@ -1308,4 +1335,54 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+  groupChosen(event) {
+    let priorities = this.formCoin.get('priorities') as FormArray;
+    const newPriority = [...this.priority_list];
+
+    if (event.value.length < newPriority.length) {
+      newPriority.forEach(item => {
+        const hasValue = event.value.some(selected => selected === item.id);
+        
+        if (!hasValue) {
+          const index = priorities.value.findIndex(list => list.group_id === item.id);
+          if (index > -1) {
+            priorities.value.length > 1 ? this.removePriority(index) : priorities.at(0).get("group_id").setValue("");
+          }
+        };
+      })
+    };
+    
+    const newList = [];
+    event.value.forEach(group_id => {
+      const item = this.groupTradePrograms.find(group => group.id === group_id);
+      newList.push(item);
+    });
+    this.priority_list = [...newList];
+  }
+
+  addPriority(index){
+    let priorities = this.formCoin.get('priorities') as FormArray;
+
+    priorities.insert((index + 1), this.formBuilder.group({
+      group_id: [""]
+    }));
+  }
+
+  removePriority(index){
+    let priorities = this.formCoin.get('priorities') as FormArray;
+    priorities.removeAt(index);
+  }
+
+  isPriorityUsed(id){
+    let priorities = this.formCoin.get('priorities') as FormArray;
+    
+    let value = false;
+    priorities.value.forEach(item => {
+      if (item.group_id === id) {
+        value = true;
+      }
+    });
+
+    return value;
+  }
 }

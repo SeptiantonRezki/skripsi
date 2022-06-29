@@ -125,7 +125,7 @@ export class PopupNotificationCreateComponent {
   selectedAll: boolean = false;
   selectedAllId: any[] = [];
 
-  public options: Object = {...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11')};
+  public options: Object = { ...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild("activeCell")
@@ -156,7 +156,7 @@ export class PopupNotificationCreateComponent {
   private _onDestroy = new Subject<void>();
   permission: any;
   roles: PagesName = new PagesName();
-  
+
   pageName = this.translate.instant('notification.popup_notifikasi.page_name');
 
   constructor(
@@ -188,11 +188,11 @@ export class PopupNotificationCreateComponent {
     // this.validComboDrag = true;
 
     this.listLandingPage = [
-      { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
-      { name: this.translate.instant('global.label.mission'), value: "misi" }, 
-      { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, 
-      { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, 
-      { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" }, 
+      { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+      { name: this.translate.instant('global.label.mission'), value: "misi" },
+      { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+      { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+      { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" },
       { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }
     ];
 
@@ -262,7 +262,7 @@ export class PopupNotificationCreateComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:[""]
+      barcode: [""]
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -287,14 +287,14 @@ export class PopupNotificationCreateComponent {
       territory: [""]
     })
 
-    if(this.ls.selectedLanguages == 'id'){
-      this.Country ='ID';
+    if (this.ls.selectedLanguages == 'id') {
+      this.Country = 'ID';
     }
-    else if(this.ls.selectedLanguages == 'km'){
+    else if (this.ls.selectedLanguages == 'km') {
       this.Country = 'KH';
     }
-    else if(this.ls.selectedLanguages == 'en-ph'){
-      this.Country ='PH';
+    else if (this.ls.selectedLanguages == 'en-ph') {
+      this.Country = 'PH';
     }
 
     this.bannerService.getListWallet().subscribe(res => {
@@ -308,8 +308,8 @@ export class PopupNotificationCreateComponent {
       }, 1);
     } else {
       this.listUserGroup = [
-        { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" }, 
-        { name: this.translate.instant('global.menu.retailer'), value: "retailer" }, 
+        { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" },
+        { name: this.translate.instant('global.menu.retailer'), value: "retailer" },
         { name: this.translate.instant('global.label.consumer'), value: "customer" }
       ];
     }
@@ -327,15 +327,15 @@ export class PopupNotificationCreateComponent {
 
       if (res === 'tsm') {
         this.listContentType = [
-          { name: this.translate.instant('global.label.static_page'), value: "static-page" }, 
-          { name: this.translate.instant('global.label.landing_page'), value: "landing-page" }, 
+          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
+          { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" }
         ];
         this.listLandingPage = [
-          { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
-          { name: this.translate.instant('global.label.mission'), value: "misi" }, 
-          { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, 
-          { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, 
+          { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+          { name: this.translate.instant('global.label.mission'), value: "misi" },
+          { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+          { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
           { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" }
         ];
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
@@ -361,10 +361,17 @@ export class PopupNotificationCreateComponent {
 
       if (res === 'wholesaler') {
         this.listContentType = [
-          { name: this.translate.instant('global.label.iframe'), value: "iframe" }
+          { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+          { name: this.translate.instant('global.label.image'), value: "image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
         ];
         if (this.permission.new_product) {
-          this.listContentType = [{ name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('notification.popup_notifikasi.new_product'), value: "new-product" }];
+          this.listContentType = [{ name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('notification.popup_notifikasi.new_product'), value: "new-product" },
+          { name: this.translate.instant('global.label.image'), value: "image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
+          ];
         }
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
@@ -392,7 +399,7 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          { name: this.translate.instant('global.label.image'),value:"image" },
+          { name: this.translate.instant('global.label.image'), value: "image" },
           { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
           { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" },
           { name: this.translate.instant('global.label.link_to_browser'), value: "link_to_web_browser" }
@@ -425,7 +432,7 @@ export class PopupNotificationCreateComponent {
         if (this.formPopupGroup.controls['content_type'].value === "link_to_web_browser") {
           this.formPopupGroup.get("url_web").enable();
         }
-  
+
         if (this.formPopupGroup.controls['content_type'].value === "e_wallet") {
           this.formPopupGroup.get("content_wallet").enable();
           this.formPopupGroup.get("body_wallet").enable();
@@ -438,23 +445,25 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}
+          { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" },
+          { name: this.translate.instant('global.label.image'), value: "image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
         ];
         this.listLandingPage = [
-          { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
-          { name: this.translate.instant('global.label.mission'), value: "misi" }, 
-          { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, 
-          { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, 
-          { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" }, 
+          { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
+          { name: this.translate.instant('global.label.mission'), value: "misi" },
+          { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
+          { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
+          { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" },
           { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }
         ];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-        
+
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
-        
+
         if (this.formPopupGroup.controls['content_type'].value === 'landing-page') {
           this.formPopupGroup.controls['landing_page'].enable();
         }
@@ -1218,11 +1227,11 @@ export class PopupNotificationCreateComponent {
 
   // handle onChange search product barcode
   // if id empty return empty string
-  handleSearchProduct(event){
-    if(event.id)
-    this.formPopupGroup.get("barcode").setValue(event)
+  handleSearchProduct(event) {
+    if (event.id)
+      this.formPopupGroup.get("barcode").setValue(event)
     else
-    this.formPopupGroup.get("barcode").setValue("")
+      this.formPopupGroup.get("barcode").setValue("")
     // console.log( this.formPopupGroup.get("barcode").value)
   }
 
@@ -1469,8 +1478,8 @@ export class PopupNotificationCreateComponent {
     } else {
       this.formPopupGroup.get('is_mission_builder').patchValue(false);
       this.listUserGroup = [
-        { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" }, 
-        { name: this.translate.instant('global.menu.retailer'), value: "retailer" }, 
+        { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" },
+        { name: this.translate.instant('global.menu.retailer'), value: "retailer" },
         { name: this.translate.instant('global.label.consumer'), value: "customer" }
       ];
       setTimeout(() => {
@@ -1512,15 +1521,15 @@ export class PopupNotificationCreateComponent {
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
       body['end_date'] = `${moment(this.formPopupGroup.get('enddate').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('endtime').value}:00`;
-      
-      if(body.recurring_type === 'recurring') {
+
+      if (body.recurring_type === 'recurring') {
         body['recurring_frequency'] = this.formPopupGroup.get('recurrence_type').value;
       }
 
-      if(this.formPopupGroup.get('recurrence_type').value === 'weekly') {
+      if (this.formPopupGroup.get('recurrence_type').value === 'weekly') {
         let recurrenceDayValues = this.formWeeklyRecurrence.value;
         let selectedWeekDays = Object.keys(recurrenceDayValues).filter(key => recurrenceDayValues[key]).map(item => parseInt(item));
-        if(selectedWeekDays.length == 0) {
+        if (selectedWeekDays.length == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.message1') });
           return;
@@ -1528,9 +1537,9 @@ export class PopupNotificationCreateComponent {
         body['recurring_day_of_week'] = selectedWeekDays;
       }
 
-      if(this.formPopupGroup.get('recurrence_type').value === 'monthly') {
+      if (this.formPopupGroup.get('recurrence_type').value === 'monthly') {
         let monthlyRecurrence = this.formMonthlyRecurrence.get('recurrence_date').value;
-        if(monthlyRecurrence.length == 0) {
+        if (monthlyRecurrence.length == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.message2') });
           commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
@@ -1538,10 +1547,10 @@ export class PopupNotificationCreateComponent {
         }
         body['recurring_day'] = monthlyRecurrence;
       }
-      
-      if(this.formPopupGroup.get('recurrence_type').value === 'yearly') {
+
+      if (this.formPopupGroup.get('recurrence_type').value === 'yearly') {
         let yearlyRecurrence = this.listDateChosen.value;
-        if(yearlyRecurrence == 0) {
+        if (yearlyRecurrence == 0) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.message3') });
           commonFormValidator.validateFormControl(this.listDateChosen);
@@ -1687,10 +1696,10 @@ export class PopupNotificationCreateComponent {
 
       this.dialogService.openSnackBar({ message: msg });
       commonFormValidator.validateAllFields(this.formPopupGroup);
-      if(this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
+      if (this.formPopupGroup.get('recurrence_type').value === 'monthly' && this.formMonthlyRecurrence.get('date').value.length == 0) {
         commonFormValidator.validateAllFields(this.formMonthlyRecurrence);
       }
-      if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
+      if (this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
         commonFormValidator.validateFormControl(this.listDateChosen);
       }
     }
@@ -2258,7 +2267,7 @@ export class PopupNotificationCreateComponent {
   }
 
   addRecurrenceDate() {
-    if(this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
+    if (this.formYearlyRecurrence.get('recurrence_date').value && this.formYearlyRecurrence.get('recurrence_month').value) {
       let months = [
         this.translate.instant('global.calendar.jan_s'),
         this.translate.instant('global.calendar.feb_s'),
@@ -2274,7 +2283,7 @@ export class PopupNotificationCreateComponent {
         this.translate.instant('global.calendar.dec_s')
       ];
       const chosenValue = `${this.formYearlyRecurrence.get('recurrence_date').value} ${months[this.formYearlyRecurrence.get('recurrence_month').value - 1]}`;
-      if(this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
+      if (this.listDateChosen.value.length > 0 && this.listDateChosen.value.map(item => item.name).includes(chosenValue)) {
         this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.date_selected') });
       } else {
         let dateChosen = this.listDateChosen.value;

@@ -1018,6 +1018,9 @@ export class Endpoint {
         preview_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/preview`,
         import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`,
         data_log_get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption-approval/dataLog`,
+        data_log_preview: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption-approval/dataLog/preview`,
+        data_log_import: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption-approval/dataLog/import`,
+        data_log_export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/coin-redemption-approval/export`,
       },
       feature_level: {
         list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level`,
