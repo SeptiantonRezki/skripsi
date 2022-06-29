@@ -60,6 +60,22 @@
               <mat-datepicker #sampai></mat-datepicker>
             </mat-form-field>
           </div>
+          <div class="px-24" fxLayout="row" fxLayoutAlign="start center" >
+            <mat-form-field fxFlex="100" class="is-light form-primary" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
+              <input   maxlength="10" matInput type="text" formControlName="ticker_title"
+                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}"> 
+              <mat-error
+                *ngIf="formBannerGroup.controls['ticker_title'].hasError('required') && formBannerGroup.controls['ticker_title'].touched">
+                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
+                translate}}
+              </mat-error>
+              <mat-error
+                *ngIf="formBannerGroup.controls['ticker_title'].hasError('maxlength') && formBannerGroup.controls['ticker_title'].touched">
+                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} Maksimal 10 karakter
+              </mat-error>
+            </mat-form-field>
+           
+          </div>
           <!-- <div class="" fxLayout="row" fxLayoutAlign="start center">
             <h3 class="">
               <strong>Audience</strong>
@@ -122,6 +138,22 @@
               </div>
             </div>
           </div>
+          <div class="px-24" fxLayout="column" style="padding-bottom: 20px;">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+              <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}}</h3>
+            </div>
+            <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" maxlength="20" [froalaEditor]="options" formControlName="ticker_body" class="pb-4" fxFlex="100"></textarea>
+            
+            <mat-error style="padding-top: 6px !important; font-size: .86em;"
+              *ngIf="formBannerGroup.controls['ticker_body'].hasError('required') && formBannerGroup.controls['ticker_body'].touched">
+              {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} {{'global.messages.mandatory_text' |
+              translate}}
+            </mat-error>
+            <mat-error
+                  *ngIf="formBannerGroup.controls['ticker_body'].hasError('maxlength') && formBannerGroup.controls['ticker_body'].touched">
+                  {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} Maksimal 20 karakter
+                </mat-error>
+              </div>
           <div *ngIf="!bannerSelected && detailBanner.image_url" class="pt-16 px-24">
             <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
               <span class="text-bold">{{'iklan_dalam_aplikasi.spanduk_online.text10' | translate}}</span>
