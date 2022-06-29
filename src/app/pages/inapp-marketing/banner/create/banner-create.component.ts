@@ -241,6 +241,7 @@ export class BannerCreateComponent {
       to: ["", Validators.required],
       enable: [1, Validators.required],
       title: ["", Validators.required],
+      ticker_title: ["", Validators.required],
       body: ["", Validators.required],
       user_group: ["", Validators.required],
       age: ["18+", Validators.required],
@@ -281,6 +282,7 @@ export class BannerCreateComponent {
       subscription:["all"],
       barcode:[""],
       kategori: null,
+      ticker_body: ["", Validators.required],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -1206,7 +1208,7 @@ console.log("BANNERSel", this.bannerSelected);
       if(this.formBannerGroup.get('type_banner').value != 'ticker'){
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
-        this.dataService.showLoading(false);
+        
       });
     }
       let body = {
@@ -1234,6 +1236,12 @@ console.log("BANNERSel", this.bannerSelected);
       fd.append('promo', this.formBannerGroup.get('promo').value);
       body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
+      if(this.formBannerGroup.get('type_banner').value == 'ticker'){
+        fd.append('ticker_title', this.formBannerGroup.get('ticker_title').value);
+        body['ticker_title'] = this.formBannerGroup.get('ticker_title').value;
+        fd.append('ticker_contents', this.formBannerGroup.get('ticker_body').value);
+        body['ticker_contents'] = this.formBannerGroup.get('ticker_body').value;
+        }
 
       if (body.content_type === 'static_page') {
         fd.append('title', this.formBannerGroup.get('title').value);
@@ -1409,6 +1417,7 @@ console.log("BANNERSel", this.bannerSelected);
         this.bannerService.create(body).subscribe(
           res => {
             this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
@@ -1421,6 +1430,7 @@ console.log("BANNERSel", this.bannerSelected);
         this.bannerService.create(fd).subscribe(
           res => {
             this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });

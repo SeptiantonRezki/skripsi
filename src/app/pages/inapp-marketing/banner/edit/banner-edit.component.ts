@@ -309,7 +309,10 @@ export class BannerEditComponent {
       ]],
       subscription:['all'],
       barcode:[""], 
-      kategori: null
+      kategori: null,
+      ticker_body: ["", Validators.required],
+      ticker_title: ["", Validators.required]
+
     })
 
     this.formFilter = this.formBuilder.group({
@@ -891,6 +894,8 @@ export class BannerEditComponent {
         this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
         if(this.formBannerGroup.get('type_banner').value === 'ticker'){
           this.formBannerGroup.get('kategori').setValue((this.detailBanner.type_ticker) ? this.detailBanner.type_ticker : 'red');
+          this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
+          this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
         }
        
       }, 50);
@@ -1402,6 +1407,12 @@ export class BannerEditComponent {
       fd.append('promo', this.formBannerGroup.get('promo').value);
       body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
+      if(this.formBannerGroup.get('type_banner').value == 'ticker'){
+        fd.append('ticker_title', this.formBannerGroup.get('ticker_title').value);
+        body['ticker_title'] = this.formBannerGroup.get('ticker_title').value;
+        fd.append('ticker_contents', this.formBannerGroup.get('ticker_body').value);
+        body['ticker_contents'] = this.formBannerGroup.get('ticker_body').value;
+        }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
