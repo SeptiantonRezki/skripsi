@@ -40,6 +40,11 @@ export class ImportExchangeCoinComponent implements OnInit {
   ngOnInit() {}
 
   preview(event) {
+    if (this.dialogData.type === "data_log") {
+      this.previewDataLog(event);
+      return;
+    }
+
     this.files = undefined;
     this.files = event;
 
@@ -78,11 +83,13 @@ export class ImportExchangeCoinComponent implements OnInit {
   }
 
   submit() {
+    const endpoint = this.dialogData.type === "data_log" ? "dataLogImport" : "importExchange";
+    
     this.dataService.showLoading(true);
     const data = {
       data: this.rows
     }
-    this.coinDisburstmentService.importExchange(data).subscribe(res => {
+    this.coinDisburstmentService[endpoint](data).subscribe(res => {
       this.dialogRef.close(true)
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text8') });
@@ -91,4 +98,34 @@ export class ImportExchangeCoinComponent implements OnInit {
     })
   }
 
+  previewDataLog(event) {
+    this.files = undefined;
+    this.files = event;
+
+    let fd = new FormData();
+    fd.append('file', this.files);
+    this.dataService.showLoading(true);
+    this.coinDisburstmentService.dataLogPreview(fd).subscribe(
+      res => {
+        this.dataService.showLoading(false);
+        
+        if (res && res.data) {
+          this.rows = res.data;
+          this.is_valid = res.is_valid;
+        } else {
+          this.dataService.showLoading(false);
+          this.files = undefined;
+          this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.failed_upload_invalid_file') })
+        }
+      },
+      err => {
+        this.dataService.showLoading(false);
+        this.files = undefined;
+        console.log('err', err);
+
+        if (err.status === 404 || err.status === 500)
+          this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.failed_upload_invalid_file') })
+      }
+    )
+  }
 }
