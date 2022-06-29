@@ -181,6 +181,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
           this.loaded = false;
         }
       })
+    
+    this.dataService.setToStorage("page_mitra", 1);
   }
 
   getCompanies() {
@@ -512,19 +514,11 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
 
-    // this.dialogRef.afterClosed().subscribe(response => {
-    //   if (response) {
-    //     this.onSelect({ selected: response });
-    //     this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
-    //   }
-    // });
-
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
         let filteredMitraX = [];
         let newArray = [];
         let dataFiltered = [];
-        let dataFilteredSecond = [];
         // reverse an array
         let reverse_array = response.slice().reverse();
         let responseX =  reverse_array.filter((value, index, self) => 
@@ -549,12 +543,20 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
             newArray.push(...this.myArrMITRA);
             const ids = newArray.map(o => o.id);
             // filter multiple data id
-            dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1));
-            dataFilteredSecond = newArray.filter(({id}, index) => !ids.includes(id, index + 1));
+            dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1))
           }
           this.onSelect({ selected: res && res.data && res.data.mitra ? dataFiltered : [] });
-          dataFilteredSecond = dataFilteredSecond.map(item => {
-            return { business_id: item.id };
+          // Refresh Datatable
+          this.loadingIndicator = true;
+          this.mitraPanelService.getMitra(this.pagination, {
+            business_id: this.selected.map(mtr => mtr.id),
+            paylater_company_id: this.formPanelMitra.get('company').value
+          }).subscribe(res => {
+            Page.renderPagination(this.pagination, res.data);
+            this.rows = res.data ? res.data.data : [];
+            this.loadingIndicator = false;
+          }, err => {
+            this.loadingIndicator = false;
           });
         }, err => {
         });
