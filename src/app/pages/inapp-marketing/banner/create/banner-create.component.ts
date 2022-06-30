@@ -241,7 +241,7 @@ export class BannerCreateComponent {
       to: ["", Validators.required],
       enable: [1, Validators.required],
       title: ["", Validators.required],
-      ticker_title: ["", Validators.required],
+      ticker_title: [""],
       body: ["", Validators.required],
       user_group: ["", Validators.required],
       age: ["18+", Validators.required],
@@ -282,7 +282,7 @@ export class BannerCreateComponent {
       subscription:["all"],
       barcode:[""],
       kategori: null,
-      ticker_body: ["", Validators.required],
+      ticker_body: [""],
     })
 
     this.formFilter = this.formBuilder.group({
