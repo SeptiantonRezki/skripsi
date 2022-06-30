@@ -542,7 +542,7 @@
               </div>
               <div *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" class="pb-16 px-24">
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
-                  <strong class="font-size-16">{{ls.locale.global.label.category}}</strong>
+                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.tickercat' | translate}}</strong>
                 </div>
                 <mat-radio-group formControlName="kategori" class="radio-group">
                   <mat-radio-button class="radio-button" *ngFor="let item of listKategori" [value]="item.value">
