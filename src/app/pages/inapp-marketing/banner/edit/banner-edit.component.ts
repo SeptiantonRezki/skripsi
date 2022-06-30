@@ -310,8 +310,8 @@ export class BannerEditComponent {
       subscription:['all'],
       barcode:[""], 
       kategori: null,
-      ticker_body: ["", Validators.required],
-      ticker_title: ["", Validators.required]
+      ticker_body: [""],
+      ticker_title: [""]
 
     })
 
