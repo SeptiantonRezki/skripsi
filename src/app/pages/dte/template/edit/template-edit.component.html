@@ -385,7 +385,7 @@
                   >
                     Image Quality Detection
                   </mat-checkbox>
-                  <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">QRCode</mat-checkbox>
+                  <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">{{'upc_code.qrcode' | translate}}</mat-checkbox>
                   <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
 
@@ -593,7 +593,7 @@
                       </div>
                       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                         <div fxLayout="row" fxFlex="50">
-                          <search-product-barcode style="width: 100%;" [inputPlaceHolder]="'{{'upc_code.brand_family_error' | translate}}'" [disabled]="isDetail" [errorMessage]="'{{'upc_code.brand_family' | translate}}'" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                          <search-product-barcode style="width: 100%;" [inputPlaceHolder]="'upc_code.brand_family_empty' | translate" [disabled]="isDetail" [errorMessage]="'upc_code.brand_family_placeholder' | translate" [isBrandFamily]="true" formControlName="upcBrandFamily">
                             <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.get('questions').at(i).get('upcBrandFamily').touched && templateTaskForm.touched">
                               {{'upc_code.brand_family_required' | translate}}
                             </mat-error>
