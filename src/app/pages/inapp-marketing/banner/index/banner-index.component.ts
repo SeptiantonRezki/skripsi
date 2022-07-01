@@ -761,6 +761,7 @@ export class BannerIndexComponent {
       case this.TYPE_BANNER.TERDEKAT: this.updateFilterTerdekat(keyword); break;
       case this.TYPE_BANNER.INFO_SRC: this.updateFilterInfoSRC(keyword); break;
       case this.TYPE_BANNER.FBTN: this.updateFilterFbtn(keyword); break;
+      case this.TYPE_BANNER.TICKER: this.updateFilterTicker(keyword); break;
     }
   }
 }
