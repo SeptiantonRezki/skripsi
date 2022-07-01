@@ -440,12 +440,8 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
-<<<<<<< HEAD
                 <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
                   placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
-=======
-                <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}"
->>>>>>> CDE-4751#PBO_Migration_service_business_v2
                   formControlName="recurrence_start_date" [min]="minStartDate">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>
