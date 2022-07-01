@@ -146,13 +146,13 @@ export class DataLogComponent implements OnInit {
     });
   }
 
-  onDocUpload() {
+  onDocUpload(row) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = {type: "data_log"};
+    dialogConfig.data = {type: "data_log", data_log_id: row.id};
 
     this.dialogRef = this.dialog.open(ImportExchangeCoinComponent, dialogConfig);
 
