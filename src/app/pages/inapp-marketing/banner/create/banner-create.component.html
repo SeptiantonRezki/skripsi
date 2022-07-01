@@ -67,7 +67,7 @@
           </div>
           <div class="px-24" fxLayout="row" fxLayoutAlign="start center" >
             <mat-form-field fxFlex="100" class="is-light form-primary" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
-              <input   maxlength="10" matInput type="text" formControlName="ticker_title"
+              <input   maxlength="20" matInput type="text" formControlName="ticker_title"
                 placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}"> 
               <mat-error
                 *ngIf="formBannerGroup.controls['ticker_title'].hasError('required') && formBannerGroup.controls['ticker_title'].touched">
@@ -76,7 +76,7 @@
               </mat-error>
               <mat-error
                 *ngIf="formBannerGroup.controls['ticker_title'].hasError('maxlength') && formBannerGroup.controls['ticker_title'].touched">
-                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} Maksimal 10 karakter
+                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} Maksimal 20 karakter
               </mat-error>
             </mat-form-field>
            
@@ -150,7 +150,7 @@
           <div class="" fxLayout="row" fxLayoutAlign="start center" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
             <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}}</h3>
           </div>
-          <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" maxlength="20" [froalaEditor]="options" formControlName="ticker_body" class="pb-4" fxFlex="100"></textarea>
+          <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" maxlength="50" [froalaEditor]="options" formControlName="ticker_body" class="pb-4" fxFlex="100"></textarea>
           
           <mat-error style="padding-top: 6px !important; font-size: .86em;"
             *ngIf="formBannerGroup.controls['ticker_body'].hasError('required') && formBannerGroup.controls['ticker_body'].touched && formBannerGroup.get('type_banner').value === 'ticker'">
@@ -159,7 +159,7 @@
           </mat-error>
           <mat-error
                 *ngIf="formBannerGroup.controls['ticker_body'].hasError('maxlength') && formBannerGroup.controls['ticker_body'].touched && formBannerGroup.get('type_banner').value === 'ticker'">
-                {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} Maksimal 20 karakter
+                {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} Maksimal 50 karakter
               </mat-error>
             </div>
           <div fxLayout="row wrap">
