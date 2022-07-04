@@ -7,6 +7,11 @@
     </mat-form-field>
   </div>
 </div>
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button type="button" class="is-danger mr-24 mb-24" (click)="onDocUpload()">
+    <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+  </button>
+</div>
 <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
   [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
