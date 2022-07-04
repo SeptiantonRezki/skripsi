@@ -85,7 +85,10 @@ export class ImportPanelMitraDialogComponent {
   }
 
   preview() {
-    this.panelMitraService.previewImportMitra().subscribe(res => {
+    this.panelMitraService.previewImportMitra({
+      'supplier_company_id': this.dialogData.supplier_company_id,
+      'product_id': this.dialogData.product_id,
+    }).subscribe(res => {
       // this.dialogRef.close(res);
       console.log('res', res);
       this.rows = res.data;
