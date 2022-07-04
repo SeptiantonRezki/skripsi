@@ -1415,6 +1415,7 @@ console.log("BANNERSel", this.bannerSelected);
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
         this.bannerService.create(body).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dataService.showLoading(false);
             this.onLoad = true;
@@ -1428,6 +1429,7 @@ console.log("BANNERSel", this.bannerSelected);
         body['target_audience'] = "0";
         this.bannerService.create(fd).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.dataService.showLoading(false);
             this.onLoad = true;
