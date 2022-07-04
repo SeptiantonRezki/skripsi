@@ -1529,10 +1529,13 @@ export class PopupNotificationCreateComponent {
         body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
       }
 
-      if (body.type === "customer") {
+      if (body.type !== 'tsm') {
         if (body.action === 'image') {
           body['action_data'] = this.convertedContentImage;
         }
+      }
+
+      if (body.type === "customer") {
         if (body.action === 'link_to_web_browser') {
           body['action_data'] = this.formPopupGroup.get('url_web').value;
         }
