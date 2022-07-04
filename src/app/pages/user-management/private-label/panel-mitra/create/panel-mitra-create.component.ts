@@ -92,7 +92,7 @@ export class PanelMitraCreateComponent implements OnInit {
     this.selected = [];
     this.selectedHub = [];
     this.permission = this.roles.getRoles('principal.supplierpanelmitra');
-    this.listFilterCategory = [ { name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data['listCategory'].data ];
+    this.listFilterCategory = [{ name: 'Semua Kategori', id: '' }, ...this.activatedRoute.snapshot.data['listCategory'].data];
     // this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ...this.activatedRoute.snapshot.data["listSupplierCompany"].data.data ];
     this.filterCategory = this.listFilterCategory;
     // this.filterSupplier = this.listFilterSupplier;
@@ -201,16 +201,16 @@ export class PanelMitraCreateComponent implements OnInit {
     if (!this.listFilterProducts) {
       return;
     }
-      // get the search keyword
-      let search = this.filterProdukSearch.value;
-      if (!search) {
-        this.filterProducts = this.listFilterProducts.slice();
-        return;
-      } else {
-        search = search.toLowerCase();
-      }
-      // filter the products
-      this.filterProducts = this.listFilterProducts.filter(item => item.name.toLowerCase().indexOf(search) > -1).map((v)=>({...v}));
+    // get the search keyword
+    let search = this.filterProdukSearch.value;
+    if (!search) {
+      this.filterProducts = this.listFilterProducts.slice();
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the products
+    this.filterProducts = this.listFilterProducts.filter(item => item.name.toLowerCase().indexOf(search) > -1).map((v) => ({ ...v }));
   }
 
   getFilterProduct(value?: any) {
@@ -218,23 +218,23 @@ export class PanelMitraCreateComponent implements OnInit {
       if (res.status == 'success') {
         this.formInput.get('filterproduct').setValue('');
         this.formInput.get('filtersupplier').setValue('');
-        this.listFilterProducts =  [ { name: 'Pilih Produk', id: '' }, ...res.data ];
-        this.filterProducts = this.listFilterProducts.map((v) => ({...v}));
+        this.listFilterProducts = [{ name: 'Pilih Produk', id: '' }, ...res.data];
+        this.filterProducts = this.listFilterProducts.map((v) => ({ ...v }));
       } else {
-        this.listFilterProducts = [ { name: 'Pilih Produk', id: '' }, ];
+        this.listFilterProducts = [{ name: 'Pilih Produk', id: '' },];
         this.filterProducts = this.listFilterProducts;
       }
     });
   }
 
   getFilterSupplier(value?: any) {
-    this.panelMitraService.getFilterSupplier( { productId: value.id }).subscribe(res => {
+    this.panelMitraService.getFilterSupplier({ productId: value.id }).subscribe(res => {
       if (res.status == 'success') {
         this.formInput.get('filtersupplier').setValue('');
-        this.listFilterSupplier =  [ { name: 'Pilih Supplier', id: '' }, ...res.data ];
-        this.filterSupplier = this.listFilterSupplier.map((v) => ({...v}));
+        this.listFilterSupplier = [{ name: 'Pilih Supplier', id: '' }, ...res.data];
+        this.filterSupplier = this.listFilterSupplier.map((v) => ({ ...v }));
       } else {
-        this.listFilterSupplier = [ { name: 'Pilih Supplier', id: '' }, ];
+        this.listFilterSupplier = [{ name: 'Pilih Supplier', id: '' },];
         this.filterSupplier = this.listFilterSupplier;
       }
     });
@@ -282,7 +282,7 @@ export class PanelMitraCreateComponent implements OnInit {
   onSelectedHub(event: any, row: any) {
     if (event && !this.allRowsSelected) {
       const temp = [...this.selected];
-      const selectedItem = {...this.selected.filter((s: any) => s.id === row.id)[0]};
+      const selectedItem = { ...this.selected.filter((s: any) => s.id === row.id)[0] };
       const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
       selectedItem['isHub'] = event.checked;
       if (indexFind !== -1) {
@@ -308,7 +308,7 @@ export class PanelMitraCreateComponent implements OnInit {
   onCheckboxChange(event: any, row: any) {
     if (event) {
       const temp = [...this.selected];
-      const selectedItem = {...this.selected.filter((s: any) => s.id === row.id)[0]};
+      const selectedItem = { ...this.selected.filter((s: any) => s.id === row.id)[0] };
       const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
       selectedItem['isHub'] = event.checked;
       if (indexFind !== -1) {
@@ -422,13 +422,13 @@ export class PanelMitraCreateComponent implements OnInit {
           });
           this.router.navigate(['user-management', 'supplier-panel-mitra']);
           this.dataService.showLoading(false);
-          }, err => {
-            console.log('err', err);
-            this.dialogService.openSnackBar({
-              message: err.error.message
-            });
-            this.dataService.showLoading(false);
-          }
+        }, err => {
+          console.log('err', err);
+          this.dialogService.openSnackBar({
+            message: err.error.message
+          });
+          this.dataService.showLoading(false);
+        }
         );
       }
     } else {
@@ -659,10 +659,11 @@ export class PanelMitraCreateComponent implements OnInit {
     let expectedArea = [];
     if (!this.formFilter.get(this.parseArea(selection)).disabled) {
       thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) { thisAreaOnSet = [
-        ...thisAreaOnSet,
-        ...this.areaFromLogin[1]
-      ];
+      if (this.areaFromLogin[1]) {
+        thisAreaOnSet = [
+          ...thisAreaOnSet,
+          ...this.areaFromLogin[1]
+        ];
       }
 
       thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
@@ -851,119 +852,119 @@ export class PanelMitraCreateComponent implements OnInit {
   getListMitra(string?: any, hubFilter?: any) {
     console.log('Search', string);
     try {
-    this.dataService.showLoading(true);
-    this.pagination.per_page = 25;
-    if (string) { this.pagination.search = string; } else { delete this.pagination.search; }
-    const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
-    const area_id = areaSelected[areaSelected.length - 1].value;
-    const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
-    this.pagination.area = area_id;
+      this.dataService.showLoading(true);
+      this.pagination.per_page = 25;
+      if (string) { this.pagination.search = string; } else { delete this.pagination.search; }
+      const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
+      const area_id = areaSelected[areaSelected.length - 1].value;
+      const areaList = ['national', 'division', 'region', 'area', 'salespoint', 'district', 'territory'];
+      this.pagination.area = area_id;
 
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-      const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        const second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) { delete this.pagination['after_level']; }
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        const oneAreaSelected = lastSelectedArea.value[0];
-        const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]]; } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
+      // console.log('area_selected on ff list', areaSelected, this.list);
+      if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
         this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
+      } else {
+        const lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+        const indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+        const indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+        let is_area_2 = false;
+
+        let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+        let last_self_area = [];
+        if (self_area.length > 0) {
+          last_self_area.push(self_area[self_area.length - 1]);
+        }
+
+        if (this.areaFromLogin[1]) {
+          const second_areas = this.areaFromLogin[1];
+          last_self_area = [
+            ...last_self_area,
+            second_areas[second_areas.length - 1].id
+          ];
+          self_area = [
+            ...self_area,
+            ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+          ];
+        }
+
+        const newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+
+        if (this.pagination['after_level']) { delete this.pagination['after_level']; }
+        this.pagination['self_area'] = self_area;
+        this.pagination['last_self_area'] = last_self_area;
+        let levelCovered = [];
+        if (this.areaFromLogin[0]) { levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type)); }
+        if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+          const oneAreaSelected = lastSelectedArea.value[0];
+          const findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+          if (findOnFirstArea) { is_area_2 = false; } else { is_area_2 = true; }
+
+          console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+          if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+            // console.log('its hitted [levelCovered > -1]');
+            if (is_area_2) { this.pagination['last_self_area'] = [last_self_area[1]]; } else { this.pagination['last_self_area'] = [last_self_area[0]]; }
+          } else {
+            // console.log('its hitted [other level]');
+            this.pagination['after_level'] = true;
+            this.pagination['last_self_area'] = newLastSelfArea;
+          }
+        } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+          // console.log('its hitted [other level other]');
+          this.pagination['after_level'] = true;
+          if (newLastSelfArea.length > 0) {
+            this.pagination['last_self_area'] = newLastSelfArea;
+          }
         }
       }
-    }
-    this.loadingIndicator = true;
-    // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
+      this.loadingIndicator = true;
+      // this.pagination.area = this.formAudience.get('type').value === 'pick-all' ? 1 : area_id;
 
-    // this.audienceService.getListRetailer(this.pagination).subscribe(res => {
-    //   Page.renderPagination(this.pagination, res);
-    //   this.rows = res.data;
-    //   this.loadingIndicator = false;
-    //   this.dataService.showLoading(false);
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // })
-    if (this.wholesalerIds.length > 0 && !this.isSort) {
-      delete this.pagination['sort'];
-      delete this.pagination['sort_type'];
-    }
-
-    let hub = null;
-    if (hubFilter === '1') {
-      hub = this.selected.filter((v) => v.isHub).map((v) => v.id);
-    } else if (hubFilter === '0') {
-      hub = this.selected.filter((v) => !v.isHub).map((v) => v.id);
-    }
-
-    this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds, only: hub }).subscribe(res => {
-      if (res.status == 'success') {
-        Page.renderPagination(this.pagination, res.data);
-        this.totalData = res.data.total;
-        this.rows = res.data.data;
-        this.loadingIndicator = false;
-        this.isSort = false;
-        this.pagination.sort = 'name';
-        this.pagination.sort_type = 'asc';
-        this.dataService.showLoading(false);
-      } else {
-        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
-        Page.renderPagination(this.pagination, res.data);
-        this.rows = [];
-        this.loadingIndicator = false;
-        this.dataService.showLoading(false);
+      // this.audienceService.getListRetailer(this.pagination).subscribe(res => {
+      //   Page.renderPagination(this.pagination, res);
+      //   this.rows = res.data;
+      //   this.loadingIndicator = false;
+      //   this.dataService.showLoading(false);
+      // }, err => {
+      //   this.dataService.showLoading(false);
+      // })
+      if (this.wholesalerIds.length > 0 && !this.isSort) {
+        delete this.pagination['sort'];
+        delete this.pagination['sort_type'];
       }
-    }, err => {
-      console.warn(err);
-      this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
-      this.loadingIndicator = false;
-      this.dataService.showLoading(false);
-    });
-    } catch(ex) {
-      console.log('ex',ex);
+
+      let hub = null;
+      if (hubFilter === '1') {
+        hub = this.selected.filter((v) => v.isHub).map((v) => v.id);
+      } else if (hubFilter === '0') {
+        hub = this.selected.filter((v) => !v.isHub).map((v) => v.id);
+      }
+
+      this.panelMitraService.getListMitra(this.pagination, { wholesaler_id: this.wholesalerIds, only: hub }).subscribe(res => {
+        if (res.status == 'success') {
+          Page.renderPagination(this.pagination, res.data);
+          this.totalData = res.data.total;
+          this.rows = res.data.data;
+          this.loadingIndicator = false;
+          this.isSort = false;
+          this.pagination.sort = 'name';
+          this.pagination.sort_type = 'asc';
+          this.dataService.showLoading(false);
+        } else {
+          this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+          Page.renderPagination(this.pagination, res.data);
+          this.rows = [];
+          this.loadingIndicator = false;
+          this.dataService.showLoading(false);
+        }
+      }, err => {
+        console.warn(err);
+        this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
+        this.loadingIndicator = false;
+        this.dataService.showLoading(false);
+      });
+    } catch (ex) {
+      console.log('ex', ex);
     }
   }
 
@@ -1065,7 +1066,10 @@ export class PanelMitraCreateComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = {};
+    dialogConfig.data = {
+      supplier_company_id: this.formInput.get('filtersupplier').value || null,
+      product_id: this.formInput.get('filterproduct').value || null,
+    };
 
     this.dialogRef = this.dialog.open(ImportPanelMitraDialogComponent, dialogConfig);
 
@@ -1093,26 +1097,26 @@ export class PanelMitraCreateComponent implements OnInit {
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     const area = areaSelected[areaSelected.length - 1].value;
     if (!this.allRowsSelected) {
-    if (this.selected.length > 0) {
-      const body = {
-        wholesaler_id: this.selected.map((item) => item.id),
-        is_hub: this.selected.filter((item: any) => item.isHub === true).map((item: any) => item.id),
-        area: area
-      };
+      if (this.selected.length > 0) {
+        const body = {
+          wholesaler_id: this.selected.map((item) => item.id),
+          is_hub: this.selected.filter((item: any) => item.isHub === true).map((item: any) => item.id),
+          area: area
+        };
 
-      try {
-        const response = await this.panelMitraService.exportMitra(body).toPromise();
-        console.log('he', response.headers);
-        this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
+        try {
+          const response = await this.panelMitraService.exportMitra(body).toPromise();
+          console.log('he', response.headers);
+          this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
+          this.dataService.showLoading(false);
+        } catch (error) {
+          this.handleError(error);
+          this.dataService.showLoading(false);
+        }
+      } else {
         this.dataService.showLoading(false);
-      } catch (error) {
-        this.handleError(error);
-        this.dataService.showLoading(false);
+        this.dialogService.openSnackBar({ message: 'Mitra Belum dipilih!' });
       }
-    } else {
-      this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: 'Mitra Belum dipilih!' });
-    }
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: 'Tidak Dapat Export Semua Data, Silahkan Pilih beberapa data!' });
@@ -1167,17 +1171,17 @@ export class PanelMitraCreateComponent implements OnInit {
       };
       this.filterHub.setValue('');
       this.panelMitraService.checkPanelMitra(body).subscribe(res => {
-          this.wholesalerIds = res.data.wholesaler_id;
-          this.selected = res.data.wholesaler_id.map((id: any) => {
-            return ({ id: id, isHub: res.data.is_hub ? res.data.is_hub.includes(id) : false });
-          });
-          this.getListMitra();
-        }, err => {
-          console.log('err', err);
-          this.dialogService.openSnackBar({
-            message: err.error.message
-          });
-        }
+        this.wholesalerIds = res.data.wholesaler_id;
+        this.selected = res.data.wholesaler_id.map((id: any) => {
+          return ({ id: id, isHub: res.data.is_hub ? res.data.is_hub.includes(id) : false });
+        });
+        this.getListMitra();
+      }, err => {
+        console.log('err', err);
+        this.dialogService.openSnackBar({
+          message: err.error.message
+        });
+      }
       );
     } else {
       commonFormValidator.validateAllFields(this.formInput);
