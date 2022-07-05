@@ -1193,7 +1193,7 @@ export class BannerCreateComponent {
       this.dialogService.brodcastCloseConfirmation();
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
-        this.dataService.showLoading(false);
+        
       });
 
       let body = {
@@ -1388,6 +1388,7 @@ export class BannerCreateComponent {
         body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
         this.bannerService.create(body).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
@@ -1400,6 +1401,7 @@ export class BannerCreateComponent {
         body['target_audience'] = "0";
         this.bannerService.create(fd).subscribe(
           res => {
+            this.dataService.showLoading(false);
             this.loadingIndicator = false;
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
