@@ -198,6 +198,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       }
     });
     this.getCompanies();
+
+    this.dataService.setToStorage("page_src", 1);
     // this.getPanelSrcList();
 
     // this.formPanelSrc.get('company')
@@ -554,7 +556,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  import(): void {
+  async import(){
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -599,6 +601,24 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
             dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1))
           }
           this.onSelect({ selected: res && res.data && res.data.src ? dataFiltered : [] });
+          // Refresh Datatable
+          this.loadingIndicator = true;
+
+          let businessIds = [];
+          businessIds = dataFiltered.map(mtr => {
+            return mtr.id;
+          })
+
+          this.panelService.getSrc(this.pagination, {
+            wholesaler_id: this.mitraSelected, business_id: businessIds,
+            paylater_company_id: this.paylaterCompanyId
+          }).subscribe(res => {
+            Page.renderPagination(this.pagination, res.data);
+            this.rows = res.data ? res.data.data : [];
+            this.loadingIndicator = false;
+          }, err => {
+            this.loadingIndicator = false;
+          });
         }, err => {
         });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });

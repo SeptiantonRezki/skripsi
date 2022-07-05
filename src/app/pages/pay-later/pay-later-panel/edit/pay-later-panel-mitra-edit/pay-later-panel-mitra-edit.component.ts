@@ -59,6 +59,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
   shortDetail: any;
   detailPanel: any;
   isDetail: Boolean;
+  myArrMITRA: any[] = [];
 
   @Output()
   onRowsSelected = new EventEmitter<any>();
@@ -78,7 +79,6 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
   ) {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
-
 
     this.listLevelArea = [
       {
@@ -181,6 +181,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
           this.loaded = false;
         }
       })
+    
+    this.dataService.setToStorage("page_mitra", 1);
   }
 
   getCompanies() {
@@ -453,6 +455,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
       fd.append('business_id[]', item.id);
     })
     fd.append('type', 'wholesaler');
+    fd.append('paylater_company_id', (this.formPanelMitra.get('company').value)? this.formPanelMitra.get('company').value : null);
     try {
       const response = await this.mitraPanelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
@@ -513,8 +516,59 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.dialogRef.afterClosed().subscribe(response => {
       if (response) {
-        this.onSelect({ selected: response });
+        let filteredMitraX = [];
+        let newArray = [];
+        let dataFiltered = [];
+        // reverse an array
+        let reverse_array = response.slice().reverse();
+        let responseX =  reverse_array.filter((value, index, self) => 
+        self.findIndex(v => v.id === value.id) === index
+      );
+        this.mitraPanelService.checkPanel({ paylater_company_id: this.formPanelMitra.get('company').value }).subscribe(res => {
+          if (res && res.data) {
+            filteredMitraX = res.data.mitra.map((mtr) => {
+              return { id: mtr['business_id'] };
+            });
+            this.myArrMITRA.push(...filteredMitraX);
+            // if data contain unwhitelist then remove from response data
+              responseX.filter((v,i) => {
+                if(!v.whitelist){ // = 0
+                  // deleted from default array data
+                  this.removeDataArr(v.id);
+                }else{
+                  newArray.push(...[{id: v.id}]);
+                }
+            });
+            
+            newArray.push(...this.myArrMITRA);
+            const ids = newArray.map(o => o.id);
+            // filter multiple data id
+            dataFiltered = newArray.filter(({id}, index) => !ids.includes(id, index + 1))
+          }
+          this.onSelect({ selected: res && res.data && res.data.mitra ? dataFiltered : [] });
+          // Refresh Datatable
+          this.loadingIndicator = true;
+          this.mitraPanelService.getMitra(this.pagination, {
+            business_id: this.selected.map(mtr => mtr.id),
+            paylater_company_id: this.formPanelMitra.get('company').value
+          }).subscribe(res => {
+            Page.renderPagination(this.pagination, res.data);
+            this.rows = res.data ? res.data.data : [];
+            this.loadingIndicator = false;
+          }, err => {
+            this.loadingIndicator = false;
+          });
+        }, err => {
+        });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+      }
+    });
+  }
+
+  removeDataArr (id_data){
+    this.myArrMITRA.map(x => {
+      if(x.id == id_data){
+        this.myArrMITRA.splice(this.myArrMITRA.indexOf(x), 1);
       }
     });
   }
