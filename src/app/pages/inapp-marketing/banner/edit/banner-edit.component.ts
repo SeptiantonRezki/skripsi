@@ -95,13 +95,19 @@ export class BannerEditComponent {
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker'), value: "ticker" }
   ];
   listTypeBannerConsumer: any[] = [
     {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
     {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value:"toko-terdekat"},
     {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value:"info-src"},
     {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value:"flying-button"}
+  ];
+  listKategori: any[] = [
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow" }
   ];
   listProfile = [
     { name: this.translate.instant('global.label.update_profile'), value: "ubah_profil" },
@@ -302,7 +308,11 @@ export class BannerEditComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:['all'],
-      barcode:[""]
+      barcode:[""], 
+      kategori: null,
+      ticker_body: [""],
+      ticker_title: [""]
+
     })
 
     this.formFilter = this.formBuilder.group({
@@ -882,6 +892,12 @@ export class BannerEditComponent {
       }
       setTimeout(() => {
         this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
+        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+          this.formBannerGroup.get('kategori').setValue((this.detailBanner.type_ticker) ? this.detailBanner.type_ticker : 'red');
+          this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
+          this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
+        }
+       
       }, 50);
     }
 
@@ -1391,6 +1407,12 @@ export class BannerEditComponent {
       fd.append('promo', this.formBannerGroup.get('promo').value);
       body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
+      if(this.formBannerGroup.get('type_banner').value == 'ticker'){
+        fd.append('ticker_title', this.formBannerGroup.get('ticker_title').value);
+        body['ticker_title'] = this.formBannerGroup.get('ticker_title').value;
+        fd.append('ticker_contents', this.formBannerGroup.get('ticker_body').value);
+        body['ticker_contents'] = this.formBannerGroup.get('ticker_body').value;
+        }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
@@ -1449,6 +1471,10 @@ export class BannerEditComponent {
         body['age'] = this.formBannerGroup.get('age').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
+        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+          fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
+          body['type_ticker'] = this.formBannerGroup.get('kategori').value;
+        }
       }
 
       if (body.user_group === 'customer') {

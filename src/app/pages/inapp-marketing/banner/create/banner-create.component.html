@@ -63,17 +63,29 @@
               </mat-datepicker-toggle>
               <mat-datepicker #sampai></mat-datepicker>
             </mat-form-field>
+            
           </div>
-          <!-- <div class="px-24" fxLayout="row" fxLayoutAlign="start center">
-            <h3 class="">
-              <strong>Audience</strong>
-            </h3>
-          </div> -->
-          <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center">
+          <div class="px-24" fxLayout="row" fxLayoutAlign="start center" >
+            <mat-form-field fxFlex="100" class="is-light form-primary" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
+              <input   maxlength="20" matInput type="text" formControlName="ticker_title"
+                placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}"> 
+              <mat-error
+                *ngIf="formBannerGroup.controls['ticker_title'].hasError('required') && formBannerGroup.controls['ticker_title'].touched">
+                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
+                translate}}
+              </mat-error>
+              <mat-error
+                *ngIf="formBannerGroup.controls['ticker_title'].hasError('maxlength') && formBannerGroup.controls['ticker_title'].touched">
+                {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} Maksimal 20 karakter
+              </mat-error>
+            </mat-form-field>
+           
+          </div>
+          <div class="py-16 px-24" fxLayout="row" fxLayoutAlign="start center" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
             <span class="text-bold">{{'iklan_dalam_aplikasi.spanduk_online.text9' | translate}}</span>
           </div>
           <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="20px"
-            fxLayoutGap.lt-md="0px">
+            fxLayoutGap.lt-md="0px" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
             <div fxFlex="45" class="pb-24" *ngFor="let item of templateBannerList">
               <span>{{item.name}}</span>
               <div
@@ -111,7 +123,7 @@
           </div> -->
           <div *ngIf="bannerSelected" class="pt-16 px-24" formGroupName="banner_selected">
             <div *ngIf="bannerSelected['id'] !== 6">
-              <div fxLayout="row">
+              <div fxLayout="row" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
                   <input matInput type="text" formControlName="title"
                     placeholder="{{'iklan_dalam_aplikasi.spanduk_online.banner_title' | translate}}">
@@ -123,7 +135,7 @@
             </div>
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
               *ngIf="bannerSelected">
-              <div fxFlex="45">
+              <div fxFlex="45" *ngIf="formBannerGroup.get('type_banner').value != 'ticker'">
                 <div class="banner-image-template-selected">
                   <div id="banner" [class]="'banner-image-custom-selected ' + bannerSelected.class"
                     [title]="bannerSelected.name">
@@ -134,6 +146,22 @@
               </div>
             </div>
           </div>
+          <div class="px-24" fxLayout="column" style="padding-bottom: 20px;" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
+          <div class="" fxLayout="row" fxLayoutAlign="start center" *ngIf="formBannerGroup.get('type_banner').value === 'ticker'">
+            <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}}</h3>
+          </div>
+          <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" maxlength="50" [froalaEditor]="options" formControlName="ticker_body" class="pb-4" fxFlex="100"></textarea>
+          
+          <mat-error style="padding-top: 6px !important; font-size: .86em;"
+            *ngIf="formBannerGroup.controls['ticker_body'].hasError('required') && formBannerGroup.controls['ticker_body'].touched && formBannerGroup.get('type_banner').value === 'ticker'">
+            {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} {{'global.messages.mandatory_text' |
+            translate}}
+          </mat-error>
+          <mat-error
+                *ngIf="formBannerGroup.controls['ticker_body'].hasError('maxlength') && formBannerGroup.controls['ticker_body'].touched && formBannerGroup.get('type_banner').value === 'ticker'">
+                {{'iklan_dalam_aplikasi.spanduk_online.textticker' | translate}} Maksimal 50 karakter
+              </mat-error>
+            </div>
           <div fxLayout="row wrap">
             <div fxFlex>
               <div class="pb-16 px-24">
@@ -375,7 +403,7 @@
             <div fxLayout="row" *ngIf="formBannerGroup.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
                 <input matInput type="text" formControlName="title"
-                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">  
                 <mat-error
                   *ngIf="formBannerGroup.controls['title'].hasError('required') && formBannerGroup.controls['title'].touched">
                   {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
@@ -420,6 +448,7 @@
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
             </div>
+           
             <textarea [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formBannerGroup.controls['body'].hasError('required') && formBannerGroup.controls['body'].touched">
@@ -499,7 +528,8 @@
 
           <!-- Retailer -->
           <div *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
-            <div class="pb-16 px-24">
+            <div  fxLayout="row" >
+              <div class="pb-16 px-24">
               <div class="" fxLayout="row" fxLayoutAlign="start center">
                 <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.text16' | translate}}</strong>
               </div>
@@ -508,6 +538,17 @@
                   {{item.name}}
                 </mat-radio-button>
               </mat-radio-group>
+              </div>
+              <div *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" class="pb-16 px-24">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.tickercat' | translate}}</strong>
+                </div>
+                <mat-radio-group formControlName="kategori" class="radio-group">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listKategori" [value]="item.value">
+                    {{item.name}}
+                  </mat-radio-button>
+                </mat-radio-group>
+                </div>
             </div>
 
             <div class="pb-16 px-24" *ngIf="formBannerGroup.get('user_group').value === 'retailer'">

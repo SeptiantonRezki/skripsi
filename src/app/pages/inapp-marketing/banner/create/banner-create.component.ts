@@ -94,7 +94,8 @@ export class BannerCreateComponent {
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker'), value: "ticker" }
   ];
   listTypeBannerConsumer: any[] = [
     {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
@@ -113,6 +114,11 @@ export class BannerCreateComponent {
   listEmployee: any[] = [
     { name: this.translate.instant('global.label.all'), value: "all" },
     { name: this.translate.instant('global.label.employee_only'), value: "yes" }
+  ];
+  listKategori: any[] = [
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow" }
   ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
@@ -235,6 +241,7 @@ export class BannerCreateComponent {
       to: ["", Validators.required],
       enable: [1, Validators.required],
       title: ["", Validators.required],
+      ticker_title: [""],
       body: ["", Validators.required],
       user_group: ["", Validators.required],
       age: ["18+", Validators.required],
@@ -273,7 +280,9 @@ export class BannerCreateComponent {
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
       subscription:["all"],
-      barcode:[""]
+      barcode:[""],
+      kategori: null,
+      ticker_body: [""],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -1156,7 +1165,7 @@ export class BannerCreateComponent {
   }
 
   openReminder() {
-    if(this.formBannerGroup.valid && this.bannerSelected) {
+    if(this.formBannerGroup.valid &&(this.bannerSelected || this.formBannerGroup.get('type_banner').value === 'ticker')) {
       let data = {
         htmlContent: true,
         captionDialog: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.title_dialot_open_reminder'),
@@ -1186,16 +1195,22 @@ export class BannerCreateComponent {
     // console.log(this.formBannerGroup.valid, this.formBannerGroup.controls['barcode']);
     let invalids = this.findInvalidControls();
     // console.log('invalid form', invalids);
+
+
+console.log("FORM VALID", this.formBannerGroup.valid);
+console.log("BANNERSel", this.bannerSelected);
+    
     if(this.onLoad == false)
-    if (this.formBannerGroup.valid && this.bannerSelected) {
+    if (this.formBannerGroup.valid && (this.bannerSelected || this.formBannerGroup.get('type_banner').value === 'ticker')) {
       this.onLoad = true;
       this.dataService.showLoading(true);
       this.dialogService.brodcastCloseConfirmation();
+      if(this.formBannerGroup.get('type_banner').value != 'ticker'){
       await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
         this.imageConverted = this.convertCanvasToImage(canvas);
         
       });
-
+    }
       let body = {
         user_group: this.formBannerGroup.get('user_group').value,
         content_type: this.formBannerGroup.get('content_type').value
@@ -1204,8 +1219,10 @@ export class BannerCreateComponent {
       let fd = new FormData();
       fd.append('name', this.formBannerGroup.get('name').value);
       body['name'] = this.formBannerGroup.get('name').value;
+      if(this.formBannerGroup.get('type_banner').value != 'ticker'){
       fd.append('image', this.imageConverted);
       body['image'] = this.imageConverted;
+      }
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
       body['from'] = moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD');
       fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
@@ -1219,6 +1236,12 @@ export class BannerCreateComponent {
       fd.append('promo', this.formBannerGroup.get('promo').value);
       body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
+      if(this.formBannerGroup.get('type_banner').value == 'ticker'){
+        fd.append('ticker_title', this.formBannerGroup.get('ticker_title').value);
+        body['ticker_title'] = this.formBannerGroup.get('ticker_title').value;
+        fd.append('ticker_contents', this.formBannerGroup.get('ticker_body').value);
+        body['ticker_contents'] = this.formBannerGroup.get('ticker_body').value;
+        }
 
       if (body.content_type === 'static_page') {
         fd.append('title', this.formBannerGroup.get('title').value);
@@ -1265,6 +1288,10 @@ export class BannerCreateComponent {
         body['age'] = this.formBannerGroup.get('age').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
+        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+          fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
+          body['type_ticker'] = this.formBannerGroup.get('kategori').value;
+        }
       }
 
       if (body.user_group === 'customer') {
@@ -1390,6 +1417,7 @@ export class BannerCreateComponent {
           res => {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
@@ -1403,6 +1431,7 @@ export class BannerCreateComponent {
           res => {
             this.dataService.showLoading(false);
             this.loadingIndicator = false;
+            this.dataService.showLoading(false);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
