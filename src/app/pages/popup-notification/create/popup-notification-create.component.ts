@@ -1652,7 +1652,7 @@ export class PopupNotificationCreateComponent {
       } else {
         if (!this.formPopupGroup.get("is_target_area").value) body['area_id'] = areas.map(item => item.value);
       }
-      if (body.type === 'customer' && this.formPopupGroup.get("is_target_area").value) {
+      if (body.type !== 'tsm' && this.formPopupGroup.get("is_target_area").value) {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {

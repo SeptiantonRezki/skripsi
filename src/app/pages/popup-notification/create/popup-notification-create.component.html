@@ -567,7 +567,7 @@
               <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
                 formControlName="is_target_audience">{{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}
               </mat-checkbox>
-              <mat-checkbox *ngIf="formPopupGroup.get('user_group').value === 'customer'" class="mt-4 ml-4 mb-8"
+              <mat-checkbox *ngIf="formPopupGroup.get('user_group').value !== 'tsm'" class="mt-4 ml-4 mb-8"
                 (change)="isTargetArea($event)" formControlName="is_target_area">
                 {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
             </div>
