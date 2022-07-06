@@ -116,9 +116,9 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.employee_only'), value: "yes" }
   ];
   listKategori: any[] = [
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red", checked: true },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue", checked: false  },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow", checked: false  }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow"}
   ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
@@ -284,7 +284,7 @@ export class BannerCreateComponent {
       kategori: null,
       ticker_body: [""],
     })
-
+ 
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
