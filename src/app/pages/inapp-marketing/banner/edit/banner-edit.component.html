@@ -394,7 +394,7 @@
             *ngIf="(formBannerGroup.get('content_type').value === 'static_page' || formBannerGroup.get('content_type').value === 'e_wallet')">
             <div fxLayout="row" *ngIf="formBannerGroup.get('content_type').value === 'static_page'">
               <mat-form-field fxFlex="100" class="is-light form-primary">
-                <input  *ngIf="formBannerGroup.get('type_banner').value === 'ticker'" maxlength="10" matInput type="text" formControlName="title"
+                <input  *ngIf="formBannerGroup.get('type_banner').value === 'ticker'"  matInput type="text" formControlName="title"
                   placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">
                 <input  *ngIf="formBannerGroup.get('type_banner').value != 'ticker'" matInput type="text" formControlName="title"
                   placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}}">  
@@ -403,10 +403,10 @@
                   {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} {{'global.messages.mandatory_text' |
                   translate}}
                 </mat-error>
-                <mat-error
+                <!-- <mat-error
                   *ngIf="formBannerGroup.controls['title'].hasError('maxlength') && formBannerGroup.controls['title'].touched">
                   {{'iklan_dalam_aplikasi.spanduk_online.text23' | translate}} Maksimal 10 karakter
-                </mat-error>
+                </mat-error> -->
               </mat-form-field>
             </div>
             <!-- Content Wallet -->
@@ -440,18 +440,18 @@
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
             </div>
-              <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker' && !isDetail" maxlength="20" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+              <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker' && !isDetail" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>
               <textarea *ngIf="formBannerGroup.get('type_banner').value != 'ticker' && !isDetail" [froalaEditor]="options" formControlName="body" class="pb-4" fxFlex="100"></textarea>  
             <mat-error style="padding-top: 6px !important; font-size: .86em;"
               *ngIf="formBannerGroup.controls['body'].hasError('required') && formBannerGroup.controls['body'].touched">
               {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' | translate}}
             </mat-error>
-            <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker' && isDetail" maxlength="20" formControlName="body" class="pb-4" fxFlex="100"></textarea>
+            <textarea *ngIf="formBannerGroup.get('type_banner').value === 'ticker' && isDetail" formControlName="body" class="pb-4" fxFlex="100"></textarea>
             <textarea *ngIf="formBannerGroup.get('type_banner').value != 'ticker' && isDetail" formControlName="body" class="pb-4" fxFlex="100"></textarea>
-            <mat-error
+            <!-- <mat-error
                   *ngIf="formBannerGroup.controls['body'].hasError('maxlength') && formBannerGroup.controls['body'].touched">
                   {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} Maksimal 20 karakter
-                </mat-error>
+                </mat-error> -->
           </div>
 
           <!-- Landing Page -->
@@ -544,8 +544,9 @@
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
                   <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.tickercat' | translate}}</strong>
                 </div>
+
                 <mat-radio-group formControlName="kategori" class="radio-group">
-                  <mat-radio-button class="radio-button" *ngFor="let item of listKategori" [value]="item.value">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listKategori"  [value]="item.value" >
                     {{item.name}}
                   </mat-radio-button>
                 </mat-radio-group>

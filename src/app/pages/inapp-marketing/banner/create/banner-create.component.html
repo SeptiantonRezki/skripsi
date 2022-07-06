@@ -544,7 +544,7 @@
                   <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.tickercat' | translate}}</strong>
                 </div>
                 <mat-radio-group formControlName="kategori" class="radio-group">
-                  <mat-radio-button class="radio-button" *ngFor="let item of listKategori" [value]="item.value">
+                  <mat-radio-button class="radio-button" *ngFor="let item of listKategori" [value]="item.value" [checked]="item.checked">
                     {{item.name}}
                   </mat-radio-button>
                 </mat-radio-group>
