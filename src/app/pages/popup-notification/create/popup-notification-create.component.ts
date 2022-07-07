@@ -367,11 +367,12 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
         ];
         if (this.permission.new_product) {
-          this.listContentType = [{ name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('notification.popup_notifikasi.new_product'), value: "new-product" },
-          { name: this.translate.instant('global.label.image'), value: "image" },
-          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
-          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
-          ];
+          this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
+          { name: "Unlinked", value: "unlinked" },
+          { name: "Static Page", value: "static-page" },];
+        }
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
         }
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
