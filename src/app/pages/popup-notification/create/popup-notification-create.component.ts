@@ -341,7 +341,8 @@ export class PopupNotificationCreateComponent {
         ];
         if (this.permission.new_product) {
           this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
-          { name: "Unlinked", value: "unlinked" }];
+          { name: "Unlinked", value: "unlinked" },
+          { name: "Static Page", value: "static-page" },];
         }
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
