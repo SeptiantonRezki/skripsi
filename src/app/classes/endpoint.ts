@@ -689,7 +689,8 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
         update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}`,
         update_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/${context.order_id}/status`,
-        export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`
+        export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/export`,
+        download: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/vendor/report_briva/export`,
       },
       PLPayMethod: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran`,

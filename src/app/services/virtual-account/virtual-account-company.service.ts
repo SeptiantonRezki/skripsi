@@ -42,4 +42,9 @@ export class VirtualAccountCompanyService extends BaseService {
     const url = this.getUrl("general", 'listbank', context);
     return this.getApi(url);
   }
+
+  exportExcel(queryParams?): Observable<any> {
+    const url = this.getUrl("orders_catalogue", 'download');
+    return this.getBlobAsJsonApi(url, queryParams);
+  }
 }
