@@ -26,6 +26,12 @@
               </ng-template>
             </ngx-datatable-column>
 
+            <ngx-datatable-column name="{{ ls.locale.cn_reward.b2c_voucher.text73 }}" prop="alias" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{value}}
+              </ng-template>
+            </ngx-datatable-column>
+
             <ngx-datatable-column name="{{ ls.locale.cn_reward.b2c_voucher.text11 }}" prop="audience_customer_count">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.audience_customer_count | rupiahFormaterWithoutRp }}
@@ -35,6 +41,12 @@
             <ngx-datatable-column name="{{ ls.locale.cn_reward.b2c_voucher.text12 }}" prop="audience_retailer_count">
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 {{row.audience_retailer_count | rupiahFormaterWithoutRp }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="{{ ls.locale.cn_reward.b2c_voucher.text29 }}" prop="allocation_voucher" [sortable]="false">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                {{value | rupiahFormaterWithoutRp }}
               </ng-template>
             </ngx-datatable-column>
 
