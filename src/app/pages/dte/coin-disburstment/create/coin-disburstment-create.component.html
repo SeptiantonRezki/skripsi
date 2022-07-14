@@ -96,7 +96,7 @@
                 <div formArrayName="priorities" *ngFor="let item of formCoin.get('priorities')['controls']; let priorities_index=index;">
                   <div [formGroupName]="priorities_index" class="priority__content">
                     <span fxFlex="25px">{{ priorities_index+1 }}.</span>
-                    <mat-form-field fxFlex="200px" id="contoh-id">
+                    <mat-form-field fxFlex id="contoh-id">
                       <mat-select
                         id="group_id"
                         formControlName="group_id"
@@ -108,7 +108,7 @@
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-                    <div>
+                    <div fxLayout="row nowrap">
                       <button
                         mat-icon-button
                         matTooltip="{{'global.button.add' | translate}}"

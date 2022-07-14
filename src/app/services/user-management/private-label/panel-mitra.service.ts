@@ -76,9 +76,9 @@ export class PanelMitraService extends BaseService {
     return this.postBlobAsJsonApi(url, body);
   }
 
-  previewImportMitra(): Observable<any> {
+  previewImportMitra(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "previewImportMitra");
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   checkPanelMitra(body: any): Observable<any> {

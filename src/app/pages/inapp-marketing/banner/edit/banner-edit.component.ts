@@ -1604,7 +1604,8 @@ export class BannerEditComponent {
             this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
           },
           err => {
-            // this.dialogService.openSnackBar({ message: err.error.message });
+            this.dataService.showLoading(false);
+            this.onLoad = false;      
             this.loadingIndicator = false;
           }
         );
@@ -1618,7 +1619,8 @@ export class BannerEditComponent {
             this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text2') });
           },
           err => {
-            // this.dialogService.openSnackBar({ message: err.error.message });
+            this.dataService.showLoading(false);
+            this.onLoad = false;
             this.loadingIndicator = false;
           }
         );

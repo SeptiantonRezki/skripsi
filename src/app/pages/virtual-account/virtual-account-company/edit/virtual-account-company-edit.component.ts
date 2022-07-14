@@ -6,6 +6,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-virtual-account-company-edit',
@@ -20,6 +21,9 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
   isDetail: Boolean;
   listBanks: any[] = [];
   listBankMap: any[] = [];
+  startDateValue: any;
+  endDateValue: any;
+  minEndDate: any;
 
   constructor(
     private router: Router,
@@ -101,6 +105,78 @@ export class VirtualAccountCompanyEditComponent implements OnInit {
     if (!/^\d+$/.test(inp)) {
       event.preventDefault()
     }
+  }
+
+  onDateChange(typeDate, date) {
+    this[typeDate] = date.target.value;
+    if (typeDate == 'startDateValue' && date.target.value) {
+      this.minEndDate = date.target.value.toDate();
+    }
+    if (typeDate == 'startDateValue' && (date.target.value == null)) {
+      this.minEndDate = null;
+    }
+    // console.log("date event", typeDate, ":", date.target.value ? date.target.value.format('YYYY-MM-DD') : null);
+  }
+
+  async download() {
+    this.dataService.showLoading(true);
+    let fileName = `Report_BRIVA_${this.startDateValue ? this.startDateValue.format('YYYYMMDD') : ''}to${this.endDateValue ? this.endDateValue.format('YYYY-MM-DD') : ''}.xlsx`;
+    // console.log(fileName);
+    try {
+      const response = await this.virtualAccountCompanyService.exportExcel({start_date: this.startDateValue ? this.startDateValue.format('YYYY-MM-DD') : null, end_date: this.endDateValue ? this.endDateValue.format('YYYY-MM-DD') : null }).toPromise();
+      // console.log('he', response.headers);
+      if (response.type == "application/json") {
+        throw response.errDesc || 'Terjadi kesalahan, silakan ulangi lagi';
+      }
+      // if (typeof response == `object` && (response.errDesc || response.status == false)) {
+      //   throw response.errDesc || 'Terjadi kesalahan, silakan ulangi lagi';
+      // }
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+      this.dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    // console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
   submit() {

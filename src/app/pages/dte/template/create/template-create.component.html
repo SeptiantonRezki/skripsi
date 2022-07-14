@@ -401,7 +401,7 @@
                   >
                   {{'dte.template_tugas.image_quality_detection' | translate}}
                   </mat-checkbox>
-                  <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">QRCode</mat-checkbox>
+                  <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">{{'upc_code.qrcode' | translate}}</mat-checkbox>
                   <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption'
                     | translate}}</mat-checkbox>
                 </div>
@@ -593,7 +593,7 @@
                   <ng-container *ngIf="item.get('typeSelection').value['value'] == 'upc'">
                     <div fxLayout="column" fxFlex="100">
                       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                        <div fxFlex="30">UPC code yang harus diinput:</div>
+                        <div fxFlex="30">{{'upc_code.upc_code_needed' | translate}}:</div>
                         <div fxLayout="row" fxFlex="20">
                           <mat-form-field fxFlex="100" class="question is-light">
                             <input class="inputUPC" matInput 
@@ -601,13 +601,13 @@
                             type="number" min="1" 
                             onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
                             <mat-error>
-                              Jumlah UPC code harus diisi
+                              {{'upc_code.upc_code_needed_required' | translate}}
                             </mat-error>
                           </mat-form-field>
                         </div>
                       </div>
                       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                        <div fxFlex="30">Konversi coin per 1 kode UPC:</div>
+                        <div fxFlex="30">{{'upc_code.upc_coin_conversion' | translate}}:</div>
                         <div fxLayout="row" fxFlex="20">
                           <mat-form-field fxFlex="100" class="question is-light">
                             <input class="inputUPC" 
@@ -615,16 +615,16 @@
                             matInput type="number" min="1" 
                             onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
                             <mat-error>
-                              Konversi coin harus diisi
+                              {{'upc_code.upc_coin_conversion_required' | translate}}
                             </mat-error>
                           </mat-form-field>
                         </div>
                       </div>
                       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
                         <div fxLayout="row" fxFlex="50">
-                          <search-product-barcode style="width: 100%;" [errorMessage]="'Tidak Ditemukan Brand'" [inputPlaceHolder]="'Search Brand Family'" [isBrandFamily]="true" formControlName="upcBrandFamily">
+                          <search-product-barcode style="width: 100%;" [errorMessage]="'upc_code.brand_family_empty' | translate" [inputPlaceHolder]="'upc_code.brand_family_placeholder' | translate" [isBrandFamily]="true" formControlName="upcBrandFamily">
                             <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.get('questions').at(i).get('upcBrandFamily').touched && templateTaskForm.touched">
-                              Brand Family Harus diisi
+                              {{'upc_code.brand_family_required' | translate}}
                             </mat-error>
                           </search-product-barcode>
                         </div>

@@ -104,6 +104,10 @@ export class ImportExchangeCoinComponent implements OnInit {
 
     let fd = new FormData();
     fd.append('file', this.files);
+    if (this.dialogData.data_log_id) {
+      fd.append('cd_approval_id', this.dialogData.data_log_id)
+    };
+
     this.dataService.showLoading(true);
     this.coinDisburstmentService.dataLogPreview(fd).subscribe(
       res => {

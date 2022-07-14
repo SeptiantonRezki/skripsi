@@ -41,23 +41,26 @@ export class ImportPanelMitraDialogComponent {
 
   import(event) {
     try {
-    this.dataService.showLoading(true);
-    this.files = undefined;
-    this.files = event;
+      this.dataService.showLoading(true);
+      this.files = undefined;
+      this.files = event;
 
-    // console.log('files info', this.files);
-    if (this.files.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
-      return;
-    }
+      // console.log('files info', this.files);
+      if (this.files.name.indexOf(".xlsx") > -1) {
+        this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+        return;
+      }
 
-    let fd = new FormData();
+      let fd = new FormData();
 
-    setTimeout(() => {
-      console.log('files info', this.files);
-      fd.append('file', this.files);
-      console.log('fd', fd.get('file'));
-      this.panelMitraService.importMitra(fd).subscribe(res => {
+      setTimeout(() => {
+        console.log('files info', this.files);
+        fd.append('file', this.files);
+        fd.append('supplier_company_id', this.dialogData.supplier_company_id)
+        fd.append('product_id', this.dialogData.product_id)
+
+        console.log('fd', fd.get('file'));
+        this.panelMitraService.importMitra(fd).subscribe(res => {
           console.log('res.data', res);
           if (res.data) {
             setTimeout(() => {
@@ -67,32 +70,35 @@ export class ImportPanelMitraDialogComponent {
             this.rows = [];
           }
         },
-        err => {
-          this.dataService.showLoading(false);
-          this.files = undefined;
-          if (err.status === 404 || err.status === 500)
-            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
-        }
-      )
-    }, 500);
-  } catch (ex) {
-    console.log('ex', ex);
-    this.dataService.showLoading(false);
-  }
+          err => {
+            this.dataService.showLoading(false);
+            this.files = undefined;
+            if (err.status === 404 || err.status === 500)
+              this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+          }
+        )
+      }, 500);
+    } catch (ex) {
+      console.log('ex', ex);
+      this.dataService.showLoading(false);
+    }
   }
 
   preview() {
-      this.panelMitraService.previewImportMitra().subscribe(res => {
-          // this.dialogRef.close(res);
-          console.log('res', res);
-          this.rows = res.data;
-          this.onImport = false;
-          this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
-          this.dataService.showLoading(false);
-        }, err => {
-          this.dataService.showLoading(false);
-          console.log('err', err);
-        })
+    this.panelMitraService.previewImportMitra({
+      supplier_company_id: this.dialogData.supplier_company_id,
+      product_id: this.dialogData.product_id,
+    }).subscribe(res => {
+      // this.dialogRef.close(res);
+      console.log('res', res);
+      this.rows = res.data;
+      this.onImport = false;
+      this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+      console.log('err', err);
+    })
   }
 
   submit() {

@@ -367,11 +367,12 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
         ];
         if (this.permission.new_product) {
-          this.listContentType = [{ name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('notification.popup_notifikasi.new_product'), value: "new-product" },
-          { name: this.translate.instant('global.label.image'), value: "image" },
-          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
-          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
-          ];
+          this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
+          { name: "Unlinked", value: "unlinked" },
+          { name: "Static Page", value: "static-page" },];
+        }
+        if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
+          this.formPopupGroup.controls['body'].enable();
         }
         this.formPopupGroup.controls['age_consumer_from'].setValue('');
         this.formPopupGroup.controls['age_consumer_to'].setValue('');
@@ -1605,10 +1606,13 @@ export class PopupNotificationCreateComponent {
         body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
       }
 
-      if (body.type === "customer") {
+      if (body.type !== 'tsm') {
         if (body.action === 'image') {
           body['action_data'] = this.convertedContentImage;
         }
+      }
+
+      if (body.type === "customer") {
         if (body.action === 'link_to_web_browser') {
           body['action_data'] = this.formPopupGroup.get('url_web').value;
         }
@@ -1649,7 +1653,7 @@ export class PopupNotificationCreateComponent {
       } else {
         if (!this.formPopupGroup.get("is_target_area").value) body['area_id'] = areas.map(item => item.value);
       }
-      if (body.type === 'customer' && this.formPopupGroup.get("is_target_area").value) {
+      if (body.type !== 'tsm' && this.formPopupGroup.get("is_target_area").value) {
         if (this.selectedAll) {
           body['area_id'] = this.selectedAllId;
         } else {

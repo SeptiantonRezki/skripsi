@@ -40,8 +40,9 @@
                 <mat-datepicker #tanggal_terbit></mat-datepicker>
               </mat-form-field>
               <mat-form-field fxFlex="15%" class="is-light form-primary" id="time">
-                <input matInput formControlName="time" placeholder="{{'notification.buat_notifikasi.text8' | translate}}" [ngxTimepicker]="fullTime" [format]="24"
-                  readonly>
+                <input matInput formControlName="time"
+                  placeholder="{{'notification.buat_notifikasi.text8' | translate}}" [ngxTimepicker]="fullTime"
+                  [format]="24" readonly>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime></ngx-material-timepicker>
                 <mat-error
@@ -165,8 +166,8 @@
                     translate}}.
                   </mat-error>
                 </mat-form-field>
-                <mat-form-field fxFlex="48"  class="is-light form-primary">
-                  <mat-select placeholder="{{'global.label.month' | translate}}" formControlName="recurrence_month">
+                <mat-form-field fxFlex="48" class="is-light form-primary">
+                  <mat-select placeholder="Bulan" formControlName="recurrence_month">
                     <mat-option *ngFor="let item of listMonths" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
@@ -220,7 +221,9 @@
                 <div *ngIf="files">
                   <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                     role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
-                      class="preview-image-content" (click)="previewImage(imageConverted)">{{'notification.popup_notifikasi.text17' | translate}}</span>
+                      class="preview-image-content"
+                      (click)="previewImage(imageConverted)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' |
+                      translate}} popup notifikasi</span>
                     <mat-icon (click)="removeImage()" matTooltip="{{'global.label.delete_image' | translate}}"
                       class="mat-chip-remove mat-chip-trailing-icon mat-icon material-icons mat-icon-no-color ng-star-inserted"
                       matchipremove="" role="img" aria-hidden="true">cancel</mat-icon>
@@ -400,9 +403,12 @@
           </div>
 
           <!-- spesifik produk b2b -->
-          <div class="px-24 pb-10" *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'spesific_product_b2b'">
+          <div class="px-24 pb-10"
+            *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'spesific_product_b2b'">
             <div fxLayout="row">
-              <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate" [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45" [value]="formPopupGroup.controls['barcode'].value" (onChange)="handleSearchProduct($event)">
+              <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate"
+                [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45"
+                [value]="formPopupGroup.controls['barcode'].value" (onChange)="handleSearchProduct($event)">
                 <mat-error
                   *ngIf="formPopupGroup.controls['barcode'].hasError('required') && formPopupGroup.controls['barcode'].touched">
                   <!-- {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
@@ -463,7 +469,7 @@
 
           <!-- Image -->
           <div class="px-24 pb-16"
-            *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'image'">
+            *ngIf="formPopupGroup.get('user_group').value !== 'tsm' && formPopupGroup.get('content_type').value === 'image'">
             <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
               <div ngfDrop selectable="1" [(validDrag)]="validDragContentImage" [(file)]="fileContentImage"
                 accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validDragContentImage === false"
@@ -561,7 +567,7 @@
               <mat-checkbox class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
                 formControlName="is_target_audience">{{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}
               </mat-checkbox>
-              <mat-checkbox *ngIf="formPopupGroup.get('user_group').value === 'customer'" class="mt-4 ml-4 mb-8"
+              <mat-checkbox *ngIf="formPopupGroup.get('user_group').value !== 'tsm'" class="mt-4 ml-4 mb-8"
                 (change)="isTargetArea($event)" formControlName="is_target_area">
                 {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
             </div>

@@ -116,9 +116,9 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.employee_only'), value: "yes" }
   ];
   listKategori: any[] = [
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue" },
-    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow" }
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red", checked: true},
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_blue'), value: "blue", checked: false},
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_yellow'), value: "yellow", checked: false}
   ];
 
   bannerTemplate: TemplateBanner = new TemplateBanner();
@@ -281,10 +281,10 @@ export class BannerCreateComponent {
       ]],
       subscription:["all"],
       barcode:[""],
-      kategori: null,
+      kategori: ['red'],
       ticker_body: [""],
     })
-
+ 
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
@@ -1421,6 +1421,10 @@ console.log("BANNERSel", this.bannerSelected);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
+          },
+          err => {
+            this.dataService.showLoading(false);
+            this.onLoad = false;
           }
         );
         // fd['target_audiences[]'] = this.audienceSelected.map(aud => aud.id);
@@ -1434,6 +1438,10 @@ console.log("BANNERSel", this.bannerSelected);
             this.onLoad = true;
             this.router.navigate(["advertisement", "banner"]);
             this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
+          },
+          err => {
+            this.dataService.showLoading(false);
+            this.onLoad = false;
           }
         );
       }
