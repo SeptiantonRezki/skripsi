@@ -735,6 +735,8 @@ export class Endpoint {
         requestor_data: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/${context.is_tsm ? 'tsm_adjustment' : 'adjustment'}/coin/requestor`,
         get_approval_history: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/approval-history/${context.id}`,
         respond_multiple_approval: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/respond-multiple-approval`,
+        approve_all: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/approve`,
+        reject_all: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/tsm_adjustment/coin/reject`,
       },
       paylater_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company`,
