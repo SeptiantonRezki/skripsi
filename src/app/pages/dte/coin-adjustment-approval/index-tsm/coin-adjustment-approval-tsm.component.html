@@ -83,7 +83,21 @@
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56" [rowHeight]="48"
   [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [count]="pagination.total"
   [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
-  (sort)="onSort($event)">
+  (sort)="onSort($event)" [selectAllRowsOnPage]="false" (select)="onSelect($event)" [rowIdentity]="getId"
+  [sorts]="[{prop: 'name', dir: 'asc'}]" [selectionType]="'checkbox'" fusePerfectScrollbar>
+
+  <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
+    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+      let-selectFn="selectFn">
+      <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+    </ng-template>
+
+    <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+      let-onCheckboxChangeFn="onCheckboxChangeFn">
+      <mat-checkbox [checked]="selected.includes(row)" (change)="onCheckboxChangeFn($event)" [disabled]="row.status !== 'pending'">
+      </mat-checkbox>
+    </ng-template>
+  </ngx-datatable-column>
 
   <ngx-datatable-column [width]="220" [sortable]="false" name="{{ 'dte.pengatur_jadwal_program.text16' | translate }}"
     prop="nama_task_sequencing_management" [flexGrow]="3">
@@ -159,4 +173,16 @@
     </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>
+
+<div fxLayout="row wrap" fxLayoutAlign="center center" fxLayout.lt-md="column" class="p-16" fxLayoutGap="20px"
+  *ngIf="selected.length">
+  <button mat-raised-button type="button" class="primary-green"
+    style="width: 220px; height: 50px; font-size: 18px;border-radius:5px;" (click)="actionDialog('Setujui')">
+    APPROVE
+  </button>
+  <button mat-raised-button type="button" class="confirmation-button"
+    style="width: 220px; height: 50px; font-size: 18px;border-radius:5px;" (click)="actionDialog('Tolak')">
+    REJECT
+  </button>
+</div>
 <a #downloadLink></a>

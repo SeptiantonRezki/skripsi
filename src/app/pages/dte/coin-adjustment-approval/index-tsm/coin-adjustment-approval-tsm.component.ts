@@ -65,6 +65,8 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
   paginationRequestor: Page = new Page();
   paginationApprover: Page = new Page();
 
+  selected = [];
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -269,9 +271,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
       is_tsm: true
     }
 
-    console.log("Ke Click gak sih ini cuk ett dah", params);
     this.coinAdjustmentApprovalService.downloadApprovalList(params).subscribe(response => {
-      console.log('resss', response);
       if (response.data && response.status) {
         setTimeout(() => {
           this.downloadLink.nativeElement.href = response.data;
@@ -321,4 +321,50 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
       this.loadingIndicator = false;
     });
   }
+  
+  getId(row) {
+    return row.id;
+  }
+
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+
+    const newSelected = selected.filter(item => item.status === 'pending');
+    this.selected.push(...newSelected);
+  }
+
+  actionDialog(type): void {
+    let caption = "";
+    if (type === "Setujui") caption += "menyetujui";
+    else caption += "menolak";
+
+    let data = {
+      titleDialog: `${type} Coin Adjustment`,
+      captionDialog: `Apakah anda yakin untuk ${caption} semua request coin adjustment yang dipilih ?`,
+      confirmCallback: (remark) => this.confirmAction(type, remark),
+      isRemark: true,
+      buttonText: ["Ya, lanjutkan", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmAction(type, reason) {
+    const method = type === "Setujui" ? "approveAll" : "rejectAll";
+    const payload = {
+      ids: this.selected.map(item => item.id),
+      reason
+    };
+
+    this.coinAdjustmentApprovalService[method](payload).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar(res);
+
+        this.getListCoinAdjustmentTSM();
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 }
