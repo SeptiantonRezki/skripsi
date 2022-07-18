@@ -1563,7 +1563,7 @@ export class BannerCreateComponent {
     }
 
     return newLastSelfArea;
-  }
+  } 
 
   getAudience() {
     let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
