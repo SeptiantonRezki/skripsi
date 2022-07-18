@@ -66,6 +66,8 @@ export class TargetAreaComponent implements OnInit {
 
   @ViewChild("downloadLink") downloadLink: ElementRef;
 
+  currentAreaIds: any;
+
   constructor(
     private fb: FormBuilder,
     private geoService: GeotreeService,
@@ -138,6 +140,7 @@ export class TargetAreaComponent implements OnInit {
 
     if (levelIds) {
       body['area_ids'] = levelIds.length ? levelIds.join() : "";
+      this.currentAreaIds = levelIds;
     }
 
     this.loadingIndicator = true;
@@ -291,21 +294,32 @@ export class TargetAreaComponent implements OnInit {
   }
 
   async export() {
-    if (!this.selected.length) {
+    if (!this.selected.length && !this.allRowsSelected) {
       this.dialogService.openSnackBar({
         message: "Pilih area untuk di ekspor!",
       });
       return;
     }
+
     try {
       const fd = new FormData();
-      const ids = this.isSelectedAll
-        ? this.getSelectedAllId().map((item) => ({ id: item }))
-        : this.selected;
+      // const ids = this.isSelectedAll
+      //     ? this.getSelectedAllId().map((item) => ({ id: item }))
+      //     : this.selected;
+      if (this.allRowsSelected) {
+        let ids = this.currentAreaIds
+        ids.forEach((item) => {
+          fd.append("selected[]", item);
+        });
+        fd.append('type', 'all')
+      } else {
+        const ids = this.selected;
 
-      ids.forEach((item) => {
-        fd.append("selected[]", item.id);
-      });
+        ids.forEach((item) => {
+          fd.append("selected[]", item.id);
+        });
+      }
+
 
       this.dataService.showLoading(true);
       const response = await this.areaService.export(fd).toPromise();
@@ -341,5 +355,24 @@ export class TargetAreaComponent implements OnInit {
       window.URL.revokeObjectURL(url);
       link.remove();
     }, 100);
+  }
+
+  onCheckboxChange(event: any, row: any) {
+    if (event) {
+      const temp = [...this.selected];
+      const selectedItem = { ...this.selected.filter((s: any) => s.id === row.id)[0] };
+      const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
+      selectedItem['isHub'] = event.checked;
+      if (indexFind !== -1) {
+        temp[indexFind] = selectedItem;
+        this.selected = temp;
+      }
+    }
+  }
+
+  allRowsSelected: boolean;
+  selectFn(allRowsSelected: boolean) {
+    this.allRowsSelected = allRowsSelected;
+    this.selected = [];
   }
 }
