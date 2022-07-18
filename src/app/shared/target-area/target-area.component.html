@@ -117,6 +117,7 @@
         let-selectFn="selectFn"
       >
         <mat-checkbox
+        [disabled]="rows.length <= 1"
           [checked]="setAllSelected(allRowsSelected)"
           (change)="selectFn(!allRowsSelected)"
         ></mat-checkbox>

@@ -233,10 +233,11 @@ export class TargetAreaComponent implements OnInit {
   }
 
   setAllSelected(state: boolean) {
+    // console.log("all selected event", state, this.isSelectedAll);
     if (this.isSelectedAll !== state) {
-      this.isSelectedAll = state;
-      this.selectedAll.emit(state);
-      if (state) this.getAllId();
+      // this.isSelectedAll = state;
+      // this.selectedAll.emit(state);
+      // if (state) this.getAllId();
     }
     return state;
   }
