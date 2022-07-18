@@ -597,11 +597,8 @@
             class="mt-4 ml-4 mb-8" (change)="isTargetAudience($event)"
               formControlName="is_target_audience">
               {{'iklan_dalam_aplikasi.spanduk_online.text26' | translate}}</mat-checkbox>
-            <mat-checkbox
-              *ngIf="formNotification.controls['user_group'].value === 'customer'"
-              class="mt-4 ml-20 mb-8"
-              (change)="isTargetArea($event)"
-              formControlName="is_target_area">
+            <mat-checkbox *ngIf="formNotification.controls['user_group'].value !== 'field-force'" class="mt-4 ml-20 mb-8"
+              (change)="isTargetArea($event)" formControlName="is_target_area">
               {{'iklan_dalam_aplikasi.spanduk_online.target_area' | translate}}</mat-checkbox>
           </div>
           <div
@@ -873,7 +870,7 @@
             </ngx-datatable>
           </div>
           <target-area
-            *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value) && formNotification.get('is_target_area').value"
+            *ngIf="formNotification.controls['user_group'].value !== 'field-force' && formNotification.get('is_target_area').value"
             (selectedArea)="getSelectedArea($event)" (selectedAll)="getSelectedAll($event)"
             (selectedAllId)="getSelectedAllId($event)" [areas]="areasInit" [isNotifValidation]="true"></target-area>
 

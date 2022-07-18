@@ -88,7 +88,7 @@ export class NotificationCreateComponent {
 
   public options: Object = { ...Config.FROALA_CONFIG, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') };
 
-  public optionsStaticPage: Object = {...Config.FROALA_CONFIG_NOTIFICATION, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') }; // Static Page Only
+  public optionsStaticPage: Object = { ...Config.FROALA_CONFIG_NOTIFICATION, placeholderText: this.translate.instant('notification.buat_notifikasi.text11') }; // Static Page Only
 
   audienceSelected: any[] = [];
 
@@ -314,7 +314,7 @@ export class NotificationCreateComponent {
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
-      barcode:[""]
+      barcode: [""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -412,11 +412,11 @@ export class NotificationCreateComponent {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }];
       } else if (res === 'customer') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" }, { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }];
-      } else if(res === 'tsm'){
+      } else if (res === 'tsm') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
-      } else{
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, {name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"}];
-        
+      } else {
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" }];
+
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -919,7 +919,7 @@ export class NotificationCreateComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: this.translate.instant('global.label.delete_salestree'),
-      captionDialog: this.translate.instant('global.messages.text29', {index: idx+1}),
+      captionDialog: this.translate.instant('global.messages.text29', { index: idx + 1 }),
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
@@ -983,11 +983,11 @@ export class NotificationCreateComponent {
     // this.getAudience();
   }
 
-  handleSearchProduct(event){
-    if(event.id)
-    this.formNotification.get("barcode").setValue(event)
+  handleSearchProduct(event) {
+    if (event.id)
+      this.formNotification.get("barcode").setValue(event)
     else
-    this.formNotification.get("barcode").setValue("")
+      this.formNotification.get("barcode").setValue("")
   }
 
   async generataList(selection, id, index, type) {
@@ -1331,7 +1331,7 @@ export class NotificationCreateComponent {
       this.formNotification.get('user_group').patchValue('tsm');
     }
 
-    if(e.source.value !== 'customer'){
+    if (e.source.value !== 'customer') {
       this.formNotification.get('is_target_area').setValue(false)
       this.formNotification.get('is_target_audience').setValue(false)
     }
@@ -1595,9 +1595,9 @@ export class NotificationCreateComponent {
                 let [key, val] = entry;
                 bodyVideo.append(key, val);
                 bodyVideo.delete('recurrence_day');
-                if(key === 'recurrence_day'){
+                if (key === 'recurrence_day') {
                   for (let i = 0; i < val.length; i++) {
-                    bodyVideo.append('recurrence_day['+i+']', val[i]);
+                    bodyVideo.append('recurrence_day[' + i + ']', val[i]);
                   }
                 }
               })
@@ -1662,9 +1662,9 @@ export class NotificationCreateComponent {
               let [key, val] = entry;
               bodyVideo.append(key, val);
               bodyVideo.delete('recurrence_day');
-              if(key === 'recurrence_day'){
+              if (key === 'recurrence_day') {
                 for (let i = 0; i < val.length; i++) {
-                  bodyVideo.append('recurrence_day['+i+']', val[i]);
+                  bodyVideo.append('recurrence_day[' + i + ']', val[i]);
                 }
               }
             })
@@ -1690,7 +1690,7 @@ export class NotificationCreateComponent {
       body['content_wallet'] = this.formNotification.get("content_wallet").value;
       body['button_text'] = this.formNotification.get("button_text").value;
       body['static_page_body'] = this.formNotification.get("static_page_body").value;
-    }else if (body.content_type === "spesific_product_b2b"){
+    } else if (body.content_type === "spesific_product_b2b") {
       body['barcode_value'] = this.formNotification.get("barcode").value.id
       body['name_value'] = this.formNotification.get("barcode").value.name
     }
@@ -2399,7 +2399,7 @@ export class NotificationCreateComponent {
       const image_url = (content_type === 'image') ? content_type_value.image_value : [];
       const wallet_value = (content_type === 'e_wallet') ? content_type_value.target_page.wallet.app_name : '';
       const button_text = (content_type === 'e_wallet') ? content_type_value.target_page.button_text : '';
-      const productInfo = (content_type === "spesific_product_b2b") ? {id:content_type_value.product_info.barcode, name:content_type_value.product_info.name} : ''
+      const productInfo = (content_type === "spesific_product_b2b") ? { id: content_type_value.product_info.barcode, name: content_type_value.product_info.name } : ''
       // console.log(productInfo)
       if (static_page_slug) {
         const { body } = await this.notificationService.getPageContent(static_page_slug).toPromise();
@@ -2439,7 +2439,7 @@ export class NotificationCreateComponent {
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
-      if(content_type === "spesific_product_b2b")
+      if (content_type === "spesific_product_b2b")
         frm.controls['barcode'].setValue(productInfo);
 
 

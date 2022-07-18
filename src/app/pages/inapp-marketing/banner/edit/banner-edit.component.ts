@@ -91,7 +91,7 @@ export class BannerEditComponent {
     { name: this.translate.instant('global.label.female'), value: "female" }
   ];
   listAge: any[] = [{ name: '18+', value: '18+' }, { name: '< 18', value: '18-' }];
-  
+
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
@@ -99,10 +99,10 @@ export class BannerEditComponent {
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker'), value: "ticker" }
   ];
   listTypeBannerConsumer: any[] = [
-    {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value:"toko-terdekat"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value:"info-src"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value:"flying-button"}
+    { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value: "toko-terdekat" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value: "info-src" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value: "flying-button" }
   ];
   listKategori: any[] = [
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.ticker_red'), value: "red" },
@@ -172,7 +172,7 @@ export class BannerEditComponent {
   area_id_list: any = [];
   lastLevel: any;
   dialogRef: any;
-  
+
   pageName = this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1')
 
   titleParam = {
@@ -307,8 +307,8 @@ export class BannerEditComponent {
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
-      subscription:['all'],
-      barcode:[""], 
+      subscription: ['all'],
+      barcode: [""],
       kategori: null,
       ticker_body: [""],
       ticker_title: [""]
@@ -471,7 +471,7 @@ export class BannerEditComponent {
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
-    this.bannerService.getListBannerCustomer().subscribe(({data}) => {
+    this.bannerService.getListBannerCustomer().subscribe(({ data }) => {
       this.listCustomerBanners = data || [];
     })
 
@@ -531,8 +531,8 @@ export class BannerEditComponent {
 
       if (typeBannerVal !== 'aktivasi-konsumen') {
         this.formBannerGroup.controls['banner_customer_id'].setValue(null),
-        this.formBannerGroup.controls['banner_customer_body'].setValue(''),
-        this.formBannerGroup.updateValueAndValidity();
+          this.formBannerGroup.controls['banner_customer_body'].setValue(''),
+          this.formBannerGroup.updateValueAndValidity();
       }
     });
 
@@ -852,14 +852,14 @@ export class BannerEditComponent {
     return areaList;
   }
 
-  handleSearchProduct(event){
+  handleSearchProduct(event) {
     console.log(
-    this.formBannerGroup.get("barcode").value
+      this.formBannerGroup.get("barcode").value
     )
-    if(event.id)
-    this.formBannerGroup.get("barcode").setValue(event)
+    if (event.id)
+      this.formBannerGroup.get("barcode").setValue(event)
     else
-    this.formBannerGroup.get("barcode").setValue("")
+      this.formBannerGroup.get("barcode").setValue("")
   }
 
   async getDetails() {
@@ -892,12 +892,12 @@ export class BannerEditComponent {
       }
       setTimeout(() => {
         this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
-        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+        if (this.formBannerGroup.get('type_banner').value === 'ticker') {
           this.formBannerGroup.get('kategori').setValue((this.detailBanner.type_ticker) ? this.detailBanner.type_ticker : 'red');
           this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
           this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
         }
-       
+
       }, 50);
     }
 
@@ -944,7 +944,7 @@ export class BannerEditComponent {
     }
 
     if (this.detailBanner.target_page.type === 'spesific_product_b2b') {
-      this.formBannerGroup.get('barcode').setValue({id:this.detailBanner.target_page.product_info.barcode, name:this.detailBanner.target_page.product_info.name});
+      this.formBannerGroup.get('barcode').setValue({ id: this.detailBanner.target_page.product_info.barcode, name: this.detailBanner.target_page.product_info.name });
       this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
     }
 
@@ -1008,8 +1008,8 @@ export class BannerEditComponent {
 
     }, 500);
     if (this.detailBanner.type_banner === 'aktivasi-konsumen') {
-          this.formBannerGroup.controls['banner_customer_id'].setValue(this.detailBanner.banner_customer_id);
-          this.formBannerGroup.controls['banner_customer_body'].setValue(this.detailBanner.banner_customer_body);
+      this.formBannerGroup.controls['banner_customer_id'].setValue(this.detailBanner.banner_customer_id);
+      this.formBannerGroup.controls['banner_customer_body'].setValue(this.detailBanner.banner_customer_body);
     }
 
     if (this.isDetail) this.formBannerGroup.disable();
@@ -1093,7 +1093,7 @@ export class BannerEditComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: this.translate.instant('global.message.delete_data', { entity: this.translate.instant('global.area.geotree') }),
-      captionDialog: this.translate.instant('global.message.delete_confirm', { entity: this.translate.instant('global.area.geotree'), index: idx+1 }),
+      captionDialog: this.translate.instant('global.message.delete_confirm', { entity: this.translate.instant('global.area.geotree'), index: idx + 1 }),
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
@@ -1391,7 +1391,7 @@ export class BannerEditComponent {
 
       let fd = new FormData();
       fd.append('_method', 'PUT');
-      body['_method'] ='PUT';
+      body['_method'] = 'PUT';
       fd.append('name', this.formBannerGroup.get('name').value);
       body['name'] = this.formBannerGroup.get('name').value;
       fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
@@ -1407,12 +1407,12 @@ export class BannerEditComponent {
       fd.append('promo', this.formBannerGroup.get('promo').value);
       body['promo'] = this.formBannerGroup.get('promo').value;
       fd.append('content_type', body.content_type);
-      if(this.formBannerGroup.get('type_banner').value == 'ticker'){
+      if (this.formBannerGroup.get('type_banner').value == 'ticker') {
         fd.append('ticker_title', this.formBannerGroup.get('ticker_title').value);
         body['ticker_title'] = this.formBannerGroup.get('ticker_title').value;
         fd.append('ticker_contents', this.formBannerGroup.get('ticker_body').value);
         body['ticker_contents'] = this.formBannerGroup.get('ticker_body').value;
-        }
+      }
 
       if (this.bannerSelected) {
         fd.append('image', this.imageConverted);
@@ -1434,14 +1434,15 @@ export class BannerEditComponent {
         body['transfer_token'] = this.formBannerGroup.get('transfer_token').value;
       } else if (body.content_type === 'image') {
         if (this.imageContentTypeFromDetail) {
-          if (this.imageContentTypeBase64){
+          if (this.imageContentTypeBase64) {
             fd.append('content_image', this.imageContentTypeBase64);
             body['content_image'] = this.imageContentTypeBase64;
-          } 
+          }
         } else {
-          if (this.imageContentTypeBase64){fd.append('content_image', this.imageContentTypeBase64);
-          body['content_image'] = this.imageContentTypeBase64;
-        }
+          if (this.imageContentTypeBase64) {
+            fd.append('content_image', this.imageContentTypeBase64);
+            body['content_image'] = this.imageContentTypeBase64;
+          }
           else return this.dialogService.openSnackBar({ message: 'Konten image belum dipilih' });
         }
       } else if (body.content_type === 'e_wallet') {
@@ -1472,7 +1473,7 @@ export class BannerEditComponent {
         body['age'] = this.formBannerGroup.get('age').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
-        if(this.formBannerGroup.get('type_banner').value === 'ticker'){
+        if (this.formBannerGroup.get('type_banner').value === 'ticker') {
           fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
           body['type_ticker'] = this.formBannerGroup.get('kategori').value;
         }
@@ -1516,19 +1517,16 @@ export class BannerEditComponent {
       }
 
       if (this.formBannerGroup.get('is_target_area').value) {
-        if (body.user_group === 'customer') {
-          let ids = [];
-          if (this.selectedAll) {
-            ids = this.selectedAllId;
-          } else {
-            ids = this.selectedArea.filter((item) => item.id.toString() !== '1').map((item) => item.id);
-          }
-          console.log(ids);
-          ids.forEach((item) => {
-            fd.append('areas[]', item);
-            body['areas[]'] = item;
-          });
+        let ids = [];
+        if (this.selectedAll) {
+          ids = this.selectedAllId;
+        } else {
+          ids = this.selectedArea.filter((item) => item.id.toString() !== '1').map((item) => item.id);
         }
+        console.log(ids);
+        ids.forEach((item) => {
+          fd.append('areas[]', item);
+        });
       } else {
         let _areas = [];
         let areas = [];
@@ -1605,7 +1603,7 @@ export class BannerEditComponent {
           },
           err => {
             this.dataService.showLoading(false);
-            this.onLoad = false;      
+            this.onLoad = false;
             this.loadingIndicator = false;
           }
         );
@@ -1626,7 +1624,7 @@ export class BannerEditComponent {
         );
       }
 
-      
+
 
     } else {
       let msg;
@@ -1678,10 +1676,10 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['button_text'].disable();
     }
     this.formBannerGroup.get("barcode").setValue("");
-    if(value === "spesific_product_b2b"){
+    if (value === "spesific_product_b2b") {
       this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()
-    }else{
+    } else {
       this.formBannerGroup.controls['barcode'].setValue("")
       this.formBannerGroup.controls['barcode'].disable()
     }

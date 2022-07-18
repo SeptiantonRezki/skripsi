@@ -106,7 +106,7 @@ export class TargetAreaComponent implements OnInit {
 
     const areas = data.areas.currentValue;
     if (areas.length) {
-      const areasId = areas.map(({id}) => id);
+      const areasId = areas.map(({ id }) => id);
       if (areasId.length == 1 && areasId[0] == 1) {
         this.defaultSelectedAll = true;
       } else {
@@ -264,6 +264,13 @@ export class TargetAreaComponent implements OnInit {
     this.selected = items;
     this.selectedArea.emit(this.selected);
   }
+
+  // selectFn(allRowsSelected: boolean) {
+  //   console.log('allRowsSelected_', allRowsSelected);
+  //   // this.allRowsSelected = allRowsSelected;
+  //   if (!allRowsSelected) this.selected = [];
+  //   // else this.selected.length = this.totalData;
+  // }
 
   import() {
     const dialogConfig = new MatDialogConfig();
