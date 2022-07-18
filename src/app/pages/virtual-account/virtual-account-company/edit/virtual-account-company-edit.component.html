@@ -8,10 +8,12 @@
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <h2 class="">{{ isDetail ? 'Detil' : 'Ubah' }} Perusahaan</h2>
       </div>
-      <div class="ayo-middle py-24" fxLayout="column">
+      <div fxLayout.xs="column" style="display: flex; justify-content: space-between;">
+      <!-- <div class="ayo-middle py-24" fxLayout="column"> -->
+      <div class="ayo-middle py-24" style="width: 45%; box-sizing: border-box">
         <form autocomplete="off" [formGroup]="formCompany">
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <mat-select formControlName="name" placeholder="Nama Bank">
                 <mat-option *ngFor="let item of listBanks" [value]="item.code">{{item.name}}</mat-option>
               </mat-select>
@@ -22,7 +24,7 @@
             </mat-form-field>
           </div>
 
-          <div fxLayout="row" fxFlex="45">
+          <div fxLayout="row" fxFlex="100">
             <mat-form-field fxFlex="5" fxFlex.xs="30" class="is-light form-primary">
               <input matInput value="+62" readonly>
             </mat-form-field>
@@ -41,7 +43,7 @@
           </mat-error>
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="email" formControlName="email" placeholder="Email">
               <mat-error
                 *ngIf="formCompany.controls['email'].hasError('required') && formCompany.controls['email'].touched">
@@ -55,7 +57,7 @@
           </div>
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="text" formControlName="flowingly_id" placeholder="Flowingly ID">
               <mat-error
                 *ngIf="formCompany.controls['flowingly_id'].hasError('required') && formCompany.controls['flowingly_id'].touched">
@@ -76,7 +78,7 @@
           </div> -->
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <input matInput type="tel" currencyMask min="0" formControlName="service_cost"
                 placeholder="Biaya Layanan" numericOnly>
               <mat-error
@@ -87,7 +89,7 @@
           </div>
 
           <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field fxFlex="100" class="is-light form-primary">
               <mat-select formControlName="status" placeholder="Status">
                 <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
               </mat-select>
@@ -98,6 +100,34 @@
             </mat-form-field>
           </div>
         </form>
+      </div>
+
+        <div *ngIf="formCompany.value['name'] == '002' && isDetail" fxLayout="row" fxLayout.xs="column" style="justify-content: center; flex-grow: 1;">
+          <div>
+            <div>
+              <h2><strong>Rekonsiliasi Data</strong></h2>
+            </div>
+            <div fxLayout="row">
+              <mat-form-field fxFlex="40" style="margin-right: 15px" class="is-light form-primary">
+                <input matInput (focus)="startDateValue.open()" [matDatepicker]="startDateValue"
+                        placeholder="Dari Tanggal" (dateChange)="onDateChange('startDateValue', $event)">
+                <mat-datepicker-toggle matSuffix [for]="startDateValue"></mat-datepicker-toggle>
+                <mat-datepicker #startDateValue></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field fxFlex="40" style="margin-left: 15px" class="is-light form-primary">
+                <input matInput (focus)="endDateValue.open()" [matDatepicker]="endDateValue"
+                        placeholder="Sampai Tanggal" [min]="minEndDate" (dateChange)="onDateChange('endDateValue', $event)">
+                <mat-datepicker-toggle matSuffix [for]="endDateValue"></mat-datepicker-toggle>
+                <mat-datepicker #endDateValue></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+              <button mat-raised-button type="button" class="confirmation-button" (click)="download()" fxFlex="100">
+                Download Laporan Rekonsiliasi
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
