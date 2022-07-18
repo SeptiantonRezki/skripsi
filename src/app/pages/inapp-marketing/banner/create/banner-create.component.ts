@@ -88,17 +88,17 @@ export class BannerCreateComponent {
     { name: this.translate.instant('global.label.female'), value: "female" }
   ];
   listAge: any[] = [{ name: "18+", value: "18+" }, { name: "< 18", value: "18-" }];
-  
+
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
   ];
   listTypeBannerConsumer: any[] = [
-    {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value:"toko-terdekat"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value:"info-src"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value:"flying-button"}
+    { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value: "toko-terdekat" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value: "info-src" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value: "flying-button" }
   ];
   listProfile = [
     { name: this.translate.instant('global.label.update_profile'), value: "ubah_profil" },
@@ -182,7 +182,7 @@ export class BannerCreateComponent {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     this.customAge = false;
-    this.onLoad =false;
+    this.onLoad = false;
     // this.validComboDrag = true;
 
     this.listLandingPage = [
@@ -270,7 +270,7 @@ export class BannerCreateComponent {
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
-      subscription:["all"],
+      subscription: ["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -406,7 +406,7 @@ export class BannerCreateComponent {
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
-    this.bannerService.getListBannerCustomer().subscribe(({data}) => {
+    this.bannerService.getListBannerCustomer().subscribe(({ data }) => {
       this.listCustomerBanners = data || [];
     })
     // this.getAudienceArea('zone', this.listLevelArea[0]);
@@ -465,8 +465,8 @@ export class BannerCreateComponent {
 
       if (typeBannerVal !== 'aktivasi-konsumen') {
         this.formBannerGroup.controls['banner_customer_id'].setValue(null),
-        this.formBannerGroup.controls['banner_customer_body'].setValue(''),
-        this.formBannerGroup.updateValueAndValidity();
+          this.formBannerGroup.controls['banner_customer_body'].setValue(''),
+          this.formBannerGroup.updateValueAndValidity();
       }
     });
 
@@ -817,7 +817,7 @@ export class BannerCreateComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: this.translate.instant('global.label.delete_salestree'),
-      captionDialog: this.translate.instant('global.messages.text29', { index: idx+1 } ),
+      captionDialog: this.translate.instant('global.messages.text29', { index: idx + 1 }),
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
@@ -1135,7 +1135,7 @@ export class BannerCreateComponent {
   }
 
   openReminder() {
-    if(this.formBannerGroup.valid && this.bannerSelected) {
+    if (this.formBannerGroup.valid && this.bannerSelected) {
       let data = {
         htmlContent: true,
         captionDialog: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.title_dialot_open_reminder'),
@@ -1148,7 +1148,7 @@ export class BannerCreateComponent {
       if (this.formBannerGroup.invalid) {
         msg = this.translate.instant('global.label.please_complete_data');
       } else if (!this.bannerSelected) {
-        msg = this.translate.instant('global.label.no_selected_image', { type: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1') } );
+        msg = this.translate.instant('global.label.no_selected_image', { type: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1') });
       } else {
         msg = this.translate.instant('global.label.please_complete_data');
       }
@@ -1165,90 +1165,89 @@ export class BannerCreateComponent {
     console.log(this.formBannerGroup);
     let invalids = this.findInvalidControls();
     console.log('invalid form', invalids);
-    if(this.onLoad == false)
-    if (this.formBannerGroup.valid && this.bannerSelected) {
-      this.onLoad = true;
-      this.dataService.showLoading(true);
-      this.dialogService.brodcastCloseConfirmation();
-      await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
-        this.imageConverted = this.convertCanvasToImage(canvas);
-        this.dataService.showLoading(false);
-      });
+    if (this.onLoad == false)
+      if (this.formBannerGroup.valid && this.bannerSelected) {
+        this.onLoad = true;
+        this.dataService.showLoading(true);
+        this.dialogService.brodcastCloseConfirmation();
+        await html2canvas(document.querySelector("#banner"), { scale: 3 }).then(canvas => {
+          this.imageConverted = this.convertCanvasToImage(canvas);
+          this.dataService.showLoading(false);
+        });
 
-      let body = {
-        user_group: this.formBannerGroup.get('user_group').value,
-        content_type: this.formBannerGroup.get('content_type').value
-      }
+        let body = {
+          user_group: this.formBannerGroup.get('user_group').value,
+          content_type: this.formBannerGroup.get('content_type').value
+        }
 
-      let fd = new FormData();
-      fd.append('name', this.formBannerGroup.get('name').value);
-      fd.append('image', this.imageConverted);
-      fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
-      fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
-      fd.append('enable', this.formBannerGroup.get('enable').value);
-      fd.append('status', this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status);
-      fd.append('user_group', this.formBannerGroup.get('user_group').value);
-      fd.append('promo', this.formBannerGroup.get('promo').value);
-      fd.append('content_type', body.content_type);
+        let fd = new FormData();
+        fd.append('name', this.formBannerGroup.get('name').value);
+        fd.append('image', this.imageConverted);
+        fd.append('from', moment(this.formBannerGroup.get('from').value).format('YYYY-MM-DD'));
+        fd.append('to', moment(this.formBannerGroup.get('to').value).format('YYYY-MM-DD'));
+        fd.append('enable', this.formBannerGroup.get('enable').value);
+        fd.append('status', this.statusChange ? (status === 'draft' ? status : this.formBannerGroup.get('status').value) : status);
+        fd.append('user_group', this.formBannerGroup.get('user_group').value);
+        fd.append('promo', this.formBannerGroup.get('promo').value);
+        fd.append('content_type', body.content_type);
 
-      if (body.content_type === 'static_page') {
-        fd.append('title', this.formBannerGroup.get('title').value);
-        fd.append('body', this.formBannerGroup.get('body').value);
-      } else if (body.content_type === 'landing_page') {
-        fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
-      } else if (body.content_type === 'iframe') {
-        fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
-        fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
-      } else if (body.content_type === 'image') {
-        if (this.imageContentTypeBase64) {
-          fd.append('content_image', this.imageContentTypeBase64);
+        if (body.content_type === 'static_page') {
+          fd.append('title', this.formBannerGroup.get('title').value);
+          fd.append('body', this.formBannerGroup.get('body').value);
+        } else if (body.content_type === 'landing_page') {
+          fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
+        } else if (body.content_type === 'iframe') {
+          fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
+          fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
+        } else if (body.content_type === 'image') {
+          if (this.imageContentTypeBase64) {
+            fd.append('content_image', this.imageContentTypeBase64);
+          } else {
+            return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.no_selected_content') });
+          }
+        } else if (body.content_type === "e_wallet") {
+          fd.append('body', this.formBannerGroup.get('body').value);
+          fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
+          fd.append('button_text', this.formBannerGroup.get('button_text').value);
+        } else if (body.content_type === 'link_web') {
+          fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
+          fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
+        }
+        else {
+
+        }
+
+        if (body.user_group === 'retailer') {
+          fd.append('age', this.formBannerGroup.get('age').value);
+          fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
+        }
+
+        if (body.user_group === 'customer') {
+          fd.append('gender', this.formBannerGroup.get('gender').value);
+          fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
+          fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
+          fd.append('employee', this.formBannerGroup.get('employee').value);
+          fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
+          fd.append("type_banner", this.formBannerGroup.get("type_banner").value);
+          if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
+            fd.append('verification', this.formBannerGroup.get('verification').value);
+          }
+          if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
+            fd.append("profile", this.formBannerGroup.get("profile").value);
+          }
+          fd.append('subscription', this.formBannerGroup.get('subscription').value);
+        }
+
+        if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
+          fd.append('banner_customer_id', this.formBannerGroup.get('banner_customer_id').value);
+          fd.append('banner_customer_body', this.formBannerGroup.get('banner_customer_body').value);
         } else {
-          return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.no_selected_content') });
+          fd.append('banner_customer_id', null);
+          fd.append('banner_customer_body', null);
         }
-      } else if (body.content_type === "e_wallet") {
-        fd.append('body', this.formBannerGroup.get('body').value);
-        fd.append('content_wallet', this.formBannerGroup.get('content_wallet').value);
-        fd.append('button_text', this.formBannerGroup.get('button_text').value);
-      } else if (body.content_type === 'link_web') {
-        fd.append('url_link', this.formBannerGroup.get('url_iframe').value);
-        fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
-      }
-      else {
-
-      }
-
-      if (body.user_group === 'retailer') {
-        fd.append('age', this.formBannerGroup.get('age').value);
-        fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
-      }
-
-      if (body.user_group === 'customer') {
-        fd.append('gender', this.formBannerGroup.get('gender').value);
-        fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
-        fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
-        fd.append('employee', this.formBannerGroup.get('employee').value);
-        fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
-        fd.append("type_banner", this.formBannerGroup.get("type_banner").value);
-        if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
-          fd.append('verification', this.formBannerGroup.get('verification').value);
-        }
-        if (this.formBannerGroup.get("content_type").value === "landing_page" && this.formBannerGroup.get("landing_page").value === "profil_saya") {
-          fd.append("profile", this.formBannerGroup.get("profile").value);
-        }
-        fd.append('subscription', this.formBannerGroup.get('subscription').value);
-      }
-
-      if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
-        fd.append('banner_customer_id', this.formBannerGroup.get('banner_customer_id').value);
-        fd.append('banner_customer_body', this.formBannerGroup.get('banner_customer_body').value);
-      } else {
-        fd.append('banner_customer_id', null);
-        fd.append('banner_customer_body', null);
-      }
 
 
-      if (this.formBannerGroup.get('is_target_area').value) {
-        if (body.user_group === "customer") {
+        if (this.formBannerGroup.get('is_target_area').value) {
           let ids = [];
           if (this.selectedAll) {
             ids = this.selectedAllId;
@@ -1258,93 +1257,92 @@ export class BannerCreateComponent {
           ids.forEach((item) => {
             fd.append("areas[]", item);
           });
-        }
-      } else {
-        let _areas = [];
-        let areas = [];
-        let value = this.formBannerGroup.getRawValue();
+        } else {
+          let _areas = [];
+          let areas = [];
+          let value = this.formBannerGroup.getRawValue();
 
-        value.areas.map(item => {
-          let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
-          for (const val of this.typeArea) {
-            const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
-            if (filteredValue) _areas.push(filteredValue)
-          }
-
-          areas.push(_.last(_areas));
-          _areas = [];
-        })
-
-        let same = this.findDuplicate(areas.map(item => item.value));
-        if (same.length > 0) {
-          return this.dialogService.openSnackBar({
-            message: this.translate.instant('global.label.duplicate_data', { entity: this.translate.instant('global.label.salestree') })
-          });
-        }
-
-        areas.map(item => {
-          if (body.user_group === 'retailer') {
-            if (this.formBannerGroup.controls['group_type'].value === 'src') {
-              fd.append("areas[src][]", item.value);
-            } else {
-              fd.append("areas[ws_downline][]", item.value);
+          value.areas.map(item => {
+            let obj = Object.entries(item).map(([key, value]) => ({ key, value }))
+            for (const val of this.typeArea) {
+              const filteredValue = obj.find(xyz => val === xyz.key && xyz.value !== "");
+              if (filteredValue) _areas.push(filteredValue)
             }
-          } else {
-            fd.append("areas[]", item.value);
+
+            areas.push(_.last(_areas));
+            _areas = [];
+          })
+
+          let same = this.findDuplicate(areas.map(item => item.value));
+          if (same.length > 0) {
+            return this.dialogService.openSnackBar({
+              message: this.translate.instant('global.label.duplicate_data', { entity: this.translate.instant('global.label.salestree') })
+            });
           }
-        })
 
-      }
+          areas.map(item => {
+            if (body.user_group === 'retailer') {
+              if (this.formBannerGroup.controls['group_type'].value === 'src') {
+                fd.append("areas[src][]", item.value);
+              } else {
+                fd.append("areas[ws_downline][]", item.value);
+              }
+            } else {
+              fd.append("areas[]", item.value);
+            }
+          })
 
-      // let areas = [];
-      // let value = this.formBannerGroup.getRawValue();
-      // value = Object.entries(value).map(([key, value]) => ({key, value}));
-
-      // this.typeArea.map(type => {
-      //   const filteredValue = value.filter(item => item.key === type && item.value);
-      //   if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
-      // })
-
-      // fd.append('areas[]', _.last(areas));
-      // areas.map(item => {
-      //   fd.append('areas[]', item)
-      // })
-      if (body.user_group === 'retailer') {
-        fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
-      }
-
-      if (this.formBannerGroup.get("is_target_audience").value) {
-        fd.append('target_audience', "1");
-        this.audienceSelected.map(aud => {
-          fd.append('target_audiences[]', aud.id)
-        });
-      } else {
-        fd.append('target_audience', "0");
-      }
-
-      this.bannerService.create(fd).subscribe(
-        res => {
-          this.loadingIndicator = false;
-          this.onLoad = true;
-          this.router.navigate(["advertisement", "banner"]);
-          this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
         }
-      );
 
-    } else {
-      this.onLoad = true;
-      let msg;
-      if (this.formBannerGroup.invalid) {
-        msg = this.translate.instant('global.label.please_complete_data');
-      } else if (!this.bannerSelected) {
-        msg = this.translate.instant('global.label.no_selected_image', {type: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1')});
+        // let areas = [];
+        // let value = this.formBannerGroup.getRawValue();
+        // value = Object.entries(value).map(([key, value]) => ({key, value}));
+
+        // this.typeArea.map(type => {
+        //   const filteredValue = value.filter(item => item.key === type && item.value);
+        //   if (filteredValue.length > 0) areas.push(parseInt(filteredValue[0].value));
+        // })
+
+        // fd.append('areas[]', _.last(areas));
+        // areas.map(item => {
+        //   fd.append('areas[]', item)
+        // })
+        if (body.user_group === 'retailer') {
+          fd.append("business_type", this.formBannerGroup.controls['group_type'].value);
+        }
+
+        if (this.formBannerGroup.get("is_target_audience").value) {
+          fd.append('target_audience', "1");
+          this.audienceSelected.map(aud => {
+            fd.append('target_audiences[]', aud.id)
+          });
+        } else {
+          fd.append('target_audience', "0");
+        }
+
+        this.bannerService.create(fd).subscribe(
+          res => {
+            this.loadingIndicator = false;
+            this.onLoad = true;
+            this.router.navigate(["advertisement", "banner"]);
+            this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
+          }
+        );
+
       } else {
-        msg = this.translate.instant('global.label.please_complete_data');
-      }
+        this.onLoad = true;
+        let msg;
+        if (this.formBannerGroup.invalid) {
+          msg = this.translate.instant('global.label.please_complete_data');
+        } else if (!this.bannerSelected) {
+          msg = this.translate.instant('global.label.no_selected_image', { type: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1') });
+        } else {
+          msg = this.translate.instant('global.label.please_complete_data');
+        }
 
-      this.dialogService.openSnackBar({ message: msg });
-      commonFormValidator.validateAllFields(this.formBannerGroup);
-    }
+        this.dialogService.openSnackBar({ message: msg });
+        commonFormValidator.validateAllFields(this.formBannerGroup);
+      }
   }
 
   convertCanvasToImage(canvas) {

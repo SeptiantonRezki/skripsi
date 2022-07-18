@@ -90,17 +90,17 @@ export class BannerEditComponent {
     { name: this.translate.instant('global.label.female'), value: "female" }
   ];
   listAge: any[] = [{ name: '18+', value: '18+' }, { name: '< 18', value: '18-' }];
-  
+
   listTypeBanner: any[] = [
     { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.news'), value: "info-terkini" },
     { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.consumer_activation'), value: "aktivasi-konsumen" }
   ];
   listTypeBannerConsumer: any[] = [
-    {name: this.translate.instant('global.label.inapp_banner'), value:"in-app-banner"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value:"toko-terdekat"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value:"info-src"},
-    {name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value:"flying-button"}
+    { name: this.translate.instant('global.label.inapp_banner'), value: "in-app-banner" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.nearby_store'), value: "toko-terdekat" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.src_info'), value: "info-src" },
+    { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.flying_button'), value: "flying-button" }
   ];
   listProfile = [
     { name: this.translate.instant('global.label.update_profile'), value: "ubah_profil" },
@@ -165,7 +165,7 @@ export class BannerEditComponent {
   area_id_list: any = [];
   lastLevel: any;
   dialogRef: any;
-  
+
   pageName = this.translate.instant('iklan_dalam_aplikasi.spanduk_online.text1')
 
   titleParam = {
@@ -299,7 +299,7 @@ export class BannerEditComponent {
       banner_customer_body: ['', [
         InappMarketingValidator.requiredIf(() => this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen')
       ]],
-      subscription:['all'],
+      subscription: ['all'],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -458,7 +458,7 @@ export class BannerEditComponent {
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
     });
-    this.bannerService.getListBannerCustomer().subscribe(({data}) => {
+    this.bannerService.getListBannerCustomer().subscribe(({ data }) => {
       this.listCustomerBanners = data || [];
     })
 
@@ -518,8 +518,8 @@ export class BannerEditComponent {
 
       if (typeBannerVal !== 'aktivasi-konsumen') {
         this.formBannerGroup.controls['banner_customer_id'].setValue(null),
-        this.formBannerGroup.controls['banner_customer_body'].setValue(''),
-        this.formBannerGroup.updateValueAndValidity();
+          this.formBannerGroup.controls['banner_customer_body'].setValue(''),
+          this.formBannerGroup.updateValueAndValidity();
       }
     });
 
@@ -973,8 +973,8 @@ export class BannerEditComponent {
 
     }, 500);
     if (this.detailBanner.type_banner === 'aktivasi-konsumen') {
-          this.formBannerGroup.controls['banner_customer_id'].setValue(this.detailBanner.banner_customer_id);
-          this.formBannerGroup.controls['banner_customer_body'].setValue(this.detailBanner.banner_customer_body);
+      this.formBannerGroup.controls['banner_customer_id'].setValue(this.detailBanner.banner_customer_id);
+      this.formBannerGroup.controls['banner_customer_body'].setValue(this.detailBanner.banner_customer_body);
     }
 
     if (this.isDetail) this.formBannerGroup.disable();
@@ -1058,7 +1058,7 @@ export class BannerEditComponent {
     this.indexDelete = idx;
     let data = {
       titleDialog: this.translate.instant('global.message.delete_data', { entity: this.translate.instant('global.area.geotree') }),
-      captionDialog: this.translate.instant('global.message.delete_confirm', { entity: this.translate.instant('global.area.geotree'), index: idx+1 }),
+      captionDialog: this.translate.instant('global.message.delete_confirm', { entity: this.translate.instant('global.area.geotree'), index: idx + 1 }),
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')]
     };
@@ -1426,18 +1426,16 @@ export class BannerEditComponent {
       }
 
       if (this.formBannerGroup.get('is_target_area').value) {
-        if (body.user_group === 'customer') {
-          let ids = [];
-          if (this.selectedAll) {
-            ids = this.selectedAllId;
-          } else {
-            ids = this.selectedArea.filter((item) => item.id.toString() !== '1').map((item) => item.id);
-          }
-          console.log(ids);
-          ids.forEach((item) => {
-            fd.append('areas[]', item);
-          });
+        let ids = [];
+        if (this.selectedAll) {
+          ids = this.selectedAllId;
+        } else {
+          ids = this.selectedArea.filter((item) => item.id.toString() !== '1').map((item) => item.id);
         }
+        console.log(ids);
+        ids.forEach((item) => {
+          fd.append('areas[]', item);
+        });
       } else {
         let _areas = [];
         let areas = [];

@@ -1656,7 +1656,7 @@ export class NotificationCreateComponent {
     } else {
       if (body['target_audience']) delete body['target_audience'];
     }
-    if (body.type === 'customer' && this.formNotification.get("is_target_area").value) {
+    if (this.formNotification.get("is_target_area").value) {
       let str = '';
       if (this.selectedAll) {
         const all = this.selectedAllId;
