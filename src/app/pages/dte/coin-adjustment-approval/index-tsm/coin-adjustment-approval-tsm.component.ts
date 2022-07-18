@@ -65,6 +65,10 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
   paginationApprover: Page = new Page();
 
   selected = [];
+  owned = {
+    name: "",
+    show: 1,
+  };
 
   constructor(
     private dialogService: DialogService,
@@ -215,10 +219,16 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     this.pagination['requestor'] = this.formFilterReqApp.get('requestor_id').value;
     this.pagination['approver'] = this.formFilterReqApp.get('approver_id').value;
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(res => {
+    const payload = {
+      ...this.pagination,
+      owned_by_user: 0,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.owned.show = 0;
     });
   }
 
@@ -233,7 +243,12 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(
+    const payload = {
+      ...this.pagination,
+      owned_by_user: this.owned.show,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(
       res => {
         if (res.total < res.per_page && page !== 1) {
           this.dataService.setToStorage('page', 1);
@@ -243,6 +258,8 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
           this.rows = res.data;
           this.onLoad = false;
           this.loadingIndicator = false;
+
+          this.owned.name = res.data && res.data[0].approver || "";
         }
       }, err => {
         console.error(err);
@@ -291,12 +308,18 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
       this.pagination.page = this.dataService.getFromStorage("page");
-    }
+    };
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(res => {
+    const payload = {
+      ...this.pagination,
+      owned_by_user: this.owned.show,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.selected = [];
     });
   }
 
@@ -327,7 +350,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
 
-    const newSelected = selected.filter(item => item.status === 'pending');
+    const newSelected = selected.filter(item => item.status === 'pending' && item.approver === this.owned.name);
     this.selected.push(...newSelected);
   }
 

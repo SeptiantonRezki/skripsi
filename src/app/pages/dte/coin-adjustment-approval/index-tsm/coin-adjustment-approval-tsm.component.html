@@ -94,7 +94,8 @@
 
     <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
       let-onCheckboxChangeFn="onCheckboxChangeFn">
-      <mat-checkbox [checked]="selected.includes(row)" (change)="onCheckboxChangeFn($event)" [disabled]="row.status !== 'pending'">
+      <mat-checkbox [checked]="selected.includes(row)" (change)="onCheckboxChangeFn($event)"
+        [disabled]="row.status !== 'pending'">
       </mat-checkbox>
     </ng-template>
   </ngx-datatable-column>
