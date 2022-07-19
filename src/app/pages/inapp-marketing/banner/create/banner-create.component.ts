@@ -1444,8 +1444,6 @@ export class BannerCreateComponent {
           );
         }
 
-
-
         // this.bannerService.create(fd).subscribe(
         //   res => {
         //     this.loadingIndicator = false;
