@@ -897,7 +897,6 @@ export class BannerEditComponent {
           this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
           this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
         }
-
       }, 50);
     }
 

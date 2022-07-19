@@ -284,7 +284,7 @@ export class BannerCreateComponent {
       kategori: ['red'],
       ticker_body: [""],
     })
-
+ 
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
