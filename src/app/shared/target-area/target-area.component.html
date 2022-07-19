@@ -110,16 +110,19 @@
       [resizeable]="false"
       [sortable]="false"
     >
-      <ng-template
+      <!-- <ng-template
         ngx-datatable-header-template
         let-value="value"
         let-allRowsSelected="allRowsSelected"
         let-selectFn="selectFn"
       >
         <mat-checkbox
-          [checked]="setAllSelected(allRowsSelected)"
+        [checked]="allRowsSelected"
           (change)="selectFn(!allRowsSelected)"
         ></mat-checkbox>
+      </ng-template> -->
+      <ng-template ngx-datatable-header-template>
+        <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
       </ng-template>
       <ng-template
         ngx-datatable-cell-template
@@ -128,10 +131,12 @@
         let-isSelected="isSelected"
         let-onCheckboxChangeFn="onCheckboxChangeFn"
       >
-        <mat-checkbox
+        <!-- <mat-checkbox
           [checked]="isSelected"
           (change)="onCheckboxChangeFn($event)"
-        ></mat-checkbox>
+        ></mat-checkbox> -->
+        <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);" [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+      <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all"></mat-checkbox>
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column
@@ -163,7 +168,7 @@
         let-curPage="curPage"
         let-offset="offset"
       >
-        <div>{{ isSelectedAll ? rowCount : selectedCount }} selected / {{ rowCount }} total</div>
+        <div>{{ allRowsSelected ? rowCount : selectedCount }} selected / {{ rowCount }} total</div>
         <datatable-pager
           [pagerLeftArrowIcon]="'datatable-icon-left'"
           [pagerRightArrowIcon]="'datatable-icon-right'"
