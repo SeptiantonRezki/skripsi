@@ -1320,14 +1320,14 @@ export class BannerCreateComponent {
           fd.append('target_audience', "0");
         }
 
-        this.bannerService.create(fd).subscribe(
-          res => {
-            this.loadingIndicator = false;
-            this.onLoad = true;
-            this.router.navigate(["advertisement", "banner"]);
-            this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
-          }
-        );
+        // this.bannerService.create(fd).subscribe(
+        //   res => {
+        //     this.loadingIndicator = false;
+        //     this.onLoad = true;
+        //     this.router.navigate(["advertisement", "banner"]);
+        //     this.dialogService.openSnackBar({ message: this.translate.instant('notification.popup_notifikasi.text22') });
+        //   }
+        // );
 
       } else {
         this.onLoad = true;
