@@ -284,7 +284,7 @@ export class BannerCreateComponent {
       kategori: ['red'],
       ticker_body: [""],
     })
- 
+
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
@@ -1561,7 +1561,7 @@ export class BannerCreateComponent {
     }
 
     return newLastSelfArea;
-  } 
+  }
 
   getAudience() {
     let keyAudience = this.formBannerGroup.get('user_group').value === 'retailer' ? 'getAudience' : 'getCustomerAudience';
