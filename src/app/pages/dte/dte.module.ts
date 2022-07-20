@@ -173,6 +173,9 @@ import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
+import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
+import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
+import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -362,6 +365,9 @@ export const MY_FORMATS = {
     EmployeeMappingComponent,
     TemplatePlanogramComponent,
     CheckImageComponent,
+    SpinTheWheelComponent,
+    SpinTheWheelCreateComponent,
+    SpinTheWheelEditComponent,
   ],
   exports: [
     TemplateIndexComponent,
