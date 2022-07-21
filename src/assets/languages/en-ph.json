@@ -197,7 +197,8 @@
       "select": "Select",
       "opsi_index": "Options {{index}}",
       "max_count_image": "Maximum {{count}} images",
-			"spesific_product_b2b":"B2B Product Specific"
+			"spesific_product_b2b":"B2B Product Specific",
+      "upc":"UPC"
     },
     "order_status": {
       "new_order": "New Order",
@@ -821,9 +822,11 @@
       "shopping": "Shopping",
       "title_dialot_open_reminder": "Make sure all parameters are filled in correctly. Banners containing <i class='italic'>Brand HM Sampoerna</i> material or other <i class='italic'>tobacco promotion materials</i> only for Consumer Type '<b>Smoking</b>'. Are you sure to save and send?",
       "ticker": "Ticker",
-      "ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
-      "ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
-      "ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
+      "ticker_red": "Red (Fraud Warning & Outage Advisory)",
+      "ticker_blue": "Blue (Server Maintenance and Downtime Advisory)",
+      "ticker_yellow": "Yellow (Version Update Reminder Advisory)",
+      "textticker": "Fill in the ticker",
+			"tickercat": "Ticker Color Category"
     }
   },
   "delivery_management": {
@@ -2182,5 +2185,15 @@
     "placeholder":"Search Products",
     "error_message":"No products found",
     "error_form":"Product Barcode Required"
+  },
+  "upc_code":{
+    "upc_code_needed":"UPC code to input",
+    "upc_code_needed_required":"Number of UPC codes required",
+    "upc_coin_conversion":"Coin conversion per 1 UPC code",
+    "upc_coin_conversion_required":"Coin conversion is required",
+    "brand_family_placeholder":"Search Brand Family",
+    "brand_family_empty":"Brand Not Found",
+    "brand_family_required":"Brand Family Required",
+    "qrcode":"QR Code"
   }
 }
