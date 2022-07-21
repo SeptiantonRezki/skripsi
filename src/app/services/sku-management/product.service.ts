@@ -97,4 +97,10 @@ export class ProductService extends BaseService {
     const url = this.getUrl(this.namespace, "generate_link");
     return this.postApi(url, body);
   }
+
+  getProductCode(context):Observable<any> {
+    const url = this.getUrl(this.namespace, "product_code", {param:context.code});
+    return this.getApi(url)
+  }
+
 }

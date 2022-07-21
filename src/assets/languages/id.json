@@ -197,7 +197,8 @@
       "select": "Pilih",
       "opsi_index": "Opsi {{index}}",
       "max_count_image": "Maksimal {{count}} gambar",
-      "spesific_product_b2b":"Spesifik Produk B2B"
+      "spesific_product_b2b":"Spesifik Produk B2B",
+      "upc":"UPC"
     },
     "order_status": {
       "new_order": "Pesanan Baru",
@@ -823,7 +824,9 @@
       "ticker": "Ticker",
       "ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
       "ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
-      "ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
+      "ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)",
+      "textticker": "Isi Ticker",
+      "tickercat": "Kategori Warna Ticker"
     }
   },
   "delivery_management": {
@@ -2182,5 +2185,15 @@
     "placeholder":"Cari Produk",
     "error_message":"Tidak ada produk ditemukan",
     "error_form":"Barcode Produk Harus diisi"
+  },
+  "upc_code":{
+    "upc_code_needed":"Kode UPC untuk dimasukkan",
+    "upc_code_needed_required":"Jumlah Kode UPC diperlukan",
+    "upc_coin_conversion":"Konversi koin per 1 kode UPC",
+    "upc_coin_conversion_required":"Konversi koin diperlukan",
+    "brand_family_placeholder":"Cari Keluarga Merek",
+    "brand_family_empty":"Merek Tidak Ditemukan",
+    "brand_family_required":"Keluarga Merek Diperlukan",
+    "qrcode":"Kode QR"
   }
 }
