@@ -383,6 +383,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
         this.dialogService.brodcastCloseConfirmation();
         this.dialogService.openSnackBar(res);
 
+        this.selected.splice(0, this.selected.length);
         this.getListCoinAdjustmentTSM();
       },
       err => {
