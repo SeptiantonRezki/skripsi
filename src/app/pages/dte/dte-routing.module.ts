@@ -781,17 +781,17 @@ const routes: Routes = [
   {
     path: 'lottery',
     component: LotteryComponent,
-    canActivate: [PageGuard]
+    // canActivate: [PageGuard]
   },
   {
     path: 'lottery/create',
     component: LotteryCreateComponent,
-    canActivate: [PageGuard]
+    // canActivate: [PageGuard]
   },
   {
     path: 'lottery/edit/:id',
     component: LotteryEditComponent,
-    canActivate: [PageGuard]
+    // canActivate: [PageGuard]
   },
 ];
 
