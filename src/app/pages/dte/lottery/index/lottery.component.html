@@ -1,0 +1,80 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Undian">
+    <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','lottery', 'create']" mat-raised-button type="button">
+      <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <h2 class="pl-8">Undian</h2>
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input id="search" matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true">
+
+        <ngx-datatable-column name="Nama Program" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Start" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.start_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="End" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.end_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{'global.label.status' | translate}}" prop="status_publish" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
+                [ngClass]="row.status_publish === 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{row.status_publish === 'publish' ? ('dte.trade_program.text6' | translate) : ('dte.trade_program.text7' | translate) }}
+              </p>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Publish" prop="coin_expiry_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="button-row" style="margin-left: -10px">
+              <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+                <mat-icon class="secondary-text">download</mat-icon>
+              </button>
+              <button id="btn-edit" mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}"
+                [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
