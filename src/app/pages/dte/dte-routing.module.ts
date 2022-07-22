@@ -61,6 +61,9 @@ import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.compon
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { LotteryComponent } from "./lottery/index/lottery.component";
+import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
+import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
 
 const routes: Routes = [
   {
@@ -744,6 +747,21 @@ const routes: Routes = [
   {
     path: 'employee-mapping/detail/:id',
     component: EmployeeMappingComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery',
+    component: LotteryComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/create',
+    component: LotteryCreateComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/edit/:id',
+    component: LotteryEditComponent,
     canActivate: [PageGuard]
   },
 ];
