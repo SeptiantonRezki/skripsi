@@ -1,0 +1,174 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Buat Undian">
+    <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','lottery']" mat-raised-button type="button">
+      <mat-icon>save</mat-icon> {{'global.button.save' | translate}}
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group>
+        <mat-tab label="Undian">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formSpin" fxLayout="row" fxLayoutGap="16px">
+              <div fxFlex="50%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="text" placeholder="Nama Program" formControlName="name"
+                      name="name">
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['name'].hasError('required') && formSpin.controls['name'].touched">
+                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="{{'dte.group_trade_program.text1' | translate}}"
+                      formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)"
+                    >
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
+                      placeholder="Tanggal Mulai">
+                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formSpin.controls['start_date'].hasError('required') && formSpin.controls['start_date'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+  
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
+                      placeholder="Tanggal Berakhir">
+                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formSpin.controls['start_date'].hasError('required') && formSpin.controls['start_date'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Audience">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form autocomplete="off" fxLayout="row" fxLayoutGap="16px">
+              <div fxFlex="50%">
+                <div fxLayout="row">
+                  <mat-radio-group>
+                    <mat-radio-button
+                      class="radio-button pr-48"
+                    >
+                      Population Blast
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="Zone"
+                      >
+                      <!-- formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)" -->
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="Regional"
+                      >
+                      <!-- formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)" -->
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="Area"
+                      >
+                      <!-- formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)" -->
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      placeholder="Retail Classification"
+                      >
+                      <!-- formControlName="group_trade_id"
+                      multiple
+                      (selectionChange)="groupChosen($event)" -->
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                    </mat-select>
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row">
+                  <mat-radio-group>
+                    <mat-radio-button
+                      class="radio-button pr-48"
+                    >
+                      Fixed Panel
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
+                  <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+                    Check
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Preview">
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

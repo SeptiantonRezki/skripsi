@@ -177,6 +177,9 @@ import { CheckImageComponent } from './image-recognition/check-image/check-image
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
+import { LotteryComponent } from './lottery/index/lottery.component';
+import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
+import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -370,6 +373,9 @@ export const MY_FORMATS = {
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
+    LotteryComponent,
+    LotteryCreateComponent,
+    LotteryEditComponent,
   ],
   exports: [
     TemplateIndexComponent,
