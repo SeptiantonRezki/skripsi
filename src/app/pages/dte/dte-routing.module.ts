@@ -68,6 +68,7 @@ import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-
 import { LotteryComponent } from "./lottery/index/lottery.component";
 import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
 import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
+import { XpComponent } from "./xp/xp.component";
 
 const routes: Routes = [
   {
@@ -793,6 +794,30 @@ const routes: Routes = [
     component: LotteryEditComponent,
     // canActivate: [PageGuard]
   },
+  {
+    path: 'xp',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/create/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/edit/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/detail/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  }
 ];
 
 @NgModule({
