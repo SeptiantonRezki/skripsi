@@ -753,23 +753,24 @@ const routes: Routes = [
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
-  // {
-  //   path: 'employee-mapping/create',
-  //   component: EmployeeMappingComponent,
-  //   canActivate: [PageGuard],
-  //   canDeactivate: [PendingChangesGuard]
-  // },
-  // {
-  //   path: 'employee-mapping/edit/:id',
-  //   component: EmployeeMappingComponent,
-  //   canActivate: [PageGuard],
-  //   canDeactivate: [PendingChangesGuard]
-  // },
-  // {
-  //   path: 'employee-mapping/detail/:id',
-  //   component: EmployeeMappingComponent,
-  //   canActivate: [PageGuard]
-  // },
+  {
+    path: 'xp/create/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/edit/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/detail/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
 ];
 
 @NgModule({

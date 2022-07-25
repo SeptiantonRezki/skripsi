@@ -23,7 +23,6 @@ export class XpComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
   ) {
-    // TODO:
     this.permission = this.roles.getArrayRoles('principal.dtexp');
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl('');
   }
