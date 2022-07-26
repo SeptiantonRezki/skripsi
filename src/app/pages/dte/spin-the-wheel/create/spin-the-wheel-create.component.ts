@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,6 +16,14 @@ export class SpinTheWheelCreateComponent implements OnInit {
   onLoad: boolean;
   minDate = new Date();
   groupTradePrograms: any[] = [];
+
+  files: File;
+  imageContentType: File;
+  imageContentTypeBase64: any;
+  image: any;
+  validComboDrag: boolean;
+  imageConverted: any;
+  preview_header: FormControl = new FormControl("");
 
 
   constructor(
@@ -35,6 +43,26 @@ export class SpinTheWheelCreateComponent implements OnInit {
     })
 
     this.onLoad = false;
+  }
+
+  removeImage(): void {
+    this.files = undefined;
+    this.imageConverted = undefined;
+  }
+
+  changeImage(event) {
+    this.readThis(event);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageConverted = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
   }
 
 }

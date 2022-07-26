@@ -72,103 +72,141 @@
           </div>
         </mat-tab>
         <mat-tab label="Audience">
-          <div class="ayo-middle py-24" fxLayout="column">
-            <form autocomplete="off" fxLayout="row" fxLayoutGap="16px">
-              <div fxFlex="50%">
-                <div fxLayout="row">
-                  <mat-radio-group>
-                    <mat-radio-button
-                      class="radio-button pr-48"
-                    >
-                      Population Blast
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Zone"
+          <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45">
+                <div fxFlex="100">
+                  <div fxLayout="row">
+                    <mat-radio-group>
+                      <mat-radio-button
+                        class="radio-button pr-48"
                       >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Regional"
+                        Population Blast
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-24">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Zone"
+                        >
+                        <!-- formControlName="group_trade_id"
+                        multiple
+                        (selectionChange)="groupChosen($event)" -->
+                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                      <!-- <mat-error
+                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-24">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Regional"
+                        >
+                        <!-- formControlName="group_trade_id"
+                        multiple
+                        (selectionChange)="groupChosen($event)" -->
+                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                      <!-- <mat-error
+                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-24">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Area"
+                        >
+                        <!-- formControlName="group_trade_id"
+                        multiple
+                        (selectionChange)="groupChosen($event)" -->
+                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                      <!-- <mat-error
+                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-24">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        >
+                        <!-- formControlName="group_trade_id"
+                        multiple
+                        (selectionChange)="groupChosen($event)" -->
+                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                      <!-- <mat-error
+                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
+                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row">
+                    <mat-radio-group>
+                      <mat-radio-button
+                        class="radio-button pr-48"
                       >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
+                        Fixed Panel
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
+                    <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+                      Check
+                    </button>
+                  </div>
                 </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Area"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
+              </form>
+              <div fxLayout="row" fxFlex="45">
+                <div class="red-big-chunk-panel" fxFlex="100">
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;">---</p>
+                  <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
                 </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Retail Classification"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxLayout="row">
-                  <mat-radio-group>
-                    <mat-radio-button
-                      class="radio-button pr-48"
-                    >
-                      Fixed Panel
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
-                  <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-                    Check
-                  </button>
-                </div>
-              </div>
-            </form>
+            </div>
           </div>
         </mat-tab>
         <mat-tab label="Pengaturan Mekanisme">
         </mat-tab>
         <mat-tab label="Preview">
+          <div fxLayout="row" fxFlex="100">
+            <div fxFlex="30">
+              <div class="grey-box">
+                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p>
+                <div class="px-24">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                    accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event)">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                      <br>
+                      <span matPrefix>Tarik Gambar Kesini</span>
+                    </div>
+                  </div>
+                </div>
+                <p style="font-weight: bold;text-align: center;">Preview</p>
+                <div style="text-align: center;" *ngIf="imageConverted">
+                  <img [src]="imageConverted" alt="Preview Image" width="200px" height="100px">
+                </div>
+                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p>
+              </div>
+            </div>
+            <div fxFlex="1"></div>
+            <div fxFlex="20">
+              <div fxLayout="row" class="px-24">
+                <mat-form-field fxFlex class="is-light form-primary">
+                  <input matInput type="text" placeholder="Header" [formControl]="preview_header"
+                    name="preview_header">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>
