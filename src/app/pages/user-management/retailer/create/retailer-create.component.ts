@@ -45,7 +45,8 @@ export class RetailerCreateComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "KA", value: "KA"},
     { name: "Official Store", value: "Official Store"},
-    { name: "RRP", value: "RRP"}
+    { name: "RRP", value: "RRP"},
+    { name: "ISR", value: "ISR"}
   ];
   country_phone: string;
 
