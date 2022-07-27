@@ -199,10 +199,10 @@
           </div>
         </mat-tab>
         <mat-tab label="Preview">
-          <div fxLayout="row" fxFlex="100">
-            <div fxFlex="30">
-              <div class="grey-box">
-                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p>
+          <div fxLayout="row" fxFlex="100" style="margin-bottom: 15px;">
+            <div fxFlex="75" class="px-24">
+              <div class="grey-box" fxFlex="30">
+                <p style="font-style: italic;font-weight: bold;">Visual Header Kupon Undian</p>
                 <div class="px-24">
                   <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
                     accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
@@ -214,20 +214,59 @@
                     </div>
                   </div>
                 </div>
-                <p style="font-weight: bold;text-align: center;">Preview</p>
+                <!-- <p style="font-weight: bold;text-align: center;">Preview</p>
                 <div style="text-align: center;" *ngIf="imageConverted">
                   <img [src]="imageConverted" alt="Preview Image" width="200px" height="100px">
                 </div>
-                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p>
+                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p> -->
+              </div>
+
+              <div fxFlex="100">
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                  <div fxLayout="column" fxFlex="45">
+                    <p style="font-style: italic;font-weight: bold;">Deskripsi Kupon Undian</p>
+                    <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
+                      <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="1"> </div>
+                  <div fxLayout="column" fxFlex="45">
+                    <div fxLayout="row" fxFlex="100">
+                      <p fxFlex="60" style="font-style: italic;font-weight: bold;">Deskripsi ATC</p>
+                      <mat-checkbox class="mt-4 ml-4 mb-4">
+                      Aktifkan</mat-checkbox>
+                    </div>
+                    <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
+                      <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grey-box" fxFlex="30">
+                <p style="font-style: italic;font-weight: bold;">Visual List Undian Pemenang Sebelumnya</p>
+                <div class="px-24">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                    accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event)">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                      <br>
+                      <span matPrefix>Tarik Gambar Kesini</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- <p style="font-weight: bold;text-align: center;">Preview</p>
+                <div style="text-align: center;" *ngIf="imageConverted">
+                  <img [src]="imageConverted" alt="Preview Image" width="200px" height="100px">
+                </div>
+                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p> -->
               </div>
             </div>
             <div fxFlex="1"></div>
             <div fxFlex="20">
               <div fxLayout="row" class="px-24">
-                <mat-form-field fxFlex class="is-light form-primary">
-                  <input matInput type="text" placeholder="Header" [formControl]="preview_header"
-                    name="preview_header">
-                </mat-form-field>
+                <p style="text-align: center;font-weight: bold;font-style: italic;">PREVIEW</p>
               </div>
             </div>
           </div>
