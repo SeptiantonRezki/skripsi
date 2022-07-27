@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Config } from 'app/classes/config';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 
@@ -33,6 +34,8 @@ export class LotteryCreateComponent implements OnInit {
   public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterSGTP: FormControl = new FormControl();
   public filteredSGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+
+  public options: Object = { ...Config.FROALA_CONFIG, placeholderText: "" };
 
 
   constructor(
