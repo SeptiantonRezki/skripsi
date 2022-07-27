@@ -173,6 +173,105 @@
           </div>
         </mat-tab>
         <mat-tab label="Pengaturan Mekanisme">
+          <div fxLayout="row" class="px-24">
+            <mat-form-field fxFlex class="is-light form-primary" fxFlex="49">
+              <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
+                name="name">
+            </mat-form-field>
+            <div fxFlex="1"></div>
+            <mat-form-field fxFlex class="is-light form-primary" fxFlex="50">
+              <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
+                name="name">
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
+            <div fxLayout="column" fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
+              <span class="opsi-type" style="font-weight: bold;">Pembatasan Produk & Category</span>
+              <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="100">
+                  <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
+                    style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
+                </div>
+              </div>
+              <mat-form-field fxFlex="100" *ngIf="formSpin.get('limit_by_product').value" class="mt-12">
+                <mat-chip-list #chipList aria-label="Product List">
+                  <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                    (removed)="remove(product)">
+                    {{product.name}}
+                    <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                  </mat-chip>
+                  <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                    (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                  <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                    (onSelectionChange)="getProductObj($event, item)">
+                    {{item.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" *ngIf="!formSpin.get('limit_by_product').value">
+                <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
+                  <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1"></div>
+            <div fxLayout="column"  fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
+              <span class="opsi-type" style="font-weight: bold;">EXCLUDE</span>
+              <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="100">
+                  <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
+                    style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
+                </div>
+              </div>
+              <mat-form-field fxFlex="100" *ngIf="formSpin.get('limit_by_product').value" class="mt-12">
+                <mat-chip-list #chipList aria-label="Product List">
+                  <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                    (removed)="remove(product)">
+                    {{product.name}}
+                    <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                  </mat-chip>
+                  <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                    (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                  <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                    (onSelectionChange)="getProductObj($event, item)">
+                    {{item.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" *ngIf="!formSpin.get('limit_by_product').value">
+                <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100">
+                <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
+                  <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="1"></div>
+            <div fxLayout="row" fxFlex="15" class="px-24">
+              <mat-form-field fxFlex class="is-light form-primary" fxFlex="100">
+                <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="name"
+                  name="name">
+              </mat-form-field>
+            </div>
+          </div>
         </mat-tab>
         <mat-tab label="Preview">
           <div fxLayout="row" fxFlex="100">
