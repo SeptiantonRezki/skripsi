@@ -13,10 +13,10 @@
         <mat-tab label="Undian">
           <div class="ayo-middle py-24" fxLayout="column">
             <form autocomplete="off" [formGroup]="formSpin" fxLayout="row" fxLayoutGap="16px">
-              <div fxFlex="50%">
+              <div fxFlex="70%">
                 <div fxLayout="row" class="px-24">
                   <mat-form-field fxFlex class="is-light form-primary">
-                    <input matInput type="text" placeholder="Nama Program" formControlName="name"
+                    <input matInput type="text" placeholder="Nama Program Kupon Undian" formControlName="name"
                       name="name">
                     <!-- <mat-error
                       *ngIf="formSpin.controls['name'].hasError('required') && formSpin.controls['name'].touched">
@@ -24,47 +24,79 @@
                     </mat-error> -->
                   </mat-form-field>
                 </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="{{'dte.group_trade_program.text1' | translate}}"
-                      formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)"
-                    >
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error>
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="number" placeholder="Jumlah Koin yang dibutuhkan per Kupon" formControlName="name"
+                      name="name">
                   </mat-form-field>
                 </div>
-                <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                  <mat-form-field fxFlex="50%" class="is-light form-primary">
-                    <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
-                      placeholder="Tanggal Mulai">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="35%" class="is-light form-primary">
+                    <input matInput formControlName="start_date" [min]="minDateFrom" (focus)="startDate.open()"
+                      [matDatepicker]="startDate" placeholder="Tanggal Awal Penukaran Kupon Undian" (dateChange)="setMinEndDate()">
                     <mat-datepicker-toggle matSuffix [for]="startDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
                     <mat-datepicker #startDate></mat-datepicker>
-                    <mat-error
-                      *ngIf="formSpin.controls['start_date'].hasError('required') && formSpin.controls['start_date'].touched">
+                    <!-- <mat-error
+                      *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
                       {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error>
+                    </mat-error> -->
                   </mat-form-field>
-  
-                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+      
+                  <mat-form-field fxFlex="35%" class="is-light form-primary">
                     <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
-                      placeholder="Tanggal Berakhir">
+                      placeholder="Tanggal Akhir Penukaran Kupon Undian" [min]="minDate" (dateChange)="setMinExpireDate()">
                     <mat-datepicker-toggle matSuffix [for]="endDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
-                    <mat-error
-                      *ngIf="formSpin.controls['start_date'].hasError('required') && formSpin.controls['start_date'].touched">
+                    <!-- <mat-error
+                      *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
                       {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error>
+                    </mat-error> -->
+                  </mat-form-field>
+                  <mat-form-field fxFlex="35%" class="is-light form-primary">
+                    <input matInput formControlName="winning_date" (focus)="winningDate.open()" [matDatepicker]="winningDate"
+                      placeholder="Tanggal Pengumuman Pemenang" [min]="minDate" (dateChange)="setMinExpireDate()">
+                    <mat-datepicker-toggle matSuffix [for]="winningDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #winningDate></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
+                      <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select> -->
+                    <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lottery-create',
@@ -23,6 +24,15 @@ export class LotteryCreateComponent implements OnInit {
   validComboDrag: boolean;
   imageConverted: any;
   preview_header: FormControl = new FormControl("");
+
+  statusTP: any[] = [{ name: this.translate.instant('dte.trade_program.text6'), value: 'publish' }, { name: this.translate.instant('dte.trade_program.text7'), value: 'unpublish' }]
+
+  private _onDestroy = new Subject<void>();
+  filteredGTpOptions: Observable<string[]>;
+  public filterGTP: FormControl = new FormControl();
+  public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterSGTP: FormControl = new FormControl();
+  public filteredSGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
 
   constructor(
