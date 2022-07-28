@@ -61,7 +61,7 @@ export class RetailerCreateComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
-    if(this.dataService.getDecryptedProfile().country == 'KH'){
+    if(this.dataService.getDecryptedProfile().country == 'PH'){
   this.listIC = [
     { name: "NON-SRC", value: "NON-SRC" },
     { name: "SRC", value: "SRC" },
