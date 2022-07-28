@@ -378,7 +378,7 @@ export class RetailerCreateComponent {
 
       let icValue = this.verticalStepperStep4.get("InternalClassification").value;
 
-      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP", "ISR"];
 
       let body = {
         name: this.verticalStepperStep1.get("name").value,
