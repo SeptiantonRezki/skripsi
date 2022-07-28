@@ -7,13 +7,15 @@
       <mat-checkbox id="nonCoinReward" [formControl]="non_coin_reward" name="non_coin_reward" (change)="selectChange($event)">
         Reward Hadiah (Non Coin)
       </mat-checkbox>
-      <div>
-        <mat-form-field style="width: 100%" *ngIf="form.value.non_coin_reward">
-          <input id="rewardDescription" matInput type="text" maxlength="20" formControlName="reward_description" placeholder="Keterangan Reward" (change)="changeRewardDesc($event)" />
-        </mat-form-field>
-        <div class="mat-error" style="font-size: 14px; margin-top: -10px;" *ngIf="isRewardError">
-          Keterangan harus diisi
-        </div>
+      <mat-checkbox id="auto-submit" [formControl]="auto_submit" name="auto_submit">Auto Submit</mat-checkbox>
+    </div>
+
+    <div style="width: 50%" *ngIf="form.value.non_coin_reward">
+      <mat-form-field style="width: 100%">
+        <input id="rewardDescription" matInput type="text" maxlength="20" formControlName="reward_description" placeholder="Keterangan Reward" (change)="changeRewardDesc($event)" />
+      </mat-form-field>
+      <div class="mat-error" style="font-size: 14px; margin-top: -10px;" *ngIf="isRewardError">
+        Keterangan harus diisi
       </div>
     </div>
 
@@ -77,6 +79,16 @@
 
       <mat-form-field style="width: 100%">
         <input id="coinVerification" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification" placeholder="Coin Verification" />
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="form.value.verifikasi">
+      <mat-form-field style="width: 100%">
+        <input id="xpSubmission" matInput type="text" (keypress)="numberOnly($event)" formControlName="xp_submission" placeholder="XP Submission" />
+      </mat-form-field>
+
+      <mat-form-field style="width: 100%">
+        <input id="xpVerification" matInput type="text" (keypress)="numberOnly($event)" formControlName="xp_verification" placeholder="XP Verification" />
       </mat-form-field>
     </div>
 
