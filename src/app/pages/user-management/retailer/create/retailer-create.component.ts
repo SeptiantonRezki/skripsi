@@ -45,8 +45,7 @@ export class RetailerCreateComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "KA", value: "KA"},
     { name: "Official Store", value: "Official Store"},
-    { name: "RRP", value: "RRP"},
-    { name: "ISR", value: "ISR"}
+    { name: "RRP", value: "RRP"}
   ];
   country_phone: string;
 
@@ -62,6 +61,19 @@ export class RetailerCreateComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.submitting = false;
     this.areaFromLogin = this.dataService.getDecryptedProfile()['area_type'];
+    if(this.dataService.getDecryptedProfile().country == 'KH'){
+  this.listIC = [
+    { name: "NON-SRC", value: "NON-SRC" },
+    { name: "SRC", value: "SRC" },
+    { name: "GT", value: "GT" },
+    { name: "IMO", value: "IMO" },
+    { name: "LAMP/HOP", value: "LAMP/HOP" },
+    { name: "KA", value: "KA"},
+    { name: "Official Store", value: "Official Store"},
+    { name: "RRP", value: "RRP"},
+    { name: "ISR", value: "ISR"}
+  ]
+    }
 
     this.verticalStepperStep1Errors = {
       name: {},
@@ -111,7 +123,6 @@ export class RetailerCreateComponent {
 
   ngOnInit() {
     let regex = new RegExp(/[0-9]/g);
-
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
       address: ["", Validators.required],
@@ -353,7 +364,7 @@ export class RetailerCreateComponent {
   }
 
   classificationSelectionChange(event) {
-    if (event.value === 'NON-SRC') {
+    if (event.value === 'NON-SRC' || event.value === 'ISR') {
       this.verticalStepperStep1.controls['business_code'].setValue("");
       this.verticalStepperStep1.controls['business_code'].disable();
     } else {
