@@ -11,6 +11,10 @@ import { AudienceService } from 'app/services/dte/audience.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { NotificationService } from 'app/services/notification.service';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { DialogService } from 'app/services/dialog.service';
+import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-spin-the-wheel-create',
@@ -112,7 +116,10 @@ export class SpinTheWheelCreateComponent implements OnInit {
     private audienceService: AudienceService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialogService: DialogService,
+    private spinTheWheelService: SpinTheWheelService,
+    private router: Router
   ) {
     this.onLoad = true
 
@@ -718,6 +725,35 @@ export class SpinTheWheelCreateComponent implements OnInit {
       console.log('err', err);
       this.dataService.showLoading(false);
     });
+  }
+
+  submit() {
+    if (this.formSpin.valid && this.formGeo.valid) {
+      let body = {
+        name: this.formSpin.get("name").value,
+        trade_creator_id: this.formSpin.get("trade_creator_id").value,
+        start_date: this.formSpin.get("start_date").value,
+        end_date: this.formSpin.get("end_date").value,
+        status: "unpublish",
+        type: this.isPopulation ? 'population' : 'fixed',
+        classification: this.formGeo.get("classification").value,
+        zone: this.formGeo.get("division").value,
+        region: this.formGeo.get("region").value,
+        area: this.formGeo.get("area").value,
+      }
+
+      this.dataService.showLoading(true);
+      this.spinTheWheelService.create(body).subscribe(res => {
+        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dataService.showLoading(false);
+        this.router.navigate(['dte', 'spin-the-wheel'])
+      })
+    } else {
+      commonFormValidator.validateAllFields(this.formSpin);
+      commonFormValidator.validateAllFields(this.formGeo);
+
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
+    }
   }
 
 }
