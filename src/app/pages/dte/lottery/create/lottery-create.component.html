@@ -12,22 +12,26 @@
       <mat-tab-group>
         <mat-tab label="Undian">
           <div class="ayo-middle py-24" fxLayout="column">
-            <form autocomplete="off" [formGroup]="formSpin" fxLayout="row" fxLayoutGap="16px">
+            <form autocomplete="off" [formGroup]="formUndian" fxLayout="row" fxLayoutGap="16px">
               <div fxFlex="70%">
                 <div fxLayout="row" class="px-24">
                   <mat-form-field fxFlex class="is-light form-primary">
                     <input matInput type="text" placeholder="Nama Program Kupon Undian" formControlName="name"
                       name="name">
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['name'].hasError('required') && formSpin.controls['name'].touched">
-                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
+                    <mat-error
+                      *ngIf="formUndian.controls['name'].hasError('required') && formUndian.controls['name'].touched">
+                      Nama Program Kupon Undian {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="row" class="px-24">
                   <mat-form-field fxFlex class="is-light form-primary">
-                    <input matInput type="number" placeholder="Jumlah Koin yang dibutuhkan per Kupon" formControlName="name"
-                      name="name">
+                    <input matInput type="number" placeholder="Jumlah Koin yang dibutuhkan per Kupon" formControlName="coin"
+                      name="coin">
+                      <mat-error
+                      *ngIf="formUndian.controls['coin'].hasError('required') && formUndian.controls['coin'].touched">
+                      Koin {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
@@ -38,10 +42,10 @@
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
                     <mat-datepicker #startDate></mat-datepicker>
-                    <!-- <mat-error
-                      *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
-                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
+                    <mat-error
+                      *ngIf="formUndian.controls['start_date'].hasError('required') && formUndian.controls['start_date'].touched">
+                      Tanggal Awal Penukaran Kupon Undian {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
                   </mat-form-field>
       
                   <mat-form-field fxFlex="35%" class="is-light form-primary">
@@ -51,22 +55,27 @@
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
                     <mat-datepicker #endDate></mat-datepicker>
-                    <!-- <mat-error
-                      *ngIf="formTradeProgram.controls['start_date'].hasError('required') && formTradeProgram.controls['start_date'].touched">
-                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
+                    <mat-error
+                      *ngIf="formUndian.controls['end_date'].hasError('required') && formUndian.controls['end_date'].touched">
+                      Tanggal Akhir Penukaran Kupon Undian {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
                   </mat-form-field>
                   <mat-form-field fxFlex="35%" class="is-light form-primary">
-                    <input matInput formControlName="winning_date" (focus)="winningDate.open()" [matDatepicker]="winningDate"
+                    <input matInput formControlName="announcement_date" (focus)="announcmentDate.open()" [matDatepicker]="announcmentDate"
                       placeholder="Tanggal Pengumuman Pemenang" [min]="minDate" (dateChange)="setMinExpireDate()">
-                    <mat-datepicker-toggle matSuffix [for]="winningDate">
+                    <mat-datepicker-toggle matSuffix [for]="announcmentDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
-                    <mat-datepicker #winningDate></mat-datepicker>
+                    <mat-datepicker #announcmentDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formUndian.controls['announcement_date'].hasError('required') && formUndian.controls['announcement_date'].touched">
+                      Tanggal Pengumuman Pemenang {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
-                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
                     <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
                       <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
                     </mat-select> -->
@@ -78,6 +87,36 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+                  <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                    {{ls.locale.global.button.save}}
+                  </button>
+                </div>
+
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary"> -->
+                    <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
+                      <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select> -->
+                    <!-- <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
                   <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
                     <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
                       <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
@@ -87,8 +126,8 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field> -->
-                </div>
-                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                <!-- </div> -->
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
                   <mat-form-field fxFlex="100" class="is-light form-primary">
                     <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
                       <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
@@ -99,176 +138,19 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
+                 -->
               </div>
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Audience">
+        <mat-tab label="Audience" [disabled]="true">
           <div class="ayo-middle py-24" fxLayout="column">
-            <form autocomplete="off" fxLayout="row" fxLayoutGap="16px">
-              <div fxFlex="50%">
-                <div fxLayout="row">
-                  <mat-radio-group>
-                    <mat-radio-button
-                      class="radio-button pr-48"
-                    >
-                      Population Blast
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Zone"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Regional"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Area"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxFlex fxLayout="row" class="px-24">
-                  <mat-form-field fxFlex="100%">
-                    <mat-select
-                      placeholder="Retail Classification"
-                      >
-                      <!-- formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)" -->
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <!-- <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error> -->
-                  </mat-form-field>
-                </div>
-                <div fxLayout="row">
-                  <mat-radio-group>
-                    <mat-radio-button
-                      class="radio-button pr-48"
-                    >
-                      Fixed Panel
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
-                <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
-                  <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-                    Check
-                  </button>
-                </div>
-              </div>
-            </form>
+           
           </div>
         </mat-tab>
-        <mat-tab label="Preview">
-          <div fxLayout="row" fxFlex="100" style="margin-bottom: 15px;">
-            <div fxFlex="75" class="px-24">
-              <div class="grey-box" fxFlex="30">
-                <p style="font-style: italic;font-weight: bold;">Visual Header Kupon Undian</p>
-                <div class="px-24">
-                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-                    accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                    (fileChange)="changeImage($event)">
-                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-                      <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
-                      <br>
-                      <span matPrefix>Tarik Gambar Kesini</span>
-                    </div>
-                  </div>
-                </div>
-                <!-- <p style="font-weight: bold;text-align: center;">Preview</p>
-                <div style="text-align: center;" *ngIf="imageConverted">
-                  <img [src]="imageConverted" alt="Preview Image" width="200px" height="100px">
-                </div>
-                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p> -->
-              </div>
-
-              <div fxFlex="100">
-                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                  <div fxLayout="column" fxFlex="45">
-                    <p style="font-style: italic;font-weight: bold;">Deskripsi Kupon Undian</p>
-                    <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-                      <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
-                    </mat-form-field>
-                  </div>
-                  <div fxFlex="1"> </div>
-                  <div fxLayout="column" fxFlex="45">
-                    <div fxLayout="row" fxFlex="100">
-                      <p fxFlex="60" style="font-style: italic;font-weight: bold;">Deskripsi ATC</p>
-                      <mat-checkbox class="mt-4 ml-4 mb-4">
-                      Aktifkan</mat-checkbox>
-                    </div>
-                    <mat-form-field fxFlex="100" class="descInput exportTextarea desc-template" floatLabel="never">
-                      <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grey-box" fxFlex="30">
-                <p style="font-style: italic;font-weight: bold;">Visual List Undian Pemenang Sebelumnya</p>
-                <div class="px-24">
-                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-                    accept="image/*" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                    (fileChange)="changeImage($event)">
-                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-                      <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
-                      <br>
-                      <span matPrefix>Tarik Gambar Kesini</span>
-                    </div>
-                  </div>
-                </div>
-                <!-- <p style="font-weight: bold;text-align: center;">Preview</p>
-                <div style="text-align: center;" *ngIf="imageConverted">
-                  <img [src]="imageConverted" alt="Preview Image" width="200px" height="100px">
-                </div>
-                <p style="font-style: italic;font-weight: bold;text-align: center;">Floating Icon AYO SRC Toko Home Page</p> -->
-              </div>
-            </div>
-            <div fxFlex="1"></div>
-            <div fxFlex="20">
-              <div fxLayout="row" class="px-24">
-                <p style="text-align: center;font-weight: bold;font-style: italic;">PREVIEW</p>
-              </div>
-            </div>
+        <mat-tab label="Preview" [disabled]="true">
+          <div class="ayo-middle py-24" fxLayout="column">
+            
           </div>
         </mat-tab>
       </mat-tab-group>

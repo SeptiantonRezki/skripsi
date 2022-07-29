@@ -764,6 +764,43 @@ const routes: Routes = [
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
+  
+
+  // {
+  //   path: "audience",
+  //   component: AudienceIndexComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.index
+  //   },
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/create",
+  //   component: AudienceCreateComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.create
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/edit",
+  //   component: AudienceEditComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.edit
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+
   {
     path: 'spin-the-wheel',
     component: SpinTheWheelComponent,
@@ -790,7 +827,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: 'lottery/edit/:id',
+    path: 'lottery/edit',
     component: LotteryEditComponent,
     // canActivate: [PageGuard]
   },
