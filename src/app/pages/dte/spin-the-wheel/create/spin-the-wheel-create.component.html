@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header contentTitle="Buat Spin The Wheel">
-    <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','spin-the-wheel']" mat-raised-button type="button">
+    <button id="btn-create-trade" style="width: 170px" (click)="submit()" mat-raised-button type="button">
       <mat-icon>save</mat-icon> {{'global.button.save' | translate}}
     </button>
   </page-content-header>
