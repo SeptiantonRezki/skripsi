@@ -227,7 +227,7 @@
             </div>
   
             <div class="p-0">
-              <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
                 fxLayoutAlign="end center" class="p-16 export">
                 <a #downloadLink></a>
                 <button mat-raised-button type="button" class="is-danger" (click)="import()">
@@ -236,7 +236,7 @@
                 <button mat-raised-button type="button" class="is-danger" (click)="export()">
                   <mat-icon>arrow_upward</mat-icon> Export XLS
                 </button>
-              </div> -->
+              </div>
               <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
               <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
                 [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
