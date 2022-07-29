@@ -166,6 +166,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
       division: [""],
       region: [""],
       area: [""],
+      classification: [""]
     });
 
     this.formFilter = this.formBuilder.group({
