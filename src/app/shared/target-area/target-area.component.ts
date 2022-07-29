@@ -123,6 +123,7 @@ export class TargetAreaComponent implements OnInit {
       division: [""],
       region: [""],
       area: [""],
+      classification: [""]
     });
   }
 

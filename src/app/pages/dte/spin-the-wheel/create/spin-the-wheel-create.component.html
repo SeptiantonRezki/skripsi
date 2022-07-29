@@ -27,17 +27,22 @@
                 <div fxFlex fxLayout="row" class="px-24">
                   <mat-form-field fxFlex="100%">
                     <mat-select
-                      placeholder="{{'dte.group_trade_program.text1' | translate}}"
-                      formControlName="group_trade_id"
-                      multiple
-                      (selectionChange)="groupChosen($event)"
-                    >
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                    </mat-select>
-                    <mat-error
-                      *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                      {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error>
+                  formControlName="trade_creator_id"
+                  placeholder="{{'dte.trade_program.text3' | translate}}"
+                  #singleSelect
+                >
+                  <ngx-mat-select-search
+                    [formControl]="filterTradeProgram"
+                    placeholderLabel="Pilih Trade Program"
+                    noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                  ></ngx-mat-select-search>
+                  <mat-option
+                    *ngFor="let item of filteredTradeProgram | async"
+                    [value]="item.id"
+                  >
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
                   </mat-form-field>
                 </div>
                 <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -73,94 +78,68 @@
         </mat-tab>
         <mat-tab label="Audience">
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
-              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45">
+              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row">
-                    <mat-radio-group>
                       <mat-radio-button
                         class="radio-button pr-48"
+                        [checked]="isPopulation"
+                        (change)="changeBlastType('population')"
                       >
                         Population Blast
                       </mat-radio-button>
-                    </mat-radio-group>
                   </div>
                   <div fxFlex fxLayout="row" class="px-24">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                        placeholder="Zone"
-                        >
-                        <!-- formControlName="group_trade_id"
-                        multiple
-                        (selectionChange)="groupChosen($event)" -->
-                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                      </mat-select>
-                      <!-- <mat-error
-                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                      </mat-error> -->
+                      placeholder="{{'global.area.zone' | translate}}"
+                      formControlName="division"
+                      (selectionChange)="getLevel('division')"
+                      multiple
+                    >
+                      <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                        item.code
+                      }}</mat-option>
+                    </mat-select>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-24">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                        placeholder="Regional"
-                        >
-                        <!-- formControlName="group_trade_id"
+                        placeholder="{{'global.area.regional' | translate}}"
+                        formControlName="region"
+                        (selectionChange)="getLevel('region')"
                         multiple
-                        (selectionChange)="groupChosen($event)" -->
-                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      >
+                        <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
                       </mat-select>
-                      <!-- <mat-error
-                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                      </mat-error> -->
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-24">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                        placeholder="Area"
-                        >
-                        <!-- formControlName="group_trade_id"
+                        placeholder="{{'global.area.area' | translate}}"
+                        formControlName="area"
                         multiple
-                        (selectionChange)="groupChosen($event)" -->
-                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                        (selectionChange)="getLevel('area')"
+                      >
+                        <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
                       </mat-select>
-                      <!-- <mat-error
-                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                      </mat-error> -->
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-24">
                     <mat-form-field fxFlex="100%">
                       <mat-select
                         placeholder="Retail Classification"
+                        formControlName="classification"
                         >
-                        <!-- formControlName="group_trade_id"
-                        multiple
-                        (selectionChange)="groupChosen($event)" -->
-                        <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.id">{{ gtp.name }}</mat-option>
                       </mat-select>
-                      <!-- <mat-error
-                        *ngIf="formSpin.controls['group_trade_id'].hasError('required') && formSpin.controls['group_trade_id'].touched">
-                        {{'dte.group_trade_program.text1' | translate}} {{'global.messages.mandatory_text' | translate}}
-                      </mat-error> -->
                     </mat-form-field>
-                  </div>
-                  <div fxLayout="row">
-                    <mat-radio-group>
-                      <mat-radio-button
-                        class="radio-button pr-48"
-                      >
-                        Fixed Panel
-                      </mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                  <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
-                    <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-                      Check
-                    </button>
                   </div>
                 </div>
               </form>
@@ -170,6 +149,139 @@
                   <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
                 </div>
             </div>
+          </div>
+          <div
+          fxLayout="column"
+          >
+          <mat-radio-button
+              class="radio-button pr-48"
+              [checked]="!isPopulation"
+              (change)="changeBlastType('fixed')"
+            >
+              Fixed Panel
+            </mat-radio-button>
+          <div fxLayout="column">
+            <div [formGroup]="formFilter">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Zona' :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Regional'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Area'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
+                      === 'all' ?
+                      'Semua
+                      Salespoint'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      District'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Territori'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="p-0">
+              <!-- <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+                fxLayoutAlign="end center" class="p-16 export">
+                <a #downloadLink></a>
+                <button mat-raised-button type="button" class="is-danger" (click)="import()">
+                  <mat-icon>arrow_downward</mat-icon> Import XLS
+                </button>
+                <button mat-raised-button type="button" class="is-danger" (click)="export()">
+                  <mat-icon>arrow_upward</mat-icon> Export XLS
+                </button>
+              </div> -->
+              <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+              <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+                [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+                [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+                [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+                [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
+                [selectCheck]='selectCheck'>
+  
+                <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+                  <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                    let-selectFn="selectFn">
+                    <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                  </ng-template> -->
+  
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                    let-onCheckboxChangeFn="onCheckboxChangeFn">
+                    <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
+                    </mat-checkbox>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+                <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
+                <ngx-datatable-column name="Code" prop="code" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.code ? row.code : '-'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Owner" prop="owner">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.owner ? row.owner : '-'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Type" prop="type">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.type.toUpperCase()}}
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+            </div>
+        </div>
+          </div>
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
+              Check
+            </button>
           </div>
         </mat-tab>
         <mat-tab label="Pengaturan Mekanisme">

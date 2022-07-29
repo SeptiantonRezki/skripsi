@@ -1087,6 +1087,9 @@ export class Endpoint {
         // get_translation: `https://d1fcivyo6xvcac.cloudfront.net/lang/bahasa-indonesia/principal/languages.json`,
 
       },
+      spin_the_wheel: {
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
