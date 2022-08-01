@@ -146,10 +146,10 @@
         <mat-tab label="Audience" [disabled]="true">
           <div class="ayo-middle py-24" fxLayout="column">
             <div fxLayout="column" fxLayoutGap="24px">
-              <!-- <form [formGroup]="formAudience" autocomplete="off"> -->
+              <form [formGroup]="formAudience" autocomplete="off">
                 <div fxLayout="row">
                   <div class="p-24" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
-                    <!-- <div fxLayout="column">
+                    <div fxLayout="column">
                       <mat-form-field class="is-light form-primary">
                         <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}" />
                         <mat-error>
@@ -236,9 +236,9 @@
                           </mat-error>
                         </mat-form-field>
                       </form>
-                    </div> -->
+                    </div>
       
-                    <!-- <div fxLayout="column">
+                    <div fxLayout="column">
                       <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)" [disabled]="isDetail">
                         <mat-radio-button value="fixed-panel">
                           {{'dte.audience.fixed_panel' | translate}}
@@ -266,10 +266,10 @@
                           <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
                         </button>
                       </div>
-                    </div> -->
+                    </div>
                   </div>
       
-                  <!-- <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
+                  <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
                     <mat-card class="text-center cards" [ngClass]="{clickable: isDetail}" (click)="showPanelBlast()">
                       <mat-card-title class="cards__title">
                         {{ formAudience.get("panel_count").value }}
@@ -282,11 +282,11 @@
                       </mat-card-title>
                       <mat-card-subtitle style="color: white;">{{'dte.audience.estimated_success' | translate}}</mat-card-subtitle>
                     </mat-card>
-                  </div> -->
+                  </div>
                 </div>
-              <!-- </form> -->
+              </form>
       
-              <!-- <div class="p-24" fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+              <div class="p-24" fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
                 <button
                   id="btn-check"
                   mat-raised-button
@@ -308,7 +308,7 @@
                 >
                   {{ls.locale.global.button.save}}
                 </button>
-              </div> -->
+              </div>
             </div>
           </div>
         </mat-tab>
