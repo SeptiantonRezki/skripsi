@@ -13,6 +13,11 @@ export class SpinTheWheelService extends BaseService {
     super(http);
   }
 
+  get(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get');
+    return this.getApi(url, queryParams);
+  }
+
   create(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);

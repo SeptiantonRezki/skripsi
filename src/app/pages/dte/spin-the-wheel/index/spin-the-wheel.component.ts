@@ -10,6 +10,7 @@ import { FormGroup, FormBuilder } from '../../../../../../node_modules/@angular/
 import { PagesName } from 'app/classes/pages-name';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from "@ngx-translate/core";
+import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 
 @Component({
   selector: 'app-spin-the-wheel',
@@ -57,10 +58,93 @@ export class SpinTheWheelComponent implements OnInit {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private spinService: SpinTheWheelService,
   ) { }
 
   ngOnInit() {
+    this.getSpinList();
+  }
+
+  getSpinList() {
+    const page = this.dataService.getFromStorage("page");
+    const sort_type = this.dataService.getFromStorage("sort_type");
+    const sort = this.dataService.getFromStorage("sort");
+
+    this.pagination.page = page;
+    this.pagination.sort_type = sort_type;
+    this.pagination.sort = sort;
+
+    this.offsetPagination = page ? (page - 1) : 0;
+
+    this.spinService.get(this.pagination).subscribe(
+      res => {
+        Page.renderPagination(this.pagination, res.data);
+        this.rows = res.data ? res.data.data : [];
+
+        this.onLoad = false;
+        this.loadingIndicator = false;
+      },
+      err => {
+        console.error(err);
+        this.onLoad = false;
+      }
+    );
+  }
+
+  setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
+    this.loadingIndicator = true;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.spinService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  onSort(event) {
+    this.pagination.sort = event.column.prop;
+    this.pagination.sort_type = event.newValue;
+    this.pagination.page = 1;
+    this.loadingIndicator = true;
+
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.spinService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    });
+  }
+
+  updateFilter(string) {
+    this.loadingIndicator = true;
+    this.pagination.search = string;
+
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
+
+    this.spinService.get(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res.data);
+      this.rows = res.data ? res.data.data : [];
+      this.loadingIndicator = false;
+    });
   }
 
 }
