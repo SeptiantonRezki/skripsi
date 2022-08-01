@@ -17,7 +17,7 @@ import { DataService } from 'app/services/data.service';
 import { merge } from "rxjs/observable/merge";
 import { DialogPanelBlastComponent } from "../dialog/dialog-panel-blast/dialog-panel-blast.component";
 import { DialogProcessComponent } from "../dialog/dialog-process/dialog-process.component";
-import { ImportAudiencePersonalizeComponent } from "../import/personalize/import-audience-personalize.component";
+import { ImportAudiencePersonalizeComponent } from "../../audience/import/personalize/import-audience-personalize.component";
 import { GeotreeService } from "app/services/geotree.service";
 
 @Component({
