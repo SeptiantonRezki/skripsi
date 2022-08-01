@@ -1086,7 +1086,7 @@ export class Endpoint {
 
       },
       spin_the_wheel: {
-        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/store`,
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel`
       },
     };
