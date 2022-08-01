@@ -76,8 +76,8 @@
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Audience">
-          <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+        <mat-tab label="Audience" disabled="true">
+          <!-- <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row">
@@ -149,8 +149,8 @@
                   <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
                 </div>
             </div>
-          </div>
-          <div
+          </div> -->
+          <!-- <div
           fxLayout="column"
           >
           <mat-radio-button
@@ -246,10 +246,13 @@
                 [selectCheck]='selectCheck'>
   
                 <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-                  <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                  
+                    dihapus .....
+                    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                     let-selectFn="selectFn">
                     <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-                  </ng-template> -->
+                  </ng-template> 
+                  .....
   
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
                     let-onCheckboxChangeFn="onCheckboxChangeFn">
@@ -277,15 +280,15 @@
               </ngx-datatable>
             </div>
         </div>
-          </div>
-          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
+          </div> -->
+          <!-- <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
               Check
             </button>
-          </div>
+          </div> -->
         </mat-tab>
-        <mat-tab label="Pengaturan Mekanisme">
-          <div fxLayout="row" class="px-24">
+        <mat-tab label="Pengaturan Mekanisme"  disabled="true">
+          <!-- <div fxLayout="row" class="px-24">
             <mat-form-field fxFlex class="is-light form-primary" fxFlex="49">
               <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
                 name="name">
@@ -295,8 +298,8 @@
               <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
                 name="name">
             </mat-form-field>
-          </div>
-          <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
+          </div> -->
+          <!-- <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
             <div fxLayout="column" fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
               <span class="opsi-type" style="font-weight: bold;">Pembatasan Produk & Category</span>
               <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -383,8 +386,8 @@
                   name="name">
               </mat-form-field>
             </div>
-          </div>
-          <div fxLayout="column" fxFlex="80">
+          </div> -->
+          <!-- <div fxLayout="column" fxFlex="80">
             <div fxLayout="row" fxFlex="100" class="px-24">
               <p fxFlex="15">Limit Spin</p>
               <div fxFlex="1"></div>
@@ -542,9 +545,9 @@
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </mat-tab>
-        <mat-tab label="Preview">
+        <mat-tab label="Preview"  disabled="true">
           <div fxLayout="row" fxFlex="100">
             <div fxFlex="30">
               <div class="grey-box">
