@@ -754,7 +754,7 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'xp/create/:tab',
+    path: 'xp/create/:id',
     component: XpComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
