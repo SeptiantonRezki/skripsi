@@ -23,6 +23,7 @@ export class LotteryEditComponent implements OnInit {
   detailFormUndian: any;
 
   formUndian: FormGroup;
+  
   // formAudience: FormGroup;
   // formPreview: FormGroup;
   onLoad: boolean;
@@ -77,15 +78,16 @@ export class LotteryEditComponent implements OnInit {
       end_date: [new Date()],
       announcement_date:  [new Date()],
     })
-
+    
+    console.log('====', this.detailFormUndian.trade_creator_group_id.split(',').map(rs => Number(rs)));
     this.formUndian.setValue({
       name: this.detailFormUndian.name,
       coin: this.detailFormUndian.coin,
       start_date: this.detailFormUndian.start_date,
       end_date: this.detailFormUndian.end_date,
       announcement_date: this.detailFormUndian.announcement_date,
-      group_trade_program_id: parseInt(this.detailFormUndian.trade_creator_group_id, 10) ? parseInt(this.detailFormUndian.trade_creator_group_id, 10) : '',
-      sub_group_trade_program_id: parseInt(this.detailFormUndian.trade_creator_sub_group_id, 10) ? parseInt(this.detailFormUndian.trade_creator_sub_group_id, 10) : '',
+      group_trade_program_id: parseInt(this.detailFormUndian.trade_creator_group_id, 10) ? this.detailFormUndian.trade_creator_group_id.split(',').map(rs => Number(rs)) : '',
+      sub_group_trade_program_id: parseInt(this.detailFormUndian.trade_creator_sub_group_id, 10) ? this.detailFormUndian.trade_creator_sub_group_id.split(',').map(rs => Number(rs))  : '',
     })
     
     this.filterGTP.valueChanges
