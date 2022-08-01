@@ -152,8 +152,10 @@ export class SpinTheWheelCreateComponent implements OnInit {
     this.formSpin = this.formBuilder.group({
       name: ["", Validators.required],
       trade_creator_id: ["", Validators.required],
-      start_date: [new Date()],
-      end_date: [new Date()],
+      start_date: [new Date(), Validators.required],
+      start_time: ["00:00", Validators.required],
+      end_date: [new Date(), Validators.required],
+      end_time: ["00:00", Validators.required],
       limit_only: [""],
       limit_by_product: [false],
       limit_by_category: [false],
@@ -729,32 +731,47 @@ export class SpinTheWheelCreateComponent implements OnInit {
   }
 
   submit() {
-    if (this.formSpin.valid && this.formGeo.valid) {
+    if (
+      this.formSpin.valid 
+      // && this.formGeo.valid
+      ) {
       let body = {
         name: this.formSpin.get("name").value,
         trade_creator_id: this.formSpin.get("trade_creator_id").value,
-        start_date: this.formSpin.get("start_date").value,
-        end_date: this.formSpin.get("end_date").value,
-        status: "unpublish",
-        type: this.isPopulation ? 'population' : 'fixed',
-        classification: this.formGeo.get("classification").value,
-        zone: this.formGeo.get("division").value,
-        region: this.formGeo.get("region").value,
-        area: this.formGeo.get("area").value,
+        // start_date: this.convertDate(this.formSpin.get("start_date").value),
+        // end_date: this.convertDate(this.formSpin.get("end_date").value),
+        // status: "unpublish",
+        // type: this.isPopulation ? 'population' : 'fixed',
+        // classification: this.formGeo.get("classification").value,
+        // zone: this.formGeo.get("division").value,
+        // region: this.formGeo.get("region").value,
+        // area: this.formGeo.get("area").value,
       }
+
+      body['start_date'] = `${moment(this.formSpin.get('start_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('start_time').value}:00`;
+      body['end_date'] = `${moment(this.formSpin.get('end_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('end_time').value}:00`;
+
+      console.log(body);
 
       this.dataService.showLoading(true);
       this.spinTheWheelService.create(body).subscribe(res => {
-        this.dialogService.openSnackBar({ message: "Data berhasil disimpan" });
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
         this.router.navigate(['dte', 'spin-the-wheel'])
       })
     } else {
       commonFormValidator.validateAllFields(this.formSpin);
-      commonFormValidator.validateAllFields(this.formGeo);
+      // commonFormValidator.validateAllFields(this.formGeo);
 
       this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 
+  convertDate(param: Date) {
+    if (param) {
+      return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
+  }
 }
