@@ -79,7 +79,7 @@
                     <!-- <mat-select formControlName="group_trade_program_id" placeholder="Group Trade Program">
                       <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
                     </mat-select> -->
-                    <mat-select formControlName="group_trade_program_id" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                    <mat-select formControlName="group_trade_program_id" placeholder="{{'dte.group_trade_program.text1' | translate}}" multiple>
                       <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
                         noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                       <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
@@ -88,7 +88,7 @@
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <mat-select formControlName="sub_group_trade_program_id" placeholder="Sub Group Trade Program" #singleSelect>
+                    <mat-select formControlName="sub_group_trade_program_id" placeholder="Sub Group Trade Program" multiple>
                       <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
                         noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
                       <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
@@ -145,7 +145,169 @@
         </mat-tab>
         <mat-tab label="Audience" [disabled]="true">
           <div class="ayo-middle py-24" fxLayout="column">
-           
+            <form [formGroup]="formAudience" autocomplete="off">
+              <div fxLayout="row">
+                <div class="p-24" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+                  <!-- <div fxLayout="column">
+                    <mat-form-field class="is-light form-primary">
+                      <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}" />
+                      <mat-error>
+                        {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+      
+                    <mat-form-field class="is-light form-primary">
+                      <mat-select
+                        formControlName="mission_publication_id"
+                        placeholder="{{'dte.audience.select_publish_mission' | translate}}"
+                        #singleSelect
+                      >
+                        <ngx-mat-select-search
+                          [formControl]="filterPublishMisi"
+                          placeholderLabel="{{'global.label.search' | translate}}"
+                          noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                        ></ngx-mat-select-search> 
+                        <mat-option
+                          *ngFor="let item of filteredPublishMisi | async"
+                          [value]="item.id"
+                        >
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="formAudience.controls['mission_publication_id'].hasError('required') && formAudience.controls['mission_publication_id'].touched">
+                        {{'dte.audience.publish_mission' | translate}} {{'global.messages.mandatory_text' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+    
+                  <div fxLayout="column">
+                    <mat-radio-group class="mb-16" formControlName="audience_filter" (change)="handleAudienceFilter($event.value)">
+                      <mat-radio-button class="mr-24" *ngFor="let item of audienceFilter" [value]="item.value">
+                        {{ item.name }}
+                      </mat-radio-button>
+                    </mat-radio-group>
+    
+                    <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
+                      <mat-form-field class="is-light form-primary">
+                        <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+                          <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">
+                            {{ item.name === "all" ? "Semua Zona" : item.code }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field class="is-light form-primary">
+                        <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+                          <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">
+                            {{ item.name === "all" ? "Semua Regional" : item.code }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field class="is-light form-primary">
+                        <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+                          <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">
+                            {{ item.name === "all" ? "Semua Area" : item.code }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </form>
+                    <form [formGroup]="formFilterRetailer" fxLayout="column">
+                      <mat-form-field class="is-light form-primary">
+                        <mat-select placeholder="{{'dte.audience.text13' | translate}}" formControlName="retail_classification" multiple>
+                          <mat-option *ngFor="let item of retailClassification" [value]="item.value" (onSelectionChange)="handleClassification($event)">
+                            {{item.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
+                        <mat-select placeholder="{{'dte.audience.b2b_active' | translate}}" formControlName="b2b_active">
+                          <mat-option *ngFor="let item of b2bActiveList" [value]="item.value">
+                            {{item.name}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error>
+                          {{'dte.audience.b2b_active' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
+                        </mat-error>
+                      </mat-form-field>
+                      <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('audience_filter').value === 'recommended-panel'">
+                        <input matInput type="number" minlength="1" formControlName="total_required_panel" placeholder="{{'dte.audience.total_required_panel' | translate}}" />
+                        <mat-error>
+                          {{'dte.audience.total_required_panel' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
+                        </mat-error>
+                      </mat-form-field>
+                    </form>
+                  </div>
+    
+                  <!-- <div fxLayout="column">
+                    <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter($event.value)" [disabled]="isDetail">
+                      <mat-radio-button value="fixed-panel">
+                        {{'dte.audience.fixed_panel' | translate}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    <div fxLayout="row" fxLayoutGap="16px" *ngIf="formAudience.get('audience_filter').value === 'fixed-panel'">
+                      <div fxLayout="column">
+                        <button
+                          mat-raised-button
+                          type="button"
+                          class="is-danger"
+                          (click)="exportAudience()"
+                        >
+                          <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+                        </button>
+                        <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+                      </div>
+                      <button
+                        mat-raised-button
+                        type="button"
+                        class="is-danger"
+                        (click)="importAudience()"
+                        [disabled]="isDetail"
+                      >
+                        <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+                      </button>
+                    </div>
+                  </div> -->
+                </div>
+    
+                <!-- <div class="p-24" fxLayout="column" fxLayoutGap="24px" fxFlex>
+                  <mat-card class="text-center cards" [ngClass]="{clickable: isDetail}" (click)="showPanelBlast()">
+                    <mat-card-title class="cards__title">
+                      {{ formAudience.get("panel_count").value }}
+                    </mat-card-title>
+                    <mat-card-subtitle style="color: white;">{{'dte.audience.panel_blast' | translate}}</mat-card-subtitle>
+                  </mat-card>
+                  <mat-card class="text-center cards">
+                    <mat-card-title class="cards__title">
+                      {{ handleEstimate(formAudience.get("est_task_compliance").value) }}
+                    </mat-card-title>
+                    <mat-card-subtitle style="color: white;">{{'dte.audience.estimated_success' | translate}}</mat-card-subtitle>
+                  </mat-card>
+                </div> -->
+              </div>
+            </form>
+    
+            <!-- <div class="p-24" fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+              <button
+                id="btn-check"
+                mat-raised-button
+                type="button"
+                class="confirmation-button"
+                (click)="checkAudience()"
+                fxFlex="20"
+              >
+                {{'global.button.check' | translate}}
+              </button>
+              <button
+                id="btn-simpan"
+                mat-raised-button
+                type="button"
+                class="confirmation-button"
+                (click)="submit()"
+                fxFlex="20"
+                [disabled]="!isChecked"
+              >
+                {{ls.locale.global.button.save}}
+              </button>
+            </div> -->
           </div>
         </mat-tab>
         <mat-tab label="Preview" [disabled]="true">

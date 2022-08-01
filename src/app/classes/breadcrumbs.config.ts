@@ -1590,6 +1590,51 @@ export const brConfig = {
         }
       ]
     },
+    lottery: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Undian"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/lottery",
+          name: "Daftar Undian"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Undian"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/lottery",
+          name: "Daftar Undian"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Undian"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/lottery",
+          name: "Daftar Undian"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Undian"
+        }
+      ]
+    },
     scheduleProgram: {
       index: [
         {
@@ -3238,5 +3283,5 @@ export const brConfig = {
         name: "Language Setup"
       }
     ]
-  }
+  },
 };

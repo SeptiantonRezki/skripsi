@@ -789,16 +789,25 @@ const routes: Routes = [
   {
     path: 'lottery',
     component: LotteryComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.index
+    },
     // canActivate: [PageGuard]
   },
   {
     path: 'lottery/create',
     component: LotteryCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.create
+    },
     // canActivate: [PageGuard]
   },
   {
     path: 'lottery/edit',
     component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.edit
+    },
     // canActivate: [PageGuard]
   },
 ];
