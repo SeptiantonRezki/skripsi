@@ -1098,7 +1098,8 @@ export class Endpoint {
       spin_the_wheel: {
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/store`,
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel`,
-        check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/check-audience`
+        check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/check-audience`,
+        save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/save-audience`
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
