@@ -858,6 +858,58 @@ export class SpinTheWheelEditComponent implements OnInit {
       });
   }
 
+  saveAudience() {
+    let body = {};
+    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    if (this.isPopulation === true) {
+      body = {
+        task_spin_id: id,
+        audience_filter: 'population-blast',
+        // class_groups: this.formGeo.get('classification').value,
+        class_groups: this.formGeo.get('classification').value,
+        zones: this.formGeo.get('division').value,
+        regions: this.formGeo.get('region').value,
+        areas: this.formGeo.get('area').value
+      };
+    } else {
+      body = {
+        task_spin_id: id,
+        audience_filter: 'fixed-panel',
+        retailers: this.data_imported.map(item => item.id)
+      };
+    }
+
+    const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = "scrumboard-card-dialog";
+      dialogConfig.data = { password: "P@ssw0rd" };
+  
+      this.dialogRef = this.dialog.open(
+        DialogProcessComponent,
+        {...dialogConfig, width: '400px'}
+      );
+
+      const processCheck = this.spinTheWheelService.saveAudience(body).subscribe(
+        (res) => {
+          if (res.data) {
+            this.isChecked = true;
+            this.panelBlast = res.data.panel_count;
+          }
+          this.dialogRef.close();
+          this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
+        },
+        (err) => {
+          this.dialogRef.close();
+        }
+      );
+
+      this.dialogRef.afterClosed().subscribe(() => {
+        processCheck.unsubscribe();
+      });
+  }
+
   async exportAudience() {
     this.dataService.showLoading(true);
     this.exportTemplate = true;
