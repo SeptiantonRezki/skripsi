@@ -823,7 +823,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       body = {
         task_spin_id: id,
         audience_filter: 'fixed-panel',
-        class_groups: this.formGeo.get('classification').value,
         retailers: this.data_imported.map(item => item.id)
       };
     }
