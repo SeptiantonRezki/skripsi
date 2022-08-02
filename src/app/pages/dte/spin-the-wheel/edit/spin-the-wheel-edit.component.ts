@@ -4,6 +4,7 @@ import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 import { GeotreeService } from 'app/services/geotree.service';
@@ -19,6 +20,8 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
 import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
+import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
+import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -30,9 +33,16 @@ export class SpinTheWheelEditComponent implements OnInit {
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
+  productListSRCC: any[] = [];
+  inputChipListSRCC = [];
+  listProductSkuBankSRCC: Array<any> = [];
+  productSRCC: FormControl = new FormControl('');
+  product: FormControl = new FormControl('');
+  formDetilVoucher: FormGroup;
 
   formSpin: FormGroup;
   formGeo: FormGroup;
+  formPM: FormGroup;
   onLoad: boolean;
   minDate = new Date();
   groupTradePrograms: any[] = [];
@@ -65,6 +75,8 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
 
   retailClassification: any[] = [
     { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" },
@@ -123,6 +135,8 @@ export class SpinTheWheelEditComponent implements OnInit {
 
 
   constructor(
+    private b2bVoucherInjectService: B2BVoucherInjectService,
+    private supplierCompanyService: SupplierCompanyService,
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
     private translate: TranslateService,
@@ -200,6 +214,15 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_by_category: [false],
       product: [""],
       category: [""],
+    })
+
+    this.formPM = this.formBuilder.group({
+      limit_only: [""],
+      limit_by_product: [false],
+      limit_by_category: [false],
+      product: [""],
+      category: [""],
+      limit_by_product_srcc: [false],
     })
 
     this.formGeo = this.formBuilder.group({
@@ -869,13 +892,15 @@ export class SpinTheWheelEditComponent implements OnInit {
         class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value,
         regions: this.formGeo.get('region').value,
-        areas: this.formGeo.get('area').value
+        areas: this.formGeo.get('area').value,
+        panel_count: this.panelBlast
       };
     } else {
       body = {
         task_spin_id: id,
         audience_filter: 'fixed-panel',
-        retailers: this.data_imported.map(item => item.id)
+        retailers: this.data_imported.map(item => item.id),
+        panel_count: this.panelBlast
       };
     }
 
@@ -981,5 +1006,179 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     return "";
+  }
+
+  getProductObjSRCC(event, obj) {
+    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productListSRCC.push(obj);
+    }
+    if (this.productInputSRCC) {
+      this.productInputSRCC.nativeElement.value = null;
+    }
+
+    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
+      const itemClick = this.inputChipListSRCC.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBankSRCC = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
+          this.productSRCC.setValue(itemClick.toString());
+          if (this.productInputSRCC) {
+            this.productInputSRCC.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.productSRCC.setValue(null);
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
+        }
+        this.listProductSkuBankSRCC = [];
+      }
+      setTimeout(() => {
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.blur();
+          this.productInputSRCC.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+
+  getProductObj(event, obj) {
+    const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productList.push(obj);
+    }
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
+
+    if (this.inputChipList && this.inputChipList.length > 0) {
+      const itemClick = this.inputChipList.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBank = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank);
+          this.product.setValue(itemClick.toString());
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.product.setValue(null);
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+        this.listProductSkuBank = [];
+      }
+      setTimeout(() => {
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+  
+  getListProduct(param?): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipList = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+
+      if (this.formDetilVoucher.get('opsiVoucher').value === 'private-label') {
+
+        const params = { page: 'all', search: param, supplier_company_id: this.formDetilVoucher.get('supplier_company_id').value }
+        this.supplierCompanyService.getProductList(params).subscribe(res => {
+          this.listProductSkuBank = res.data ? res.data : [];
+          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+        });
+
+      } else {
+
+        this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
+          this.listProductSkuBank = res.data ? res.data : [];
+          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+        });
+
+      }
+
+      // this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+    }
+  }
+
+  _filterSku(value): any[] {
+    // console.log('valueee', value);
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  isCheckedPM(type, event) {
+    console.log(type, event);
+    // console.log('type' + event, type);
+    if (type === 'product') {
+      this.formPM.get('category').setValue('');
+      this.formPM.get('limit_by_category').setValue(false);
+      this.formPM.get('limit_by_product').setValue(true);
+      if (!event.checked) {
+        this.productList = [];
+        this.product.setValue(null);
+        // this.product.disable();
+        this.listProductSkuBank = [];
+        this.inputChipList = [];
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+      } else {
+        this.formPM.get('category').disable();
+        this.product.enable();
+      }
+    } else {
+      this.formPM.get('limit_by_category').setValue(true);
+      this.formPM.get('limit_by_product').setValue(false);
+      this.productList = [];
+      this.product.setValue(null);
+      // this.product.disable();
+      this.listProductSkuBank = [];
+      this.inputChipList = [];
+      if (event.checked) {
+        this.formPM.get('category').setValue('');
+        this.formPM.get('category').enable();
+      } else {
+        this.formPM.get('category').setValue('');
+        this.formPM.get('category').disable();
+      }
+      if (this.productInput) {
+        this.productInput.nativeElement.value = null;
+      }
+    }
   }
 }
