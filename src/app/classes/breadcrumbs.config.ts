@@ -3008,6 +3008,39 @@ export const brConfig = {
       }
     ]
   },
+  discount_coins_order: {
+    index: [
+      {
+        type: "current",
+        url: "/shoping-discount-coins",
+        name: "breadcrumbs.discount_coins_order.index"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/shoping-discount-coins",
+        name: "breadcrumbs.discount_coins_order.index"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "breadcrumbs.discount_coins_order.create"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/shoping-discount-coins",
+        name: "breadcrumbs.discount_coins_order.index"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "breadcrumbs.discount_coins_order.detail"
+      }
+    ]
+  },
   b2c_voucher: {
     index: [
       {

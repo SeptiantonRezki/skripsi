@@ -901,6 +901,31 @@ export class Endpoint {
         listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`,
         change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/status`
       },
+      shoping_discount_coins: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins`,
+        create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/${context.coin_discount_id}`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/${context.coin_discount_id}`,
+
+        redeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem`,
+        export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-excel`,
+        export_invoice: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-invoice`,
+        list_retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/retailer`,
+        list_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/voucher/panel/mitra`,
+        selected_retailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/panel/${context.voucher_id}/retailer`,
+        selected_mitra: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/panel/${context.coind_discount_id}/mitra`,
+        update_panel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/panel/${context.coin_discount_id}`,
+        export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/discount-coin/panel/export`,
+        import_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/discount-coin/panel/import`,
+        preview_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/discount-coin/panel/preview`,
+        product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
+        product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
+        redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
+        redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
+        redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
+        listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`,
+        change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/status`
+      },
       medalBadge: {
         medal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal`,
         putMedal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/medal/${context.id}`,
