@@ -43,6 +43,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   formSpin: FormGroup;
   formGeo: FormGroup;
   formPM: FormGroup;
+  formPreview: FormGroup;
   onLoad: boolean;
   minDate = new Date();
   groupTradePrograms: any[] = [];
@@ -132,7 +133,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   menuList: any[] = [];
   iconList: any[] = [];
   areaIdNonTargetAudience: any = 1;
-
+  detailFormSpin: any;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -180,6 +181,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       .subscribe(() => {
         this.filteringTradeProgram();
       });
+
+    this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
   }
   filteringTradeProgram() {
     if (!this.listTradePrograms) {
@@ -209,11 +212,11 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
-      limit_only: [""],
-      limit_by_product: [false],
-      limit_by_category: [false],
-      product: [""],
-      category: [""],
+      // limit_only: [""],
+      // limit_by_product: [false],
+      // limit_by_category: [false],
+      // product: [""],
+      // category: [""],
     })
 
     this.formPM = this.formBuilder.group({
@@ -241,6 +244,25 @@ export class SpinTheWheelEditComponent implements OnInit {
       salespoint: [""],
       district: [""],
       territory: [""]
+    })
+
+    this.formPreview = this.formBuilder.group({
+      // image: ["", Validators.required],
+      // icon: ["", Validators.required],
+      preview_header: ["", Validators.required]
+    });
+
+    this.formSpin.setValue({
+      name: this.detailFormSpin.name ? this.detailFormSpin.name : '',
+      trade_creator_id: this.detailFormSpin.trade_creator_id ? this.detailFormSpin.trade_creator_id : '',
+      start_date: this.convertDate(this.detailFormSpin.start_date ? this.detailFormSpin.start_date : ''),
+      start_time: this.convertTime(this.detailFormSpin.start_date ? this.detailFormSpin.start_date : ''),
+      end_date: this.convertDate(this.detailFormSpin.end_date ? this.detailFormSpin.end_date : ''),
+      end_time: this.convertTime(this.detailFormSpin.end_date ? this.detailFormSpin.end_date : '')
+    });
+
+    this.formPreview.setValue({
+      preview_header: this.detailFormSpin.header ? this.detailFormSpin.header : '',
     })
 
     this.onLoad = false;
@@ -793,6 +815,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submit() {
+    const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (
       this.formSpin.valid 
       // && this.formGeo.valid
@@ -816,10 +839,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       console.log(body);
 
       this.dataService.showLoading(true);
-      this.spinTheWheelService.create(body).subscribe(res => {
+      this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
-        this.router.navigate(['dte', 'spin-the-wheel'])
+        // this.router.navigate(['dte', 'spin-the-wheel'])
       })
     } else {
       commonFormValidator.validateAllFields(this.formSpin);
@@ -923,7 +946,8 @@ export class SpinTheWheelEditComponent implements OnInit {
             this.panelBlast = res.data.panel_count;
           }
           this.dialogRef.close();
-          this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
         },
         (err) => {
           this.dialogRef.close();
@@ -933,6 +957,41 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.dialogRef.afterClosed().subscribe(() => {
         processCheck.unsubscribe();
       });
+  }
+
+  submitPreview() {
+    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    this.dataService.showLoading(true);
+    // if (
+    //   this.formPreview.valid
+    //   ) {
+      // let body = new FormData();
+      // body.append('icon', '-');
+      // body.append('header', this.formPreview.get('preview_header').value);
+      // body.append('image', '-');
+      let body;
+
+      body = {
+        icon: '-',
+        header: this.formPreview.get('preview_header').value,
+        image: '-'
+      };
+      // if (this.files) body.append('image', this.files)
+      // if (this.files) body.append('icon', this.files)
+      
+      this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.dataService.showLoading(false);
+        // this.router.navigate(['dte', 'spin-the-wheel'])
+      }, err => {
+        this.dataService.showLoading(false);
+      });
+    // } else {
+    //   commonFormValidator.validateAllFields(this.formSpin);
+    //   // commonFormValidator.validateAllFields(this.formGeo);
+
+    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
+    // }
   }
 
   async exportAudience() {
@@ -1003,6 +1062,14 @@ export class SpinTheWheelEditComponent implements OnInit {
   convertDate(param: Date) {
     if (param) {
       return moment(param).format('YYYY-MM-DD');
+    }
+
+    return "";
+  }
+
+  convertTime(param: Date) {
+    if (param) {
+      return moment(param).format('HH:mm');
     }
 
     return "";

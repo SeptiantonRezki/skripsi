@@ -764,78 +764,110 @@
           </div>
         </mat-tab>
         <mat-tab label="Preview" [disabled]="false">
-          <div fxLayout="row" fxFlex="100">
-            <div fxFlex="30">
-              <div class="grey-box">
-                <p
-                  style="
-                    font-style: italic;
-                    font-weight: bold;
-                    text-align: center;
-                  "
-                >
-                  Floating Icon AYO SRC Toko Home Page
-                </p>
-                <div class="px-24">
-                  <div
-                    ngfDrop
-                    selectable="1"
-                    class="rectangle-16"
-                    [(validDrag)]="validComboDrag"
-                    [(file)]="files"
-                    accept="image/*"
-                    [class.invalid-drag]="validComboDrag === false"
-                    [class.valid-drag]="validComboDrag"
-                    (fileChange)="changeImage($event)"
+          <div class="ayo-middle py-24" fxLayout="column">
+            
+            <form
+              autocomplete="off"
+              [formGroup]="formPreview"
+              fxLayout="row"
+              fxLayoutGap="16px"
+            >
+              <div fxFlex="50%">
+                <div class="grey-box">
+                  <p
+                    style="
+                      font-style: italic;
+                      font-weight: bold;
+                      text-align: center;
+                    "
                   >
+                    Floating Icon AYO SRC Toko Home Page
+                  </p>
+                  <div class="px-24">
                     <div
-                      class="p-24"
-                      fxLayout="column"
-                      fxLayoutAlign="center center"
+                      ngfDrop
+                      selectable="1"
+                      class="rectangle-16"
+                      [(validDrag)]="validComboDrag"
+                      [(file)]="files"
+                      accept="image/*"
+                      [class.invalid-drag]="validComboDrag === false"
+                      [class.valid-drag]="validComboDrag"
+                      (fileChange)="changeImage($event)"
                     >
-                      <mat-icon
-                        style="width: 48px; height: 48px; font-size: 48px"
-                        >add_photo_alternate_outline</mat-icon
+                      <div
+                        class="p-24"
+                        fxLayout="column"
+                        fxLayoutAlign="center center"
                       >
-                      <br />
-                      <span matPrefix>Tarik Gambar Kesini</span>
+                        <mat-icon
+                          style="width: 48px; height: 48px; font-size: 48px"
+                          >add_photo_alternate_outline</mat-icon
+                        >
+                        <br />
+                        <span matPrefix>Tarik Gambar Kesini</span>
+                      </div>
                     </div>
                   </div>
+                  <p style="font-weight: bold; text-align: center">Preview</p>
+                  <div style="text-align: center" *ngIf="imageConverted">
+                    <img
+                      [src]="imageConverted"
+                      alt="Preview Image"
+                      width="200px"
+                      height="100px"
+                    />
+                  </div>
+                  <p
+                    style="
+                      font-style: italic;
+                      font-weight: bold;
+                      text-align: center;
+                    "
+                  >
+                    Floating Icon AYO SRC Toko Home Page
+                  </p>
                 </div>
-                <p style="font-weight: bold; text-align: center">Preview</p>
-                <div style="text-align: center" *ngIf="imageConverted">
-                  <img
-                    [src]="imageConverted"
-                    alt="Preview Image"
-                    width="200px"
-                    height="100px"
-                  />
+
+                <div class="confirm pt-24 pb-24 px-24">
+                  <button
+                    id="btn-simpan"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submitPreview()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
                 </div>
-                <p
-                  style="
-                    font-style: italic;
-                    font-weight: bold;
-                    text-align: center;
-                  "
-                >
-                  Floating Icon AYO SRC Toko Home Page
-                </p>
+                
               </div>
-            </div>
-            <div fxFlex="1"></div>
-            <div fxFlex="20">
-              <div fxLayout="row" class="px-24">
-                <mat-form-field fxFlex class="is-light form-primary">
-                  <input
-                    matInput
-                    type="text"
-                    placeholder="Header"
-                    [formControl]="preview_header"
-                    name="preview_header"
-                  />
-                </mat-form-field>
+              <div fxFlex="1"></div>
+              <div fxFlex="50%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Nama Program"
+                      formControlName="preview_header"
+                      name="preview_header"
+                    />
+                    <mat-error
+                      *ngIf="formPreview.controls['preview_header'].hasError('required') && formPreview.controls['preview_header'].touched">
+                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24 pb-24">
+                  <img mat-list-icon src="assets/images/ayo/preview-spin.png" style="max-height: 100%;" />
+                </div>
+                
               </div>
-            </div>
+              
+            </form>
+
           </div>
         </mat-tab>
       </mat-tab-group>
