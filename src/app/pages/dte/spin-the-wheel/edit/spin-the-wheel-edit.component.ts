@@ -17,11 +17,12 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DialogService } from 'app/services/dialog.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
 import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
+import { ProductService } from 'app/services/sku-management/product.service';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -33,11 +34,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
-  productListSRCC: any[] = [];
-  inputChipListSRCC = [];
-  listProductSkuBankSRCC: Array<any> = [];
-  productSRCC: FormControl = new FormControl('');
-  product: FormControl = new FormControl('');
+  
   formDetilVoucher: FormGroup;
 
   formSpin: FormGroup;
@@ -58,18 +55,28 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   keyUp = new Subject<string>();
   keyUpProduct = new Subject<string>();
+  keyUpProductSRCC = new Subject<string>();
   listCategories: any[] = [];
+  listCategoriesSRCC: any[] = [];
   listProduct: any[] = [];
   filterProduct: FormControl = new FormControl("");
   public filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   listProductSkuBank: Array<any> = [];
+  listProductSkuBankSRCC: Array<any> = [];
   filteredSkuOptions: Observable<string[]>;
+  filteredSkuOptionsSRCC: Observable<string[]>;
   productList: any[] = [];
+  productListSRCC: any[] = [];
+  inputChipList = [];
+  inputChipListSRCC = [];
+  product: FormControl = new FormControl('');
+  productSRCC: FormControl = new FormControl('');
+
+  
   visible = true;
   selectable = true;
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
-  inputChipList = [];
 
   dialogRef: any;
   data_imported: any = [];
@@ -148,6 +155,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     private notificationService: NotificationService,
     private dialogService: DialogService,
     private spinTheWheelService: SpinTheWheelService,
+    private productService: ProductService,
     private router: Router,
     private dialog: MatDialog,
   ) {
@@ -182,8 +190,19 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.filteringTradeProgram();
       });
 
+    this.filteredSkuOptions = this.product.valueChanges.pipe(
+      startWith(null),
+      map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
+
     this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
   }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
+  
   filteringTradeProgram() {
     if (!this.listTradePrograms) {
       return;
@@ -212,23 +231,41 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
-      // limit_only: [""],
-      // limit_by_product: [false],
-      // limit_by_category: [false],
-      // product: [""],
-      // category: [""],
     })
 
     this.formPM = this.formBuilder.group({
       limit_only: [''],
       limit_by_product: [false],
       limit_by_category: [false],
-      product: [''],
-      category: [''],
       limit_by_product_srcc: [false],
+      limit_by_category_srcc: [false],
+      product: [''],
+      product_srcc: [''],
+      category: [''],
+      category_srcc: [''],
+      
       coin_variation: 0,
       coins: []
     });
+
+    this.keyUpProduct.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        // console.log('reas ngetik cuk', res);
+        this.getListProduct(res);
+        this.resetField(res);
+      });
+
+    this.keyUpProductSRCC.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.getListProductSRCC(res);
+        this.resetField(res);
+      });
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -273,6 +310,10 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.getTradePrograms();
 
     this.initAreaV2();
+
+    // *MEKANISME
+    this.getCategories();
+    // this.getCategoriesSRCC();
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       // console.log('zone', res);
@@ -1077,48 +1118,26 @@ export class SpinTheWheelEditComponent implements OnInit {
     return "";
   }
 
-  getProductObjSRCC(event, obj) {
-    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
-    if (index === -1) {
-      this.productListSRCC.push(obj);
-    }
-    if (this.productInputSRCC) {
-      this.productInputSRCC.nativeElement.value = null;
-    }
+  // MEKANISME PEMBATASAN PRODUK *MEKANISME
 
-    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
-      const itemClick = this.inputChipListSRCC.filter((item) => {
-        return item.toLowerCase().search(obj.name.toLowerCase());
-      });
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
 
-      if (itemClick && itemClick.length > 0) {
-        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
-          /**
-           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
-           */
-          this.listProductSkuBankSRCC = [];
-        } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank)
-          this.productSRCC.setValue(itemClick.toString());
-          if (this.productInputSRCC) {
-            this.productInputSRCC.nativeElement.value = itemClick.toString();
-          }
-          this.getListProduct(itemClick.toString());
-        }
-      } else {
-        this.productSRCC.setValue(null);
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.value = null;
-        }
-        this.listProductSkuBankSRCC = [];
-      }
-      setTimeout(() => {
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.blur();
-          this.productInputSRCC.nativeElement.focus();
-        }
-      }, 500);
+    if (filteredItem.length === 0) {
+      // this.product = undefined;
     }
+  }
+
+  getCategories() {
+    this.productService.getListCategory(null).subscribe(res => {
+      this.listCategories = res.data ? res.data.data : [];
+    });
+  }
+
+  getCategoriesSRCC() {
+    this.productService.getListCategory(null).subscribe(res => {
+      this.listCategoriesSRCC = res.data ? res.data : [];
+    });
   }
 
   getProductObj(event, obj) {
@@ -1179,25 +1198,11 @@ export class SpinTheWheelEditComponent implements OnInit {
       });
     }
     if (param.length >= 3) {
+      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      });
 
-      if (this.formDetilVoucher.get('opsiVoucher').value === 'private-label') {
-
-        const params = { page: 'all', search: param, supplier_company_id: this.formDetilVoucher.get('supplier_company_id').value }
-        this.supplierCompanyService.getProductList(params).subscribe(res => {
-          this.listProductSkuBank = res.data ? res.data : [];
-          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-        });
-
-      } else {
-
-        this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-          this.listProductSkuBank = res.data ? res.data : [];
-          this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-        });
-
-      }
-
-      // this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
     } else {
       this.listProductSkuBank = [];
       this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
@@ -1205,14 +1210,13 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   _filterSku(value): any[] {
-    // console.log('valueee', value);
     const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
     return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   isCheckedPM(type, event) {
-    console.log(type, event);
-    // console.log('type' + event, type);
+    console.log('X -', type);
+    console.log('Y -', event);
     if (type === 'product') {
       this.formPM.get('category').setValue('');
       this.formPM.get('limit_by_category').setValue(false);
@@ -1235,7 +1239,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('limit_by_product').setValue(false);
       this.productList = [];
       this.product.setValue(null);
-      // this.product.disable();
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event.checked) {
@@ -1248,6 +1251,169 @@ export class SpinTheWheelEditComponent implements OnInit {
       if (this.productInput) {
         this.productInput.nativeElement.value = null;
       }
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productList.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.product.setValue(null);
+  }
+
+  remove(id: string): void {
+    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productList.splice(index, 1);
+    }
+  }
+
+  getProductObjSRCC(event, obj) {
+    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productListSRCC.push(obj);
+    }
+    if (this.productInputSRCC) {
+      this.productInputSRCC.nativeElement.value = null;
+    }
+
+    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
+      const itemClick = this.inputChipListSRCC.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBankSRCC = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
+          this.productSRCC.setValue(itemClick.toString());
+          if (this.productInputSRCC) {
+            this.productInputSRCC.nativeElement.value = itemClick.toString();
+          }
+          this.getListProductSRCC(itemClick.toString());
+        }
+      } else {
+        this.productSRCC.setValue(null);
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
+        }
+        this.listProductSkuBankSRCC = [];
+      }
+      setTimeout(() => {
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.blur();
+          this.productInputSRCC.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+
+  getListProductSRCC(param?): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipListSRCC = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBankSRCC = res.data ? res.data : [];
+        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
+      });
+
+    } else {
+      this.listProductSkuBankSRCC = [];
+      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
+    }
+  }
+
+  _filterSkuSRCC(value): any[] {
+    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBankSRCC.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  isCheckedSRCC(type, event) {
+    console.log('X SRCC', type);
+    console.log('Y SRCC', event);
+    if (type === 'product') {
+      this.formPM.get('category_srcc').setValue('');
+      this.formPM.get('limit_by_category_srcc').setValue(false);
+      this.formPM.get('limit_by_product_srcc').setValue(true);
+      if (!event.checked) {
+        this.productListSRCC = [];
+        this.productSRCC.setValue(null);
+        // this.product.disable();
+        this.listProductSkuBankSRCC = [];
+        this.inputChipListSRCC = [];
+        if (this.productInputSRCC) {
+          this.productInputSRCC.nativeElement.value = null;
+        }
+      } else {
+        this.formPM.get('category_srcc').disable();
+        this.productSRCC.enable();
+      }
+    } else {
+      this.formPM.get('limit_by_category_srcc').setValue(true);
+      this.formPM.get('limit_by_product_srcc').setValue(false);
+      this.productListSRCC = [];
+      this.productSRCC.setValue(null);
+      // this.product.disable();
+      this.listProductSkuBankSRCC = [];
+      this.inputChipListSRCC = [];
+      if (event.checked) {
+        this.formPM.get('category_srcc').setValue('');
+        this.formPM.get('category_srcc').enable();
+      } else {
+        this.formPM.get('category_srcc').setValue('');
+        this.formPM.get('category_srcc').disable();
+      }
+      if (this.productInputSRCC) {
+        this.productInputSRCC.nativeElement.value = null;
+      }
+    }
+  }
+
+  addSRCC(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productListSRCC.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.productSRCC.setValue(null);
+  }
+
+  removeSRCC(id: string): void {
+    const index = this.productListSRCC.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productListSRCC.splice(index, 1);
     }
   }
   
@@ -1266,4 +1432,5 @@ export class SpinTheWheelEditComponent implements OnInit {
     await this.formPM.get('coins').setValue(arr);
     console.log('arraynya', this.formPM.get('coins').value);
   }
+  
 }
