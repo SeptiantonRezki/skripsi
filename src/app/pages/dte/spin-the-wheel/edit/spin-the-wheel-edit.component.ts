@@ -217,7 +217,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       // limit_by_category: [false],
       // product: [""],
       // category: [""],
-    })
+    });
 
     this.formPM = this.formBuilder.group({
       limit_only: [''],
@@ -226,8 +226,9 @@ export class SpinTheWheelEditComponent implements OnInit {
       product: [''],
       category: [''],
       limit_by_product_srcc: [false],
-      coin_variation: 0,
-      coins: []
+      coin_variation: '',
+      coins: [],
+      limit_spin: ''
     });
 
     this.formGeo = this.formBuilder.group({
@@ -1252,18 +1253,51 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
   
   async changeCoinVariation(event) {
-    console.log('valuenya', event.target.value);
     let arr = [];
     for (let i = 0; i < event.target.value; i++) {
       arr.push(
         {
-          coin: 0,
-          slice: 0,
-          probability: 0,
+          coin: '',
+          slice: '',
+          probability: '',
+          limit_atempt: '',
+          total_budget: ''
         }
       );
     }
     await this.formPM.get('coins').setValue(arr);
-    console.log('arraynya', this.formPM.get('coins').value);
+  }
+
+  async changeCoin(event, index) {
+    let newArr = this.formPM.get('coins').value;
+    newArr[index].coin = event.target.value;
+    newArr[index].limit_atempt = newArr[index].probability * this.formPM.get('limit_spin').value;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    await this.formPM.get('coins').setValue(newArr);
+  }
+
+  async changeSlice(event, index) {
+    let newArr = this.formPM.get('coins').value;
+    newArr[index].slice = event.target.value;
+    await this.formPM.get('coins').setValue(newArr);
+  }
+
+  async changeProbability(event, index) {
+    let newArr = this.formPM.get('coins').value;
+    newArr[index].probability = event.target.value;
+    newArr[index].limit_atempt = newArr[index].probability * this.formPM.get('limit_spin').value;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    await this.formPM.get('coins').setValue(newArr);
+  }
+
+  async calculatePM(event) {
+    let newArr = this.formPM.get('coins').value;
+    if (newArr.length > 0) {
+      for (let i = 0; i < newArr.length; i++) {
+        newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
+        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt;
+      }
+      await this.formPM.get('coins').setValue(newArr);
+    }
   }
 }
