@@ -217,7 +217,18 @@
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
-                  <div fxLayout="row">
+                  <div fxFlex fxLayout="row" class="px-24">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        formControlName="classification"
+                        multiple
+                        >
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" class="px-16">
                       <mat-radio-button
                         class="radio-button pr-48"
                         [checked]="isPopulation"
@@ -226,7 +237,7 @@
                         Population Blast
                       </mat-radio-button>
                   </div>
-                  <div fxFlex fxLayout="row" class="px-24">
+                  <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
                       placeholder="{{'global.area.zone' | translate}}"
@@ -240,7 +251,7 @@
                     </mat-select>
                     </mat-form-field>
                   </div>
-                  <div fxFlex fxLayout="row" class="px-24">
+                  <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
                         placeholder="{{'global.area.regional' | translate}}"
@@ -254,7 +265,7 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <div fxFlex fxLayout="row" class="px-24">
+                  <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
                         placeholder="{{'global.area.area' | translate}}"
@@ -268,37 +279,29 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <div fxFlex fxLayout="row" class="px-24">
-                    <mat-form-field fxFlex="100%">
-                      <mat-select
-                        placeholder="Retail Classification"
-                        formControlName="classification"
-                        >
-                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.id">{{ gtp.name }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
                 </div>
               </form>
               <div fxLayout="row" fxFlex="45">
                 <div class="red-big-chunk-panel" fxFlex="100">
-                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;">---</p>
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
                   <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
                 </div>
             </div>
           </div>
           <div
           fxLayout="column"
+          class="px-16"
           >
-          <mat-radio-button
+            <mat-radio-button
               class="radio-button pr-48"
               [checked]="!isPopulation"
               (change)="changeBlastType('fixed')"
             >
               Fixed Panel
             </mat-radio-button>
-          <div fxLayout="column">
-            <div [formGroup]="formFilter">
+          <div fxLayout="column" class="px-20 py-16">
+            <!-- <div [formGroup]="formFilter">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
                 fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
@@ -315,7 +318,7 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field fxFlex="12%" class="is-light form-primary">
-                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="audienceaudienceaudienceaudience" multiple>
                     <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
                       'all' ? 'Semua
                       Regional'
@@ -361,9 +364,9 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-            </div>
+            </div> -->
   
-            <div class="p-0">
+            <!-- <div class="p-0">
               <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
                 fxLayoutAlign="end center" class="p-16 export">
                 <a #downloadLink></a>
@@ -415,12 +418,45 @@
                   </ng-template>
                 </ngx-datatable-column>
               </ngx-datatable>
+            </div> -->
+            
+            <div fxLayout="row" fxLayoutGap="16px">
+              <div fxLayout="column">
+                <button
+                  mat-raised-button
+                  type="button"
+                  class="is-danger"
+                  (click)="exportAudience()"
+                >
+                  <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+                </button>
+                <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+              </div>
+              <button
+                mat-raised-button
+                type="button"
+                class="is-danger"
+                (click)="importAudience()"
+              >
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+              </button>
             </div>
-        </div>
+          </div>
           </div>
           <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
             <button mat-raised-button type="button" class="confirmation-button" (click)="submitAudience()" fxFlex="20">
               Check
+            </button>
+            <button
+              id="btn-simpan"
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="submit()"
+              fxFlex="20"
+              [disabled]="!isChecked"
+            >
+              Save
             </button>
           </div>
         </mat-tab>
@@ -762,4 +798,5 @@
       </mat-tab-group>
     </div>
   </div>
+  <a #downloadLink></a>
 </div>

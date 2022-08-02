@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
@@ -16,6 +16,9 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DialogService } from 'app/services/dialog.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
+import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
+import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -24,6 +27,9 @@ import { Router } from '@angular/router';
 })
 export class SpinTheWheelEditComponent implements OnInit {
   selectedTab: number = 0;
+  panelBlast: number;
+  exportTemplate: Boolean;
+  isChecked: boolean = false;
 
   formSpin: FormGroup;
   formGeo: FormGroup;
@@ -53,6 +59,12 @@ export class SpinTheWheelEditComponent implements OnInit {
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
   inputChipList = [];
+
+  dialogRef: any;
+  data_imported: any = [];
+
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('singleSelect') singleSelect: MatSelect;
 
   retailClassification: any[] = [
     { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" },
@@ -121,7 +133,8 @@ export class SpinTheWheelEditComponent implements OnInit {
     private notificationService: NotificationService,
     private dialogService: DialogService,
     private spinTheWheelService: SpinTheWheelService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) {
     this.onLoad = true
 
@@ -801,7 +814,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         // class_groups: this.formGeo.get('classification').value,
-        class_groups: ["SRC"],
+        class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value,
         regions: this.formGeo.get('region').value,
         areas: this.formGeo.get('area').value
@@ -811,16 +824,104 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'fixed-panel',
         class_groups: this.formGeo.get('classification').value,
-        retailers: [1, 2]
+        retailers: this.data_imported.map(item => item.id)
       };
     }
-    this.spinTheWheelService.checkAudience(body).subscribe(res => {
+
+    const dialogConfig = new MatDialogConfig();
+  
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = "scrumboard-card-dialog";
+      dialogConfig.data = { password: "P@ssw0rd" };
+  
+      this.dialogRef = this.dialog.open(
+        DialogProcessComponent,
+        {...dialogConfig, width: '400px'}
+      );
+
+      const processCheck = this.spinTheWheelService.checkAudience(body).subscribe(
+        (res) => {
+          if (res.data) {
+            this.isChecked = true;
+            this.panelBlast = res.data.panel_count;
+          }
+          this.dialogRef.close();
+          this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
+        },
+        (err) => {
+          this.dialogRef.close();
+        }
+      );
+
+      this.dialogRef.afterClosed().subscribe(() => {
+        processCheck.unsubscribe();
+      });
+  }
+
+  async exportAudience() {
+    this.dataService.showLoading(true);
+    this.exportTemplate = true;
+    const body = {
+      retailer_id: [1]
+    };
+
+    try {
+      const response = await this.audienceService.exportExcel(body).toPromise();
+      this.downloadLink.nativeElement.href = response.data;
+      this.downloadLink.nativeElement.click();
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+        this.exportTemplate = false;
+      }, 3000);
+    } catch (error) {
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.router.navigate(['inject-b2b-voucher']);
-    }, err => {
-      this.dataService.showLoading(false);
+      this.exportTemplate = false;
+      throw error;
+    }
+  }
+
+  importAudience() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
+
+    this.dialogRef = this.dialog.open(
+      ImportAudiencePersonalizeComponent,
+      dialogConfig
+    );
+
+    this.dialogRef.afterClosed().subscribe((response) => {
+      if (response) {
+        this.data_imported = response;
+      }
     });
+  }
+
+  handleClassification(event){
+    console.log('asdf', event);
+    if (event.isUserInput) {
+      const {value, selected} = event.source;
+      console.log('satu', value, selected);
+      const retailer = this.formGeo.get('classification');
+
+      if (value !== 'all' && selected) {
+        if (retailer.value.includes('all')) {
+          console.log('terbaca 1');
+          let newValue = retailer.value;
+          newValue.shift();
+          retailer.setValue(newValue);
+        }
+      } else if (value === 'all' && selected) {
+        console.log('terbaca 2');
+        let newValue = retailer.value;
+        newValue.splice(0, newValue.length);
+        retailer.setValue(newValue);
+      }
+    }
   }
 
   convertDate(param: Date) {
