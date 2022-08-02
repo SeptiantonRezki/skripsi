@@ -3012,14 +3012,14 @@ export const brConfig = {
     index: [
       {
         type: "current",
-        url: "/shoping-discount-coins",
+        url: "/discount-coins-order",
         name: "breadcrumbs.discount_coins_order.index"
       }
     ],
     create: [
       {
         type: "parent",
-        url: "/shoping-discount-coins",
+        url: "/discount-coins-order",
         name: "breadcrumbs.discount_coins_order.index"
       },
       {
@@ -3031,7 +3031,7 @@ export const brConfig = {
     detail: [
       {
         type: "parent",
-        url: "/shoping-discount-coins",
+        url: "/discount-coins-order",
         name: "breadcrumbs.discount_coins_order.index"
       },
       {
