@@ -145,6 +145,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'discount-coins-order',
+    loadChildren: './pages/shoping-discount-coins/shoping-discount-coins.module#ShopingDiscountCoinsModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'inject-b2b-voucher',
     loadChildren: './pages/b2b-voucher-inject/b2b-voucher-inject.module#B2BVoucherInjectModule',
     canActivate: [AuthGuard]

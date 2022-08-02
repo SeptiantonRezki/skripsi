@@ -67,6 +67,8 @@ export class TargetAreaComponent implements OnInit {
 
   @ViewChild("downloadLink") downloadLink: ElementRef;
 
+  currentAreaIds: any;
+
   constructor(
     private fb: FormBuilder,
     private geoService: GeotreeService,
@@ -106,7 +108,7 @@ export class TargetAreaComponent implements OnInit {
 
     const areas = data.areas.currentValue;
     if (areas.length) {
-      const areasId = areas.map(({id}) => id);
+      const areasId = areas.map(({ id }) => id);
       if (areasId.length == 1 && areasId[0] == 1) {
         this.defaultSelectedAll = true;
       } else {
@@ -140,6 +142,7 @@ export class TargetAreaComponent implements OnInit {
 
     if (levelIds) {
       body['area_ids'] = levelIds.length ? levelIds.join() : "";
+      this.currentAreaIds = levelIds;
     }
 
     this.loadingIndicator = true;
@@ -235,10 +238,11 @@ export class TargetAreaComponent implements OnInit {
   }
 
   setAllSelected(state: boolean) {
+    // console.log("all selected event", state, this.isSelectedAll);
     if (this.isSelectedAll !== state) {
-      this.isSelectedAll = state;
-      this.selectedAll.emit(state);
-      if (state) this.getAllId();
+      // this.isSelectedAll = state;
+      // this.selectedAll.emit(state);
+      // if (state) this.getAllId();
     }
     return state;
   }
@@ -265,6 +269,13 @@ export class TargetAreaComponent implements OnInit {
     this.selectedArea.emit(this.selected);
   }
 
+  // selectFn(allRowsSelected: boolean) {
+  //   console.log('allRowsSelected_', allRowsSelected);
+  //   // this.allRowsSelected = allRowsSelected;
+  //   if (!allRowsSelected) this.selected = [];
+  //   // else this.selected.length = this.totalData;
+  // }
+
   import() {
     const dialogConfig = new MatDialogConfig();
 
@@ -285,21 +296,32 @@ export class TargetAreaComponent implements OnInit {
   }
 
   async export() {
-    if (!this.selected.length) {
+    if (!this.selected.length && !this.allRowsSelected) {
       this.dialogService.openSnackBar({
         message: this.translate.instant('global.label.select_area_to_export'),
       });
       return;
     }
+
     try {
       const fd = new FormData();
-      const ids = this.isSelectedAll
-        ? this.getSelectedAllId().map((item) => ({ id: item }))
-        : this.selected;
+      // const ids = this.isSelectedAll
+      //     ? this.getSelectedAllId().map((item) => ({ id: item }))
+      //     : this.selected;
+      if (this.allRowsSelected) {
+        let ids = this.currentAreaIds
+        ids.forEach((item) => {
+          fd.append("selected[]", item);
+        });
+        fd.append('type', 'all')
+      } else {
+        const ids = this.selected;
 
-      ids.forEach((item) => {
-        fd.append("selected[]", item.id);
-      });
+        ids.forEach((item) => {
+          fd.append("selected[]", item.id);
+        });
+      }
+
 
       this.dataService.showLoading(true);
       const response = await this.areaService.export(fd).toPromise();
@@ -335,5 +357,24 @@ export class TargetAreaComponent implements OnInit {
       window.URL.revokeObjectURL(url);
       link.remove();
     }, 100);
+  }
+
+  onCheckboxChange(event: any, row: any) {
+    if (event) {
+      const temp = [...this.selected];
+      const selectedItem = { ...this.selected.filter((s: any) => s.id === row.id)[0] };
+      const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
+      selectedItem['isHub'] = event.checked;
+      if (indexFind !== -1) {
+        temp[indexFind] = selectedItem;
+        this.selected = temp;
+      }
+    }
+  }
+
+  allRowsSelected: boolean;
+  selectFn(allRowsSelected: boolean) {
+    this.allRowsSelected = allRowsSelected;
+    this.selected = [];
   }
 }

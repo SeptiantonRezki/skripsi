@@ -46,7 +46,7 @@
 			"apps_version": "ជំនាន់កម្មវិធី",
 			"all_version": "ជំនាន់ទាំងអស់",
 			"upload_file": "ផ្ទុកហ្វាល់ឡើង",
-			"chat_bot": "កម្មវិធីឆាតបត",
+			"chat_bot": "bot ជជែក",
 			"latitude": "រយៈទទឹង",
 			"longitude": "រយៈបណ្ដោយ",
 			"description": "ការពិពណ៌នា",
@@ -197,7 +197,8 @@
 			"select": "ជ្រើសរើស",
 			"opsi_index": "ជម្រើស {{index}}",
 			"max_count_image": "រូបភាព {{count}} អតិបរមា",
-			"spesific_product_b2b":"ផលិតផល B2B ជាក់លាក់"
+			"spesific_product_b2b":"ផលិតផល B2B ជាក់លាក់",
+			"upc":"UPC"
 		},
 		"order_status": {
 			"new_order": "ការ​កុ​ម្ម​ង់​ថ្មី",
@@ -820,10 +821,12 @@
 			"and_send": "AND SEND",
 			"shopping": "ដើរទិញឥវ៉ាន់",
 			"title_dialot_open_reminder": "ត្រូវប្រាកដថាប៉ារ៉ាម៉ែត្រទាំងអស់ត្រូវបានបំពេញយ៉ាងត្រឹមត្រូវ។ បដាដែលមានសម្ភារៈ <i class='italic'>ម៉ាក HM Sampoerna</i> ឬ <i class='italic'>សម្ភារៈផ្សព្វផ្សាយថ្នាំជក់</i> ផ្សេងទៀតតែប៉ុណ្ណោះ សម្រាប់អ្នកប្រើប្រាស់ប្រភេទ '<b>ជក់បារី</b>'។ តើអ្នកប្រាកដក្នុងការរក្សាទុក និងផ្ញើមែនទេ?",
-			"ticker": "Ticker",
-      		"ticker_red": "Red (Untuk informasi Fraud warning & bug stopper)",
-      		"ticker_blue": "Blue (Untuk informasi Mainetenance dan downtime)",
-      		"ticker_yellow": "Yellow (Untuk informasi Reminder Update Version)"
+			"ticker": "Ticker",	
+      		"ticker_red": "Red (Fraud warning & bug stopper information)",	
+      		"ticker_blue": "Blue (Server maintenance and downtime information)",	
+      		"ticker_yellow": "Yellow (Version update reminder information)",	
+			"textticker": "បំពេញសំបុត្រ",	
+			"tickercat": "Ticker Color Category"
 		}
 	},
 	"delivery_management": {
@@ -2178,9 +2181,19 @@
 			"edit": "ការផ្លាស់ប្តូរការជូនដំណឹងលេចឡើង"
 		}
 	},
-	"search_product_component":{
-		"placeholder":"ស្វែងរកផលិតផល",
-		"error_message":"រកមិនឃើញផលិតផល",
-		"error_form":"កូដផលិតផលតម្រូវឱ្យប្រើ"
-	  }
+	"search_product_component":{	
+		"placeholder":"ស្វែងរកផលិតផល",	
+		"error_message":"រកមិនឃើញផលិតផល",	
+		"error_form":"កូដផលិតផលតម្រូវឱ្យប្រើ"	
+	},
+	"upc_code":{
+		"upc_code_needed":"លេខកូដ UPC ដើម្បីបញ្ចូល",
+		"upc_code_needed_required":"ចំនួនលេខកូដ UPC ដែលត្រូវការ",
+		"upc_coin_conversion":"ការបម្លែងកាក់ក្នុង 1 លេខកូដ UPC",
+		"upc_coin_conversion_required":"តម្រូវ​ឱ្យ​មាន​ការ​បម្លែង​កាក់",
+		"brand_family_placeholder":"ស្វែងរកម៉ាកគ្រួសារ",
+		"brand_family_empty":"រកមិនឃើញម៉ាក",
+		"brand_family_required":"គ្រួសារម៉ាកដែលទាមទារ",
+		"qrcode":"កូដ QR"
+	}
 }
