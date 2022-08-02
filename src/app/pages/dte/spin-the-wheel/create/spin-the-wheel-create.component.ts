@@ -4,6 +4,7 @@ import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 import { GeotreeService } from 'app/services/geotree.service';
 import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
@@ -80,6 +81,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
   );
   listTradePrograms: any[];
   isPopulation: boolean = true;
+  private _onDestroy = new Subject<void>();
 
   formFilter: FormGroup;
   loadingIndicator: boolean;
@@ -146,6 +148,30 @@ export class SpinTheWheelCreateComponent implements OnInit {
       district: [],
       territory: []
     }
+    this.filterTradeProgram.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringTradeProgram();
+      });
+  }
+  filteringTradeProgram() {
+    if (!this.listTradePrograms) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterTradeProgram.value;
+    if (!search) {
+      this.filteredTradeProgram.next(this.listTradePrograms.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredTradeProgram.next(
+      this.listTradePrograms.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
   }
 
   ngOnInit() {

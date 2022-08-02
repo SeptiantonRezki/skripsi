@@ -147,4 +147,9 @@ export class SpinTheWheelComponent implements OnInit {
     });
   }
 
+  directEdit(param?: any): void {
+    this.dataService.setToStorage('spin_the_wheel', param);
+    this.router.navigate(['dte', 'spin-the-wheel', 'edit', param.id]);
+  }
+
 }

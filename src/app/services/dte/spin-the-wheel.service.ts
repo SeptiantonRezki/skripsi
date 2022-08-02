@@ -22,4 +22,9 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
   }
+
+  checkAudience(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'check_audience');
+    return this.postApi(url, body);
+  }
 }
