@@ -69,6 +69,7 @@ import { LotteryComponent } from "./lottery/index/lottery.component";
 import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
 import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
 import { XpComponent } from "./xp/xp.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 
 const routes: Routes = [
   {
@@ -862,6 +863,16 @@ const routes: Routes = [
     path: 'xp/detail/:id/:tab',
     component: XpComponent,
     canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
     canDeactivate: [PendingChangesGuard]
   },
 ];
