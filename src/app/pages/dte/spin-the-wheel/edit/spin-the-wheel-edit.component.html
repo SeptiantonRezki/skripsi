@@ -473,47 +473,90 @@
             </mat-form-field>
           </div>
           <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
-            <div fxLayout="column" fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
-              <span class="opsi-type" style="font-weight: bold;">Pembatasan Produk & Category</span>
-              <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <div fxFlex="100">
-                  <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
-                    style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
-                  </mat-checkbox>
-                  <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
+              <div fxFlex="50" fxLayout="column">
+                <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                  <span class="opsi-type">Pembatasan Produk & Kategori</span> <!-- // TODO -->
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <div fxFlex="100">
+                      <mat-checkbox formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
+                        style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                      </mat-checkbox> <!-- // TODO -->
+                      <mat-checkbox formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                    </div>
+                  </div>
+                  <mat-form-field fxFlex="100" class="" *ngIf="formPM.get('limit_by_product').value">
+                    <mat-chip-list #chipList aria-label="Product List">
+                      <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                        (removed)="remove(product)">
+                        {{product.name}}
+                        <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                      </mat-chip>
+                      <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                        (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event)"> <!-- // TODO -->
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                      <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                        (onSelectionChange)="getProductObj($event, item)">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="100" class="" *ngIf="!formPM.get('limit_by_product').value">
+                    <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true"> <!-- // TODO -->
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="50">
+                    <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple> <!-- // TODO -->
+                      <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
-              <mat-form-field fxFlex="100" *ngIf="formSpin.get('limit_by_product').value" class="mt-12">
-                <mat-chip-list #chipList aria-label="Product List">
-                  <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
-                    (removed)="remove(product)">
-                    {{product.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
-                  </mat-chip>
-                  <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
-                    (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
-                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="add($event)">
-                </mat-chip-list>
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
-                  <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
-                    (onSelectionChange)="getProductObj($event, item)">
-                    {{item.name}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" *ngIf="!formSpin.get('limit_by_product').value">
-                <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
-              </mat-form-field>
-
-              <mat-form-field fxFlex="100">
-                <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
-                  <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+              <div fxFlex="50" fxLayout="column">
+                <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                  <span class="opsi-type">Exclude</span>
+                  <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <div fxFlex="100">
+                      <mat-checkbox formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
+                        style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                      </mat-checkbox> <!-- // TODO -->
+                      <mat-checkbox formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                    </div>
+                  </div>
+                  <mat-form-field fxFlex="100" *ngIf="formPM.get('limit_by_product_srcc').value" class="mt-8">
+                    <mat-chip-list #chipList aria-label="Product List">
+                      <mat-chip *ngFor="let product of productListSRCC" [selectable]="selectable" [removable]="removable"
+                        (removed)="removeSRCC(product)">
+                        {{product.name}}
+                        <mat-icon matChipRemove *ngIf="removable" (click)="removeSRCC(product.sku_id)">cancel</mat-icon>
+                      </mat-chip>
+                      <input matInput type="text" #productInputSRCC placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                        (input)="keyUpProductSRCC.next($event.target.value)" [formControl]="product_srcc" [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="addSRCC($event)"> <!-- // TODO -->
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                      <mat-option *ngFor="let item of filteredSkuOptionsSRCC | async" [value]="item"
+                        (onSelectionChange)="getProductObjSRCC($event, item)">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="100" *ngIf="!formPM.get('limit_by_product_srcc').value">
+                    <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
+                  </mat-form-field>
+                  
+                  <mat-form-field fxFlex="100">
+                    <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category_srcc" multiple>
+                      <mat-option *ngFor="let cat of listCategoriesSRCC" [value]="cat.id">{{ cat.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
             <div fxFlex="1"></div>
-            <div fxLayout="column"  fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
+            <!-- <div fxLayout="column"  fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
               <span class="opsi-type" style="font-weight: bold;">EXCLUDE</span>
               <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="100">
@@ -551,7 +594,7 @@
                   <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+            </div> -->
             <div fxFlex="1"></div>
             <div fxLayout="row" fxFlex="15" class="px-24">
               <mat-form-field fxFlex class="is-light form-primary" fxFlex="100">
