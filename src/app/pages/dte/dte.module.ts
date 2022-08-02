@@ -181,6 +181,7 @@ import { LotteryComponent } from './lottery/index/lottery.component';
 import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { XpComponent } from './xp/xp.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -378,6 +379,7 @@ export const MY_FORMATS = {
     LotteryCreateComponent,
     LotteryEditComponent,
     XpComponent,
+    JobsRequestComponent,
   ],
   exports: [
     TemplateIndexComponent,
