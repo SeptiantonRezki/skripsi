@@ -585,7 +585,7 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
       product: [""],
       category: [""],
       trade_creator_group_id: [""],
-      coin_exchange_rate: [0, [Validators.required, Validators.minLength(1)]]
+      coin_exchange_rate: [{value: 100, disabled: true}, [Validators.required, Validators.minLength(1)]]
       // note: [''],
       // limit_by_product_srcc: [false],
       // limit_by_category_srcc: [false],
