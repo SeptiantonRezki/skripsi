@@ -246,6 +246,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       coins: [],
       limit_spin: '',
       category_srcc: [''],
+      minimum_transaction: ''
     });
 
     this.keyUpProduct.debounceTime(300)
@@ -313,7 +314,10 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     // *MEKANISME
     this.getCategories();
-    // this.getCategoriesSRCC();
+    this.getCategoriesSRCC();
+    
+    this.formPM.get('category').disable();
+    this.formPM.get('category_srcc').disable();
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       // console.log('zone', res);
@@ -1130,13 +1134,15 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   getCategories() {
     this.productService.getListCategory(null).subscribe(res => {
+      console.log(res.data);
       this.listCategories = res.data ? res.data.data : [];
     });
   }
 
   getCategoriesSRCC() {
     this.productService.getListCategory(null).subscribe(res => {
-      this.listCategoriesSRCC = res.data ? res.data : [];
+      console.log(res.data);
+      this.listCategoriesSRCC = res.data ? res.data.data : [];
     });
   }
 

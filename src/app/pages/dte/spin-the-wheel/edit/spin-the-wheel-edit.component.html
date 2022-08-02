@@ -498,7 +498,7 @@
                           <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
                         </mat-chip>
                         <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
-                          (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                          (input)="keyUpProduct.next($event.target.value)" formControlName="product" [matAutocomplete]="auto"
                           [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                           (matChipInputTokenEnd)="add($event)"> <!-- // TODO -->
                       </mat-chip-list>
@@ -509,7 +509,7 @@
                         </mat-option>
                       </mat-autocomplete>
                     </mat-form-field>
-                    <mat-form-field fxFlex="100" class="" *ngIf="!formPM.get('limit_by_product').value">
+                    <mat-form-field fxFlex="100" *ngIf="!formPM.get('limit_by_product').value">
                       <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true"> <!-- // TODO -->
                     </mat-form-field>
 
@@ -539,7 +539,7 @@
                           <mat-icon matChipRemove *ngIf="removable" (click)="removeSRCC(product.sku_id)">cancel</mat-icon>
                         </mat-chip>
                         <input matInput type="text" #productInputSRCC placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
-                          (input)="keyUpProductSRCC.next($event.target.value)" [formControl]="product_srcc" [matAutocomplete]="auto"
+                          (input)="keyUpProductSRCC.next($event.target.value)" formControlName="product_srcc" [matAutocomplete]="auto"
                           [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                           (matChipInputTokenEnd)="addSRCC($event)"> <!-- // TODO -->
                       </mat-chip-list>
@@ -554,7 +554,7 @@
                       <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
                     </mat-form-field>
                     
-                    <mat-form-field fxFlex="100">
+                    <mat-form-field fxFlex="50">
                       <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category_srcc" multiple>
                         <mat-option *ngFor="let cat of listCategoriesSRCC" [value]="cat.id">{{ cat.name }}</mat-option>
                       </mat-select>
@@ -604,9 +604,8 @@
               <div fxFlex="1"></div>
               <div fxLayout="row" fxFlex="15" class="px-24">
                 <mat-form-field fxFlex class="is-light form-primary" fxFlex="100">
-                  <!-- <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="name"
-                    name="name"> -->
-                    <input matInput type="number" placeholder="Minimum Nilai Transaksi">
+                  <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="minimum_transaction"
+                    name="minimum_transaction">
                 </mat-form-field>
               </div>
             </div>
