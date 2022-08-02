@@ -217,17 +217,6 @@
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
-                  <div fxFlex fxLayout="row" class="px-24">
-                    <mat-form-field fxFlex="100%">
-                      <mat-select
-                        placeholder="Retail Classification"
-                        formControlName="classification"
-                        multiple
-                        >
-                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
                   <div fxLayout="row" class="px-16">
                       <mat-radio-button
                         class="radio-button pr-48"
@@ -276,6 +265,17 @@
                         <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
                           item.code
                         }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        formControlName="classification"
+                        multiple
+                        >
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
