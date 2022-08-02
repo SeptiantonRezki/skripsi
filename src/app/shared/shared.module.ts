@@ -47,7 +47,7 @@ import { TranslateModule } from "@ngx-translate/core";
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     ngfModule,
-    MatAutocompleteModule,
+    // MatAutocompleteModule,
     TranslateModule.forChild(),
   ],
   declarations: [
