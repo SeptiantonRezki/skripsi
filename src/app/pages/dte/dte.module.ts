@@ -173,6 +173,7 @@ import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -362,6 +363,7 @@ export const MY_FORMATS = {
     EmployeeMappingComponent,
     TemplatePlanogramComponent,
     CheckImageComponent,
+    JobsRequestComponent,
   ],
   exports: [
     TemplateIndexComponent,
