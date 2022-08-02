@@ -217,13 +217,15 @@ export class SpinTheWheelEditComponent implements OnInit {
     })
 
     this.formPM = this.formBuilder.group({
-      limit_only: [""],
+      limit_only: [''],
       limit_by_product: [false],
       limit_by_category: [false],
-      product: [""],
-      category: [""],
+      product: [''],
+      category: [''],
       limit_by_product_srcc: [false],
-    })
+      coin_variation: 0,
+      coins: []
+    });
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -292,6 +294,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.getAudience();
       }
     });
+    this.formGeo.get('classification').setValue(['all']);
   }
 
   removeImage(): void {
@@ -836,11 +839,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       body = {
         task_spin_id: id,
         audience_filter: 'population-blast',
-        // class_groups: this.formGeo.get('classification').value,
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value,
-        regions: this.formGeo.get('region').value,
-        areas: this.formGeo.get('area').value
+        zones: this.formGeo.get('division').value.lengt > 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all']
       };
     } else {
       body = {
@@ -1180,5 +1182,21 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.productInput.nativeElement.value = null;
       }
     }
+  }
+  
+  async changeCoinVariation(event) {
+    console.log('valuenya', event.target.value);
+    let arr = [];
+    for (let i = 0; i < event.target.value; i++) {
+      arr.push(
+        {
+          coin: 0,
+          slice: 0,
+          probability: 0,
+        }
+      );
+    }
+    await this.formPM.get('coins').setValue(arr);
+    console.log('arraynya', this.formPM.get('coins').value);
   }
 }
