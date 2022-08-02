@@ -467,20 +467,22 @@
             >
             <div fxLayout="row" class="px-24">
               <mat-form-field fxFlex class="is-light form-primary" fxFlex="49">
-                <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
-                  name="name">
+                <!-- <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
+                  name="name"> -->
+                  <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan">
               </mat-form-field>
               <div fxFlex="1"></div>
               <mat-form-field fxFlex class="is-light form-primary" fxFlex="50">
-                <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
-                  name="name">
+                <!-- <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
+                  name="name"> -->
+                <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu">
               </mat-form-field>
             </div>
             <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
                 <div fxFlex="50" fxLayout="column">
                   <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                     <span class="opsi-type">Pembatasan Produk & Kategori</span> <!-- // TODO -->
-                    <div fxFlex="50" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                       <div fxFlex="100">
                         <mat-checkbox formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
                           style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
@@ -602,8 +604,9 @@
               <div fxFlex="1"></div>
               <div fxLayout="row" fxFlex="15" class="px-24">
                 <mat-form-field fxFlex class="is-light form-primary" fxFlex="100">
-                  <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="name"
-                    name="name">
+                  <!-- <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="name"
+                    name="name"> -->
+                    <input matInput type="number" placeholder="Minimum Nilai Transaksi">
                 </mat-form-field>
               </div>
             </div>
