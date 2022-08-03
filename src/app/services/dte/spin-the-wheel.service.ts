@@ -47,4 +47,9 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, "save_settings");
     return this.postApi(url, body);
   }
+
+  showAudience(context: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show_audience', {id: context});
+    return this.getApi(url);
+  }
 }
