@@ -191,6 +191,10 @@ export class PagesName {
       "/dte/employee-mapping/create": "principal.dteemployeemapping.buat",
       "/dte/employee-mapping/edit/": "principal.dteemployeemapping.ubah",
       "/dte/employee-mapping/detail/": "principal.dteemployeemapping.lihat",
+      "/dte/xp": "principal.dtexp.lihat",
+      "/dte/xp/create/xp": "principal.dtexp.buat",
+      "/dte/xp/edit/": "principal.dtexp.ubah",
+      "/dte/xp/detail/": "principal.dtexp.lihat",
     }
     return PAGES[name];
   }
