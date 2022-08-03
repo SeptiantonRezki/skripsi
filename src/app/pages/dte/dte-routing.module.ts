@@ -61,6 +61,8 @@ import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.compon
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { XpComponent } from "./xp/xp.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 
 const routes: Routes = [
   {
@@ -692,6 +694,16 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: 'verification-approval',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval/detail/:id',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
     path: 'sub-group-trade-program',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard],
@@ -745,6 +757,30 @@ const routes: Routes = [
     path: 'employee-mapping/detail/:id',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
+  },
+  {
+    path: 'xp',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/create/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/edit/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/detail/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
 ];
 
