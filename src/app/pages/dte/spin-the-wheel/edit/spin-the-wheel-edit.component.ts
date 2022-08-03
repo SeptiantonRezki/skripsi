@@ -1424,19 +1424,27 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.productListSRCC.splice(index, 1);
     }
   }
-  
+
   async changeCoinVariation(event) {
     let arr = [];
+    let coins = await this.formPM.get('coins').value;
+    if (coins === null) {
+      coins = [];
+    }
     for (let i = 0; i < event.target.value; i++) {
-      arr.push(
-        {
-          coin: '',
-          slice: '',
-          probability: '',
-          limit_atempt: '',
-          total_budget: ''
-        }
-      );
+      if (i > coins.length - 1 || i === 0 && coins.length === 0) {
+        arr.push(
+          {
+            coin: '',
+            slice: '',
+            probability: '',
+            limit_atempt: '',
+            total_budget: ''
+          }
+        );
+      } else {
+        arr.push(coins[i]);
+      }
     }
     await this.formPM.get('coins').setValue(arr);
   }
@@ -1444,7 +1452,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   async changeCoin(event, index) {
     let newArr = this.formPM.get('coins').value;
     newArr[index].coin = event.target.value;
-    newArr[index].limit_atempt = newArr[index].probability * this.formPM.get('limit_spin').value;
+    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
     await this.formPM.get('coins').setValue(newArr);
   }
@@ -1458,7 +1466,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   async changeProbability(event, index) {
     let newArr = this.formPM.get('coins').value;
     newArr[index].probability = event.target.value;
-    newArr[index].limit_atempt = newArr[index].probability * this.formPM.get('limit_spin').value;
+    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
     await this.formPM.get('coins').setValue(newArr);
   }
@@ -1477,8 +1485,10 @@ export class SpinTheWheelEditComponent implements OnInit {
   sumPM(field) {
     const coins = this.formPM.get('coins').value;
     let sum = 0;
-    for (let i = 0; i < coins.length; i++) {
-      sum += coins[i][field] * 1;
+    if (coins !== null) {
+      for (let i = 0; i < coins.length; i++) {
+        sum += coins[i][field] * 1;
+      }
     }
     return sum;
   }
@@ -1504,7 +1514,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
         product = this.productList.map(r => r.sku_id);
         const limitBy = limitByProduct ? 'product' : 'category';
-        newArr ={
+        newArr = {
           limit_by: limitBy,
           limit_only: limitByProduct ? product : this.formPM.get('category').value
         };
