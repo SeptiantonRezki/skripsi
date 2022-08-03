@@ -5,7 +5,7 @@
 >
   <!-- HEADER -->
   <page-content-header contentTitle="Buat Spin The Wheel">
-    <button
+    <!-- <button
       id="btn-create-trade"
       style="width: 170px"
       (click)="submit()"
@@ -13,7 +13,7 @@
       type="button"
     >
       <mat-icon>save</mat-icon> {{ "global.button.edit" | translate }}
-    </button>
+    </button> -->
   </page-content-header>
   <!-- / HEADER -->
 
@@ -615,7 +615,7 @@
                 <p fxFlex="15">Limit Spin</p>
                 <div fxFlex="1"></div>
                 <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
-                  <input matInput type="number" placeholder="" formControlName="limit_spin"
+                  <input matInput currencyMask type="tel" placeholder="" formControlName="limit_spin"
                     name="limit_spin" (change)="calculatePM($event)" (keyup)="calculatePM($event)">
                 </mat-form-field>
                 <div fxFlex="2"></div>
@@ -683,6 +683,18 @@
                   </tbody>
                 </table>
               </div>
+            </div>
+            <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+              <button
+                id="btn-simpan"
+                mat-raised-button
+                type="button"
+                class="confirmation-button"
+                fxFlex="20"
+                (click)="submit()"
+              >
+                {{ ls.locale.global.button.save }}
+              </button>
             </div>
           </form>
         </mat-tab>
