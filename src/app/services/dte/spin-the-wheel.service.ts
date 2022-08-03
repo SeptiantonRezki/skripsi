@@ -52,4 +52,14 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, 'show_audience', {id: context});
     return this.getApi(url);
   }
+
+  exportSpin(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_spin");
+    return this.postApi(url, body);
+  }
+
+  publishUnpublish(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_publish", context);
+    return this.postApi(url, body);
+  }
 }

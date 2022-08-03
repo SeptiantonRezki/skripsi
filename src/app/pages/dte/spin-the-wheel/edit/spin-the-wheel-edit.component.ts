@@ -141,7 +141,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   iconList: any[] = [];
   areaIdNonTargetAudience: any = 1;
   detailFormSpin: any;
-  showDetail: any = [];
+  showDetail: any;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -251,9 +251,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       frekuensi_belanja: '',
       frekuensi_reward: ''
     });
-    // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { return res; });
-    console.log('SHOW', this.showDetail);
 
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -318,6 +315,8 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.initAreaV2();
 
+    this.setStorageDetail();
+
     // *MEKANISME
     this.getCategories();
     this.getCategoriesSRCC();
@@ -368,6 +367,15 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     });
     this.formGeo.get('classification').setValue(['all']);
+  }
+
+  setStorageDetail() {
+    // Show detail
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+      if(res.data){
+        this.dataService.setToStorage('spin_the_wheel', res.data);
+      }
+    });
   }
 
   removeImage(): void {
@@ -896,6 +904,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
+        this.setStorageDetail();
         // this.router.navigate(['dte', 'spin-the-wheel'])
       })
     } else {
@@ -1000,6 +1009,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
         this.dialogRef.close();
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.setStorageDetail();
         // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
       },
       (err) => {
@@ -1035,6 +1045,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
+        this.setStorageDetail();
         // this.router.navigate(['dte', 'spin-the-wheel'])
       }, err => {
         this.dataService.showLoading(false);
@@ -1045,6 +1056,21 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     // }
+  }
+
+  submitPublishUnpublish() {
+    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    this.dataService.showLoading(true);
+    let body = {
+      status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
+    }
+    this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
+      
+    this.dataService.showLoading(false);
+    this.router.navigate(['dte', 'spin-the-wheel'])
+    }, err => {
+      this.dataService.showLoading(false);
+    })
   }
 
   async exportAudience() {
