@@ -32,4 +32,19 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, 'save_audience');
     return this.postApi(url, body);
   }
+
+  put_spin(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_spin", context);
+    return this.postApi(url, body);
+  }
+  
+  put_preview(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_preview", context);
+    return this.postApi(url, body);
+  }
+  
+  saveSettings(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "save_settings");
+    return this.postApi(url, body);
+  }
 }
