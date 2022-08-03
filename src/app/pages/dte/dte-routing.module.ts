@@ -62,6 +62,7 @@ import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { XpComponent } from "./xp/xp.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 
 const routes: Routes = [
   {
@@ -690,6 +691,16 @@ const routes: Routes = [
   {
     path: 'verification-assignment/detail/:id',
     component: TaskVerificationAssignmentComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval/detail/:id',
+    component: VerificationApprovalComponent,
     canActivate: [PageGuard]
   },
   {
