@@ -34,6 +34,9 @@ export class SpinTheWheelEditComponent implements OnInit {
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
+  averageCoin: number = 0;
+  isPPK: boolean = false;
+  isExclude: boolean = false;
   
   formDetilVoucher: FormGroup;
 
@@ -914,7 +917,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value.lengt > 0 ? this.formGeo.get('division').value : ['all'],
+        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
         regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
         areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all']
       };
@@ -1451,6 +1454,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     }
     await this.formPM.get('coins').setValue(arr);
+    this.averageCoin = this.sumPM('coin') / event.target.value;
   }
 
   async changeCoin(event, index) {
@@ -1459,6 +1463,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
     await this.formPM.get('coins').setValue(newArr);
+    this.averageCoin = this.sumPM('coin') / this.formPM.get('coin_variation').value;
   }
 
   async changeSlice(event, index) {
@@ -1505,7 +1510,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
         limit_spin: this.formPM.get('limit_spin').value,
         coin_variation: this.formPM.get('coin_variation').value,
-        average_coin_spin: 38,
+        average_coin_spin: this.averageCoin,
         frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
         frekuensi_reward: this.formPM.get('frekuensi_reward').value,
         minimum_transaction: this.formPM.get('minimum_transaction').value,
@@ -1565,6 +1570,22 @@ export class SpinTheWheelEditComponent implements OnInit {
       });
     } else {
       this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+    }
+  }
+
+  changeType(value) {
+    if (value === 'ppk') {
+      this.productListSRCC = [];
+      this.isPPK = true;
+      this.isExclude = false;
+      this.formPM.get('limit_by_category_srcc').setValue(false);
+      this.formPM.get('limit_by_product_srcc').setValue(false);
+    } else {
+      this.productList = [];
+      this.isPPK = false;
+      this.isExclude = true;
+      this.formPM.get('limit_by_category').setValue(false);
+      this.formPM.get('limit_by_product').setValue(false);
     }
   }
 }

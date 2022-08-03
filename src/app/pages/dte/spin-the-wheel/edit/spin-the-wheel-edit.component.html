@@ -466,28 +466,38 @@
               [formGroup]="formPM"
             >
             <div fxLayout="row" class="px-24">
-              <mat-form-field fxFlex class="is-light form-primary" fxFlex="49">
+              <mat-form-field fxFlex class="is-light form-primary pt-16" fxFlex="49">
                 <!-- <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
                   name="name"> -->
                   <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="frekuensi_belanja" name="frekuensi_belanja">
               </mat-form-field>
               <div fxFlex="1"></div>
-              <mat-form-field fxFlex class="is-light form-primary" fxFlex="50">
+              <mat-form-field fxFlex class="is-light form-primary pt-16" fxFlex="50">
                 <!-- <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
                   name="name"> -->
                 <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="frekuensi_reward" name="frekuensi_reward">
               </mat-form-field>
             </div>
             <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
-                <div fxFlex="50" fxLayout="column">
+              <div fxFlex="100">
+                <div fxFlex="100" fxLayout="row">
+                  <mat-radio-button
+                    class="radio-button pr-48"
+                    [checked]="isPPK"
+                    (change)="changeType('ppk')"
+                  >
+                    Pembatasan Produk & Kategori
+                  </mat-radio-button>
+                </div>
+                <div fxFlex="100" class="px-16 py-16">
                   <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                     <span class="opsi-type">Pembatasan Produk & Kategori</span> <!-- // TODO -->
                     <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                       <div fxFlex="100">
-                        <mat-checkbox formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
+                        <mat-checkbox [disabled]="!isPPK" formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
                           style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                         </mat-checkbox> <!-- // TODO -->
-                        <mat-checkbox formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="!isPPK" formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
                       </div>
                     </div>
                     <mat-form-field fxFlex="100" class="" *ngIf="formPM.get('limit_by_product').value">
@@ -520,15 +530,26 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div fxFlex="50" fxLayout="column">
+              </div>
+              <div fxFlex="100">
+                <div fxFlex="100" fxLayout="row">
+                  <mat-radio-button
+                    class="radio-button pr-48"
+                    [checked]="isExclude"
+                    (change)="changeType('exclude')"
+                  >
+                    Exclude
+                  </mat-radio-button>
+                </div>
+                <div fxFlex="100" class="px-16 py-16">
                   <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
                     <span class="opsi-type">Exclude</span>
                     <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                       <div fxFlex="100">
-                        <mat-checkbox formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
+                        <mat-checkbox [disabled]="!isExclude" formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
                           style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                         </mat-checkbox> <!-- // TODO -->
-                        <mat-checkbox formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="!isExclude" formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
                       </div>
                     </div>
                     <mat-form-field fxFlex="100" *ngIf="formPM.get('limit_by_product_srcc').value" class="mt-8">
@@ -561,51 +582,15 @@
                     </mat-form-field>
                   </div>
                 </div>
+              </div>
+            </div>
               <div fxFlex="1"></div>
-              <!-- <div fxLayout="column"  fxFlex="35" style="border: 1px solid #ddd; position: relative;" class="p-8">
-                <span class="opsi-type" style="font-weight: bold;">EXCLUDE</span>
-                <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                  <div fxFlex="100">
-                    <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
-                      style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
-                    </mat-checkbox>
-                    <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
-                  </div>
-                </div>
-                <mat-form-field fxFlex="100" *ngIf="formSpin.get('limit_by_product').value" class="mt-12">
-                  <mat-chip-list #chipList aria-label="Product List">
-                    <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
-                      (removed)="remove(product)">
-                      {{product.name}}
-                      <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
-                    </mat-chip>
-                    <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
-                      (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
-                      [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)">
-                  </mat-chip-list>
-                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
-                    <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
-                      (onSelectionChange)="getProductObj($event, item)">
-                      {{item.name}}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-                <mat-form-field fxFlex="100" *ngIf="!formSpin.get('limit_by_product').value">
-                  <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
-                </mat-form-field>
-
-                <mat-form-field fxFlex="100">
-                  <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
-                    <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div> -->
-              <div fxFlex="1"></div>
-              <div fxLayout="row" fxFlex="15" class="px-24">
-                <mat-form-field fxFlex class="is-light form-primary" fxFlex="100">
-                  <input matInput type="number" placeholder="Minimum Nilai Transaksi" formControlName="minimum_transaction"
-                    name="minimum_transaction">
+            <div fxLayout="column" fxFlex="80">
+              <div fxLayout="row" fxFlex="100" class="px-24">
+                <p fxFlex="15">Minimum Nilai Transaksi</p>
+                <div fxFlex="1"></div>
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                  <input matInput currencyMask type="tel" placeholder="" formControlName="minimum_transaction" name="minimum_transaction">
                 </mat-form-field>
               </div>
             </div>
@@ -618,7 +603,7 @@
                     name="limit_spin" (change)="calculatePM($event)" (keyup)="calculatePM($event)">
                 </mat-form-field>
                 <div fxFlex="2"></div>
-                <p style="font-weight: bold;font-style: italic;">Average Coin per Spin = 35</p>
+                <p style="font-weight: bold;font-style: italic;">Average Coin per Spin = {{averageCoin}}</p>
               </div>
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Jumlah Variasi Koin</p>
@@ -661,10 +646,10 @@
                         </mat-form-field>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">{{item.limit_atempt}}</p>
+                        <p style="font-style: italic;padding:15px;">{{item.limit_atempt | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">{{item.total_budget}}</p>
+                        <p style="font-style: italic;padding:15px;">{{item.total_budget | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
                         <p style="font-style: italic;padding:15px;">0</p>
@@ -687,10 +672,10 @@
                       <td>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('limit_atempt')}}</p>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('limit_atempt') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('total_budget')}}</p>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('total_budget') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
                         <p style="font-style: italic;padding:15px; font-weight: bold;">0</p>
