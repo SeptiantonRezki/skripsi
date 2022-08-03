@@ -141,6 +141,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   iconList: any[] = [];
   areaIdNonTargetAudience: any = 1;
   detailFormSpin: any;
+  showDetail: any = [];
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -250,6 +251,9 @@ export class SpinTheWheelEditComponent implements OnInit {
       frekuensi_belanja: '',
       frekuensi_reward: ''
     });
+    // Show detail
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { return res; });
+    console.log('SHOW', this.showDetail);
 
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -1014,19 +1018,19 @@ export class SpinTheWheelEditComponent implements OnInit {
     // if (
     //   this.formPreview.valid
     //   ) {
-      // let body = new FormData();
-      // body.append('icon', '-');
-      // body.append('header', this.formPreview.get('preview_header').value);
+      let body = new FormData();
+      body.append('image', null);
+      body.append('header', this.formPreview.get('preview_header').value);
       // body.append('image', '-');
-      let body;
+      // let body;
 
-      body = {
-        icon: '-',
-        header: this.formPreview.get('preview_header').value,
-        image: '-'
-      };
+      // body = {
+      //   // icon: '-',
+      //   header: this.formPreview.get('preview_header').value,
+      //   image: '-'
+      // };
       // if (this.files) body.append('image', this.files)
-      // if (this.files) body.append('icon', this.files)
+      if (this.files) body.append('icon', this.files)
       
       this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
