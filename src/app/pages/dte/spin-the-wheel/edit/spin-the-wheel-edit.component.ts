@@ -240,13 +240,15 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_by_product_srcc: [false],
       limit_by_category_srcc: [false],
       product: [''],
-      product_srcc: [''],
       category: [''],
+      product_srcc: [''],
+      category_srcc: [''],
       coin_variation: '',
       coins: [],
       limit_spin: '',
-      category_srcc: [''],
-      minimum_transaction: ''
+      minimum_transaction: '',
+      frekuensi_belanja: '',
+      frekuensi_reward: ''
     });
 
     this.keyUpProduct.debounceTime(300)
@@ -976,34 +978,34 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     const dialogConfig = new MatDialogConfig();
   
-      dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.panelClass = "scrumboard-card-dialog";
-      dialogConfig.data = { password: "P@ssw0rd" };
-  
-      this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
-        {...dialogConfig, width: '400px'}
-      );
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
 
-      const processCheck = this.spinTheWheelService.saveAudience(body).subscribe(
-        (res) => {
-          if (res.data) {
-            this.isChecked = true;
-            this.panelBlast = res.data.panel_count;
-          }
-          this.dialogRef.close();
-          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
-        },
-        (err) => {
-          this.dialogRef.close();
+    this.dialogRef = this.dialog.open(
+      DialogProcessComponent,
+      {...dialogConfig, width: '400px'}
+    );
+
+    const processCheck = this.spinTheWheelService.saveAudience(body).subscribe(
+      (res) => {
+        if (res.data) {
+          this.isChecked = true;
+          this.panelBlast = res.data.panel_count;
         }
-      );
+        this.dialogRef.close();
+        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
+      },
+      (err) => {
+        this.dialogRef.close();
+      }
+    );
 
-      this.dialogRef.afterClosed().subscribe(() => {
-        processCheck.unsubscribe();
-      });
+    this.dialogRef.afterClosed().subscribe(() => {
+      processCheck.unsubscribe();
+    });
   }
 
   submitPreview() {
@@ -1463,7 +1465,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   async calculatePM(event) {
     let newArr = this.formPM.get('coins').value;
-    if (newArr.length > 0) {
+    if (newArr !== null && newArr.length > 0) {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt;
@@ -1471,5 +1473,84 @@ export class SpinTheWheelEditComponent implements OnInit {
       await this.formPM.get('coins').setValue(newArr);
     }
   }
-  
+
+  sumPM(field) {
+    const coins = this.formPM.get('coins').value;
+    let sum = 0;
+    for (let i = 0; i < coins.length; i++) {
+      sum += coins[i][field] * 1;
+    }
+    return sum;
+  }
+
+  async submitPM() {
+    const sumProbability = this.sumPM('probability');
+    console.log(sumProbability);
+    if (sumProbability === 100) {
+      let body = {
+        task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
+        limit_spin: this.formPM.get('limit_spin').value,
+        coin_variation: this.formPM.get('coin_variation').value,
+        average_coin_spin: 38,
+        frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
+        frekuensi_reward: this.formPM.get('frekuensi_reward').value,
+        minimum_transaction: this.formPM.get('minimum_transaction').value,
+        coins: this.formPM.get('coins').value
+      };
+      const limitByProduct = this.formPM.get('limit_by_product').value;
+      const excludeByProduct = this.formPM.get('limit_by_product_srcc').value;
+      let product = [];
+      let newArr = {};
+      if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
+        product = this.productList.map(r => r.sku_id);
+        const limitBy = limitByProduct ? 'product' : 'category';
+        newArr ={
+          limit_by: limitBy,
+          limit_only: limitByProduct ? product : this.formPM.get('category').value
+        };
+        body = {...body, ...newArr};
+      }
+      if (excludeByProduct === true || this.formPM.get('limit_by_category_srcc').value === true) {
+        product = this.productListSRCC.map(r => r.sku_id);
+        const excludeBy = excludeByProduct ? 'product' : 'category';
+        newArr = {
+          exclude_by: excludeBy,
+          exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
+        };
+        body = {...body, ...newArr};
+      }
+      const dialogConfig = new MatDialogConfig();
+    
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = "scrumboard-card-dialog";
+      dialogConfig.data = { password: "P@ssw0rd" };
+
+      this.dialogRef = this.dialog.open(
+        DialogProcessComponent,
+        {...dialogConfig, width: '400px'}
+      );
+
+      const processCheck = this.spinTheWheelService.saveSettings(body).subscribe(
+        (res) => {
+          if (res.data) {
+            this.isChecked = true;
+            this.panelBlast = res.data.panel_count;
+          }
+          this.dialogRef.close();
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
+        },
+        (err) => {
+          this.dialogRef.close();
+        }
+      );
+
+      this.dialogRef.afterClosed().subscribe(() => {
+        processCheck.unsubscribe();
+      });
+    } else {
+      this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+    }
+  }
 }

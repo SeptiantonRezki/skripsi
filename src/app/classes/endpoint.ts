@@ -1092,6 +1092,7 @@ export class Endpoint {
         save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/save-audience`,
         update_spin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update/${context.id}`,
         update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-preview/${context.id}`,
+        save_settings: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/save-settings`,
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

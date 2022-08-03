@@ -469,13 +469,13 @@
               <mat-form-field fxFlex class="is-light form-primary" fxFlex="49">
                 <!-- <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
                   name="name"> -->
-                  <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan">
+                  <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="frekuensi_belanja" name="frekuensi_belanja">
               </mat-form-field>
               <div fxFlex="1"></div>
               <mat-form-field fxFlex class="is-light form-primary" fxFlex="50">
                 <!-- <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
                   name="name"> -->
-                <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu">
+                <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="frekuensi_reward" name="frekuensi_reward">
               </mat-form-field>
             </div>
             <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
@@ -679,6 +679,32 @@
                         <p style="font-style: italic;padding:15px;">40.000.000</p>
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('limit_atempt')}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('total_budget')}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">20.000</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">40.000.000</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">20.000</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px; font-weight: bold;">40.000.000</p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -690,7 +716,7 @@
                 type="button"
                 class="confirmation-button"
                 fxFlex="20"
-                (click)="submit()"
+                (click)="submitPM()"
               >
                 {{ ls.locale.global.button.save }}
               </button>
