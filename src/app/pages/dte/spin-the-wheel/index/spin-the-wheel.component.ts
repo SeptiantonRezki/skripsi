@@ -181,4 +181,26 @@ export class SpinTheWheelComponent implements OnInit {
     }, 100);
   }
 
+  deleteTp(id) {
+    this.id = id;
+    let data = {
+      titleDialog: 'Hapus Spin The Wheel',
+      captionDialog: 'Apakah anda yakin untuk menghapus data ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.spinService.delete({ id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getSpinList();
+
+        this.dialogService.openSnackBar({ message: 'Berhasil' });
+      }
+    });
+  }
+
 }
