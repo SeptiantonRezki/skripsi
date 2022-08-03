@@ -366,7 +366,34 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.getAudience();
       }
     });
-    this.formGeo.get('classification').setValue(['all']);
+    if(!this.detailFormSpin){
+      this.formGeo.get('classification').setValue(['all']);
+    }
+    
+    this.setValueDetail();
+
+    let arr = this.detailFormSpin.areas;
+    let arr_area = [];
+    let arr_region = [];
+    let arr_zone = [];
+    arr.map((area, index) => {
+      if(area.level_desc === 'area'){
+        if(arr_area.indexOf(area.area_id) == -1){
+          arr_area.push(area.area_id);
+        }
+      }else if(area.level_desc === 'region'){
+        if(arr_region.indexOf(area.area_id) == -1){
+          arr_region.push(area.area_id);
+        }
+      }else{
+        if(arr_zone.indexOf(area.area_id) == -1){
+          arr_zone.push(area.area_id);
+        }
+      }
+    });
+    console.log(arr_area);
+    console.log(arr_region);
+    console.log(arr_zone);
   }
 
   setStorageDetail() {
@@ -613,7 +640,12 @@ export class SpinTheWheelEditComponent implements OnInit {
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
-          // fd = null
+          if (this.detailFormSpin.hasOwnProperty('zones')) {
+            const zones = this.detailFormSpin.zones[0];
+            const detailZones = zones > 1 ? this.detailFormSpin.zones : [];
+            this.formFilter.get('zone').setValue(detailZones);
+            this.detailFormSpin.zone = true
+          }
         });
 
         this.formFilter.get('region').setValue('');
@@ -640,6 +672,11 @@ export class SpinTheWheelEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
+              if (this.detailFormSpin.hasOwnProperty('regions')) {
+                const regions = this.detailFormSpin.regions[0];
+                const detailRegions = regions > 1 ? this.detailFormSpin.regions : [];
+                this.formFilter.get('region').setValue(detailRegions);
+              }
             });
           } else {
             this.list[selection] = []
@@ -670,6 +707,11 @@ export class SpinTheWheelEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
+              if (this.detailFormSpin.hasOwnProperty('areas')) {
+                const areas = this.detailFormSpin.areas[0];
+                const detailAreas = areas > 1 ? this.detailFormSpin.areas : [];
+                this.formFilter.get('area').setValue(detailAreas);
+              }
             });
           } else {
             this.list[selection] = []
@@ -1583,4 +1625,31 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
     }
   }
+
+  setValueDetail() {
+    
+    this.panelBlast = this.detailFormSpin.panel_count;
+    
+    const filter = this.detailFormSpin.audience_filter;
+    this.handleAudienceFilter(filter);
+
+    if (filter !== 'fixed-panel') {
+      this.formGeo.get('classification').setValue(this.detailFormSpin.class_group);
+    }
+
+    if (this.detailFormSpin.panel_count > 0) {
+      this.isChecked = true;
+    }
+
+    // if (this.isDetail) {
+    //   this.formAudience.disable();
+    //   this.formFilter.disable();
+    //   this.formFilterRetailer.disable();
+    // }
+  }
+
+  handleAudienceFilter(value) {
+    this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+  }
+  
 }
