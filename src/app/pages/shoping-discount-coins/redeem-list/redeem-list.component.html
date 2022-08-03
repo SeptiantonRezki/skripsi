@@ -1,0 +1,143 @@
+<div class="ayo-middle p-24" fxLayout="column">
+  <!-- <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+    <h2 class="pl-8">Penukaran Voucher</h2>
+  </div> -->
+
+  <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+    <div class="button-row">
+      <button mat-flat-button style="width: 160px" color="white" (click)="importRedeem()">
+        <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+      </button>
+    </div>
+    <div class="button-row">
+      <button mat-flat-button style="width: 160px" color="white" (click)="exportRedeem()">
+        <mat-icon>vertical_align_top</mat-icon> Export XLS
+      </button>
+    </div>
+  </div>
+
+  <!-- <h4 style="text-align: center;">Page Under Construction!</h4> -->
+  <div fxLayout="column">
+    <form [formGroup]="formFilter" autoComplete="off">
+      <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
+            <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ? 'Semua
+              Zona' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ? 'Semua
+              Regional' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ? 'Semua
+              Area' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name === 'all' ? 'Semua
+              Salespoint' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all' ? 'Semua
+              District' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all' ? 'Semua
+              Territory' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+    [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+    [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
+    [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+    <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.code}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.owner}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.classification}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Toko Menukarkan Voucher" prop="retailer_redeem_voucher_count">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.retailer_redeem_voucher_count}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="wholesaler_name">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name }}</ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.cn_reward.b2b_voucher.text9 }}" prop="nominal">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        {{row.nominal_format_currency }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.global.label.date_redeem }}" prop="available_at">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.available_at | date: 'dd/MM/yyyy
+        HH:mm:ss'}}</ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ ls.locale.global.label.invoice_redeem }}" prop="available_at">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.invoice}}</ng-template>
+    </ngx-datatable-column>
+    
+    <ngx-datatable-column name="{{ ls.locale.global.label.order_id_payment }}" prop="order_id">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_id}}</ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Tanggal" prop="payment_date"> <!-- // TODO -->
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.payment_date | date: 'dd-MM-yyyy'}}</ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</div>
