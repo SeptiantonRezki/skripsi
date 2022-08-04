@@ -632,17 +632,17 @@
                     <tr *ngFor="let item of formPM.get('coins').value; let i=index;">
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.slice}}" (change)="changeSlice($event, i)" (keyup)="changeSlice($event, i)">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.slice}}" (change)="changeSlice($event, i)" (keyup)="changeSlice($event, i)">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.probability}}" (change)="changeProbability($event, i)" (keyup)="changeProbability($event, i)">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.probability}}" (change)="changeProbability($event, i)" (keyup)="changeProbability($event, i)">
                         </mat-form-field>
                       </td>
                       <td>

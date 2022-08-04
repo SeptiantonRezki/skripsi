@@ -452,8 +452,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.formPM.get('coin_variation').disable();
         } else {
           this.editableCoin = true;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
         }
 
         this.formPM.get('coins').setValue(res.data.settings[0].coins);
