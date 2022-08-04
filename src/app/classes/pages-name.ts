@@ -197,6 +197,10 @@ export class PagesName {
       "/dte/xp/create/xp": "principal.dtexp.buat",
       "/dte/xp/edit/": "principal.dtexp.ubah",
       "/dte/xp/detail/": "principal.dtexp.lihat",
+      "/discount-coins-order": "principal.koin_potongan_belanja.lihat",
+      "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
+      "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
+      "/discount-coins-order/detail": "principal.koin_potongan_belanja.lihat",
     }
     return PAGES[name];
   }

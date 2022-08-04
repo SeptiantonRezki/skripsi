@@ -3,7 +3,7 @@
     <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
       <div class="button-row">
         <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"
-          *ngIf="permissions.buat || permissions.ubah">
+          *ngIf="actionType === 'edit' && permissions?.ubah">
           <mat-icon>vertical_align_bottom</mat-icon> Import XLS
         </button>
       </div>
@@ -114,7 +114,7 @@
           <span class="row-address">{{row.owner || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification" [sortable]="false">
+      <!-- <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.classification || '-'}}</span>
         </ng-template>
@@ -129,24 +129,24 @@
           <span class="row-address">{{row.ws_name || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Coin" prop="coin" [sortable]="false"> <!-- // TODO -->
+      <ngx-datatable-column name="Coin" prop="coin" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
           <span class="row-address">{{row.coin || 0}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false"> <!-- // TODO -->
+      <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
+          <span class="row-address">{{row.ws_name || '-'}}</span>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false"> <!-- // TODO -->
+      <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false">
         <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-          <!-- <span class="row-address">{{row.ws_name || '-'}}</span> -->
+          <span class="row-address">{{row.ws_name || '-'}}</span>
         </ng-template>
-      </ngx-datatable-column>
+      </ngx-datatable-column> -->
     </ngx-datatable>
     <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center"
-      *ngIf="isDetail && statusCoinDiscount !== 'need-approval' && !permissions.b2b_approval">
+      *ngIf="permissions?.ubah && actionType === 'edit'">
       <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
         (click)="onSave()">
         {{ ls.locale.global.button.save }}
