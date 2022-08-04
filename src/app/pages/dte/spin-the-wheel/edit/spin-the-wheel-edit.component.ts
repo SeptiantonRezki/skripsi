@@ -37,7 +37,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   averageCoin: number = 0;
   isPPK: boolean = false;
   isExclude: boolean = false;
-  editableCoin: boolean = false;
+  editableCoin: boolean = true;
   selectedZone = [];
   
   formDetilVoucher: FormGroup;
@@ -477,11 +477,11 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
 
         if (res.data.status === 'publish' && res.data.start_date <= moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && res.data.end_date >= moment(new Date()).format('YYYY-MM-DD HH:mm:ss')) {
-          this.editableCoin = false;
+          this.editableCoin = true;
           this.formPM.get('limit_spin').disable();
           this.formPM.get('coin_variation').disable();
         } else {
-          this.editableCoin = true;
+          this.editableCoin = false;
         }
 
         this.formPM.get('coins').setValue(res.data.settings[0].coins);
@@ -538,11 +538,12 @@ export class SpinTheWheelEditComponent implements OnInit {
         fd.append("area_id[]", "");
       }
 
+      if(value === 'division'){
+        // this.formGeo.get('division').setValue(this.selectedZone);
+      }
+
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
-        if(value === 'division'){
-          this.formGeo.get('division').setValue(this.selectedZone);
-        }
       });
     }
 
