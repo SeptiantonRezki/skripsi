@@ -41,27 +41,39 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{'global.label.status' | translate}}" prop="status_publish" [sortable]="false">
+        <ngx-datatable-column name="{{'global.label.status' | translate}}" prop="status_label" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
-              <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
-                [ngClass]="row.status_publish === 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{row.status_publish === 'publish' ? ('dte.trade_program.text6' | translate) : ('dte.trade_program.text7' | translate) }}
+              <p id="status_label" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
+                [ngClass]="
+                row.status_label === 'Belum Berjalan' ? 
+                  'mat-primary-800-bg' : 
+                  row.status_label === 'Draft' ? 
+                  'mat-blue-900-bg' : 
+                  row.status_label === 'Berakhir' ?
+                  'mat-red-900-bg' :
+                'mat-green-900-bg'">
+                {{ row.status_label }}
               </p>
             </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Publish" prop="coin_expiry_date">
+        <ngx-datatable-column name="Publish" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.coin_expiry_date | date:'dd/MM/yyyy'}}
+            <div class="name-container">
+              <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
+                [ngClass]="row.status === 'publish' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
+                {{row.status === 'publish' ? ('dte.pengatur_jadwal_program.text8' | translate) : ('dte.pengatur_jadwal_program.text9' | translate) }}
+              </p>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+              <button id="btn-detail" mat-icon-button color="" (click)="export(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
               </button>
               <button id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">

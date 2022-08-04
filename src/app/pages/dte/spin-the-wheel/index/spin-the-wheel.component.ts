@@ -152,4 +152,33 @@ export class SpinTheWheelComponent implements OnInit {
     this.router.navigate(['dte', 'spin-the-wheel', 'edit', param.id]);
   }
 
+  export(row) {
+    this.dataService.showLoading(true);
+    this.spinService.exportSpin({id: row.id}).subscribe(({data}) => {
+      
+      console.log({data});
+      this.downLoadFile(data.file);
+      this.dataService.showLoading(false);
+
+    }, err => {
+
+      this.dataService.showLoading(false);
+    })
+  }
+
+  downLoadFile(url) {
+
+    var link = document.createElement('a');
+    link.href = url;
+    // link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
 }

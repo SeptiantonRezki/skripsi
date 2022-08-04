@@ -82,7 +82,7 @@
                         (focus)="startDate.open()"
                         [matDatepicker]="startDate"
                         placeholder="Tanggal Mulai"
-                        [min]="minDate"
+                        
                       />
                       <mat-datepicker-toggle matSuffix [for]="startDate">
                         <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -144,7 +144,7 @@
                         (focus)="endDate.open()"
                         [matDatepicker]="endDate"
                         placeholder="Tanggal Berakhir"
-                        [min]="minDate"
+                        
                       />
                       <mat-datepicker-toggle matSuffix [for]="endDate">
                         <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -784,6 +784,15 @@
                     (click)="submitPreview()"
                   >
                     {{ ls.locale.global.button.save }}
+                  </button>
+
+                  <button 
+                    mat-raised-button 
+                    type="button" 
+                    class="ml-24 confirmation-button" 
+                    (click)="submitPublishUnpublish()" 
+                    fxFlex="20">
+                      {{ detailFormSpin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
                   </button>
                 </div>
                 

@@ -37,6 +37,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   averageCoin: number = 0;
   isPPK: boolean = false;
   isExclude: boolean = false;
+  editableCoin: boolean = false;
   
   formDetilVoucher: FormGroup;
 
@@ -144,7 +145,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   iconList: any[] = [];
   areaIdNonTargetAudience: any = 1;
   detailFormSpin: any;
-  showDetail: any = [];
+  showDetail: any;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -254,9 +255,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       frekuensi_belanja: '',
       frekuensi_reward: ''
     });
-    // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { return res; });
-    console.log('SHOW', this.showDetail);
 
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -321,6 +319,8 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.initAreaV2();
 
+    this.setStorageDetail();
+
     // *MEKANISME
     this.getCategories();
     this.getCategoriesSRCC();
@@ -370,7 +370,88 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.getAudience();
       }
     });
-    this.formGeo.get('classification').setValue(['all']);
+    if(!this.detailFormSpin){
+      this.formGeo.get('classification').setValue(['all']);
+    }
+    
+    this.setValueDetail();
+
+    let arr = this.detailFormSpin.areas;
+    let arr_area = [];
+    let arr_region = [];
+    let arr_zone = [];
+    arr.map((area, index) => {
+      if(area.level_desc === 'area'){
+        if(arr_area.indexOf(area.area_id) == -1){
+          arr_area.push(area.area_id);
+        }
+      }else if(area.level_desc === 'region'){
+        if(arr_region.indexOf(area.area_id) == -1){
+          arr_region.push(area.area_id);
+        }
+      }else{
+        if(arr_zone.indexOf(area.area_id) == -1){
+          arr_zone.push(area.area_id);
+        }
+      }
+    });
+    console.log(arr_area);
+    console.log(arr_region);
+    console.log(arr_zone);
+  }
+
+  setStorageDetail() {
+    // Show detail
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+      if(res.data){
+        this.dataService.setToStorage('spin_the_wheel', res.data);
+        this.formPM.get('limit_spin').setValue(res.data.settings[0].limit_spin);
+        this.formPM.get('coin_variation').setValue(res.data.settings[0].coin_variation);
+        this.averageCoin = res.data.settings[0].average_coin_spin;
+        
+        for (let i = 0; i < res.data.settings[0].details.length; i++) {
+          if (res.data.settings[0].details[i].category_type === 'belanja') {
+            this.formPM.get('frekuensi_belanja').setValue(res.data.settings[0].details[i].amount);
+          } else if (res.data.settings[0].details[i].category_type === 'reward') {
+            this.formPM.get('frekuensi_reward').setValue(res.data.settings[0].details[i].amount);
+          } else if (res.data.settings[0].details[i].category_type === 'minimum_transaction') {
+            this.formPM.get('minimum_transaction').setValue(res.data.settings[0].details[i].amount);
+          } else if (res.data.settings[0].details[i].category_type === 'limit') {
+            this.changeType('ppk');
+            if (res.data.settings[0].details[i].limit_by === 'product') {
+              this.formPM.get('limit_by_category').setValue(false);
+              this.formPM.get('limit_by_product').setValue(true);
+              // this.productList = res.data.settings[0].details[i].limit_only;
+            } else {
+              this.formPM.get('limit_by_category').setValue(true);
+              this.formPM.get('limit_by_product').setValue(false);
+            }
+          } else if (res.data.settings[0].details[i].category_type === 'exclude') {
+            this.changeType('exclude');
+            if (res.data.settings[0].details[i].limit_by === 'product') {
+              this.formPM.get('limit_by_category_srcc').setValue(false);
+              this.formPM.get('limit_by_product_srcc').setValue(true);
+              // this.productList = res.data.settings[0].details[i].limit_only;
+            } else {
+              this.formPM.get('limit_by_category_srcc').setValue(true);
+              this.formPM.get('limit_by_product_srcc').setValue(false);
+            }
+          }
+        }
+
+        if (res.data.status === 'publish' && res.data.start_date <= moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && res.data.end_date >= moment(new Date()).format('YYYY-MM-DD HH:mm:ss')) {
+          this.editableCoin = false;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
+        } else {
+          this.editableCoin = true;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
+        }
+
+        this.formPM.get('coins').setValue(res.data.settings[0].coins);
+      }
+    });
   }
 
   removeImage(): void {
@@ -608,7 +689,12 @@ export class SpinTheWheelEditComponent implements OnInit {
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
-          // fd = null
+          if (this.detailFormSpin.hasOwnProperty('zones')) {
+            const zones = this.detailFormSpin.zones[0];
+            const detailZones = zones > 1 ? this.detailFormSpin.zones : [];
+            this.formFilter.get('zone').setValue(detailZones);
+            this.detailFormSpin.zone = true
+          }
         });
 
         this.formFilter.get('region').setValue('');
@@ -635,6 +721,11 @@ export class SpinTheWheelEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
+              if (this.detailFormSpin.hasOwnProperty('regions')) {
+                const regions = this.detailFormSpin.regions[0];
+                const detailRegions = regions > 1 ? this.detailFormSpin.regions : [];
+                this.formFilter.get('region').setValue(detailRegions);
+              }
             });
           } else {
             this.list[selection] = []
@@ -665,6 +756,11 @@ export class SpinTheWheelEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
+              if (this.detailFormSpin.hasOwnProperty('areas')) {
+                const areas = this.detailFormSpin.areas[0];
+                const detailAreas = areas > 1 ? this.detailFormSpin.areas : [];
+                this.formFilter.get('area').setValue(detailAreas);
+              }
             });
           } else {
             this.list[selection] = []
@@ -899,6 +995,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
+        this.setStorageDetail();
         // this.router.navigate(['dte', 'spin-the-wheel'])
       })
     } else {
@@ -1003,6 +1100,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
         this.dialogRef.close();
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        this.setStorageDetail();
         // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
       },
       (err) => {
@@ -1038,6 +1136,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
+        this.setStorageDetail();
         // this.router.navigate(['dte', 'spin-the-wheel'])
       }, err => {
         this.dataService.showLoading(false);
@@ -1048,6 +1147,21 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     // }
+  }
+
+  submitPublishUnpublish() {
+    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    this.dataService.showLoading(true);
+    let body = {
+      status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
+    }
+    this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
+      
+    this.dataService.showLoading(false);
+    this.router.navigate(['dte', 'spin-the-wheel'])
+    }, err => {
+      this.dataService.showLoading(false);
+    })
   }
 
   async exportAudience() {
@@ -1093,21 +1207,17 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   handleClassification(event){
-    console.log('asdf', event);
     if (event.isUserInput) {
       const {value, selected} = event.source;
-      console.log('satu', value, selected);
       const retailer = this.formGeo.get('classification');
 
       if (value !== 'all' && selected) {
         if (retailer.value.includes('all')) {
-          console.log('terbaca 1');
           let newValue = retailer.value;
           newValue.shift();
           retailer.setValue(newValue);
         }
       } else if (value === 'all' && selected) {
-        console.log('terbaca 2');
         let newValue = retailer.value;
         newValue.splice(0, newValue.length);
         retailer.setValue(newValue);
@@ -1438,19 +1548,25 @@ export class SpinTheWheelEditComponent implements OnInit {
     if (coins === null) {
       coins = [];
     }
-    for (let i = 0; i < event.target.value; i++) {
-      if (i > coins.length - 1 || i === 0 && coins.length === 0) {
-        arr.push(
-          {
-            coin: '',
-            slice: '',
-            probability: '',
-            limit_atempt: '',
-            total_budget: ''
-          }
-        );
-      } else {
-        arr.push(coins[i]);
+    if (event.target.value <= 100) {
+      for (let i = 0; i < event.target.value; i++) {
+        if (i > coins.length - 1 || i === 0 && coins.length === 0) {
+          arr.push(
+            {
+              coin: '',
+              slice: '',
+              probability: '',
+              limit_atempt: '',
+              total_budget: '',
+              actual_spin: 0,
+              actual_budget: 0,
+              spin_left: 0,
+              budget_left: 0
+            }
+          );
+        } else {
+          arr.push(coins[i]);
+        }
       }
     }
     await this.formPM.get('coins').setValue(arr);
@@ -1588,4 +1704,31 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('limit_by_product').setValue(false);
     }
   }
+  
+  setValueDetail() {
+    
+    this.panelBlast = this.detailFormSpin.panel_count;
+    
+    const filter = this.detailFormSpin.audience_filter;
+    this.handleAudienceFilter(filter);
+
+    if (filter !== 'fixed-panel') {
+      this.formGeo.get('classification').setValue(this.detailFormSpin.class_group);
+    }
+
+    if (this.detailFormSpin.panel_count > 0) {
+      this.isChecked = true;
+    }
+
+    // if (this.isDetail) {
+    //   this.formAudience.disable();
+    //   this.formFilter.disable();
+    //   this.formFilterRetailer.disable();
+    // }
+  }
+
+  handleAudienceFilter(value) {
+    this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+  }
+  
 }
