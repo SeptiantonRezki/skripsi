@@ -3073,6 +3073,18 @@ export const brConfig = {
         name: "breadcrumbs.discount_coins_order.create"
       }
     ],
+    edit: [
+      {
+        type: "parent",
+        url: "/discount-coins-order",
+        name: "breadcrumbs.discount_coins_order.index"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "breadcrumbs.discount_coins_order.edit"
+      }
+    ],
     detail: [
       {
         type: "parent",
