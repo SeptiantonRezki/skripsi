@@ -442,33 +442,33 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
-        this.formPM.get('limit_spin').setValue(res.data.settings[0].limit_spin);
-        this.formPM.get('coin_variation').setValue(res.data.settings[0].coin_variation);
-        this.averageCoin = res.data.settings[0].average_coin_spin;
+        this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
+        this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
+        this.averageCoin = res.data.settings.average_coin_spin;
         
-        for (let i = 0; i < res.data.settings[0].details.length; i++) {
-          if (res.data.settings[0].details[i].category_type === 'belanja') {
-            this.formPM.get('frekuensi_belanja').setValue(res.data.settings[0].details[i].amount);
-          } else if (res.data.settings[0].details[i].category_type === 'reward') {
-            this.formPM.get('frekuensi_reward').setValue(res.data.settings[0].details[i].amount);
-          } else if (res.data.settings[0].details[i].category_type === 'minimum_transaction') {
-            this.formPM.get('minimum_transaction').setValue(res.data.settings[0].details[i].amount);
-          } else if (res.data.settings[0].details[i].category_type === 'limit') {
+        for (let i = 0; i < res.data.settings.details.length; i++) {
+          if (res.data.settings.details[i].category_type === 'belanja') {
+            this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'reward') {
+            this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
+            this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'limit') {
             this.changeType('ppk');
-            if (res.data.settings[0].details[i].limit_by === 'product') {
+            if (res.data.settings.details[i].limit_by === 'product') {
               this.formPM.get('limit_by_category').setValue(false);
               this.formPM.get('limit_by_product').setValue(true);
-              // this.productList = res.data.settings[0].details[i].limit_only;
+              // this.productList = res.data.settings.details[i].limit_only;
             } else {
               this.formPM.get('limit_by_category').setValue(true);
               this.formPM.get('limit_by_product').setValue(false);
             }
-          } else if (res.data.settings[0].details[i].category_type === 'exclude') {
+          } else if (res.data.settings.details[i].category_type === 'exclude') {
             this.changeType('exclude');
-            if (res.data.settings[0].details[i].limit_by === 'product') {
+            if (res.data.settings.details[i].limit_by === 'product') {
               this.formPM.get('limit_by_category_srcc').setValue(false);
               this.formPM.get('limit_by_product_srcc').setValue(true);
-              // this.productList = res.data.settings[0].details[i].limit_only;
+              // this.productList = res.data.settings.details[i].limit_only;
             } else {
               this.formPM.get('limit_by_category_srcc').setValue(true);
               this.formPM.get('limit_by_product_srcc').setValue(false);
@@ -484,7 +484,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.editableCoin = false;
         }
 
-        this.formPM.get('coins').setValue(res.data.settings[0].coins);
+        this.formPM.get('coins').setValue(res.data.settings.coins);
 
         let zone = [];
         for (let i = 0; i < res.data.areas.length; i++) {
