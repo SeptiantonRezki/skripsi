@@ -292,6 +292,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('frekuensi_reward').disable();
     }
 
+    // if(this.isDetail){
+      this.imageConverted = this.detailFormSpin.icon;
+    // }
+
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
