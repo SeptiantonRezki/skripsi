@@ -764,6 +764,11 @@ const routes: Routes = [
     component: SpinTheWheelEditComponent,
     // canActivate: [PageGuard]
   },
+  {
+    path: "spin-the-wheel/detail",
+    component: SpinTheWheelEditComponent,
+    //canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({

@@ -152,6 +152,11 @@ export class SpinTheWheelComponent implements OnInit {
     this.router.navigate(['dte', 'spin-the-wheel', 'edit', param.id]);
   }
 
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('spin_the_wheel', param);
+    this.router.navigate(['dte', 'spin-the-wheel', 'detail']);
+  }
+
   export(row) {
     this.dataService.showLoading(true);
     this.spinService.exportSpin({id: row.id}).subscribe(({data}) => {
