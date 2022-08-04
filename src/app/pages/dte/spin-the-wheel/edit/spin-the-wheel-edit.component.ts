@@ -459,6 +459,7 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('limit_by_category').setValue(false);
               this.formPM.get('limit_by_product').setValue(true);
               // this.productList = res.data.settings.details[i].limit_only;
+              this.productList = res.data.settings.details[i].limit_only_data;
             } else {
               this.formPM.get('limit_by_category').setValue(true);
               this.formPM.get('limit_by_product').setValue(false);
@@ -469,6 +470,7 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('limit_by_category_srcc').setValue(false);
               this.formPM.get('limit_by_product_srcc').setValue(true);
               // this.productList = res.data.settings.details[i].limit_only;
+              this.productListSRCC = res.data.settings.details[i].limit_only_data;
             } else {
               this.formPM.get('limit_by_category_srcc').setValue(true);
               this.formPM.get('limit_by_product_srcc').setValue(false);
@@ -1113,11 +1115,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       body = {
         task_spin_id: id,
         audience_filter: 'population-blast',
-        // class_groups: this.formGeo.get('classification').value,
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value,
-        regions: this.formGeo.get('region').value,
-        areas: this.formGeo.get('area').value,
+        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all'],
         panel_count: this.panelBlast
       };
     } else {
