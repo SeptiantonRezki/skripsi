@@ -293,7 +293,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     // if(this.isDetail){
-      this.imageConverted = this.detailFormSpin.icon;
+      this.imageConverted = this.detailFormSpin.icon_url;
     // }
 
     this.keyUpProduct.debounceTime(300)
