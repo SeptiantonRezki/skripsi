@@ -1115,11 +1115,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       body = {
         task_spin_id: id,
         audience_filter: 'population-blast',
-        // class_groups: this.formGeo.get('classification').value,
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value,
-        regions: this.formGeo.get('region').value,
-        areas: this.formGeo.get('area').value,
+        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all'],
         panel_count: this.panelBlast
       };
     } else {
