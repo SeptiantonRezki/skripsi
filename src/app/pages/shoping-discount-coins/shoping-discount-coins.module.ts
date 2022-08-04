@@ -62,7 +62,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.discount_coins_order.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "create",
@@ -70,7 +70,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.discount_coins_order.create
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "detail",
@@ -78,7 +78,15 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.discount_coins_order.detail
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
+  },
+  {
+    path: "edit",
+    component: ShopingDiscountCoinsCreateComponent,
+    data: {
+      breadcrumbs: brConfig.discount_coins_order.edit
+    },
+    canActivate: [PageGuard]
   },
 ]
 
