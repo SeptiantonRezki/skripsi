@@ -56,6 +56,7 @@ export class PanelMitraCoinComponent implements OnInit {
   detailCoinDiscount: any;
   isDetail: Boolean;
   isEdit: Boolean;
+  actionType: string;
   @Output() refreshDetail = new EventEmitter();
   @Input() statusCoinDiscount: string;
   @Input() permissions: any;
@@ -72,9 +73,10 @@ export class PanelMitraCoinComponent implements OnInit {
     private ls: LanguagesService
   ) {
     activatedRoute.url.subscribe(params => {
+      this.actionType = params[0].path;
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isEdit = params[0].path === 'edit' ? true : false;
-      if (this.isDetail || this.isEdit) {
+      if (['edit', 'detail'].includes(this.actionType)) {
         this.detailCoinDiscount = this.dataService.getFromStorage("detail_shoping_discount_coins");
       }
     });
@@ -129,7 +131,7 @@ export class PanelMitraCoinComponent implements OnInit {
     this.getListMitra();
 
     setTimeout(() => {
-      if (this.isDetail || this.isEdit) {
+      if (['edit', 'detail'].includes(this.actionType)) {
         this.getMitraSelected();
       }
     }, 1000);
@@ -140,31 +142,26 @@ export class PanelMitraCoinComponent implements OnInit {
     });
 
     this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
       if (res) {
         this.getAudienceAreaV2('region', res);
       }
     });
     this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
       if (res) {
         this.getAudienceAreaV2('area', res);
       }
     });
     this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
       if (res) {
         this.getAudienceAreaV2('salespoint', res);
       }
     });
     this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
       if (res) {
         this.getAudienceAreaV2('district', res);
       }
     });
     this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
       if (res) {
         this.getAudienceAreaV2('territory', res);
       }
@@ -172,13 +169,11 @@ export class PanelMitraCoinComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    // console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
 
   selectFn(allRowsSelected: boolean) {
-    console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (!allRowsSelected) this.selected = [];
     else this.selected.length = this.totalData;
@@ -193,8 +188,6 @@ export class PanelMitraCoinComponent implements OnInit {
     let fd = new FormData();
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -206,7 +199,6 @@ export class PanelMitraCoinComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -219,7 +211,6 @@ export class PanelMitraCoinComponent implements OnInit {
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
@@ -231,7 +222,6 @@ export class PanelMitraCoinComponent implements OnInit {
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -261,7 +251,7 @@ export class PanelMitraCoinComponent implements OnInit {
       }
 
       if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
-      // console.log('on set', thisAreaOnSet, selection, id);
+      
     }
 
 
@@ -286,7 +276,7 @@ export class PanelMitraCoinComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
+        
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -323,7 +313,7 @@ export class PanelMitraCoinComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
+          
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -352,7 +342,7 @@ export class PanelMitraCoinComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          console.log('item', item);
+          
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -439,7 +429,7 @@ export class PanelMitraCoinComponent implements OnInit {
   }
 
   getListMitra(string?: any) {
-    console.log('Search', string);
+    
     try {
       this.dataService.showLoading(true);
       this.pagination.per_page = 25;
@@ -487,11 +477,11 @@ export class PanelMitraCoinComponent implements OnInit {
         if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
           let oneAreaSelected = lastSelectedArea.value[0];
           let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-          console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+          
           if (findOnFirstArea) is_area_2 = false;
           else is_area_2 = true;
 
-          console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+          
           if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
             // console.log('its hitted [levelCovered > -1]');
             if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
@@ -627,7 +617,7 @@ export class PanelMitraCoinComponent implements OnInit {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
+            
             // console.log(this.formFilter.controls[this.parseArea(level.type)]);
             if (sameArea.level_desc === level.type) {
               lastLevelDisabled = level.type;
@@ -637,7 +627,7 @@ export class PanelMitraCoinComponent implements OnInit {
 
             if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
             // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+            
           }
 
           let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
@@ -646,7 +636,7 @@ export class PanelMitraCoinComponent implements OnInit {
             ...this.list[this.parseArea(level.type)],
             level
           ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+          
           if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
 
           if (i === area.length - 1) {
@@ -660,7 +650,7 @@ export class PanelMitraCoinComponent implements OnInit {
 
   getMitraSelected() {
     this.shopingDiscountCoinsService.getSelectedMitra({ coind_discount_id: this.detailCoinDiscount.id }).subscribe(res => {
-      console.log('retailer selected', res);
+      
       this.onSelect({
         selected: res.data.map(slc => ({
           ...slc,
@@ -686,11 +676,12 @@ export class PanelMitraCoinComponent implements OnInit {
     this.shopingDiscountCoinsService.updatePanel({ coin_discount_id: this.detailCoinDiscount.id }, body).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      if (!this.isDetail && !this.isEdit) this.router.navigate(['b2b-voucher', 'detail']);
-      else {
-        // this.getDetail();
-        this.getMitraSelected();
-      }
+      this.router.navigate(['discount-coins-order']);
+      // if (!this.isDetail && !this.isEdit) this.router.navigate(['discount-coins-order', 'detail']);
+      // else {
+      //   // this.getDetail();
+      //   this.getMitraSelected();
+      // }
       this.refreshDetail.emit('refreshdong');
     }, err => {
       this.dataService.showLoading(false);
@@ -712,7 +703,6 @@ export class PanelMitraCoinComponent implements OnInit {
     }
     try {
       const response = await this.shopingDiscountCoinsService.exportMitra(fd, { coin_discount_id: this.detailCoinDiscount.id }).toPromise();
-      console.log('he', response.headers);
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PanelMitra_${new Date().toLocaleString()}.xls`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
@@ -756,8 +746,6 @@ export class PanelMitraCoinComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
-    console.log(error)
 
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
@@ -785,7 +773,6 @@ export class PanelMitraCoinComponent implements OnInit {
         // this.selected = this.selected.concat(response);
         this.onSelect({ selected: response });
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
-        console.log('this', this.selected)
       }
     });
   }

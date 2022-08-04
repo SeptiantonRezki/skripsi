@@ -908,6 +908,7 @@ export class Endpoint {
         create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins`,
         update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/${context.coin_discount_id}`,
         show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/${context.coin_discount_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount/coins/${context.coin_discount_id}`,
 
         redeem: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem`,
         export_excel: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/export-excel`,

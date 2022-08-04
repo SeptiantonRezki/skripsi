@@ -10,6 +10,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { ShopingDiscountCoinsService } from 'app/services/shoping-discount-coins.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-shoping-discount-coins.component',
@@ -50,13 +51,13 @@ export class ShopingDiscountCoinsComponent implements OnInit {
     private dialogService: DialogService,
     private dataService: DataService,
     private shopingDiscountCoinsService: ShopingDiscountCoinsService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     this.onLoad = true;
     // this.selected = [];
 
-    this.permission = this.roles.getRoles('principal.b2b_voucher');
-    console.log(this.permission);
+    this.permission = this.roles.getRoles('principal.koin_potongan_belanja');
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -158,6 +159,10 @@ export class ShopingDiscountCoinsComponent implements OnInit {
     this.dataService.setToStorage("detail_shoping_discount_coins", param);
     this.router.navigate(["discount-coins-order", "detail"]);
   }
+  directEdit(param?: any): void {
+    this.dataService.setToStorage("detail_shoping_discount_coins", param);
+    this.router.navigate(["discount-coins-order", "edit"]);
+  }
 
   getStatusColor(status) {
     switch (status) {
@@ -174,24 +179,25 @@ export class ShopingDiscountCoinsComponent implements OnInit {
     }
   }
 
-  deleteVoucher(id) {
+  deleteDiscountCoin(id) {
     this.id = id;
+    const entity = this.translate.instant('cn_reward.discount_coins_order.title')
     const data = {
-      titleDialog: 'Hapus Voucher', // TODO
-      captionDialog: 'Apakah anda yakin untuk menghapus voucher ini?', // TODO
+      titleDialog: this.translate.instant('global.label.delete_entity', {entity}),
+      captionDialog: this.translate.instant('global.messages.delete_confirm', {entity, index: ''}),
       confirmCallback: this.confirmDelete.bind(this),
-      buttonText: ['Hapus', this.ls.locale.global.button.cancel] // TODO
+      buttonText: [this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel')] 
     };
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
   confirmDelete() {
-    this.shopingDiscountCoinsService.delete({ voucher_id: this.id }).subscribe(res => {
+    this.shopingDiscountCoinsService.delete({ coin_discount_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         this.getList();
 
-        this.dialogService.openSnackBar({ message: 'Data Berhasil Dihapus' }); // TODO
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text1') }); // TODO
       }
     });
   }

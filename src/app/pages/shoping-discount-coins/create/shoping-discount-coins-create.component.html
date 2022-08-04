@@ -52,7 +52,13 @@
                 </mat-form-field>
                 <mat-form-field fxFlex="50">
                   <mat-select placeholder="{{ls.locale.dte.group_trade_program.text1}}" formControlName="trade_creator_group_id" multiple>
-                    <mat-option *ngFor="let item of groupTradePrograms" [value]="item.id">{{ item.name }}</mat-option>
+                    <ngx-mat-select-search
+                      [formControl]="searchKeywordGTP"
+                      placeholderLabel="{{'global.label.search' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                      [searching]="searchingGTP"
+                    ></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of groupTradePrograms | async" [value]="item.id">{{ item.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
@@ -174,11 +180,11 @@
               </div>
               
               <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start">
-                <button mat-raised-button type="button" class="confirmation-button" *ngIf="whyYouCantSeeMe()"
+                <button mat-raised-button type="button" class="confirmation-button" *ngIf="(permission?.ubah && actionType === 'edit') || (permission?.buat && actionType === 'create')"
                   fxFlex="30" fxFlex.gt-xs="20" (click)="onSaveDetail()">
                   {{ls.locale.global.button.save}}
                 </button>
-                <ng-container *ngIf="checkForNonApprover()">
+                <!-- <ng-container *ngIf="checkForNonApprover()">
                   <button *ngFor="let item of listStatuses" mat-raised-button type="button"
                     [ngClass]="item.value === 'rejected' ? 'confirmation-button' : 'mat-green-800-bg'" fxFlex="20"
                     style="margin-left: 10px;" (click)="takeAction(item)">
@@ -188,18 +194,18 @@
                 <button mat-raised-button type="button" *ngIf="detailCoinDiscount && detailCoinDiscount.status === 'published'"
                   fxFlex="20" style="margin-left: 10px;" disabled>
                   {{ls.locale.cn_reward.b2b_voucher.published}}
-                </button>
+                </button> -->
               </div>
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Panel Mitra" *ngIf="isDetail">
+        <mat-tab label="Panel Mitra" *ngIf="actionType !== 'create'">
           <app-panel-mitra-coin (refreshDetail)="onRefreshDetail()" [statusCoinDiscount]="detailCoinDiscount.status"
             [permissions]="permission">
           </app-panel-mitra-coin>
         </mat-tab>
         
-        <mat-tab label="{{ 'cn_reward.discount_coins_order.coin_redeem' | translate}}" *ngIf="isDetail">
+        <mat-tab label="{{ 'cn_reward.discount_coins_order.coin_redeem' | translate}}" *ngIf="actionType !== 'create'">
           <!-- <app-redeem-list></app-redeem-list> -->
         </mat-tab>
       </mat-tab-group>
