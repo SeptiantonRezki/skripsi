@@ -1,0 +1,835 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Buat Spin The Wheel">
+    <!-- <button
+      id="btn-create-trade"
+      style="width: 170px"
+      (click)="submit()"
+      mat-raised-button
+      type="button"
+    >
+      <mat-icon>save</mat-icon> {{ "global.button.edit" | translate }}
+    </button> -->
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group>
+        <mat-tab label="Spin The Wheel">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form
+              autocomplete="off"
+              [formGroup]="formSpin"
+              fxLayout="row"
+              fxLayoutGap="16px"
+            >
+              <div fxFlex="50%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Nama Program"
+                      formControlName="name"
+                      name="name"
+                    />
+                    <!-- <mat-error
+                      *ngIf="formSpin.controls['name'].hasError('required') && formSpin.controls['name'].touched">
+                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex="100%">
+                    <mat-select
+                      formControlName="trade_creator_id"
+                      placeholder="{{ 'dte.trade_program.text3' | translate }}"
+                      #singleSelect
+                    >
+                      <ngx-mat-select-search
+                        [formControl]="filterTradeProgram"
+                        placeholderLabel="Pilih Trade Program"
+                        noEntriesFoundLabel="{{
+                          'global.messages.data_not_found' | translate
+                        }}"
+                      ></ngx-mat-select-search>
+                      <mat-option
+                        *ngFor="let item of filteredTradeProgram | async"
+                        [value]="item.id"
+                      >
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div
+                  fxLayout="row"
+                  class="px-24"
+                  fxLayout.lt-md="column"
+                  fxLayoutGap="20px"
+                  fxLayoutGap.lt-md="0px"
+                >
+                  <div fxLayout="row" fxFlex="100">
+                    <mat-form-field fxFlex="50%" class="is-light form-primary">
+                      <input
+                        matInput
+                        formControlName="start_date"
+                        (focus)="startDate.open()"
+                        [matDatepicker]="startDate"
+                        placeholder="Tanggal Mulai"
+                        
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="startDate">
+                        <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #startDate></mat-datepicker>
+                      <mat-error
+                        *ngIf="
+                          formSpin.controls['start_date'].hasError(
+                            'required'
+                          ) && formSpin.controls['start_date'].touched
+                        "
+                      >
+                        {{
+                          ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                        }}
+                        {{ "global.messages.mandatory_text" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="10"></div>
+                    <mat-form-field
+                      fxFlex="30"
+                      class="is-light form-primary"
+                      id="start_time"
+                    >
+                      <input
+                        matInput
+                        formControlName="start_time"
+                        placeholder="{{
+                          'notification.popup_notifikasi.text8' | translate
+                        }}"
+                        [ngxTimepicker]="fullTime1"
+                        [format]="24"
+                        readonly
+                      />
+                      <mat-icon matSuffix>access_time</mat-icon>
+                      <ngx-material-timepicker
+                        #fullTime1
+                      ></ngx-material-timepicker>
+                      <mat-error
+                        *ngIf="
+                          formSpin.controls['start_time'].hasError(
+                            'required'
+                          ) && formSpin.controls['start_time'].touched
+                        "
+                      >
+                        {{
+                          ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                        }}
+                        {{ "global.messages.mandatory_text" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxLayout="row" fxFlex="100">
+                    <mat-form-field fxFlex="50%" class="is-light form-primary">
+                      <input
+                        matInput
+                        formControlName="end_date"
+                        (focus)="endDate.open()"
+                        [matDatepicker]="endDate"
+                        placeholder="Tanggal Berakhir"
+                        
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="endDate">
+                        <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #endDate></mat-datepicker>
+                      <mat-error
+                        *ngIf="
+                          formSpin.controls['start_date'].hasError(
+                            'required'
+                          ) && formSpin.controls['start_date'].touched
+                        "
+                      >
+                        {{
+                          ls.locale.manajemen_barang_sku.manajemen_koin.text16
+                        }}
+                        {{ "global.messages.mandatory_text" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="10"></div>
+                    <mat-form-field
+                      fxFlex="30"
+                      class="is-light form-primary"
+                      id="end_time"
+                    >
+                      <input
+                        matInput
+                        formControlName="end_time"
+                        placeholder="{{
+                          'notification.popup_notifikasi.text10' | translate
+                        }}"
+                        [ngxTimepicker]="fullTime2"
+                        [format]="24"
+                        readonly
+                      />
+                      <mat-icon matSuffix>access_time</mat-icon>
+                      <ngx-material-timepicker
+                        #fullTime2
+                      ></ngx-material-timepicker>
+                      <mat-error
+                        *ngIf="
+                          formSpin.controls['end_time'].hasError('required') &&
+                          formSpin.controls['end_time'].touched
+                        "
+                      >
+                        {{
+                          ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                        }}
+                        {{ "global.messages.mandatory_text" | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="confirm pt-24 pb-24 px-24" fxLayout="row" *ngIf="!isDetail">
+                  <button
+                    id="btn-simpan"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submit()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Audience" [disabled]="false">
+          <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
+                <div fxFlex="100">
+                  <div fxLayout="row" class="px-16">
+                      <mat-radio-button
+                        class="radio-button pr-48"
+                        [checked]="isPopulation"
+                        (change)="changeBlastType('population')"
+                      >
+                        Population Blast
+                      </mat-radio-button>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                      placeholder="{{'global.area.zone' | translate}}"
+                      formControlName="division"
+                      (selectionChange)="getLevel('division')"
+                      multiple
+                    >
+                      <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                        item.code
+                      }}</mat-option>
+                    </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.regional' | translate}}"
+                        formControlName="region"
+                        (selectionChange)="getLevel('region')"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.area' | translate}}"
+                        formControlName="area"
+                        multiple
+                        (selectionChange)="getLevel('area')"
+                      >
+                        <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        formControlName="classification"
+                        multiple
+                        >
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div fxLayout="row" fxFlex="45">
+                <div class="red-big-chunk-panel" fxFlex="100">
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
+                  <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
+                </div>
+            </div>
+          </div>
+          <div
+          fxLayout="column"
+          class="px-16"
+          >
+            <mat-radio-button
+              class="radio-button pr-48"
+              [checked]="!isPopulation"
+              (change)="changeBlastType('fixed')"
+            >
+              Fixed Panel
+            </mat-radio-button>
+          <div fxLayout="column" class="px-20 py-16">
+            <!-- <div [formGroup]="formFilter">
+              <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
+                fxLayoutGap="20px" fxLayoutGap.lt-md="0px" style="margin-left: 25px; margin-right: 25px;">
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
+                    <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Zona' :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="audienceaudienceaudienceaudience" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Regional'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Area'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name
+                      === 'all' ?
+                      'Semua
+                      Salespoint'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      District'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex="12%" class="is-light form-primary">
+                  <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
+                    <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
+                      'all' ? 'Semua
+                      Territori'
+                      :
+                      item.code}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div> -->
+  
+            <!-- <div class="p-0">
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+                fxLayoutAlign="end center" class="p-16 export">
+                <a #downloadLink></a>
+                <button mat-raised-button type="button" class="is-danger" (click)="import()">
+                  <mat-icon>arrow_downward</mat-icon> Import XLS
+                </button>
+                <button mat-raised-button type="button" class="is-danger" (click)="export()">
+                  <mat-icon>arrow_upward</mat-icon> Export XLS
+                </button>
+              </div>
+              <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+              <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+                [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+                [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page"
+                [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
+                [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
+                [selectCheck]='selectCheck'>
+  
+                <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+                  
+                    dihapus .....
+                    <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                    let-selectFn="selectFn">
+                    <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                  </ng-template> 
+                  .....
+  
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+                    let-onCheckboxChangeFn="onCheckboxChangeFn">
+                    <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
+                    </mat-checkbox>
+                  </ng-template>
+                </ngx-datatable-column>
+  
+                <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
+                <ngx-datatable-column name="Code" prop="code" [sortable]="false">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.code ? row.code : '-'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Owner" prop="owner">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.owner ? row.owner : '-'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Type" prop="type">
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{row.type.toUpperCase()}}
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+            </div> -->
+            
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+              <div fxLayout="column">
+                <button
+                  mat-raised-button
+                  type="button"
+                  class="is-danger"
+                  (click)="exportAudience()"
+                >
+                  <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+                </button>
+                <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+              </div>
+              <button
+                mat-raised-button
+                type="button"
+                class="is-danger"
+                (click)="importAudience()"
+              >
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+              </button>
+            </div>
+          </div>
+          </div>
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submitAudience()" fxFlex="20">
+              Check
+            </button>
+            <button
+              id="btn-simpan"
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="saveAudience()"
+              fxFlex="20"
+              [disabled]="!isChecked"
+            >
+              {{ ls.locale.global.button.save }}
+            </button>
+          </div>
+        </mat-tab>
+        <mat-tab label="Pengaturan Mekanisme" [disabled]="false">
+          <form
+              autocomplete="off"
+              [formGroup]="formPM"
+            >
+            <div fxLayout="row" class="px-24">
+              <mat-form-field fxFlex class="is-light form-primary pt-16" fxFlex="49">
+                <!-- <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
+                  name="name"> -->
+                  <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="frekuensi_belanja" name="frekuensi_belanja">
+              </mat-form-field>
+              <div fxFlex="1"></div>
+              <mat-form-field fxFlex class="is-light form-primary pt-16" fxFlex="50">
+                <!-- <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
+                  name="name"> -->
+                <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="frekuensi_reward" name="frekuensi_reward">
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
+              <div fxFlex="100">
+                <div fxFlex="100" fxLayout="row">
+                  <mat-radio-button
+                    class="radio-button pr-48"
+                    [checked]="isPPK"
+                    (change)="changeType('ppk')"
+                    [disabled]="isDetail"
+                  >
+                    Pembatasan Produk & Kategori
+                  </mat-radio-button>
+                </div>
+                <div fxFlex="100" class="px-16 py-16">
+                  <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                    <span class="opsi-type">Pembatasan Produk & Kategori</span> <!-- // TODO -->
+                    <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                      <div fxFlex="100">
+                        <mat-checkbox [disabled]="(!isDetail)? !isPPK : isDetail" formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
+                          style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                        </mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="(!isDetail)? !isPPK : isDetail" formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                      </div>
+                    </div>
+                    <mat-form-field fxFlex="100" class="" *ngIf="formPM.get('limit_by_product').value">
+                      <mat-chip-list #chipList aria-label="Product List">
+                        <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                          (removed)="remove(product)">
+                          {{product.name}}
+                          <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                        </mat-chip>
+                        <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                          (input)="keyUpProduct.next($event.target.value)" formControlName="product" [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="add($event)"> <!-- // TODO -->
+                      </mat-chip-list>
+                      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                        <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                          (onSelectionChange)="getProductObj($event, item)">
+                          {{item.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" *ngIf="!formPM.get('limit_by_product').value">
+                      <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true"> <!-- // TODO -->
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex="50">
+                      <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple> <!-- // TODO -->
+                        <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div fxFlex="100">
+                <div fxFlex="100" fxLayout="row">
+                  <mat-radio-button
+                    class="radio-button pr-48"
+                    [checked]="isExclude"
+                    (change)="changeType('exclude')"
+                    [disabled]="isDetail"
+                  >
+                    Exclude
+                  </mat-radio-button>
+                </div>
+                <div fxFlex="100" class="px-16 py-16">
+                  <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                    <span class="opsi-type">Exclude</span>
+                    <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                      <div fxFlex="100">
+                        <mat-checkbox [disabled]="(!isDetail)? !isExclude : isDetail" formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
+                          style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                        </mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="(!isDetail)? !isExclude : isDetail" formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                      </div>
+                    </div>
+                    <mat-form-field fxFlex="100" *ngIf="formPM.get('limit_by_product_srcc').value" class="mt-8">
+                      <mat-chip-list #chipList aria-label="Product List">
+                        <mat-chip *ngFor="let product of productListSRCC" [selectable]="selectable" [removable]="removable"
+                          (removed)="removeSRCC(product)">
+                          {{product.name}}
+                          <mat-icon matChipRemove *ngIf="removable" (click)="removeSRCC(product.sku_id)">cancel</mat-icon>
+                        </mat-chip>
+                        <input matInput type="text" #productInputSRCC placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                          (input)="keyUpProductSRCC.next($event.target.value)" formControlName="product_srcc" [matAutocomplete]="auto"
+                          [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addSRCC($event)"> <!-- // TODO -->
+                      </mat-chip-list>
+                      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                        <mat-option *ngFor="let item of filteredSkuOptionsSRCC | async" [value]="item"
+                          (onSelectionChange)="getProductObjSRCC($event, item)">
+                          {{item.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" *ngIf="!formPM.get('limit_by_product_srcc').value">
+                      <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
+                    </mat-form-field>
+                    
+                    <mat-form-field fxFlex="50">
+                      <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category_srcc" multiple>
+                        <mat-option *ngFor="let cat of listCategoriesSRCC" [value]="cat.id">{{ cat.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div fxFlex="1"></div>
+            <div fxLayout="column" fxFlex="80">
+              <div fxLayout="row" fxFlex="100" class="px-24">
+                <p fxFlex="15">Minimum Nilai Transaksi</p>
+                <div fxFlex="1"></div>
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                  <input matInput currencyMask type="tel" placeholder="" formControlName="minimum_transaction" name="minimum_transaction">
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="column" fxFlex="80">
+              <div fxLayout="row" fxFlex="100" class="px-24">
+                <p fxFlex="15">Limit Spin</p>
+                <div fxFlex="1"></div>
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                  <input matInput currencyMask type="tel" placeholder="" formControlName="limit_spin"
+                    name="limit_spin" (change)="calculatePM($event)" (keyup)="calculatePM($event)">
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <p style="font-weight: bold;font-style: italic;">Average Coin per Spin = {{averageCoin}}</p>
+              </div>
+              <div fxLayout="row" fxFlex="100" class="px-24">
+                <p fxFlex="15">Jumlah Variasi Koin</p>
+                <div fxFlex="1"></div>
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                  <input min="1" max="100" matInput type="number" placeholder="" formControlName="coin_variation"
+                    name="name" (change)="changeCoinVariation($event)" (keyup)="changeCoinVariation($event)">
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxFlex="100" class="px-24" *ngIf="formPM.get('coin_variation').value">
+                <table class="table" fxFlex="25">
+                  <thead>
+                    <tr>
+                      <th>#Coin</th>
+                      <th>#Slice</th>
+                      <th>%Probability</th>
+                      <th>Limit Attempt</th>
+                      <th>Total Budget</th>
+                      <th>Actual Spin</th>
+                      <th>Actual Budget</th>
+                      <th>Sisa Spin</th>
+                      <th>Sisa Budget</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of formPM.get('coins').value; let i=index;">
+                      <td>
+                        <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.slice}}" (change)="changeSlice($event, i)" (keyup)="changeSlice($event, i)">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.probability}}" (change)="changeProbability($event, i)" (keyup)="changeProbability($event, i)">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.limit_atempt | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.total_budget | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.actual_spin | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.actual_budget | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.spin_left | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{item.budget_left | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('limit_atempt') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('total_budget') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('actual_spin') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('actual_budget') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('spin_left') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                      <td>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('budget_left') | rupiahFormaterWithoutRp}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="confirm pt-24 pb-24 px-24" fxLayout="row" *ngIf="!isDetail">
+              <button
+                id="btn-simpan"
+                mat-raised-button
+                type="button"
+                class="confirmation-button"
+                fxFlex="20"
+                (click)="submitPM()"
+              >
+                {{ ls.locale.global.button.save }}
+              </button>
+            </div>
+          </form>
+        </mat-tab>
+        <mat-tab label="Preview" [disabled]="false">
+          <div class="ayo-middle py-24" fxLayout="column">
+            
+            <form
+              autocomplete="off"
+              [formGroup]="formPreview"
+              fxLayout="row"
+              fxLayoutGap="16px"
+            >
+              <div fxFlex="50%">
+                <div class="grey-box">
+                  <p
+                    style="
+                      font-style: italic;
+                      font-weight: bold;
+                      text-align: center;
+                    "
+                  >
+                    Floating Icon AYO SRC Toko Home Page
+                  </p>
+                  <div class="px-24">
+                    <div
+                      ngfDrop
+                      selectable="1"
+                      class="rectangle-16"
+                      [(validDrag)]="validComboDrag"
+                      [(file)]="files"
+                      accept="image/*"
+                      [class.invalid-drag]="validComboDrag === false"
+                      [class.valid-drag]="validComboDrag"
+                      (fileChange)="changeImage($event)"
+                      [(invalidDrag)]="isDetail"
+                      [fileDropDisabled]="isDetail"
+                    >
+                      <div
+                        class="p-24"
+                        fxLayout="column"
+                        fxLayoutAlign="center center"
+                      >
+                        <mat-icon
+                          style="width: 48px; height: 48px; font-size: 48px"
+                          >add_photo_alternate_outline</mat-icon
+                        >
+                        <br />
+                        <span matPrefix>Tarik Gambar Kesini</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p style="font-weight: bold; text-align: center">Preview</p>
+                  <div style="text-align: center" *ngIf="imageConverted">
+                    <img
+                      [src]="imageConverted"
+                      alt="Preview Image"
+                      width="200px"
+                      height="100px"
+                    />
+                  </div>
+                  <p
+                    style="
+                      font-style: italic;
+                      font-weight: bold;
+                      text-align: center;
+                    "
+                  >
+                    Floating Icon AYO SRC Toko Home Page
+                  </p>
+                </div>
+
+                <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
+                  <button
+                    id="btn-simpan"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submitPreview()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
+
+                  <button 
+                    mat-raised-button 
+                    type="button" 
+                    class="ml-24 confirmation-button" 
+                    (click)="submitPublishUnpublish()" 
+                    fxFlex="20">
+                      {{ detailFormSpin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+                  </button>
+                </div>
+                
+              </div>
+              <div fxFlex="1"></div>
+              <div fxFlex="50%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Nama Program"
+                      formControlName="preview_header"
+                      name="preview_header"
+                    />
+                    <mat-error
+                      *ngIf="formPreview.controls['preview_header'].hasError('required') && formPreview.controls['preview_header'].touched">
+                      {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24 pb-24">
+                  <img mat-list-icon src="assets/images/ayo/preview-spin.png" style="max-height: 100%;" />
+                </div>
+                
+              </div>
+              
+            </form>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+  <a #downloadLink></a>
+</div>

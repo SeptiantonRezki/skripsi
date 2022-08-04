@@ -175,6 +175,9 @@ import { TemplatePlanogramComponent } from './image-recognition/template-planogr
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { XpComponent } from './xp/xp.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
+import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
+import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
+import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -366,6 +369,9 @@ export const MY_FORMATS = {
     CheckImageComponent,
     XpComponent,
     VerificationApprovalComponent,
+    SpinTheWheelComponent,
+    SpinTheWheelCreateComponent,
+    SpinTheWheelEditComponent,
   ],
   exports: [
     TemplateIndexComponent,
