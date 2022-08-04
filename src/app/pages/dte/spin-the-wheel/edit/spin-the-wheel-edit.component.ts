@@ -38,6 +38,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   isPPK: boolean = false;
   isExclude: boolean = false;
   editableCoin: boolean = false;
+  selectedZone = [];
   
   formDetilVoucher: FormGroup;
 
@@ -455,6 +456,16 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
 
         this.formPM.get('coins').setValue(res.data.settings[0].coins);
+
+        let zone = [];
+        for (let i = 0; i < res.data.areas.length; i++) {
+          if (res.data.areas[i].level_desc === 'zone') {
+            if (!( res.data.areas[i].area_id in zone )) {
+              zone.push(res.data.areas[i].area_id);
+            }
+          }
+        }
+        this.selectedZone = zone;
       }
     });
   }
@@ -500,6 +511,9 @@ export class SpinTheWheelEditComponent implements OnInit {
 
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
+        if(value === 'division'){
+          this.formGeo.get('division').setValue(this.selectedZone);
+        }
       });
     }
 
