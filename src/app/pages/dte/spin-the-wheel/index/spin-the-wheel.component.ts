@@ -152,4 +152,60 @@ export class SpinTheWheelComponent implements OnInit {
     this.router.navigate(['dte', 'spin-the-wheel', 'edit', param.id]);
   }
 
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('spin_the_wheel', param);
+    this.router.navigate(['dte', 'spin-the-wheel', 'detail']);
+  }
+
+  export(row) {
+    this.dataService.showLoading(true);
+    this.spinService.exportSpin({id: row.id}).subscribe(({data}) => {
+      
+      console.log({data});
+      this.downLoadFile(data.file);
+      this.dataService.showLoading(false);
+
+    }, err => {
+
+      this.dataService.showLoading(false);
+    })
+  }
+
+  downLoadFile(url) {
+
+    var link = document.createElement('a');
+    link.href = url;
+    // link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  deleteTp(id) {
+    this.id = id;
+    let data = {
+      titleDialog: 'Hapus Spin The Wheel',
+      captionDialog: 'Apakah anda yakin untuk menghapus data ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.spinService.delete({ id: this.id }).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getSpinList();
+
+        this.dialogService.openSnackBar({ message: 'Berhasil' });
+      }
+    });
+  }
+
 }

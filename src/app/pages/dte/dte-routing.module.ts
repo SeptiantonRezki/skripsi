@@ -818,6 +818,11 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
+    path: 'spin-the-wheel/detail',
+    component: SpinTheWheelEditComponent,
+    //canActivate: [PageGuard]
+  },
+  {
     path: 'lottery',
     component: LotteryComponent,
     data: {
