@@ -31,6 +31,8 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
   isB2CVoucher: FormControl = new FormControl(false);
   isDetail: Boolean;
   isCreate: Boolean;
+  isEdit: Boolean;
+  actionType: string = 'detail';
   formShopingDiscountCoins: FormGroup;
   formFilter: FormGroup;
   minDateVoucher: any = new Date();
@@ -69,7 +71,7 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
   wholesalerIds: any = [];
   isSort: boolean = false;
 
-  groupTradePrograms: any[] = [];
+  // groupTradePrograms: any[] = [];
   listCategories: any[] = [];
   listProduct: any[] = [];
   filterProduct: FormControl = new FormControl("");
@@ -110,6 +112,9 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
   titleParam = {
     entity: this.translate.instant('cn_reward.discount_coins_order.title')
   }
+  public searchKeywordGTP: FormControl = new FormControl();
+  public groupTradePrograms: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  searchingGTP: Boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -126,9 +131,10 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
     private translate: TranslateService
   ) {
     activatedRoute.url.subscribe(params => {
+      this.actionType = params[0].path;
       this.isDetail = params[0].path === 'detail' ? true : false;
       this.isCreate = params[0].path === 'create' ? true : false;
-      if (this.isDetail) {
+      if (this.actionType !== 'create') {
         this.detailCoinDiscount = this.dataService.getFromStorage("detail_shoping_discount_coins");
       }
     });
@@ -173,6 +179,9 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
     // this.filteredSkuOptions = this.product.valueChanges.pipe(
     //   startWith(null),
     //   map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
+    this.searchKeywordGTP.valueChanges.debounceTime(350).takeUntil(this._onDestroy).subscribe(keyword => {
+      this.getGroupTradeProgram(keyword);
+    });
   }
 
   _filterSku(value): any[] {
@@ -285,9 +294,13 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
     });
   }
 
-  getGroupTradeProgram() {
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
-      this.groupTradePrograms = res.data ? res.data.data : [];
+  getGroupTradeProgram(keyword = null) {
+    this.searchingGTP = true;
+    this.groupTradeProgramService.get({ page: (!keyword) && 'all', search: keyword }).subscribe(res => {
+      this.groupTradePrograms.next(res.data ? res.data.data : []);
+      this.searchingGTP = false;
+    }, error => {
+      this.searchingGTP = false;
     })
   }
 
@@ -426,7 +439,6 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
 
   getDetail() {
     this.shopingDiscountCoinsService.show({ coin_discount_id: this.detailCoinDiscount.id }).subscribe(res => {
-      console.log('RES DATA', res.data);
       this.detailCoinDiscount = res.data;
       this.isB2CVoucher.setValue(res.data.is_b2c_voucher ? true : false);
       this.formShopingDiscountCoins.setValue({
@@ -459,9 +471,9 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
         ([value, name]) => ({ value, name })
       ) : [];
 
-      // if (!this.formShopingDiscountCoins.get('limit_by_category').value) {
-      //   this.formShopingDiscountCoins.get('category').disable();
-      // }
+      if (!this.formShopingDiscountCoins.get('limit_by_category').value) {
+        this.formShopingDiscountCoins.get('category').disable();
+      }
 
       if (this.permission.b2b_approval) this.formShopingDiscountCoins.disable();
 
@@ -487,6 +499,9 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
       if (res.data.limit_by_src_catalogue === 'product') {
         this.productListSRCC = res && res.data && res.data.limit_only_data_src_catalogue ?
         res.data.limit_only_data_src_catalogue : [];
+      }
+      if(this.actionType === 'detail') {
+        this.formShopingDiscountCoins.disable();
       }
     });
   }
@@ -537,7 +552,7 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
   }
 
   whyYouCantSeeMe() {
-    if (this.permission.b2b_approval && !this.isCreate) return false;
+    if (this.permission.lihat && !this.isCreate) return false;
     else if (this.isCreate && this.permission.buat) return true;
     else if (!this.isCreate && this.permission.ubah) return true;
     else return false;
@@ -608,8 +623,7 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
       district: [""],
       territory: [""]
     })
-
-    if (this.isDetail) {
+    if (this.actionType !== 'create') {
       this.getDetail();
       // this.getRetailerSelected();
       this.getDetailRedeem();
@@ -1097,7 +1111,6 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
 
   getVoucherB2CList() {
     this.shopingDiscountCoinsService.getVoucherB2CList().subscribe(res => {
-      console.log({res});
       this.voucherB2CList = res.data;
     }, err => {
       console.log('err', err)
@@ -1218,27 +1231,39 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
     // }
 
     this.dataService.showLoading(true);
-    if (this.isDetail) {
-      this.shopingDiscountCoinsService.update({ coin_discount_id: this.detailCoinDiscount.id }, body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        if (!this.isDetail) this.router.navigate(['discount-coins-order', 'detail']);
-        else {
-          this.getDetail();
-          // this.getRetailerSelected();
-        }
-      }, err => {
-        this.dataService.showLoading(false);
-      })
-    } else {
-      this.shopingDiscountCoinsService.create(body).subscribe(res => {
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.router.navigate(['discount-coins-order']);
-      }, err => {
-        this.dataService.showLoading(false);
-      })
-    }
+    // if (this.isDetail) {
+    //   this.shopingDiscountCoinsService.update({ coin_discount_id: this.detailCoinDiscount.id }, body).subscribe(res => {
+    //     this.dataService.showLoading(false);
+    //     this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //     if (!this.isDetail) this.router.navigate(['discount-coins-order', 'detail']);
+    //     else {
+    //       this.getDetail();
+    //     }
+    //   }, err => {
+    //     this.dataService.showLoading(false);
+    //   })
+    // } else {
+    //   this.shopingDiscountCoinsService.create(body).subscribe(res => {
+    //     this.dataService.showLoading(false);
+    //     this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //     this.router.navigate(['discount-coins-order']);
+    //   }, err => {
+    //     this.dataService.showLoading(false);
+    //   })
+    // }
+    const actionService = (this.actionType === 'edit')
+      ? this.shopingDiscountCoinsService.update({ coin_discount_id: this.detailCoinDiscount.id }, body) // IF EDIT
+      : this.shopingDiscountCoinsService.create(body); // IF CREATE
+    actionService.subscribe(res => {
+      this.dataService.showLoading(false);
+      
+      this.dialogService.openSnackBar({
+        message: this.translate.instant((this.actionType === 'edit') ? 'global.messages.text2' : 'notification.popup_notifikasi.text22')
+      });
+      this.router.navigate(['discount-coins-order']);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   onSavePanelRetailer() {

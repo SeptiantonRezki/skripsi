@@ -191,6 +191,10 @@ export class PagesName {
       "/dte/employee-mapping/create": "principal.dteemployeemapping.buat",
       "/dte/employee-mapping/edit/": "principal.dteemployeemapping.ubah",
       "/dte/employee-mapping/detail/": "principal.dteemployeemapping.lihat",
+      "/discount-coins-order": "principal.koin_potongan_belanja.lihat",
+      "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
+      "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
+      "/discount-coins-order/detail": "principal.koin_potongan_belanja.lihat",
     }
     return PAGES[name];
   }

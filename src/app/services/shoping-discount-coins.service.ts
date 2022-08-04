@@ -33,7 +33,7 @@ export class ShopingDiscountCoinsService extends BaseService {
   }
 
   delete(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'update', context);
+    const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
 

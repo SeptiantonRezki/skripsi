@@ -3,8 +3,9 @@
   <page-content-header contentTitle="{{'cn_reward.discount_coins_order.title' | translate}}">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      *ngIf="permission?.buat"
         [routerLink]="['/discount-coins-order','create']">
-        <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
+        <mat-icon>add</mat-icon> {{ 'global.button.add' | translate }}
       </button>
     </div>
   </page-content-header>
@@ -47,6 +48,22 @@
         <ngx-datatable-column name="{{ 'cn_reward.discount_coins_order.end_date' | translate }}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date: 'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="{{ 'global.label.action' | translate }}" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row" style="margin-left: -10px">
+              <button mat-icon-button color="" (click)="directEdit(row)"
+              [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.ubah">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="deleteDiscountCoin(row.id)"
+                [ngStyle]="{'cursor': !permission?.hapus ? 'no-drop' : ''}" [disabled]="!permission?.hapus">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
