@@ -459,6 +459,7 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('limit_by_category').setValue(false);
               this.formPM.get('limit_by_product').setValue(true);
               // this.productList = res.data.settings.details[i].limit_only;
+              this.productList = res.data.settings.details[i].limit_only_data;
             } else {
               this.formPM.get('limit_by_category').setValue(true);
               this.formPM.get('limit_by_product').setValue(false);
@@ -469,6 +470,7 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('limit_by_category_srcc').setValue(false);
               this.formPM.get('limit_by_product_srcc').setValue(true);
               // this.productList = res.data.settings.details[i].limit_only;
+              this.productListSRCC = res.data.settings.details[i].limit_only_data;
             } else {
               this.formPM.get('limit_by_category_srcc').setValue(true);
               this.formPM.get('limit_by_product_srcc').setValue(false);
