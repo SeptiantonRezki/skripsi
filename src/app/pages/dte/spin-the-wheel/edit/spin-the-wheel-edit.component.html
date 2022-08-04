@@ -197,7 +197,7 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+                <div class="confirm pt-24 pb-24 px-24" fxLayout="row" *ngIf="!isDetail">
                   <button
                     id="btn-simpan"
                     mat-raised-button
@@ -420,7 +420,7 @@
               </ngx-datatable>
             </div> -->
             
-            <div fxLayout="row" fxLayoutGap="16px">
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
               <div fxLayout="column">
                 <button
                   mat-raised-button
@@ -443,7 +443,7 @@
             </div>
           </div>
           </div>
-          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" >
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
             <button mat-raised-button type="button" class="confirmation-button" (click)="submitAudience()" fxFlex="20">
               Check
             </button>
@@ -485,6 +485,7 @@
                     class="radio-button pr-48"
                     [checked]="isPPK"
                     (change)="changeType('ppk')"
+                    [disabled]="isDetail"
                   >
                     Pembatasan Produk & Kategori
                   </mat-radio-button>
@@ -494,10 +495,10 @@
                     <span class="opsi-type">Pembatasan Produk & Kategori</span> <!-- // TODO -->
                     <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                       <div fxFlex="100">
-                        <mat-checkbox [disabled]="!isPPK" formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
+                        <mat-checkbox [disabled]="(!isDetail)? !isPPK : isDetail" formControlName="limit_by_product" (change)="isCheckedPM('product', $event)"
                           style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                         </mat-checkbox> <!-- // TODO -->
-                        <mat-checkbox [disabled]="!isPPK" formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="(!isDetail)? !isPPK : isDetail" formControlName="limit_by_category" (change)="isCheckedPM('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
                       </div>
                     </div>
                     <mat-form-field fxFlex="100" class="" *ngIf="formPM.get('limit_by_product').value">
@@ -537,6 +538,7 @@
                     class="radio-button pr-48"
                     [checked]="isExclude"
                     (change)="changeType('exclude')"
+                    [disabled]="isDetail"
                   >
                     Exclude
                   </mat-radio-button>
@@ -546,10 +548,10 @@
                     <span class="opsi-type">Exclude</span>
                     <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                       <div fxFlex="100">
-                        <mat-checkbox [disabled]="!isExclude" formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
+                        <mat-checkbox [disabled]="(!isDetail)? !isExclude : isDetail" formControlName="limit_by_product_srcc" (change)="isCheckedSRCC('product', $event)"
                           style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
                         </mat-checkbox> <!-- // TODO -->
-                        <mat-checkbox [disabled]="!isExclude" formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
+                        <mat-checkbox [disabled]="(!isDetail)? !isExclude : isDetail" formControlName="limit_by_category_srcc" (change)="isCheckedSRCC('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox> <!-- // TODO -->
                       </div>
                     </div>
                     <mat-form-field fxFlex="100" *ngIf="formPM.get('limit_by_product_srcc').value" class="mt-8">
@@ -694,7 +696,7 @@
                 </table>
               </div>
             </div>
-            <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+            <div class="confirm pt-24 pb-24 px-24" fxLayout="row" *ngIf="!isDetail">
               <button
                 id="btn-simpan"
                 mat-raised-button
@@ -739,6 +741,8 @@
                       [class.invalid-drag]="validComboDrag === false"
                       [class.valid-drag]="validComboDrag"
                       (fileChange)="changeImage($event)"
+                      [(invalidDrag)]="isDetail"
+                      [fileDropDisabled]="isDetail"
                     >
                       <div
                         class="p-24"
@@ -774,7 +778,7 @@
                   </p>
                 </div>
 
-                <div class="confirm pt-24 pb-24 px-24">
+                <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
                   <button
                     id="btn-simpan"
                     mat-raised-button

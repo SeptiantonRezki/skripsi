@@ -246,6 +246,16 @@ export class SpinTheWheelEditComponent implements OnInit {
       end_time: ["00:00", Validators.required],
     })
 
+    if(this.isDetail){
+      this.formSpin.get('name').disable();
+      this.formSpin.get('trade_creator_id').disable();
+      this.formSpin.get('start_date').disable();
+      this.formSpin.get('start_time').disable();
+      this.formSpin.get('end_date').disable();
+      this.formSpin.get('end_time').disable();
+    }
+    
+
     this.formPM = this.formBuilder.group({
       limit_only: [''],
       limit_by_product: [false],
@@ -263,6 +273,24 @@ export class SpinTheWheelEditComponent implements OnInit {
       frekuensi_belanja: '',
       frekuensi_reward: ''
     });
+
+    if(this.isDetail){
+      this.formPM.get('limit_only').disable();
+      this.formPM.get('limit_by_product').disable();
+      this.formPM.get('limit_by_category').disable();
+      this.formPM.get('limit_by_product_srcc').disable();
+      this.formPM.get('limit_by_category_srcc').disable();
+      this.formPM.get('product').disable();
+      this.formPM.get('category').disable();
+      this.formPM.get('product_srcc').disable();
+      this.formPM.get('category_srcc').disable();
+      this.formPM.get('coin_variation').disable();
+      this.formPM.get('coins').disable();
+      this.formPM.get('limit_spin').disable();
+      this.formPM.get('minimum_transaction').disable();
+      this.formPM.get('frekuensi_belanja').disable();
+      this.formPM.get('frekuensi_reward').disable();
+    }
 
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
@@ -306,6 +334,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       // icon: ["", Validators.required],
       preview_header: ["", Validators.required]
     });
+    if (this.isDetail) this.formPreview.disable();
 
     this.formSpin.setValue({
       name: this.detailFormSpin.name ? this.detailFormSpin.name : '',
