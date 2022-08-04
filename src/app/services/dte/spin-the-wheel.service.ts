@@ -62,4 +62,9 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, "update_publish", context);
     return this.postApi(url, body);
   }
+  
+  delete(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete', context);
+    return this.deleteApi(url);
+  }
 }

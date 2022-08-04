@@ -80,7 +80,7 @@
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}"
-                [disabled]="row.status === 'active' || !permission?.hapus" (click)="deleteTp(row.id)">
+                 (click)="deleteTp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

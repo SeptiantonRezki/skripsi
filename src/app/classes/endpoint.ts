@@ -1095,7 +1095,8 @@ export class Endpoint {
         save_settings: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/save-settings`,
         show_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/show/${context.id}`,
         export_spin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/export`,
-        update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`
+        update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/${context.id}`,
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
