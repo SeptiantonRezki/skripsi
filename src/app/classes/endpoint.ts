@@ -1129,7 +1129,7 @@ export class Endpoint {
         update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-preview/${context.id}`,
         save_settings: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/save-settings`,
         show_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/show/${context.id}`,
-        export_spin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/export`,
+        export_spin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/export/${context.id}`,
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/${context.id}`,
       },

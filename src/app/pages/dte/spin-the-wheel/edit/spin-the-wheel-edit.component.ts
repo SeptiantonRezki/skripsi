@@ -292,6 +292,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('frekuensi_reward').disable();
     }
 
+    // if(this.isDetail){
+      this.imageConverted = this.detailFormSpin.icon;
+    // }
+
     this.keyUpProduct.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
@@ -478,7 +482,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           }
         }
 
-        if (res.data.status === 'publish' && res.data.start_date <= moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && res.data.end_date >= moment(new Date()).format('YYYY-MM-DD HH:mm:ss')) {
+        if (res.data.settings) { //Jika sudah disetting maka tidak bisa diupdate lagi
           this.editableCoin = false;
           this.formPM.get('limit_spin').disable();
           this.formPM.get('coin_variation').disable();
@@ -1620,7 +1624,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     }
     await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = this.sumPM('coin') / event.target.value;
+    this.averageCoin = Math.floor(this.sumPM('coin') / event.target.value);
   }
 
   async changeCoin(event, index) {
@@ -1629,7 +1633,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
     await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = this.sumPM('coin') / this.formPM.get('coin_variation').value;
+    this.averageCoin = Math.floor(this.sumPM('coin') / this.formPM.get('coin_variation').value);
   }
 
   async changeSlice(event, index) {
@@ -1688,21 +1692,25 @@ export class SpinTheWheelEditComponent implements OnInit {
       let newArr = {};
       if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
         product = this.productList.map(r => r.sku_id);
-        const limitBy = limitByProduct ? 'product' : 'category';
-        newArr = {
-          limit_by: limitBy,
-          limit_only: limitByProduct ? product : this.formPM.get('category').value
-        };
-        body = {...body, ...newArr};
+        if (product.length > 0 || this.formPM.get('category').value.length > 0) {
+          const limitBy = limitByProduct ? 'product' : 'category';
+          newArr = {
+            limit_by: limitBy,
+            limit_only: limitByProduct ? product : this.formPM.get('category').value
+          };
+          body = {...body, ...newArr};
+        }
       }
       if (excludeByProduct === true || this.formPM.get('limit_by_category_srcc').value === true) {
         product = this.productListSRCC.map(r => r.sku_id);
-        const excludeBy = excludeByProduct ? 'product' : 'category';
-        newArr = {
-          exclude_by: excludeBy,
-          exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
-        };
-        body = {...body, ...newArr};
+        if (product.length > 0 || this.formPM.get('category_srcc').value.length > 0) {
+          const excludeBy = excludeByProduct ? 'product' : 'category';
+          newArr = {
+            exclude_by: excludeBy,
+            exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
+          };
+          body = {...body, ...newArr};
+        }
       }
       const dialogConfig = new MatDialogConfig();
     

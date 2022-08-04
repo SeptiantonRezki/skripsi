@@ -53,16 +53,16 @@ export class SpinTheWheelService extends BaseService {
     return this.getApi(url);
   }
 
-  exportSpin(body): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_spin");
-    return this.postApi(url, body);
+  exportSpin(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_spin", context);
+    return this.getBlobAsJsonApi(url, {});
   }
 
   publishUnpublish(context: any, body: any): Observable<any> {
     const url = this.getUrl(this.namespace, "update_publish", context);
     return this.postApi(url, body);
   }
-  
+
   delete(context): Observable<any> {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
