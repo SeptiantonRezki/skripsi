@@ -634,7 +634,7 @@
                     <tr *ngFor="let item of formPM.get('coins').value; let i=index;">
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
+                          <input [disabled]="!editableCoin" min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
                         </mat-form-field>
                       </td>
                       <td>

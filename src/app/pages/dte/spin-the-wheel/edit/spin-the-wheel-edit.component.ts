@@ -477,11 +477,11 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
 
         if (res.data.status === 'publish' && res.data.start_date <= moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && res.data.end_date >= moment(new Date()).format('YYYY-MM-DD HH:mm:ss')) {
-          this.editableCoin = true;
+          this.editableCoin = false;
           this.formPM.get('limit_spin').disable();
           this.formPM.get('coin_variation').disable();
         } else {
-          this.editableCoin = false;
+          this.editableCoin = true;
         }
 
         this.formPM.get('coins').setValue(res.data.settings.coins);
