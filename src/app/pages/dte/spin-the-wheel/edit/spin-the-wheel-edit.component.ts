@@ -146,6 +146,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   areaIdNonTargetAudience: any = 1;
   detailFormSpin: any;
   showDetail: any;
+  isDetail: Boolean;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
