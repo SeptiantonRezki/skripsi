@@ -599,7 +599,7 @@
                 <p fxFlex="15">Limit Spin</p>
                 <div fxFlex="1"></div>
                 <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
-                  <input matInput currencyMask type="tel" placeholder="" formControlName="limit_spin"
+                  <input matInput type="number" placeholder="" formControlName="limit_spin"
                     name="limit_spin" (change)="calculatePM($event)" (keyup)="calculatePM($event)">
                 </mat-form-field>
                 <div fxFlex="2"></div>
@@ -609,7 +609,7 @@
                 <p fxFlex="15">Jumlah Variasi Koin</p>
                 <div fxFlex="1"></div>
                 <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
-                  <input min="1" matInput type="number" placeholder="" formControlName="coin_variation"
+                  <input min="1" max="100" matInput type="number" placeholder="" formControlName="coin_variation"
                     name="name" (change)="changeCoinVariation($event)" (keyup)="changeCoinVariation($event)">
                 </mat-form-field>
               </div>
@@ -632,17 +632,17 @@
                     <tr *ngFor="let item of formPM.get('coins').value; let i=index;">
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
+                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.coin}}" (change)="changeCoin($event, i)" (keyup)="changeCoin($event, i)">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input min="1" matInput type="number" placeholder="" value="{{item.slice}}" (change)="changeSlice($event, i)" (keyup)="changeSlice($event, i)">
+                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.slice}}" (change)="changeSlice($event, i)" (keyup)="changeSlice($event, i)">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field fxFlex class="is-light form-primary" fxFlex="25">
-                          <input min="1" matInput type="number" placeholder="" value="{{item.probability}}" (change)="changeProbability($event, i)" (keyup)="changeProbability($event, i)">
+                          <input [disabled]="editableCoin" min="1" matInput type="number" placeholder="" value="{{item.probability}}" (change)="changeProbability($event, i)" (keyup)="changeProbability($event, i)">
                         </mat-form-field>
                       </td>
                       <td>
@@ -652,16 +652,16 @@
                         <p style="font-style: italic;padding:15px;">{{item.total_budget | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{item.actual_spin | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{item.actual_budget | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{item.spin_left | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{item.budget_left | rupiahFormaterWithoutRp}}</p>
                       </td>
                     </tr>
                     <tr>
@@ -672,22 +672,22 @@
                       <td>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('limit_atempt') | rupiahFormaterWithoutRp}}</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('limit_atempt') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">{{sumPM('total_budget') | rupiahFormaterWithoutRp}}</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('total_budget') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('actual_spin') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('actual_budget') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('spin_left') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px; font-weight: bold;">0</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('budget_left') | rupiahFormaterWithoutRp}}</p>
                       </td>
                     </tr>
                   </tbody>
