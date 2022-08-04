@@ -61,7 +61,16 @@ export class SpinTheWheelComponent implements OnInit {
     private ls: LanguagesService,
     private translate: TranslateService,
     private spinService: SpinTheWheelService,
-  ) { }
+  ) { 
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
+  }
 
   ngOnInit() {
     this.getSpinList();
