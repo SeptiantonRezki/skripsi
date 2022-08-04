@@ -1,0 +1,18 @@
+.grey-box {
+    border: 2px solid rgba(161, 161, 161, .5);
+    padding: 35px 25px;
+    margin: 20px;
+    width: 100%;
+}
+
+.red-big-chunk-panel {
+    background-color: red;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+:host {
+    .export {
+        background-color: #3a3a3a !important;
+    }
+}

@@ -63,6 +63,9 @@ import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.co
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
+import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
+import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 
 const routes: Routes = [
   {
@@ -781,6 +784,26 @@ const routes: Routes = [
     component: XpComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'spin-the-wheel',
+    component: SpinTheWheelComponent,
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/create',
+    component: SpinTheWheelCreateComponent,
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/edit/:id',
+    component: SpinTheWheelEditComponent,
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "spin-the-wheel/detail",
+    component: SpinTheWheelEditComponent,
+    //canActivate: [PageGuard]
   },
 ];
 
