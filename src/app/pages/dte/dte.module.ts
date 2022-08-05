@@ -172,8 +172,8 @@ import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.co
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
-import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { JobsRequestComponent } from './jobs-request/jobs-request.component';
+import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -362,8 +362,8 @@ export const MY_FORMATS = {
     CoinRedemptionApprovalComponent,
     EmployeeMappingComponent,
     TemplatePlanogramComponent,
-    CheckImageComponent,
     JobsRequestComponent,
+    CheckImageComponent,
   ],
   exports: [
     TemplateIndexComponent,
