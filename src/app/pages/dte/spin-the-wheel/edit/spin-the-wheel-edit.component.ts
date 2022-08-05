@@ -19,6 +19,7 @@ import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
@@ -1161,7 +1162,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessComponent,
+      DialogProcessSaveComponent,
       {...dialogConfig, width: '400px'}
     );
 
