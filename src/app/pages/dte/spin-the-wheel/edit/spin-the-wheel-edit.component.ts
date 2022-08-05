@@ -81,7 +81,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   product: FormControl = new FormControl('');
   productSRCC: FormControl = new FormControl('');
   public audienceFixed: FormControl = new FormControl();
-  
+  public audiencePopulation: FormControl = new FormControl();
   visible = true;
   selectable = true;
   removable = true;
@@ -324,7 +324,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       region: [""],
       area: [""],
       classification:  [['all']],
-      audiencePopulation: [""]
+      // audiencePopulation: [""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -419,6 +419,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
         this.averageCoin = res.data.settings.average_coin_spin;
         // this.changeBlastType(res.data.audience_filter);
+        if(res.data.audience_filter === 'population-blast'){
+          this.formGeo.get('classification').setValue(res.data.class_groups);
+        }
         for (let i = 0; i < res.data.settings.details.length; i++) {
           if (res.data.settings.details[i].category_type === 'belanja') {
             this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
@@ -1815,14 +1818,15 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log('si value', value);
     if (value !== 'fixed-panel') {
       this.isPopulation = true;
-      this.formGeo.get('audiencePopulation').setValue(value);
+      // this.formGeo.get('audiencePopulation').setValue(value);
       this.audienceFixed.setValue('');
+      this.audiencePopulation.setValue(value);
     } else {
       this.isPopulation = false;
       this.audienceFixed.setValue(value);
-      this.formGeo.get('audiencePopulation').setValue('');
+      this.audiencePopulation.setValue('');
+      // this.formGeo.get('audiencePopulation').setValue('');
     }
-    console.log('my value', this.formGeo.get('audiencePopulation').value);
   }
   
 }
