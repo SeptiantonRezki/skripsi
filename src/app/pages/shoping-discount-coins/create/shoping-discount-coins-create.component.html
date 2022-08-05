@@ -1,6 +1,10 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header contentTitle="{{isDetail ? ('global.label.detail_entity' | translate:titleParam) : ('global.label.create_entity' | translate:titleParam) }}">
+  <page-content-header contentTitle="{{
+    actionType === 'edit' ? ('global.label.edit_entity' | translate:titleParam) :
+    actionType === 'create' ? ('global.label.create_entity' | translate:titleParam)
+    : ('global.label.detail_entity' | translate:titleParam)
+    }}">
   </page-content-header>
   <!-- / HEADER -->
   <div class="content p-24">
