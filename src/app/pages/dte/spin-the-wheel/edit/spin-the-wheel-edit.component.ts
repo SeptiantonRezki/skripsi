@@ -31,7 +31,7 @@ import { ProductService } from 'app/services/sku-management/product.service';
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number = 0;
+  selectedTab: number;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -1827,6 +1827,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.audiencePopulation.setValue('');
       // this.formGeo.get('audiencePopulation').setValue('');
     }
+  }
+
+  onChangeTab(event: any) {
+    this.selectedTab = event.index;
   }
   
 }
