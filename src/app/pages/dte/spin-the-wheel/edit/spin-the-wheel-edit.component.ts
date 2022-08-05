@@ -39,6 +39,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   isExclude: boolean = false;
   editableCoin: boolean = true;
   selectedZone = [];
+  selectedRegion = [];
+  selectedArea = [];
   
   formDetilVoucher: FormGroup;
 
@@ -244,7 +246,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
-    })
+    });
 
     if(this.isDetail){
       this.formSpin.get('name').disable();
@@ -354,7 +356,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.onLoad = false;
 
-    this.getLevel('national')
+    this.getLevel('national');
     this.getTradePrograms();
 
     this.initAreaV2();
@@ -368,48 +370,13 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.formPM.get('category').disable();
     this.formPM.get('category_srcc').disable();
 
-    this.formGeo.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
-      if (res) {
-        this.getAudienceAreaV2('zone', res);
-        // this.getAudience();
-      }
+    this.formGeo.get('division').valueChanges.subscribe(res => {
+      this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
-      if (res) {
-        this.getAudienceAreaV2('region', res);
-        // this.getAudience();
-      }
+      this.getLevel('region');
     });
-    this.formGeo.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
-      if (res) {
-        this.getAudienceAreaV2('area', res);
-        // this.getAudience();
-      }
-    });
-    // this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-    //   // console.log('salespoint', res);
-    //   if (res) {
-    //     this.getAudienceAreaV2('district', res);
-    //     this.getAudience();
-    //   }
-    // });
-    // this.formFilter.get('district').valueChanges.subscribe(res => {
-    //   // console.log('district', res);
-    //   if (res) {
-    //     this.getAudienceAreaV2('territory', res);
-    //     this.getAudience();
-    //   }
-    // });
-    // this.formFilter.get('territory').valueChanges.subscribe(res => {
-    //   // console.log('territory', res);
-    //   if (res) {
-    //     // this.getAudienceAreaV2('territory', res);
-    //     this.getAudience();
-    //   }
-    // });
+
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
@@ -501,8 +468,39 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
         this.selectedZone = zone;
         this.imageConverted = res.data.icon_url;
+
+        this.initAreaSelected(res.data);
       }
     });
+  }
+
+  initAreaSelected(data = null) {
+    console.log('=================');
+    let arr = data.areas;
+    let arr_area = [];
+    let arr_region = [];
+    let arr_zone = [];
+    arr.map((area, index) => {
+      if(area.level_desc === 'area'){
+        if(arr_area.indexOf(area.area_id) == -1){
+          arr_area.push(area.area_id);
+        }
+      }else if(area.level_desc === 'region'){
+        if(arr_region.indexOf(area.area_id) == -1){
+          arr_region.push(area.area_id);
+        }
+      }else{
+        if(arr_zone.indexOf(area.area_id) == -1){
+          arr_zone.push(area.area_id);
+        }
+      }
+    });
+    console.log(arr_area);
+    console.log(arr_region);
+    console.log(arr_zone);
+    this.selectedZone = arr_zone;
+    this.selectedRegion = arr_region;
+    this.selectedArea = arr_area;
   }
 
   removeImage(): void {
@@ -550,6 +548,19 @@ export class SpinTheWheelEditComponent implements OnInit {
 
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
+
+        console.log('disini', value);
+        if (value === 'national' && this.selectedZone.length > 0) {
+          this.formGeo.get('division').setValue(this.selectedZone);
+          this.selectedZone = [];
+        } else if (value === 'division' && this.selectedRegion.length > 0) {
+          this.formGeo.get('region').setValue(this.selectedRegion);
+          this.selectedRegion = [];
+        } else if (value === 'region' && this.selectedArea.length > 0) {
+          console.log('terbaca', this.selectedArea);
+          this.formGeo.get('area').setValue(this.selectedArea);
+          this.selectedArea = [];
+        }
       });
     }
 

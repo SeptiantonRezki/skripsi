@@ -231,7 +231,6 @@
                       <mat-select
                       placeholder="{{'global.area.zone' | translate}}"
                       formControlName="division"
-                      (selectionChange)="getLevel('division')"
                       multiple
                     >
                       <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
@@ -245,7 +244,6 @@
                       <mat-select
                         placeholder="{{'global.area.regional' | translate}}"
                         formControlName="region"
-                        (selectionChange)="getLevel('region')"
                         multiple
                       >
                         <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
@@ -260,7 +258,6 @@
                         placeholder="{{'global.area.area' | translate}}"
                         formControlName="area"
                         multiple
-                        (selectionChange)="getLevel('area')"
                       >
                         <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
                           item.code
