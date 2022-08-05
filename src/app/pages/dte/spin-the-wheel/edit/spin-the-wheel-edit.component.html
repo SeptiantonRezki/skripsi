@@ -19,7 +19,7 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <mat-tab-group>
+      <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Spin The Wheel">
           <div class="ayo-middle py-24" fxLayout="column">
             <form
