@@ -60,6 +60,7 @@ import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
@@ -737,6 +738,16 @@ const routes: Routes = [
   {
     path: 'coin-redemption-approval/download',
     component: CoinRedemptionApprovalComponent,
+  },
+  {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'employee-mapping',

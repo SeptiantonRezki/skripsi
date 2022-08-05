@@ -67,6 +67,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   requestingImport: boolean = false;
   importing: boolean = false;
   allData: Array<any> = [];
+  validData = [];
   numError: number = 1;
 
   constructor(
@@ -123,11 +124,12 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
       res => {
         if (res && res.data) {
           this.dataService.showLoading(false);
-          this.pagination['per_page'] = 250;
+          this.pagination['per_page'] = 10000;
           this.audienceService.showImport(this.pagination).subscribe(response => {
             const {data} = response.data;
             this.allData = [...data];
             this.invalidData = this.allData.some(item => item.is_valid === false);
+            this.validData = data.filter(item => item.is_valid === true);
 
             // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
             data.map((item, idx) => {
@@ -175,13 +177,21 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+      const payload = {
+        page: this.currPage,
+        per_page: 10000
+      };
+
+      this.audienceService.showImport(payload).subscribe(response => {
         if (response && response.data) {
           const {data} = response.data;
           this.allData = [...this.allData, ...data];
           if (!this.invalidData) {
             this.invalidData = this.allData.some(item => item.is_valid === false);
           }
+
+          const newData = data.filter(item => item.is_valid === true);
+          this.validData = [...this.validData, ...newData];
           
           // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
           data.map((item, idx) => {
@@ -288,7 +298,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     }
     else {
       if (this.totalData > 0) {
-        this.dialogRef.close(this.allData);
+        this.dialogRef.close(this.validData);
       } else {
         this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
       }

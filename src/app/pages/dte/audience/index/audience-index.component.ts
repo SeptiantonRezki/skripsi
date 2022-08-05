@@ -215,4 +215,60 @@ export class AudienceIndexComponent {
     });
   }
 
+  classStatus(status, import_status){
+    let classes = `text-boxed `;
+
+    if (import_status === 'failed') {
+      classes += `mat-red-700-bg`;
+    }
+    else if (import_status === 'requesting') {
+      classes += `mat-yellow-700-bg`;
+    }
+    else if (import_status === 'running') {
+      classes += `mat-orange-700-bg`;
+    }
+    else if (import_status === 'done') {
+      if (status === 'rejected') {
+        classes += `mat-red-700-bg`;
+      }
+      else if (status === 'pending') {
+        classes += `mat-yellow-700-bg`;
+      }
+      else if (status === 'approved') {
+        classes += `mat-green-700-bg`;
+      }
+    }
+
+    return classes;
+  }
+
+  renderStatus(status, import_status) {
+    switch (import_status) {
+      case "failed":
+        return this.translate.instant('global.label.failed');
+      case "requesting":
+        return this.translate.instant('global.messages.requesting');
+      case "running":
+        return this.translate.instant('global.label.processing');
+      case "done":
+        switch (status) {
+          case "rejected":
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.rejected');
+          case "pending":
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.pending');
+          case "approved":
+            // return real_status;
+            return this.translate.instant('dte.approval_coin_adjustment.approved');
+          default:
+            // return "No Status"
+            return this.translate.instant('global.label.no_status');
+        }
+      default:
+        // return "No Status"
+        return this.translate.instant('global.label.no_status');
+    }
+  }
+
 }
