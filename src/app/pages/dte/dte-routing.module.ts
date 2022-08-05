@@ -61,6 +61,7 @@ import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.compon
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 
 const routes: Routes = [
   {
@@ -745,6 +746,16 @@ const routes: Routes = [
     path: 'employee-mapping/detail/:id',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
+  },
+  {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
   },
 ];
 
