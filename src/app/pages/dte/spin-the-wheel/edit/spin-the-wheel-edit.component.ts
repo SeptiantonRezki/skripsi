@@ -469,11 +469,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.selectedZone = zone;
         this.imageConverted = res.data.icon_url;
 
-        // if (res.data.audience_filter === 'population-blast') {
-          this.changeBlastType('population');
-          this.isPopulation = true;
-          console.log('statusnhya', this.isPopulation);
-        // }
         this.initAreaSelected(res.data);
       }
     });
