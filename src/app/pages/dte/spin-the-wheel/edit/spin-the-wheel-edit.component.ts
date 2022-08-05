@@ -469,6 +469,11 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.selectedZone = zone;
         this.imageConverted = res.data.icon_url;
 
+        // if (res.data.audience_filter === 'population-blast') {
+          this.changeBlastType('population');
+          this.isPopulation = true;
+          console.log('statusnhya', this.isPopulation);
+        // }
         this.initAreaSelected(res.data);
       }
     });
@@ -542,10 +547,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         fd.append("area_id[]", "");
       }
 
-      if(value === 'division'){
-        // this.formGeo.get('division').setValue(this.selectedZone);
-      }
-
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
 
@@ -574,7 +575,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         return;
       }
       if (current) {
-        this.formGeo.get(item).setValue("");
+        // this.formGeo.get(item).setValue("");
         this.geoList[item] = [];
       }
     });
@@ -799,7 +800,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         } else {
           this.list['region'] = [];
         }
-        this.formFilter.get('region').setValue('');
+        // this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
@@ -835,7 +836,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.list['area'] = [];
         }
 
-        this.formFilter.get('area').setValue('');
+        // this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
         this.formFilter.get('territory').setValue('');
