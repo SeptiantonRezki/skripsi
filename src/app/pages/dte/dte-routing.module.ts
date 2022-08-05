@@ -63,6 +63,7 @@ import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.co
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 
 const routes: Routes = [
   {
@@ -780,6 +781,16 @@ const routes: Routes = [
     path: 'xp/detail/:id/:tab',
     component: XpComponent,
     canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
     canDeactivate: [PendingChangesGuard]
   },
 ];

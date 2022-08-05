@@ -175,6 +175,7 @@ import { TemplatePlanogramComponent } from './image-recognition/template-planogr
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { XpComponent } from './xp/xp.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -366,6 +367,7 @@ export const MY_FORMATS = {
     CheckImageComponent,
     XpComponent,
     VerificationApprovalComponent,
+    JobsRequestComponent,
   ],
   exports: [
     TemplateIndexComponent,
