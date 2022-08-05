@@ -215,6 +215,15 @@
         </mat-tab>
         <mat-tab label="Audience" [disabled]="false">
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <!-- <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                <mat-radio-button
+                  class="radio-button pr-48"
+                  [value]="population-blast"
+                >
+                Population Blast
+                </mat-radio-button>
+              </mat-radio-group> -->
+              
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row" class="px-16">
@@ -225,12 +234,9 @@
                       >
                         Population Blast
                       </mat-radio-button> -->
-                      <mat-radio-group class="mb-16" formControlName="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
-                        <mat-radio-button
-                          class="radio-button pr-48"
-                          [value]="population-blast"
-                        >
-                        Population Blast
+                      <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                        <mat-radio-button class="radio-button pr-48" value="population-blast">
+                          Population Blast
                         </mat-radio-button>
                       </mat-radio-group>
                   </div>
