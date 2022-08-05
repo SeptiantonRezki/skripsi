@@ -41,6 +41,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   selectedZone = [];
   selectedRegion = [];
   selectedArea = [];
+  selectedCategory = [];
   
   formDetilVoucher: FormGroup;
 
@@ -433,6 +434,12 @@ export class SpinTheWheelEditComponent implements OnInit {
             } else {
               this.formPM.get('limit_by_category').setValue(true);
               this.formPM.get('limit_by_product').setValue(false);
+              this.selectedCategory = res.data.settings.details[i].limit_only;
+              this.formPM.get('category').enable();
+              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                return parseInt(x, 10);
+              });
+              this.formPM.get('category').setValue(resultCat);
             }
           } else if (res.data.settings.details[i].category_type === 'exclude') {
             this.changeType('exclude');
@@ -444,6 +451,10 @@ export class SpinTheWheelEditComponent implements OnInit {
             } else {
               this.formPM.get('limit_by_category_srcc').setValue(true);
               this.formPM.get('limit_by_product_srcc').setValue(false);
+              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                return parseInt(x, 10);
+              });
+              this.formPM.get('category_srcc').setValue(resultCat);
             }
           }
         }
@@ -1404,7 +1415,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log('X -', type);
     console.log('Y -', event);
     if (type === 'product') {
-      this.formPM.get('category').setValue('');
+      // this.formPM.get('category').setValue('');
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(true);
       if (!event.checked) {
@@ -1428,10 +1439,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event.checked) {
-        this.formPM.get('category').setValue('');
+        // this.formPM.get('category').setValue('');
         this.formPM.get('category').enable();
       } else {
-        this.formPM.get('category').setValue('');
+        // this.formPM.get('category').setValue('');
         this.formPM.get('category').disable();
       }
       if (this.productInput) {
@@ -1761,12 +1772,14 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.isExclude = false;
       this.formPM.get('limit_by_category_srcc').setValue(false);
       this.formPM.get('limit_by_product_srcc').setValue(false);
+      this.formPM.get('category_srcc').setValue([]);
     } else {
       this.productList = [];
       this.isPPK = false;
       this.isExclude = true;
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(false);
+      this.formPM.get('category').setValue([]);
     }
   }
   
