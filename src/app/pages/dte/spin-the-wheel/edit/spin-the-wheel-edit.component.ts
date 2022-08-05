@@ -1743,7 +1743,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
 
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessSaveComponent,
         {...dialogConfig, width: '400px'}
       );
 
