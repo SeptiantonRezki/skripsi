@@ -29,7 +29,7 @@ export class DialogProcessSaveComponent implements OnInit {
   detailData: any;
 
   constructor(
-    public dialogRef: MatDialogRef<DialogProcessComponent>,
+    public dialogRef: MatDialogRef<DialogProcessSaveComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,

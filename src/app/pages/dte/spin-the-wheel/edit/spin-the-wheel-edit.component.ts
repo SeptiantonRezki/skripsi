@@ -43,6 +43,9 @@ export class SpinTheWheelEditComponent implements OnInit {
   selectedRegion = [];
   selectedArea = [];
   selectedCategory = [];
+  loadingZone = true;
+  loadingRegion = true;
+  loadingArea = true;
   
   formDetilVoucher: FormGroup;
 
@@ -374,9 +377,11 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.formPM.get('category_srcc').disable();
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
+      this.loadingRegion = true;
       this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
+      this.loadingArea = true;
       this.getLevel('region');
     });
 
@@ -385,29 +390,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
     
     this.setValueDetail();
-
-    let arr = this.detailFormSpin.areas;
-    let arr_area = [];
-    let arr_region = [];
-    let arr_zone = [];
-    arr.map((area, index) => {
-      if(area.level_desc === 'area'){
-        if(arr_area.indexOf(area.area_id) == -1){
-          arr_area.push(area.area_id);
-        }
-      }else if(area.level_desc === 'region'){
-        if(arr_region.indexOf(area.area_id) == -1){
-          arr_region.push(area.area_id);
-        }
-      }else{
-        if(arr_zone.indexOf(area.area_id) == -1){
-          arr_zone.push(area.area_id);
-        }
-      }
-    });
-    console.log(arr_area);
-    console.log(arr_region);
-    console.log(arr_zone);
   }
 
   setStorageDetail() {
@@ -514,6 +496,15 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log(arr_area);
     console.log(arr_region);
     console.log(arr_zone);
+    if (arr_zone.length === 0 || parseInt(arr_zone[0], 10) === 0) {
+      this.loadingZone = false;
+    }
+    if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
+      this.loadingRegion = false;
+    }
+    if (arr_area.length === 0 || parseInt(arr_area[0], 10) === 0) {
+      this.loadingArea = false;
+    }
     this.selectedZone = arr_zone;
     this.selectedRegion = arr_region;
     this.selectedArea = arr_area;
@@ -561,7 +552,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
 
-        console.log('disini', value);
         if (value === 'national' && this.selectedZone.length > 0) {
           this.formGeo.get('division').setValue(this.selectedZone);
           this.selectedZone = [];
@@ -569,9 +559,17 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.formGeo.get('region').setValue(this.selectedRegion);
           this.selectedRegion = [];
         } else if (value === 'region' && this.selectedArea.length > 0) {
-          console.log('terbaca', this.selectedArea);
           this.formGeo.get('area').setValue(this.selectedArea);
           this.selectedArea = [];
+        }
+        if (value === 'national' && this.loadingZone === true) {
+          this.loadingZone = false;
+        }
+        if (value === 'division' && this.loadingRegion === true) {
+          this.loadingRegion = false;
+        }
+        if (value === 'region' && this.loadingArea === true) {
+          this.loadingArea = false;
         }
       });
     }
@@ -1085,6 +1083,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submitAudience() {
+    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
@@ -1092,9 +1091,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
-        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all']
+        zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
       };
     } else {
       body = {
@@ -1143,9 +1142,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
-        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all'],
+        zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
         panel_count: this.panelBlast
       };
     } else {
@@ -1815,7 +1814,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   // }
 
   handleAudienceFilter(value) {
-    console.log('si value', value);
     if (value !== 'fixed-panel') {
       this.isPopulation = true;
       // this.formGeo.get('audiencePopulation').setValue(value);

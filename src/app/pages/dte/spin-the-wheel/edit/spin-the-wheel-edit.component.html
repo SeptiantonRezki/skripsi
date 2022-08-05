@@ -243,14 +243,21 @@
                   <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                      placeholder="{{'global.area.zone' | translate}}"
-                      formControlName="division"
-                      multiple
-                    >
-                      <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
-                        item.code
-                      }}</mat-option>
-                    </mat-select>
+                        placeholder="{{'global.area.zone' | translate}}"
+                        formControlName="division"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingZone">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -264,6 +271,13 @@
                           item.code
                         }}</mat-option>
                       </mat-select>
+
+                      <mat-placeholder *ngIf="loadingRegion">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -277,6 +291,13 @@
                           item.code
                         }}</mat-option>
                       </mat-select>
+
+                      <mat-placeholder *ngIf="loadingArea">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -293,7 +314,7 @@
                 </div>
               </form>
               <div fxLayout="row" fxFlex="45">
-                <div class="red-big-chunk-panel" fxFlex="100">
+                <div class="box-red" fxFlex="100">
                   <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
                   <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
                   <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
