@@ -293,7 +293,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     // if(this.isDetail){
-      this.imageConverted = this.detailFormSpin.icon_url;
     // }
 
     this.keyUpProduct.debounceTime(300)
@@ -501,6 +500,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           }
         }
         this.selectedZone = zone;
+        this.imageConverted = res.data.icon_url;
       }
     });
   }
