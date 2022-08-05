@@ -79,7 +79,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   inputChipListSRCC = [];
   product: FormControl = new FormControl('');
   productSRCC: FormControl = new FormControl('');
-
+  public audienceFixed: FormControl = new FormControl();
   
   visible = true;
   selectable = true;
@@ -322,7 +322,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       division: [""],
       region: [""],
       area: [""],
-      classification:  [['all']]
+      classification:  [['all']],
+      audiencePopulation: [""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -416,7 +417,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
         this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
         this.averageCoin = res.data.settings.average_coin_spin;
-        
+        // this.changeBlastType(res.data.audience_filter);
         for (let i = 0; i < res.data.settings.details.length; i++) {
           if (res.data.settings.details[i].category_type === 'belanja') {
             this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
@@ -600,10 +601,10 @@ export class SpinTheWheelEditComponent implements OnInit {
     );
   }
 
-  changeBlastType(type) {
-    if (type === 'population') this.isPopulation = true;
-    else this.isPopulation = false
-  }
+  // changeBlastType(type) {
+  //   if (type === 'population-blast') this.isPopulation = true;
+  //   else this.isPopulation = false
+  // }
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()['areas'] || [];
@@ -1791,7 +1792,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.handleAudienceFilter(filter);
 
     if (filter !== 'fixed-panel') {
-      this.formGeo.get('classification').setValue(this.detailFormSpin.class_group);
+      this.formGeo.get('classification').setValue(this.detailFormSpin.class_groups);
     }
 
     if (this.detailFormSpin.panel_count > 0) {
@@ -1805,8 +1806,22 @@ export class SpinTheWheelEditComponent implements OnInit {
     // }
   }
 
+  // handleAudienceFilter(value) {
+  //   this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+  // }
+
   handleAudienceFilter(value) {
-    this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+    console.log('si value', value);
+    if (value !== 'fixed-panel') {
+      this.isPopulation = true;
+      this.formGeo.get('audiencePopulation').setValue(value);
+      this.audienceFixed.setValue('');
+    } else {
+      this.isPopulation = false;
+      this.audienceFixed.setValue(value);
+      this.formGeo.get('audiencePopulation').setValue('');
+    }
+    console.log('my value', this.formGeo.get('audiencePopulation').value);
   }
   
 }

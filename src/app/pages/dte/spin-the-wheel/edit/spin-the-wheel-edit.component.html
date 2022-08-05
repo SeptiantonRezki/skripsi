@@ -218,13 +218,21 @@
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row" class="px-16">
-                      <mat-radio-button
+                      <!-- <mat-radio-button
                         class="radio-button pr-48"
                         [checked]="isPopulation"
-                        (change)="changeBlastType('population')"
+                        (change)="changeBlastType('population-blast')"
                       >
                         Population Blast
-                      </mat-radio-button>
+                      </mat-radio-button> -->
+                      <mat-radio-group class="mb-16" formControlName="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                        <mat-radio-button
+                          class="radio-button pr-48"
+                          [value]="population-blast"
+                        >
+                        Population Blast
+                        </mat-radio-button>
+                      </mat-radio-group>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
@@ -290,13 +298,18 @@
           fxLayout="column"
           class="px-16"
           >
-            <mat-radio-button
+            <!-- <mat-radio-button
               class="radio-button pr-48"
               [checked]="!isPopulation"
-              (change)="changeBlastType('fixed')"
+              (change)="changeBlastType('fixed-panel')"
             >
               Fixed Panel
-            </mat-radio-button>
+            </mat-radio-button> -->
+            <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter('fixed-panel')">
+              <mat-radio-button class="radio-button pr-48" value="fixed-panel">
+                Fixed Panel
+              </mat-radio-button>
+            </mat-radio-group>
           <div fxLayout="column" class="px-20 py-16">
             <!-- <div [formGroup]="formFilter">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"
