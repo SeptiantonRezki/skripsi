@@ -174,7 +174,6 @@ import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.compon
 import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
-import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
@@ -183,6 +182,7 @@ import { LotteryCreateComponent } from './lottery/create/lottery-create.componen
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { XpComponent } from './xp/xp.component';
 import { JobsRequestComponent } from './jobs-request/jobs-request.component';
+import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -373,7 +373,6 @@ export const MY_FORMATS = {
     DataLogComponent,
     CoinRedemptionApprovalComponent,
     EmployeeMappingComponent,
-    CheckImageComponent,
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
@@ -382,6 +381,7 @@ export const MY_FORMATS = {
     LotteryEditComponent,
     XpComponent,
     JobsRequestComponent,
+    CheckImageComponent,
   ],
   exports: [
     TemplateIndexComponent,
