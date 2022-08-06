@@ -1653,7 +1653,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let newArr = this.formPM.get('coins').value;
     newArr[index].coin = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
     await this.formPM.get('coins').setValue(newArr);
     this.averageCoin = Math.floor(this.sumPM('coin') / this.formPM.get('coin_variation').value);
   }
@@ -1668,7 +1668,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let newArr = this.formPM.get('coins').value;
     newArr[index].probability = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
     await this.formPM.get('coins').setValue(newArr);
   }
 
@@ -1677,7 +1677,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     if (newArr !== null && newArr.length > 0) {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
-        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt;
+        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
       }
       await this.formPM.get('coins').setValue(newArr);
     }
@@ -1825,10 +1825,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.audiencePopulation.setValue('');
       // this.formGeo.get('audiencePopulation').setValue('');
     }
-  }
-
-  onChangeTab(event: any) {
-    this.selectedTab = event.index;
   }
   
 }
