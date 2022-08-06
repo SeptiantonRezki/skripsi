@@ -157,6 +157,7 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from './audience/dialog/dialog-process-save/dialog-process-save.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
@@ -356,6 +357,7 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
@@ -485,6 +487,7 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     ImportAudiencePersonalizeComponent
   ],
 })
