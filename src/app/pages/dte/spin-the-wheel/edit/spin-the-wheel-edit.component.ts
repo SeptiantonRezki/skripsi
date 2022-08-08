@@ -1700,7 +1700,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     if (this.formPM.get('frekuensi_belanja').value === '') {
       this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
       return false;
-    } else if (this.formPM.get('frekuensi_reward').value) {
+    } else if (this.formPM.get('frekuensi_reward').value === '') {
       this.dialogService.openSnackBar({ message: 'Maksimal Frekuensi Reward wajib diisi.' });
       return false;
     }
