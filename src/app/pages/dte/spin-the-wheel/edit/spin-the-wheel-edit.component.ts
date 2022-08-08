@@ -397,64 +397,64 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
-        this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
-        this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
-        this.averageCoin = res.data.settings.average_coin_spin;
+        if (res.data.settings) {
+          this.editableCoin = false;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
+          
+          this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
+          this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
+          this.averageCoin = res.data.settings.average_coin_spin;
+          for (let i = 0; i < res.data.settings.details.length; i++) {
+            if (res.data.settings.details[i].category_type === 'belanja') {
+              this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
+            } else if (res.data.settings.details[i].category_type === 'reward') {
+              this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
+            } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
+              this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
+            } else if (res.data.settings.details[i].category_type === 'limit') {
+              this.changeType('ppk');
+              if (res.data.settings.details[i].limit_by === 'product') {
+                this.formPM.get('limit_by_category').setValue(false);
+                this.formPM.get('limit_by_product').setValue(true);
+                // this.productList = res.data.settings.details[i].limit_only;
+                this.productList = res.data.settings.details[i].limit_only_data;
+              } else {
+                this.formPM.get('limit_by_category').setValue(true);
+                this.formPM.get('limit_by_product').setValue(false);
+                this.selectedCategory = res.data.settings.details[i].limit_only;
+                this.formPM.get('category').enable();
+                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                  return parseInt(x, 10);
+                });
+                this.formPM.get('category').setValue(resultCat);
+              }
+            } else if (res.data.settings.details[i].category_type === 'exclude') {
+              this.changeType('exclude');
+              if (res.data.settings.details[i].limit_by === 'product') {
+                this.formPM.get('limit_by_category_srcc').setValue(false);
+                this.formPM.get('limit_by_product_srcc').setValue(true);
+                // this.productList = res.data.settings.details[i].limit_only;
+                this.productListSRCC = res.data.settings.details[i].limit_only_data;
+              } else {
+                this.formPM.get('limit_by_category_srcc').setValue(true);
+                this.formPM.get('limit_by_product_srcc').setValue(false);
+                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                  return parseInt(x, 10);
+                });
+                this.formPM.get('category_srcc').setValue(resultCat);
+              }
+            }
+          }
+
+          this.formPM.get('coins').setValue(res.data.settings.coins);
+        } else {
+          this.editableCoin = true;
+        }
         // this.changeBlastType(res.data.audience_filter);
         if(res.data.audience_filter === 'population-blast'){
           this.formGeo.get('classification').setValue(res.data.class_groups);
         }
-        for (let i = 0; i < res.data.settings.details.length; i++) {
-          if (res.data.settings.details[i].category_type === 'belanja') {
-            this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'reward') {
-            this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
-            this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'limit') {
-            this.changeType('ppk');
-            if (res.data.settings.details[i].limit_by === 'product') {
-              this.formPM.get('limit_by_category').setValue(false);
-              this.formPM.get('limit_by_product').setValue(true);
-              // this.productList = res.data.settings.details[i].limit_only;
-              this.productList = res.data.settings.details[i].limit_only_data;
-            } else {
-              this.formPM.get('limit_by_category').setValue(true);
-              this.formPM.get('limit_by_product').setValue(false);
-              this.selectedCategory = res.data.settings.details[i].limit_only;
-              this.formPM.get('category').enable();
-              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                return parseInt(x, 10);
-              });
-              this.formPM.get('category').setValue(resultCat);
-            }
-          } else if (res.data.settings.details[i].category_type === 'exclude') {
-            this.changeType('exclude');
-            if (res.data.settings.details[i].limit_by === 'product') {
-              this.formPM.get('limit_by_category_srcc').setValue(false);
-              this.formPM.get('limit_by_product_srcc').setValue(true);
-              // this.productList = res.data.settings.details[i].limit_only;
-              this.productListSRCC = res.data.settings.details[i].limit_only_data;
-            } else {
-              this.formPM.get('limit_by_category_srcc').setValue(true);
-              this.formPM.get('limit_by_product_srcc').setValue(false);
-              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                return parseInt(x, 10);
-              });
-              this.formPM.get('category_srcc').setValue(resultCat);
-            }
-          }
-        }
-
-        if (res.data.settings) { //Jika sudah disetting maka tidak bisa diupdate lagi
-          this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
-        } else {
-          this.editableCoin = true;
-        }
-
-        this.formPM.get('coins').setValue(res.data.settings.coins);
 
         let zone = [];
         for (let i = 0; i < res.data.areas.length; i++) {
