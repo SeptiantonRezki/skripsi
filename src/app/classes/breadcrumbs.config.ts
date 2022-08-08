@@ -1368,6 +1368,51 @@ export const brConfig = {
     }
   },
   dte: {
+    spinTheWheel: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Spin The Wheel"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/dte/spin-the-wheel",
+          name: "Daftar Spin The Wheel"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Spin The Wheel"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/dte/spin-the-wheel",
+          name: "Daftar Spin The Wheel"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Spin The Wheel"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/dte/spin-the-wheel",
+          name: "Daftar Spin The Wheel"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail Spin The Wheel"
+        }
+      ],
+    },
     pengaturanAttributeMisi: {
       index: [
         {
