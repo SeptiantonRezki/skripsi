@@ -752,21 +752,33 @@ const routes: Routes = [
   {
     path: 'spin-the-wheel',
     component: SpinTheWheelComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.index
+    },
     // canActivate: [PageGuard]
   },
   {
     path: 'spin-the-wheel/create',
     component: SpinTheWheelCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.create
+    },
     // canActivate: [PageGuard]
   },
   {
     path: 'spin-the-wheel/edit/:id',
     component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
+    },
     // canActivate: [PageGuard]
   },
   {
     path: "spin-the-wheel/detail",
     component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
     //canActivate: [PageGuard]
   },
 ];
