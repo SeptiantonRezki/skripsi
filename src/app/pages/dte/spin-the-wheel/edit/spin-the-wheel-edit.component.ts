@@ -19,6 +19,7 @@ import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
@@ -30,7 +31,7 @@ import { ProductService } from 'app/services/sku-management/product.service';
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number = 0;
+  selectedTab: number;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -39,6 +40,12 @@ export class SpinTheWheelEditComponent implements OnInit {
   isExclude: boolean = false;
   editableCoin: boolean = true;
   selectedZone = [];
+  selectedRegion = [];
+  selectedArea = [];
+  selectedCategory = [];
+  loadingZone = true;
+  loadingRegion = true;
+  loadingArea = true;
   
   formDetilVoucher: FormGroup;
 
@@ -76,8 +83,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   inputChipListSRCC = [];
   product: FormControl = new FormControl('');
   productSRCC: FormControl = new FormControl('');
-
-  
+  public audienceFixed: FormControl = new FormControl();
+  public audiencePopulation: FormControl = new FormControl();
   visible = true;
   selectable = true;
   removable = true;
@@ -244,7 +251,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
-    })
+    });
 
     if(this.isDetail){
       this.formSpin.get('name').disable();
@@ -293,7 +300,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     // if(this.isDetail){
-      this.imageConverted = this.detailFormSpin.icon;
     // }
 
     this.keyUpProduct.debounceTime(300)
@@ -320,7 +326,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       division: [""],
       region: [""],
       area: [""],
-      classification:  [['all']]
+      classification:  [['all']],
+      // audiencePopulation: [""]
     });
 
     this.formFilter = this.formBuilder.group({
@@ -355,7 +362,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.onLoad = false;
 
-    this.getLevel('national')
+    this.getLevel('national');
     this.getTradePrograms();
 
     this.initAreaV2();
@@ -369,55 +376,105 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.formPM.get('category').disable();
     this.formPM.get('category_srcc').disable();
 
-    this.formGeo.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
-      if (res) {
-        this.getAudienceAreaV2('zone', res);
-        // this.getAudience();
-      }
+    this.formGeo.get('division').valueChanges.subscribe(res => {
+      this.loadingRegion = true;
+      this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
-      if (res) {
-        this.getAudienceAreaV2('region', res);
-        // this.getAudience();
-      }
+      this.loadingArea = true;
+      this.getLevel('region');
     });
-    this.formGeo.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
-      if (res) {
-        this.getAudienceAreaV2('area', res);
-        // this.getAudience();
-      }
-    });
-    // this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-    //   // console.log('salespoint', res);
-    //   if (res) {
-    //     this.getAudienceAreaV2('district', res);
-    //     this.getAudience();
-    //   }
-    // });
-    // this.formFilter.get('district').valueChanges.subscribe(res => {
-    //   // console.log('district', res);
-    //   if (res) {
-    //     this.getAudienceAreaV2('territory', res);
-    //     this.getAudience();
-    //   }
-    // });
-    // this.formFilter.get('territory').valueChanges.subscribe(res => {
-    //   // console.log('territory', res);
-    //   if (res) {
-    //     // this.getAudienceAreaV2('territory', res);
-    //     this.getAudience();
-    //   }
-    // });
+
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
     
     this.setValueDetail();
+  }
 
-    let arr = this.detailFormSpin.areas;
+  setStorageDetail() {
+    // Show detail
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+      if(res.data){
+        this.dataService.setToStorage('spin_the_wheel', res.data);
+        this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
+        this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
+        this.averageCoin = res.data.settings.average_coin_spin;
+        // this.changeBlastType(res.data.audience_filter);
+        if(res.data.audience_filter === 'population-blast'){
+          this.formGeo.get('classification').setValue(res.data.class_groups);
+        }
+        for (let i = 0; i < res.data.settings.details.length; i++) {
+          if (res.data.settings.details[i].category_type === 'belanja') {
+            this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'reward') {
+            this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
+            this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
+          } else if (res.data.settings.details[i].category_type === 'limit') {
+            this.changeType('ppk');
+            if (res.data.settings.details[i].limit_by === 'product') {
+              this.formPM.get('limit_by_category').setValue(false);
+              this.formPM.get('limit_by_product').setValue(true);
+              // this.productList = res.data.settings.details[i].limit_only;
+              this.productList = res.data.settings.details[i].limit_only_data;
+            } else {
+              this.formPM.get('limit_by_category').setValue(true);
+              this.formPM.get('limit_by_product').setValue(false);
+              this.selectedCategory = res.data.settings.details[i].limit_only;
+              this.formPM.get('category').enable();
+              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                return parseInt(x, 10);
+              });
+              this.formPM.get('category').setValue(resultCat);
+            }
+          } else if (res.data.settings.details[i].category_type === 'exclude') {
+            this.changeType('exclude');
+            if (res.data.settings.details[i].limit_by === 'product') {
+              this.formPM.get('limit_by_category_srcc').setValue(false);
+              this.formPM.get('limit_by_product_srcc').setValue(true);
+              // this.productList = res.data.settings.details[i].limit_only;
+              this.productListSRCC = res.data.settings.details[i].limit_only_data;
+            } else {
+              this.formPM.get('limit_by_category_srcc').setValue(true);
+              this.formPM.get('limit_by_product_srcc').setValue(false);
+              const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+                return parseInt(x, 10);
+              });
+              this.formPM.get('category_srcc').setValue(resultCat);
+            }
+          }
+        }
+
+        if (res.data.settings) { //Jika sudah disetting maka tidak bisa diupdate lagi
+          this.editableCoin = false;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
+        } else {
+          this.editableCoin = true;
+        }
+
+        this.formPM.get('coins').setValue(res.data.settings.coins);
+
+        let zone = [];
+        for (let i = 0; i < res.data.areas.length; i++) {
+          if (res.data.areas[i].level_desc === 'zone') {
+            if (!( res.data.areas[i].area_id in zone )) {
+              zone.push(res.data.areas[i].area_id);
+            }
+          }
+        }
+        this.selectedZone = zone;
+        this.imageConverted = res.data.icon_url;
+
+        this.initAreaSelected(res.data);
+      }
+    });
+  }
+
+  initAreaSelected(data = null) {
+    console.log('=================');
+    let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
     let arr_zone = [];
@@ -439,70 +496,18 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log(arr_area);
     console.log(arr_region);
     console.log(arr_zone);
-  }
-
-  setStorageDetail() {
-    // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
-      if(res.data){
-        this.dataService.setToStorage('spin_the_wheel', res.data);
-        this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
-        this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
-        this.averageCoin = res.data.settings.average_coin_spin;
-        
-        for (let i = 0; i < res.data.settings.details.length; i++) {
-          if (res.data.settings.details[i].category_type === 'belanja') {
-            this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'reward') {
-            this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
-            this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
-          } else if (res.data.settings.details[i].category_type === 'limit') {
-            this.changeType('ppk');
-            if (res.data.settings.details[i].limit_by === 'product') {
-              this.formPM.get('limit_by_category').setValue(false);
-              this.formPM.get('limit_by_product').setValue(true);
-              // this.productList = res.data.settings.details[i].limit_only;
-              this.productList = res.data.settings.details[i].limit_only_data;
-            } else {
-              this.formPM.get('limit_by_category').setValue(true);
-              this.formPM.get('limit_by_product').setValue(false);
-            }
-          } else if (res.data.settings.details[i].category_type === 'exclude') {
-            this.changeType('exclude');
-            if (res.data.settings.details[i].limit_by === 'product') {
-              this.formPM.get('limit_by_category_srcc').setValue(false);
-              this.formPM.get('limit_by_product_srcc').setValue(true);
-              // this.productList = res.data.settings.details[i].limit_only;
-              this.productListSRCC = res.data.settings.details[i].limit_only_data;
-            } else {
-              this.formPM.get('limit_by_category_srcc').setValue(true);
-              this.formPM.get('limit_by_product_srcc').setValue(false);
-            }
-          }
-        }
-
-        if (res.data.status === 'publish' && res.data.start_date <= moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && res.data.end_date >= moment(new Date()).format('YYYY-MM-DD HH:mm:ss')) {
-          this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
-        } else {
-          this.editableCoin = true;
-        }
-
-        this.formPM.get('coins').setValue(res.data.settings.coins);
-
-        let zone = [];
-        for (let i = 0; i < res.data.areas.length; i++) {
-          if (res.data.areas[i].level_desc === 'zone') {
-            if (!( res.data.areas[i].area_id in zone )) {
-              zone.push(res.data.areas[i].area_id);
-            }
-          }
-        }
-        this.selectedZone = zone;
-      }
-    });
+    if (arr_zone.length === 0 || parseInt(arr_zone[0], 10) === 0) {
+      this.loadingZone = false;
+    }
+    if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
+      this.loadingRegion = false;
+    }
+    if (arr_area.length === 0 || parseInt(arr_area[0], 10) === 0) {
+      this.loadingArea = false;
+    }
+    this.selectedZone = arr_zone;
+    this.selectedRegion = arr_region;
+    this.selectedArea = arr_area;
   }
 
   removeImage(): void {
@@ -544,12 +549,28 @@ export class SpinTheWheelEditComponent implements OnInit {
         fd.append("area_id[]", "");
       }
 
-      if(value === 'division'){
-        // this.formGeo.get('division').setValue(this.selectedZone);
-      }
-
       this.geoService.getChildFilterArea(fd).subscribe((res) => {
         this.geoList[subLevel] = res.data;
+
+        if (value === 'national' && this.selectedZone.length > 0) {
+          this.formGeo.get('division').setValue(this.selectedZone);
+          this.selectedZone = [];
+        } else if (value === 'division' && this.selectedRegion.length > 0) {
+          this.formGeo.get('region').setValue(this.selectedRegion);
+          this.selectedRegion = [];
+        } else if (value === 'region' && this.selectedArea.length > 0) {
+          this.formGeo.get('area').setValue(this.selectedArea);
+          this.selectedArea = [];
+        }
+        if (value === 'national' && this.loadingZone === true) {
+          this.loadingZone = false;
+        }
+        if (value === 'division' && this.loadingRegion === true) {
+          this.loadingRegion = false;
+        }
+        if (value === 'region' && this.loadingArea === true) {
+          this.loadingArea = false;
+        }
       });
     }
 
@@ -563,7 +584,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         return;
       }
       if (current) {
-        this.formGeo.get(item).setValue("");
+        // this.formGeo.get(item).setValue("");
         this.geoList[item] = [];
       }
     });
@@ -582,10 +603,10 @@ export class SpinTheWheelEditComponent implements OnInit {
     );
   }
 
-  changeBlastType(type) {
-    if (type === 'population') this.isPopulation = true;
-    else this.isPopulation = false
-  }
+  // changeBlastType(type) {
+  //   if (type === 'population-blast') this.isPopulation = true;
+  //   else this.isPopulation = false
+  // }
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()['areas'] || [];
@@ -788,7 +809,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         } else {
           this.list['region'] = [];
         }
-        this.formFilter.get('region').setValue('');
+        // this.formFilter.get('region').setValue('');
         this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
@@ -824,7 +845,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.list['area'] = [];
         }
 
-        this.formFilter.get('area').setValue('');
+        // this.formFilter.get('area').setValue('');
         this.formFilter.get('salespoint').setValue('');
         this.formFilter.get('district').setValue('');
         this.formFilter.get('territory').setValue('');
@@ -1062,6 +1083,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submitAudience() {
+    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
@@ -1069,9 +1091,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
-        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all']
+        zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
       };
     } else {
       body = {
@@ -1120,9 +1142,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         task_spin_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
-        zones: this.formGeo.get('division').value.length > 0 ? this.formGeo.get('division').value : ['all'],
-        regions: this.formGeo.get('region').value.length > 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value ? this.formGeo.get('area').value : ['all'],
+        zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
+        regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
         panel_count: this.panelBlast
       };
     } else {
@@ -1142,7 +1164,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessComponent,
+      DialogProcessSaveComponent,
       {...dialogConfig, width: '400px'}
     );
 
@@ -1397,7 +1419,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log('X -', type);
     console.log('Y -', event);
     if (type === 'product') {
-      this.formPM.get('category').setValue('');
+      // this.formPM.get('category').setValue('');
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(true);
       if (!event.checked) {
@@ -1421,10 +1443,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event.checked) {
-        this.formPM.get('category').setValue('');
+        // this.formPM.get('category').setValue('');
         this.formPM.get('category').enable();
       } else {
-        this.formPM.get('category').setValue('');
+        // this.formPM.get('category').setValue('');
         this.formPM.get('category').disable();
       }
       if (this.productInput) {
@@ -1624,16 +1646,16 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     }
     await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = this.sumPM('coin') / event.target.value;
+    this.averageCoin = Math.floor(this.sumPM('coin') / event.target.value);
   }
 
   async changeCoin(event, index) {
     let newArr = this.formPM.get('coins').value;
     newArr[index].coin = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
     await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = this.sumPM('coin') / this.formPM.get('coin_variation').value;
+    this.averageCoin = Math.floor(this.sumPM('coin') / this.formPM.get('coin_variation').value);
   }
 
   async changeSlice(event, index) {
@@ -1646,7 +1668,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let newArr = this.formPM.get('coins').value;
     newArr[index].probability = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt;
+    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
     await this.formPM.get('coins').setValue(newArr);
   }
 
@@ -1655,7 +1677,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     if (newArr !== null && newArr.length > 0) {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
-        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt;
+        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
       }
       await this.formPM.get('coins').setValue(newArr);
     }
@@ -1692,21 +1714,25 @@ export class SpinTheWheelEditComponent implements OnInit {
       let newArr = {};
       if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
         product = this.productList.map(r => r.sku_id);
-        const limitBy = limitByProduct ? 'product' : 'category';
-        newArr = {
-          limit_by: limitBy,
-          limit_only: limitByProduct ? product : this.formPM.get('category').value
-        };
-        body = {...body, ...newArr};
+        if (product.length > 0 || this.formPM.get('category').value.length > 0) {
+          const limitBy = limitByProduct ? 'product' : 'category';
+          newArr = {
+            limit_by: limitBy,
+            limit_only: limitByProduct ? product : this.formPM.get('category').value
+          };
+          body = {...body, ...newArr};
+        }
       }
       if (excludeByProduct === true || this.formPM.get('limit_by_category_srcc').value === true) {
         product = this.productListSRCC.map(r => r.sku_id);
-        const excludeBy = excludeByProduct ? 'product' : 'category';
-        newArr = {
-          exclude_by: excludeBy,
-          exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
-        };
-        body = {...body, ...newArr};
+        if (product.length > 0 || this.formPM.get('category_srcc').value.length > 0) {
+          const excludeBy = excludeByProduct ? 'product' : 'category';
+          newArr = {
+            exclude_by: excludeBy,
+            exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
+          };
+          body = {...body, ...newArr};
+        }
       }
       const dialogConfig = new MatDialogConfig();
     
@@ -1716,7 +1742,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
 
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessSaveComponent,
         {...dialogConfig, width: '400px'}
       );
 
@@ -1750,12 +1776,14 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.isExclude = false;
       this.formPM.get('limit_by_category_srcc').setValue(false);
       this.formPM.get('limit_by_product_srcc').setValue(false);
+      this.formPM.get('category_srcc').setValue([]);
     } else {
       this.productList = [];
       this.isPPK = false;
       this.isExclude = true;
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(false);
+      this.formPM.get('category').setValue([]);
     }
   }
   
@@ -1767,7 +1795,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.handleAudienceFilter(filter);
 
     if (filter !== 'fixed-panel') {
-      this.formGeo.get('classification').setValue(this.detailFormSpin.class_group);
+      this.formGeo.get('classification').setValue(this.detailFormSpin.class_groups);
     }
 
     if (this.detailFormSpin.panel_count > 0) {
@@ -1781,8 +1809,22 @@ export class SpinTheWheelEditComponent implements OnInit {
     // }
   }
 
+  // handleAudienceFilter(value) {
+  //   this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+  // }
+
   handleAudienceFilter(value) {
-    this.isPopulation = (this.detailFormSpin.audience_filter === 'population-blast')? true : false;
+    if (value !== 'fixed-panel') {
+      this.isPopulation = true;
+      // this.formGeo.get('audiencePopulation').setValue(value);
+      this.audienceFixed.setValue('');
+      this.audiencePopulation.setValue(value);
+    } else {
+      this.isPopulation = false;
+      this.audienceFixed.setValue(value);
+      this.audiencePopulation.setValue('');
+      // this.formGeo.get('audiencePopulation').setValue('');
+    }
   }
   
 }

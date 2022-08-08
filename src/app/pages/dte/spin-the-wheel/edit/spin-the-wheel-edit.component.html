@@ -19,7 +19,7 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <mat-tab-group>
+      <mat-tab-group [selectedIndex]="selectedTab">
         <mat-tab label="Spin The Wheel">
           <div class="ayo-middle py-24" fxLayout="column">
             <form
@@ -215,29 +215,49 @@
         </mat-tab>
         <mat-tab label="Audience" [disabled]="false">
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <!-- <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                <mat-radio-button
+                  class="radio-button pr-48"
+                  [value]="population-blast"
+                >
+                Population Blast
+                </mat-radio-button>
+              </mat-radio-group> -->
+              
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row" class="px-16">
-                      <mat-radio-button
+                      <!-- <mat-radio-button
                         class="radio-button pr-48"
                         [checked]="isPopulation"
-                        (change)="changeBlastType('population')"
+                        (change)="changeBlastType('population-blast')"
                       >
                         Population Blast
-                      </mat-radio-button>
+                      </mat-radio-button> -->
+                      <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                        <mat-radio-button class="radio-button pr-48" value="population-blast">
+                          Population Blast
+                        </mat-radio-button>
+                      </mat-radio-group>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                      placeholder="{{'global.area.zone' | translate}}"
-                      formControlName="division"
-                      (selectionChange)="getLevel('division')"
-                      multiple
-                    >
-                      <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
-                        item.code
-                      }}</mat-option>
-                    </mat-select>
+                        placeholder="{{'global.area.zone' | translate}}"
+                        formControlName="division"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingZone">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -245,13 +265,19 @@
                       <mat-select
                         placeholder="{{'global.area.regional' | translate}}"
                         formControlName="region"
-                        (selectionChange)="getLevel('region')"
                         multiple
                       >
                         <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
                           item.code
                         }}</mat-option>
                       </mat-select>
+
+                      <mat-placeholder *ngIf="loadingRegion">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -260,12 +286,18 @@
                         placeholder="{{'global.area.area' | translate}}"
                         formControlName="area"
                         multiple
-                        (selectionChange)="getLevel('area')"
                       >
                         <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
                           item.code
                         }}</mat-option>
                       </mat-select>
+
+                      <mat-placeholder *ngIf="loadingArea">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
                     </mat-form-field>
                   </div>
                   <div fxFlex fxLayout="row" class="px-36">
@@ -282,7 +314,7 @@
                 </div>
               </form>
               <div fxLayout="row" fxFlex="45">
-                <div class="red-big-chunk-panel" fxFlex="100">
+                <div class="box-red" fxFlex="100">
                   <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
                   <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
                   <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
@@ -293,13 +325,18 @@
           fxLayout="column"
           class="px-16"
           >
-            <mat-radio-button
+            <!-- <mat-radio-button
               class="radio-button pr-48"
               [checked]="!isPopulation"
-              (change)="changeBlastType('fixed')"
+              (change)="changeBlastType('fixed-panel')"
             >
               Fixed Panel
-            </mat-radio-button>
+            </mat-radio-button> -->
+            <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter('fixed-panel')">
+              <mat-radio-button class="radio-button pr-48" value="fixed-panel">
+                Fixed Panel
+              </mat-radio-button>
+            </mat-radio-group>
           <div fxLayout="column" class="px-20 py-16">
             <!-- <div [formGroup]="formFilter">
               <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayout.lt-md="column" class="pt-16"

@@ -1,0 +1,33 @@
+<div class="dialog-content-wrapper">
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar fxLayout="column" fxLayoutAlign=" center">
+    <mat-spinner diameter="100"></mat-spinner>
+    <div class="dialog__title mt-24">{{'dte.audience.on_process_data' | translate}}</div>
+    <div class="dialog__subtitle">{{'dte.audience.please_wait' | translate}}</div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16 text-center" fxLayout="row" fxLayoutGap="16px">
+      <a [routerLink]="['/dte', 'audience']" target="_blank" rel="noopener noreferrer" fxFlex="50">
+        <button
+          id="btn-to-dashboard"
+          mat-raised-button
+          type="button"
+          class="dialog__btn--primary"
+        >
+          {{'dte.audience.back_to_dashboard' | translate}}
+        </button>
+      </a>
+      <button
+        id="btn-cancel"
+        mat-raised-button
+        type="button"
+        class="confirmation-button"
+        (click)="dialogRef.close()"
+        fxFlex="50"
+      >
+        {{'global.button.cancel' | translate}}
+      </button>
+    </div>
+  </div>
+</div>
