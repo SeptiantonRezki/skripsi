@@ -1697,6 +1697,14 @@ export class SpinTheWheelEditComponent implements OnInit {
   async submitPM() {
     const sumProbability = this.sumPM('probability');
     console.log(sumProbability);
+    if (this.formPM.get('frekuensi_belanja').value === '') {
+      this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
+      return false;
+    } else if (this.formPM.get('frekuensi_reward').value === '') {
+      this.dialogService.openSnackBar({ message: 'Maksimal Frekuensi Reward wajib diisi.' });
+      return false;
+    }
+
     if (sumProbability === 100) {
       let body = {
         task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
@@ -1735,7 +1743,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
       }
       const dialogConfig = new MatDialogConfig();
-    
+
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       dialogConfig.panelClass = "scrumboard-card-dialog";
