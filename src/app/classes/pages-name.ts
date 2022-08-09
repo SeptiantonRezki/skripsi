@@ -183,7 +183,6 @@ export class PagesName {
       "/dte/verification-assignment/detail/": "principal.dteverificationassignment.lihat",
       "/dte/verification-approval": "principal.dteverificationapproval.lihat",
       "/dte/verification-approval/detail/": "principal.dteverificationapproval.lihat",
-
       "/dte/sub-group-trade-program": "principal.dtesubgrouptradeprogram.lihat",
       "/dte/sub-group-trade-program/create": "principal.dtesubgrouptradeprogram.buat",
       "/dte/sub-group-trade-program/edit/": "principal.dtesubgrouptradeprogram.ubah",

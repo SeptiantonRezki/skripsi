@@ -1,19 +1,18 @@
 .spinner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-product-barcode {
+  ::ng-deep .mat-form-field-wrapper {
+    position: relative;
+    width: 100%;
   }
-  
-  .search-product-barcode {
-    ::ng-deep .mat-form-field-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    ::ng-deep .mat-error {
-      position: absolute;
-      top: 100%;
-      margin-top: 8px;
-      font-size: 12px;
-    }
+  ::ng-deep .mat-error {
+    position: absolute;
+    top: 100%;
+    margin-top: 8px;
+    font-size: 12px;
   }
-  
+}

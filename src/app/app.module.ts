@@ -88,6 +88,7 @@ import { PanelMitraService } from './services/user-management/private-label/pane
 import { OrdertoSupplierService } from './services/user-management/private-label/orderto-supplier.service';
 import { PayMethodService } from './services/user-management/private-label/pay-method.service';
 import { PLStockService } from './services/user-management/private-label/stock.service';
+import { LotteryService } from './services/dte/lottery.service';
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from './services/idle.service';
@@ -298,6 +299,7 @@ class CustomLoader implements TranslateLoader {
     OrderToMitraHubService,
     CountrySetupService,
     LanguageSetupService,
+    LotteryService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

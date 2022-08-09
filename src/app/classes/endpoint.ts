@@ -337,6 +337,14 @@ export class Endpoint {
         preview_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/preview-audience`,
         export_preview_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience-personalized/export`,
       },
+      lottery: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery`,
+        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/${context.lottery_id}`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery`,
+        put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update/${context.lottery_id}`,
+        put_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-audience/${context.lottery_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/${context.lottery_id}`,
+      },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
         list_audience_groups: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation/list-audience`,

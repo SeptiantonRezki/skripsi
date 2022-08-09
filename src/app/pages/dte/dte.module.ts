@@ -157,6 +157,7 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from './audience/dialog/dialog-process-save/dialog-process-save.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
@@ -167,17 +168,22 @@ import { TaskVerificationComponent } from './task-verification-2/task-verificati
 import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 import { TranslateModule } from "@ngx-translate/core";
+import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.component';
 import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
-import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { XpComponent } from './xp/xp.component';
-import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
+import { LotteryComponent } from './lottery/index/lottery.component';
+import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
+import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -352,6 +358,7 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
@@ -361,6 +368,8 @@ export const MY_FORMATS = {
     TaskVerificationComponent,
     AssignmentCartComponent,
     TaskVerificationAssignmentComponent,
+    TemplatePlanogramComponent,
+    VerificationApprovalComponent,
     SubGroupTradeComponent,
     DataLogComponent,
     CoinRedemptionApprovalComponent,
@@ -372,6 +381,15 @@ export const MY_FORMATS = {
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
+    SpinTheWheelComponent,
+    SpinTheWheelCreateComponent,
+    SpinTheWheelEditComponent,
+    LotteryComponent,
+    LotteryCreateComponent,
+    LotteryEditComponent,
+    XpComponent,
+    JobsRequestComponent,
+    CheckImageComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -477,6 +495,7 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     ImportAudiencePersonalizeComponent
   ],
 })

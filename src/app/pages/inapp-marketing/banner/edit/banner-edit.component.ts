@@ -897,7 +897,6 @@ export class BannerEditComponent {
           this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
           this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
         }
-
       }, 50);
     }
 
@@ -1460,6 +1459,7 @@ export class BannerEditComponent {
       } else if (body.content_type === 'spesific_product_b2b') {
         fd.append('barcode', this.formBannerGroup.get('barcode').value.id);
         body['barcode'] = this.formBannerGroup.get('barcode').value.id;
+        this.formBannerGroup.controls['barcode'].enable();
         fd.append('name_product', this.formBannerGroup.get('barcode').value.name);
         body['name_product'] = this.formBannerGroup.get('barcode').value.name;
       }
@@ -1674,7 +1674,7 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['content_wallet'].disable();
       this.formBannerGroup.controls['button_text'].disable();
     }
-
+    this.formBannerGroup.get("barcode").setValue("");
     if (value === "spesific_product_b2b") {
       this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()

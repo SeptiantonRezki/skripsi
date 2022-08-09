@@ -817,7 +817,6 @@ export class AdminPrincipalCreateComponent {
       var newArray = [];
       var lookupObject  = {};
 
-
       let area2Value = this.wilayah_2.getRawValue();
       
       for(let i=0; i<value.length; i++){
@@ -895,7 +894,7 @@ else{
           this.submitting = false;
         }
       );
-    }
+      }
     } else {
       commonFormValidator.validateAllFields(this.verticalStepperStep1);
       commonFormValidator.validateAllFields(this.verticalStepperStep2);

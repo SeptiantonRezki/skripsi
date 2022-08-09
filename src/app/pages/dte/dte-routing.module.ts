@@ -66,6 +66,10 @@ import { VerificationApprovalComponent } from "./task-verification-2/verificatio
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
+import { LotteryComponent } from "./lottery/index/lottery.component";
+import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
+import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 
 const routes: Routes = [
   {
@@ -739,6 +743,16 @@ const routes: Routes = [
     component: CoinRedemptionApprovalComponent,
   },
   {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
     path: 'employee-mapping',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard],
@@ -760,6 +774,99 @@ const routes: Routes = [
     path: 'employee-mapping/detail/:id',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
+  },
+  
+
+  // {
+  //   path: "audience",
+  //   component: AudienceIndexComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.index
+  //   },
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/create",
+  //   component: AudienceCreateComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.create
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/edit",
+  //   component: AudienceEditComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.edit
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+
+  {
+    path: 'spin-the-wheel',
+    component: SpinTheWheelComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/create',
+    component: SpinTheWheelCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/edit/:id',
+    component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/detail',
+    component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery',
+    component: LotteryComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/create',
+    component: LotteryCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/edit',
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.edit
+    },
+    // canActivate: [PageGuard]
   },
   {
     path: 'xp',
@@ -791,9 +898,9 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: 'spin-the-wheel/create',
-    component: SpinTheWheelCreateComponent,
-    // canActivate: [PageGuard]
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'spin-the-wheel/edit/:id',
@@ -804,6 +911,11 @@ const routes: Routes = [
     path: "spin-the-wheel/detail",
     component: SpinTheWheelEditComponent,
     //canActivate: [PageGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
   },
 ];
 

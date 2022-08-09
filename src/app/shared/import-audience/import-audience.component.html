@@ -5,7 +5,8 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{'global.label.upload_file' | translate}} {{dialogData.fileType ? dialogData.fileType.toUpperCase() : ''}}</span>
+        <span>{{'global.label.upload_file' | translate}} {{dialogData.fileType ? dialogData.fileType.toUpperCase() :
+          ''}}</span>
       </div>
 
     </div>
@@ -18,13 +19,14 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files" [accept]="fileType || ''"
-      [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag" (fileChange)="preview($event)">
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+       [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
         <span matPrefix>{{'global.messages.file_browse_label' | translate}}
-           
+
         </span>
       </div>
     </div>
@@ -63,7 +65,8 @@
               {{ item.type }}
             </td>
             <td nowrap>
-              {{ item.flag || item.is_valid ? ('global.label.valid' | translate) : ('global.label.invalid' | translate) }}
+              {{ item.flag || item.is_valid ? ('global.label.valid' | translate) : ('global.label.invalid' | translate)
+              }}
             </td>
             <td nowrap>
               {{ item.reason }}
@@ -77,7 +80,9 @@
         </tbody>
       </table>
     </div>
-    <div *ngIf="counter" style="margin-top: 5px;"><b>{{counter.total}} {{'global.label.total' | translate}}</b>, {{counter.valid}} {{'global.label.valid' | translate}}, {{counter.invalid}} {{'global.label.invalid' | translate}}</div>
+    <div *ngIf="counter" style="margin-top: 5px;"><b>{{counter.total}} {{'global.label.total' | translate}}</b>,
+      {{counter.valid}} {{'global.label.valid' | translate}}, {{counter.invalid}} {{'global.label.invalid' | translate}}
+    </div>
   </div>
 
   <div class="border-top">

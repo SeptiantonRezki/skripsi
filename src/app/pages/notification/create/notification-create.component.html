@@ -449,7 +449,7 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               <mat-form-field fxFlex="30" class="is-light form-primary">
                 <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
-                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}"
+                  placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}"
                   formControlName="recurrence_start_date" [min]="minStartDate">
                 <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startPicker></mat-datepicker>

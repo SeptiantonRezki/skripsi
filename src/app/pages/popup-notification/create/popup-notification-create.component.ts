@@ -360,9 +360,11 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "Image", value: "image" },
-        { name: "Unlinked", value: "unlinked" },
-        { name: "Static Page", value: "static-page" },
+        this.listContentType = [
+          { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+          { name: this.translate.instant('global.label.image'), value: "image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
         ];
         if (this.permission.new_product) {
           this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
@@ -445,8 +447,8 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
           { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" },
-          { name: "Image", value: "image" },
-          { name: "Unlinked", value: "unlinked" }
+          { name: this.translate.instant('global.label.image'), value: "image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },

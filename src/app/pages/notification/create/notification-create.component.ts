@@ -218,6 +218,7 @@ export class NotificationCreateComponent {
   titleParam = { entity: this.pageName };
 
   ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
+  // ALLOW_FOR_TYPE = ['customer'];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -408,14 +409,14 @@ export class NotificationCreateComponent {
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
-        //this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }]; // hide Unlinked and Iframe
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }];
       } else if (res === 'customer') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" }, { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }];
-      } else if (res === "tsm") {
+      } else if (res === 'tsm') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
       } else {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" }];
+
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -508,7 +509,7 @@ export class NotificationCreateComponent {
     }
 
     if (!this.ALLOW_FOR_TYPE.includes(this.formNotification.controls.user_group.value)) {
-      this.formNotification.controls.type_of_recurrence.disable();
+      // this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
