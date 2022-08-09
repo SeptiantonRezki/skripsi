@@ -614,6 +614,10 @@ export class ShopingDiscountCoinsCreateComponent implements OnInit {
       // this.formShopingDiscountCoins.get('category_srcc').disable();
     }
 
+    if(this.actionType === 'edit') {
+      this.formShopingDiscountCoins.get('startDate').disable();
+    }
+
     this.formFilter = this.formBuilder.group({
       national: [""],
       zone: [""],
