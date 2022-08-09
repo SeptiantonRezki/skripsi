@@ -7,6 +7,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { forkJoin } from 'rxjs';
 import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { AdminPrincipalService } from 'app/services/user-management/admin-principal.service';
 
 @Component({
   selector: 'app-force-update-apps',
@@ -19,10 +20,10 @@ export class ForceUpdateAppsComponent {
     { name: 'Android', value: 'android' },
     // { name: 'ios', value: 'ios' }
   ]
-  region: any[] = [
-    { name: 'Indonesia', value: 'ID'},
-    { name: 'Non Indonesia', value: 'KM'},
-  ]
+  // region: any[] = [
+  //   { name: 'Indonesia', value: 'ID'},
+  //   { name: 'Non Indonesia', value: 'KM'},
+  // ]
   // yesOrNo: any[] = [{ name: 'Ya', value: 'yes' }, { name: 'Tidak', value: 'no' }];
   yesOrNo: any[] = [{ name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 'yes' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 'no' }];
   formForceUpdate: FormGroup;
@@ -40,13 +41,16 @@ export class ForceUpdateAppsComponent {
 
   permission: any;
   roles: PagesName = new PagesName();
+  Region: any[];
 
   constructor(
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private accessServices: AccessService,
     private dataService: DataService,
-    private ls: LanguagesService
+    private ls: LanguagesService,
+    private adminPrincipalService: AdminPrincipalService,
+
   ) {
     this.onLoad = true;
 
@@ -55,7 +59,8 @@ export class ForceUpdateAppsComponent {
   }
 
   ngOnInit() {
-
+    
+    
     this.accessServices.listVersion().subscribe(res => {
       this.listVersionRetailer = res[0].data;
       this.listVersionConsumer = res[1].data;
@@ -102,7 +107,18 @@ export class ForceUpdateAppsComponent {
     this.accessServices.deviceOS().subscribe((response) => {
       this.listDeviceOS = response.map(({ name, version }) => ({ name, value: version }));
     })
+    this.adminPrincipalService.getCountry().subscribe(
+        res => {  
+          this.Region = res.data; 
+          console.log('Response Country',res);       
+        },
+        err => {
+          console.error(err);
+        }
+    );  
   }
+
+
 
   changeValue() {
     if (this.formForceUpdate.controls['notifNewVersion'].value === 'yes') {
