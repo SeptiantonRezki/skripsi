@@ -18,10 +18,11 @@
           </mat-form-field>
         </div>
       </div>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+        [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
+        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+        (sort)="onSort($event)">
 
         <ngx-datatable-column name="Nama Program" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
