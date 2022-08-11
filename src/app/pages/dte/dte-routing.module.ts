@@ -57,19 +57,19 @@ import { TemplatePlanogramComponent } from "./image-recognition/template-planogr
 import { TaskVerificationComponent } from "./task-verification-2/task-verification/task-verification.component";
 import { AssignmentCartComponent } from "./task-verification-2/assignment-cart/assignment-cart.component";
 import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-verification-assignment/task-verification-assignment.component";
-import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { XpComponent } from "./xp/xp.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 import { LotteryComponent } from "./lottery/index/lottery.component";
 import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
 import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
-import { XpComponent } from "./xp/xp.component";
 import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
-import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 
 const routes: Routes = [
   {
@@ -893,9 +893,24 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard]
   },
   {
+    path: 'spin-the-wheel',
+    component: SpinTheWheelComponent,
+    // canActivate: [PageGuard]
+  },
+  {
     path: 'jobs-request',
     component: JobsRequestComponent,
     canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'spin-the-wheel/edit/:id',
+    component: SpinTheWheelEditComponent,
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "spin-the-wheel/detail",
+    component: SpinTheWheelEditComponent,
+    //canActivate: [PageGuard]
   },
   {
     path: 'jobs-request/:tab',

@@ -75,7 +75,7 @@ export class WholesalerService extends BaseService {
   }
 
   exportWholesalerNew(queryParams?,context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "exportWhosaller", context);
+    const url = this.getUrl(this.namespace, "exportWholesaller", context);
     return this.getBlobApi(url, queryParams);
   }
   
