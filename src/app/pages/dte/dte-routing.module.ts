@@ -60,10 +60,16 @@ import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { LotteryComponent } from "./lottery/index/lottery.component";
 import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
 import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
+import { XpComponent } from "./xp/xp.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
+import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
+import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 
 const routes: Routes = [
   {
@@ -695,6 +701,16 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: 'verification-approval',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
+    path: 'verification-approval/detail/:id',
+    component: VerificationApprovalComponent,
+    canActivate: [PageGuard]
+  },
+  {
     path: 'sub-group-trade-program',
     component: SubGroupTradeComponent,
     canActivate: [PageGuard],
@@ -727,6 +743,16 @@ const routes: Routes = [
     component: CoinRedemptionApprovalComponent,
   },
   {
+    path: 'jobs-request',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'jobs-request/:tab',
+    component: JobsRequestComponent,
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
     path: 'employee-mapping',
     component: EmployeeMappingComponent,
     canActivate: [PageGuard],
@@ -750,7 +776,6 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   
-
   // {
   //   path: "audience",
   //   component: AudienceIndexComponent,
@@ -786,6 +811,62 @@ const routes: Routes = [
   //   canActivate: [PageGuard]
   // },
 
+  {
+    path: 'xp',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/create/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/edit/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'xp/detail/:id/:tab',
+    component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'spin-the-wheel',
+    component: SpinTheWheelComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/create',
+    component: SpinTheWheelCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'spin-the-wheel/edit/:id',
+    component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "spin-the-wheel/detail",
+    component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
   {
     path: 'lottery',
     component: LotteryComponent,

@@ -157,6 +157,7 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from './audience/dialog/dialog-process-save/dialog-process-save.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
@@ -172,10 +173,16 @@ import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.co
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { LotteryComponent } from './lottery/index/lottery.component';
 import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
+import { XpComponent } from './xp/xp.component';
+import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
+import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
+import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
+import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -350,6 +357,7 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ApprovalHistoryComponent,
@@ -364,10 +372,16 @@ export const MY_FORMATS = {
     CoinRedemptionApprovalComponent,
     EmployeeMappingComponent,
     TemplatePlanogramComponent,
+    JobsRequestComponent,
     CheckImageComponent,
     LotteryComponent,
     LotteryCreateComponent,
     LotteryEditComponent,
+    XpComponent,
+    VerificationApprovalComponent,
+    SpinTheWheelComponent,
+    SpinTheWheelCreateComponent,
+    SpinTheWheelEditComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -473,6 +487,7 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessSaveComponent,
     ImportAudiencePersonalizeComponent
   ],
 })

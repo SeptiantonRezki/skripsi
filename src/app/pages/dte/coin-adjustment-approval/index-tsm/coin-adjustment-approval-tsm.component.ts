@@ -65,6 +65,12 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
   paginationRequestor: Page = new Page();
   paginationApprover: Page = new Page();
 
+  selected = [];
+  owned = {
+    name: "",
+    show: 1,
+  };
+
   constructor(
     private dialogService: DialogService,
     private adapter: DateAdapter<any>,
@@ -215,10 +221,16 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     this.pagination['requestor'] = this.formFilterReqApp.get('requestor_id').value;
     this.pagination['approver'] = this.formFilterReqApp.get('approver_id').value;
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(res => {
+    const payload = {
+      ...this.pagination,
+      owned_by_user: 0,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.owned.show = 0;
     });
   }
 
@@ -233,7 +245,12 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(
+    const payload = {
+      ...this.pagination,
+      owned_by_user: this.owned.show,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(
       res => {
         if (res.total < res.per_page && page !== 1) {
           this.dataService.setToStorage('page', 1);
@@ -243,6 +260,8 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
           this.rows = res.data;
           this.onLoad = false;
           this.loadingIndicator = false;
+
+          this.owned.name = res.data && res.data[0].approver || "";
         }
       }, err => {
         console.error(err);
@@ -269,9 +288,7 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
       is_tsm: true
     }
 
-    console.log("Ke Click gak sih ini cuk ett dah", params);
     this.coinAdjustmentApprovalService.downloadApprovalList(params).subscribe(response => {
-      console.log('resss', response);
       if (response.data && response.status) {
         setTimeout(() => {
           this.downloadLink.nativeElement.href = response.data;
@@ -293,12 +310,18 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
       this.pagination.page = this.dataService.getFromStorage("page");
-    }
+    };
 
-    this.coinAdjustmentApprovalService.getTsm(this.pagination).subscribe(res => {
+    const payload = {
+      ...this.pagination,
+      owned_by_user: this.owned.show,
+    };
+
+    this.coinAdjustmentApprovalService.getTsm(payload).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
       this.loadingIndicator = false;
+      this.selected = [];
     });
   }
 
@@ -321,4 +344,51 @@ export class CoinAdjustmentApprovalTSMComponent implements OnInit, OnDestroy {
       this.loadingIndicator = false;
     });
   }
+  
+  getId(row) {
+    return row.id;
+  }
+
+  onSelect({ selected }) {
+    this.selected.splice(0, this.selected.length);
+
+    const newSelected = selected.filter(item => item.status === 'pending' && item.approver === this.owned.name);
+    this.selected.push(...newSelected);
+  }
+
+  actionDialog(type): void {
+    let caption = "";
+    if (type === "Setujui") caption += "menyetujui";
+    else caption += "menolak";
+
+    let data = {
+      titleDialog: `${type} Coin Adjustment`,
+      captionDialog: `Apakah anda yakin untuk ${caption} semua request coin adjustment yang dipilih ?`,
+      confirmCallback: (remark) => this.confirmAction(type, remark),
+      isRemark: true,
+      buttonText: ["Ya, lanjutkan", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmAction(type, reason) {
+    const method = type === "Setujui" ? "approveAll" : "rejectAll";
+    const payload = {
+      ids: this.selected.map(item => item.id),
+      reason
+    };
+
+    this.coinAdjustmentApprovalService[method](payload).subscribe(
+      res => {
+        this.dialogService.brodcastCloseConfirmation();
+        this.dialogService.openSnackBar(res);
+
+        this.selected.splice(0, this.selected.length);
+        this.getListCoinAdjustmentTSM();
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 }

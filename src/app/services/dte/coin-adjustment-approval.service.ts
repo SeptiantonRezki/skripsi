@@ -73,4 +73,14 @@ export class CoinAdjustmentApprovalService extends BaseService {
     const url = this.getUrl(this.namespace, 'respond_multiple_approval', context);
     return this.postApi(url, body);
   }
+
+  approveAll(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'approve_all');
+    return this.postApi(url, body);
+  }
+
+  rejectAll(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'reject_all');
+    return this.postApi(url, body);
+  }
 }

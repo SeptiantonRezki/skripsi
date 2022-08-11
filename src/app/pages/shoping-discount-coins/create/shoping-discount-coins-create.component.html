@@ -1,0 +1,218 @@
+<div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="{{
+    actionType === 'edit' ? ('global.label.edit_entity' | translate:titleParam) :
+    actionType === 'create' ? ('global.label.create_entity' | translate:titleParam)
+    : ('global.label.detail_entity' | translate:titleParam)
+    }}">
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+
+
+      <!-- <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar> -->
+      <mat-tab-group>
+        <mat-tab label="{{'global.label.detail_entity' | translate:titleParam}}">
+          <div class="ayo-middle" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formShopingDiscountCoins" (keydown.enter)="$event.preventDefault();">
+              <!-- <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center"
+                *ngIf="isDetail">
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportInvoice()">
+                    <mat-icon>vertical_align_top</mat-icon> Export Invoice
+                  </button>
+                </div>
+                <div class="button-row">
+                  <button mat-flat-button style="width: 160px" color="white" (click)="exportExcel()">
+                    <mat-icon>vertical_align_top</mat-icon> Export XLS
+                  </button>
+                </div>
+              </div> -->
+              <div fxLayout="row wrap" fxLayoutGap="20px" class="top-table p-8" style="margin-left: 25px;">
+
+                <div fxFlex.xs="100" fxLayout.xs="column" fxLayoutAlign.xs="start" fxFlex="50" fxLayout="row wrap" fxLayoutAlign="start center">
+                  <!-- <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
+                    <span>{{ls.locale.cn_reward.b2b_voucher.text18}}</span>
+                    <mat-checkbox class="mt-4 ml-4 mb-8" [formControl]="isB2CVoucher"
+                      (change)="onChangeIsB2CVoucher($event)">
+                      {{ls.locale.cn_reward.b2c_voucher.text1}}</mat-checkbox>
+                  </div> -->
+                  <!-- <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
+                    <mat-form-field fxFlex="100" class="mt-8">
+                      <mat-select placeholder="{{ls.locale.cn_reward.b2c_voucher.text25}}" formControlName="opsiVoucher">
+                        <mat-option *ngFor="let ovl of opsiVoucherList" [value]="ovl.value">{{ ovl.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div> -->
+                </div>
+
+                <mat-form-field fxFlex="50" class="is-light">
+                  <input matInput type="text" placeholder="{{ 'cn_reward.discount_coins_order.program_name' | translate }}" formControlName="name">
+                  <mat-error
+                    *ngIf="formShopingDiscountCoins.controls['name'].hasError('required') && formShopingDiscountCoins.controls['name'].touched ">
+                    {{ 'cn_reward.discount_coins_order.program_name' | translate }} {{ls.locale.global.messages.mandatory_text}}
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="50">
+                  <mat-select placeholder="{{ls.locale.dte.group_trade_program.text1}}" formControlName="trade_creator_group_id" multiple>
+                    <ngx-mat-select-search
+                      [formControl]="searchKeywordGTP"
+                      placeholderLabel="{{'global.label.search' | translate}}"
+                      noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"
+                      [searching]="searchingGTP"
+                    ></ngx-mat-select-search>
+                    <mat-option *ngFor="let item of groupTradePrograms | async" [value]="item.id">{{ item.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <div fxLayout="row" fxFlex="60" fxLayoutGap="20px">
+                  <!-- <div fxFlex="20">
+                    <mat-form-field class="is-light">
+                      <input matInput type="text" [mask]="ls.locale.global.input_mask_b2b" [thousandSeparator]="ls.locale.global.input_separator" placeholder="Nilai Penukaran Untuk 1 Koin" formControlName="currency">
+                      <mat-error>
+                        {{ls.locale.cn_reward.b2b_voucher.text20}} {{ls.locale.global.messages.mandatory_text}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div> -->
+                  <!-- <mat-form-field fxFlex="20" class="is-light">
+                    <input matInput type="number" placeholder="{{ls.locale.cn_reward.b2b_voucher.text21}}" formControlName="coin">
+                    <mat-error
+                      *ngIf="formShopingDiscountCoins.controls['coin'].hasError('required') && formShopingDiscountCoins.controls['coin'].touched ">
+                      {{ls.locale.cn_reward.b2b_voucher.text21}} {{ls.locale.global.messages.mandatory_text}}
+                    </mat-error>
+                  </mat-form-field> -->
+                  <!-- <mat-form-field fxFlex="20" class="is-light">
+                    <input matInput type="number" placeholder="{{ls.locale.cn_reward.b2c_voucher.text21}}" formControlName="voucher" readonly> 
+                    <mat-error
+                      *ngIf="formShopingDiscountCoins.controls['voucher'].hasError('required') && formShopingDiscountCoins.controls['voucher'].touched ">
+                      {{ls.locale.cn_reward.b2c_voucher.text21}} {{ls.locale.global.messages.mandatory_text}} 
+                    </mat-error>
+                  </mat-form-field> -->
+                </div>
+
+                <div fxFlex.xs="100" fxLayout.xs="column" fxFlex="50" fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" formControlName="startDate" [min]="minDateVoucher">
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formShopingDiscountCoins.controls['startDate'].hasError('required') && formShopingDiscountCoins.controls['startDate'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{ls.locale.global.messages.mandatory_text}}
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <input matInput (focus)="endDate.open()" [min]="minDateVoucher" [matDatepicker]="endDate"
+                      placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error class="mt-8 px-24"
+                      *ngIf="formShopingDiscountCoins.controls['endDate'].hasError('required') && formShopingDiscountCoins.controls['endDate'].touched">
+                      {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{ls.locale.global.messages.mandatory_text}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+
+                <div fxFlex.xs="100" fxLayout.xs="column" fxFlex="50" fxLayout="row" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex="50" class="is-light">
+                    <input matInput type="number" placeholder="{{'cn_reward.discount_coins_order.coin_exchange_rate' | translate}}" formControlName="coin_exchange_rate">
+                    <mat-error
+                      *ngIf="formShopingDiscountCoins.controls['coin_exchange_rate'].hasError('required') && formShopingDiscountCoins.controls['coin_exchange_rate'].touched ">
+                      {{'cn_reward.discount_coins_order.coin_exchange_rate' | translate}} {{ls.locale.global.messages.mandatory_text}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                
+
+                <!-- <mat-form-field fxFlex="50" class="isLight">
+                  <textarea matInput name="{{ls.locale.global.label.note}}" formControlName="note" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="15"
+                    placeholder="{{ls.locale.global.label.note}}"></textarea>
+                </mat-form-field> -->
+
+                <div fxFlex="50">
+                  <h4 style="font-weight: bold;">{{ls.locale.cn_reward.b2b_voucher.text25}}</h4>
+                </div>
+
+                <div fxFlex="100" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+                  <div fxFlex="50" fxLayout="column">
+                    <div fxLayout="column" style="border: 1px solid #ddd; position: relative;" class="p-8">
+                      <span class="opsi-type">{{ls.locale.cn_reward.b2b_voucher.text28}}</span>
+                      <div fxFlex="100" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                        <div fxFlex="100">
+                          <mat-checkbox formControlName="limit_by_product" (change)="isChecked('product', $event)"
+                            style="margin-right: 25px;">{{ls.locale.cn_reward.b2b_voucher.text26}}
+                          </mat-checkbox>
+                          <mat-checkbox formControlName="limit_by_category" (change)="isChecked('category', $event)">{{ls.locale.cn_reward.b2b_voucher.text27}}</mat-checkbox>
+                        </div>
+                      </div>
+                      <mat-form-field fxFlex="100" *ngIf="formShopingDiscountCoins.get('limit_by_product').value" class="mt-12">
+                        <mat-chip-list #chipList aria-label="Product List">
+                          <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                            (removed)="remove(product)">
+                            {{product.name}}
+                            <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                          </mat-chip>
+                          <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                            (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            (matChipInputTokenEnd)="add($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                          <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                            (onSelectionChange)="getProductObj($event, item)">
+                            {{item.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" *ngIf="!formShopingDiscountCoins.get('limit_by_product').value">
+                        <input matInput type="text" placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}" [disabled]="true">
+                      </mat-form-field>
+
+                      <mat-form-field fxFlex="100">
+                        <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple>
+                          <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="confirm p-24" fxLayout="row" fxLayoutAlign="start">
+                <button mat-raised-button type="button" class="confirmation-button" *ngIf="(permission?.ubah && actionType === 'edit') || (permission?.buat && actionType === 'create')"
+                  fxFlex="30" fxFlex.gt-xs="20" (click)="onSaveDetail()">
+                  {{ls.locale.global.button.save}}
+                </button>
+                <!-- <ng-container *ngIf="checkForNonApprover()">
+                  <button *ngFor="let item of listStatuses" mat-raised-button type="button"
+                    [ngClass]="item.value === 'rejected' ? 'confirmation-button' : 'mat-green-800-bg'" fxFlex="20"
+                    style="margin-left: 10px;" (click)="takeAction(item)">
+                    {{item.name ? item.name.toUpperCase() : item.name}}
+                  </button>
+                </ng-container>
+                <button mat-raised-button type="button" *ngIf="detailCoinDiscount && detailCoinDiscount.status === 'published'"
+                  fxFlex="20" style="margin-left: 10px;" disabled>
+                  {{ls.locale.cn_reward.b2b_voucher.published}}
+                </button> -->
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Panel Mitra" *ngIf="actionType !== 'create'">
+          <app-panel-mitra-coin (refreshDetail)="onRefreshDetail()" [statusCoinDiscount]="detailCoinDiscount.status"
+            [permissions]="permission">
+          </app-panel-mitra-coin>
+        </mat-tab>
+        
+        <mat-tab label="{{ 'cn_reward.discount_coins_order.coin_redeem' | translate}}" *ngIf="actionType !== 'create'">
+          <!-- <app-redeem-list></app-redeem-list> -->
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

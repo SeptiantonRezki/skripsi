@@ -1,0 +1,156 @@
+<div class="ayo-middle p-24" fxLayout="column">
+  <div>
+    <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
+      <div class="button-row">
+        <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()"
+          *ngIf="actionType === 'edit' && permissions?.ubah">
+          <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+        </button>
+      </div>
+      <div class="button-row">
+        <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()">
+          <mat-icon>vertical_align_top</mat-icon> Export XLS
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="formFilter" autoComplete="off">
+      <div class="pl-16 pr-16 mt-8 bb" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
+            <mat-option [value]="item.id" *ngFor="let item of listLevelArea">{{item.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['zone'])">{{item.name === 'all' ?
+              'Semua
+              Zona' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['region'])">{{item.name === 'all' ?
+              'Semua
+              Regional' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['area'])">{{item.name === 'all' ?
+              'Semua
+              Area' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['salespoint'])">{{item.name ===
+              'all' ? 'Semua
+              Salespoint' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['district'])">{{item.name === 'all'
+              ? 'Semua
+              District' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+          <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
+            <mat-option [value]="item.id" *ngFor="let item of filteringGeotree(list['territory'])">{{item.name === 'all'
+              ? 'Semua
+              Territory' :
+              item.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> <!-- // TODO -->
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+      [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+      [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selected]="selected"
+      [selectAllRowsOnPage]="false" [selectionType]="'checkbox'" (select)="onSelect($event)" [rowIdentity]="getId">
+
+      <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+        <ng-template ngx-datatable-header-template>
+          <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
+        </ng-template>
+
+        <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+          let-onCheckboxChangeFn="onCheckboxChangeFn">
+          <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected"
+            *ngIf="!allRowsSelected"></mat-checkbox>
+          <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all">
+          </mat-checkbox>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name" [sortable]="true">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-name" (click)="directDetail(row)">{{row.name || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.code || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner" [sortable]="true">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.owner || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <!-- <ngx-datatable-column name="{{ ls.locale.global.label.classification }}" prop="classification" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.classification || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="ws_code" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.ws_code || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="ws_name" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.ws_name || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Coin" prop="coin" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.coin || 0}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Menukarkan Coin" prop="coin" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.ws_name || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Menukarkan Voucher" prop="coin" [sortable]="false">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          <span class="row-address">{{row.ws_name || '-'}}</span>
+        </ng-template>
+      </ngx-datatable-column> -->
+    </ngx-datatable>
+    <div class="confirm p-24" fxLayout="row" fxLayoutAlign="center center"
+      *ngIf="permissions?.ubah && actionType === 'edit'">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="30" fxFlex.gt-xs="20"
+        (click)="onSave()">
+        {{ ls.locale.global.button.save }}
+      </button>
+    </div>
+  </div>
+</div>

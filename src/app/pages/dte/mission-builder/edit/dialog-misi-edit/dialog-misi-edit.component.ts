@@ -25,6 +25,7 @@ export class DialogMisiEditComponent implements OnInit {
   status_pin_up: FormControl = new FormControl(false);
   non_coin_reward: FormControl = new FormControl(false);
   isRewardError: boolean = false;
+  auto_submit: FormControl = new FormControl(false);
 
   missions: any[];
   minDate: any;
@@ -65,7 +66,10 @@ export class DialogMisiEditComponent implements OnInit {
       is_ir_template: null,
       status_pin_up: this.status_pin_up,
       non_coin_reward: this.non_coin_reward,
-      reward_description: [""]
+      reward_description: [""],
+      auto_submit: this.auto_submit,
+      xp_submission: null,
+      xp_verification: null,
     });
 
     this.filterMission.valueChanges
@@ -100,6 +104,8 @@ export class DialogMisiEditComponent implements OnInit {
         verification_type: this.data.data.attribute.verification_type,
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
+        xp_submission: this.data.data.attribute.xp_submission === 0 ? null : this.data.data.attribute.xp_submission,
+        xp_verification: this.data.data.attribute.xp_verification === 0 ? null : this.data.data.attribute.xp_verification,
         is_push_to_ff: parseInt(this.data.data.attribute.is_push_to_ff),
         is_ir_template: parseInt(this.data.data.attribute.is_ir_template),
         status_pin_up: this.data.data.attribute.status_pin_up,
@@ -139,6 +145,12 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('status_pin_up').patchValue(true);
       }
 
+      if (parseInt(this.data.data.attribute.auto_submit) === 0) {
+        this.form.get('auto_submit').patchValue(false);
+      } else if (parseInt(this.data.data.attribute.auto_submit) === 1) {
+        this.form.get('auto_submit').patchValue(true);
+      }
+
       if (parseInt(this.data.data.attribute.non_coin_reward) === 0) {
         this.form.get('non_coin_reward').patchValue(false);
       } else if (parseInt(this.data.data.attribute.non_coin_reward) === 1) {
@@ -158,7 +170,9 @@ export class DialogMisiEditComponent implements OnInit {
           // this.form.get("is_push_to_ff").disable();
           // this.form.get("is_ir_template").disable();
           this.form.get("status_pin_up").disable();
-          console.log('this form', this.form.value);
+          this.form.get("auto_submit").disable();
+          this.form.get("xp_submission").disable();
+          this.form.get("xp_verification").disable();
         }, 1000)
       }
     }
@@ -194,7 +208,6 @@ export class DialogMisiEditComponent implements OnInit {
       this.filterMission.setValue(this.form.get('task_template_id').value, { emitEvent: false });
       this.filterMissionOther.setValue(this.form.get('task_template_id').value, { emitEvent: false });
       const theIndex = this.missions.findIndex(x => x.id === this.form.get('task_template_id').value);
-      console.log("the index", theIndex, this.form.get('task_template_id').value, this.missions[theIndex]);
       this.form.patchValue({
         is_ir_template: this.missions[theIndex] && this.missions[theIndex]['is_ir_template'] ? this.missions[theIndex].is_ir_template : 0
       });
@@ -394,7 +407,11 @@ export class DialogMisiEditComponent implements OnInit {
     if (e.source.name === 'verifikasi' && e.checked) {
       this.form.get('verifikasiFF').patchValue(false);
       this.form.get('pushFF').patchValue(false);
+    } else {
+      this.form.get('xp_submission').patchValue(null);
+      this.form.get('xp_verification').patchValue(null);
     }
+
     if (e.source.name === 'verifikasi-ff' && e.checked) {
       this.form.get('verifikasi').patchValue(false);
       this.form.get('pushFF').patchValue(false);
@@ -455,6 +472,9 @@ export class DialogMisiEditComponent implements OnInit {
     );
     form.get('status_pin_up').patchValue(
       (form.value.status_pin_up === true) ? 1 : 0
+    );
+    form.get('auto_submit').patchValue(
+      (form.value.auto_submit === true) ? 1 : 0
     );
     form.get('non_coin_reward').patchValue(
       (form.value.non_coin_reward === true) ? 1 : 0
