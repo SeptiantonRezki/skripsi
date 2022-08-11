@@ -176,7 +176,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+      this.audienceService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
         // console.log('dua');
         if (response && response.data) {
           const {data} = response.data;
@@ -300,7 +300,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial });
+      let response = this.audienceService.showImport({ page: trial, per_page: this.pagination['per_page'] });
       // console.log('tiga');
       trialsRes.push(response);
     })
