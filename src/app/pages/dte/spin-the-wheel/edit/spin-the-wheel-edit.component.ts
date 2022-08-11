@@ -479,16 +479,16 @@ export class SpinTheWheelEditComponent implements OnInit {
     let arr_region = [];
     let arr_zone = [];
     arr.map((area, index) => {
-      if(area.level_desc === 'area'){
-        if(arr_area.indexOf(area.area_id) == -1){
+      if (area.level_desc === 'area') {
+        if (arr_area.indexOf(area.area_id) == -1) {
           arr_area.push(area.area_id);
         }
-      }else if(area.level_desc === 'region'){
-        if(arr_region.indexOf(area.area_id) == -1){
+      } else if (area.level_desc === 'region') {
+        if (arr_region.indexOf(area.area_id) == -1) {
           arr_region.push(area.area_id);
         }
-      }else{
-        if(arr_zone.indexOf(area.area_id) == -1){
+      } else {
+        if (arr_zone.indexOf(area.area_id) == -1) {
           arr_zone.push(area.area_id);
         }
       }
@@ -496,9 +496,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     console.log(arr_area);
     console.log(arr_region);
     console.log(arr_zone);
-    if (arr_zone.length === 0 || parseInt(arr_zone[0], 10) === 0) {
-      this.loadingZone = false;
-    }
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
@@ -1676,7 +1673,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let newArr = this.formPM.get('coins').value;
     if (newArr !== null && newArr.length > 0) {
       for (let i = 0; i < newArr.length; i++) {
-        newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
+        newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
       }
       await this.formPM.get('coins').setValue(newArr);
@@ -1697,6 +1694,14 @@ export class SpinTheWheelEditComponent implements OnInit {
   async submitPM() {
     const sumProbability = this.sumPM('probability');
     console.log(sumProbability);
+    if (this.formPM.get('frekuensi_belanja').value === '') {
+      this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
+      return false;
+    } else if (this.formPM.get('frekuensi_reward').value === '') {
+      this.dialogService.openSnackBar({ message: 'Maksimal Frekuensi Reward wajib diisi.' });
+      return false;
+    }
+
     if (sumProbability === 100) {
       let body = {
         task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
@@ -1735,7 +1740,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
       }
       const dialogConfig = new MatDialogConfig();
-    
+
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       dialogConfig.panelClass = "scrumboard-card-dialog";
