@@ -776,7 +776,6 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   
-
   // {
   //   path: "audience",
   //   component: AudienceIndexComponent,
@@ -916,6 +915,30 @@ const routes: Routes = [
     path: 'jobs-request/:tab',
     component: JobsRequestComponent,
     canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'lottery',
+    component: LotteryComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/create',
+    component: LotteryCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/edit',
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.edit
+    },
+    // canActivate: [PageGuard]
   },
 ];
 

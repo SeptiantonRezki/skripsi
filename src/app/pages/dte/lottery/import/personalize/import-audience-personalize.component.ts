@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './import-audience-personalize.component.html',
   styleUrls: ['./import-audience-personalize.component.scss']
 })
-export class ImportAudiencePersonalizeComponent implements OnInit {
+export class ImportLotteryDialogComponent implements OnInit {
 
   files: File;
   validComboDrag: boolean;
@@ -70,7 +70,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   numError: number = 1;
 
   constructor(
-    public dialogRef: MatDialogRef<ImportAudiencePersonalizeComponent>,
+    public dialogRef: MatDialogRef<ImportLotteryDialogComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
