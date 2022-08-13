@@ -15,6 +15,7 @@ export class CashierEditComponent implements OnInit {
   onLoad: boolean = true;
   productId: string;
   isDetail: boolean;
+  productCashierType: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,8 +26,9 @@ export class CashierEditComponent implements OnInit {
     private router: Router
   ) {
     this.activatedRoute.url.subscribe((params) => {
-      this.productId = params[2].path;
-      this.isDetail = params[1].path === "detail" ? true : false;
+      this.productId = params[3].path;
+      this.isDetail = params[2].path === "detail" ? true : false;
+      this.productCashierType = params[1].path;
     });
   }
 
@@ -41,6 +43,7 @@ export class CashierEditComponent implements OnInit {
       barcode: [{ value: "", disabled: false }],
       purchase_price: ["", [Validators.required, Validators.min(1)]],
       selling_price: ["", [Validators.required, Validators.min(1)]],
+      apply_all_rrp: [false],
     });
   }
 
@@ -54,6 +57,7 @@ export class CashierEditComponent implements OnInit {
             barcode: data.barcode,
             purchase_price: data.purchase_price.raw,
             selling_price: data.selling_price.raw,
+            apply_all_rrp: data.apply_all_rrp,
           });
         }
       );
@@ -74,6 +78,7 @@ export class CashierEditComponent implements OnInit {
       _method: "PUT",
       selling_price: this.formProductGroup.get("selling_price").value,
       purchase_price: this.formProductGroup.get("purchase_price").value,
+      apply_all_rrp: this.productCashierType === 'rrp' ? this.formProductGroup.get("apply_all_rrp").value : undefined,
     };
     this.dataService.showLoading(true);
     this.productCashierService.put(body, {
