@@ -39,6 +39,7 @@ import {
   MatDatepicker,
   MatProgressSpinnerModule,
   MatExpansionModule,
+  MatSlideToggleModule,
 } from "@angular/material";
 import {
   DateAdapter,
@@ -148,6 +149,7 @@ export const MY_FORMATS = {
     UserManagementModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     TranslateModule.forChild(),
+    MatSlideToggleModule,
   ],
   declarations: [
     ProductIndexComponent,
