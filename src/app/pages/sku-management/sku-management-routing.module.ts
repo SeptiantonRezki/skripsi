@@ -81,38 +81,6 @@ const routes: Routes = [
   },
   {
     path: "product-cashier",
-    component: CashierIndexComponent,
-    data: {
-      breadcrumbs: brConfig.skuManagement.productCashier.index
-    },
-    canActivate: [PageGuard]
-  },
-  {
-    path: "product-cashier/create",
-    component: CashierCreateComponent,
-    data: {
-      breadcrumbs: brConfig.skuManagement.productCashier.create
-    },
-    canActivate: [PageGuard]
-  },
-  {
-    path: "product-cashier/edit/:id",
-    component: CashierEditComponent,
-    data: {
-      breadcrumbs: brConfig.skuManagement.productCashier.edit
-    },
-    canActivate: [PageGuard]
-  },
-  {
-    path: "product-cashier/detail/:id",
-    component: CashierEditComponent,
-    data: {
-      breadcrumbs: brConfig.skuManagement.productCashier.detail
-    },
-    canActivate: [PageGuard]
-  },
-  {
-    path: "product-cashier/submission",
     component: CashierSubmissionComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.productCashier.submission
@@ -120,10 +88,74 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "product-cashier/submission/detail/:id",
+    path: "product-cashier/detail/:id",
     component: CashierSubmissionEditComponent,
     data: {
       breadcrumbs: brConfig.skuManagement.productCashier.submissionDetail
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/list",
+    component: CashierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.list
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/list/create",
+    component: CashierCreateComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.listCreate
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/list/edit/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.listEdit
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/list/detail/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.listDetail
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/rrp",
+    component: CashierIndexComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.rrp
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/rrp/create",
+    component: CashierCreateComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.rrpCreate
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/rrp/edit/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.rrpEdit
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "product-cashier/rrp/detail/:id",
+    component: CashierEditComponent,
+    data: {
+      breadcrumbs: brConfig.skuManagement.productCashier.rrpDetail
     },
     canActivate: [PageGuard]
   },

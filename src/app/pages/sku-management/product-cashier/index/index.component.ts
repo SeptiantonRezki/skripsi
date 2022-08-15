@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Subject, Observable } from "rxjs";
 import { DatatableComponent } from "@swimlane/ngx-datatable";
 import { Page } from "app/classes/laravel-pagination";
@@ -26,6 +27,8 @@ export class CashierIndexComponent implements OnInit {
   permission: any;
   id: any[];
   dialogRef: any;
+  activeTabs: any = 'list';
+  category: string;
 
   keyUp = new Subject<string>();
 
@@ -43,8 +46,13 @@ export class CashierIndexComponent implements OnInit {
     private dialogService: DialogService,
     private dialog: MatDialog,
     private ls: LanguagesService,
+    private activatedRoute: ActivatedRoute,
   ) {
-    this.permission = this.roles.getRoles("principal.produk_kasir");
+    this.activatedRoute.url.subscribe((params) => {
+      this.activeTabs = params[1].path;
+    });
+    this.category = this.activeTabs === 'rrp' ? 'RRP' : 'NON_RRP';
+    this.permission = this.roles.getRoles(this.activeTabs === 'rrp' ? 'principal.produk_kasir_rrp' : 'principal.produk_kasir');
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
@@ -74,7 +82,7 @@ export class CashierIndexComponent implements OnInit {
       this.offsetPagination = page ? page - 1 : 0;
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.productCashierService.get({ ...this.pagination, category: this.category }).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -92,7 +100,7 @@ export class CashierIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.productCashierService.get({ ...this.pagination, category: this.category }).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -116,7 +124,7 @@ export class CashierIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", sortName);
     this.dataService.setToStorage("sort_type", event.newValue.toUpperCase());
 
-    this.productCashierService.get(this.pagination).subscribe((res) => {
+    this.productCashierService.get({ ...this.pagination, category: this.category }).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data ? res.data : [];
       this.loadingIndicator = false;
@@ -159,7 +167,7 @@ export class CashierIndexComponent implements OnInit {
 
     this.offsetPagination = page ? page - 1 : 0;
 
-    this.productCashierService.get(this.pagination).subscribe(
+    this.productCashierService.get({ ...this.pagination, category: this.category }).subscribe(
       (res) => {
         Page.renderPagination(this.pagination, res);
         this.rows = res.data ? res.data : [];
@@ -177,7 +185,7 @@ export class CashierIndexComponent implements OnInit {
 
   export() {
     this.dataService.showLoading(true);
-    this.productCashierService.export().subscribe(
+    this.productCashierService.export({ category: this.category }).subscribe(
       (res) => {
         this.downloadLink.nativeElement.href = res.data.url;
         this.downloadLink.nativeElement.target = "_blank";

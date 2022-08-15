@@ -1098,49 +1098,6 @@ export const brConfig = {
       ]
     },
     productCashier: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "breadcrumbs.productcashier.index",
-        }
-      ],
-      create: [
-        {
-          type: "parent",
-          url: "/sku-management/product-cashier",
-          name: "breadcrumbs.productcashier.index"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "breadcrumbs.productcashier.create"
-        }
-      ],
-      edit: [
-        {
-          type: "parent",
-          url: "/sku-management/product-cashier",
-          name: "breadcrumbs.productcashier.index"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "breadcrumbs.productcashier.edit"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/sku-management/product-cashier",
-          name: "breadcrumbs.productcashier.index"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "breadcrumbs.productcashier.detail"
-        }
-      ],
       submission: [
         {
           type: "parent",
@@ -1156,13 +1113,144 @@ export const brConfig = {
       submissionDetail: [
         {
           type: "parent",
-          url: "/sku-management/product-cashier/submission",
+          url: "/sku-management/product-cashier",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier",
           name: "breadcrumbs.productcashier.submission"
         },
         {
           type: "current",
-          url: "",
+          url: "/sku-management/product-cashier/detail",
           name: "breadcrumbs.productcashier.submission_detail"
+        }
+      ],
+      list: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.list",
+        }
+      ],
+      listCreate: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.list"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.create"
+        }
+      ],
+      listEdit: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.list"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.edit"
+        }
+      ],
+      listDetail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/list",
+          name: "breadcrumbs.productcashier.list"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.detail"
+        }
+      ],
+      rrp: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.rrp",
+        }
+      ],
+      rrpCreate: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.rrp"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.rrpCreate"
+        }
+      ],
+      rrpEdit: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.rrp"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.rrpEdit"
+        }
+      ],
+      rrpDetail: [
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.index"
+        },
+        {
+          type: "parent",
+          url: "/sku-management/product-cashier/rrp",
+          name: "breadcrumbs.productcashier.rrp"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "breadcrumbs.productcashier.rrpEdit"
         }
       ],
     },
