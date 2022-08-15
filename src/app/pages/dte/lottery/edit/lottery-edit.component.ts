@@ -1020,7 +1020,7 @@ export class LotteryEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
       body = {
-        task_spin_id: id,
+        lottery_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
@@ -1029,7 +1029,7 @@ export class LotteryEditComponent implements OnInit {
       };
     } else {
       body = {
-        task_spin_id: id,
+        lottery_id: id,
         audience_filter: 'fixed-panel',
         retailers: this.data_imported.map(item => item.id)
       };
@@ -1049,9 +1049,9 @@ export class LotteryEditComponent implements OnInit {
 
       const processCheck = this.lotteryService.checkAudience(body).subscribe(
         (res) => {
-          if (res.status === 'success') {
+          if (res.data) {
             this.isChecked = true;
-            this.panelBlast = res.data;
+            this.panelBlast = res.data.panel_count;
           }
           this.dialogRef.close();
           this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
@@ -1071,7 +1071,7 @@ export class LotteryEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
       body = {
-        task_spin_id: id,
+        lottery_id: id,
         audience_filter: 'population-blast',
         class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
@@ -1081,7 +1081,7 @@ export class LotteryEditComponent implements OnInit {
       };
     } else {
       body = {
-        task_spin_id: id,
+        lottery_id: id,
         audience_filter: 'fixed-panel',
         retailers: this.data_imported.map(item => item.id),
         panel_count: this.panelBlast
