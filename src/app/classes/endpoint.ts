@@ -346,7 +346,7 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/${context.lottery_id}`,
         show_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-lottery/lottery/show/${context.id}`,
         check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-lottery/lottery/check-audience`,
-        save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-lottery/lottery/update-audience/${context.id}`,
+        save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/task-lottery/lottery/update-audience`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
