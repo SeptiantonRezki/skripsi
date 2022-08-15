@@ -1017,7 +1017,7 @@ export class LotteryEditComponent implements OnInit {
   submitAudience() {
     console.log('final', this.formGeo.get('area').value);
     let body = {};
-    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    const id = this.dataService.getFromStorage('detail_lottery').id;
     if (this.isPopulation === true) {
       body = {
         lottery_id: id,
@@ -1068,7 +1068,7 @@ export class LotteryEditComponent implements OnInit {
 
   saveAudience() {
     let body = {};
-    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    const id = this.dataService.getFromStorage('detail_lottery').id;
     if (this.isPopulation === true) {
       body = {
         lottery_id: id,
@@ -1122,7 +1122,7 @@ export class LotteryEditComponent implements OnInit {
   }
 
   submitPreview() {
-    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    const id = this.dataService.getFromStorage('detail_lottery').id;
     this.dataService.showLoading(true);
     // if (
     //   this.formPreview.valid
@@ -1158,7 +1158,7 @@ export class LotteryEditComponent implements OnInit {
   }
 
   submitPublishUnpublish() {
-    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    const id = this.dataService.getFromStorage('detail_lottery').id;
     this.dataService.showLoading(true);
     let body = {
       // status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
