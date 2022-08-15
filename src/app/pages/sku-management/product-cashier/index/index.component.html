@@ -157,7 +157,7 @@
               <div class="button-row" style="white-space: nowrap">
                 <button
                   mat-icon-button
-                  *ngIf="!permission?.ubah"
+                  *ngIf="activeTabs === 'rrp' ? !permissionRRP?.ubah : !permission?.ubah"
                   color=""
                   matTooltip="Detail Produk"
                   [routerLink]="[
@@ -172,7 +172,7 @@
                 </button>
                 <button
                   mat-icon-button
-                  *ngIf="permission?.ubah"
+                  *ngIf="activeTabs === 'rrp' ? permissionRRP?.ubah : permission?.ubah"
                   color=""
                   matTooltip="Ubah Produk"
                   [routerLink]="[
@@ -190,8 +190,8 @@
                   color="primary"
                   matTooltip="Hapus Produk"
                   (click)="deleteProduct(row.id)"
-                  [ngStyle]="{ cursor: !permission?.hapus ? 'no-drop' : '' }"
-                  [disabled]="!permission?.hapus"
+                  [ngStyle]="{ cursor: (activeTabs !== 'rrp' && !permission?.hapus) || (activeTabs === 'rrp' && !permissionRRP?.hapus) ? 'no-drop' : '' }"
+                  [disabled]="activeTabs === 'rrp' ? !permissionRRP?.hapus : !permission?.hapus"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>

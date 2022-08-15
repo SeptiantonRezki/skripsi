@@ -25,6 +25,7 @@ export class CashierIndexComponent implements OnInit {
   rows: any[];
   roles: PagesName = new PagesName();
   permission: any;
+  permissionRRP: any;
   id: any[];
   dialogRef: any;
   activeTabs: any = 'list';
@@ -52,7 +53,8 @@ export class CashierIndexComponent implements OnInit {
       this.activeTabs = params[1].path;
     });
     this.category = this.activeTabs === 'rrp' ? 'RRP' : 'NON_RRP';
-    this.permission = this.roles.getRoles(this.activeTabs === 'rrp' ? 'principal.produk_kasir_rrp' : 'principal.produk_kasir');
+    this.permission = this.roles.getRoles('principal.produk_kasir');
+    this.permissionRRP = this.roles.getRoles('principal.produk_kasir_rrp');
     this.keyUp
       .debounceTime(300)
       .distinctUntilChanged()
@@ -187,7 +189,7 @@ export class CashierIndexComponent implements OnInit {
     this.dataService.showLoading(true);
     this.productCashierService.export({ category: this.category }).subscribe(
       (res) => {
-        this.downloadLink.nativeElement.href = res.data.url;
+        this.downloadLink.nativeElement.href = res.url;
         this.downloadLink.nativeElement.target = "_blank";
         this.downloadLink.nativeElement.click();
         this.dataService.showLoading(false);
