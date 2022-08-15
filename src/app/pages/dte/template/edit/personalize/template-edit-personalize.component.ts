@@ -1745,13 +1745,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
   }
 
-  html2text(html) {
-    var tag = document.createElement('div');
-    tag.innerHTML = html;
-    
-    return tag.innerText;
-  }
-
   async submit() {
     console.log(this.templateTaskForm.valid)
     if (this.templateTaskForm.valid) {
@@ -1763,15 +1756,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
       let children: any[] = this.templateTaskForm.get('children').value;
       let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
-
-      questions.map((item, index) => {
-        questions[index].question = this.html2text(item.question);
-      });
-
-      children.map((child, index) => {
-        children[index].name = this.html2text(child.name);
-        children[index].description = this.html2text(child.description);
-      });
 
       let questionsIsEmpty = [];
       let body = {
