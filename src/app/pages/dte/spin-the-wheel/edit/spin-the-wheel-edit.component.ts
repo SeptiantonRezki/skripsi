@@ -1677,7 +1677,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let newArr = this.formPM.get('coins').value;
     if (newArr !== null && newArr.length > 0) {
       for (let i = 0; i < newArr.length; i++) {
-        newArr[i].limit_atempt = newArr[i].probability * this.formPM.get('limit_spin').value;
+        newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
       }
       await this.formPM.get('coins').setValue(newArr);

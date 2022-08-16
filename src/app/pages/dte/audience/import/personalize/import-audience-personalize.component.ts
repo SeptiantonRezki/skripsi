@@ -124,8 +124,9 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
       res => {
         if (res && res.data) {
           this.dataService.showLoading(false);
-          this.pagination['per_page'] = 10000;
+          this.pagination['per_page'] = 1000;
           this.audienceService.showImport(this.pagination).subscribe(response => {
+            // console.log('satu', this.pagination);
             const {data} = response.data;
             this.allData = [...data];
             this.invalidData = this.allData.some(item => item.is_valid === false);
@@ -177,12 +178,8 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      const payload = {
-        page: this.currPage,
-        per_page: 10000
-      };
-
-      this.audienceService.showImport(payload).subscribe(response => {
+      this.audienceService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
+        // console.log('dua');
         if (response && response.data) {
           const {data} = response.data;
           this.allData = [...this.allData, ...data];
@@ -308,7 +305,8 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial });
+      let response = this.audienceService.showImport({ page: trial, per_page: this.pagination['per_page'] });
+      // console.log('tiga');
       trialsRes.push(response);
     })
 
