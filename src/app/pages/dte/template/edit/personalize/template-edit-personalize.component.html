@@ -421,6 +421,7 @@
                 </div>
                 <!-- end UPLOAD GAMBAR & VIDEO DARI FLOATING BUTTON -->
         
+                <!-- QUESTIONS -->
                 <div formArrayName="questions" *ngFor="let item of templateTaskForm.get('questions')['controls']; let i=index;">
                   <div [formGroupName]="i" class="section-shadow p-24 mb-32">
 
@@ -436,17 +437,16 @@
                         </mat-autocomplete>
                       </mat-form-field>
     
-                      <div fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
-                        <button mat-icon-button matTooltip="{{'dte.template_tugas.place_video' | translate}}" matTooltipPosition="below" class="add-image secondary-text" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                      <div class="pr-16" fxFlex="5" fxLayout="column" fxLayoutAlign="center end" fxFlex="1 0 auto">
+                        <button mat-icon-button matTooltip="{{'dte.template_tugas.place_video' | translate}}" matTooltipPosition="below" (click)="uploadVideo('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">videocam</mat-icon>
                         </button>
-                        <button mat-icon-button matTooltip="{{'dte.template_tugas.place_image' | translate}}" matTooltipPosition="below"
-                          class="add-image secondary-text" (click)="uploadImage('question', i)"
-                          *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
+                        <button mat-icon-button matTooltip="{{'dte.template_tugas.place_image' | translate}}" matTooltipPosition="below" (click)="uploadImage('question', i)" *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                           <mat-icon class="secondary-text">photo</mat-icon>
                         </button>
                       </div>
 
+                      <!-- QUESTIONS TYPE -->
                       <div fxLayout="column" fxLayoutGap="24px" class="ml-auto">
                         <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
                           <mat-select formControlName="type" (selectionChange)="changeType(item, i)">
@@ -468,6 +468,7 @@
                       </div>
                     </div>
 
+                    <!-- CHECKBOX ENCRYPTION -->
                     <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="end center" class="py-16">
                       <div *ngIf="item.get('image_quality_detection').value">
                         <mat-form-field class="is-light form-primary" style="width: 150px;">
@@ -628,9 +629,10 @@
                       <video class="template-task-video" [src]="item.get('question_video').value" controls> </video>
                     </div>
 
+                    <!-- ANSWER TYPE -->
                     <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                       <ng-container *ngIf="checkWording(item.get('type').value)">
-                        <mat-form-field fxFlex="80" class="opsi is-light" *ngIf="templateList[i]">
+                        <mat-form-field fxFlex="50" class="opsi is-light" *ngIf="templateList[i]">
                           <mat-select placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item, i)"
                             formControlName="planogram_id">
                             <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm.id">
@@ -640,12 +642,12 @@
                         </mat-form-field>
                       </ng-container>
                       <ng-container *ngIf="item.get('typeSelection').value['value'] == 'text'">
-                        <mat-form-field fxFlex="60" class="question is-light">
+                        <mat-form-field fxFlex="50" class="question is-light">
                           <input matInput value="{{'dte.template_tugas.short_answer_text' | translate}}" disabled>
                         </mat-form-field>
                       </ng-container>
                       <ng-container *ngIf="item.get('typeSelection').value['value'] == 'textarea'">
-                        <mat-form-field fxFlex="80" class="question is-light">
+                        <mat-form-field fxFlex="50" class="question is-light">
                           <input matInput value="{{'dte.template_tugas.long_answer_text' | translate}}" disabled>
                         </mat-form-field>
                       </ng-container>
@@ -672,10 +674,10 @@
                         </mat-form-field>
                       </ng-container>
                       <ng-container *ngIf="item.get('typeSelection').value['value'] == 'upc'">
-                        <div fxLayout="column" fxFlex="100">
+                        <div fxLayout="column" fxFlex="50">
                           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                            <div fxFlex="30">{{'upc_code.upc_code_needed' | translate}}:</div>
-                            <div fxLayout="row" fxFlex="20">
+                            <div fxFlex>{{'upc_code.upc_code_needed' | translate}}:</div>
+                            <div fxLayout="row" fxFlex>
                               <mat-form-field fxFlex="100" class="question is-light">
                                 <input class="inputUPC" matInput 
                                 formControlName="upcCodeMax"
@@ -688,8 +690,8 @@
                             </div>
                           </div>
                           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                            <div fxFlex="30">{{'upc_code.upc_coin_conversion' | translate}}:</div>
-                            <div fxLayout="row" fxFlex="20">
+                            <div fxFlex>{{'upc_code.upc_coin_conversion' | translate}}:</div>
+                            <div fxLayout="row" fxFlex>
                               <mat-form-field fxFlex="100" class="question is-light">
                                 <input class="inputUPC" 
                                 formControlName="upcCoin" 
@@ -703,7 +705,7 @@
                             </div>
                           </div>
                           <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
-                            <div fxLayout="row" fxFlex="50">
+                            <div fxLayout="row" fxFlex>
                               <search-product-barcode style="width: 100%;" [errorMessage]="'upc_code.brand_family_empty' | translate" [inputPlaceHolder]="'upc_code.brand_family_placeholder' | translate" [disabled]="isDetail" [isBrandFamily]="true" formControlName="upcBrandFamily">
                                 <mat-error *ngIf="templateTaskForm.get('questions').at(i).get('upcBrandFamily').hasError('required') && templateTaskForm.touched">
                                   {{'upc_code.brand_family_required' | translate}}
@@ -713,37 +715,50 @@
                           </div>
                         </div>
                       </ng-container>
-                      <ng-container
-                        *ngIf="item.get('typeSelection').value['value'] && item.get('typeSelection').value['value'] !== 'text' && item.get('typeSelection').value['value'] !== 'textarea' && item.get('typeSelection').value['value'] !== 'image' && item.get('typeSelection').value['value'] !== 'numeric' && item.get('typeSelection').value['value'] !== 'date' && item.get('typeSelection').value['value'] !== 'upc'">
+
+                      <ng-container *ngIf="item.get('typeSelection').value['value'] && (checkIsRadioType(item.get('typeSelection').value['value']) || item.get('typeSelection').value['value'] === 'checkbox' || item.get('typeSelection').value['value'] === 'stock_check')">
                         <div fxFlex="100" fxLayout="column">
                           <div *ngIf="item.get('typeSelection').value['value'] !== 'stock_check'">
                             <div formArrayName="additional"
                               *ngFor="let additional of item.get('additional')['controls']; let j=index;">
-                              <div fxFlex="80" class="py-2" fxLayout="row" fxLayoutAlign="space-between center"
-                                fxFlex="1 0 auto" [formGroupName]="j">
-                                <mat-icon class="secondary-text" fxFlex="5">
-                                  {{checkIsRadioType(item.get('typeSelection').value['value']) ?
-                                  'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
-                                <mat-form-field
-                                  [fxFlex]="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true ? 50 : 85"
-                                  class="opsi is-light">
-                                  <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
-                                    (change)="defaultValue($event, 'questions', 'Opsi ', i, j)"
-                                    [readonly]="checkIsRadioTypeWasOther(additional.value)">
-                                </mat-form-field>
-                                <div fxFlex="1" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
+                              <div
+                                class="py-2"
+                                fxLayout="row"
+                                fxLayoutAlign="space-between center"
+                                fxFlex="1 0 auto"
+                                [formGroupName]="j"
+                              >
+                                <!-- OPTION -->
+                                <div fxFlex fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+                                  <mat-icon id="btnOpsi" class="secondary-text" fxFlex="none">
+                                    {{checkIsRadioType(item.get('typeSelection').value['value']) ?
+                                    'radio_button_unchecked' : 'check_box_outline_blank'}}</mat-icon>
+                                  <mat-form-field class="opsi is-light" fxFlex>
+                                    <input class="option" matInput formControlName="option" (focus)="$event.target.select()"
+                                      (change)="defaultValue($event, 'questions', 'Opsi ', i, j)"
+                                      [readonly]="checkIsRadioTypeWasOther(additional.value)">
+                                  </mat-form-field>
                                 </div>
-                                <div fxFlex="2"
-                                  *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false ">
-                                  <mat-icon style="color: #4A90E2; cursor: pointer;" (click)="showNextQuestion(i, j)">
+
+                                <button
+                                  id="btnAddNext"
+                                  (click)="showNextQuestion(i, j)"
+                                  mat-icon-button
+                                  fxFlex="none"
+                                  *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false"
+                                >
+                                  <mat-icon style="color: #4A90E2; cursor: pointer;">
                                     add_circle
                                   </mat-icon>
-                                </div>
-                                <div fxFlex="2" *ngIf="checkIsRadioType(item.get('typeSelection').value['value'])">
-                                </div>
+                                </button>
+                                
+                                <!-- SELECT NEXT QUESTION -->
                                 <mat-form-field
-                                  *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
-                                  fxFlex="48" class="opsi is-light">
+                                  fxFlex
+                                  class="opsi is-light"
+                                  style="overflow: hidden"
+                                  *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                                >
                                   <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
                                     <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">{{'dte.template_tugas.none' | translate}}</mat-option>
                                     <mat-option
@@ -754,29 +769,34 @@
                                     <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">{{'global.button.finish' | translate}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
-                                <div fxFlex="2"
-                                  *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true">
-                                </div>
-                                <div fxFlex="2"
-                                  *ngIf="checkIsRadioType(item.get('typeSelection').value['value']) && frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true">
-                                  <mat-icon style="color: red;cursor: pointer;" (click)="showNextQuestion(i, j)">remove_circle
-                                  </mat-icon>
-                                </div>
-                                <div fxFlex="6"></div>
+
+                                <button
+                                  id="btnRemoveNext"
+                                  (click)="showNextQuestion(i, j)"
+                                  mat-icon-button
+                                  fxFlex="none"
+                                  *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                                >
+                                  <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
+                                </button>
+                                
                                 <button
                                   *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value) && !isDetail"
                                   (click)="deleteAdditional(i, j, item.get('typeSelection').value['value'])" mat-icon-button
-                                  fxFlex="5" matTooltip="{{'global.button.delete' | translate}}" matTooltipPosition="below" class="secondary-text">
+                                  fxFlex="none" matTooltip="{{'global.button.delete' | translate}}" matTooltipPosition="below" class="secondary-text">
                                   <mat-icon class="secondary-text">close</mat-icon>
                                 </button>
                               </div>
                             </div>
                           </div>
+
                           <div fxFlex="80" class="py-2" fxLayout="row" fxFlex="1 0 auto" *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && !checkWording(item.get('type').value)">
                             <mat-icon class="secondary-text direct-belanja" fxFlex="5" (click)="onDirectBelanja(i)">
                               {{listDirectBelanja[i] ? 'check_box' :'check_box_outline_blank'}}</mat-icon> <span
                               style="margin-top: 5px;margin-left: 3px;">"{{'dte.template_tugas.direct_to_shop' | translate}}"</span>
                           </div>
+
+                          <!-- ADD OPTION -->
                           <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center"
                             fxFlex="1 0 auto"
                             *ngIf="!isDetail && item.get('typeSelection').value['value'] !== 'stock_check' && !checkWording(item.get('type').value)">
@@ -789,6 +809,63 @@
                           </div>
                         </div>
                       </ng-container>
+
+                      <ng-container *ngIf="frmIsBranching.value === true && !checkIsRadioType(item.get('typeSelection').value['value']) && item.get('typeSelection').value['value'] !== 'checkbox'">
+                        <div
+                          class="pl-16"
+                          fxFlex="50"
+                          formArrayName="additional"
+                          *ngFor="let additional of item.get('additional')['controls']; let additionalIndex=index;"
+                        >
+                          <div
+                            fxLayout="row"
+                            fxLayoutAlign="space-between center"
+                            fxFlex="1 0 auto"
+                            [formGroupName]="additionalIndex"
+                          >
+                            <button
+                              id="btnAddNext"
+                              class="ml-auto"
+                              fxFlex="none"
+                              mat-icon-button
+                              (click)="showNextQuestion(i, 0)"
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === false"
+                            >
+                              <mat-icon style="color: #4A90E2; cursor: pointer;">
+                                add_circle
+                              </mat-icon>
+                            </button>
+      
+                            <!-- SELECT NEXT QUESTION -->
+                            <mat-form-field
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
+                              fxFlex class="opsi is-light">
+                              <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
+                                <mat-option value="" (click)="onPossibilitiesChange('none', i, 0)">
+                                  {{'dte.template_tugas.none' | translate}}</mat-option>
+                                <mat-option
+                                  *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
+                                  [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, 0)">
+                                  <span [innerHTML]="possibility.question"></span>
+                                </mat-option>
+                                <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, 0)">
+                                  {{'global.button.finish' | translate}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+      
+                            <button
+                              id="btnRemoveNext"
+                              fxFlex="none"
+                              mat-icon-button
+                              (click)="showNextQuestion(i, 0)"
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
+                            >
+                              <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </ng-container>
+
                       <div fxFlex="48" *ngIf="frmQuiz.value === 'quiz'" style="margin-left: 35px;">
                         <span>{{'dte.template_tugas.add_options' | translate}}</span>
                         <mat-form-field fxFlex="25" class="question is-light" style="margin-left: 5px;">
@@ -796,6 +873,7 @@
                         </mat-form-field>
                       </div>
                     </div>
+
                     <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
                       *ngIf="templateListImageIR[i]['ir_id'] || templateListImageIR[i]['ir_code']" style="margin-top: 25px;">
                       <div fxFlex="45" *ngIf="item.get('type').value !== 'stock_check_ir'">
@@ -837,6 +915,7 @@
                         </div>
                       </div>
                     </div>
+                    
                     <div fxFlex="100" *ngIf="frmQuiz.value === 'quiz'">
                       <p>{{'dte.template_tugas.answer_key'| translate}}</p>
                       <ul class="menu-answer-key py-2" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 1 auto">

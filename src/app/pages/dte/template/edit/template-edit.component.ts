@@ -420,9 +420,6 @@ export class TemplateEditComponent {
     );
   }
 
-  splitCheckList(template) {
-    console.log('template', template);
-  }
   onChangeDetailBannerQuestion(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let question_image_description = questions.at(index).get('question_image_description') as FormArray;
@@ -672,10 +669,6 @@ export class TemplateEditComponent {
     }
   }
 
-  onChangeListChoose(selection) {
-    console.log('selection', selection);
-  }
-
   getProductObj(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     console.log('event', event, index);
@@ -772,6 +765,8 @@ export class TemplateEditComponent {
         this.listProductSelected[index] = {
           product: new FormControl(item.stock_check_data.name)
         };
+
+        item.additional = ["Opsi 1"];
 
         // this.listProductSelected[index] = this.formBuilder.group({
         //   product: item.stock_check_data.name
@@ -1135,7 +1130,7 @@ export class TemplateEditComponent {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length}`, next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
@@ -1172,6 +1167,11 @@ export class TemplateEditComponent {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
+    }
+
+    if (additional.length === 0) {
+      additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'] = [{ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false }];
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
@@ -1492,7 +1492,7 @@ export class TemplateEditComponent {
             type: item.type,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
             })) : [],
