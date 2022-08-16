@@ -62,8 +62,8 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
-                [ngClass]="row.status_publish === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
-                {{row.status_publish === 'publish' ? ('dte.trade_program.text6' | translate) : ('dte.trade_program.text7' | translate) }}
+                [ngClass]="row.status_publish.toLowerCase() === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
+                {{ row.status_publish }}
               </p>
             </div>
           </ng-template>

@@ -180,7 +180,8 @@ export class LotteryCreateComponent implements OnInit {
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
       fd.append('announcement_date', body.announcement_date);
-      fd.append('trade_creator_group_id[]', this.formUndian.get('group_trade_program').value);
+      // fd.append('trade_creator_group_id[]', this.formUndian.get('group_trade_program').value);
+      fd.append('trade_creator_group_id[]', '0');
       fd.append('trade_creator_sub_group_id[]', this.formUndian.get('sub_group_trade_program').value);
 
       this.lotteryService.create(fd).subscribe(
