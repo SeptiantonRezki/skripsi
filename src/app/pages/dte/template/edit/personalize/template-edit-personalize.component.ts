@@ -424,6 +424,8 @@ export class TemplateEditPersonalizeComponent implements OnInit {
           product: new FormControl(item.stock_check_data.name)
         };
 
+        item.additional = ["Opsi 1"];
+
         // this.listProductSelected[index] = this.formBuilder.group({
         //   product: item.stock_check_data.name
         // });
@@ -1183,7 +1185,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length + 1}`, next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: `Opsi ${additional.length}`, next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
@@ -1220,6 +1222,11 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
+    }
+
+    if (additional.length === 0) {
+      additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'] = [{ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false }];
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
@@ -1745,15 +1752,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     }
   }
 
-  html2text(html) {
-    var tag = document.createElement('div');
-    tag.innerHTML = html;
-    
-    return tag.innerText;
-  }
-
   async submit() {
-    console.log(this.templateTaskForm.valid)
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
       this.saveData = !this.saveData;
@@ -1763,15 +1762,6 @@ export class TemplateEditPersonalizeComponent implements OnInit {
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
       let children: any[] = this.templateTaskForm.get('children').value;
       let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
-
-      questions.map((item, index) => {
-        questions[index].question = this.html2text(item.question);
-      });
-
-      children.map((child, index) => {
-        children[index].name = this.html2text(child.name);
-        children[index].description = this.html2text(child.description);
-      });
 
       let questionsIsEmpty = [];
       let body = {
@@ -1836,7 +1826,7 @@ export class TemplateEditPersonalizeComponent implements OnInit {
             type: item.type,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: pos.next === "" ? null : pos.next
             })) : [],

@@ -126,13 +126,13 @@ export class Config {
       },
       'froalaEditor.keyup': function (e, editor, event) {
         if (event.keyCode === 32) {
-          var value = event.target.textContent;
+          var value = event.target.innerHTML;
           value = value.replace(
             /(##[0-9]+)/g,
-            (match: any) => { return `<strong>${match}</strong>`}
+            (match: any) => { return (value.includes(`<strong>${match}</strong>`) ? match : `<strong>${match}</strong>`)}
           );
-    
-          if (value !== event.target.textContent) {
+          
+          if (value !== event.target.innerHTML) {
             const el = event.target;
             el.innerHTML = value;
       
