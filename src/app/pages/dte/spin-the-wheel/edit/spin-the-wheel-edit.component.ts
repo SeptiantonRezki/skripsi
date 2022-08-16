@@ -457,10 +457,12 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
 
         let zone = [];
-        for (let i = 0; i < res.data.areas.length; i++) {
-          if (res.data.areas[i].level_desc === 'zone') {
-            if (!( res.data.areas[i].area_id in zone )) {
-              zone.push(res.data.areas[i].area_id);
+        if (res.data.areas) {
+          for (let i = 0; i < res.data.areas.length; i++) {
+            if (res.data.areas[i].level_desc === 'zone') {
+              if (!( res.data.areas[i].area_id in zone )) {
+                zone.push(res.data.areas[i].area_id);
+              }
             }
           }
         }
@@ -478,21 +480,23 @@ export class SpinTheWheelEditComponent implements OnInit {
     let arr_area = [];
     let arr_region = [];
     let arr_zone = [];
-    arr.map((area, index) => {
-      if (area.level_desc === 'area') {
-        if (arr_area.indexOf(area.area_id) == -1) {
-          arr_area.push(area.area_id);
+    if (arr) {
+      arr.map((area, index) => {
+        if (area.level_desc === 'area') {
+          if (arr_area.indexOf(area.area_id) == -1) {
+            arr_area.push(area.area_id);
+          }
+        } else if (area.level_desc === 'region') {
+          if (arr_region.indexOf(area.area_id) == -1) {
+            arr_region.push(area.area_id);
+          }
+        } else {
+          if (arr_zone.indexOf(area.area_id) == -1) {
+            arr_zone.push(area.area_id);
+          }
         }
-      } else if (area.level_desc === 'region') {
-        if (arr_region.indexOf(area.area_id) == -1) {
-          arr_region.push(area.area_id);
-        }
-      } else {
-        if (arr_zone.indexOf(area.area_id) == -1) {
-          arr_zone.push(area.area_id);
-        }
-      }
-    });
+      });
+    }
     console.log(arr_area);
     console.log(arr_region);
     console.log(arr_zone);
