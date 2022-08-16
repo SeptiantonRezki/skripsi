@@ -62,23 +62,20 @@
                   </mat-form-field>
                   <mat-form-field fxFlex="35%" class="is-light form-primary">
                     <input matInput formControlName="announcement_date" (focus)="announcmentDate.open()" [matDatepicker]="announcmentDate"
-                      placeholder="Tanggal Pengumuman Pemenang" [min]="minDate" (dateChange)="setMinExpireDate()">
+                      placeholder="Tanggal Pengumuman Pemenang Berakhir" [min]="minDate" (dateChange)="setMinExpireDate()">
                     <mat-datepicker-toggle matSuffix [for]="announcmentDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
                     </mat-datepicker-toggle>
                     <mat-datepicker #announcmentDate></mat-datepicker>
                     <mat-error
                       *ngIf="formUndian.controls['announcement_date'].hasError('required') && formUndian.controls['announcement_date'].touched">
-                      Tanggal Pengumuman Pemenang {{'global.messages.mandatory_text' | translate}}
+                      Tanggal Pengumuman Pemenang Berakhir {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
                 </div>
 
                 <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
-                  <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
-                      <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
-                    </mat-select> -->
+                  <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
                     <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" multiple>
                       <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
                         noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
@@ -86,7 +83,7 @@
                         {{item.name}}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field> -->
                   <mat-form-field fxFlex="50" class="is-light form-primary">
                     <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" multiple>
                       <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
