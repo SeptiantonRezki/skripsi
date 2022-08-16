@@ -960,7 +960,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
@@ -997,6 +997,11 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
+    }
+
+    if (additional.length === 0) {
+      additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'] = [{ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false }];
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
@@ -1560,7 +1565,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
             required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
@@ -1609,7 +1614,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
                 return tmpung;
               }
             }),
-            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,
