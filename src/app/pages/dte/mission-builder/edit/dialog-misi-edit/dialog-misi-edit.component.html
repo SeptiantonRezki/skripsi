@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="submit(form)">
   <h2 id="header-card-mission" class="">Pengaturan Misi</h2>
 
-  <mat-dialog-content>
+  <mat-dialog-content class="pb-16">
     <div class="pb-16" fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
       <mat-checkbox id="pin-up" [formControl]="status_pin_up" name="status_pin_up">Pin Up Misi</mat-checkbox>
       <mat-checkbox id="nonCoinReward" [formControl]="non_coin_reward" name="non_coin_reward" (change)="selectChange($event)">
@@ -21,7 +21,7 @@
 
     <mat-form-field style="width: 100%">
       <mat-select formControlName="task_template_id" placeholder="Pilih Template Misi" id="task-template-id" (click)="selectForm('template')"
-        (selectionChange)="selectChangeMisi($event)" #singleSelect>
+        (selectionChange)="selectChangeMisi($event)" #singleSelect [disabled]="isDetail">
         <ngx-mat-select-search id="select-search-template" [formControl]="filterMission" [placeholderLabel]="'Cari Template Misi...'"
           [noEntriesFoundLabel]="'Tidak ada Template Misi yang ditemukan'" [clearSearchInput]="false">
         </ngx-mat-select-search>
@@ -102,6 +102,77 @@
       </mat-icon>
     </mat-form-field>
 
+    <div class="pt-16" *ngIf="data.totalMission === 1 && form.value.task_template_id">
+      <div class="mb-16">
+        Reblast Misi
+        <mat-slide-toggle
+          id="toggle-reblast"
+          style="margin-right: 20px"
+          [formControl]="reblast_misi"
+          name="reblast-misi"
+          (change)="handleVerificationNotes($event.checked)"
+          [disabled]="isDetail"
+        >
+        </mat-slide-toggle>
+      </div>
+      <div *ngIf="form.value.reblast_misi">
+        <div
+          class="mb-16"
+          formArrayName="verification_notes"
+          *ngFor="let verif of form.get('verification_notes')['controls']; let verif_index=index;"
+        >
+          <div [formGroupName]="verif_index" fxLayout="row" style="background-color: #f8f9fa;">
+            <div class="px-16 pt-16" style="border-radius: 8px;" fxFlex fxLayout="column">
+              <mat-form-field fxFlex>
+                <mat-select
+                  id="reason"
+                  formControlName="reason"
+                  placeholder="Alasan"
+                  #singleSelect
+                  [disabled]="isDetail"
+                >
+                  <mat-option *ngFor="let item of rejected_list" [value]="item">
+                    {{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <input
+                  id="detail"
+                  matInput
+                  formControlName="detail"
+                  placeholder="Detail"
+                  [disabled]="isDetail"
+                >
+              </mat-form-field>
+            </div>
+            <div fxFlex="none">
+              <button
+                id="btn-remove"
+                mat-icon-button
+                type="button"
+                (click)="deleteVerifNotes(verif_index)"
+                *ngIf="!isDetail"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          id="btn-add-verification"
+          type="button"
+          mat-raised-button
+          color="success"
+          (click)="addVerifNotes()"
+          [disabled]="form.get('verification_notes')['controls'].length === rejected_list.length"
+          *ngIf="!isDetail"
+        >
+          Tambah
+        </button>
+      </div>
+    </div>
   </mat-dialog-content>
   <br><br>
   <mat-dialog-actions>
