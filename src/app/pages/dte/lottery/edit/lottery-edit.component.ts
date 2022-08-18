@@ -63,6 +63,7 @@ export class LotteryEditComponent implements OnInit {
   formGeo: FormGroup;
   formPM: FormGroup;
   formPreview: FormGroup;
+  formListPemenang: FormGroup;
   onLoad: boolean;
   minDate = new Date();
   groupTradePrograms: any[] = [];
@@ -300,6 +301,11 @@ export class LotteryEditComponent implements OnInit {
       // icon: ["", Validators.required],
       preview_header: ["", Validators.required]
     });
+    this.formListPemenang = this.formBuilder.group({
+      // image: ["", Validators.required],
+      // icon: ["", Validators.required],
+      preview_header: ["", Validators.required]
+    });
     if (this.isDetail) this.formPreview.disable();
 
     this.formUndian.setValue({
@@ -352,30 +358,6 @@ export class LotteryEditComponent implements OnInit {
     if(!this.detailFormUndian){
       this.formGeo.get('classification').setValue(['all']);
     }
-    
-    this.setValueDetail();
-  }
-  
-  setValueDetail() {
-    
-    this.panelBlast = this.detailFormUndian.panel_count;
-    
-    const filter = this.detailFormUndian.audience_filter;
-    this.handleAudienceFilter(filter);
-
-    if (filter !== 'fixed-panel') {
-      this.formGeo.get('classification').setValue(this.detailFormUndian.class_groups);
-    }
-
-    if (this.detailFormUndian.panel_count > 0) {
-      this.isChecked = true;
-    }
-
-    // if (this.isDetail) {
-    //   this.formAudience.disable();
-    //   this.formFilter.disable();
-    //   this.formFilterRetailer.disable();
-    // }
   }
 
   setStorageDetail() {
@@ -401,6 +383,19 @@ export class LotteryEditComponent implements OnInit {
         }
         this.selectedZone = zone;
         this.imageConverted = res.data.icon_url;
+
+        this.panelBlast = res.data.panel_count;
+        
+        const filter = res.data.audience_filter;
+        this.handleAudienceFilter(filter);
+
+        if (filter !== 'fixed-panel') {
+          this.formGeo.get('classification').setValue(res.data.class_groups);
+        }
+
+        if (res.data.panel_count > 0) {
+          this.isChecked = true;
+        }
 
         this.initAreaSelected(res.data);
       }
