@@ -63,6 +63,7 @@ export class LotteryEditComponent implements OnInit {
   formGeo: FormGroup;
   formPM: FormGroup;
   formPreview: FormGroup;
+  formListPemenang: FormGroup;
   onLoad: boolean;
   minDate = new Date();
   groupTradePrograms: any[] = [];
@@ -296,6 +297,11 @@ export class LotteryEditComponent implements OnInit {
     })
 
     this.formPreview = this.formBuilder.group({
+      // image: ["", Validators.required],
+      // icon: ["", Validators.required],
+      preview_header: ["", Validators.required]
+    });
+    this.formListPemenang = this.formBuilder.group({
       // image: ["", Validators.required],
       // icon: ["", Validators.required],
       preview_header: ["", Validators.required]
