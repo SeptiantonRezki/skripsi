@@ -853,8 +853,11 @@
       
                             <!-- SELECT NEXT QUESTION -->
                             <mat-form-field
+                              fxFlex
+                              class="opsi is-light"
+                              style="overflow: hidden"
                               *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
-                              fxFlex class="opsi is-light">
+                            >
                               <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
                                 <mat-option value="" (click)="onPossibilitiesChange('none', i, 0)">
                                   {{'dte.template_tugas.none' | translate}}</mat-option>

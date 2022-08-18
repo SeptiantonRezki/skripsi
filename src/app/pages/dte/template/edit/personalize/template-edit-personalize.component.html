@@ -745,6 +745,7 @@
                                   (click)="showNextQuestion(i, j)"
                                   mat-icon-button
                                   fxFlex="none"
+                                  [disabled]="isDetail"
                                   *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false"
                                 >
                                   <mat-icon style="color: #4A90E2; cursor: pointer;">
@@ -759,7 +760,7 @@
                                   style="overflow: hidden"
                                   *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                                 >
-                                  <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
+                                  <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}" [disabled]="isDetail">
                                     <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">{{'dte.template_tugas.none' | translate}}</mat-option>
                                     <mat-option
                                       *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
@@ -775,6 +776,7 @@
                                   (click)="showNextQuestion(i, j)"
                                   mat-icon-button
                                   fxFlex="none"
+                                  [disabled]="isDetail"
                                   *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                                 >
                                   <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
@@ -829,6 +831,7 @@
                               fxFlex="none"
                               mat-icon-button
                               (click)="showNextQuestion(i, 0)"
+                              [disabled]="isDetail"
                               *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === false"
                             >
                               <mat-icon style="color: #4A90E2; cursor: pointer;">
@@ -838,9 +841,12 @@
       
                             <!-- SELECT NEXT QUESTION -->
                             <mat-form-field
+                              fxFlex
+                              class="opsi is-light"
+                              style="overflow: hidden"
                               *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
-                              fxFlex class="opsi is-light">
-                              <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
+                            >
+                              <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}" [disabled]="isDetail">
                                 <mat-option value="" (click)="onPossibilitiesChange('none', i, 0)">
                                   {{'dte.template_tugas.none' | translate}}</mat-option>
                                 <mat-option
@@ -858,6 +864,7 @@
                               fxFlex="none"
                               mat-icon-button
                               (click)="showNextQuestion(i, 0)"
+                              [disabled]="isDetail"
                               *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
                             >
                               <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
