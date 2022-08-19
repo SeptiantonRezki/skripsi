@@ -150,5 +150,30 @@ export class LotteryComponent implements OnInit {
     this.dataService.setToStorage('detail_lottery', param);
     this.router.navigate(['dte', 'lottery', 'edit']);
   }
+  
+  deleteTp(id) {
+    this.id = id;
+    let data = {
+      titleDialog: 'Hapus Spin The Wheel',
+      captionDialog: 'Apakah anda yakin untuk menghapus data ini?',
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.lotteryService.delete({ id: this.id }).subscribe(res => {
+      // console.log('responnya', res);
+      // if (res.success === true) {
+      //   this.dialogService.brodcastCloseConfirmation();
+      //   this.getLottery();
+
+      //   this.dialogService.openSnackBar({ message: 'Berhasil' });
+      // } else {
+      //   this.dialogService.openSnackBar({ message: res.message });
+      // }
+    });
+  }
 
 }

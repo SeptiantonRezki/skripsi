@@ -263,8 +263,11 @@ export class LotteryEditComponent implements OnInit {
       group_trade_program_id: [""],
       sub_group_trade_program_id: [""],
       start_date: [new Date()],
+      start_time: ["00:00", Validators.required],
       end_date: [new Date()],
+      end_time: ["00:00", Validators.required],
       announcement_date:  [new Date()],
+      announcement_time: ["00:00", Validators.required],
     });
 
     if (this.isDetail) {
@@ -272,7 +275,10 @@ export class LotteryEditComponent implements OnInit {
       // this.formUndian.get('coin').disable();
       // this.formUndian.get('start_date').disable();
       // this.formUndian.get('start_time').disable();
+      // this.formSpin.get('end_date').disable();
+      // this.formSpin.get('end_time').disable();
       // this.formUndian.get('announcement_date').disable();
+      // this.formUndian.get('announcement_time').disable();
       // this.formUndian.get('group_trade_program_id').disable();
       // this.formUndian.get('sub_group_trade_program_id').disable();
     }
@@ -312,8 +318,11 @@ export class LotteryEditComponent implements OnInit {
       name: this.detailFormUndian.name,
       coin: this.detailFormUndian.coin,
       start_date: this.convertDate(this.detailFormUndian.start_date),
+      start_time: this.convertTime(this.detailFormUndian.start_date ? this.detailFormUndian.start_date : ''),
       end_date: this.convertDate(this.detailFormUndian.end_date),
+      end_time: this.convertTime(this.detailFormUndian.end_date ? this.detailFormUndian.end_date : ''),
       announcement_date: this.convertDate(this.detailFormUndian.announcement_date),
+      announcement_time: this.convertTime(this.detailFormUndian.announcement_date ? this.detailFormUndian.announcement_date : ''),
       group_trade_program_id: Array.isArray(this.detailFormUndian.trade_creator_group_id) ? this.detailFormUndian.trade_creator_group_id : parseInt(this.detailFormUndian.trade_creator_group_id, 10) ? this.detailFormUndian.trade_creator_group_id.split(',').map(rs => Number(rs)) : '',
       sub_group_trade_program_id: Array.isArray(this.detailFormUndian.trade_creator_sub_group_id) ? this.detailFormUndian.trade_creator_sub_group_id : parseInt(this.detailFormUndian.trade_creator_sub_group_id, 10) ? this.detailFormUndian.trade_creator_sub_group_id.split(',').map(rs => Number(rs))  : '',
     });
@@ -980,9 +989,9 @@ export class LotteryEditComponent implements OnInit {
         _method: 'PUT',
         name: this.formUndian.get('name').value,
         coin: this.formUndian.get('coin').value,
-        start_date: this.convertDate(this.formUndian.get('start_date').value),
-        end_date: this.convertDate(this.formUndian.get('end_date').value),
-        announcement_date: this.convertDate(this.formUndian.get('announcement_date').value),
+        start_date: `${moment(this.formUndian.get('start_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('start_time').value}:00`,
+        end_date: `${moment(this.formUndian.get('end_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('end_time').value}:00`,
+        announcement_date: `${moment(this.formUndian.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('announcement_time').value}:00`,
       }
 
       fd.append('_method', body._method);

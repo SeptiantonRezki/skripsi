@@ -35,6 +35,7 @@ export class LotteryService extends BaseService {
   }
 
   delete(context): Observable<any> {
+    console.log('contextnya', context);
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }

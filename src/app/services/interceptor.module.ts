@@ -153,7 +153,12 @@ export class BaseInterceptor implements HttpInterceptor {
           }
 
         } else if (req.method === "DELETE") {
-          let errorArray = Object.values(err.error.errors);
+          let errorArray;
+          if (err.status === 422) {
+            errorArray = [[err.error.message]];
+          } else {
+            errorArray = Object.values(err.error.errors);
+          }
           this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
         }
 
