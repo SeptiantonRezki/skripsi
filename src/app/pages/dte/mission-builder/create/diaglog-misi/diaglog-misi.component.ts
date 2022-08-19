@@ -24,7 +24,7 @@ export class DiaglogMisiComponent implements OnInit {
   non_coin_reward: FormControl = new FormControl(false);
   isRewardError: boolean = false;
   auto_submit: FormControl = new FormControl(false);
-  reblast_misi: FormControl = new FormControl(false);
+  mission_reblast: FormControl = new FormControl(false);
   rejected_list = [];
 
   missions: any[];
@@ -70,7 +70,7 @@ export class DiaglogMisiComponent implements OnInit {
       auto_submit: this.auto_submit,
       xp_submission: null,
       xp_verification: null,
-      reblast_misi: this.reblast_misi,
+      mission_reblast: this.mission_reblast,
       verification_notes: this.formBuilder.array([]),
     });
 
@@ -156,7 +156,7 @@ export class DiaglogMisiComponent implements OnInit {
         this.form.get('non_coin_reward').patchValue(true);
       }
 
-      this.form.get('reblast_misi').patchValue(parseInt(attribute.reblast_misi) === 1 ? true : false);
+      this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
       
       if (attribute.verification_notes && attribute.verification_notes.length) {
         const verif_notes = this.form.get('verification_notes') as FormArray;
@@ -188,7 +188,7 @@ export class DiaglogMisiComponent implements OnInit {
 
     const verif_notes = this.form.get("verification_notes") as FormArray;
     this.rejected_list = this.missions[theIndex].rejected_reason_choices;
-    this.form.get('reblast_misi').setValue(false);
+    this.form.get('mission_reblast').setValue(false);
     while (verif_notes.value.length > 0) {
       verif_notes.removeAt(verif_notes.value.length - 1);
     }
@@ -444,6 +444,11 @@ export class DiaglogMisiComponent implements OnInit {
     verif_notes.removeAt(index);
   }
 
+  checkReason(item){
+    const verif_notes = this.form.get("verification_notes").value;
+    return verif_notes.some(verif => verif.reason === item);
+  }
+
   submit(form: any) {
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
@@ -469,8 +474,8 @@ export class DiaglogMisiComponent implements OnInit {
     form.get('auto_submit').patchValue(
       (form.value.auto_submit === true) ? 1 : 0
     );
-    form.get('reblast_misi').patchValue(
-      (form.value.reblast_misi === true) ? 1 : 0
+    form.get('mission_reblast').patchValue(
+      (form.value.mission_reblast === true) ? "active" : "inactive"
     );
     form.get('non_coin_reward').patchValue(
       (form.value.non_coin_reward === true) ? 1 : 0
