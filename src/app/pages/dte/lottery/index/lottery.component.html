@@ -47,12 +47,7 @@
               <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
                 [ngClass]="row.status === 'berjalan' ? 'mat-green-800-bg' : row.status === 'berakhir' ? 'mat-red-800-bg' : row.status === 'belum berjalan' ? 'mat-primary-800-bg' :
                 'mat-blue-900-bg'">
-                {{
-                  row.status === 'berjalan' ? 'Berjalan' : 
-                  row.status === 'berakhir' ? 'Berakhir' :
-                  row.status === 'belum berjalan' ? 'Belum Berjalan'
-                  : 'Draft'
-                }}
+                {{ row.status }}
               </p>
             </div>
           </ng-template>
