@@ -69,11 +69,13 @@ export class LotteryEditComponent implements OnInit {
   groupTradePrograms: any[] = [];
 
   files: File;
+  files2: File;
   imageContentType: File;
   imageContentTypeBase64: any;
   image: any;
   validComboDrag: boolean;
   imageConverted: any;
+  imageConverted2: any;
   preview_header: FormControl = new FormControl("");
 
   keyUp = new Subject<string>();
@@ -105,6 +107,7 @@ export class LotteryEditComponent implements OnInit {
   data_imported: any = [];
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadLinkWinner') downloadLinkWinner: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
@@ -305,7 +308,9 @@ export class LotteryEditComponent implements OnInit {
     this.formPreview = this.formBuilder.group({
       // image: ["", Validators.required],
       // icon: ["", Validators.required],
-      preview_header: ["", Validators.required]
+      desc: ["", Validators.required],
+      desc_tc: ["", Validators.required],
+      desc_tc_status: ["", Validators.required]
     });
     this.formListPemenang = this.formBuilder.group({
       // image: ["", Validators.required],
@@ -341,10 +346,6 @@ export class LotteryEditComponent implements OnInit {
 
     this.getGroupTradeProgram();
     this.getSubGroupTradeProgram();
-
-    this.formPreview.setValue({
-      preview_header: this.detailFormUndian.header ? this.detailFormUndian.header : '',
-    })
 
     this.onLoad = false;
 
@@ -392,6 +393,7 @@ export class LotteryEditComponent implements OnInit {
         }
         this.selectedZone = zone;
         this.imageConverted = res.data.icon_url;
+        this.imageConverted2 = res.data.icon_url;
 
         this.panelBlast = res.data.panel_count;
         
@@ -405,6 +407,12 @@ export class LotteryEditComponent implements OnInit {
         if (res.data.panel_count > 0) {
           this.isChecked = true;
         }
+
+        this.formPreview.setValue({
+          desc: res.data.desc,
+          desc_tc: res.data.desc_tc,
+          desc_tc_status: res.data.desc_tc_status === 'active' ? true : false
+        });
 
         this.initAreaSelected(res.data);
       }
@@ -463,6 +471,26 @@ export class LotteryEditComponent implements OnInit {
 
     myReader.onloadend = (e) => {
       this.imageConverted = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  removeImage2(): void {
+    this.files2 = undefined;
+    this.imageConverted2 = undefined;
+  }
+
+  changeImage2(event) {
+    this.readThis2(event);
+  }
+
+  readThis2(inputValue: any): void {
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageConverted2 = myReader.result;
     }
 
     myReader.readAsDataURL(file);
@@ -1133,8 +1161,6 @@ export class LotteryEditComponent implements OnInit {
     //   this.formPreview.valid
     //   ) {
       let body = new FormData();
-      body.append('image', null);
-      body.append('header', this.formPreview.get('preview_header').value);
       // body.append('image', '-');
       // let body;
 
@@ -1144,9 +1170,13 @@ export class LotteryEditComponent implements OnInit {
       //   image: '-'
       // };
       // if (this.files) body.append('image', this.files)
-      if (this.files) body.append('icon', this.files)
-      
-      this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
+      if (this.files) body.append('header_img', this.files);
+      if (this.files2) body.append('header_list_img', this.files2);
+      body.append('desc', this.formPreview.get('desc').value);
+      body.append('desc_tc', this.formPreview.get('desc_tc').value);
+      body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value);
+
+      this.lotteryService.put_preview({ id: id }, body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
         this.setStorageDetail();
@@ -1160,6 +1190,25 @@ export class LotteryEditComponent implements OnInit {
 
     //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     // }
+  }
+
+  async downloadWinnerList() {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.lotteryService.downloadWinner(this.detailFormUndian.id).toPromise();
+      this.downloadLinkWinner.nativeElement.href = response.data;
+      this.downloadLinkWinner.nativeElement.click();
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+      }, 3000);
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
+
+  submitPemenang() {
+    
   }
 
   submitPublishUnpublish() {

@@ -55,6 +55,16 @@ export class LotteryService extends BaseService {
     return this.postApi(url, body);
   }
 
+  put_preview(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_preview", context);
+    return this.postApi(url, body);
+  }
+
+  downloadWinner(context: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'download_winner', {id: context});
+    return this.getApi(url);
+  }
+
   // getListAudience(): Observable<any> {
   //   const url = this.getUrl(this.namespace, 'list_scheduler');
   //   return this.getApi(url);
