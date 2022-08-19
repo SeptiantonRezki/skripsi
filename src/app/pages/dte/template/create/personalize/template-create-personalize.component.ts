@@ -1488,6 +1488,13 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     }
   }
   
+  html2text(text) {
+    var tag = document.createElement('div');
+    tag.innerHTML = text;
+    
+    return tag.textContent;
+  }
+  
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1499,6 +1506,10 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let copywritingList: any[] = this.templateTaskForm.get('copywritingList').value;
       let children: any[] = this.templateTaskForm.get('children').value;
+
+      children.map((child, index) => {
+        children[index].name = this.html2text(child.name);
+      });
 
       let questionsIsEmpty = [];
       let body = {
