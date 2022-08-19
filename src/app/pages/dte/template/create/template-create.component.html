@@ -668,48 +668,50 @@
                             </mat-form-field>
                           </div>
                           
-                          <button
-                            id="btnAddNext"
-                            (click)="showNextQuestion(i, j)"
-                            mat-icon-button
-                            fxFlex="none"
-                            *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false"
-                          >
-                            <mat-icon style="color: #4A90E2; cursor: pointer;">
-                              add_circle
-                            </mat-icon>
-                          </button>
-
-                          <!-- SELECT NEXT QUESTION -->
-                          <mat-form-field
-                            fxFlex
-                            class="opsi is-light pl-16"
-                            style="overflow: hidden"
-                            *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
-                          >
-                            <mat-select formControlName="next_question"
-                              placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
-                              <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">
-                                {{'dte.template_tugas.none' | translate}}</mat-option>
-                              <mat-option
-                                *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
-                                [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
-                                <span [innerHTML]="possibility.question"></span>
-                              </mat-option>
-                              <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">
-                                {{'global.button.finish' | translate}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
-
-                          <button
-                            id="btnRemoveNext"
-                            (click)="showNextQuestion(i, j)"
-                            mat-icon-button
-                            fxFlex="none"
-                            *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
-                          >
-                            <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
-                          </button>
+                          <ng-container *ngIf="item.get('typeSelection').value['value'] !== 'checkbox'">
+                            <button
+                              id="btnAddNext"
+                              (click)="showNextQuestion(i, j)"
+                              mat-icon-button
+                              fxFlex="none"
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === false"
+                            >
+                              <mat-icon style="color: #4A90E2; cursor: pointer;">
+                                add_circle
+                              </mat-icon>
+                            </button>
+  
+                            <!-- SELECT NEXT QUESTION -->
+                            <mat-form-field
+                              fxFlex
+                              class="opsi is-light pl-16"
+                              style="overflow: hidden"
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                            >
+                              <mat-select formControlName="next_question"
+                                placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
+                                <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">
+                                  {{'dte.template_tugas.none' | translate}}</mat-option>
+                                <mat-option
+                                  *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
+                                  [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
+                                  <span [innerHTML]="possibility.question"></span>
+                                </mat-option>
+                                <mat-option value="-99" (click)="onPossibilitiesChange('-99', i, j)">
+                                  {{'global.button.finish' | translate}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+  
+                            <button
+                              id="btnRemoveNext"
+                              (click)="showNextQuestion(i, j)"
+                              mat-icon-button
+                              fxFlex="none"
+                              *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
+                            >
+                              <mat-icon style="color: red;cursor: pointer;">remove_circle</mat-icon>
+                            </button>
+                          </ng-container>
 
                           <button id="btnRemoveOpsi"
                             *ngIf="item.get('additional').value.length > 1 && !checkIsRadioTypeWasOther(additional.value)"
@@ -745,12 +747,12 @@
                     </div>
                   </ng-container>
 
-                  <ng-container *ngIf="frmIsBranching.value === true && !checkIsRadioType(item.get('typeSelection').value['value']) && item.get('typeSelection').value['value'] !== 'checkbox'">
+                  <ng-container *ngIf="frmIsBranching.value === true && !checkIsRadioType(item.get('typeSelection').value['value'])">
                     <div
                       class="pl-16"
                       fxFlex="50"
                       formArrayName="additional"
-                      *ngFor="let additional of item.get('additional')['controls']; let additionalIndex=index;"
+                      *ngFor="let additional of item.get('additional')['controls'].slice(0, 1); let additionalIndex=index;"
                     >
                       <div
                         fxLayout="row"
@@ -773,8 +775,11 @@
   
                         <!-- SELECT NEXT QUESTION -->
                         <mat-form-field
+                          fxFlex
+                          class="opsi is-light"
+                          style="overflow: hidden"
                           *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
-                          fxFlex class="opsi is-light">
+                        >
                           <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
                             <mat-option value="" (click)="onPossibilitiesChange('none', i, 0)">
                               {{'dte.template_tugas.none' | translate}}</mat-option>

@@ -98,12 +98,12 @@
         <mat-slide-toggle
           id="toggle-reblast"
           style="margin-right: 20px"
-          [formControl]="reblast_misi"
+          [formControl]="mission_reblast"
           name="reblast-misi"
           (change)="handleVerificationNotes($event.checked)">
         </mat-slide-toggle>
       </div>
-      <div *ngIf="form.value.reblast_misi">
+      <div *ngIf="form.value.mission_reblast">
         <div
           class="mb-16"
           formArrayName="verification_notes"
@@ -118,7 +118,7 @@
                   placeholder="Alasan"
                   #singleSelect
                 >
-                  <mat-option *ngFor="let item of rejected_list" [value]="item">
+                  <mat-option *ngFor="let item of rejected_list" [value]="item" [disabled]="checkReason(item)">
                     {{item}}
                   </mat-option>
                 </mat-select>

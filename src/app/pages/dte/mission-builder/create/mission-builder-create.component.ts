@@ -183,8 +183,8 @@ export class MissionBuilderCreateComponent implements OnInit {
         
         newAction.forEach((action, index) => {
           if (action.type === "mission") {
-            if (action.attribute.reblast_misi && action.attribute.reblast_misi === 1) {
-              newAction[index].attribute.reblast_misi = 0;
+            if (action.attribute.mission_reblast && action.attribute.mission_reblast === 1) {
+              newAction[index].attribute.mission_reblast = 0;
             }
             if (action.attribute.verification_notes) {
               newAction[index].attribute.verification_notes = [];
