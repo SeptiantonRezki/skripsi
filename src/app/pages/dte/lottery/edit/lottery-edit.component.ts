@@ -70,12 +70,16 @@ export class LotteryEditComponent implements OnInit {
 
   files: File;
   files2: File;
+  files3: File;
+  files4: File;
   imageContentType: File;
   imageContentTypeBase64: any;
   image: any;
   validComboDrag: boolean;
   imageConverted: any;
   imageConverted2: any;
+  imageConverted3: any;
+  fileNameListExcel: any;
   preview_header: FormControl = new FormControl("");
 
   keyUp = new Subject<string>();
@@ -485,12 +489,32 @@ export class LotteryEditComponent implements OnInit {
     this.readThis2(event);
   }
 
+  removeImage3(): void {
+    this.files3 = undefined;
+    this.imageConverted3 = undefined;
+  }
+
+  changeImage3(event) {
+    this.readThis3(event);
+  }
+
   readThis2(inputValue: any): void {
     var file: File = inputValue;
     var myReader: FileReader = new FileReader();
 
     myReader.onloadend = (e) => {
       this.imageConverted2 = myReader.result;
+    }
+
+    myReader.readAsDataURL(file);
+  }
+
+  readThis3(inputValue: any): void {
+    var file: File = inputValue;
+    var myReader: FileReader = new FileReader();
+
+    myReader.onloadend = (e) => {
+      this.imageConverted3 = myReader.result;
     }
 
     myReader.readAsDataURL(file);
@@ -1009,6 +1033,45 @@ export class LotteryEditComponent implements OnInit {
     });
   }
 
+  previewPemenang(event) {
+    this.files4 = undefined;
+    this.files4 = event;
+
+    console.log('files info', this.files4);
+    
+    if (this.files4.name.indexOf(".xlsx") > -1) {
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+      return;
+    }
+    console.log(this.files4.name);
+    this.fileNameListExcel = this.files4.name;
+
+    //let fd = new FormData();
+
+    //fd.append('file', this.files);
+    // this.dataService.showLoading(true);
+    // this.coinService.previewImport(fd).subscribe(
+    //   res => {
+    //     // if (res && res.data && res.data.is_valid) {
+    //     this.rows = res.data.data;
+    //     this.validData = res.data ? res.data.is_valid : false;
+    //     this.dataService.showLoading(false);
+    //     console.log('is valid', this.validData)
+    //     // } else {
+    //     //   this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
+    //     //   this.dataService.showLoading(false);
+    //     // }
+    //   },
+    //   err => {
+    //     this.dataService.showLoading(false);
+    //     this.files = undefined;
+
+    //     if (err.status === 404 || err.status === 500)
+    //       this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
+    //   }
+    // )
+  }
+
   submit() {
     if (this.formUndian.valid) {
       let fd = new FormData();
@@ -1210,7 +1273,21 @@ export class LotteryEditComponent implements OnInit {
   }
 
   submitPemenang() {
+    const id = this.dataService.getFromStorage('detail_lottery').id;
+    this.dataService.showLoading(true);
     
+    let body = new FormData();
+    body.append('lottery_id', this.dataService.getFromStorage('detail_lottery').id);
+    if (this.files3) body.append('winner_img', this.files3);
+    if (this.files4) body.append('file', this.files4);
+  
+    this.lotteryService.put_winner({ id: id }, body).subscribe(res => {
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      this.dataService.showLoading(false);
+      this.setStorageDetail();
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   submitPublishUnpublish() {

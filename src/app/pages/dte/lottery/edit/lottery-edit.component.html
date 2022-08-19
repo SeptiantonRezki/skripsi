@@ -657,11 +657,11 @@
                         selectable="1"
                         class="rectangle-16"
                         [(validDrag)]="validComboDrag"
-                        [(file)]="files"
+                        [(file)]="files3"
                         accept="image/*"
                         [class.invalid-drag]="validComboDrag === false"
                         [class.valid-drag]="validComboDrag"
-                        (fileChange)="changeImage($event)"
+                        (fileChange)="changeImage3($event)"
                         [(invalidDrag)]="isDetail"
                         [fileDropDisabled]="isDetail"
                       >
@@ -680,9 +680,9 @@
                       </div>
                     </div>
                     <p style="font-weight: bold; text-align: center">Preview</p>
-                    <div style="text-align: center" *ngIf="imageConverted">
+                    <div style="text-align: center" *ngIf="imageConverted3">
                       <img
-                        [src]="imageConverted"
+                        [src]="imageConverted3"
                         alt="Preview Image"
                         width="200px"
                         height="100px"
@@ -700,6 +700,7 @@
                   </div>
                 </div>
               </div>
+
               <div fxLayout="column" class="px-20 py-16">
                 <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
                   <!-- <div fxLayout="column">
@@ -723,6 +724,48 @@
                   </button>
                 </div>
               </div>
+
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                  <div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                    List Pemenang Undian
+                    </p>
+                    <div class="px-24">
+                      <div 
+                        ngfDrop 
+                        selectable="1" 
+                        class="rectangle-16" 
+                        [(validDrag)]="validComboDrag" 
+                        [(file)]="files4" 
+                        accept=".xls"
+                        [class.invalid-drag]="validComboDrag===false" 
+                        [class.valid-drag]="validComboDrag" 
+                        (fileChange)="previewPemenang($event)"
+                      >
+                        <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                          <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+                          <br>
+                          <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+                            
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div style="text-align: center" *ngIf="fileNameListExcel">
+                      {{ fileNameListExcel }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
                   <button
