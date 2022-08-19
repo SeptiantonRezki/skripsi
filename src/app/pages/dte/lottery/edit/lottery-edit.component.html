@@ -537,11 +537,11 @@
                         selectable="1"
                         class="rectangle-16"
                         [(validDrag)]="validComboDrag"
-                        [(file)]="files"
+                        [(file)]="files2"
                         accept="image/*"
                         [class.invalid-drag]="validComboDrag === false"
                         [class.valid-drag]="validComboDrag"
-                        (fileChange)="changeImage($event)"
+                        (fileChange)="changeImage2($event)"
                         [(invalidDrag)]="isDetail"
                         [fileDropDisabled]="isDetail"
                       >
@@ -560,9 +560,9 @@
                       </div>
                     </div>
                     <p style="font-weight: bold; text-align: center">Preview</p>
-                    <div style="text-align: center" *ngIf="imageConverted">
+                    <div style="text-align: center" *ngIf="imageConverted2">
                       <img
-                        [src]="imageConverted"
+                        [src]="imageConverted2"
                         alt="Preview Image"
                         width="200px"
                         height="100px"
@@ -585,7 +585,7 @@
                   <p style="font-style: italic;font-weight: bold; margin-bottom: 0px">Deskripsi Kupon Undian</p>
                   <div fxLayout="column" fxFlex="100">
                   <mat-form-field fxFlex="100%" class="descInput exportTextarea desc-template" floatLabel="never">
-                    <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
+                    <textarea matInput [froalaEditor]="options" formControlName="desc" data-froala-id="froala-tugas"></textarea>
                   </mat-form-field>
                   </div>
                 </div>
@@ -594,11 +594,11 @@
                 <div fxFlex="100%">
                   <div fxLayout="row" fxLayoutAlign="space-between center">
                     <p style="font-style: italic;font-weight: bold; margin-bottom: 0px">Deksripsi T&C</p>
-                    <mat-slide-toggle style="margin-bottom: 0px; align-self: end" formControlName="activeTerms">Aktifkan</mat-slide-toggle>
+                    <mat-slide-toggle style="margin-bottom: 0px; align-self: end" formControlName="desc_tc_status">Aktifkan</mat-slide-toggle>
                   </div>
                   <div fxLayout="column" fxFlex="100">
                   <mat-form-field fxFlex="100%" class="descInput exportTextarea desc-template" floatLabel="never">
-                    <textarea matInput [froalaEditor]="options" formControlName="name" data-froala-id="froala-tugas"></textarea>
+                    <textarea matInput [froalaEditor]="options" formControlName="desc_tc" data-froala-id="froala-tugas"></textarea>
                   </mat-form-field>
                   </div>
                 </div>
