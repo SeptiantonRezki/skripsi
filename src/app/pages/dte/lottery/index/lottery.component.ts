@@ -9,7 +9,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { LotteryService } from "../../../../services/dte/lottery.service";
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lottery',
@@ -59,7 +59,16 @@ export class LotteryComponent implements OnInit {
     private lotteryService: LotteryService,
     private ls: LanguagesService,
     private translate: TranslateService
-  ) { }
+  ) {
+    const observable = this.keyUp.debounceTime(1000)
+      .distinctUntilChanged()
+      .flatMap(search => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe(data => {
+        this.updateFilter(data);
+      });
+  }
 
   ngOnInit() {
     this.getLottery();
