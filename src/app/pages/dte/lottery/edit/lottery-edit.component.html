@@ -702,7 +702,7 @@
               </div>
               <div fxLayout="column" class="px-20 py-16">
                 <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
-                  <div fxLayout="column">
+                  <!-- <div fxLayout="column">
                     <button
                       mat-raised-button
                       type="button"
@@ -712,12 +712,12 @@
                       <mat-icon>arrow_upward</mat-icon> Upload List Pemenang
                     </button>
                     <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
-                  </div>
+                  </div> -->
                   <button
                     mat-raised-button
                     type="button"
                     class="is-danger"
-                    (click)="importAudience()"
+                    (click)="downloadWinnerList()"
                   >
                     <mat-icon>arrow_downward</mat-icon> Download List Pemenang
                   </button>
@@ -731,7 +731,7 @@
                     type="button"
                     class="confirmation-button"
                     fxFlex="20"
-                    (click)="submitPreview()"
+                    (click)="submitPemenang()"
                   >
                     {{ ls.locale.global.button.save }}
                   </button>
@@ -746,4 +746,5 @@
     </div>
   </div>
   <a #downloadLink></a>
+  <a #downloadLinkWinner></a>
 </div>
