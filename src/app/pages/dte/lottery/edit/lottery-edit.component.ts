@@ -1271,25 +1271,21 @@ export class LotteryEditComponent implements OnInit {
   }
 
   submitPemenang() {
+    const id = this.dataService.getFromStorage('detail_lottery').id;
+    this.dataService.showLoading(true);
     
-    // const id = this.dataService.getFromStorage('detail_lottery').id;
-    // this.dataService.showLoading(true);
-    console.log(this.files3);
-    console.log(this.files4);
     let body = new FormData();
     body.append('lottery_id', this.dataService.getFromStorage('detail_lottery').id);
-    body.append('winner_img', this.files3);
-    body.append('file', this.files4);
-
-    console.log(body);
+    if (this.files3) body.append('winner_img', this.files3);
+    if (this.files4) body.append('file', this.files4);
   
-    // this.lotteryService.put_winner({ id: id }, body).subscribe(res => {
-    //   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-    //   this.dataService.showLoading(false);
-    //   this.setStorageDetail();
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
+    this.lotteryService.put_winner({ id: id }, body).subscribe(res => {
+      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+      this.dataService.showLoading(false);
+      this.setStorageDetail();
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   submitPublishUnpublish() {
