@@ -105,6 +105,7 @@ export class LotteryEditComponent implements OnInit {
   data_imported: any = [];
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadLinkWinner') downloadLinkWinner: ElementRef;
   @ViewChild('singleSelect') singleSelect: MatSelect;
   @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
   @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
@@ -1160,6 +1161,25 @@ export class LotteryEditComponent implements OnInit {
 
     //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     // }
+  }
+
+  async downloadWinnerList() {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.lotteryService.downloadWinner(this.detailFormUndian.id).toPromise();
+      this.downloadLinkWinner.nativeElement.href = response.data;
+      this.downloadLinkWinner.nativeElement.click();
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+      }, 3000);
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
+
+  submitPemenang() {
+    
   }
 
   submitPublishUnpublish() {
