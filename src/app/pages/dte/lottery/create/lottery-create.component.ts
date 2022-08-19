@@ -69,8 +69,11 @@ export class LotteryCreateComponent implements OnInit {
       group_trade_program: [""],
       sub_group_trade_program: [""],
       start_date: [new Date()],
+      start_time: ["00:00", Validators.required],
       end_date: [new Date()],
+      end_time: ["00:00", Validators.required],
       announcement_date:  [new Date()],
+      announcement_time: ["00:00", Validators.required],
     })
     
     this.filterGTP.valueChanges
@@ -170,9 +173,12 @@ export class LotteryCreateComponent implements OnInit {
       let body = {
         name: this.formUndian.get('name').value,
         coin: this.formUndian.get('coin').value,
-        start_date: this.convertDate(this.formUndian.get('start_date').value),
-        end_date: this.convertDate(this.formUndian.get('end_date').value),
-        announcement_date: this.convertDate(this.formUndian.get('announcement_date').value),
+        // start_date: this.convertDate(this.formUndian.get('start_date').value),
+        // end_date: this.convertDate(this.formUndian.get('end_date').value),
+        // announcement_date: this.convertDate(this.formUndian.get('announcement_date').value),
+        start_date: `${moment(this.formUndian.get('start_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('start_time').value}:00`,
+        end_date: `${moment(this.formUndian.get('end_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('end_time').value}:00`,
+        announcement_date: `${moment(this.formUndian.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('announcement_time').value}:00`,
       }
 
       fd.append('name', body.name);
