@@ -371,8 +371,6 @@ export class LotteryEditComponent implements OnInit {
       this.formUndian.get('announcement_time').disable();
       this.formUndian.get('group_trade_program_id').disable();
       this.formUndian.get('sub_group_trade_program_id').disable();
-      this.formPreview.disable();
-      this.formGeo.disable();
     }
   }
 
