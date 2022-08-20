@@ -277,19 +277,6 @@ export class LotteryEditComponent implements OnInit {
       announcement_time: ["00:00", Validators.required],
     });
 
-    if (this.isDetail) {
-      // this.formUndian.get('name').disable();
-      // this.formUndian.get('coin').disable();
-      // this.formUndian.get('start_date').disable();
-      // this.formUndian.get('start_time').disable();
-      // this.formSpin.get('end_date').disable();
-      // this.formSpin.get('end_time').disable();
-      // this.formUndian.get('announcement_date').disable();
-      // this.formUndian.get('announcement_time').disable();
-      // this.formUndian.get('group_trade_program_id').disable();
-      // this.formUndian.get('sub_group_trade_program_id').disable();
-    }
-
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
       division: [""],
@@ -372,6 +359,21 @@ export class LotteryEditComponent implements OnInit {
     if(!this.detailFormUndian){
       this.formGeo.get('classification').setValue(['all']);
     }
+
+    if (this.isDetail) {
+      this.formUndian.get('name').disable();
+      this.formUndian.get('coin').disable();
+      this.formUndian.get('start_date').disable();
+      this.formUndian.get('start_time').disable();
+      this.formUndian.get('end_date').disable();
+      this.formUndian.get('end_time').disable();
+      this.formUndian.get('announcement_date').disable();
+      this.formUndian.get('announcement_time').disable();
+      this.formUndian.get('group_trade_program_id').disable();
+      this.formUndian.get('sub_group_trade_program_id').disable();
+      this.formPreview.disable();
+      this.formGeo.disable();
+    }
   }
 
   setStorageDetail() {
@@ -397,7 +399,7 @@ export class LotteryEditComponent implements OnInit {
         }
         this.selectedZone = zone;
         this.imageConverted = res.data.header_img_url;
-        this.imageConverted2 = res.data.header_img_url;
+        this.imageConverted2 = res.data.header_list_img_url;
         this.imageConverted3 = res.data.winner_img_url;
 
         this.panelBlast = res.data.panel_count;

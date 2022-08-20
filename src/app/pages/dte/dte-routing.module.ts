@@ -891,6 +891,14 @@ const routes: Routes = [
     },
     // canActivate: [PageGuard]
   },
+  {
+    path: "lottery/detail",
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.detail
+    },
+    //canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
