@@ -398,6 +398,7 @@ export class LotteryEditComponent implements OnInit {
         this.selectedZone = zone;
         this.imageConverted = res.data.header_img_url;
         this.imageConverted2 = res.data.header_img_url;
+        this.imageConverted3 = res.data.winner_img_url;
 
         this.panelBlast = res.data.panel_count;
         
