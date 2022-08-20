@@ -242,7 +242,7 @@
                   </mat-form-field>
                 </div>
 
-                <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+                <div *ngIf="!isDetail" class="confirm pt-24 pb-24 px-24" fxLayout="row">
                   <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
                     {{ls.locale.global.button.edit}}
                   </button>

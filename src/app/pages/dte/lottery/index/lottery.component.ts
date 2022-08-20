@@ -185,4 +185,9 @@ export class LotteryComponent implements OnInit {
     });
   }
 
+  directDetail(param?: any): void {
+    this.dataService.setToStorage('detail_lottery', param);
+    this.router.navigate(['dte', 'lottery', 'detail']);
+  }
+
 }
