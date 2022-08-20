@@ -1238,7 +1238,6 @@ export class LotteryEditComponent implements OnInit {
       body.append('desc', this.formPreview.get('desc').value);
       body.append('desc_tc', this.formPreview.get('desc_tc').value);
       body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value === true ? 'active' : 'inactive');
-      body.append('desc', this.formPreview.get('desc').value);
       body.append('lottery_id', this.detailFormUndian.id);
 
       this.lotteryService.put_preview({ id: id }, body).subscribe(res => {
