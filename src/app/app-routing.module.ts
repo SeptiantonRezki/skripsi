@@ -197,6 +197,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'tactical-retail-sales',
+    loadChildren: './pages/tactical-retail-sales/tactical-retail-sales.module#TacticalRetailSalesModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   },

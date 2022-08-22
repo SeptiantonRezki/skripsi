@@ -204,6 +204,12 @@ export class PagesName {
       "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
       "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
       "/discount-coins-order/detail": "principal.koin_potongan_belanja.lihat",
+
+      "/tactical-retail-sales/trs-proposal": "principal.trsproposal.lihat",
+      "/tactical-retail-sales/trs-proposal/create": "principal.trsproposal.buat",
+      "/tactical-retail-sales/trs-proposal/edit": "principal.trsproposal.ubah",
+      "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
+      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.lihat",
     }
     return PAGES[name];
   }
