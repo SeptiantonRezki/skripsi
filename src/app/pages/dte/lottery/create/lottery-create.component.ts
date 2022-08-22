@@ -24,7 +24,9 @@ export class LotteryCreateComponent implements OnInit {
   // formAudience: FormGroup;
   // formPreview: FormGroup;
   onLoad: boolean;
-  minDate = new Date();
+  minDateStart = new Date();
+  minDateEnd = new Date();
+  minDateAnnounce = new Date();
   groupTradePrograms: any[] = [];
 
   files: File;
@@ -211,6 +213,29 @@ export class LotteryCreateComponent implements OnInit {
     }
 
     return "";
+  }
+
+  onDateStart($event) {
+    const stringified = JSON.stringify($event.value);
+    const dob = stringified.substring(1, 11);
+    let date = new Date();
+    date.setDate(new Date(dob).getDate() + 1);
+    console.log(date);
+    this.minDateStart = date;
+  }
+  onDateEnd($event) {
+    const stringified = JSON.stringify($event.value);
+    const dob = stringified.substring(1, 11);
+    let date = new Date();
+    date.setDate(new Date(dob).getDate() + 1);
+    console.log(date);
+  }
+  onDateAnnounce($event) {
+    const stringified = JSON.stringify($event.value);
+    const dob = stringified.substring(1, 11);
+    let date = new Date();
+    date.setDate(new Date(dob).getDate() + 1);
+    console.log(date);
   }
 
 }

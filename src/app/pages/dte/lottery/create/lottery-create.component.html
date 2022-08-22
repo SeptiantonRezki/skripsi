@@ -79,11 +79,11 @@
                     <input
                       matInput
                       formControlName="start_date"
-                      [min]="minDate"
+                      [min]="minDateStart"
                       (focus)="startDate.open()"
                       [matDatepicker]="startDate"
                       placeholder="Tanggal Mulai"
-                      
+                      (dateChange)="onDateStart($event)"
                     />
                     <mat-datepicker-toggle matSuffix [for]="startDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
