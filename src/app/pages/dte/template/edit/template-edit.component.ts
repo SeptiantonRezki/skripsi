@@ -1448,6 +1448,19 @@ export class TemplateEditComponent {
       let questionsIsEmpty = [];
       let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
 
+      if (this.frmIsBranching.value) {
+        let hasEmptyNext = false;
+        this.allQuestionList.forEach((list) => {
+          if (list.possibilities.some(pos => !pos.next)) hasEmptyNext = true;
+        })
+
+        if (hasEmptyNext) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
       let body = {
         _method: 'PUT',
         task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,

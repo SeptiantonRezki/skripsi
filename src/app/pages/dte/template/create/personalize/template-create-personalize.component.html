@@ -770,7 +770,6 @@
                                   *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][j]['isBranching'] === true"
                                 >
                                   <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
-                                    <mat-option value="" (click)="onPossibilitiesChange('none', i, j)">{{'dte.template_tugas.none' | translate}}</mat-option>
                                     <mat-option
                                       *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
                                       [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, j)">
@@ -861,8 +860,6 @@
                               *ngIf="frmIsBranching.value === true && allQuestionList[i]['possibilities'][0]['isBranching'] === true"
                             >
                               <mat-select formControlName="next_question" placeholder="{{'dte.template_tugas.next_question_posibility' | translate}}">
-                                <mat-option value="" (click)="onPossibilitiesChange('none', i, 0)">
-                                  {{'dte.template_tugas.none' | translate}}</mat-option>
                                 <mat-option
                                   *ngFor="let possibility of filteringPossibilitiesQuestion(item.get('id').value); let p_i = index;"
                                   [value]="possibility.id" (click)="onPossibilitiesChange(possibility, i, 0)">
