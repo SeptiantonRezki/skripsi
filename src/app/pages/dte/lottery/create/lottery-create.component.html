@@ -143,7 +143,7 @@
                     <input
                       matInput
                       formControlName="end_date"
-                      [min]="minDate"
+                      [min]="formUndian.get('start_date').value"
                       (focus)="endDate.open()"
                       [matDatepicker]="endDate"
                       placeholder="Tanggal Berakhir"
@@ -208,7 +208,7 @@
                       (focus)="announcmentDate.open()"
                       [matDatepicker]="announcmentDate"
                       placeholder="Tanggal Pengumuman Pemenang Berakhir"
-                      [min]="minDate" 
+                      [min]="formUndian.get('end_date').value" 
                       (dateChange)="setMinExpireDate()"
                     />
                     <mat-datepicker-toggle matSuffix [for]="announcmentDate">
