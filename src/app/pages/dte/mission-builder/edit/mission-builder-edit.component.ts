@@ -211,8 +211,8 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
         
         newAction.forEach((action, index) => {
           if (action.type === "mission") {
-            if (action.attribute.mission_reblast && action.attribute.mission_reblast === 1) {
-              newAction[index].attribute.mission_reblast = 0;
+            if (action.attribute.mission_reblast && action.attribute.mission_reblast === "active") {
+              newAction[index].attribute.mission_reblast = "inactive";
             }
             if (action.attribute.verification_notes) {
               newAction[index].attribute.verification_notes = [];
@@ -295,8 +295,8 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
           
           newAction.forEach((action, index) => {
             if (action.type === "mission") {
-              if (action.attribute.mission_reblast && action.attribute.mission_reblast === 1) {
-                newAction[index].attribute.mission_reblast = 0;
+              if (action.attribute.mission_reblast && action.attribute.mission_reblast === "active") {
+                newAction[index].attribute.mission_reblast = "inactive";
               }
               if (action.attribute.verification_notes) {
                 newAction[index].attribute.verification_notes = [];
