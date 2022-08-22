@@ -4,16 +4,16 @@
   fusePerfectScrollbar
 >
   <!-- HEADER -->
-  <page-content-header contentTitle="Buat Undian">
-    <!-- <button
+  <page-content-header contentTitle="Ubah Undian">
+    <button
       id="btn-create-trade"
       style="width: 170px"
-      (click)="submit()"
+      (click)="submitPublishUnpublish()"
       mat-raised-button
       type="button"
     >
-      <mat-icon>save</mat-icon> {{ "global.button.edit" | translate }}
-    </button> -->
+      {{ detailFormUndian.status_publish === 'Publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+    </button>
   </page-content-header>
   <!-- / HEADER -->
 
@@ -616,14 +616,14 @@
                     {{ ls.locale.global.button.save }}
                   </button>
 
-                  <button 
+                  <!-- <button 
                     mat-raised-button 
                     type="button" 
                     class="ml-24 confirmation-button" 
                     (click)="submitPublishUnpublish()" 
                     fxFlex="20">
-                      Publish<!-- {{ detailFormUndian.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }} -->
-                  </button>
+                      Publish {{ detailFormUndian.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+                  </button> -->
                 </div>
               </div>
               
@@ -720,7 +720,7 @@
                     class="is-danger"
                     (click)="downloadWinnerList()"
                   >
-                    <mat-icon>arrow_downward</mat-icon> Download List Pemenang
+                    <mat-icon>arrow_downward</mat-icon> Download List Pemenang ( {{ (winner_count !== null)? winner_count : 0 }} Pemenang )
                   </button>
                 </div>
               </div>
