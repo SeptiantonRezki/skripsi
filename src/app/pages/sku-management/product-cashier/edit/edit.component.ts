@@ -78,7 +78,7 @@ export class CashierEditComponent implements OnInit {
       _method: "PUT",
       selling_price: this.formProductGroup.get("selling_price").value,
       purchase_price: this.formProductGroup.get("purchase_price").value,
-      is_sync_price: this.productCashierType === 'rrp' ? this.formProductGroup.get("is_sync_price").value : undefined,
+      is_sync_price: this.productCashierType === 'rrp' ? this.formProductGroup.get("is_sync_price").value ? 1 : 0 : undefined,
     };
     this.dataService.showLoading(true);
     this.productCashierService.put(body, {
