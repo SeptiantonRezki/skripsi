@@ -145,7 +145,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
 
     this.dialogRef.afterClosed().subscribe(rows => {
       if (rows) {
-        this.mergeSelected(rows);
+        this.replaceSelected(rows);
         setTimeout(() => {
           this.getWholesalerList();
         }, 300);
@@ -156,6 +156,13 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
 
   mergeSelected(rows) {
 
+    const selected = _.pluck(this.selected, 'id');
+    const filtered = rows.filter(row => !selected.includes(row.id));
+    this.selected = this.selected.concat(filtered);
+    this.onSelectWholesaler.emit(this.selected);
+  }
+  replaceSelected(rows) {
+    this.selected = [];
     const selected = _.pluck(this.selected, 'id');
     const filtered = rows.filter(row => !selected.includes(row.id));
     this.selected = this.selected.concat(filtered);
