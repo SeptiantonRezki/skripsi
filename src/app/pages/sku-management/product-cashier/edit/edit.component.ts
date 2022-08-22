@@ -57,7 +57,7 @@ export class CashierEditComponent implements OnInit {
             barcode: data.barcode,
             purchase_price: data.purchase_price.raw,
             selling_price: data.selling_price.raw,
-            is_sync_price: data.is_sync_price,
+            is_sync_price: data.is_sync_price == 1,
           });
         }
       );
