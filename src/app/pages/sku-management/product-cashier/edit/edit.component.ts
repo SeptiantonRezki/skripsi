@@ -43,7 +43,7 @@ export class CashierEditComponent implements OnInit {
       barcode: [{ value: "", disabled: false }],
       purchase_price: ["", [Validators.required, Validators.min(1)]],
       selling_price: ["", [Validators.required, Validators.min(1)]],
-      apply_all_rrp: [false],
+      is_sync_price: [false],
     });
   }
 
@@ -57,7 +57,7 @@ export class CashierEditComponent implements OnInit {
             barcode: data.barcode,
             purchase_price: data.purchase_price.raw,
             selling_price: data.selling_price.raw,
-            apply_all_rrp: data.apply_all_rrp,
+            is_sync_price: data.is_sync_price,
           });
         }
       );
@@ -78,7 +78,7 @@ export class CashierEditComponent implements OnInit {
       _method: "PUT",
       selling_price: this.formProductGroup.get("selling_price").value,
       purchase_price: this.formProductGroup.get("purchase_price").value,
-      apply_all_rrp: this.productCashierType === 'rrp' ? this.formProductGroup.get("apply_all_rrp").value : undefined,
+      is_sync_price: this.productCashierType === 'rrp' ? this.formProductGroup.get("is_sync_price").value : undefined,
     };
     this.dataService.showLoading(true);
     this.productCashierService.put(body, {
