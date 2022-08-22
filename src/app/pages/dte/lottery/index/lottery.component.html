@@ -65,13 +65,16 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="98" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="120" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+              <button matTooltip="Download Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportCoupon(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
               </button>
-              <button id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">
+              <button matTooltip="Download Detail Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportDetailCoupon(row)">
+                <mat-icon class="secondary-text">download</mat-icon>
+              </button>
+              <button matTooltip="Edit" id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteTp(row.id)">
@@ -83,4 +86,6 @@
       </ngx-datatable>
     </div>
   </div>
+  <a #downloadLinkDetailCoupon></a>
+  <a #downloadLinkCoupon></a>
 </div>
