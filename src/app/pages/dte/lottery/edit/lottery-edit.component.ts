@@ -109,6 +109,7 @@ export class LotteryEditComponent implements OnInit {
 
   dialogRef: any;
   data_imported: any = [];
+  winner_count: 0;
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
   @ViewChild('downloadLinkWinner') downloadLinkWinner: ElementRef;
@@ -339,6 +340,8 @@ export class LotteryEditComponent implements OnInit {
     this.getSubGroupTradeProgram();
 
     this.onLoad = false;
+
+    this.winner_count = this.detailFormUndian.count_winner;
 
     this.getLevel('national');
     this.getTradePrograms();
@@ -1294,12 +1297,13 @@ export class LotteryEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('detail_lottery').id;
     this.dataService.showLoading(true);
     let body = {
-      // status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
+      status: (this.dataService.getFromStorage('detail_lottery').status_publish === 'Unpublish')? 'publish' : 'unpublish',
+      lottery_id: id
     }
-    this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
+    this.lotteryService.publishUnpublish(body).subscribe(({data}) => {
       
     this.dataService.showLoading(false);
-    this.router.navigate(['dte', 'spin-the-wheel'])
+    this.router.navigate(['dte', 'lottery'])
     }, err => {
       this.dataService.showLoading(false);
     })

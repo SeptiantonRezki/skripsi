@@ -350,6 +350,7 @@ export class Endpoint {
         update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-preview`,
         download_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-winner/${context.id}`,
         update_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-winner`,
+        update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-status`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
