@@ -116,7 +116,7 @@
                       (focus)="endDate.open()"
                       [matDatepicker]="endDate"
                       placeholder="Tanggal Berakhir"
-                      
+                      [min]="formUndian.get('start_date').value" 
                     />
                     <mat-datepicker-toggle matSuffix [for]="endDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -177,7 +177,7 @@
                       (focus)="announcmentDate.open()"
                       [matDatepicker]="announcmentDate"
                       placeholder="Tanggal Pengumuman Pemenang Berakhir"
-                      [min]="minDate" 
+                      [min]="formUndian.get('end_date').value" 
                       (dateChange)="setMinExpireDate()"
                     />
                     <mat-datepicker-toggle matSuffix [for]="announcmentDate">
