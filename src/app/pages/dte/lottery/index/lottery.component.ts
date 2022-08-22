@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,6 +31,9 @@ export class LotteryComponent implements OnInit {
 
   @ViewChild("activeCell")
   activeCellTemp: TemplateRef<any>;
+
+  @ViewChild('downloadLinkDetailCoupon') downloadLinkDetailCoupon: ElementRef;
+  @ViewChild('downloadLinkCoupon') downloadLinkCoupon: ElementRef;
 
   keyUp = new Subject<string>();
   dateNow: any;
@@ -187,4 +190,33 @@ export class LotteryComponent implements OnInit {
     this.router.navigate(['dte', 'lottery', 'detail']);
   }
 
+  async exportDetailCoupon(param?: any) {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.lotteryService.exportDetailCoupon(param.id).toPromise();
+      this.downloadLinkDetailCoupon.nativeElement.href = response.data;
+      this.downloadLinkDetailCoupon.nativeElement.click();
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+      }, 3000);
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
+
+  async exportCoupon(param?: any) {
+    this.dataService.showLoading(true);
+    try {
+      const response = await this.lotteryService.exportCoupon(param.id).toPromise();
+      this.downloadLinkCoupon.nativeElement.href = response.data;
+      this.downloadLinkCoupon.nativeElement.click();
+      setTimeout(() => {
+        this.dataService.showLoading(false);
+      }, 3000);
+    } catch (error) {
+      this.dataService.showLoading(false);
+      throw error;
+    }
+  }
 }
