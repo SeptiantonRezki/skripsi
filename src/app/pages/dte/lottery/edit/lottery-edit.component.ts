@@ -12,6 +12,7 @@ import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.s
 import { AudienceService } from 'app/services/dte/audience.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
+import { Config } from 'app/classes/config';
 import { NotificationService } from 'app/services/notification.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DialogService } from 'app/services/dialog.service';
@@ -163,6 +164,7 @@ export class LotteryEditComponent implements OnInit {
   pagination: Page = new Page();
 
   areaType: any[] = [];
+  public options: Object = Config.FROALA_CONFIG;
 
   // 2 geotree property
   endArea: String;

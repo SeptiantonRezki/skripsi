@@ -163,7 +163,7 @@ export class LotteryComponent implements OnInit {
   deleteTp(id) {
     this.id = id;
     let data = {
-      titleDialog: 'Hapus Spin The Wheel',
+      titleDialog: 'Hapus Undian',
       captionDialog: 'Apakah anda yakin untuk menghapus data ini?',
       confirmCallback: this.confirmDelete.bind(this),
       buttonText: [ this.translate.instant('global.button.delete'), this.translate.instant('global.button.cancel') ]
@@ -173,15 +173,12 @@ export class LotteryComponent implements OnInit {
 
   confirmDelete() {
     this.lotteryService.delete({ id: this.id }).subscribe(res => {
-      // console.log('responnya', res);
-      // if (res.success === true) {
-      //   this.dialogService.brodcastCloseConfirmation();
-      //   this.getLottery();
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getLottery();
 
-      //   this.dialogService.openSnackBar({ message: 'Berhasil' });
-      // } else {
-      //   this.dialogService.openSnackBar({ message: res.message });
-      // }
+        this.dialogService.openSnackBar({ message: 'Berhasil' });
+      }
     });
   }
 
