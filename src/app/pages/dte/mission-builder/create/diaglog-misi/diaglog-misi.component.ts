@@ -436,7 +436,14 @@ export class DiaglogMisiComponent implements OnInit {
 
   addVerifNotes(){
     const verif_notes = this.form.get('verification_notes') as FormArray;
-    verif_notes.push(this.formBuilder.group({ reason: ["", Validators.required], detail: [""] }))
+    let available = [];
+    this.rejected_list.forEach(rejected => {
+      if (!verif_notes.value.some(verif => verif.reason === rejected)) {
+        available.push(rejected);
+      }
+    });
+
+    verif_notes.push(this.formBuilder.group({ reason: [available[0], Validators.required], detail: [""] }))
   }
 
   deleteVerifNotes(index){

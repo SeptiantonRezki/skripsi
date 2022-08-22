@@ -1541,6 +1541,19 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         children[index].description = this.removeStrongTag(child.description);
       });
 
+      if (this.frmIsBranching.value) {
+        let hasEmptyNext = false;
+        this.allQuestionList.forEach((list) => {
+          if (list.possibilities.some(pos => !pos.next)) hasEmptyNext = true;
+        })
+
+        if (hasEmptyNext) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
       let questionsIsEmpty = [];
       let body = {
         task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,

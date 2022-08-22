@@ -1310,6 +1310,20 @@ export class TemplateCreateComponent {
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let questionsIsEmpty = [];
       let questionVideoList = []
+
+      if (this.frmIsBranching.value) {
+        let hasEmptyNext = false;
+        this.allQuestionList.forEach((list) => {
+          if (list.possibilities.some(pos => !pos.next)) hasEmptyNext = true;
+        })
+
+        if (hasEmptyNext) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
       let body = {
         task_toolbox_id: this.templateTaskForm.get('kategori_toolbox').value,
         task_toolbox_type_id: this.templateTaskForm.get('tipe_misi').value,
