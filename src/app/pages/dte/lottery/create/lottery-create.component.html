@@ -82,7 +82,7 @@
                       [min]="minDateStart"
                       (focus)="startDate.open()"
                       [matDatepicker]="startDate"
-                      placeholder="Tanggal Mulai"
+                      placeholder="Tanggal Awal Penukaran Kupon Undian"
                       (dateChange)="onDateStart($event)"
                     />
                     <mat-datepicker-toggle matSuffix [for]="startDate">
@@ -146,7 +146,7 @@
                       [min]="formUndian.get('start_date').value"
                       (focus)="endDate.open()"
                       [matDatepicker]="endDate"
-                      placeholder="Tanggal Berakhir"
+                      placeholder="Tanggal Berakhir Penukaran Kupon Undian"
                       
                     />
                     <mat-datepicker-toggle matSuffix [for]="endDate">
