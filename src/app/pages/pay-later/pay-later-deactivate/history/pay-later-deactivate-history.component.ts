@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
   styleUrls: ['./pay-later-deactivate-history.component.scss']
 })
 export class PayLaterDeactivateHistoryComponent implements OnInit {
+  @Input() dataType: string;
   rows: any[];
   selected: any[];
   id: any[];
@@ -66,7 +67,7 @@ export class PayLaterDeactivateHistoryComponent implements OnInit {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-    this.payLaterDeactivateService.history(this.pagination).subscribe(
+    this.payLaterDeactivateService.history({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -89,7 +90,7 @@ export class PayLaterDeactivateHistoryComponent implements OnInit {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.payLaterDeactivateService.history(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.history({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -104,7 +105,7 @@ export class PayLaterDeactivateHistoryComponent implements OnInit {
 
     console.log("check pagination", this.pagination);
 
-    this.payLaterDeactivateService.history(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.history({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -119,7 +120,7 @@ export class PayLaterDeactivateHistoryComponent implements OnInit {
 
     console.log(this.pagination);
 
-    this.payLaterDeactivateService.history(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.history({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;

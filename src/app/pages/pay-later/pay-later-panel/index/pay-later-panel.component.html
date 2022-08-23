@@ -1,13 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Panel Pojok Modal'">
-    <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/paylater', 'panel', 'create']">
+  <!-- <page-content-header [contentTitle]="'Panel Pojok Modal'"> -->
+    <div class="button-row" fxLayout="row" style="padding-right: 24px; padding-top: 24px; justify-content: end">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" (click)="directAdd()">
         <mat-icon>add</mat-icon>BUAT
       </button>
     </div>
-  </page-content-header>
+  <!-- </page-content-header> -->
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">

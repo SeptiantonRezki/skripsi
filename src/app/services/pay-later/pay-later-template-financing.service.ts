@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PayLaterCompanyService extends BaseService {
-  namespace = "paylater_company";
-
+export class PayLaterTemplateFinancingService extends BaseService {
+  // namespace = "paylater_template_financing"
+  namespace = "distribution_list"
   constructor(http: HttpClient) {
     super(http);
   }
@@ -23,8 +23,8 @@ export class PayLaterCompanyService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  put(body, context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'put', context);
+  update(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update', context);
     return this.putApi(url, body);
   }
 
@@ -38,12 +38,9 @@ export class PayLaterCompanyService extends BaseService {
     return this.deleteApi(url);
   }
 
-  updateStatus(context?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'update_status', context);
-    return this.putApi(url, body);
+  autocomplete(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "autocomplete");
+    return this.getApi(url, queryParams);
   }
-  list(context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'list', context);
-    return this.getApi(url);
-  }
+
 }

@@ -2815,6 +2815,15 @@ export const brConfig = {
         }
       ],
     },
+    activate: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Daftar Pengajuan Aktivasi"
+        }
+      ],
+    },
     deactivate: {
       index: [
         {
@@ -2830,6 +2839,39 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Distribution List"
+        }
+      ]
+    },
+    templatefinancing: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Template Financing"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/paylater/template",
+          name: "Template Financing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Template"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/paylater/template",
+          name: "Template Financing"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Template"
         }
       ]
     }

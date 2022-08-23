@@ -1,0 +1,229 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Template Financing'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h1 class="">Invoice Financing</h1>
+      </div>
+      <div>
+        <form [formGroup]="formTemplate">
+
+          <div class="card">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">Informasi General</h2>
+            </div>
+            <textarea [froalaEditor]="optionsGeneral" formControlName="information" class="pb-4" fxFlex="100"></textarea>
+          </div>
+
+          <div class="card">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">Alasan Bergabung</h2>
+            </div>
+            <div style="margin-bottom: 42px;" formArrayName="reason" *ngFor="let re of formTemplate.get('reason')['controls']; let i = index;">
+              <div [formGroupName]="i">
+                <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50">
+                    <h3 class="">&nbsp;</h3>
+                  </div>
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                    fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <!-- <button mat-raised-button type="button" (click)="addReason()">
+                      <mat-icon>add</mat-icon>
+                    </button> -->
+                    <button *ngIf="formTemplate.get('reason').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteReason(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div fxLayout="row">
+                    <div style="margin-right: 15px;">
+                      <h3>{{i+1}}.</h3>
+                    </div>
+                    <mat-form-field class="is-light form-primary" fxFlex="50">
+                      <input matInput type="text" formControlName="reason_title" placeholder="Alasan">
+                      <!-- <mat-error *ngIf="formTemplate.controls['reason_title'].hasError('required') && formTemplate.controls['reason_title'].touched">
+                        Alasan harus diisi
+                      </mat-error> -->
+                    </mat-form-field>
+                  </div>
+                  <textarea [froalaEditor]="options" formControlName="reason_body" class="pb-4" fxFlex="100"></textarea>
+                </div>
+              </div>
+            </div>
+            <div fxLayoutAlign="end center">
+              <button mat-raised-button type="button" (click)="addReason()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">Cara Penggunaan</h2>
+            </div>
+            <div style="margin-bottom: 42px;" formArrayName="use" *ngFor="let use of formTemplate.get('use')['controls']; let i = index;">
+              <div [formGroupName]="i">
+                <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50">
+                    <h3 class="">&nbsp;</h3>
+                  </div>
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                    fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <!-- <button mat-raised-button type="button" (click)="addUse()">
+                      <mat-icon>add</mat-icon>
+                    </button> -->
+                    <button *ngIf="formTemplate.get('use').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteUse(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div style="margin-right: 15px;">
+                    <h3>{{i+1}}.</h3>
+                  </div>
+                  <mat-form-field class="is-light form-primary" fxFlex="50">
+                    <input matInput type="text" formControlName="use_title" placeholder="Langkah">
+                    <!-- <mat-error *ngIf="formTemplate.controls['use'].hasError('required') && formTemplate.controls['use'].touched">
+                      Penggunaan harus diisi
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <textarea [froalaEditor]="options" formControlName="use_body" class="pb-4" fxFlex="100"></textarea>
+              </div>
+            </div>
+            <div fxLayoutAlign="end center">
+              <button mat-raised-button type="button" (click)="addUse()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">FAQ</h2>
+            </div>
+            <div style="margin-bottom: 42px;" formArrayName="faq" *ngFor="let faq of formTemplate.get('faq')['controls']; let i = index;">
+              <div [formGroupName]="i">
+                <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50">
+                    <h3 class="">&nbsp;</h3>
+                  </div>
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                    fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <!-- <button mat-raised-button type="button" (click)="addFaq()">
+                      <mat-icon>add</mat-icon>
+                    </button> -->
+                    <button *ngIf="formTemplate.get('faq').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteFaq(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div style="margin-right: 15px;">
+                    <h3>{{i+1}}.</h3>
+                  </div>
+                  <mat-form-field class="is-light form-primary" fxFlex="50">
+                    <input matInput type="text" formControlName="question" placeholder="Pertanyaan">
+                    <!-- <mat-error *ngIf="formTemplate.controls['faq'].hasError('required') && formTemplate.controls['faq'].touched">
+                      Pertanyaan harus diisi
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <textarea [froalaEditor]="optionsFaq" formControlName="answer" class="pb-4" fxFlex="100"></textarea>
+              </div>
+            </div>
+            <div fxLayoutAlign="end center">
+              <button mat-raised-button type="button" (click)="addFaq()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pt-8" fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">Tips & Trick supaya SRC bisa di Whitelist</h2>
+            </div>
+            <div style="margin-bottom: 42px;" formArrayName="tips" *ngFor="let tips of formTemplate.get('tips')['controls']; let i = index;">
+              <div [formGroupName]="i">
+                <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
+                  <div fxFlex="50">
+                    <h3 class="">&nbsp;</h3>
+                  </div>
+                  <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
+                    fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                    <!-- <button mat-raised-button type="button" (click)="addTips()">
+                      <mat-icon>add</mat-icon>
+                    </button> -->
+                    <button *ngIf="formTemplate.get('tips').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteTips(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div fxLayout="row">
+                  <div style="margin-right: 15px;">
+                    <h3>{{i+1}}.</h3>
+                  </div>
+                  <mat-form-field class="is-light form-primary" fxFlex="50">
+                    <input matInput type="text" formControlName="tips_title" placeholder="Tips">
+                    <!-- <mat-error *ngIf="formTemplate.controls['tips'].hasError('required') && formTemplate.controls['tips'].touched">
+                      Tips harus diisi
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <textarea [froalaEditor]="options" formControlName="tips_body" class="pb-4" fxFlex="100"></textarea>
+              </div>
+            </div>
+            <div fxLayoutAlign="end center">
+              <button mat-raised-button type="button" (click)="addTips()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div fxLayout="column">
+              <h2>Gambar Banner</h2>
+              <small>Besar file maksimal 2mb. Gambar yang diunggah min 1 dan max 4</small>
+              <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                  [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                  (fileChange)="changeImage($event)">
+                  <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                    <!-- <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon> -->
+                    <!-- <br> -->
+                    <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                    </span>
+                    <!-- <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="column">
+              <div class="" *ngFor="let imgUrl of image_list;let i = index" style="margin-top: 15px;margin-bottom: 15px;">
+                <div class="delete">
+                  <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
+                </div>
+                <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
+                <div>
+                  <img id="image" [src]='imgUrl' width="410px" height="410px" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button">
+        {{ls.locale.global.button.save}}
+      </button>
+    </div>
+    <a #downloadLink></a>
+  </div>
+</div>
