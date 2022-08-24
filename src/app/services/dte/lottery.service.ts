@@ -75,13 +75,13 @@ export class LotteryService extends BaseService {
     return this.postApi(url, body);
   }
 
-  exportDetailCoupon(context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_detail_coupon", {id: context});
-    return this.getApi(url, {});
+  exportDetailCoupon(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_detail_coupon");
+    return this.postApi(url, body);
   }
 
-  exportCoupon(context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_coupon", {id: context});
-    return this.getApi(url, {});
+  exportCoupon(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_coupon");
+    return this.postApi(url, body);
   }
 }
