@@ -3,16 +3,16 @@
   <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
     <mat-icon>search</mat-icon>
     <mat-form-field autoComplete="off" class="is-light tab-search">
-      <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
+      <input id="search" matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)">
     </mat-form-field>
   </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="end center">
-  <button mat-raised-button type="button" class="is-danger mr-24 mb-24" (click)="onDocUpload()">
+  <button id="btnImport" mat-raised-button type="button" class="is-danger mr-24 mb-24" (click)="onDocUpload()">
     <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
   </button>
 </div>
-<ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+<ngx-datatable id="tableDatalog" class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
   [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
   [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
   [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
