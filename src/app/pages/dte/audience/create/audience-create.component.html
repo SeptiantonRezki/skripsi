@@ -411,7 +411,7 @@
             class="is-danger"
             (click)="importAudience()"
           >
-            <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
+            <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} CSV
           </button>
           <label 
             *ngIf="!ENABLE_IMPORT_IF.includes(importingDataStatus.import_audience_status) && importingDataStatus.import_audience_status_type"
