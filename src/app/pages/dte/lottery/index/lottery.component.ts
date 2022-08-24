@@ -192,8 +192,10 @@ export class LotteryComponent implements OnInit {
 
   async exportDetailCoupon(param?: any) {
     this.dataService.showLoading(true);
+    let fd = new FormData();
+        fd.append('lottery_id', param.id);
     try {
-      const response = await this.lotteryService.exportDetailCoupon(param.id).toPromise();
+      const response = await this.lotteryService.exportDetailCoupon(fd).toPromise();
       this.downloadLinkDetailCoupon.nativeElement.href = response.data;
       this.downloadLinkDetailCoupon.nativeElement.click();
       setTimeout(() => {
@@ -207,8 +209,10 @@ export class LotteryComponent implements OnInit {
 
   async exportCoupon(param?: any) {
     this.dataService.showLoading(true);
+    let fd = new FormData();
+        fd.append('lottery_id', param.id);
     try {
-      const response = await this.lotteryService.exportCoupon(param.id).toPromise();
+      const response = await this.lotteryService.exportCoupon(fd).toPromise();
       this.downloadLinkCoupon.nativeElement.href = response.data;
       this.downloadLinkCoupon.nativeElement.click();
       setTimeout(() => {
