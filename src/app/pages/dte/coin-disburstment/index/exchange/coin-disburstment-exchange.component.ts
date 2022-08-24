@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
@@ -67,6 +67,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
 
   // Untuk Edit
   detailCoin: any;
+  @Input() isTabActive: any;
 
   constructor(
     private dialogService: DialogService,
@@ -203,6 +204,14 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.unsubscribe();
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if (this.isTabActive === 2) {
+      setTimeout(() => {
+        this.addObjectToTable();
+      }, 500);
+    }
   }
 
   getGroupTradeProgram() {
@@ -774,6 +783,26 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     } catch (error) {
       this.dataService.showLoading(false);
       throw error;
+    }
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    const table = document.getElementById("tableListExchange");
+
+    let header = table.querySelectorAll("datatable-header-cell");
+    for (let indexHeader = 0; indexHeader < header.length; indexHeader++) {
+      header[indexHeader].id = 'data-header';
+    }
+
+    let rows = table.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      rows[index].id = 'data-row';
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';
+      }
     }
   }
 }
