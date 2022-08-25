@@ -67,6 +67,9 @@ import { VerificationApprovalComponent } from "./task-verification-2/verificatio
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
+import { InfoBoardComponent } from "./info-board/index/info-board.component";
+import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
+import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 
 const routes: Routes = [
   {
@@ -823,6 +826,39 @@ const routes: Routes = [
   {
     path: "spin-the-wheel/detail",
     component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
+
+  {
+    path: 'info-board',
+    component: InfoBoardComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/create',
+    component: InfoBoardCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/edit/:id',
+    component: InfoBoardEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "info-board/detail",
+    component: InfoBoardEditComponent,
     data: {
       breadcrumbs: brConfig.dte.spinTheWheel.detail
     },
