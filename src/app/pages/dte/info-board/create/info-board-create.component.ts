@@ -48,6 +48,7 @@ export class InfoBoardCreateComponent implements OnInit {
   loadingArea = false;
   list: any;
   areaFromLogin;
+  isFreeText = false;
 
   // 2 geotree property
   endArea: String;
@@ -175,24 +176,17 @@ export class InfoBoardCreateComponent implements OnInit {
       salespoint: [""],
       district: [""],
       territory: [""]
-    })
-    
-    this.filterGTP.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filteringGTP();
-      });
-
-    this.filterSGTP.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filteringSGTP();
-      });
-
-    this.getGroupTradeProgram();
-    this.getSubGroupTradeProgram();
+    });
 
     this.onLoad = false;
+
+    this.formBoard.get('jenis_info_board').valueChanges.subscribe(res => {
+      if (res === 'task-free-text') {
+        this.isFreeText = true;
+      } else {
+        this.isFreeText = false;
+      }
+    });
 
     this.getLevel('national');
     this.initAreaV2();
@@ -204,77 +198,6 @@ export class InfoBoardCreateComponent implements OnInit {
       this.loadingArea = true;
       this.getLevel('region');
     });
-  }
-
-  filteringGTP() {
-    if (!this.listGroupTradeProgram) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterGTP.value;
-    if (!search) {
-      this.filteredGTP.next(this.listGroupTradeProgram.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredGTP.next(
-      this.listGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
-    );
-  }
-
-  getGroupTradeProgram() {
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
-      this.listGroupTradeProgram = res.data ? res.data.data : [];
-      this.filteredGTP.next(this.listGroupTradeProgram.slice());
-    })
-  }
-
-  getSubGroupTradeProgram() {
-    this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
-      const data = res.data ? res.data.data.filter((item: any) => item.status === "active") : [];
-      this.listSubGroupTradeProgram = data;
-      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
-    });
-  }
-
-  filteringSGTP() {
-    if (!this.listSubGroupTradeProgram) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterSGTP.value;
-    if (!search) {
-      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredSGTP.next(
-      this.listSubGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
-    );
-  }
-
-  removeImage(): void {
-    this.files = undefined;
-    this.imageConverted = undefined;
-  }
-
-  changeImage(event) {
-    this.readThis(event);
-  }
-
-  readThis(inputValue: any): void {
-    var file: File = inputValue;
-    var myReader: FileReader = new FileReader();
-
-    myReader.onloadend = (e) => {
-      this.imageConverted = myReader.result;
-    }
-
-    myReader.readAsDataURL(file);
   }
 
   submit(): void {

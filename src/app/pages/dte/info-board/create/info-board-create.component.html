@@ -247,7 +247,7 @@
             </form>
           </div>
         </mat-tab>
-        <mat-tab label="Audience" [disabled]="false">
+        <mat-tab label="Audience" [disabled]="!isFreeText">
           <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
               <!-- <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
                 <mat-radio-button
