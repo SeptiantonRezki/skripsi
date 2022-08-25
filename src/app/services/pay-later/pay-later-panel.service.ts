@@ -52,9 +52,9 @@ export class PayLaterPanelService extends BaseService {
     return this.postApi(url, body);
   }
 
-  show(context?): Observable<any> {
+  show(context?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "show", context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   delete(context?): Observable<any> {
