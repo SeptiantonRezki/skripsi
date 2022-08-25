@@ -1,31 +1,23 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
-import { LanguagesService } from 'app/services/languages/languages.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/operators';
-import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
-import { GeotreeService } from 'app/services/geotree.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
-import { AudienceService } from 'app/services/dte/audience.service';
-import { Page } from 'app/classes/laravel-pagination';
-import { DataService } from 'app/services/data.service';
 import { Config } from 'app/classes/config';
-import { NotificationService } from 'app/services/notification.service';
-import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
+import { InfoBoardService } from "app/services/dte/info-board.service";
 import { DialogService } from 'app/services/dialog.service';
-import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
+import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
+import { GeotreeService } from 'app/services/geotree.service';
+import { DataService } from 'app/services/data.service';
 import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
-import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
-import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
-import { ProductService } from 'app/services/sku-management/product.service';
-import { InfoBoardService } from "app/services/dte/info-board.service";
+import { AudienceService } from 'app/services/dte/audience.service';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -33,90 +25,66 @@ import { InfoBoardService } from "app/services/dte/info-board.service";
   styleUrls: ['./info-board-edit.component.scss']
 })
 export class InfoBoardEditComponent implements OnInit {
-  selectedTab: number;
-  panelBlast: number;
+  selectedTab: number = 0;
+
+  formBoard: FormGroup;
+  onLoad: boolean;
+  minDateStart = new Date();
+  minDateEnd = new Date();
+  formFilter: FormGroup;
+  formGeo: FormGroup;
+  isPopulation: boolean = true;
+  data_imported: any = [];
   exportTemplate: Boolean;
+  dialogRef: any;
   isChecked: boolean = false;
-  averageCoin: number = 0;
-  isPPK: boolean = false;
-  isExclude: boolean = false;
-  editableCoin: boolean = true;
+  panelBlast: number;
   selectedZone = [];
   selectedRegion = [];
   selectedArea = [];
-  selectedCategory = [];
   loadingZone = true;
-  loadingRegion = true;
-  loadingArea = true;
+  loadingRegion = false;
+  loadingArea = false;
+  list: any;
+  areaFromLogin;
 
+  // 2 geotree property
+  endArea: String;
+  area_id_list: any = [];
+  lastLevel: any;
+
+  showDetail: any;
+  infoBoard: any[] =
+  [
+      { name: 'Ensure new order is processed within 6 hours (P0)', value: 'task-ensure-new-order-opt-p0' },
+      { name: 'Ensure process order is ready / sent within 24 hours (P0)', value: 'task-ensure-process-order-opt-p0' },
+      { name: 'Upload HMS products (P0)', value: 'task-upload-hms-product-sc-p0' },
+      { name: 'Upload Top Selling Products (P0)', value: 'task-upload-top-selling-sc-p0' },
+      { name: 'Upload NPL from HMS products (P0)', value: 'task-upload-npl-product-sc-p0' },
+      { name: 'Upload product image for SKU without image (P1)', value: 'task-upload-product-image-sku-sc-p1' },
+      { name: 'Revise wrong product data Name & Category (P1)', value: 'task-revise-wrong-product-sc-p1' },
+      { name: 'Revise wrong / unclear product image (P2)', value: 'task-revise-wrong-unclear-sc-p2' },
+      { name: 'Create Reward Catalog (P1)', value: 'task-create-reward-catalog-plp-p1' },
+      { name: 'Create loyalty poin scheme (P1)', value: 'task-create-loyalty-poin-plp-p1' },
+      { name: 'FREE TEXT', value: 'task-free-text' },
+  ]
+
+  public audienceFixed: FormControl = new FormControl();
+  public audiencePopulation: FormControl = new FormControl();
+
+  @ViewChild('downloadLink') downloadLink: ElementRef;
+
+  listGroupTradeProgram: any[] = [];
+  listSubGroupTradeProgram: any[] = [];
+
+  private _onDestroy = new Subject<void>();
   filteredGTpOptions: Observable<string[]>;
   public filterGTP: FormControl = new FormControl();
   public filteredGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   public filterSGTP: FormControl = new FormControl();
   public filteredSGTP: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
-  listGroupTradeProgram: any[] = [];
-  listSubGroupTradeProgram: any[] = [];
-
-  formDetilVoucher: FormGroup;
-
-  formUndian: FormGroup;
-  formGeo: FormGroup;
-  formPM: FormGroup;
-  formPreview: FormGroup;
-  formListPemenang: FormGroup;
-  onLoad: boolean;
-  minDate = new Date();
-  groupTradePrograms: any[] = [];
-
-  files: File;
-  files2: File;
-  files3: File;
-  files4: File;
-  imageContentType: File;
-  imageContentTypeBase64: any;
-  image: any;
-  validComboDrag: boolean;
-  imageConverted: any;
-  imageConverted2: any;
-  imageConverted3: any;
-  fileNameListExcel: any;
-  preview_header: FormControl = new FormControl("");
-
-  keyUp = new Subject<string>();
-  keyUpProduct = new Subject<string>();
-  keyUpProductSRCC = new Subject<string>();
-  listCategories: any[] = [];
-  listCategoriesSRCC: any[] = [];
-  listProduct: any[] = [];
-  filterProduct: FormControl = new FormControl("");
-  public filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  listProductSkuBank: Array<any> = [];
-  listProductSkuBankSRCC: Array<any> = [];
-  filteredSkuOptions: Observable<string[]>;
-  filteredSkuOptionsSRCC: Observable<string[]>;
-  productList: any[] = [];
-  productListSRCC: any[] = [];
-  inputChipList = [];
-  inputChipListSRCC = [];
-  product: FormControl = new FormControl('');
-  productSRCC: FormControl = new FormControl('');
-  public audienceFixed: FormControl = new FormControl();
-  public audiencePopulation: FormControl = new FormControl();
-  visible = true;
-  selectable = true;
-  removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
-
-  dialogRef: any;
-  data_imported: any = [];
-  winner_count: 0;
-
-  @ViewChild('downloadLink') downloadLink: ElementRef;
-  @ViewChild('downloadLinkWinner') downloadLinkWinner: ElementRef;
-  @ViewChild('singleSelect') singleSelect: MatSelect;
-  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
-  @ViewChild('productInputSRCC') productInputSRCC: ElementRef<HTMLInputElement>;
+  public options: Object = { ...Config.FROALA_CONFIG, placeholderText: "" };
 
   retailClassification: any[] = [
     { name: this.ls.locale.global.label.all + " " + this.ls.locale.call_objective.text9, value: "all" },
@@ -139,80 +107,27 @@ export class InfoBoardEditComponent implements OnInit {
       },
     ],
   };
-  public filterTradeProgram: FormControl = new FormControl();
-  public filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(
-    1
-  );
-  listTradePrograms: any[];
-  isPopulation: boolean = true;
-  private _onDestroy = new Subject<void>();
-
-  formFilter: FormGroup;
-  loadingIndicator: boolean;
-  showLoading: Boolean;
-  listLevelArea: any[];
-  indexDelete: any;
-  list: any;
-  typeArea: any[] = ["national", "zone", "region", "area", "district", "salespoint", "territory"];
-  areaFromLogin;
-
-  audienceSelected: any[] = [];
-  rows: any[];
-  selected: any[] = [];
-  id: any[];
-  reorderable = true;
-  pagination: Page = new Page();
-
-  areaType: any[] = [];
-  public options: Object = Config.FROALA_CONFIG;
-
-  // 2 geotree property
-  endArea: String;
-  area_id_list: any = [];
-  lastLevel: any;
-  menuList: any[] = [];
-  iconList: any[] = [];
-  areaIdNonTargetAudience: any = 1;
-  detailFormUndian: any;
-  showDetail: any;
   isDetail: Boolean;
+  detailFormBoard: any;
 
   constructor(
-    private b2bVoucherInjectService: B2BVoucherInjectService,
-    private supplierCompanyService: SupplierCompanyService,
+    private router: Router,
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
     private translate: TranslateService,
-    private geoService: GeotreeService,
-    private audienceService: AudienceService,
-    private dataService: DataService,
-    private geotreeService: GeotreeService,
-    private notificationService: NotificationService,
-    private dialogService: DialogService,
-    private spinTheWheelService: SpinTheWheelService,
-    private productService: ProductService,
-    private router: Router,
-    private dialog: MatDialog,
-    private activatedRoute: ActivatedRoute,
     private infoBoardService: InfoBoardService,
-    private groupTradeProgramService: GroupTradeProgramService,
+    private dialogService: DialogService,
+    private dialog: MatDialog,
+    private geoService: GeotreeService,
+    private geotreeService: GeotreeService,
+    private dataService: DataService,
+    private audienceService: AudienceService,
+    private activatedRoute: ActivatedRoute,
   ) {
-    this.onLoad = true
+    this.onLoad = true;
 
-    this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
-
-    this.listLevelArea = [
-      {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
-      }
-    ];
-
-    this.selected = [];
 
     this.list = {
       zone: [],
@@ -221,64 +136,26 @@ export class InfoBoardEditComponent implements OnInit {
       salespoint: [],
       district: [],
       territory: []
-    }
-    this.filterTradeProgram.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filteringTradeProgram();
-      });
-
-    this.filteredSkuOptions = this.product.valueChanges.pipe(
-      startWith(null),
-      map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
-
-    this.detailFormUndian = this.dataService.getFromStorage('detail_info_board');
+    };
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
-    })
+    });
 
-  }
+    this.detailFormBoard = this.dataService.getFromStorage('detail_info_board');
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-  }
-  
-  filteringTradeProgram() {
-    if (!this.listTradePrograms) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterTradeProgram.value;
-    if (!search) {
-      this.filteredTradeProgram.next(this.listTradePrograms.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredTradeProgram.next(
-      this.listTradePrograms.filter(
-        (item) => item.name.toLowerCase().indexOf(search) > -1
-      )
-    );
   }
 
   ngOnInit() {
-    this.formUndian = this.formBuilder.group({
-      name: ["", Validators.required],
-      coin: ["", Validators.required],
-      group_trade_program_id: [""],
-      sub_group_trade_program_id: [""],
+    this.formBoard = this.formBuilder.group({
+      name_board: ["", Validators.required],
+      description_board: ["", Validators.required],
+      jenis_info_board: [""],
       start_date: [new Date()],
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-      announcement_date:  [new Date()],
-      announcement_time: ["00:00", Validators.required],
-    });
+    })
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -298,90 +175,33 @@ export class InfoBoardEditComponent implements OnInit {
       district: [""],
       territory: [""]
     })
-
-    this.formPreview = this.formBuilder.group({
-      // image: ["", Validators.required],
-      // icon: ["", Validators.required],
-      desc: ["", Validators.required],
-      desc_tc: ["", Validators.required],
-      desc_tc_status: ["", Validators.required]
-    });
-    this.formListPemenang = this.formBuilder.group({
-      // image: ["", Validators.required],
-      // icon: ["", Validators.required],
-      preview_header: ["", Validators.required]
-    });
-    if (this.isDetail) this.formPreview.disable();
-
-    this.formUndian.setValue({
-      name: this.detailFormUndian.name,
-      coin: this.detailFormUndian.coin,
-      start_date: this.convertDate(this.detailFormUndian.start_date),
-      start_time: this.convertTime(this.detailFormUndian.start_date ? this.detailFormUndian.start_date : ''),
-      end_date: this.convertDate(this.detailFormUndian.end_date),
-      end_time: this.convertTime(this.detailFormUndian.end_date ? this.detailFormUndian.end_date : ''),
-      announcement_date: this.convertDate(this.detailFormUndian.announcement_date),
-      announcement_time: this.convertTime(this.detailFormUndian.announcement_date ? this.detailFormUndian.announcement_date : ''),
-      group_trade_program_id: Array.isArray(this.detailFormUndian.trade_creator_group_id) ? this.detailFormUndian.trade_creator_group_id : parseInt(this.detailFormUndian.trade_creator_group_id, 10) ? this.detailFormUndian.trade_creator_group_id.split(',').map(rs => Number(rs)) : '',
-      sub_group_trade_program_id: Array.isArray(this.detailFormUndian.trade_creator_sub_group_id) ? this.detailFormUndian.trade_creator_sub_group_id : parseInt(this.detailFormUndian.trade_creator_sub_group_id, 10) ? this.detailFormUndian.trade_creator_sub_group_id.split(',').map(rs => Number(rs))  : '',
-    });
-
-    this.filterGTP.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filteringGTP();
-      });
-
-    this.filterSGTP.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filteringSGTP();
-      });
-
-    this.getGroupTradeProgram();
-    this.getSubGroupTradeProgram();
-
     this.onLoad = false;
 
-    this.winner_count = this.detailFormUndian.count_winner;
+    // this.formBoard.setValue({
+    //   name_board: this.detailFormBoard.name,
+    //   description_board: this.detailFormBoard.description,
+    //   jenis_info_board: this.detailFormBoard.jenis,
+    //   start_date: this.convertDate(this.detailFormBoard.start_date),
+    //   start_time: this.convertTime(this.detailFormBoard.start_date ? this.detailFormBoard.start_date : ''),
+    //   end_date: this.convertDate(this.detailFormBoard.end_date),
+    //   end_time: this.convertTime(this.detailFormBoard.end_date ? this.detailFormBoard.end_date : ''),
+    // });
 
-    this.getLevel('national');
-    this.getTradePrograms();
-
-    this.initAreaV2();
-
-    this.setStorageDetail();
-
-    this.formGeo.get('division').valueChanges.subscribe(res => {
-      this.loadingRegion = true;
-      this.getLevel('division');
-    });
-    this.formGeo.get('region').valueChanges.subscribe(res => {
-      this.loadingArea = true;
-      this.getLevel('region');
-    });
-
-    if(!this.detailFormUndian){
-      this.formGeo.get('classification').setValue(['all']);
-    }
 
     if (this.isDetail) {
-      this.formUndian.get('name').disable();
-      this.formUndian.get('coin').disable();
-      this.formUndian.get('start_date').disable();
-      this.formUndian.get('start_time').disable();
-      this.formUndian.get('end_date').disable();
-      this.formUndian.get('end_time').disable();
-      this.formUndian.get('announcement_date').disable();
-      this.formUndian.get('announcement_time').disable();
-      this.formUndian.get('group_trade_program_id').disable();
-      this.formUndian.get('sub_group_trade_program_id').disable();
+      this.formBoard.get('jenis_info_board').disable();
+      this.formBoard.get('name_board').disable();
+      this.formBoard.get('description_board').disable();
+      this.formBoard.get('start_date').disable();
+      this.formBoard.get('start_time').disable();
+      this.formBoard.get('end_date').disable();
+      this.formBoard.get('end_time').disable();
     }
   }
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.infoBoardService.showAudience(this.detailFormUndian.id).subscribe(res => { 
+    this.showDetail = this.infoBoardService.showAudience(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
 
@@ -401,9 +221,6 @@ export class InfoBoardEditComponent implements OnInit {
           }
         }
         this.selectedZone = zone;
-        this.imageConverted = res.data.header_img_url;
-        this.imageConverted2 = res.data.header_list_img_url;
-        this.imageConverted3 = res.data.winner_img_url;
 
         this.panelBlast = res.data.panel_count;
         
@@ -418,19 +235,12 @@ export class InfoBoardEditComponent implements OnInit {
           this.isChecked = true;
         }
 
-        this.formPreview.setValue({
-          desc: res.data.desc,
-          desc_tc: res.data.desc_tc,
-          desc_tc_status: res.data.desc_tc_status === 'active' ? true : false
-        });
-
         this.initAreaSelected(res.data);
       }
     });
   }
 
   initAreaSelected(data = null) {
-    console.log('=================');
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
@@ -452,9 +262,6 @@ export class InfoBoardEditComponent implements OnInit {
         }
       });
     }
-    console.log(arr_area);
-    console.log(arr_region);
-    console.log(arr_zone);
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
@@ -464,66 +271,6 @@ export class InfoBoardEditComponent implements OnInit {
     this.selectedZone = arr_zone;
     this.selectedRegion = arr_region;
     this.selectedArea = arr_area;
-  }
-
-  removeImage(): void {
-    this.files = undefined;
-    this.imageConverted = undefined;
-  }
-
-  changeImage(event) {
-    this.readThis(event);
-  }
-
-  readThis(inputValue: any): void {
-    var file: File = inputValue;
-    var myReader: FileReader = new FileReader();
-
-    myReader.onloadend = (e) => {
-      this.imageConverted = myReader.result;
-    }
-
-    myReader.readAsDataURL(file);
-  }
-
-  removeImage2(): void {
-    this.files2 = undefined;
-    this.imageConverted2 = undefined;
-  }
-
-  changeImage2(event) {
-    this.readThis2(event);
-  }
-
-  removeImage3(): void {
-    this.files3 = undefined;
-    this.imageConverted3 = undefined;
-  }
-
-  changeImage3(event) {
-    this.readThis3(event);
-  }
-
-  readThis2(inputValue: any): void {
-    var file: File = inputValue;
-    var myReader: FileReader = new FileReader();
-
-    myReader.onloadend = (e) => {
-      this.imageConverted2 = myReader.result;
-    }
-
-    myReader.readAsDataURL(file);
-  }
-
-  readThis3(inputValue: any): void {
-    var file: File = inputValue;
-    var myReader: FileReader = new FileReader();
-
-    myReader.onloadend = (e) => {
-      this.imageConverted3 = myReader.result;
-    }
-
-    myReader.readAsDataURL(file);
   }
 
   getLevel(value: string) {
@@ -585,24 +332,6 @@ export class InfoBoardEditComponent implements OnInit {
       }
     });
   }
-
-  getTradePrograms() {
-    this.audienceService.getListTradePrograms().subscribe(
-      (res) => {
-        console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
-      },
-      (err) => {
-        console.log("err trade programs", err);
-      }
-    );
-  }
-
-  // changeBlastType(type) {
-  //   if (type === 'population-blast') this.isPopulation = true;
-  //   else this.isPopulation = false
-  // }
 
   initAreaV2() {
     let areas = this.dataService.getDecryptedProfile()['areas'] || [];
@@ -752,7 +481,6 @@ export class InfoBoardEditComponent implements OnInit {
       // console.log('on set', thisAreaOnSet, selection, id);
     }
 
-    console.log('XYZ--------')
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
@@ -761,11 +489,11 @@ export class InfoBoardEditComponent implements OnInit {
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
-          if (this.detailFormUndian.hasOwnProperty('zones')) {
-            const zones = this.detailFormUndian.zones[0];
-            const detailZones = zones > 1 ? this.detailFormUndian.zones : [];
+          if (this.detailFormBoard.hasOwnProperty('zones')) {
+            const zones = this.detailFormBoard.zones[0];
+            const detailZones = zones > 1 ? this.detailFormBoard.zones : [];
             this.formFilter.get('zone').setValue(detailZones);
-            this.detailFormUndian.zone = true
+            this.detailFormBoard.zone = true
           }
         });
 
@@ -793,9 +521,9 @@ export class InfoBoardEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
-              if (this.detailFormUndian.hasOwnProperty('regions')) {
-                const regions = this.detailFormUndian.regions[0];
-                const detailRegions = regions > 1 ? this.detailFormUndian.regions : [];
+              if (this.detailFormBoard.hasOwnProperty('regions')) {
+                const regions = this.detailFormBoard.regions[0];
+                const detailRegions = regions > 1 ? this.detailFormBoard.regions : [];
                 this.formFilter.get('region').setValue(detailRegions);
               }
             });
@@ -828,9 +556,9 @@ export class InfoBoardEditComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
-              if (this.detailFormUndian.hasOwnProperty('areas')) {
-                const areas = this.detailFormUndian.areas[0];
-                const detailAreas = areas > 1 ? this.detailFormUndian.areas : [];
+              if (this.detailFormBoard.hasOwnProperty('areas')) {
+                const areas = this.detailFormBoard.areas[0];
+                const detailAreas = areas > 1 ? this.detailFormBoard.areas : [];
                 this.formFilter.get('area').setValue(detailAreas);
               }
             });
@@ -959,136 +687,17 @@ export class InfoBoardEditComponent implements OnInit {
     return newLastSelfArea;
   }
 
-  getAudience() {
-    this.dataService.showLoading(true);
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
-
-    // this.pagination['audience'] = this.formUndian.get('application').value;
-
-
-    this.notificationService.getPopupAudience(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.dataService.showLoading(false);
-    }, err => {
-      console.log('err', err);
-      this.dataService.showLoading(false);
-    });
-  }
-
-  previewPemenang(event) {
-    this.files4 = undefined;
-    this.files4 = event;
-
-    console.log('files info', this.files4);
-    
-    if (this.files4.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
-      return;
-    }
-    console.log(this.files4.name);
-    this.fileNameListExcel = this.files4.name;
-
-    //let fd = new FormData();
-
-    //fd.append('file', this.files);
-    // this.dataService.showLoading(true);
-    // this.coinService.previewImport(fd).subscribe(
-    //   res => {
-    //     // if (res && res.data && res.data.is_valid) {
-    //     this.rows = res.data.data;
-    //     this.validData = res.data ? res.data.is_valid : false;
-    //     this.dataService.showLoading(false);
-    //     console.log('is valid', this.validData)
-    //     // } else {
-    //     //   this.dialogService.openSnackBar({ message: "Data tidak Valid, mohon mengunggah ulang." });
-    //     //   this.dataService.showLoading(false);
-    //     // }
-    //   },
-    //   err => {
-    //     this.dataService.showLoading(false);
-    //     this.files = undefined;
-
-    //     if (err.status === 404 || err.status === 500)
-    //       this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." })
-    //   }
-    // )
-  }
-
   submit() {
-    if (this.formUndian.valid) {
+    if (this.formBoard.valid) {
       let fd = new FormData();
 
       const body = {
         _method: 'PUT',
-        name: this.formUndian.get('name').value,
-        coin: this.formUndian.get('coin').value,
-        start_date: `${moment(this.formUndian.get('start_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('start_time').value}:00`,
-        end_date: `${moment(this.formUndian.get('end_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('end_time').value}:00`,
-        announcement_date: `${moment(this.formUndian.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('announcement_time').value}:00`,
+        name: this.formBoard.get('name').value,
+        coin: this.formBoard.get('coin').value,
+        start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
+        end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
+        announcement_date: `${moment(this.formBoard.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('announcement_time').value}:00`,
       }
 
       fd.append('_method', body._method);
@@ -1097,11 +706,11 @@ export class InfoBoardEditComponent implements OnInit {
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
       fd.append('announcement_date', body.announcement_date);
-      // fd.append('trade_creator_group_id[]', this.formUndian.get('group_trade_program_id').value);
+      // fd.append('trade_creator_group_id[]', this.formBoard.get('group_trade_program_id').value);
       fd.append('trade_creator_group_id[]', '0');
-      fd.append('trade_creator_sub_group_id[]', this.formUndian.get('sub_group_trade_program_id').value);
+      fd.append('trade_creator_sub_group_id[]', this.formBoard.get('sub_group_trade_program_id').value);
 
-      this.infoBoardService.put(fd, { lottery_id: this.detailFormUndian.id }).subscribe(
+      this.infoBoardService.put(fd, { lottery_id: this.detailFormBoard.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['dte', 'lottery']);
@@ -1112,7 +721,7 @@ export class InfoBoardEditComponent implements OnInit {
       )
     } else {
       this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-      commonFormValidator.validateAllFields(this.formUndian);
+      commonFormValidator.validateAllFields(this.formBoard);
     }
   }
 
@@ -1202,7 +811,7 @@ export class InfoBoardEditComponent implements OnInit {
       {...dialogConfig, width: '400px'}
     );
 
-    const processCheck = this.infoBoardService.saveAudience(body, this.detailFormUndian.id).subscribe(
+    const processCheck = this.infoBoardService.saveAudience(body, this.detailFormBoard.id).subscribe(
       (res) => {
         if (res.data) {
           this.isChecked = true;
@@ -1221,94 +830,6 @@ export class InfoBoardEditComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(() => {
       processCheck.unsubscribe();
     });
-  }
-
-  submitPreview() {
-    const id = this.dataService.getFromStorage('detail_info_board').id;
-    this.dataService.showLoading(true);
-    // if (
-    //   this.formPreview.valid
-    //   ) {
-      let body = new FormData();
-      // body.append('image', '-');
-      // let body;
-
-      // body = {
-      //   // icon: '-',
-      //   header: this.formPreview.get('preview_header').value,
-      //   image: '-'
-      // };
-      // if (this.files) body.append('image', this.files)
-      if (this.files) body.append('header_img', this.files);
-      if (this.files2) body.append('header_list_img', this.files2);
-      body.append('desc', this.formPreview.get('desc').value);
-      body.append('desc_tc', this.formPreview.get('desc_tc').value);
-      body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value === true ? 'active' : 'inactive');
-      body.append('lottery_id', this.detailFormUndian.id);
-
-      this.infoBoardService.put_preview({ id: id }, body).subscribe(res => {
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.dataService.showLoading(false);
-        this.setStorageDetail();
-        // this.router.navigate(['dte', 'spin-the-wheel'])
-      }, err => {
-        this.dataService.showLoading(false);
-      });
-    // } else {
-    //   commonFormValidator.validateAllFields(this.formUndian);
-    //   // commonFormValidator.validateAllFields(this.formGeo);
-
-    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-    // }
-  }
-
-  async downloadWinnerList() {
-    this.dataService.showLoading(true);
-    try {
-      const response = await this.infoBoardService.downloadWinner(this.detailFormUndian.id).toPromise();
-      this.downloadLinkWinner.nativeElement.href = response.data;
-      this.downloadLinkWinner.nativeElement.click();
-      setTimeout(() => {
-        this.dataService.showLoading(false);
-      }, 3000);
-    } catch (error) {
-      this.dataService.showLoading(false);
-      throw error;
-    }
-  }
-
-  submitPemenang() {
-    const id = this.dataService.getFromStorage('detail_info_board').id;
-    this.dataService.showLoading(true);
-    
-    let body = new FormData();
-    body.append('lottery_id', this.dataService.getFromStorage('detail_info_board').id);
-    if (this.files3) body.append('winner_img', this.files3);
-    if (this.files4) body.append('file', this.files4);
-  
-    this.infoBoardService.put_winner({ id: id }, body).subscribe(res => {
-      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.dataService.showLoading(false);
-      this.setStorageDetail();
-    }, err => {
-      this.dataService.showLoading(false);
-    });
-  }
-
-  submitPublishUnpublish() {
-    const id = this.dataService.getFromStorage('detail_info_board').id;
-    this.dataService.showLoading(true);
-    let body = {
-      status: (this.dataService.getFromStorage('detail_info_board').status_publish === 'Unpublish')? 'publish' : 'unpublish',
-      lottery_id: id
-    }
-    this.infoBoardService.publishUnpublish(body).subscribe(({data}) => {
-      
-    this.dataService.showLoading(false);
-    this.router.navigate(['dte', 'lottery'])
-    }, err => {
-      this.dataService.showLoading(false);
-    })
   }
 
   async exportAudience() {
@@ -1401,55 +922,5 @@ export class InfoBoardEditComponent implements OnInit {
       this.audiencePopulation.setValue('');
       // this.formGeo.get('audiencePopulation').setValue('');
     }
-  }
-  filteringGTP() {
-    if (!this.listGroupTradeProgram) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterGTP.value;
-    if (!search) {
-      this.filteredGTP.next(this.listGroupTradeProgram.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredGTP.next(
-      this.listGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
-    );
-  }
-
-  getGroupTradeProgram() {
-    this.groupTradeProgramService.get({ page: 'all' }).subscribe(res => {
-      this.listGroupTradeProgram = res.data ? res.data.data : [];
-      this.filteredGTP.next(this.listGroupTradeProgram.slice());
-    })
-  }
-
-  getSubGroupTradeProgram() {
-    this.groupTradeProgramService.getSubGroupTrade({ page: 'all' }).subscribe(res => {
-      const data = res.data ? res.data.data.filter((item: any) => item.status === "active") : [];
-      this.listSubGroupTradeProgram = data;
-      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
-    })
-  }
-  
-  filteringSGTP() {
-    if (!this.listSubGroupTradeProgram) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterSGTP.value;
-    if (!search) {
-      this.filteredSGTP.next(this.listSubGroupTradeProgram.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredSGTP.next(
-      this.listSubGroupTradeProgram.filter(item => item.name.toLowerCase().indexOf(search) > -1)
-    );
   }
 }
