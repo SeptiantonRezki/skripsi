@@ -24,21 +24,44 @@
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
         (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Nama Program" prop="name">
+        <ngx-datatable-column width="10" name="ID" prop="id">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span id="id" class="row-name" (click)="directDetail(row)">{{row.id}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nama Info Board" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Start" prop="start_date">
+        <ngx-datatable-column name="Info Board Type" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Tanggal Mulai" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date | date:'dd/MM/yyyy'}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="End" prop="end_date">
+        <ngx-datatable-column name="Tanggal Akhir" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date | date:'dd/MM/yyyy'}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Publish" prop="status_publish" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div class="name-container">
+              <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
+                [ngClass]="row.status_publish.toLowerCase() === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
+                {{ row.status_publish }}
+              </p>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
@@ -49,17 +72,6 @@
                 [ngClass]="row.status === 'berjalan' ? 'mat-green-800-bg' : row.status === 'berakhir' ? 'mat-red-800-bg' : row.status === 'belum berjalan' ? 'mat-primary-800-bg' :
                 'mat-blue-900-bg'">
                 {{ row.status }}
-              </p>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="Publish" prop="status_publish" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div class="name-container">
-              <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
-                [ngClass]="row.status_publish.toLowerCase() === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
-                {{ row.status_publish }}
               </p>
             </div>
           </ng-template>
