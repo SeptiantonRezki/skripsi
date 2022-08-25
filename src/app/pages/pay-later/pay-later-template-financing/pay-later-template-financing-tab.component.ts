@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pay-later-template-financing-tab',
@@ -16,11 +17,19 @@ export class PayLaterTemplateFinancingTabComponent implements OnInit {
   // invoiceSelected: any;
 
   constructor(
-    private dataService: DataService
-  ) {
+    private dataService: DataService,
+    private router: Router
+    ) {
     // const selectedTab = dataService.getFromStorage("selected_tab_paylater_company");
     // this.selectedTab = selectedTab ? selectedTab : 0;
-    this.selectedTab = 0;
+    // this.selectedTab = 0;
+    if (this.router.routerState.root.queryParams['value'].type === "kur") {
+      this.selectedTab = 2;
+    } else if (this.router.routerState.root.queryParams['value'].type === "retailer-financing") {
+      this.selectedTab = 1;
+    } else {
+      this.selectedTab = 0;
+    }
   }
 
   ngOnInit() {
@@ -42,24 +51,6 @@ export class PayLaterTemplateFinancingTabComponent implements OnInit {
 
     this.selectedTab = tabChangeEvent.index;
     this.dataService.setToStorage("selected_tab_paylater_company", this.selectedTab);
-  }
-
-  onRowsSelected(event: any) {
-    this.allRowsSelected = event.allRowsSelected || false;
-    if (event.allRowsSelected) {
-      // this.invoiceSelected = { allRowsSelected: true };
-    }
-    if (event.isSelected) {
-      if (event.data.length > 0) {
-        this.selectedRowIds = event.data.map((item: any) => item.id);
-        this.isSelectedRows = true;
-        // this.invoiceSelected = { isSelected: true, data: this.selectedRowIds };
-      } else {
-        this.selectedRowIds = [];
-        this.isSelectedRows = false;
-        // this.invoiceSelected = { isSelected: true, data: [] };
-      }
-    }
   }
 
 }

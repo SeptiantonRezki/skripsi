@@ -7,22 +7,6 @@
       <div fxLayout="row" fxLayoutAlign="start center" class="top-table pt-8">
 
         <form fxFlex="100" *ngIf="{results: filteredOptions | async} as obs">
-          <!-- <mat-form-field class="is-light form-primary" [style.width.%]="30">
-            <input type="text" placeholder="Cari Template Financing" matInput [formControl]="templateControl"
-              [matAutocomplete]="auto">
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getOptionText">
-              <mat-option disabled class="loading" *ngIf="loadingSearch" fxLayoutAlign="center center">
-                <mat-spinner diameter="35"></mat-spinner>
-              </mat-option>
-              <mat-option disabled *ngIf="obs.results?.length === 0 && !loadingSearch">
-                Tidak ada hasil
-              </mat-option>
-              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option[FILTER_BY]}}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field> -->
-
           <div class="search-field" fxLayout="row" [style.width.%]="30" style="align-items: center;">
             <mat-icon>search</mat-icon>
             <mat-form-field class="is-light tab-search">
@@ -42,17 +26,11 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Template Financing" prop="fullname">
+        <ngx-datatable-column name="Template Financing" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="detailTemplate(row)">{{row.fullname}}</span>
+            <span class="row-name" (click)="editTemplate(row)">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-
-        <!-- <ngx-datatable-column name="Email" prop="email">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name">{{row.email}}</span>
-          </ng-template>
-        </ngx-datatable-column> -->
 
         <ngx-datatable-column name="Last Updated At" prop="updated_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
