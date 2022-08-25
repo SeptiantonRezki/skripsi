@@ -339,7 +339,7 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = offset;
     this.pagination.page = offset + 1;
-    this.audienceService.showPreviewImport(this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImportNew(this.pagination).subscribe(({data}) => {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);
@@ -390,7 +390,7 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImport(this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImportNew(this.pagination).subscribe(({data}) => {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);

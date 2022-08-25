@@ -83,12 +83,12 @@ export class AudienceService extends BaseService {
     return this.postApi(url, body);
   }
 
-  showPreviewImport(queryParams?): Observable<any> {
+  showPreviewImportNew(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "show_preview_import");
     return this.getApi(url, queryParams);
   }
 
-  showPreviewImportPerso(body?, queryParams?): Observable<any> {
+  showPreviewImport(body?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "show_preview_import");
     return this.postApi(url, body, queryParams);
   }
