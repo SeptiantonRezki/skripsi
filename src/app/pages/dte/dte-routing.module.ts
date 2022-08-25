@@ -836,7 +836,7 @@ const routes: Routes = [
     path: 'info-board',
     component: InfoBoardComponent,
     data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.index
+      breadcrumbs: brConfig.dte.infoBoard.index
     },
     // canActivate: [PageGuard]
   },
@@ -844,7 +844,7 @@ const routes: Routes = [
     path: 'info-board/create',
     component: InfoBoardCreateComponent,
     data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.create
+      breadcrumbs: brConfig.dte.infoBoard.create
     },
     // canActivate: [PageGuard]
   },
@@ -852,7 +852,7 @@ const routes: Routes = [
     path: 'info-board/edit/:id',
     component: InfoBoardEditComponent,
     data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.edit
+      breadcrumbs: brConfig.dte.infoBoard.edit
     },
     // canActivate: [PageGuard]
   },
@@ -860,7 +860,7 @@ const routes: Routes = [
     path: "info-board/detail",
     component: InfoBoardEditComponent,
     data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.detail
+      breadcrumbs: brConfig.dte.infoBoard.detail
     },
     //canActivate: [PageGuard]
   },
