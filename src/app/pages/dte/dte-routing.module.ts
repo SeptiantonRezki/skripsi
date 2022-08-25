@@ -849,7 +849,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: 'info-board/edit/:id',
+    path: 'info-board/edit',
     component: InfoBoardEditComponent,
     data: {
       breadcrumbs: brConfig.dte.infoBoard.edit

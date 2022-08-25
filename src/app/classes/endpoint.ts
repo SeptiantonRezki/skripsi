@@ -1126,6 +1126,23 @@ export class Endpoint {
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/${context.id}`,
       },
+      info_board: {
+        get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery`,
+        detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/${context.lottery_id}`,
+        create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery`,
+        put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update/${context.lottery_id}`,
+        put_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-audience/${context.lottery_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/delete/${context.id}`,
+        show_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/show/${context.id}`,
+        check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/check-audience`,
+        save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-audience`,
+        update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-preview`,
+        download_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-winner/${context.id}`,
+        update_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-winner`,
+        update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-status`,
+        export_detail_coupon: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-coupon-detail/${context.id}`,
+        export_coupon: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-coupon/${context.id}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
