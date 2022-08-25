@@ -27,13 +27,10 @@ import { AudienceService } from 'app/services/dte/audience.service';
 export class InfoBoardCreateComponent implements OnInit {
   selectedTab: number = 0;
 
-  formUndian: FormGroup;
-  // formAudience: FormGroup;
-  // formPreview: FormGroup;
+  formBoard: FormGroup;
   onLoad: boolean;
   minDateStart = new Date();
   minDateEnd = new Date();
-  minDateAnnounce = new Date();
   groupTradePrograms: any[] = [];
   formFilter: FormGroup;
   formGeo: FormGroup;
@@ -64,6 +61,21 @@ export class InfoBoardCreateComponent implements OnInit {
   validComboDrag: boolean;
   imageConverted: any;
   preview_header: FormControl = new FormControl("");
+
+  infoBoard: any[] = 
+  [
+      { name: 'Ensure new order is processed within 6 hours (P0)', value: 'task-ensure-new-order-opt-p0' },
+      { name: 'Ensure process order is ready / sent within 24 hours (P0)', value: 'task-ensure-process-order-opt-p0' },
+      { name: 'Upload HMS products (P0)', value: 'task-upload-hms-product-sc-p0' },
+      { name: 'Upload Top Selling Products (P0)', value: 'task-upload-top-selling-sc-p0' },
+      { name: 'Upload NPL from HMS products (P0)', value: 'task-upload-npl-product-sc-p0' },
+      { name: 'Upload product image for SKU without image (P1)', value: 'task-upload-product-image-sku-sc-p1' },
+      { name: 'Revise wrong product data Name & Category (P1)', value: 'task-revise-wrong-product-sc-p1' },
+      { name: 'Revise wrong / unclear product image (P2)', value: 'task-revise-wrong-unclear-sc-p2' },
+  
+      { name: 'Create Reward Catalog (P1)', value: 'task-create-reward-catalog-plp-p1' },
+      { name: 'Create loyalty poin scheme (P1)', value: 'task-create-loyalty-poin-plp-p1' },
+  ]
 
   public audienceFixed: FormControl = new FormControl();
   public audiencePopulation: FormControl = new FormControl();
@@ -124,17 +136,14 @@ export class InfoBoardCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formUndian = this.formBuilder.group({
-      name: ["", Validators.required],
-      coin: ["", Validators.required],
-      group_trade_program: [""],
-      sub_group_trade_program: [""],
+    this.formBoard = this.formBuilder.group({
+      name_board: ["", Validators.required],
+      description_board: ["", Validators.required],
+      jenis_info_board: [""],
       start_date: [new Date()],
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-      announcement_date:  [new Date()],
-      announcement_time: ["00:00", Validators.required],
     })
 
     this.formGeo = this.formBuilder.group({
@@ -259,18 +268,18 @@ export class InfoBoardCreateComponent implements OnInit {
 
   submit(): void {
 
-    if (this.formUndian.valid) {
+    if (this.formBoard.valid) {
       let fd = new FormData();
 
       let body = {
-        name: this.formUndian.get('name').value,
-        coin: this.formUndian.get('coin').value,
-        // start_date: this.convertDate(this.formUndian.get('start_date').value),
-        // end_date: this.convertDate(this.formUndian.get('end_date').value),
-        // announcement_date: this.convertDate(this.formUndian.get('announcement_date').value),
-        start_date: `${moment(this.formUndian.get('start_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('start_time').value}:00`,
-        end_date: `${moment(this.formUndian.get('end_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('end_time').value}:00`,
-        announcement_date: `${moment(this.formUndian.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formUndian.get('announcement_time').value}:00`,
+        name: this.formBoard.get('name').value,
+        coin: this.formBoard.get('coin').value,
+        // start_date: this.convertDate(this.formBoard.get('start_date').value),
+        // end_date: this.convertDate(this.formBoard.get('end_date').value),
+        // announcement_date: this.convertDate(this.formBoard.get('announcement_date').value),
+        start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
+        end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
+        announcement_date: `${moment(this.formBoard.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('announcement_time').value}:00`,
       }
 
       fd.append('name', body.name);
@@ -278,9 +287,9 @@ export class InfoBoardCreateComponent implements OnInit {
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
       fd.append('announcement_date', body.announcement_date);
-      // fd.append('trade_creator_group_id[]', this.formUndian.get('group_trade_program').value);
+      // fd.append('trade_creator_group_id[]', this.formBoard.get('group_trade_program').value);
       fd.append('trade_creator_group_id[]', '0');
-      fd.append('trade_creator_sub_group_id[]', this.formUndian.get('sub_group_trade_program').value);
+      fd.append('trade_creator_sub_group_id[]', this.formBoard.get('sub_group_trade_program').value);
 
       this.infoBoardService.create(fd).subscribe(
         res => {
@@ -293,7 +302,7 @@ export class InfoBoardCreateComponent implements OnInit {
       )
     } else {
       this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-      commonFormValidator.validateAllFields(this.formUndian);
+      commonFormValidator.validateAllFields(this.formBoard);
     }
   }
 
@@ -666,11 +675,11 @@ export class InfoBoardCreateComponent implements OnInit {
           // this.list[this.parseArea(selection)] = res.data;
           this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
-          // if (this.detailFormUndian.hasOwnProperty('zones')) {
-          //   const zones = this.detailFormUndian.zones[0];
-          //   const detailZones = zones > 1 ? this.detailFormUndian.zones : [];
+          // if (this.detailformBoard.hasOwnProperty('zones')) {
+          //   const zones = this.detailformBoard.zones[0];
+          //   const detailZones = zones > 1 ? this.detailformBoard.zones : [];
           //   this.formFilter.get('zone').setValue(detailZones);
-          //   this.detailFormUndian.zone = true
+          //   this.detailformBoard.zone = true
           // }
         });
 
@@ -698,9 +707,9 @@ export class InfoBoardCreateComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
-              // if (this.detailFormUndian.hasOwnProperty('regions')) {
-              //   const regions = this.detailFormUndian.regions[0];
-              //   const detailRegions = regions > 1 ? this.detailFormUndian.regions : [];
+              // if (this.detailformBoard.hasOwnProperty('regions')) {
+              //   const regions = this.detailformBoard.regions[0];
+              //   const detailRegions = regions > 1 ? this.detailformBoard.regions : [];
               //   this.formFilter.get('region').setValue(detailRegions);
               // }
             });
@@ -733,9 +742,9 @@ export class InfoBoardCreateComponent implements OnInit {
               // this.list[selection] = res.data;
               this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
               // fd = null
-              // if (this.detailFormUndian.hasOwnProperty('areas')) {
-              //   const areas = this.detailFormUndian.areas[0];
-              //   const detailAreas = areas > 1 ? this.detailFormUndian.areas : [];
+              // if (this.detailformBoard.hasOwnProperty('areas')) {
+              //   const areas = this.detailformBoard.areas[0];
+              //   const detailAreas = areas > 1 ? this.detailformBoard.areas : [];
               //   this.formFilter.get('area').setValue(detailAreas);
               // }
             });
