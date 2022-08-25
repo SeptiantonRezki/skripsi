@@ -47,6 +47,7 @@ export class InfoBoardEditComponent implements OnInit {
   loadingArea = false;
   list: any;
   areaFromLogin;
+  isFreeText = false;
 
   // 2 geotree property
   endArea: String;
@@ -177,6 +178,26 @@ export class InfoBoardEditComponent implements OnInit {
     })
     this.onLoad = false;
 
+    this.getLevel('national');
+
+    this.setStorageDetail();
+
+    this.formBoard.get('jenis_info_board').valueChanges.subscribe(res => {
+      if (res === 'task-free-text') {
+        this.isFreeText = true;
+      } else {
+        this.isFreeText = false;
+      }
+    });
+
+    this.formGeo.get('division').valueChanges.subscribe(res => {
+      this.loadingRegion = true;
+      this.getLevel('division');
+    });
+    this.formGeo.get('region').valueChanges.subscribe(res => {
+      this.loadingArea = true;
+      this.getLevel('region');
+    });
     // this.formBoard.setValue({
     //   name_board: this.detailFormBoard.name,
     //   description_board: this.detailFormBoard.description,

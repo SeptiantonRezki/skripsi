@@ -189,7 +189,6 @@ export class InfoBoardCreateComponent implements OnInit {
     });
 
     this.getLevel('national');
-    this.initAreaV2();
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
       this.getLevel('division');
