@@ -71,8 +71,8 @@ export class CashierImportDialogComponent implements OnInit {
     this.dataService.showLoading(true);
     this.productCashierService.previewImport(fd).subscribe(
       (res) => {
-        this.rows = res.data.result;
-        this.rowsLength = res.data.result.length;
+        this.rows = res.result;
+        this.rowsLength = res.result.length;
         if (this.rows.reduce((s, i) => s + (i.flag === true ? 1 : 0), 0) === 0)
           this.isValid = true;
         this.dataService.showLoading(false);
