@@ -62,7 +62,7 @@ export class InfoBoardCreateComponent implements OnInit {
   imageConverted: any;
   preview_header: FormControl = new FormControl("");
 
-  infoBoard: any[] = 
+  infoBoard: any[] =
   [
       { name: 'Ensure new order is processed within 6 hours (P0)', value: 'task-ensure-new-order-opt-p0' },
       { name: 'Ensure process order is ready / sent within 24 hours (P0)', value: 'task-ensure-process-order-opt-p0' },
@@ -72,9 +72,9 @@ export class InfoBoardCreateComponent implements OnInit {
       { name: 'Upload product image for SKU without image (P1)', value: 'task-upload-product-image-sku-sc-p1' },
       { name: 'Revise wrong product data Name & Category (P1)', value: 'task-revise-wrong-product-sc-p1' },
       { name: 'Revise wrong / unclear product image (P2)', value: 'task-revise-wrong-unclear-sc-p2' },
-  
       { name: 'Create Reward Catalog (P1)', value: 'task-create-reward-catalog-plp-p1' },
       { name: 'Create loyalty poin scheme (P1)', value: 'task-create-loyalty-poin-plp-p1' },
+      { name: 'FREE TEXT', value: 'task-free-text' },
   ]
 
   public audienceFixed: FormControl = new FormControl();
@@ -132,7 +132,19 @@ export class InfoBoardCreateComponent implements OnInit {
     private dataService: DataService,
     private audienceService: AudienceService,
   ) {
-    this.onLoad = true
+    this.onLoad = true;
+
+    this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
+    this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+
+    this.list = {
+      zone: [],
+      region: [],
+      area: [],
+      salespoint: [],
+      district: [],
+      territory: []
+    };
   }
 
   ngOnInit() {
@@ -185,7 +197,6 @@ export class InfoBoardCreateComponent implements OnInit {
     this.getLevel('national');
     this.initAreaV2();
     this.formGeo.get('division').valueChanges.subscribe(res => {
-      alert('bisa');
       this.loadingRegion = true;
       this.getLevel('division');
     });
@@ -533,43 +544,46 @@ export class InfoBoardCreateComponent implements OnInit {
       this.formFilter.get('national').disable();
       lastLevelDisabled = 'national';
     }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            // console.log('ff value', this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
-
-              this.formFilter.get(this.parseArea(level.type)).disable();
+    if (areas.length > 0) {
+      areas.map((area, index) => {
+        area.map((level, i) => {
+          let level_desc = level.level_desc;
+          let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
+          if (lastDiffLevelIndex > levelIndex - 2) {
+            console.log('ini', this.list, level.type);
+            if (!this.list[level.type]) this.list[level.type] = [];
+            if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
+              this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
+              // console.log('ff value', this.formFilter.value);
+              // console.log(this.formFilter.controls[this.parseArea(level.type)]);
+              if (sameArea.level_desc === level.type) {
+                lastLevelDisabled = level.type;
+  
+                this.formFilter.get(this.parseArea(level.type)).disable();
+              }
+  
+              if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
+              // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
+              // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
             }
-
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
+  
+            let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
+            level['area_type'] = `area_${index + 1}`;
+            this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
+              ...this.list[this.parseArea(level.type)],
+              level
+            ];
+            // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
+            if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+  
+            if (i === area.length - 1) {
+              this.endArea = this.parseArea(level.type);
+              this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+            }
           }
-
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
-          level['area_type'] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
-            ...this.list[this.parseArea(level.type)],
-            level
-          ];
-          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-          }
-        }
+        });
       });
-    });
+    }
 
     // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
     // mutableAreas.areas.map((ar, i) => {
