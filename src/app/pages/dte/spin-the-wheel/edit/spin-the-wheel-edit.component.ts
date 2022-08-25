@@ -365,8 +365,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.getLevel('national');
     this.getTradePrograms();
 
-    this.initAreaV2();
-
     this.setStorageDetail();
 
     // *MEKANISME
@@ -608,65 +606,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   //   if (type === 'population-blast') this.isPopulation = true;
   //   else this.isPopulation = false
   // }
-
-  initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
-    this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
-    this.lastLevel = areasDisabled;
-    let lastLevelDisabled = null;
-    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
-
-    if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
-      this.formFilter.get('national').setValue(1);
-      this.formFilter.get('national').disable();
-      lastLevelDisabled = 'national';
-    }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            // console.log('ff value', this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
-
-              this.formFilter.get(this.parseArea(level.type)).disable();
-            }
-
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
-          }
-
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
-          level['area_type'] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
-            ...this.list[this.parseArea(level.type)],
-            level
-          ];
-          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-          }
-        }
-      });
-    });
-
-    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
-    // mutableAreas.areas.map((ar, i) => {
-    //   this.list[ar].splice(1, 1);
-    // });
-  }
 
   parseArea(type) {
     // return type === 'division' ? 'zone' : type;
