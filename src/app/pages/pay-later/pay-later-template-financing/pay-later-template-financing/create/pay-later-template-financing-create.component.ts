@@ -17,14 +17,21 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
   formTemplate: FormGroup;
   arr: FormArray;
   indexDelete: any;
+  dataType: any;
   public optionsGeneral: Object = Config.FROALA_CONFIG;
   public options: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Penjelasan");
   public optionsFaq: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Jawaban");
 
-  image_list: Array<any> = [];
-  imageSku: any;
+  // image_list: Array<any> = [];
+  imageUrl: any;
+  imageUrl2: any;
+  imageUrl3: any;
+  imageUrl4: any;
   files: File;
-  fileList: Array<File> = [];
+  files2: File;
+  files3: File;
+  files4: File;
+  // fileList: Array<File> = [];
   validComboDrag: Boolean;
 
   constructor(
@@ -39,12 +46,19 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
+
     this.formTemplate = this.formBuilder.group({
+      name: ["", Validators.required],
       information: ["", Validators.required],
       reason: this.formBuilder.array([this.createReasonFormArray()]),
       use: this.formBuilder.array([this.createUseFormArray()]),
       faq: this.formBuilder.array([this.createFaqFormArray()]),
       tips: this.formBuilder.array([this.createTipsFormArray()]),
+      banner_1: [],
+      banner_2: [],
+      banner_3: [],
+      banner_4: [],
     });
   }
 
@@ -60,12 +74,6 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
     this.arr.push(this.createReasonFormArray());
   }
 
-  deleteReason(idx) {
-    this.indexDelete = idx;
-    let reason = this.formTemplate.controls['reason'] as FormArray;
-    reason.removeAt(this.indexDelete);
-  }
-
   createUseFormArray(): FormGroup {
     return this.formBuilder.group({
       use_title: ["", Validators.required],
@@ -76,12 +84,6 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
   addUse() {
     this.arr = this.formTemplate.get('use') as FormArray;
     this.arr.push(this.createUseFormArray());
-  }
-
-  deleteUse(idx) {
-    this.indexDelete = idx;
-    let use = this.formTemplate.controls['use'] as FormArray;
-    use.removeAt(this.indexDelete);
   }
 
   createFaqFormArray() {
@@ -96,12 +98,6 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
     this.arr.push(this.createFaqFormArray());
   }
 
-  deleteFaq(idx) {
-    this.indexDelete = idx;
-    let faq = this.formTemplate.controls['faq'] as FormArray;
-    faq.removeAt(this.indexDelete);
-  }
-
   createTipsFormArray() {
     return this.formBuilder.group({
       tips_title: ["", Validators.required],
@@ -114,24 +110,17 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
     this.arr.push(this.createTipsFormArray());
   }
 
-  deleteTips(idx) {
+  deleteForm(idx: any, value: any) {
     this.indexDelete = idx;
-    let tips = this.formTemplate.controls['tips'] as FormArray;
-    tips.removeAt(this.indexDelete);
+    let form = this.formTemplate.controls[value] as FormArray;
+    form.removeAt(this.indexDelete);
   }
 
-  changeImage(evt) {
-    if (this.fileList && this.fileList.length >= 4) {
-      this.dialogService.openSnackBar({
-        message: "Gambar Banner maksimum 4"
-      });
-      evt = null;
-      return;
-    }
-    this.readThis(evt);
+  changeImage(evt: any, index: any) {
+    this.readThis(evt, index);
   }
 
-  readThis(inputValue: any): void {
+  readThis(inputValue: any, index: any): void {
     var file: File = inputValue;
     if (file.size > 2000000) {
       this.dialogService.openSnackBar({
@@ -139,49 +128,116 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
       });
       return;
     }
-
-    this.fileList = [
-      ...this.fileList,
-      file
-    ]
     var myReader: FileReader = new FileReader();
 
     myReader.onloadend = (e) => {
-      this.image_list = [...this.image_list, myReader.result];
+      if (index) {
+        if (index === '1') {
+          this.imageUrl = myReader.result;
+        }
+        if (index === '2') {
+          this.imageUrl2 = myReader.result;
+        }
+        if (index === '3') {
+          this.imageUrl3 = myReader.result;
+        }
+        if (index === '4') {
+          this.imageUrl4 = myReader.result;
+        }
+      }
     }
 
     myReader.readAsDataURL(file);
   }
 
-  removeImage(idx) {
-    this.image_list.splice(idx, 1);
-    this.fileList.splice(idx, 1);
+  removeImage(i: any): void {
+    if (i) {
+      if (i === '1') {
+        this.files = null;
+        this.imageUrl = null;
+      }
+      if (i === '2') {
+        this.files2 = null;
+        this.imageUrl2 = null;
+      }
+      if (i === '3') {
+        this.files3 = null;
+        this.imageUrl3 = null;
+      }
+      if (i === '4') {
+        this.files4 = null;
+        this.imageUrl4 = null;
+      }
+    }
   }
 
-  //PRODUCT CATALOGUE CREATE FUNCTION
-
   submit() {
-    if (this.formTemplate.valid && this.image_list.length > 0) {
-      this.dataService.showLoading(true);
-      let fd = new FormData();
-      fd.append('name', this.formTemplate.get('name').value);
-      fd.append('informasi_general', this.formTemplate.get('information').value);
-      fd.append('alasan_bergabung', this.formTemplate.get('reason').value);
-      fd.append('cara_penggunaan', this.formTemplate.get('use').value);
-      fd.append('faq', this.formTemplate.get('faq').value);
-      fd.append('tips_trick', this.formTemplate.get('tips').value);
-      fd.append('paylater_company_type_id', '0');
-      this.fileList.map(imgr => {
-        fd.append('banner_file[]', imgr);
-      });
+    if (this.formTemplate.valid) {
+      if (this.files || this.files2 || this.files3 || this.files4) {
+        this.dataService.showLoading(true);
+        if (this.files) {
+          this.files = new File([this.files], this.files.name.split(" ").join("_"), {type: this.files.type});
+        }
+        if (this.files2) {
+          this.files2 = new File([this.files2], this.files2.name.split(" ").join("_"), {type: this.files2.type});
+        }
+        if (this.files3) {
+          this.files3 = new File([this.files3], this.files3.name.split(" ").join("_"), {type: this.files3.type});
+        }
+        if (this.files4) {
+          this.files4 = new File([this.files4], this.files4.name.split(" ").join("_"), {type: this.files4.type});
+        }
 
-      this.PayLaterTemplateFinancingService.create(fd).subscribe(res => {
-        this.dataService.showLoading(false);
+        let fd = new FormData();
+        fd.append('name', this.formTemplate.get('name').value);
+        fd.append('informasi_general', this.formTemplate.get('information').value);
+        fd.append('alasan_bergabung', JSON.stringify(this.formTemplate.get('reason').value));
+        fd.append('cara_penggunaan', JSON.stringify(this.formTemplate.get('use').value));
+        fd.append('faq', JSON.stringify(this.formTemplate.get('faq').value));
+        fd.append('tips_trick', JSON.stringify(this.formTemplate.get('tips').value));
+        fd.append('paylater_company_type_id', this.dataType === "invoice-financing" ? "1" : this.dataType === "retailer-financing" ? "2" : this.dataType === "kur" ? "3" : "null");
+        if (!this.files) {
+          fd.append('banner_file1', this.files);
+          fd.append('banner_1', this.files);
+        } else {
+          fd.append('banner_file1', this.files);
+        }
+
+        if (!this.files2) {
+          fd.append('banner_file2', this.files2);
+          fd.append('banner_2', this.files2);
+        } else {
+          fd.append('banner_file2', this.files2);
+        }
+
+        if (!this.files3) {
+          fd.append('banner_file3', this.files3);
+          fd.append('banner_3', this.files3);
+        } else {
+          fd.append('banner_file3', this.files3);
+        }
+
+        if (!this.files4) {
+          fd.append('banner_file4', this.files4);
+          fd.append('banner_4', this.files4);
+        } else {
+          fd.append('banner_file4', this.files4);
+        }
+  
+        this.PayLaterTemplateFinancingService.create(fd).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.router.navigate(['paylater', 'template'], {queryParams:{type: this.dataType}});
+        })
+      } else {
         this.dialogService.openSnackBar({
-          message: this.ls.locale.notification.popup_notifikasi.text22
+          message: "Gambar harus diisi minimal 1!"
         });
-        this.router.navigate(['paylater', 'template']);
-      })
+  
+        commonFormValidator.validateAllFields(this.formTemplate);
+      }
     } else {
       this.dialogService.openSnackBar({
         message: "Silahkan lengkapi pengisian data!"

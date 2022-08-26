@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PayLaterTemplateFinancingService extends BaseService {
-  // namespace = "paylater_template_financing"
-  namespace = "distribution_list"
+  namespace = "paylater_template_financing"
   constructor(http: HttpClient) {
     super(http);
   }
@@ -23,9 +22,9 @@ export class PayLaterTemplateFinancingService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  update(body, context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'update', context);
-    return this.putApi(url, body);
+  update(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'update');
+    return this.postApi(url, body);
   }
 
   create(body): Observable<any> {
@@ -38,9 +37,9 @@ export class PayLaterTemplateFinancingService extends BaseService {
     return this.deleteApi(url);
   }
 
-  autocomplete(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "autocomplete");
-    return this.getApi(url, queryParams);
-  }
+  // autocomplete(queryParams?): Observable<any> {
+  //   const url = this.getUrl(this.namespace, "autocomplete");
+  //   return this.getApi(url, queryParams);
+  // }
 
 }

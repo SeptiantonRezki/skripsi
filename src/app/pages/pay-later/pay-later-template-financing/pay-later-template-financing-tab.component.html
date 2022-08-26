@@ -11,17 +11,17 @@
             <span>Invoice Financing</span>
             <span>(Kasbon)</span>
           </ng-template>
-          <app-pay-later-template-financing *ngIf="selectedTab === 0"></app-pay-later-template-financing>
+          <app-pay-later-template-financing *ngIf="selectedTab === 0" [dataType]="'invoice-financing'"></app-pay-later-template-financing>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
             <span>Retailer Financing</span>
             <span>(Modal Usaha)</span>
           </ng-template>
-          <app-pay-later-template-financing *ngIf="selectedTab === 1"></app-pay-later-template-financing>
+          <app-pay-later-template-financing *ngIf="selectedTab === 1" [dataType]="'retailer-financing'"></app-pay-later-template-financing>
         </mat-tab>
         <mat-tab label="KUR">
-          <app-pay-later-template-financing *ngIf="selectedTab === 2"></app-pay-later-template-financing>
+          <app-pay-later-template-financing *ngIf="selectedTab === 2" [dataType]="'kur'"></app-pay-later-template-financing>
         </mat-tab>
       </mat-tab-group>
     </div>
