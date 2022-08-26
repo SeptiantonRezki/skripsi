@@ -246,9 +246,9 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
         delete: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/${context.product_id}`,
         barcode: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku?search=${context.product_id}`,
-        export: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/export`,
-        import: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/import`,
-        preview_import: `${AYO_API_SERVICE(SERVER.productCashier)}/api/v1/cashier-product/${type_api}/default-product/preview-import`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/default-product/export`,
+        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/default-product/import`,
+        preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/default-product/preview-import`,
       },
       product_submission: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/coo/products/submissions`,

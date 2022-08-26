@@ -44,6 +44,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
     dialog: MatDialog,
     geotreeService: GeotreeService,
     ls: LanguagesService,
+    private _dataService: DataService,
     public _wholesalerService: WholesalerSpecialPriceService,
   ) {
     super(
@@ -117,7 +118,16 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
   async exportwholesaler() {
     const body = { business_id: this.businessId };
     const exportFileName = `Export_list_Wholesaler_special_price${new Date().toLocaleString()}.xls`;
-    super.exportwholesaler(body, exportFileName);
+    this._dataService.showLoading(true);
+    try {
+      const response = await this._wholesalerService.exportWholesalerNew(this.pagination, body).toPromise();
+      console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportFileName);
+      this._dataService.showLoading(false);
+    } catch (error) {
+      this.handleError(error);
+      this._dataService.showLoading(false);
+    }
   }
   import(): void {
     const dialogConfig = new MatDialogConfig();
@@ -135,7 +145,7 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
 
     this.dialogRef.afterClosed().subscribe(rows => {
       if (rows) {
-        this.mergeSelected(rows);
+        this.replaceSelected(rows);
         setTimeout(() => {
           this.getWholesalerList();
         }, 300);
@@ -146,6 +156,13 @@ export class WholesalerSpecialPriceComponent extends WholesalerIndexComponent {
 
   mergeSelected(rows) {
 
+    const selected = _.pluck(this.selected, 'id');
+    const filtered = rows.filter(row => !selected.includes(row.id));
+    this.selected = this.selected.concat(filtered);
+    this.onSelectWholesaler.emit(this.selected);
+  }
+  replaceSelected(rows) {
+    this.selected = [];
     const selected = _.pluck(this.selected, 'id');
     const filtered = rows.filter(row => !selected.includes(row.id));
     this.selected = this.selected.concat(filtered);
