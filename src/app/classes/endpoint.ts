@@ -766,7 +766,7 @@ export class Endpoint {
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/company/${context.company_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/company`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/company/${context.company_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/${context.company_id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/company/${context.company_id}`,
         update_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/company/update-status/${context.company_id}`,
         list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/group`,
       },
@@ -778,11 +778,11 @@ export class Endpoint {
         panel_companies: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/company/list`,
         export_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/export`,
         export_all_panel: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/list/export`,
-        store: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel`,
+        store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/${context.panel_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/${context.panel_id}`,
-        import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/import`,
-        preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/paylater/panel/preview-import`
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/${context.panel_id}`,
+        import: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/import`,
+        preview: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/preview-import`
       },
       paylater_deactivate: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation`,
@@ -790,11 +790,11 @@ export class Endpoint {
         approval: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation/${context.deactivation_id}`,
       },
       paylater_template_financing: {
-        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/template_financing`,
-        show: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/template_financing/${context.template_id}`,
-        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/template_financing`,
-        update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/template_financing/${context.template_id}`,
-        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/template_financing/${context.template_id}`
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
+        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing/${context.id}`,
+        create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
+        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
+        delete: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing/${context.id}`
       },
       sequencing: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./pay-later-template-financing.component.scss']
 })
 export class PayLaterTemplateFinancingComponent implements OnInit {
+  @Input() dataType: string;
   rows: any[];
   selected: any[];
   id: any[];
@@ -79,7 +80,7 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     const filterValue = value.toLowerCase();
     this.loadingIndicator = true;
     this.loadingSearch = true;
-    return this.PayLaterTemplateFinancingService.autocomplete({search: filterValue})
+    return this.PayLaterTemplateFinancingService.get({search: filterValue})
       .pipe(
         map(response => {
           this.loadingIndicator = false;
@@ -101,7 +102,7 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
 
     console.log(this.pagination);
 
-    this.PayLaterTemplateFinancingService.get(this.pagination).subscribe(res => {
+    this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -122,7 +123,7 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-    this.PayLaterTemplateFinancingService.get(this.pagination).subscribe(
+    this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -140,7 +141,7 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.PayLaterTemplateFinancingService.get(this.pagination).subscribe(res => {
+    this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -155,43 +156,25 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
 
     console.log("check pagination", this.pagination);
 
-    this.PayLaterTemplateFinancingService.get(this.pagination).subscribe(res => {
+    this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
-  addTemplate() {
-    // this.dataService.setToStorage("detail_paylater_template", param);
-    this.router.navigate(["paylater", "template", "create"]);
-
-    // this.loadingIndicator = true;
-    // this.loadingSearch = true;
-    // this.PayLaterTemplateFinancingService.create({user_id: this.templateControl.value.id}).subscribe(res => {
-      
-    //   this.loadingIndicator = false;
-    //   this.loadingSearch = false;
-    //   this.clear();
-    //   this.getList();
-    // }, err => {
-    //   this.loadingIndicator = false;
-    //   this.loadingSearch = false;
-    // });
-  }
-
   clear() {
     this.templateControl.setValue('');
   }
 
-  editTemplate(param?: any): void {
-    this.dataService.setToStorage("detail_paylater_template", param);
-    this.router.navigate(["paylater", "template", "edit"]);
+  addTemplate() {
+    // this.dataService.setToStorage("detail_paylater_template", param);
+    this.router.navigate(["paylater", "template", "create"], {queryParams:{type: this.dataType}});
   }
 
-  detailTemplate(param?: any): void {
+  editTemplate(param?: any): void {
     this.dataService.setToStorage("detail_paylater_template", param);
-    this.router.navigate(["paylater", "template", "detail"]);
+    this.router.navigate(["paylater", "template", "edit"], {queryParams:{type: this.dataType}});
   }
 
   deleteTemplate(id) {
