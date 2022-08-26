@@ -233,7 +233,7 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
         })
       } else {
         this.dialogService.openSnackBar({
-          message: "Gambar harus diisi!"
+          message: "Gambar harus diisi minimal 1!"
         });
   
         commonFormValidator.validateAllFields(this.formTemplate);

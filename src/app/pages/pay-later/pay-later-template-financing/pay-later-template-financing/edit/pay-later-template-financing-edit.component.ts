@@ -370,7 +370,7 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
           this.dataService.showLoading(false);
           commonFormValidator.validateAllFields(this.formTemplate);
           this.dialogService.openSnackBar({
-            message: "Gambar harus diisi!"
+            message: "Gambar harus diisi minimal 1!"
           })
       }
     } else {
