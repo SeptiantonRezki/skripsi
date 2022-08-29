@@ -9,6 +9,7 @@ import { DataService } from 'app/services/data.service';
 import { PayLaterTemplateFinancingService } from 'app/services/pay-later/pay-later-template-financing.service';
 import { PagesName } from 'app/classes/pages-name';
 import { Router } from '@angular/router';
+import { DialogService } from 'app/services/dialog.service';
 
 @Component({
   selector: 'app-pay-later-template-financing',
@@ -49,7 +50,8 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     private payLaterPanelServicer: PayLaterPanelService,
     private dataService: DataService,
     private PayLaterTemplateFinancingService: PayLaterTemplateFinancingService,
-  ) {
+    private dialogService: DialogService,
+    ) {
     this.onLoad = true;
     // this.permission = this.roles.getRoles('principal.paylater_distribution');
 
@@ -178,23 +180,28 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
   }
 
   deleteTemplate(id) {
-    this.loadingIndicator = true;
-    this.loadingSearch = true;
-    this.onDeleting = id;
-    this.PayLaterTemplateFinancingService.delete({id}).subscribe(res => {
-        
-      this.loadingIndicator = false;
-      this.loadingSearch = false;
-      this.onDeleting = null;
-      this.getList();
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Template",
+      captionDialog: "Apakah anda yakin untuk menghapus template ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
 
-    }, err => {
-      
-      this.loadingIndicator = false;
-      this.loadingSearch = false;
-      this.onDeleting = null;
-      
-    })
+  confirmDelete() {
+    this.PayLaterTemplateFinancingService.delete({id: this.id}).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getList();
+
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
+    },
+    err => {
+      this.dialogService.openSnackBar({ message: err.error.message });
+    });
   }
 
 }
