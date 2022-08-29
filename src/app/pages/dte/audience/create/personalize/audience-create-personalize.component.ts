@@ -100,7 +100,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
   exportTemplate: Boolean;
   allRowsSelected: boolean;
   isChecked: boolean = false;
-  data_imported: any = [];
+  data_imported: any = {};
   pageName = this.translate.instant('dte.audience.audience_personalize');
   titleParam = {entity: this.pageName};
 
@@ -972,7 +972,8 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
           est_task_compliance: this.formAudience.get("est_task_compliance").value,
           audience_filter: audience_filter,
           
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         }
       }
 
@@ -1021,7 +1022,11 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
+    dialogConfig.data = {
+      IMPORT_TYPE: 'AUDIENCE',
+      IMPORT_FROM_METHOD: 'CREATE',
+      pagination: this.pagination,
+    };
 
     this.dialogRef = this.dialog.open(
       ImportAudiencePersonalizeComponent,
@@ -1043,7 +1048,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.audienceService.exportExcelPerso(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -1084,7 +1089,7 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
           };
         }
       } else {
-        if (!this.data_imported.length) {
+        if (!this.data_imported.preview_id || !this.data_imported.preview_task_id) {
           this.dialogService.openSnackBar({
             message: this.translate.instant('global.label.please_import_file'),
           });
@@ -1094,7 +1099,8 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
         body = {
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
           audience_filter: audience_filter,
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         }
       }
   

@@ -88,266 +88,83 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     if(data.IMPORT_TYPE === 'AUDIENCE') {
 
       if (!this.ENABLE_IMPORT_IF.includes(data.import_audience_status) && data.import_audience_status_type === 'preview') {
-
         this.requestingPreview = true;
-
       } else {
-
         this.getPreview();
-
       }
       if(!this.ENABLE_IMPORT_IF.includes(data.import_audience_status) && data.import_audience_status_type === 'import') {
-        
         this.requestingImport = true;
-
       } else {
-        
         this.requestingImport = false;
-
       }
 
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  preview(event) {
+  requestPreview(event) {
     this.files = undefined;
     this.files = event;
+    
+    if (this.requestingPreview) {
+      this.dialogService.openSnackBar({ message: this.translate.instant('dte.approval_coin_adjustment.request_preview_onprogress') });
+      return;
+    }
 
     let fd = new FormData();
     this.idbService.reset();
     fd.append('file', this.files);
+    
     this.dataService.showLoading(true);
-    this.audienceService.importExcel(fd).subscribe(
-      res => {
-        if (res && res.data) {
-          this.dataService.showLoading(false);
-          this.pagination['per_page'] = 1000;
-          this.audienceService.showImport(this.pagination).subscribe(response => {
-            // console.log('satu', this.pagination);
-            const {data} = response.data;
-            this.allData = [...data];
-            this.invalidData = this.allData.some(item => item.is_valid === false);
-            this.validData = data.filter(item => item.is_valid === true);
+    
+    this.audienceService.requestPreviewImportPerso(fd).subscribe((res) => {
 
-            // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
-            data.map((item, idx) => {
-              if (item.id === '') {
-                data[idx].id = 'error'+this.numError;
-                this.numError += 1;
-              } 
-            });
+      if(this.detailData.IMPORT_FROM_METHOD && this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
 
-            this.currPage += 1;
-            this.lastPage = response.data.last_page;
-            this.totalData = response.data.total;
-
-            this.idbService.bulkUpdate(data).then(res => {
-              this.recursiveImport();
-            }, err => {
-              this.dialogService.openSnackBar({
-                message: this.translate.instant('global.label.failed_import')
-              })
-              this.dialogRef.close([]);
-            })
-          }, err => {
-            console.log('error show import', err);
-            this.dataService.showLoading(false);
-            this.files = undefined;
-
-            if (err.status === 404 || err.status === 500)
-              this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
-          })
-        } else {
-          this.dataService.showLoading(false);
-          this.files = undefined;
-          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
-        }
-      },
-      err => {
-        this.dataService.showLoading(false);
-        this.files = undefined;
-
-        if (err.status === 404 || err.status === 500)
-          this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text16') })
-      }
-    );
-  };
-  
-  recursiveImport() {
-    if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
-        // console.log('dua');
-        if (response && response.data) {
-          const {data} = response.data;
-          this.allData = [...this.allData, ...data];
-          if (!this.invalidData) {
-            this.invalidData = this.allData.some(item => item.is_valid === false);
-          }
-
-          const newData = data.filter(item => item.is_valid === true);
-          this.validData = [...this.validData, ...newData];
-          
-          // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
-          data.map((item, idx) => {
-            if (item.id === '') {
-              data[idx].id = 'error'+this.numError;
-              this.numError += 1;
-            } 
-          })
-
-          this.idbService.bulkUpdate(data).then(res => {
-            this.currPage += 1;
-            this.lastPage = response.data.last_page;
-            this.recursiveImport();
-          }, err => {
-            this.dialogService.openSnackBar({
-              message: this.translate.instant('global.label.failed_import')
-            })
-            this.dialogRef.close([]);
-          })
-        } else {
-          this.dialogService.openSnackBar({
-            message: this.translate.instant('global.label.failed_import')
-          })
-          this.dialogRef.close([]);
-        }
-      }, err => {
-        console.log('error show import', err);
-        this.trials.push(this.currPage);
-        this.dataService.showLoading(false);
-        this.files = undefined;
-      });
-    } else {
-      if (this.trials.length > 0) {
-        this.trialImport().subscribe(results => {
-          let bowls = [];
-          results.map(result => {
-            if (result && result.data && result.data.data) {
-              bowls = [
-                ...bowls,
-                result.data.data
-              ]
-            }
-          });
-
-          this.idbService.bulkUpdate(bowls).then(resUpdate => {
-            this.pagination['per_page'] = 15;
-            this.idbService.paginate(this.pagination).then(resPaginate => {
-              this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
-              Page.renderPagination(this.pagination, this.p_pagination);
-              this.rows = resPaginate && resPaginate[0] ? resPaginate[0] : [];
-              this.dataService.showLoading(false);
-            })
-          }, err => {
-            this.dialogService.openSnackBar({
-              message: this.translate.instant('global.messages.failed_partial_import_at') + this.trials.join(",")
-            })
-            this.dialogRef.close([]);
-          })
-        }, err => {
-          this.dialogService.openSnackBar({
-            message: this.translate.instant('global.messages.failed_partial_import_at') + this.trials.join(",")
-          })
-          this.dialogRef.close([]);
+        this.dataService.setToStorage('create_audience_import_status', {
+          import_audience_status: "running",
+          import_audience_status_type: "preview"
         });
-      } else {
-        if (this.invalidData) {
-          this.dialogService.openSnackBar({
-            message: this.translate.instant('global.label.invalid_data_double_check')
-          });
-        }
-        
-        this.pagination['per_page'] = 15;
-        this.idbService.paginate(this.pagination)
-          .then(res => {
-            this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
-            Page.renderPagination(this.pagination, this.p_pagination);
-            this.rows = res && res[0] ? res[0] : [];
-            this.dataService.showLoading(false);
-          })
-          .then(() => this.setPage({offset: 0}));
+
       }
-    }
-  }
-
-  submit() {
-    const {IMPORT_TYPE, min, max, trade_scheduler_id, type, audience_type} = this.detailData;
-    if(IMPORT_TYPE === 'AUDIENCE') {
-      const {is_valid, preview_id, preview_task_id} = this.previewData;
-
-      if(is_valid && preview_id && preview_task_id) {
-        this.audienceService.requestImportExcel({
-          preview_id,
-          preview_task_id,
-          min, max,
-          trade_scheduler_id, type,
-          audience_type
-        }).subscribe(res => {
-          this.setRequesting('import')
-          this.dialogRef.close({...this.previewData});
-        })
-      } else {
-        this.dialogService.openSnackBar({ message: this.translate.instant('global.label.invalid_data') });
-      }
-    }
-    else {
-      if (this.totalData > 0) {
-        this.dialogRef.close(this.validData);
-      } else {
-        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
-      }
-    }
-  }
-
-  trialImport() {
-    let trialsRes = [];
-    this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial, per_page: this.pagination['per_page'] });
-      // console.log('tiga');
-      trialsRes.push(response);
-    })
-
-    return forkJoin(trialsRes);
-  }
-
-  onPageChange(pageInfo) {
-    const {IMPORT_TYPE} = this.detailData;
-    if(IMPORT_TYPE === 'AUDIENCE') {
-      this.setPageFromServer(pageInfo)
-    } else {
-      this.setPage(pageInfo);
-    }
-  }
-
-  setPage(pageInfo) {
-    this.dataService.showLoading(true);
-    this.offsetPagination = pageInfo.offset;
-    this.p_pagination['page'] = pageInfo.offset + 1;
-
-    this.idbService.paginate(this.p_pagination).then(res => {
-      this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
-      Page.renderPagination(this.pagination, this.p_pagination);
-      this.rows = res && res[0] ? res[0] : [];
+      
+      this.setRequesting('preview');
       this.dataService.showLoading(false);
-    });
-  }
 
-  setPageFromServer({offset}) {
-    this.dataService.showLoading(true);
-    const {trade_audience_group_id} = this.detailData;
-    this.offsetPagination = offset;
-    this.pagination.page = offset + 1;
-    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
-      this.setPreview(data);
     }, err => {
 
       this.dataService.showLoading(false);
 
     })
+  }
 
+  submit() {
+    const {is_valid, preview_id, preview_task_id} = this.previewData;
+
+    if(is_valid && preview_id && preview_task_id) {
+      this.setRequesting('import');
+      this.dialogRef.close({...this.previewData});
+    } else {
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.invalid_data') });
+    }
+  }
+
+  onPageChange(pageInfo) {
+    this.setPageFromServer(pageInfo)
+  }
+
+  setPageFromServer({offset}) {
+    this.dataService.showLoading(true);
+    
+    this.offsetPagination = offset;
+    this.pagination.page = offset + 1;
+
+    this.audienceService.showPreviewImportPerso(this.pagination).subscribe(({data}) => {
+      this.setPreview(data);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
   getPreview() {
@@ -356,17 +173,18 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImportPerso(this.pagination).subscribe(({data}) => {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);
+      this.dialogService.openSnackBar(err.error);
     });
     
   }
   setPreview(data) {
     this.lastPage = data.data.last_page;
     this.totalData = data.data.total;
-    this.rows = (data.data.data || []).map(item => item.preview);
+    this.rows = data.data.data;
     this.previewData = {
       is_valid: data.is_valid,
       preview_id: data.preview_id,
@@ -385,14 +203,18 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     }
 
     if(reqType === 'import') {
-      
       this.importing = true;
-
     } else {
-
       this.requestingPreview = true;
-
     }
+
+    if(this.detailData.IMPORT_FROM_METHOD && this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
+      this.dataService.setToStorage('create_audience_import_status', {
+        import_audience_status: "running",
+        import_audience_status_type: reqType,
+      });
+    }
+
     const newDetailAudience = {
       ...this.dataService.getFromStorage('detail_audience'),
       ...newStatus
@@ -402,7 +224,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
 
   getRowClass = (row) => {
     return {
-      'row-invalid': row.is_valid === false,
+      'row-invalid': row.validated === 0,
     };
   }
 }
