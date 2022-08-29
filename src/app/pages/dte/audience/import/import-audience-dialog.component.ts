@@ -394,6 +394,7 @@ export class ImportAudienceDialogComponent {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);
+      this.dialogService.openSnackBar(err.error);
     });
   }
   setPreview(data) {
@@ -449,6 +450,12 @@ export class ImportAudienceDialogComponent {
     }
     this.dataService.setToStorage('detail_audience', newDetailAudience);
 
+  }
+
+  getRowClass = (row) => {
+    return {
+      'row-invalid': row.validated === 0,
+    };
   }
 
 }

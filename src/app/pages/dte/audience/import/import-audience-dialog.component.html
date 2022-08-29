@@ -42,7 +42,7 @@
     </div>
 
     <div class="responsive" *ngIf="!requestingPreview">
-      <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
         [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
         [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">

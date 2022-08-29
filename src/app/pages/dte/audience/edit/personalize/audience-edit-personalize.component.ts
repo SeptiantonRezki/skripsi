@@ -104,7 +104,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   detailAudience: any;
   isDetail: boolean;
   isChecked: boolean = false;
-  data_imported: any = [];
+  data_imported: any = {};
   initDetailGeoTree: any = {
     zone: false,
     region: false,
@@ -1007,7 +1007,8 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           est_task_compliance: this.formAudience.get("est_task_compliance").value,
           audience_filter: audience_filter,
 
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         }
       }
 
@@ -1052,11 +1053,20 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
   importAudience() {
     const dialogConfig = new MatDialogConfig();
+    const {
+      import_audience_status,
+      import_audience_status_type,
+    } = this.detailAudience;
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
+    dialogConfig.data = {
+      IMPORT_TYPE: 'AUDIENCE',
+      pagination: this.pagination,
+      import_audience_status,
+      import_audience_status_type,
+    };
 
     this.dialogRef = this.dialog.open(
       ImportAudiencePersonalizeComponent,
@@ -1078,7 +1088,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.audienceService.exportExcelPerso(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -1140,7 +1150,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           };
         }
       } else {
-        if (!this.data_imported.length) {
+        if (!this.data_imported.preview_id || !this.data_imported.preview_task_id) {
           this.dialogService.openSnackBar({
             message: this.translate.instant('global.label.please_import_file'),
           });
@@ -1150,7 +1160,8 @@ export class AudienceEditPersonalizeComponent implements OnInit {
         body = {
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
           audience_filter: audience_filter,
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         };
       }
 
