@@ -79,6 +79,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
         if (event.data.length > 0) {
           this.mitraSelected = event.data;
           this.loaded = true;
+          this.dataType = this.router.routerState.root.queryParams['value'].type;
           this.aturPanelMitra();
         } else {
           this.mitraSelected = [];
