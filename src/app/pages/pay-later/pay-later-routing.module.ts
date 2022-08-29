@@ -105,7 +105,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "template",
+    path: "template_financing",
     component: PayLaterTemplateFinancingTabComponent,
     data: {
       breadcrumbs: brConfig.paylater.templatefinancing.index
@@ -113,7 +113,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "template/create",
+    path: "template_financing/create",
     component: PayLaterTemplateFinancingCreateComponent,
     data: {
       breadcrumbs: brConfig.paylater.templatefinancing.create
@@ -121,7 +121,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "template/edit",
+    path: "template_financing/edit",
     component: PayLaterTemplateFinancingEditComponent,
     data: {
       breadcrumbs: brConfig.paylater.templatefinancing.edit

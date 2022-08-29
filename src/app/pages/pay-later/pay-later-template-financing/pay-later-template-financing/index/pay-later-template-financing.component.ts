@@ -51,9 +51,9 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     private dataService: DataService,
     private PayLaterTemplateFinancingService: PayLaterTemplateFinancingService,
     private dialogService: DialogService,
-    ) {
+  ) {
     this.onLoad = true;
-    // this.permission = this.roles.getRoles('principal.paylater_distribution');
+    this.permission = this.roles.getRoles('principal.template_financing');
 
     this.getOptionText = this.getOptionText.bind(this);
     this.templateControl.valueChanges.debounceTime(400).subscribe(val => {
@@ -98,11 +98,16 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -140,8 +145,15 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page");
+    }
 
     this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -156,7 +168,9 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page", this.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
 
     this.PayLaterTemplateFinancingService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -171,12 +185,12 @@ export class PayLaterTemplateFinancingComponent implements OnInit {
 
   addTemplate() {
     // this.dataService.setToStorage("detail_paylater_template", param);
-    this.router.navigate(["paylater", "template", "create"], {queryParams:{type: this.dataType}});
+    this.router.navigate(["paylater", "template_financing", "create"], {queryParams:{type: this.dataType}});
   }
 
   editTemplate(param?: any): void {
     this.dataService.setToStorage("detail_paylater_template", param);
-    this.router.navigate(["paylater", "template", "edit"], {queryParams:{type: this.dataType}});
+    this.router.navigate(["paylater", "template_financing", "edit"], {queryParams:{type: this.dataType}});
   }
 
   deleteTemplate(id) {

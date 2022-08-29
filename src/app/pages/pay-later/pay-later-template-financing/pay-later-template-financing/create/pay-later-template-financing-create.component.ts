@@ -229,7 +229,7 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
           this.dialogService.openSnackBar({
             message: this.ls.locale.notification.popup_notifikasi.text22
           });
-          this.router.navigate(['paylater', 'template'], {queryParams:{type: this.dataType}});
+          this.router.navigate(['paylater', 'template_financing'], {queryParams:{type: this.dataType}});
         })
       } else {
         this.dialogService.openSnackBar({
