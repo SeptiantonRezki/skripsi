@@ -339,14 +339,10 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = offset;
     this.pagination.page = offset + 1;
-    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
-      
+    this.audienceService.showPreviewImportNew(this.pagination).subscribe(({data}) => {
       this.setPreview(data);
-
     }, err => {
-
       this.dataService.showLoading(false);
-
     })
 
   }
@@ -359,24 +355,17 @@ export class ImportAudienceDialogComponent {
       const {is_valid, preview_id, preview_task_id} = this.previewData;
 
       if(is_valid && preview_id && preview_task_id) {
+        const formData = new FormData();
+        formData.append("type", type)
+        formData.append("preview_id", preview_id)
+        formData.append("preview_task_id", preview_task_id)
+        formData.append("audience_type", audience_type)
+        formData.append("trade_creator_id", trade_creator_id)
         
-        this.audienceService.requestImportExcel({
-          preview_id,
-          preview_task_id,
-          min, max,
-          trade_scheduler_id: (trade_scheduler_id) ? trade_scheduler_id : this.previewData.trade_scheduler_id,
-          type,
-          audience_type,
-          trade_creator_id,
-          is_create
-        }).subscribe(res => {
-
+        this.audienceService.requestImportExcel(formData).subscribe(res => {
           this.setRequesting('import');
-
           window.localStorage.setItem('isImport', 'true');
-          
           this.dialogRef.close({...this.previewData});
-
         })
 
       } else {
@@ -384,8 +373,6 @@ export class ImportAudienceDialogComponent {
         this.dialogService.openSnackBar({ message: this.translate.instant('global.label.invalid_data') });
 
       }
-
-
     }
 
     else {
@@ -404,20 +391,17 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
-      
+    this.audienceService.showPreviewImportNew(this.pagination).subscribe(({data}) => {
       this.setPreview(data);
-
-
     }, err => {
       this.dataService.showLoading(false);
+      this.dialogService.openSnackBar(err.error);
     });
-    
   }
   setPreview(data) {
     this.lastPage = data.data.last_page;
     this.totalData = data.data.total;
-    this.rows = (data.data.data || []).map(item => item.preview);
+    this.rows = data.data.data;
     this.previewData = {
       is_valid: data.is_valid,
       preview_id: data.preview_id,
@@ -437,7 +421,6 @@ export class ImportAudienceDialogComponent {
   }
 
   setRequesting(reqType) {
-
     const newStatus = {
       import_audience_status: 'request',
       import_audience_status_type: reqType
@@ -468,6 +451,12 @@ export class ImportAudienceDialogComponent {
     }
     this.dataService.setToStorage('detail_audience', newDetailAudience);
 
+  }
+
+  getRowClass = (row) => {
+    return {
+      'row-invalid': row.validated === 0,
+    };
   }
 
 }
