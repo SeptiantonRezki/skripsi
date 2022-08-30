@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
-import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from "@angular/forms";
 import { Subject, ReplaySubject } from "rxjs";
 import moment from 'moment';
 import { takeUntil } from 'rxjs/operators';
@@ -26,6 +26,8 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
   non_coin_reward: FormControl = new FormControl(false);
   isRewardError: boolean = false;
   auto_submit: FormControl = new FormControl(false);
+  mission_reblast: FormControl = new FormControl(false);
+  rejected_list = [];
 
   missions: any[];
   minDate: any;
@@ -69,6 +71,8 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       auto_submit: this.auto_submit,
       xp_submission: null,
       xp_verification: null,
+      mission_reblast: this.mission_reblast,
+      verification_notes: this.formBuilder.array([]),
     });
 
     this.filterMission.valueChanges
@@ -95,6 +99,8 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       });
 
     if (this.data !== null) {
+      const { attribute } = this.data.data;
+
       this.form.patchValue({
         task_template_id: this.data.data.attribute.task_template_id,
         task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
@@ -150,6 +156,15 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       } else if (parseInt(this.data.data.attribute.non_coin_reward) === 1) {
         this.form.get('non_coin_reward').patchValue(true);
       }
+
+      this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
+      
+      if (attribute.verification_notes && attribute.verification_notes.length) {
+        const verif_notes = this.form.get('verification_notes') as FormArray;
+        attribute.verification_notes.forEach(verif => {
+          verif_notes.push(this.formBuilder.group({ reason: [verif.reason, Validators.required], detail: verif.detail }));
+        })
+      }
     }
   }
 
@@ -177,7 +192,14 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     // this.filterMissionOther.setValue(e.value);
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
-    // console.log(this.missions[theIndex]);
+    
+    const verif_notes = this.form.get("verification_notes") as FormArray;
+    this.rejected_list = this.missions[theIndex].rejected_reason_choices;
+    this.form.get('mission_reblast').setValue(false);
+    while (verif_notes.value.length > 0) {
+      verif_notes.removeAt(verif_notes.value.length - 1);
+    }
+
     this.form.patchValue({
       is_ir_template: this.missions[theIndex].is_ir_template
     });
@@ -342,6 +364,10 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
           this.filteredMissionOther.next(this.missions.slice());
           this.checkTaskTemplate();
           this.form.get("task_template_other_name_id").disable();
+
+          const task_template = this.form.get("task_template_id").value;
+          const index = this.missions.findIndex(mission => mission.id === task_template);
+          if (task_template) this.rejected_list = this.missions[index].rejected_reason_choices;
         },
         (err) => {
           console.log("err ", err);
@@ -354,6 +380,10 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
           this.filteredMission.next(this.missions.slice());
           this.filteredMissionOther.next(this.missions.slice());
           this.checkTaskTemplate();
+
+          const task_template = this.form.get("task_template_id").value;
+          const index = this.missions.findIndex(mission => mission.id === task_template);
+          if (task_template) this.rejected_list = this.missions[index].rejected_reason_choices;
         },
         (err) => {
           console.log("err ", err);
@@ -421,6 +451,40 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     this.isRewardError = event.target.value.length ? false : true;
   }
 
+  handleVerificationNotes(reblast){
+    if (reblast) {
+      const verif_notes = this.form.get("verification_notes") as FormArray;
+
+      if (!verif_notes.length) {
+        this.rejected_list.forEach(rejected => {
+          verif_notes.push(this.formBuilder.group({ reason: [rejected, Validators.required], detail: [""] }))
+        })
+      }
+    }
+  }
+
+  addVerifNotes(){
+    const verif_notes = this.form.get('verification_notes') as FormArray;
+    let available = [];
+    this.rejected_list.forEach(rejected => {
+      if (!verif_notes.value.some(verif => verif.reason === rejected)) {
+        available.push(rejected);
+      }
+    });
+
+    verif_notes.push(this.formBuilder.group({ reason: [available[0], Validators.required], detail: [""] }))
+  }
+
+  deleteVerifNotes(index){
+    const verif_notes = this.form.get("verification_notes") as FormArray;
+    verif_notes.removeAt(index);
+  }
+
+  checkReason(item){
+    const verif_notes = this.form.get("verification_notes").value;
+    return verif_notes.some(verif => verif.reason === item);
+  }
+
   submit(form: any) {
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
@@ -445,6 +509,9 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     );
     form.get('auto_submit').patchValue(
       (form.value.auto_submit === true) ? 1 : 0
+    );
+    form.get('mission_reblast').patchValue(
+      (form.value.mission_reblast === true) ? "active" : "inactive"
     );
     form.get('non_coin_reward').patchValue(
       (form.value.non_coin_reward === true) ? 1 : 0

@@ -811,6 +811,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   addAdditional(idx) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx).get('additional') as FormArray;
+    const type = questions.at(idx).get('type').value;
 
     let rawAddt = questions.at(idx).get('additional').value;
     let rawType = questions.at(idx).get('type').value;
@@ -829,8 +830,9 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       additional.removeAt(idxOther);
     }
 
-
-    this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+    if (type !== "checkbox") {
+      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+    }
     additional.push(this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next_question: '' }));
 
     if (rawType.includes("radio_")) {
@@ -960,7 +962,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
 
     if (additional.length === 0 && this.checkIsRadioType(type) || additional.length === 0 && type == 'checkbox') {
       additional.push(this.createAdditional());
-      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length + 1}), next: '', isBranching: false });
+      this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false });
     }
 
     if (type.includes("radio_")) {
@@ -973,6 +975,15 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       }
 
       if (idxOther === -1) {
+        const possibilitiesLength = this.allQuestionList[idx]['possibilities'].length;
+        if(additional.length !== possibilitiesLength) {
+          const max = additional.length - possibilitiesLength;
+
+          for (let index = 0; index < max; index++) {
+            this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: index + 2}), next: '', isBranching: false });
+          }
+        }
+
         additional.push(this.formBuilder.group({ option: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
         this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
       } else {
@@ -991,12 +1002,26 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       let idxOtherInPossibilities = this.allQuestionList[idx]['possibilities'].findIndex(psb => psb.key.includes(this.translate.instant('dte.template_tugas.other_explain')));
       if (idxOther > -1) additional.removeAt(idxOther);
       if (idxOtherInPossibilities > -1) this.allQuestionList[idx]['possibilities'].splice(idxOtherInPossibilities, 1);
+
+      const possibilitiesLength = this.allQuestionList[idx]['possibilities'].length;
+      if(additional.length !== possibilitiesLength) {
+        const max = additional.length - possibilitiesLength;
+
+        for (let index = 0; index < max; index++) {
+          this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: index + 2}), next: '', isBranching: false });
+        }
+      }
     }
 
-    if (additional.length > 0 && !this.checkIsRadioType(type) && type !== 'checkbox') {
+    if (additional.length > 0 && !this.checkIsRadioType(type)) {
       while (additional.length > 0) {
         additional.removeAt(additional.length - 1);
       }
+    }
+
+    if (additional.length === 0) {
+      additional.push(this.createAdditional());
+      this.allQuestionList[idx]['possibilities'] = [{ key: this.translate.instant('global.label.opsi_index', {index: additional.length}), next: '', isBranching: false }];
     }
 
     questions.at(idx).get('typeSelection').setValue(typeSelection);
@@ -1251,6 +1276,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
   deleteAdditional(idx1?, idx2?, selectionValue?): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let additional = questions.at(idx1).get('additional') as FormArray;
+    const type = questions.at(idx1).get('type').value;
 
     if (this.frmQuiz.value === 'quiz') {
       let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
@@ -1282,7 +1308,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       }
     }
 
-    this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
+    if (type !== "checkbox") this.allQuestionList[idx1]['possibilities'].splice(idx2, 1);
     additional.removeAt(idx2);
     this.findQuestionsHasNext();
   }
@@ -1482,12 +1508,16 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       return 'check_box_outline_blank';
     }
   }
-  
+
   html2text(text) {
     var tag = document.createElement('div');
     tag.innerHTML = text;
     
     return tag.textContent;
+  }
+
+  removeStrongTag(text) {
+    return text.replace(/<strong>|<\/strong>/gi, "")
   }
   
   async submit() {
@@ -1503,13 +1533,26 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       let children: any[] = this.templateTaskForm.get('children').value;
 
       questions.map((item, index) => {
-        questions[index].question = this.html2text(item.question);
+        questions[index].question = this.removeStrongTag(item.question);
       });
 
       children.map((child, index) => {
         children[index].name = this.html2text(child.name);
-        children[index].description = this.html2text(child.description);
+        children[index].description = this.removeStrongTag(child.description);
       });
+
+      if (this.frmIsBranching.value) {
+        let hasEmptyNext = false;
+        this.allQuestionList.forEach((list) => {
+          if (list.possibilities.some(pos => !pos.next)) hasEmptyNext = true;
+        })
+
+        if (hasEmptyNext) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
 
       let questionsIsEmpty = [];
       let body = {
@@ -1576,7 +1619,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
             required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
-            possibilities: (this.frmIsBranching.value && this.checkIsRadioType(item.type)) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
+            possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
@@ -1625,7 +1668,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
                 return tmpung;
               }
             }),
-            additional: this.checkIsRadioType(item.type) || item.type === 'checkbox' ? item.additional.map(item => item.option) : (item.type === 'stock_check' ? ["Ada", "Tidak Ada"] : []),
+            additional: item.type !== 'stock_check' ? item.additional.map(item => item.option) : ["Ada", "Tidak Ada"],
             stock_check_data: item.type === 'stock_check' ? ({
               sku_id: this.listProductSelected[index].sku_id,
               name: this.listProductSelected[index].name,

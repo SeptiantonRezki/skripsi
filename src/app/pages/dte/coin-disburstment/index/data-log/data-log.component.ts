@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -34,6 +34,7 @@ export class DataLogComponent implements OnInit {
   id: any;
   dialogRef: any;
   @ViewChild('downloadDataLog') downloadDataLog: ElementRef;
+  @Input() isTabActive: any;
 
   constructor(
     private dialogService: DialogService,
@@ -64,6 +65,14 @@ export class DataLogComponent implements OnInit {
     this.getCoinDisburstment()
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    if (this.isTabActive === 1) {
+      setTimeout(() => {
+        this.addObjectToTable();
+      }, 500);
+    }
+  }
+
   getCoinDisburstment() {
     const page = this.dataService.getFromStorage('page');
     const sort_type = this.dataService.getFromStorage('sort_type');
@@ -77,8 +86,6 @@ export class DataLogComponent implements OnInit {
 
     this.coinDisburstmentService.getDataLog(this.pagination).subscribe(
       res => {
-        console.log('res', res);
-        
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
         this.onLoad = false;
@@ -198,6 +205,26 @@ export class DataLogComponent implements OnInit {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar(error);
       throw error;
+    }
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    const table = document.getElementById("tableDatalog");
+
+    let header = table.querySelectorAll("datatable-header-cell");
+    for (let indexHeader = 0; indexHeader < header.length; indexHeader++) {
+      header[indexHeader].id = 'data-header';
+    }
+
+    let rows = table.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      rows[index].id = 'data-row';
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';
+      }
     }
   }
 }
