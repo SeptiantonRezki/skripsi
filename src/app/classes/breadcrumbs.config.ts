@@ -2986,7 +2986,7 @@ export const brConfig = {
       create: [
         {
           type: "parent",
-          url: "/paylater/template",
+          url: "/paylater/template_financing",
           name: "Template Financing"
         },
         {
@@ -2998,7 +2998,7 @@ export const brConfig = {
       edit: [
         {
           type: "parent",
-          url: "/paylater/template",
+          url: "/paylater/template_financing",
           name: "Template Financing"
         },
         {
