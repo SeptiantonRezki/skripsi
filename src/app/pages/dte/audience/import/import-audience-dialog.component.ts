@@ -360,6 +360,7 @@ export class ImportAudienceDialogComponent {
         formData.append("preview_id", preview_id)
         formData.append("preview_task_id", preview_task_id)
         formData.append("audience_type", audience_type)
+        formData.append("trade_creator_id", trade_creator_id)
         
         this.audienceService.requestImportExcel(formData).subscribe(res => {
           this.setRequesting('import');
