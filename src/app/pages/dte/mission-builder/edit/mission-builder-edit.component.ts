@@ -206,6 +206,21 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
         message: "Ada notifikasi yang belum diset!"
       });
     } else {
+      if (missionNodes.length > 1) {
+        let newAction = data.actions;
+        
+        newAction.forEach((action, index) => {
+          if (action.type === "mission") {
+            if (action.attribute.mission_reblast && action.attribute.mission_reblast === "active") {
+              newAction[index].attribute.mission_reblast = "inactive";
+            }
+            if (action.attribute.verification_notes) {
+              newAction[index].attribute.verification_notes = [];
+            }
+          }
+        })
+      }
+      
       this.dataService.showLoading(true);
       this.sequencingService.put(data, { sequencing_id: this.task.id }).subscribe(res => {
         this.dataService.showLoading(false);
@@ -275,6 +290,21 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
           message: "Ada notifikasi yang belum diset!"
         });
       } else {
+        if (missionNodes.length > 1) {
+          let newAction = data.actions;
+          
+          newAction.forEach((action, index) => {
+            if (action.type === "mission") {
+              if (action.attribute.mission_reblast && action.attribute.mission_reblast === "active") {
+                newAction[index].attribute.mission_reblast = "inactive";
+              }
+              if (action.attribute.verification_notes) {
+                newAction[index].attribute.verification_notes = [];
+              }
+            }
+          })
+        }
+        
         this.sequencingService.put(data, { sequencing_id: this.task.id }).subscribe(res => {
           this.sequencingService.updateStatus({ sequencing_id: this.task.id }, { status: this.task.status === 'publish' ? 'unpublish' : 'publish' }).subscribe(res => {
             this.dataService.showLoading(false);
@@ -896,8 +926,9 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
   }
 
   openDialogMisi(node: any) {
+    const totalMission = this.actions.filter(action => action.type === "mission").length;
     this.dialogMisiRef = this.Dialog.open(
-      DialogMisiEditComponent, { width: "600px", data: node }
+      DialogMisiEditComponent, { width: "600px", data: { totalMission, ...node } }
     );
 
     this.dialogMisiRef

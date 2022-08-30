@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
-import { FormGroup, FormBuilder, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from "@angular/forms";
 import { Subject, ReplaySubject } from "rxjs";
 import { takeUntil } from 'rxjs/operators';
 import { TemplateTaskService } from '../../../../../services/dte/template-task.service';
@@ -24,6 +24,8 @@ export class DiaglogMisiComponent implements OnInit {
   non_coin_reward: FormControl = new FormControl(false);
   isRewardError: boolean = false;
   auto_submit: FormControl = new FormControl(false);
+  mission_reblast: FormControl = new FormControl(false);
+  rejected_list = [];
 
   missions: any[];
   minDate: any;
@@ -68,6 +70,8 @@ export class DiaglogMisiComponent implements OnInit {
       auto_submit: this.auto_submit,
       xp_submission: null,
       xp_verification: null,
+      mission_reblast: this.mission_reblast,
+      verification_notes: this.formBuilder.array([]),
     });
 
     this.filterMission.valueChanges
@@ -94,6 +98,8 @@ export class DiaglogMisiComponent implements OnInit {
       });
 
     if (this.data !== null) {
+      const { attribute } = this.data.data;
+      
       this.form.patchValue({
         task_template_id: parseInt(this.data.data.attribute.task_template_id, 10),
         task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
@@ -149,6 +155,15 @@ export class DiaglogMisiComponent implements OnInit {
       } else if (this.data.data.attribute.non_coin_reward === 1) {
         this.form.get('non_coin_reward').patchValue(true);
       }
+
+      this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
+      
+      if (attribute.verification_notes && attribute.verification_notes.length) {
+        const verif_notes = this.form.get('verification_notes') as FormArray;
+        attribute.verification_notes.forEach(verif => {
+          verif_notes.push(this.formBuilder.group({ reason: [verif.reason, Validators.required], detail: verif.detail }));
+        })
+      }
     }
   }
 
@@ -170,6 +185,13 @@ export class DiaglogMisiComponent implements OnInit {
   selectChangeMisi(e: any) {
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
+
+    const verif_notes = this.form.get("verification_notes") as FormArray;
+    this.rejected_list = this.missions[theIndex].rejected_reason_choices;
+    this.form.get('mission_reblast').setValue(false);
+    while (verif_notes.value.length > 0) {
+      verif_notes.removeAt(verif_notes.value.length - 1);
+    }
 
     this.form.patchValue({
       is_ir_template: this.missions[theIndex].is_ir_template
@@ -330,6 +352,10 @@ export class DiaglogMisiComponent implements OnInit {
         this.filteredMission.next(this.missions.slice());
         this.filteredMissionOther.next(this.missions.slice());
         this.checkTaskTemplate();
+
+        const task_template = this.form.get("task_template_id").value;
+        const index = this.missions.findIndex(mission => mission.id === task_template);
+        if (task_template) this.rejected_list = this.missions[index].rejected_reason_choices;
       },
       (err) => {
         console.log("err ", err);
@@ -338,7 +364,6 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   selectChangeFF(e: any) {
-    // console.log(e);
     if (e.source.name === 'push-to-ff' && e.checked === true) {
       this.form.get('is_push_to_ff').patchValue(1);
       this.form.get('coin_submission').patchValue(0);
@@ -397,6 +422,40 @@ export class DiaglogMisiComponent implements OnInit {
     this.isRewardError = event.target.value.length ? false : true;
   }
 
+  handleVerificationNotes(reblast){
+    if (reblast) {
+      const verif_notes = this.form.get("verification_notes") as FormArray;
+
+      if (!verif_notes.length) {
+        this.rejected_list.forEach(rejected => {
+          verif_notes.push(this.formBuilder.group({ reason: [rejected, Validators.required], detail: [""] }))
+        })
+      }
+    }
+  }
+
+  addVerifNotes(){
+    const verif_notes = this.form.get('verification_notes') as FormArray;
+    let available = [];
+    this.rejected_list.forEach(rejected => {
+      if (!verif_notes.value.some(verif => verif.reason === rejected)) {
+        available.push(rejected);
+      }
+    });
+
+    verif_notes.push(this.formBuilder.group({ reason: [available[0], Validators.required], detail: [""] }))
+  }
+
+  deleteVerifNotes(index){
+    const verif_notes = this.form.get("verification_notes") as FormArray;
+    verif_notes.removeAt(index);
+  }
+
+  checkReason(item){
+    const verif_notes = this.form.get("verification_notes").value;
+    return verif_notes.some(verif => verif.reason === item);
+  }
+
   submit(form: any) {
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
@@ -422,6 +481,9 @@ export class DiaglogMisiComponent implements OnInit {
     form.get('auto_submit').patchValue(
       (form.value.auto_submit === true) ? 1 : 0
     );
+    form.get('mission_reblast').patchValue(
+      (form.value.mission_reblast === true) ? "active" : "inactive"
+    );
     form.get('non_coin_reward').patchValue(
       (form.value.non_coin_reward === true) ? 1 : 0
     );
@@ -443,7 +505,6 @@ export class DiaglogMisiComponent implements OnInit {
       min_date: this.minDate,
       max_date: this.maxDate
     }
-    console.log('update => ',returnObject);
     this.dialogRef.close(returnObject);
   }
 
