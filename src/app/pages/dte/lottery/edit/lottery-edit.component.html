@@ -1,0 +1,793 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Ubah Undian">
+    <button
+      id="btn-create-trade"
+      style="width: 170px"
+      (click)="submitPublishUnpublish()"
+      mat-raised-button
+      type="button"
+    >
+      {{ detailFormUndian.status_publish === 'Publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+    </button>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group [selectedIndex]="selectedTab">
+        <mat-tab label="Undian">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form autocomplete="off" [formGroup]="formUndian" fxLayout="row" fxLayoutGap="16px">
+              <div fxFlex="70%">
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="text" placeholder="Nama Program Kupon Undian" formControlName="name"
+                      name="name">
+                    <mat-error
+                      *ngIf="formUndian.controls['name'].hasError('required') && formUndian.controls['name'].touched">
+                      Nama Program Kupon Undian {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input matInput type="number" placeholder="Jumlah Koin yang dibutuhkan per Kupon" formControlName="coin"
+                      name="coin">
+                      <mat-error
+                      *ngIf="formUndian.controls['coin'].hasError('required') && formUndian.controls['coin'].touched">
+                      Koin {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxFlex="100" class="px-24">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input
+                      matInput
+                      formControlName="start_date"
+                      (focus)="startDate.open()"
+                      [matDatepicker]="startDate"
+                      placeholder="Tanggal Awal Penukaran Kupon Undian"
+                      
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                      formUndian.controls['start_date'].hasError(
+                          'required'
+                        ) && formUndian.controls['start_date'].touched
+                      "
+                    >
+                      {{
+                        ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                      }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="10"></div>
+                  <mat-form-field
+                    fxFlex="30"
+                    class="is-light form-primary"
+                    id="start_time"
+                  >
+                    <input
+                      matInput
+                      formControlName="start_time"
+                      placeholder="{{
+                        'notification.popup_notifikasi.text8' | translate
+                      }}"
+                      [ngxTimepicker]="fullTime1"
+                      [format]="24"
+                      readonly
+                      style="width: 50px"
+                    />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker
+                      #fullTime1
+                    ></ngx-material-timepicker>
+                    <mat-error
+                      *ngIf="
+                      formUndian.controls['start_time'].hasError(
+                          'required'
+                        ) && formUndian.controls['start_time'].touched
+                      "
+                    >
+                      {{
+                        ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                      }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxFlex="100" class="px-24">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input
+                      matInput
+                      formControlName="end_date"
+                      (focus)="endDate.open()"
+                      [matDatepicker]="endDate"
+                      placeholder="Tanggal Berakhir Penukaran Kupon Undian"
+                      [min]="formUndian.get('start_date').value" 
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                        formUndian.controls['start_date'].hasError(
+                          'required'
+                        ) && formUndian.controls['start_date'].touched
+                      "
+                    >
+                      {{
+                        ls.locale.manajemen_barang_sku.manajemen_koin.text16
+                      }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="10"></div>
+                  <mat-form-field
+                    fxFlex="30"
+                    class="is-light form-primary"
+                    id="end_time"
+                  >
+                    <input
+                      matInput
+                      formControlName="end_time"
+                      placeholder="{{
+                        'notification.popup_notifikasi.text10' | translate
+                      }}"
+                      [ngxTimepicker]="fullTime2"
+                      [format]="24"
+                      readonly
+                    />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker
+                      #fullTime2
+                    ></ngx-material-timepicker>
+                    <mat-error
+                      *ngIf="
+                        formUndian.controls['end_time'].hasError('required') &&
+                        formUndian.controls['end_time'].touched
+                      "
+                    >
+                      {{
+                        ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                      }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxFlex="100" class="px-24">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input
+                      matInput
+                      formControlName="announcement_date"
+                      (focus)="announcmentDate.open()"
+                      [matDatepicker]="announcmentDate"
+                      placeholder="Tanggal Pengumuman Pemenang Berakhir"
+                      [min]="formUndian.get('end_date').value" 
+                      (dateChange)="setMinExpireDate()"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="announcmentDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #announcmentDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="formUndian.controls['announcement_date'].hasError('required') && formUndian.controls['announcement_date'].touched">
+                      Tanggal Pengumuman Pemenang Berakhir {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="10"></div>
+                  <mat-form-field
+                    fxFlex="30"
+                    class="is-light form-primary"
+                    id="announcement_time"
+                  >
+                    <input
+                      matInput
+                      formControlName="announcement_time"
+                      placeholder="Jam Pengumuman Pemenang Berakhir"
+                      [ngxTimepicker]="fullTime3"
+                      [format]="24"
+                      readonly
+                    />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker
+                      #fullTime3
+                    ></ngx-material-timepicker>
+                    <mat-error
+                      *ngIf="
+                        formUndian.controls['end_time'].hasError('required') &&
+                        formUndian.controls['end_time'].touched
+                      "
+                    >
+                      {{
+                        ls.locale.manajemen_barang_sku.manajemen_koin.text15
+                      }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="group_trade_program_id" placeholder="{{'dte.group_trade_program.text1' | translate}}" multiple>
+                      <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program_id" placeholder="Sub Group Trade Program" multiple>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="!isDetail" class="confirm pt-24 pb-24 px-24" fxLayout="row">
+                  <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+                    {{ls.locale.global.button.edit}}
+                  </button>
+                </div>
+
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary"> -->
+                    <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
+                      <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select> -->
+                    <!-- <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                <!-- </div> -->
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                 -->
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Audience" [disabled]="false">
+          <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <!-- <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                <mat-radio-button
+                  class="radio-button pr-48"
+                  [value]="population-blast"
+                >
+                Population Blast
+                </mat-radio-button>
+              </mat-radio-group> -->
+              
+              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
+                <div fxFlex="100">
+                  <div fxLayout="row" class="px-16">
+                      <!-- <mat-radio-button
+                        class="radio-button pr-48"
+                        [checked]="isPopulation"
+                        (change)="changeBlastType('population-blast')"
+                      >
+                        Population Blast
+                      </mat-radio-button> -->
+                      <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                        <mat-radio-button class="radio-button pr-48" value="population-blast">
+                          Population Blast
+                        </mat-radio-button>
+                      </mat-radio-group>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.zone' | translate}}"
+                        formControlName="division"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingZone">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.regional' | translate}}"
+                        formControlName="region"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingRegion">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.area' | translate}}"
+                        formControlName="area"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingArea">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        formControlName="classification"
+                        multiple
+                        >
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div fxLayout="row" fxFlex="45">
+                <div class="box-red" fxFlex="100">
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
+                  <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
+                </div>
+            </div>
+          </div>
+          <div
+          fxLayout="column"
+          class="px-16"
+          >
+            <!-- <mat-radio-button
+              class="radio-button pr-48"
+              [checked]="!isPopulation"
+              (change)="changeBlastType('fixed-panel')"
+            >
+              Fixed Panel
+            </mat-radio-button> -->
+            <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter('fixed-panel')">
+              <mat-radio-button class="radio-button pr-48" value="fixed-panel">
+                Fixed Panel
+              </mat-radio-button>
+            </mat-radio-group>
+          <div fxLayout="column" class="px-20 py-16">
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+              <div fxLayout="column">
+                <button
+                  mat-raised-button
+                  type="button"
+                  class="is-danger"
+                  (click)="exportAudience()"
+                >
+                  <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+                </button>
+                <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+              </div>
+              <button
+                mat-raised-button
+                type="button"
+                class="is-danger"
+                (click)="importAudience()"
+              >
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+              </button>
+            </div>
+          </div>
+          </div>
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submitAudience()" fxFlex="20">
+              Check
+            </button>
+            <button
+              id="btn-simpan"
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="saveAudience()"
+              fxFlex="20"
+              [disabled]="!isChecked"
+            >
+              {{ ls.locale.global.button.save }}
+            </button>
+          </div>
+        </mat-tab>
+        <mat-tab label="Preview" [disabled]="false">
+          <div class="ayo-middle py-24" fxLayout="column">
+            
+            <form
+              autocomplete="off"
+              [formGroup]="formPreview"
+              fxLayoutGap="16px"
+            >
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                  <div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                    Visual Header Kupon Undian
+                    </p>
+                    <div class="px-24">
+                      <div
+                        ngfDrop
+                        selectable="1"
+                        class="rectangle-16"
+                        [(validDrag)]="validComboDrag"
+                        [(file)]="files"
+                        accept="image/*"
+                        [class.invalid-drag]="validComboDrag === false"
+                        [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeImage($event)"
+                        [(invalidDrag)]="isDetail"
+                        [fileDropDisabled]="isDetail"
+                      >
+                        <div
+                          class="p-24"
+                          fxLayout="column"
+                          fxLayoutAlign="center center"
+                        >
+                          <mat-icon
+                            style="width: 48px; height: 48px; font-size: 48px"
+                            >add_photo_alternate_outline</mat-icon
+                          >
+                          <br />
+                          <span matPrefix>Tarik Gambar Kesini</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p style="font-weight: bold; text-align: center">Preview</p>
+                    <div style="text-align: center" *ngIf="imageConverted">
+                      <img
+                        [src]="imageConverted"
+                        alt="Preview Image"
+                        width="200px"
+                        height="100px"
+                      />
+                    </div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                      Visual Header Kupon Undian
+                    </p>
+                  </div>
+                </div>
+                <div fxFlex="50%">
+                  <div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                      Visual Header di List Program Kupon Undian
+                    </p>
+                    <div class="px-24">
+                      <div
+                        ngfDrop
+                        selectable="1"
+                        class="rectangle-16"
+                        [(validDrag)]="validComboDrag"
+                        [(file)]="files2"
+                        accept="image/*"
+                        [class.invalid-drag]="validComboDrag === false"
+                        [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeImage2($event)"
+                        [(invalidDrag)]="isDetail"
+                        [fileDropDisabled]="isDetail"
+                      >
+                        <div
+                          class="p-24"
+                          fxLayout="column"
+                          fxLayoutAlign="center center"
+                        >
+                          <mat-icon
+                            style="width: 48px; height: 48px; font-size: 48px"
+                            >add_photo_alternate_outline</mat-icon
+                          >
+                          <br />
+                          <span matPrefix>Tarik Gambar Kesini</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p style="font-weight: bold; text-align: center">Preview</p>
+                    <div style="text-align: center" *ngIf="imageConverted2">
+                      <img
+                        [src]="imageConverted2"
+                        alt="Preview Image"
+                        width="200px"
+                        height="100px"
+                      />
+                    </div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                      Visual Header di List Program Kupon Undian
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" class="px-24">
+                <div fxFlex="100%">
+                  <p style="font-style: italic;font-weight: bold; margin-bottom: 0px">Deskripsi Kupon Undian</p>
+                  <div fxLayout="column" fxFlex="100">
+                  <mat-form-field fxFlex="100%" class="descInput exportTextarea desc-template" floatLabel="never">
+                    <textarea matInput [froalaEditor]="options" formControlName="desc"></textarea>
+                  </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" class="px-24">
+                <div fxFlex="100%">
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <p style="font-style: italic;font-weight: bold; margin-bottom: 0px">Deksripsi T&C</p>
+                    <mat-slide-toggle style="margin-bottom: 0px; align-self: end" formControlName="desc_tc_status">Aktifkan</mat-slide-toggle>
+                  </div>
+                  <div fxLayout="column" fxFlex="100">
+                  <mat-form-field fxFlex="100%" class="descInput exportTextarea desc-template" floatLabel="never">
+                    <textarea matInput [froalaEditor]="options" formControlName="desc_tc"></textarea>
+                  </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
+                  <button
+                    id="btn-simpan"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submitPreview()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
+
+                  <!-- <button 
+                    mat-raised-button 
+                    type="button" 
+                    class="ml-24 confirmation-button" 
+                    (click)="submitPublishUnpublish()" 
+                    fxFlex="20">
+                      Publish {{ detailFormUndian.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+                  </button> -->
+                </div>
+              </div>
+              
+            </form>
+
+          </div>
+        </mat-tab>
+        <mat-tab label="List Pemenang" [disabled]="false">
+          <div class="ayo-middle py-24" fxLayout="column">
+            
+            <form
+              autocomplete="off"
+              [formGroup]="formListPemenang"
+              fxLayoutGap="16px"
+            >
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                  <div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                    Visual Header Pemenang Undian
+                    </p>
+                    <div class="px-24">
+                      <div
+                        ngfDrop
+                        selectable="1"
+                        class="rectangle-16"
+                        [(validDrag)]="validComboDrag"
+                        [(file)]="files3"
+                        accept="image/*"
+                        [class.invalid-drag]="validComboDrag === false"
+                        [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeImage3($event)"
+                        [(invalidDrag)]="isDetail"
+                        [fileDropDisabled]="isDetail"
+                      >
+                        <div
+                          class="p-24"
+                          fxLayout="column"
+                          fxLayoutAlign="center center"
+                        >
+                          <mat-icon
+                            style="width: 48px; height: 48px; font-size: 48px"
+                            >add_photo_alternate_outline</mat-icon
+                          >
+                          <br />
+                          <span matPrefix>Tarik Gambar Kesini</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p style="font-weight: bold; text-align: center">Preview</p>
+                    <div style="text-align: center" *ngIf="imageConverted3">
+                      <img
+                        [src]="imageConverted3"
+                        alt="Preview Image"
+                        width="200px"
+                        height="100px"
+                      />
+                    </div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                      Visual Header Pemenang Undian
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="column" class="px-20 py-16">
+                <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+                  <!-- <div fxLayout="column">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      class="is-danger"
+                      (click)="exportAudience()"
+                    >
+                      <mat-icon>arrow_upward</mat-icon> Upload List Pemenang
+                    </button>
+                    <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+                  </div> -->
+                  <button
+                    mat-raised-button
+                    type="button"
+                    class="is-danger"
+                    (click)="downloadWinnerList()"
+                  >
+                    <mat-icon>arrow_downward</mat-icon> Download List Pemenang ( {{ (winner_count !== null)? winner_count : 0 }} Pemenang )
+                  </button>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayoutGap="16px">
+                <div fxFlex="50%">
+                  <div>
+                    <p
+                      style="
+                        font-style: italic;
+                        font-weight: bold;
+                        text-align: center;
+                      "
+                    >
+                    List Pemenang Undian
+                    </p>
+                    <div class="px-24">
+                      <div 
+                        ngfDrop 
+                        selectable="1" 
+                        class="rectangle-16" 
+                        [(validDrag)]="validComboDrag" 
+                        [(file)]="files4" 
+                        accept=".xls"
+                        [class.invalid-drag]="validComboDrag===false" 
+                        [class.valid-drag]="validComboDrag" 
+                        (fileChange)="previewPemenang($event)"
+                      >
+                        <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                          <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+                          <br>
+                          <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
+                            
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div style="text-align: center" *ngIf="fileNameListExcel">
+                      {{ fileNameListExcel }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
+                  <button
+                    id="btn-simpan"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submitPemenang()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
+                </div>
+              </div>
+              
+            </form>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+  <a #downloadLink></a>
+  <a #downloadLinkWinner></a>
+</div>

@@ -62,6 +62,9 @@ import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { LotteryComponent } from "./lottery/index/lottery.component";
+import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
+import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
@@ -772,6 +775,42 @@ const routes: Routes = [
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
+  
+  // {
+  //   path: "audience",
+  //   component: AudienceIndexComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.index
+  //   },
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/create",
+  //   component: AudienceCreateComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.create
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/edit",
+  //   component: AudienceEditComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.edit
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+
   {
     path: 'xp',
     component: XpComponent,
@@ -825,6 +864,38 @@ const routes: Routes = [
     component: SpinTheWheelEditComponent,
     data: {
       breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery',
+    component: LotteryComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/create',
+    component: LotteryCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/edit',
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "lottery/detail",
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.detail
     },
     //canActivate: [PageGuard]
   },

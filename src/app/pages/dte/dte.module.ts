@@ -175,6 +175,9 @@ import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.co
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
 import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
+import { LotteryComponent } from './lottery/index/lottery.component';
+import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
+import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { XpComponent } from './xp/xp.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
@@ -371,6 +374,9 @@ export const MY_FORMATS = {
     TemplatePlanogramComponent,
     JobsRequestComponent,
     CheckImageComponent,
+    LotteryComponent,
+    LotteryCreateComponent,
+    LotteryEditComponent,
     XpComponent,
     VerificationApprovalComponent,
     SpinTheWheelComponent,
