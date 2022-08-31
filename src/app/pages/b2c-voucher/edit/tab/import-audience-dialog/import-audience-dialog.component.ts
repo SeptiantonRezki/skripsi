@@ -63,11 +63,7 @@ export class ImportAudienceDialogComponent implements OnInit {
     this.b2cVoucherService[keyAudience](fd, dataParams).subscribe(
       res => {
         if (res && res.data.is_valid) {
-          if (this.dialogData.audience === 'retailer') {
-            this.rows = res.data && res.data.listAudiences ? Object.values(res.data.listAudiences) : [];
-          } else {
-            this.rows = res.data && res.data.audiences ? res.data.audiences : [];
-          }
+          this.rows = res.data && res.data.audiences ? res.data.audiences : [];
           this.validData = res.data && res.data.is_valid ? res.data.is_valid : false;
           this.dataService.showLoading(false);
         } else {
