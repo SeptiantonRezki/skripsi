@@ -339,6 +339,10 @@ export class Endpoint {
         check_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/check-audience`,
         preview_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience-personalized/preview-audience`,
         export_preview_audience: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience-personalized/export`,
+        export_xlsx: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/request-export`,
+        request_preview_import_xlsx: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/request-preview`,
+        show_preview_import_xlsx: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/audience/show-preview`,
+        request_import_xlsx: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/request-import`,
       },
       lottery: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery`,
