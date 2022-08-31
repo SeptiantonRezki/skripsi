@@ -102,6 +102,23 @@ export class AudienceService extends BaseService {
     return this.postApi(url, body);
   }
 
+  exportExcelXLSX(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postApi(url, body);
+  }
+  requestPreviewImportExcelXLSX(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "request_preview_import");
+    return this.postApi(url, body);
+  }
+  showPreviewImportXLSX(body?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_preview_import");
+    return this.postApi(url, body, queryParams);
+  }
+  requestImportExcelXLSX(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "request_import");
+    return this.postApi(url, body);
+  }
+
   getListTradePrograms(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_trade_program");
     return this.getApi(url, queryParams);

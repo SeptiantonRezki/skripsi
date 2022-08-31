@@ -272,7 +272,7 @@ export class ImportLotteryDialogComponent implements OnInit {
       const {is_valid, preview_id, preview_task_id} = this.previewData;
 
       if(is_valid && preview_id && preview_task_id) {
-        this.audienceService.requestImportExcel({
+        this.audienceService.requestImportExcelXLSX({
           preview_id,
           preview_task_id,
           min, max,
@@ -348,7 +348,7 @@ export class ImportLotteryDialogComponent implements OnInit {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImportXLSX({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);
