@@ -348,8 +348,8 @@ export class ImportAudienceDialogComponent {
   }
 
   submit() {
-    let {IMPORT_TYPE, min, max, trade_scheduler_id, type, audience_type} = this.detailData;
-    const {trade_creator_id} = this.previewData;
+    let {IMPORT_TYPE, min, max, type, audience_type} = this.detailData;
+    const {trade_creator_id, trade_scheduler_id} = this.previewData;
     let is_create = (this.detailData.IMPORT_FROM_METHOD === 'CREATE') ? 'yes' : 'no';
     if(IMPORT_TYPE === 'AUDIENCE') {
       const {is_valid, preview_id, preview_task_id} = this.previewData;
@@ -361,6 +361,10 @@ export class ImportAudienceDialogComponent {
         formData.append("preview_task_id", preview_task_id)
         formData.append("audience_type", audience_type)
         formData.append("trade_creator_id", trade_creator_id)
+
+        if (audience_type === "scheduler" || type === "challenge") {
+          formData.append("trade_scheduler_id", trade_scheduler_id)
+        }
         
         this.audienceService.requestImportExcel(formData).subscribe(res => {
           this.setRequesting('import');
