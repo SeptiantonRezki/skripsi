@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './import-audience-personalize.component.html',
   styleUrls: ['./import-audience-personalize.component.scss']
 })
-export class ImportLotteryDialogComponent implements OnInit {
+export class ImportAudiencePersonalizeComponentLottery implements OnInit {
 
   files: File;
   validComboDrag: boolean;
@@ -67,10 +67,11 @@ export class ImportLotteryDialogComponent implements OnInit {
   requestingImport: boolean = false;
   importing: boolean = false;
   allData: Array<any> = [];
+  validData = [];
   numError: number = 1;
 
   constructor(
-    public dialogRef: MatDialogRef<ImportLotteryDialogComponent>,
+    public dialogRef: MatDialogRef<ImportAudiencePersonalizeComponentLottery>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
@@ -123,11 +124,13 @@ export class ImportLotteryDialogComponent implements OnInit {
       res => {
         if (res && res.data) {
           this.dataService.showLoading(false);
-          this.pagination['per_page'] = 250;
+          this.pagination['per_page'] = 1000;
           this.audienceService.showImport(this.pagination).subscribe(response => {
+            // console.log('satu', this.pagination);
             const {data} = response.data;
             this.allData = [...data];
             this.invalidData = this.allData.some(item => item.is_valid === false);
+            this.validData = data.filter(item => item.is_valid === true);
 
             // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
             data.map((item, idx) => {
@@ -175,13 +178,17 @@ export class ImportLotteryDialogComponent implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+      this.audienceService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
+        // console.log('dua');
         if (response && response.data) {
           const {data} = response.data;
           this.allData = [...this.allData, ...data];
           if (!this.invalidData) {
             this.invalidData = this.allData.some(item => item.is_valid === false);
           }
+
+          const newData = data.filter(item => item.is_valid === true);
+          this.validData = [...this.validData, ...newData];
           
           // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
           data.map((item, idx) => {
@@ -272,7 +279,7 @@ export class ImportLotteryDialogComponent implements OnInit {
       const {is_valid, preview_id, preview_task_id} = this.previewData;
 
       if(is_valid && preview_id && preview_task_id) {
-        this.audienceService.requestImportExcelXLSX({
+        this.audienceService.requestImportExcel({
           preview_id,
           preview_task_id,
           min, max,
@@ -288,7 +295,7 @@ export class ImportLotteryDialogComponent implements OnInit {
     }
     else {
       if (this.totalData > 0) {
-        this.dialogRef.close(this.allData);
+        this.dialogRef.close(this.validData);
       } else {
         this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
       }
@@ -298,7 +305,8 @@ export class ImportLotteryDialogComponent implements OnInit {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial });
+      let response = this.audienceService.showImport({ page: trial, per_page: this.pagination['per_page'] });
+      // console.log('tiga');
       trialsRes.push(response);
     })
 
@@ -348,7 +356,7 @@ export class ImportLotteryDialogComponent implements OnInit {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImportXLSX({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
       this.setPreview(data);
     }, err => {
       this.dataService.showLoading(false);
