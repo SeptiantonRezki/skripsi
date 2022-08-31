@@ -210,7 +210,7 @@ export class ImportAudienceDialogComponent {
     console.log({fd});
     this.dataService.showLoading(true);
     
-    this.audienceService.requestPreviewImportExcelXLSX(fd).subscribe((res) => {
+    this.audienceService.requestPreviewImportExcel(fd).subscribe((res) => {
 
       if(this.detailData.IMPORT_FROM_METHOD && this.detailData.IMPORT_FROM_METHOD === 'CREATE') {
 
@@ -339,7 +339,7 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = offset;
     this.pagination.page = offset + 1;
-    this.audienceService.showPreviewImportXLSX({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
       
       this.setPreview(data);
 
@@ -360,7 +360,7 @@ export class ImportAudienceDialogComponent {
 
       if(is_valid && preview_id && preview_task_id) {
         
-        this.audienceService.requestImportExcelXLSX({
+        this.audienceService.requestImportExcel({
           preview_id,
           preview_task_id,
           min, max,
@@ -404,7 +404,7 @@ export class ImportAudienceDialogComponent {
     const {trade_audience_group_id} = this.detailData;
     this.offsetPagination = 0;
 
-    this.audienceService.showPreviewImportXLSX({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
+    this.audienceService.showPreviewImport({trade_audience_group_id}, this.pagination).subscribe(({data}) => {
       
       this.setPreview(data);
 

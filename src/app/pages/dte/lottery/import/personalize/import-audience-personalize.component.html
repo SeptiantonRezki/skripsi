@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ls.locale.global.label.upload_file}} XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLSX</span>
       </div>
 
     </div>
@@ -112,7 +112,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport || invalidData">{{ls.locale.global.button.send}}</button>
+          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
       </div>
