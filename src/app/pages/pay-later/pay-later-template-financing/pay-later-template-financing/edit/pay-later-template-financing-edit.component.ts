@@ -17,7 +17,7 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
   formTemplate: FormGroup;
   arr: FormArray;
   indexDelete: any;
-  public optionsGeneral: Object = Config.FROALA_CONFIG;
+  public optionsGeneral: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG();
   public options: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Penjelasan");
   public optionsFaq: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Jawaban");
   AYO_API_SERVICE = serviceServer;
@@ -74,6 +74,7 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
     this.dataService.showLoading(true);
     this.PayLaterTemplateFinancingService.show({ id: this.shortDetail.id }).subscribe(res => {
       this.detailTemplate = res.data;
+      // console.log("Data Template >>> ", res.data)
       let reasonData = JSON.parse(res.data.alasan_bergabung),
           useData = JSON.parse(res.data.cara_penggunaan),
           faqData = JSON.parse(res.data.faq),
@@ -141,10 +142,10 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
 
       this.formTemplate.get("name").setValue(res.data.name);
       this.formTemplate.get("information").setValue(res.data.informasi_general);
-      this.formTemplate.get("banner_1").setValue(res.data.banner_1 ? ["undefined", "null"].indexOf(res.data.banner_1) === -1 ? res.data.banner_1 : [] : []);
-      this.formTemplate.get("banner_2").setValue(res.data.banner_2 ? ["undefined", "null"].indexOf(res.data.banner_2) === -1 ? res.data.banner_2 : [] : []);
-      this.formTemplate.get("banner_3").setValue(res.data.banner_3 ? ["undefined", "null"].indexOf(res.data.banner_3) === -1 ? res.data.banner_3 : [] : []);
-      this.formTemplate.get("banner_4").setValue(res.data.banner_4 ? ["undefined", "null"].indexOf(res.data.banner_4) === -1 ? res.data.banner_4 : [] : []);
+      this.formTemplate.get("banner_1").setValue(res.data.banner_url1 ? ["undefined", "null"].indexOf(res.data.banner_url1) === -1 ? res.data.banner_url1 : [] : []);
+      this.formTemplate.get("banner_2").setValue(res.data.banner_url2 ? ["undefined", "null"].indexOf(res.data.banner_url2) === -1 ? res.data.banner_url2 : [] : []);
+      this.formTemplate.get("banner_3").setValue(res.data.banner_url3 ? ["undefined", "null"].indexOf(res.data.banner_url3) === -1 ? res.data.banner_url3 : [] : []);
+      this.formTemplate.get("banner_4").setValue(res.data.banner_url4 ? ["undefined", "null"].indexOf(res.data.banner_url4) === -1 ? res.data.banner_url4 : [] : []);
 
       let reason = this.formTemplate.get("reason") as FormArray;
       reasonData.map((item, idx) => {
@@ -178,15 +179,15 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
         }));
       });
 
-      this.files = res.data.banner_1 ? ["undefined", "null"].indexOf(res.data.banner_1) === -1 ? res.data.banner_1 : undefined : undefined
-      this.files2 = res.data.banner_2 ? ["undefined", "null"].indexOf(res.data.banner_2) === -1 ? res.data.banner_2 : undefined : undefined
-      this.files3 = res.data.banner_3 ? ["undefined", "null"].indexOf(res.data.banner_3) === -1 ? res.data.banner_3 : undefined : undefined
-      this.files4 = res.data.banner_4 ? ["undefined", "null"].indexOf(res.data.banner_4) === -1 ? res.data.banner_4 : undefined : undefined
+      this.files = res.data.banner_url1 ? ["undefined", "null"].indexOf(res.data.banner_url1) === -1 ? res.data.banner_url1 : null : null
+      this.files2 = res.data.banner_url2 ? ["undefined", "null"].indexOf(res.data.banner_url2) === -1 ? res.data.banner_url2 : null : null
+      this.files3 = res.data.banner_url3 ? ["undefined", "null"].indexOf(res.data.banner_url3) === -1 ? res.data.banner_url3 : null : null
+      this.files4 = res.data.banner_url4 ? ["undefined", "null"].indexOf(res.data.banner_url4) === -1 ? res.data.banner_url4 : null : null
 
-      this.imageUrl = res.data.banner_1 ? ["undefined", "null"].indexOf(res.data.banner_1) === -1 ? res.data.banner_1 : undefined : undefined
-      this.imageUrl2 = res.data.banner_2 ? ["undefined", "null"].indexOf(res.data.banner_2) === -1 ? res.data.banner_2 : undefined : undefined
-      this.imageUrl3 = res.data.banner_3 ? ["undefined", "null"].indexOf(res.data.banner_3) === -1 ? res.data.banner_3 : undefined : undefined
-      this.imageUrl4 = res.data.banner_4 ? ["undefined", "null"].indexOf(res.data.banner_4) === -1 ? res.data.banner_4 : undefined : undefined
+      this.imageUrl = res.data.banner_url1 ? ["undefined", "null"].indexOf(res.data.banner_url1) === -1 ? res.data.banner_url1 : null : null
+      this.imageUrl2 = res.data.banner_url2 ? ["undefined", "null"].indexOf(res.data.banner_url2) === -1 ? res.data.banner_url2 : null : null
+      this.imageUrl3 = res.data.banner_url3 ? ["undefined", "null"].indexOf(res.data.banner_url3) === -1 ? res.data.banner_url3 : null : null
+      this.imageUrl4 = res.data.banner_url4 ? ["undefined", "null"].indexOf(res.data.banner_url4) === -1 ? res.data.banner_url4 : null : null
 
       this.dataService.showLoading(false);
     }, err => {
@@ -330,29 +331,29 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
         fd.append('tips_trick', JSON.stringify(this.formTemplate.get('tips').value));
          // fd.append('paylater_company_type_id', this.dataType === "invoice-financing" ? "1" : this.dataType === "retailer-financing" ? "2" : this.dataType === "kur" ? "3" : "");
         if (!this.files) {
-          fd.append('banner_file1', this.files);
-          fd.append('banner_1', this.files);
+          fd.append('banner_file1', null);
+          fd.append('banner_1', null);
         } else {
           fd.append('banner_file1', this.files);
         }
 
         if (!this.files2) {
-          fd.append('banner_file2', this.files2);
-          fd.append('banner_2', this.files2);
+          fd.append('banner_file2', null);
+          fd.append('banner_2', null);
         } else {
           fd.append('banner_file2', this.files2);
         }
 
         if (!this.files3) {
-          fd.append('banner_file3', this.files3);
-          fd.append('banner_3', this.files3);
+          fd.append('banner_file3', null);
+          fd.append('banner_3', null);
         } else {
           fd.append('banner_file3', this.files3);
         }
 
         if (!this.files4) {
-          fd.append('banner_file4', this.files4);
-          fd.append('banner_4', this.files4);
+          fd.append('banner_file4', null);
+          fd.append('banner_4', null);
         } else {
           fd.append('banner_file4', this.files4);
         }
