@@ -793,11 +793,11 @@ export class Endpoint {
         approval: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation/${context.deactivation_id}`,
       },
       paylater_template_financing: {
-        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
-        show: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing/${context.id}`,
-        create: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
-        update: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing`,
-        delete: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/template_financing/${context.id}`
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
+        show: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing/${context.id}`,
+        create: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
+        update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
+        delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing/${context.id}`
       },
       sequencing: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,

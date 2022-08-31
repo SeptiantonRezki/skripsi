@@ -18,7 +18,7 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
   arr: FormArray;
   indexDelete: any;
   dataType: any;
-  public optionsGeneral: Object = Config.FROALA_CONFIG;
+  public optionsGeneral: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG();
   public options: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Penjelasan");
   public optionsFaq: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Jawaban");
 
@@ -175,16 +175,16 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
     if (this.formTemplate.valid) {
       if (this.files || this.files2 || this.files3 || this.files4) {
         this.dataService.showLoading(true);
-        if (this.files) {
+        if (this.files && this.files.name) {
           this.files = new File([this.files], this.files.name.split(" ").join("_"), {type: this.files.type});
         }
-        if (this.files2) {
+        if (this.files2 && this.files2.name) {
           this.files2 = new File([this.files2], this.files2.name.split(" ").join("_"), {type: this.files2.type});
         }
-        if (this.files3) {
+        if (this.files3 && this.files3.name) {
           this.files3 = new File([this.files3], this.files3.name.split(" ").join("_"), {type: this.files3.type});
         }
-        if (this.files4) {
+        if (this.files4 && this.files4.name) {
           this.files4 = new File([this.files4], this.files4.name.split(" ").join("_"), {type: this.files4.type});
         }
 
@@ -197,29 +197,29 @@ export class PayLaterTemplateFinancingCreateComponent implements OnInit {
         fd.append('tips_trick', JSON.stringify(this.formTemplate.get('tips').value));
         fd.append('paylater_company_type_id', this.dataType === "invoice-financing" ? "1" : this.dataType === "retailer-financing" ? "2" : this.dataType === "kur" ? "3" : "null");
         if (!this.files) {
-          fd.append('banner_file1', this.files);
-          fd.append('banner_1', this.files);
+          fd.append('banner_file1', null);
+          fd.append('banner_1', null);
         } else {
           fd.append('banner_file1', this.files);
         }
 
         if (!this.files2) {
-          fd.append('banner_file2', this.files2);
-          fd.append('banner_2', this.files2);
+          fd.append('banner_file2', null);
+          fd.append('banner_2', null);
         } else {
           fd.append('banner_file2', this.files2);
         }
 
         if (!this.files3) {
-          fd.append('banner_file3', this.files3);
-          fd.append('banner_3', this.files3);
+          fd.append('banner_file3', null);
+          fd.append('banner_3', null);
         } else {
           fd.append('banner_file3', this.files3);
         }
 
         if (!this.files4) {
-          fd.append('banner_file4', this.files4);
-          fd.append('banner_4', this.files4);
+          fd.append('banner_file4', null);
+          fd.append('banner_4', null);
         } else {
           fd.append('banner_file4', this.files4);
         }

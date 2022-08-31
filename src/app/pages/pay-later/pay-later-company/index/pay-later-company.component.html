@@ -22,8 +22,8 @@
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" 
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
         <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
