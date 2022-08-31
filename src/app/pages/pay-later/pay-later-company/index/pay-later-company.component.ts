@@ -54,19 +54,19 @@ export class PayLaterCompanyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCompanies();
+    this.getCompanies(true);
   }
 
-  getCompanies() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+  getCompanies(resetPage?) {
+    this.pagination.page = resetPage ? 1 : this.dataService.getFromStorage("page_company");
+    this.pagination.sort_type = resetPage ? null : this.dataService.getFromStorage("sort_type_company");
+    this.pagination.sort = resetPage ? null : this.dataService.getFromStorage("sort_company");
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.dataService.setToStorage("page_company", this.pagination.page);
+    this.dataService.setToStorage("sort_type_company", this.pagination.sort_type);
+    this.dataService.setToStorage("sort_company", this.pagination.sort);
 
-    this.offsetPagination = page ? (page - 1) : 0;
+    this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
     this.paylaterCompanyService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
@@ -87,8 +87,15 @@ export class PayLaterCompanyComponent implements OnInit {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page_company", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page_company");
+    }
 
     this.paylaterCompanyService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -103,7 +110,9 @@ export class PayLaterCompanyComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page_company", this.pagination.page);
+    this.dataService.setToStorage("sort_company", event.column.prop);
+    this.dataService.setToStorage("sort_type_company", event.newValue);
 
     this.paylaterCompanyService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -114,11 +123,16 @@ export class PayLaterCompanyComponent implements OnInit {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page_company");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
     this.paylaterCompanyService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
@@ -157,7 +171,7 @@ export class PayLaterCompanyComponent implements OnInit {
     this.paylaterCompanyService.delete({ company_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getCompanies();
+        this.getCompanies(true);
 
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
