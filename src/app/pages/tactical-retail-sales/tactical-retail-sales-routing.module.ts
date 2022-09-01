@@ -16,22 +16,37 @@ const routes: Routes = [
   {
     path: "trs-system-variable",
     component: TrsSystemVariableComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_system_variable
+    },
   },
   {
     path: "trs-proposal",
     component: TrsProposalComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.index
+    },
+  },
+  {
+    path: "trs-proposal/:id",
+    component: TrsProposalEditComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
+    },
   },
   {
     path: "trs-proposal/create",
     component: TrsProposalCreateComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.create
+    },
   },
   {
     path: "trs-proposal/edit/:id",
     component: TrsProposalEditComponent,
-  },
-  {
-    path: "trs-proposal/detail/:id",
-    component: TrsProposalEditComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.edit
+    },
   }
 ]
 

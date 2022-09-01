@@ -1,3 +1,32 @@
-<p>
-  trs-system-variable works!
-</p>
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="TRS System Variable"
+    ><button
+      mat-raised-button
+      aria-label="Simpan"
+      (click)="submit()"
+      type="button"
+    >
+      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
+    </button></page-content-header
+  >
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
+        <h2 style="margin: unset">TRS System Variable</h2>
+      </div>
+      <div class="mb-20" style="font-style: italic;">Last update: {{ max_pack_data.updated_date }}</div>
+
+      <form [formGroup]="sysvariable" class="py-24" *ngIf="sysvariable">
+        <div fxLayout="row">
+          <mat-form-field fxFlex="30" class="is-light form-primary">
+            <input matInput type="number" min="0" formControlName="max_pack" placeholder="Max total pack per customer" numericOnly>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
