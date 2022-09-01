@@ -75,10 +75,10 @@ export class PayLaterTemplateFinancingEditComponent implements OnInit {
     this.PayLaterTemplateFinancingService.show({ id: this.shortDetail.id }).subscribe(res => {
       this.detailTemplate = res.data;
       // console.log("Data Template >>> ", res.data)
-      let reasonData = JSON.parse(res.data.alasan_bergabung),
-          useData = JSON.parse(res.data.cara_penggunaan),
-          faqData = JSON.parse(res.data.faq),
-          tipsData = JSON.parse(res.data.tips_trick);
+      let reasonData = res.data.alasan_bergabung,
+          useData = res.data.cara_penggunaan,
+          faqData = res.data.faq,
+          tipsData = res.data.tips_trick;
 
       let arrayReason = [
         {
