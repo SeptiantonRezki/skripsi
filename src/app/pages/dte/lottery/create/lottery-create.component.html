@@ -26,7 +26,14 @@
                 </div>
                 <div fxLayout="row" class="px-24">
                   <mat-form-field fxFlex class="is-light form-primary">
-                    <input matInput type="number" placeholder="Jumlah Koin yang dibutuhkan per Kupon" formControlName="coin"
+                    <input 
+                      matInput 
+                      type="text"
+                      autocomplete="off"
+                      pattern="^[1-9][0-9]*$" 
+                      oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+                      placeholder="Jumlah Koin yang dibutuhkan per Kupon" 
+                      formControlName="coin"
                       name="coin">
                       <mat-error
                       *ngIf="formUndian.controls['coin'].hasError('required') && formUndian.controls['coin'].touched">
