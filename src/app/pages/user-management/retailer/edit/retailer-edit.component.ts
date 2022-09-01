@@ -817,7 +817,7 @@ export class RetailerEditComponent {
     // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
-    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
+    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'gsr', 'salestree_toko', 'akses_kasir'];
 
 
     console.log('SEE', this.seePhone);
@@ -849,6 +849,10 @@ export class RetailerEditComponent {
     if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
+    }
+
+    if (!this.isCan(['ubah', 'gsr'])) {
+      this.disableFields(['gsr']);
     }
 
     if (!this.isCan(['ubah', 'salestree_toko'])) {

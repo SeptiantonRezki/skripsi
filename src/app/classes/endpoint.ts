@@ -1157,6 +1157,11 @@ export class Endpoint {
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/${context.id}`,
       },
+      tactical_retail_sales: {
+        sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
+        proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal`,
+        proposal_detail: `${AYO_API_SERVICE(SERVER.task)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
