@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject } 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
+import { LotteryService } from 'app/services/dte/lottery.service';
 import { DataService } from 'app/services/data.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -75,6 +76,7 @@ export class ImportAudiencePersonalizeComponentLottery implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private lotteryService: LotteryService,
     private dataService: DataService,
     private idbService: IdbService,
     private ls: LanguagesService,
@@ -120,12 +122,12 @@ export class ImportAudiencePersonalizeComponentLottery implements OnInit {
     this.idbService.reset();
     fd.append('file', this.files);
     this.dataService.showLoading(true);
-    this.audienceService.importExcel(fd).subscribe(
+    this.lotteryService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
           this.dataService.showLoading(false);
           this.pagination['per_page'] = 1000;
-          this.audienceService.showImport(this.pagination).subscribe(response => {
+          this.lotteryService.showImport(this.pagination).subscribe(response => {
             // console.log('satu', this.pagination);
             const {data} = response.data;
             this.allData = [...data];
@@ -178,7 +180,7 @@ export class ImportAudiencePersonalizeComponentLottery implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
+      this.lotteryService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
         // console.log('dua');
         if (response && response.data) {
           const {data} = response.data;
@@ -305,7 +307,7 @@ export class ImportAudiencePersonalizeComponentLottery implements OnInit {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial, per_page: this.pagination['per_page'] });
+      let response = this.lotteryService.showImport({ page: trial, per_page: this.pagination['per_page'] });
       // console.log('tiga');
       trialsRes.push(response);
     })
