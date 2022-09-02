@@ -1258,7 +1258,7 @@ export class LotteryEditComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcelXLSX(body).toPromise();
+      const response = await this.lotteryService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
