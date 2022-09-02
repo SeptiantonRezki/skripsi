@@ -157,9 +157,12 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessComponentLottery } from './lottery/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponent } from './audience/dialog/dialog-process-save/dialog-process-save.component';
+import { DialogProcessSaveComponentLottery } from './lottery/dialog/dialog-process-save/dialog-process-save.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
+import { ImportAudiencePersonalizeComponentLottery } from './lottery/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
 import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
 import { SkuComponent } from './image-recognition/sku/sku.component';
@@ -357,9 +360,12 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessComponentLottery,
     DialogProcessSaveComponent,
+    DialogProcessSaveComponentLottery,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
+    ImportAudiencePersonalizeComponentLottery,
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
@@ -487,8 +493,11 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessComponentLottery,
     DialogProcessSaveComponent,
-    ImportAudiencePersonalizeComponent
+    DialogProcessSaveComponentLottery,
+    ImportAudiencePersonalizeComponent,
+    ImportAudiencePersonalizeComponentLottery
   ],
 })
 export class DteModule { }

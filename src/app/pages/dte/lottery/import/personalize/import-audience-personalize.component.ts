@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject } 
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
+import { LotteryService } from 'app/services/dte/lottery.service';
 import { DataService } from 'app/services/data.service';
 import { Page } from 'app/classes/laravel-pagination';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -16,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './import-audience-personalize.component.html',
   styleUrls: ['./import-audience-personalize.component.scss']
 })
-export class ImportLotteryDialogComponent implements OnInit {
+export class ImportAudiencePersonalizeComponentLottery implements OnInit {
 
   files: File;
   validComboDrag: boolean;
@@ -67,13 +68,15 @@ export class ImportLotteryDialogComponent implements OnInit {
   requestingImport: boolean = false;
   importing: boolean = false;
   allData: Array<any> = [];
+  validData = [];
   numError: number = 1;
 
   constructor(
-    public dialogRef: MatDialogRef<ImportLotteryDialogComponent>,
+    public dialogRef: MatDialogRef<ImportAudiencePersonalizeComponentLottery>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
+    private lotteryService: LotteryService,
     private dataService: DataService,
     private idbService: IdbService,
     private ls: LanguagesService,
@@ -119,15 +122,17 @@ export class ImportLotteryDialogComponent implements OnInit {
     this.idbService.reset();
     fd.append('file', this.files);
     this.dataService.showLoading(true);
-    this.audienceService.importExcel(fd).subscribe(
+    this.lotteryService.importExcel(fd).subscribe(
       res => {
         if (res && res.data) {
           this.dataService.showLoading(false);
-          this.pagination['per_page'] = 250;
-          this.audienceService.showImport(this.pagination).subscribe(response => {
+          this.pagination['per_page'] = 1000;
+          this.lotteryService.showImport(this.pagination).subscribe(response => {
+            // console.log('satu', this.pagination);
             const {data} = response.data;
             this.allData = [...data];
             this.invalidData = this.allData.some(item => item.is_valid === false);
+            this.validData = data.filter(item => item.is_valid === true);
 
             // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
             data.map((item, idx) => {
@@ -175,13 +180,17 @@ export class ImportLotteryDialogComponent implements OnInit {
   
   recursiveImport() {
     if (this.currPage <= this.lastPage) {
-      this.audienceService.showImport({ page: this.currPage }).subscribe(response => {
+      this.lotteryService.showImport({ page: this.currPage, per_page: this.pagination['per_page'] }).subscribe(response => {
+        // console.log('dua');
         if (response && response.data) {
           const {data} = response.data;
           this.allData = [...this.allData, ...data];
           if (!this.invalidData) {
             this.invalidData = this.allData.some(item => item.is_valid === false);
           }
+
+          const newData = data.filter(item => item.is_valid === true);
+          this.validData = [...this.validData, ...newData];
           
           // data.sort((a,b) => (a.is_valid > b.is_valid ? 1 : -1));
           data.map((item, idx) => {
@@ -288,7 +297,7 @@ export class ImportLotteryDialogComponent implements OnInit {
     }
     else {
       if (this.totalData > 0) {
-        this.dialogRef.close(this.allData);
+        this.dialogRef.close(this.validData);
       } else {
         this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text17') });
       }
@@ -298,7 +307,8 @@ export class ImportLotteryDialogComponent implements OnInit {
   trialImport() {
     let trialsRes = [];
     this.trials.map(trial => {
-      let response = this.audienceService.showImport({ page: trial });
+      let response = this.lotteryService.showImport({ page: trial, per_page: this.pagination['per_page'] });
+      // console.log('tiga');
       trialsRes.push(response);
     })
 

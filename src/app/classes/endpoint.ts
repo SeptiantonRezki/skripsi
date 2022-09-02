@@ -356,6 +356,9 @@ export class Endpoint {
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-status`,
         export_detail_coupon:`${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/detail-export`,
         export_coupon:`${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/export`,
+        import_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/audience/pre-import`,
+        show_import_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/lottery/audience/show-import`,
+        export_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/audience/request-export`,
       },
       dte_automation: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/automation`,
