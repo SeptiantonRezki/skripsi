@@ -77,6 +77,6 @@ export class SpinTheWheelService extends BaseService {
   }
   showImport(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "show_import");
-    return this.getApi(url, queryParams);
+    return this.postApi(url, queryParams);
   }
 }
