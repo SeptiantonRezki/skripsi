@@ -68,15 +68,15 @@ export class SpinTheWheelService extends BaseService {
     return this.deleteApi(url);
   }
   exportExcel(body): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_lottery");
+    const url = this.getUrl(this.namespace, "export");
     return this.postApi(url, body);
   }
   importExcel(body): Observable<any> {
-    const url = this.getUrl(this.namespace, "import_lottery");
+    const url = this.getUrl(this.namespace, "import");
     return this.postApi(url, body);
   }
   showImport(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "show_import_lottery");
+    const url = this.getUrl(this.namespace, "show_import");
     return this.getApi(url, queryParams);
   }
 }
