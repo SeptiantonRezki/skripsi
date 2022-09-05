@@ -187,6 +187,9 @@ import { LotteryComponent } from './lottery/index/lottery.component';
 import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { JobsRequestComponent } from './jobs-request/jobs-request.component';
+import { DialogProcessComponentSPW } from "./spin-the-wheel/dialog/dialog-process/dialog-process.component";
+import { DialogProcessSaveComponentSPW } from "./spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component";
+import { ImportAudiencePersonalizeComponentSPW } from "./spin-the-wheel/import/personalize/import-audience-personalize.component";
 
 
 export const customCurrencyMaskConfig = {
@@ -367,6 +370,9 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
@@ -498,7 +504,10 @@ export const MY_FORMATS = {
     DialogProcessSaveComponent,
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
-    ImportAudiencePersonalizeComponentLottery
+    ImportAudiencePersonalizeComponentLottery,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
   ],
 })
 export class DteModule { }

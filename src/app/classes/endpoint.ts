@@ -1155,6 +1155,9 @@ export class Endpoint {
         export_spin: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/export/${context.id}`,
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/update-status/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/${context.id}`,
+        import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/pre-import`,
+        show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/spin/audience/show-import`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
       },
       tactical_retail_sales: {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,

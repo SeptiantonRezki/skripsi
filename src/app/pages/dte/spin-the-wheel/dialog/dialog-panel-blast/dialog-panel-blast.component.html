@@ -1,0 +1,43 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+    <div fxFlex fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
+      <span>{{'dte.audience.panel_blast' | translate}}</span>
+      <button
+        mat-raised-button
+        type="button"
+        (click)="export()"
+      >
+        <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+      </button>
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+      [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
+      [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
+
+      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.retailer_id' | translate}}" prop="retailer_id"></ngx-datatable-column>
+
+      <ngx-datatable-column name="{{'dte.template_tugas.copywriting' | translate}}" prop="copywrites"></ngx-datatable-column>
+
+      <ngx-datatable-column name="{{'dte.audience.blasted_time' | translate}}" prop="blasted_time">
+        <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+          {{ row.blasted_time }}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="{{'dte.task_sequencing.text35' | translate}}" prop="coin_submission"></ngx-datatable-column>
+      <ngx-datatable-column name="{{'dte.task_sequencing.text36' | translate}}" prop="coin_verification"></ngx-datatable-column>
+      <ngx-datatable-column name="{{'dte.audience.error_validation' | translate}}" prop="error_validation"></ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+  <a #downloadLink></a>
+</div>
