@@ -177,6 +177,9 @@ import { CheckImageComponent } from './image-recognition/check-image/check-image
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
+import { DialogProcessComponentSPW } from "./spin-the-wheel/dialog/dialog-process/dialog-process.component";
+import { DialogProcessSaveComponentSPW } from "./spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component";
+import { ImportAudiencePersonalizeComponentSPW } from "./spin-the-wheel/import/personalize/import-audience-personalize.component";
 
 
 export const customCurrencyMaskConfig = {
@@ -354,6 +357,9 @@ export const MY_FORMATS = {
     DialogProcessSaveComponent,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
@@ -476,7 +482,10 @@ export const MY_FORMATS = {
     DialogPanelBlastComponent,
     DialogProcessComponent,
     DialogProcessSaveComponent,
-    ImportAudiencePersonalizeComponent
+    ImportAudiencePersonalizeComponent,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
   ],
 })
 export class DteModule { }
