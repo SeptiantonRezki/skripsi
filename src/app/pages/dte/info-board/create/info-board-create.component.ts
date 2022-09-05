@@ -152,7 +152,7 @@ export class InfoBoardCreateComponent implements OnInit {
     this.formBoard = this.formBuilder.group({
       name_board: ["", Validators.required],
       description_board: ["", Validators.required],
-      jenis_info_board: [""],
+      type: [""],
       start_date: [new Date()],
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
@@ -180,7 +180,7 @@ export class InfoBoardCreateComponent implements OnInit {
 
     this.onLoad = false;
 
-    this.formBoard.get('jenis_info_board').valueChanges.subscribe(res => {
+    this.formBoard.get('type').valueChanges.subscribe(res => {
       if (res === 'task-free-text') {
         this.isFreeText = true;
       } else {
@@ -205,24 +205,18 @@ export class InfoBoardCreateComponent implements OnInit {
       let fd = new FormData();
 
       let body = {
-        name: this.formBoard.get('name').value,
-        coin: this.formBoard.get('coin').value,
-        // start_date: this.convertDate(this.formBoard.get('start_date').value),
-        // end_date: this.convertDate(this.formBoard.get('end_date').value),
-        // announcement_date: this.convertDate(this.formBoard.get('announcement_date').value),
+        name: this.formBoard.get('name_board').value,
+        type: this.formBoard.get('type').value,
+        description: this.formBoard.get('description_board').value,
         start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
         end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
-        announcement_date: `${moment(this.formBoard.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('announcement_time').value}:00`,
       }
 
       fd.append('name', body.name);
-      fd.append('coin', body.coin);
+      fd.append('type', body.coin);
+      fd.append('description', body.coin);
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
-      fd.append('announcement_date', body.announcement_date);
-      // fd.append('trade_creator_group_id[]', this.formBoard.get('group_trade_program').value);
-      fd.append('trade_creator_group_id[]', '0');
-      fd.append('trade_creator_sub_group_id[]', this.formBoard.get('sub_group_trade_program').value);
 
       this.infoBoardService.create(fd).subscribe(
         res => {

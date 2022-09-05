@@ -151,7 +151,7 @@ export class InfoBoardEditComponent implements OnInit {
     this.formBoard = this.formBuilder.group({
       name_board: ["", Validators.required],
       description_board: ["", Validators.required],
-      jenis_info_board: [""],
+      type: [""],
       start_date: [new Date()],
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
@@ -182,7 +182,7 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.setStorageDetail();
 
-    this.formBoard.get('jenis_info_board').valueChanges.subscribe(res => {
+    this.formBoard.get('type').valueChanges.subscribe(res => {
       if (res === 'task-free-text') {
         this.isFreeText = true;
       } else {
@@ -201,7 +201,7 @@ export class InfoBoardEditComponent implements OnInit {
     // this.formBoard.setValue({
     //   name_board: this.detailFormBoard.name,
     //   description_board: this.detailFormBoard.description,
-    //   jenis_info_board: this.detailFormBoard.jenis,
+    //   type: this.detailFormBoard.jenis,
     //   start_date: this.convertDate(this.detailFormBoard.start_date),
     //   start_time: this.convertTime(this.detailFormBoard.start_date ? this.detailFormBoard.start_date : ''),
     //   end_date: this.convertDate(this.detailFormBoard.end_date),
@@ -210,7 +210,7 @@ export class InfoBoardEditComponent implements OnInit {
 
 
     if (this.isDetail) {
-      this.formBoard.get('jenis_info_board').disable();
+      this.formBoard.get('type').disable();
       this.formBoard.get('name_board').disable();
       this.formBoard.get('description_board').disable();
       this.formBoard.get('start_date').disable();
@@ -222,7 +222,7 @@ export class InfoBoardEditComponent implements OnInit {
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.infoBoardService.showAudience(this.detailFormBoard.id).subscribe(res => { 
+    this.showDetail = this.infoBoardService.detail(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
 
@@ -714,24 +714,21 @@ export class InfoBoardEditComponent implements OnInit {
 
       const body = {
         _method: 'PUT',
-        name: this.formBoard.get('name').value,
-        coin: this.formBoard.get('coin').value,
+        name: this.formBoard.get('name_board').value,
+        type: this.formBoard.get('type').value,
+        description: this.formBoard.get('description_board').value,
         start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
         end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
-        announcement_date: `${moment(this.formBoard.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('announcement_time').value}:00`,
       }
 
       fd.append('_method', body._method);
       fd.append('name', body.name);
-      fd.append('coin', body.coin);
+      fd.append('type', body.coin);
+      fd.append('description', body.coin);
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
-      fd.append('announcement_date', body.announcement_date);
-      // fd.append('trade_creator_group_id[]', this.formBoard.get('group_trade_program_id').value);
-      fd.append('trade_creator_group_id[]', '0');
-      fd.append('trade_creator_sub_group_id[]', this.formBoard.get('sub_group_trade_program_id').value);
 
-      this.infoBoardService.put(fd, { lottery_id: this.detailFormBoard.id }).subscribe(
+      this.infoBoardService.put(fd, { id: this.detailFormBoard.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           this.router.navigate(['dte', 'lottery']);

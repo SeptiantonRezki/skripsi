@@ -32,7 +32,7 @@
                   class="px-24"
                 >
                 <mat-form-field fxFlex="50" class="is-light form-primary">
-                  <mat-select formControlName="jenis_info_board" placeholder="Jenis Info Board">
+                  <mat-select formControlName="type" placeholder="Jenis Info Board">
                       <mat-option *ngFor="let item of infoBoard" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>

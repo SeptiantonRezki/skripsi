@@ -40,8 +40,8 @@ export class InfoBoardService extends BaseService {
     return this.deleteApi(url);
   }
 
-  showAudience(context: any): Observable<any> {
-    const url = this.getUrl(this.namespace, 'show_audience', {id: context});
+  detail(context: any): Observable<any> {
+    const url = this.getUrl(this.namespace, 'detail', {id: context});
     return this.getApi(url);
   }
 
