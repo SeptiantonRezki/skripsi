@@ -18,12 +18,12 @@ import { DialogService } from 'app/services/dialog.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
-import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
-import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
-import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { DialogProcessComponentSPW } from '../dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponentSPW } from '../dialog/dialog-process-save/dialog-process-save.component';
+import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/import-audience-personalize.component';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -1051,7 +1051,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
   
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessComponentSPW,
         {...dialogConfig, width: '400px'}
       );
 
@@ -1104,7 +1104,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessSaveComponent,
+      DialogProcessSaveComponentSPW,
       {...dialogConfig, width: '400px'}
     );
 
@@ -1188,7 +1188,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.spinTheWheelService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -1211,7 +1211,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      ImportAudiencePersonalizeComponent,
+      ImportAudiencePersonalizeComponentSPW,
       dialogConfig
     );
 
@@ -1690,7 +1690,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
 
       this.dialogRef = this.dialog.open(
-        DialogProcessSaveComponent,
+        DialogProcessSaveComponentSPW,
         {...dialogConfig, width: '400px'}
       );
 
