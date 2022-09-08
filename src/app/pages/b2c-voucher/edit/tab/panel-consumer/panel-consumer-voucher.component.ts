@@ -91,7 +91,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   private _onDestroy = new Subject<void>();
 
   typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
-  listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
+  listSmoker: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Perokok CC', value: 'cc' }, { name: 'Pengguna iQOS', value: 'rrp' }, { name: 'Bukam Perokok', value: 'non-smoker' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
   listVA: any[] = [
     { name: 'Referral Code', value: 'referral' },
@@ -231,7 +231,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
     this.formConsumerGroup = this.formBuilder.group({
       allocationVoucher: [0],
-      is_smoker: ['both', Validators.required],
+      is_smoker: ['all', Validators.required],
       gender: ['both', Validators.required],
       age_consumer_from: ['', Validators.required],
       age_consumer_to: ['', Validators.required],
