@@ -45,7 +45,6 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
   listProductBarcodes: Array<any> = []
 
-  listJenisKonsumen: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.verified'), value: "verified" }];
   listSubscriptionStatus: any[] = [{ name: this.translate.instant('global.label.all'), value: 'all' }, { name: this.translate.instant('global.label.subscribe'), value: 'subscribed' }, { name: this.translate.instant('global.label.unsubscribe'), value: 'not-subscribed' }]
   userGroup: any[] = [
     { name: this.translate.instant('global.menu.field_force'), value: "field-force" },
@@ -71,11 +70,6 @@ export class NotificationCreateComponent {
   listNotifType: any[] = [
     { name: this.translate.instant('notification.buat_notifikasi.send_as_notif'), value: "notif" },
     { name: this.translate.instant('notification.buat_notifikasi.send_as_message'), value: "message" },
-  ];
-  listConsumentType: any[] = [
-    { name: this.translate.instant('global.label.all'), value: 'all' },
-    { name: this.translate.instant('global.label.smoking'), value: '1' },
-    { name: this.translate.instant('global.label.not_smoke'), value: '0' }
   ];
 
   imageContentType: File;
@@ -137,6 +131,11 @@ export class NotificationCreateComponent {
     { id: 'Nov', name: this.translate.instant('global.calendar.november') },
     { id: 'Dec', name: this.translate.instant('global.calendar.december') },
   ]
+  listContentTypeNew: any[] = [
+    { name: this.translate.instant('global.label.reguler'), value: "all" },
+    { name: this.translate.instant('global.label.cc'), value: "cc" },
+    { name: this.translate.instant('global.label.rrp'), value: "rrp" },
+  ];
 
   listDates: number[];
 
@@ -247,7 +246,6 @@ export class NotificationCreateComponent {
       user_group: {},
       age: {},
       notif_type: {},
-      is_smoking: {},
     };
 
     this.listLevelArea = [
@@ -288,7 +286,6 @@ export class NotificationCreateComponent {
       title: ["", Validators.required],
       body: ["", Validators.required],
       user_group: ["retailer", Validators.required],
-      verification: ["all"],
       subscription_status: ['all'],
       age: ["18+", Validators.required],
       employee_filter: ["all", Validators.required],
@@ -310,11 +307,11 @@ export class NotificationCreateComponent {
       send_ayo: [false],
       status: ["Active"],
       notif_type: ['notif', Validators.required],
-      is_smoking: ['all', Validators.required],
       area_ids: [[]],
       date: [moment(), Validators.required],
       time: ["00:00", Validators.required],
-      barcode: [""]
+      barcode: [""],
+      content_type_new: ['all'],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -446,9 +443,6 @@ export class NotificationCreateComponent {
     this.formNotification.controls['age'].valueChanges.debounceTime(50).subscribe(res => {
       this.resetAudience();
     });
-    this.formNotification.controls['verification'].valueChanges.debounceTime(50).subscribe(res => {
-      this.resetAudience();
-    });
     this.formNotification.controls['subscription_status'].valueChanges.debounceTime(50).subscribe(res => {
       this.resetAudience();
     });
@@ -478,14 +472,6 @@ export class NotificationCreateComponent {
     this.formRecurrenceCommon.get('end_recurrence_count').valueChanges.subscribe(val => {
       if (val) {
         this.formRecurrenceCommon.controls['end_option'].setValue('end_count');
-      }
-    })
-
-    this.formNotification.controls['is_smoking'].valueChanges.debounceTime(50).subscribe(res => {
-      if (this.formNotification.get("is_target_audience").value === true) {
-        this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
       }
     })
 
@@ -1489,11 +1475,10 @@ export class NotificationCreateComponent {
 
     if (this.ALLOW_FOR_TYPE.includes(body.type)) {
       body['employee'] = this.formNotification.get('employee').value;
-      body['verification'] = this.formNotification.get('verification').value;
       body['subscription_status'] = this.formNotification.get('subscription_status').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
-      body['is_smoking'] = this.formNotification.get('is_smoking').value;
       body['employee_filter'] = this.formNotification.get('employee_filter').value;
+      body['user_type'] = this.formNotification.get('content_type_new').value;
     }
 
     if (this.typeOfRecurrence == 'Bday18') {
@@ -1559,7 +1544,6 @@ export class NotificationCreateComponent {
             bodyVideo.append('type', body.type);
 
             if (this.ALLOW_FOR_TYPE.includes(body.type)) {
-              bodyVideo.append('verification', body.verification);
               bodyVideo.append('age', body.age);
               bodyVideo.append('notif_type', body.notif_type);
             }
@@ -1628,7 +1612,6 @@ export class NotificationCreateComponent {
           bodyVideo.append('body', body.body);
           bodyVideo.append('type', body.type);
           if (this.ALLOW_FOR_TYPE.includes(body.type)) {
-            bodyVideo.append('verification', body.verification);
             bodyVideo.append('age', body.age);
             bodyVideo.append('notif_type', body.notif_type);
           }
@@ -2035,13 +2018,11 @@ export class NotificationCreateComponent {
 
 
       this.pagination['age'] = age;
-      this.pagination['verification'] = this.formNotification.get('verification').value;
       this.pagination['subscription_status'] = this.formNotification.get('subscription_status').value;
       this.pagination['employee_filter'] = this.formNotification.get('employee_filter').value;
     }
     else {
       if (this.pagination['age']) delete this.pagination['age'];
-      if (this.pagination['verification']) delete this.pagination['verification'];
       if (this.pagination['subscription_status']) delete this.pagination['subscription_status'];
       if (this.pagination['employee_filter']) delete this.pagination['employee_filter'];
     }
@@ -2388,7 +2369,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        verification, send_sfmc, area_ids, is_smoking, date
+        send_sfmc, area_ids, date, user_type,
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2411,7 +2392,6 @@ export class NotificationCreateComponent {
       }
 
       const frm = this.formNotification;
-      frm.controls['is_smoking'].setValue(is_smoking);
       frm.controls['title'].setValue(title);
       frm.controls['body'].setValue(body);
       frm.controls['user_group'].setValue(type);
@@ -2424,7 +2404,6 @@ export class NotificationCreateComponent {
       frm.controls['static_page_title'].setValue(static_page_slug);
       frm.controls['static_page_body'].setValue(static_page_body);
       frm.controls['status'].setValue(status);
-      frm.controls['verification'].setValue(verification);
       frm.controls['area_ids'].setValue(area_ids);
       frm.controls['date'].setValue(moment(date.split(' ')[0]));
       frm.controls['time'].setValue(date.split(' ')[1]);
@@ -2436,6 +2415,7 @@ export class NotificationCreateComponent {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
         frm.controls['area_ids'].setValue(area_ids);
+        frm.controls['content_type_new'].setValue(user_type);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
