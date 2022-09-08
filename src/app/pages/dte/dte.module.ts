@@ -182,6 +182,7 @@ import { LotteryComponent } from './lottery/index/lottery.component';
 import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { XpComponent } from './xp/xp.component';
+import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
@@ -390,6 +391,7 @@ export const MY_FORMATS = {
     LotteryCreateComponent,
     LotteryEditComponent,
     XpComponent,
+    LoyaltyMitraComponent,
     VerificationApprovalComponent,
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,

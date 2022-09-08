@@ -70,6 +70,7 @@ import { VerificationApprovalComponent } from "./task-verification-2/verificatio
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
+import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
 
 const routes: Routes = [
   {
@@ -832,6 +833,48 @@ const routes: Routes = [
   {
     path: 'xp/detail/:id/:tab',
     component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/create',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/create/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id/:tab',
+    component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
