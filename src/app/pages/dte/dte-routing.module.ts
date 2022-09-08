@@ -62,6 +62,7 @@ import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
 import { XpComponent } from "./xp/xp.component";
+import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
@@ -888,6 +889,48 @@ const routes: Routes = [
   {
     path: 'xp/detail/:id/:tab',
     component: XpComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/create',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/create/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id/:tab',
+    component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
