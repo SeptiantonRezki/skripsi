@@ -180,6 +180,7 @@ import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.co
 
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
 import { XpComponent } from './xp/xp.component';
+import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
@@ -391,6 +392,7 @@ export const MY_FORMATS = {
     LotteryCreateComponent,
     LotteryEditComponent,
     XpComponent,
+    LoyaltyMitraComponent,
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
