@@ -91,7 +91,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   private _onDestroy = new Subject<void>();
 
   typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
-  listSmoker: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Perokok CC', value: 'cc' }, { name: 'Pengguna iQOS', value: 'rrp' }, { name: 'Bukan Perokok', value: 'non-smoker' }];
+  listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
   listVA: any[] = [
     { name: 'Referral Code', value: 'referral' },
