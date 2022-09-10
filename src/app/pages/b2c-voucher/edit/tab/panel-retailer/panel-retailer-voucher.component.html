@@ -95,31 +95,47 @@
     </form>
 
     <div *ngIf="isTargetAudience.value === true">
-      <div
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <mat-form-field fxFlex="100" class="mr-20 w-120 is-light">
+            <mat-select [formControl]="filterChecklist" placeholder="{{'dte.coin_disbursement.text18' | translate}}" (selectionChange)="onChangeFilter($event.value)">
+              <mat-option *ngFor="let item of listFilter" [value]="item.value">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            type="button"
+            (click)="resetFilter()"
+          >
+            Reset
+          </button>
+        </div>
+        <div
         fxLayout="row wrap"
         fxLayout.lt-md="column"
         fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px"
         fxLayoutAlign="end center"
         class="p-16 export"
-      >
-        <button
-          mat-raised-button
-          type="button"
-          class="is-danger"
-          (click)="importRetailer()"
-          [disabled]="disableForm"
         >
-          <mat-icon>vertical_align_bottom</mat-icon> Import XLS
-        </button>
-        <button
-          mat-raised-button
-          type="button"
-          class="is-danger"
-          (click)="exportRetailer()"
-        >
-          <mat-icon>vertical_align_top</mat-icon> Export XLS
-        </button>
+          <button
+            mat-raised-button
+            type="button"
+            class="is-danger"
+            (click)="importRetailer()"
+            [disabled]="disableForm"
+          >
+            <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+          </button>
+          <button
+            mat-raised-button
+            type="button"
+            class="is-danger"
+            (click)="exportRetailer()"
+          >
+            <mat-icon>vertical_align_top</mat-icon> Export XLS
+          </button>
+        </div>
       </div>
 
       <ngx-datatable
