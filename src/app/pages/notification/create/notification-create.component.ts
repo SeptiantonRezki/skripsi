@@ -1478,7 +1478,7 @@ export class NotificationCreateComponent {
       body['subscription_status'] = this.formNotification.get('subscription_status').value;
       body['notif_type'] = this.formNotification.get('notif_type').value;
       body['employee_filter'] = this.formNotification.get('employee_filter').value;
-      body['user_type'] = this.formNotification.get('content_type_new').value;
+      body['user_content_type'] = this.formNotification.get('content_type_new').value;
     }
 
     if (this.typeOfRecurrence == 'Bday18') {
@@ -2369,7 +2369,7 @@ export class NotificationCreateComponent {
       this.dataService.showLoading(true);
       const details = await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       const { title, static_page_slug, body, age, content_type, type, subscription_status, employee_filter, type_of_recurrence, target_audience, audience, recurrence, status, notif_type, content_type_value,
-        send_sfmc, area_ids, date, user_type,
+        send_sfmc, area_ids, date, user_content_type,
       } = details;
       // await this.notificationService.show({ notification_id: this.idNotif }).toPromise();
       // let staticPageDetail = null;
@@ -2415,7 +2415,7 @@ export class NotificationCreateComponent {
         let send_ayo = send_sfmc == null || send_sfmc == 0 || send_sfmc == '0';
         frm.controls['send_ayo'].setValue(send_ayo);
         frm.controls['area_ids'].setValue(area_ids);
-        frm.controls['content_type_new'].setValue(user_type);
+        frm.controls['content_type_new'].setValue(user_content_type);
       } else {
         frm.controls['send_ayo'].setValue(true);
       }
