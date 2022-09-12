@@ -11,16 +11,11 @@ import { Router } from '@angular/router';
 export class PayLaterTemplateFinancingTabComponent implements OnInit {
   selectedTab: any;
 
-  allRowsSelected: boolean;
-  isSelectedRows: boolean;
-  selectedRowIds: any[];
-  // invoiceSelected: any;
-
   constructor(
     private dataService: DataService,
     private router: Router
     ) {
-    // const selectedTab = dataService.getFromStorage("selected_tab_paylater_company");
+    // const selectedTab = dataService.getFromStorage("selected_tab_paylater_template_financing");
     // this.selectedTab = selectedTab ? selectedTab : 0;
     // this.selectedTab = 0;
     if (this.router.routerState.root.queryParams['value'].type === "kur") {
@@ -50,7 +45,7 @@ export class PayLaterTemplateFinancingTabComponent implements OnInit {
     window.localStorage.removeItem("sort_type_kur");
 
     this.selectedTab = tabChangeEvent.index;
-    this.dataService.setToStorage("selected_tab_paylater_company", this.selectedTab);
+    this.dataService.setToStorage("selected_tab_paylater_template_financing", this.selectedTab);
   }
 
 }
