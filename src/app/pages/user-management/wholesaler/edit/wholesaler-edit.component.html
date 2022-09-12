@@ -81,7 +81,7 @@
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">
-            <input matInput type="text" placeholder="ls.locale.global.label.phone" formControlName="phone">
+            <input matInput type="text" [placeholder]="ls.locale.global.label.phone" formControlName="phone">
           </mat-form-field>
 
           <div *ngIf="!isDetail && seePhone" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
@@ -120,7 +120,7 @@
                     [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'">
                   </ngx-mat-select-search>
                   <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
-                    {{item.name}}
+                    {{remaskSelect(item.name)}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
