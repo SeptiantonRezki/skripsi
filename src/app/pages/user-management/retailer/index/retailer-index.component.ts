@@ -137,6 +137,18 @@ export class RetailerIndexComponent {
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
     console.log('asdas', this.dataService.getDecryptedProfile());
+    if(this.dataService.getDecryptedProfile().country == 'PH'){
+      this.retailClassification = [
+        { name: this.ls.locale.global.label.all, value: 'all' },
+        { name: 'SRC', value: 'SRC' },
+        { name: 'NON-SRC', value: 'NON-SRC' },
+        { name: 'IMO', value: 'IMO' },
+        { name: 'LAMP/HOP', value: 'LAMP/HOP' },
+        { name: 'GT', value: 'GT' },
+        { name: 'KA', value: 'KA' },
+        { name: "ISR", value: "ISR"}
+      ]
+        }
     this.listLevelArea = [
       {
         'id': 1,
