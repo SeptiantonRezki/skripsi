@@ -11,10 +11,10 @@ import { PayLaterPanelEditComponent } from "./pay-later-panel/edit/pay-later-pan
 import { PayLaterPanelCreateComponent } from "./pay-later-panel/create/pay-later-panel-create.component";
 import { PayLaterActivationTabComponent } from "./pay-later-activation/pay-later-activation-tab.component";
 import { PaylaterListCompanyResolver } from "app/resolver/paylater.resolver";
-import { PayLaterDistributionListComponent } from "./pay-later-distribution-list/pay-later-distribution-list.component";
+import { PayLaterDistributionListTabComponent } from "./pay-later-distribution-list/pay-later-distribution-list-tab.component";
 import { PayLaterTemplateFinancingTabComponent } from "./pay-later-template-financing/pay-later-template-financing-tab.component";
-import { PayLaterTemplateFinancingCreateComponent } from './pay-later-template-financing/pay-later-template-financing/create/pay-later-template-financing-create.component';
-import { PayLaterTemplateFinancingEditComponent } from './pay-later-template-financing/pay-later-template-financing/edit/pay-later-template-financing-edit.component';
+import { PayLaterTemplateFinancingCreateComponent } from "./pay-later-template-financing/pay-later-template-financing/create/pay-later-template-financing-create.component";
+import { PayLaterTemplateFinancingEditComponent } from "./pay-later-template-financing/pay-later-template-financing/edit/pay-later-template-financing-edit.component";
 
 const routes: Routes = [
   {
@@ -98,7 +98,7 @@ const routes: Routes = [
   },
   {
     path: "distribution",
-    component: PayLaterDistributionListComponent,
+    component: PayLaterDistributionListTabComponent,
     data: {
       breadcrumbs: brConfig.paylater.distributionlist.index
     },

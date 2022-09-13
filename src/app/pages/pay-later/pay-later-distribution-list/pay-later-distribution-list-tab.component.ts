@@ -4,18 +4,18 @@ import { MatTabChangeEvent } from '@angular/material';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-pay-later-template-financing-tab',
-  templateUrl: './pay-later-template-financing-tab.component.html',
-  styleUrls: ['./pay-later-template-financing-tab.component.scss']
+  selector: 'app-pay-later-distribution-list-tab',
+  templateUrl: './pay-later-distribution-list-tab.component.html',
+  styleUrls: ['./pay-later-distribution-list-tab.component.scss']
 })
-export class PayLaterTemplateFinancingTabComponent implements OnInit {
+export class PayLaterDistributionListTabComponent implements OnInit {
   selectedTab: any;
 
   constructor(
     private dataService: DataService,
     private router: Router
     ) {
-    // const selectedTab = dataService.getFromStorage("selected_tab_paylater_template_financing");
+    // const selectedTab = dataService.getFromStorage("selected_tab_paylater_distribution");
     // this.selectedTab = selectedTab ? selectedTab : 0;
     // this.selectedTab = 0;
     if (this.router.routerState.root.queryParams['value'].type === "kur") {
@@ -45,7 +45,7 @@ export class PayLaterTemplateFinancingTabComponent implements OnInit {
     window.localStorage.removeItem("sort_type_kur");
 
     this.selectedTab = tabChangeEvent.index;
-    this.dataService.setToStorage("selected_tab_paylater_template_financing", this.selectedTab);
+    this.dataService.setToStorage("selected_tab_paylater_distribution", this.selectedTab);
   }
 
 }
