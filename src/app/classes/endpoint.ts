@@ -767,10 +767,21 @@ export class Endpoint {
         import: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/import`,
         preview: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/panel/preview-import`
       },
+      paylater_activate: {
+        activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/mitra`,
+        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/src`,
+        export: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/src/export`,
+      },
       paylater_deactivate: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation`,
         history: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation/history`,
         approval: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/deactivation/${context.deactivation_id}`,
+      },
+      distribution_list: {
+        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
+        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
+        autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
       },
       paylater_template_financing: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
@@ -831,11 +842,6 @@ export class Endpoint {
         put_delete_verification_remark: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-verification-remark/${context.id}`,
         get_post_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite`,
         put_delete_copywriting: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/kategori-toolbox-copywrite/${context.id}`,
-      },
-      paylater_activate: {
-        activate_mitra: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/mitra`,
-        activate_src: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/src`,
-        export: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/paylater/activation/src/export`,
       },
       virtual_account_company: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/virtual-account/company`,
@@ -1066,12 +1072,6 @@ export class Endpoint {
         put: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/feature-level/${context.id}`,
 
-      },
-      distribution_list: {
-        get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
-        create: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution`,
-        delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/${context.id}`,
-        autocomplete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/paylater/distribution/list/user`,
       },
       rca_agent: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/user/agent-pengguna`,

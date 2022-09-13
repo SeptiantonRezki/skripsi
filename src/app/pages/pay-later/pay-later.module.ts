@@ -52,13 +52,14 @@ import { PayLaterActivationTabComponent } from './pay-later-activation/pay-later
 import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation-mitra/pay-later-activation.component';
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { PayLaterDistributionListComponent } from './pay-later-distribution-list/pay-later-distribution-list.component';
+import { PayLaterDistributionListComponent } from './pay-later-distribution-list/pay-later-distribution-list/index/pay-later-distribution-list.component';
 import { PayLaterTemplateFinancingTabComponent } from './pay-later-template-financing/pay-later-template-financing-tab.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PayLaterDeactivateTabComponent } from './pay-later-deactivate/pay-later-deactivate-tab.component';
 import { PayLaterTemplateFinancingComponent } from './pay-later-template-financing/pay-later-template-financing/index/pay-later-template-financing.component';
 import { PayLaterTemplateFinancingCreateComponent } from './pay-later-template-financing/pay-later-template-financing/create/pay-later-template-financing-create.component';
 import { PayLaterTemplateFinancingEditComponent } from './pay-later-template-financing/pay-later-template-financing/edit/pay-later-template-financing-edit.component';
+import { PayLaterDistributionListTabComponent } from './pay-later-distribution-list/pay-later-distribution-list-tab.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -114,7 +115,7 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
   ],
-  declarations: [PayLaterCompanyTabComponent, PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelTabComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent, PayLaterDistributionListComponent, PayLaterTemplateFinancingTabComponent, PayLaterActivationTabComponent, PayLaterDeactivateTabComponent, PayLaterTemplateFinancingComponent, PayLaterTemplateFinancingCreateComponent, PayLaterTemplateFinancingEditComponent],
+  declarations: [PayLaterCompanyTabComponent, PayLaterCompanyComponent, PayLaterCompanyCreateComponent, PayLaterCompanyEditComponent, PayLaterPanelTabComponent, PayLaterPanelComponent, PayLaterPanelCreateComponent, PayLaterPanelEditComponent, PayLaterDeactivateComponent, PayLaterDeactivateRequestComponent, PayLaterDeactivateHistoryComponent, PayLaterPanelMitraComponent, PayLaterPanelSrcComponent, PayLaterPanelSrcEditComponent, PayLaterPanelMitraEditComponent, DeactivateReasonDialogComponent, PayLaterPanelImportDialogComponent, PayLaterActivationComponent, PayLaterActivationSrcComponent, PayLaterDistributionListComponent, PayLaterTemplateFinancingTabComponent, PayLaterActivationTabComponent, PayLaterDeactivateTabComponent, PayLaterTemplateFinancingComponent, PayLaterTemplateFinancingCreateComponent, PayLaterTemplateFinancingEditComponent, PayLaterDistributionListTabComponent],
   providers: [
     {
       provide: DateAdapter,
