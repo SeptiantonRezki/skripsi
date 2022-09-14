@@ -213,8 +213,8 @@ export class InfoBoardCreateComponent implements OnInit {
       }
 
       fd.append('name', body.name);
-      fd.append('type', body.coin);
-      fd.append('description', body.coin);
+      fd.append('type', body.type);
+      fd.append('description', body.description);
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
 
