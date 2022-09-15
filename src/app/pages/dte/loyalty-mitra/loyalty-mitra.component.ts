@@ -40,7 +40,9 @@ export class LoyaltyMitraComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router
   ) {
-    this.permission = this.roles.getArrayRoles("principal.dteprogramloyaltymitra");
+    this.permission = this.roles.getArrayRoles(
+      "principal.dteprogramloyaltymitra"
+    );
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl("");
   }
 
@@ -48,12 +50,13 @@ export class LoyaltyMitraComponent implements OnInit {
     const targetPath = this.router.url;
     this.authService.getEncryptedToken().subscribe((res) => {
       const baseurl = environment.REACT_BASE_URL;
-
+      const lang = localStorage.getItem("user_country");
       const encodedToken = encodeURI(res.data);
       const httpParams = new HttpParams()
         .set("dceauth", encodedToken)
         .set("destination", targetPath)
         .set("platform", "principal")
+        .set("locale", lang)
         .set("allowBack", "1")
         .set("_prmdxtrn", JSON.stringify(this.permission));
       const fullUrl = `${baseurl}?${httpParams.toString()}`;
