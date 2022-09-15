@@ -1368,18 +1368,8 @@ export class BannerCreateComponent {
           }
 
           areas.map(item => {
-            if (body.user_group === 'retailer') {
-              if (this.formBannerGroup.controls['group_type'].value === 'src') {
-                fd.append("areas[src][]", item.value);
-                body['areas[src][]'] = item.value;
-              } else {
-                fd.append("areas[ws_downline][]", item.value);
-                body['areas[ws_downline][]'] = item.value;
-              }
-            } else {
-              fd.append("areas[]", item.value);
-              body['areas[]'] = item.value;
-            }
+            fd.append("areas[]", item.value);
+            body['areas[]'] = item.value;
           })
 
         }
