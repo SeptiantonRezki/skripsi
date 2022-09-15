@@ -132,6 +132,19 @@ export class RetailerEditComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
+    if(this.dataService.getDecryptedProfile().country == 'PH'){
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"},
+        { name: "ISR", value: "ISR"}
+      ]
+        }
     this.formdataErrors = {
       name: {},
       address: {},
@@ -643,7 +656,7 @@ export class RetailerEditComponent {
 
 
   classificationSelectionChange(event) {
-    if (event.value === 'NON-SRC') {
+    if (event.value === 'NON-SRC'|| event.value === 'ISR') {
       this.formRetailer.controls['business_code'].setValue('');
       this.formRetailer.controls['business_code'].disable();
     } else {
@@ -699,7 +712,7 @@ export class RetailerEditComponent {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
       const icValue = this.formRetailer.get('InternalClassification').value;
-      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP", "ISR"];
 
       let body = {
         _method: 'PUT',
