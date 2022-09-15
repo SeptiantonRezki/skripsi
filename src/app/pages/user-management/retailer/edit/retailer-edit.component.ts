@@ -27,6 +27,7 @@ export class RetailerEditComponent {
   onLoad: Boolean;
   formBankAccount: FormGroup;
   formBankAccountError: any;
+  Busin_code:any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -361,6 +362,31 @@ export class RetailerEditComponent {
   }
 
   handleCountryPhone(event){
+    if(this.formRetailer.get('country').value !== 'PH'){
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"}
+      ]
+    }
+    else{
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"},
+        { name: "ISR", value: "ISR"}
+      ]
+    }
     this.country_phone = Utils.getPhoneCode(event.value);
   }
 
@@ -656,10 +682,16 @@ export class RetailerEditComponent {
 
 
   classificationSelectionChange(event) {
-    if (event.value === 'NON-SRC'|| event.value === 'ISR') {
+    this.Busin_code = this.detailRetailer.code;
+    if (event.value === 'NON-SRC') {
       this.formRetailer.controls['business_code'].setValue('');
       this.formRetailer.controls['business_code'].disable();
-    } else {
+    }
+    else if (event.value === 'ISR') {
+      this.formRetailer.controls['business_code'].setValue(this.Busin_code);
+      this.formRetailer.controls['business_code'].disable();
+    }
+     else {
       this.formRetailer.controls['business_code'].enable();
     }
   }
