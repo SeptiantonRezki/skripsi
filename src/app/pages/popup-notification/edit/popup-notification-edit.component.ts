@@ -47,6 +47,7 @@ export class PopupNotificationEditComponent {
 
   lvl: any[];
   minDate: any;
+  listJenisKonsumen: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.verified'), value: "verified" }];
   listSubscription: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.subscribe'), value: "yes" }, { name: this.translate.instant('global.label.unsubscribe'), value: "no" }];
   // listUserGroup: any[] = [{ name: "Wholesaler", value: "wholesaler" }, { name: "Retailer", value: "retailer" }, { name: "Consumer", value: "customer" }, { name: "TSM", value: "tsm"}];
   listUserGroup: any[] = [];
@@ -252,6 +253,7 @@ export class PopupNotificationEditComponent {
       button_text: ["", [Validators.required, Validators.maxLength(30)]],
       content_wallet: ["", Validators.required],
       body_wallet: ["", Validators.required],
+      verification: ["all"],
       employee: ["all"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
@@ -1205,6 +1207,7 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('employee').setValue(response.employee);
         this.formPopupGroup.get('subscription').setValue(response.subscription);
+        this.formPopupGroup.get('verification').setValue(response.verification || 'all');
         this.formPopupGroup.get('content_type_new').setValue(response.content_type);
 
         if (!response.target_audience && response.areas.length) {
@@ -1407,6 +1410,7 @@ export class PopupNotificationEditComponent {
         body['gender'] = this.formPopupGroup.get('gender').value;
         body['employee'] = this.formPopupGroup.get('employee').value;
         body['subscription'] = this.formPopupGroup.get('subscription').value;
+        body['verification'] = this.formPopupGroup.get('verification').value;
         body['content_type'] = this.formPopupGroup.get('content_type_new').value;
       }
 
