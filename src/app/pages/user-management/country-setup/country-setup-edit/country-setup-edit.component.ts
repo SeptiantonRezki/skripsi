@@ -124,17 +124,17 @@ export class CountrySetupEditComponent implements OnInit {
       })
       this.setAbilities(this.nested(filtered), access_menus);
       
-      const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
-      const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
-      const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
-      const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
-      const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
-      categories_menus.push(this.buildcFullAccessTogle());
-      categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
-        this.oncFullAccessChange(cfullaccess);
-      })
-      this.setAbilities(this.nested(cfiltered), categories_menus);
-      console.log(categories_menus.value);
+      // const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
+      // const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
+      // const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
+      // const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
+      // const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
+      // categories_menus.push(this.buildcFullAccessTogle());
+      // categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
+      //   this.oncFullAccessChange(cfullaccess);
+      // })
+      // this.setAbilities(this.nested(cfiltered), categories_menus);
+      // console.log(categories_menus.value);
 
     }, err => {
 
