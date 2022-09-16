@@ -73,6 +73,11 @@ export class CountrySetupEditComponent implements OnInit {
         type: ["retailer", Validators.required],
         fullaccess: false,
         abilities: formBuilder.array([])
+      }),
+      categories_menu: formBuilder.group({
+        type: ["retailer", Validators.required],
+        cfullaccess: false,
+        cabilities: formBuilder.array([])
       })
     })
 
@@ -112,22 +117,49 @@ export class CountrySetupEditComponent implements OnInit {
       const flatabilities = this.flatenedAbilities(abilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
       const filtered = this.assignTrueIfExists(flatMasterAbilities, flatabilities, (left, right) => left.title === right.title);
       const access_menus = this.formCountry.get('access_menu').get('abilities') as FormArray;
-
       access_menus.push(this.buildFullAccessTogle());
-      
+      // console.log(access_menus.at(0).value);
       access_menus.at(0).valueChanges.subscribe(fullaccess => {
         this.onFullAccessChange(fullaccess);
       })
       this.setAbilities(this.nested(filtered), access_menus);
+      
+      const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
+      const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
+      const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
+      const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
+      const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
+      categories_menus.push(this.buildcFullAccessTogle());
+      categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
+        this.oncFullAccessChange(cfullaccess);
+      })
+      this.setAbilities(this.nested(cfiltered), categories_menus);
+      console.log(categories_menus.value);
 
     }, err => {
 
     })
+     // build recursive toggle for categories 
+    this.countrySetupService.getRetailerCategoryMenus().subscribe(({data}) => {
+      const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
+      const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
+      const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
+      const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
+      const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
+      categories_menus.push(this.buildcFullAccessTogle());
+      categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
+        this.oncFullAccessChange(cfullaccess);
+      })
+      this.setAbilities(this.nested(cfiltered), categories_menus);
+    },err => {
+      console.log(err)
+    })
+
 
     if(this.isDetail) {
       this.formCountry.disable();
     }
-
+    console.log(this.formCountry,'check1')
   }
 
   buildFullAccessTogle() {
@@ -139,9 +171,22 @@ export class CountrySetupEditComponent implements OnInit {
       depth: 0
     })
   }
+  buildcFullAccessTogle() {
+    return this.formBuilder.group({
+      title: 'full_access',
+      name: 'Full Access',
+      children: this.formBuilder.array([]),
+      checked: false,
+      depth: 0
+    })
+  }
 
   onFullAccessChange({checked, value}) {
     let menus = this.formCountry.get('access_menu').get('abilities') as FormArray;
+    this.recurseCheck(menus.controls, checked);
+  }
+  oncFullAccessChange({checked, value}) {
+    let menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
     this.recurseCheck(menus.controls, checked);
   }
 
@@ -331,16 +376,21 @@ export class CountrySetupEditComponent implements OnInit {
     this.dataService.showLoading(true);
 
     let body = this.formCountry.getRawValue();
-
     let fullaccess = _.find(body.access_menu.abilities, item => item.title === 'full_access');
     let abilitiesWithoutFullAccess = body.access_menu.abilities.filter(item => item.title !== 'full_access');
+    let cfullaccess = _.find(body.categories_menu.cabilities, item => item.title === 'full_access');
+    let cabilitiesWithoutFullAccess = body.categories_menu.cabilities.filter(item => item.title !== 'full_access');
 
     body.access_menu = [{
       ...body.access_menu,
       fullaccess: fullaccess.checked,
       abilities: this.getAbilities(abilitiesWithoutFullAccess, []),
     }]
-    
+    body.categories_menu = [{
+      ...body.categories_menu,
+      fullaccess: cfullaccess.checked,
+      cabilities: this.getAbilities(cabilitiesWithoutFullAccess, []),
+    }]
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });

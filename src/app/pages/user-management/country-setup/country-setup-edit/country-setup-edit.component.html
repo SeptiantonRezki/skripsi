@@ -131,6 +131,12 @@
               <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
             </div>
             <div fxLayout="column" fxFlex="45">
+              <h2>Categories</h2>
+              <recursive-slide-toggle [items]="formCountry.get('categories_menu').get('cabilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('categories_menu').get('cabilities')" [fullAccess]="formCountry.get('categories_menu').get('cabilities').at(0)"></recursive-slide-toggle>
+            </div>  
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
+            <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.customer_service}}</h2>
               <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
                 <div fxFlex="100" [formGroup]="item" fxLayout="column">
@@ -164,6 +170,7 @@
               </div>
             </div>
           </div>
+
 
           <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
             <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
