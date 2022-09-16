@@ -40,6 +40,9 @@ export class LoyaltyMitraComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router
   ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+      return false;
+    }
     this.permission = this.roles.getArrayRoles(
       "principal.dteprogramloyaltymitra"
     );
