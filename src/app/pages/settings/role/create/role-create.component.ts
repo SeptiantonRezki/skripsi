@@ -333,13 +333,16 @@ export class RoleCreateComponent {
   }
 
   onToggleChange(targetItem, targetItems, targetRole, event) {
-
+    console.log("targetsss", targetItem, targetItems, targetRole);
     let hasActiveParents = [];
     let hasActiveChildren = [];
 
-
     _.map(targetItems.value, (val) => {
-      if (!val.submenu) hasActiveParents.push(val.status);
+      if (!val.submenu) {
+        if (val.nama === 'ubah') {
+          hasActiveParents.push(val.status);
+        }
+      }
       else { hasActiveChildren.push(val.status); }
     });
 
@@ -352,6 +355,13 @@ export class RoleCreateComponent {
         event.source.checked = false;
 
       }
+      else if (!hasActiveChildren.includes(true)) {
+        this.clearParents(targetRole, targetItems, 'ubah');
+      }
+
+    }
+    else if (targetItem.nama === 'ubah' && event.checked) {
+      this.setTargetSubmenu(targetRole, targetItems, true);
 
     }
     // else targetItem is not submenu but have any submenu activated and dont have active parents, then clear all submenu
@@ -359,11 +369,8 @@ export class RoleCreateComponent {
 
       if (!hasActiveParents.includes(true)) {
         // deactive all submenu
-        this.clearTargetSubmenu(targetRole, targetItems);
-
+        this.setTargetSubmenu(targetRole, targetItems, false);
       }
-
-
     }
 
     if (targetItem.value == 'principal.wholesaler.lihat') {
@@ -384,6 +391,87 @@ export class RoleCreateComponent {
       }
     }
 
+    let checkWholesaler = targetItems.value.find(item => {
+      return item.value == 'principal.wholesaler.ubah';
+    });
+
+    let checkRetailer = targetItems.value.find(item => {
+      return item.value == 'principal.retailer.ubah';
+    });
+
+    let checkCustomer = targetItems.value.find(item => {
+      return item.value == 'principal.customer.lihat';
+    });
+
+    // Start Wholesaler Feature
+    if (targetItem.value == 'principal.wholesaler.submenu.view_phone_number') {
+      if (checkWholesaler.status == false) {
+        return;
+      }
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.phone_number';
+      });
+
+      console.log('ini', event.checked);
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        phoneNumberToggle.disabled = false;
+      }
+      if (!event.checked) {
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.wholesaler.submenu.view_Rekening_toko') {
+      if (checkWholesaler.status == false) {
+        return;
+      }
+      let rekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+      });
+
+      if (!rekeningToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        rekeningToggle.disabled = false;
+      }
+      if (!event.checked) {
+        rekeningToggle.disabled = true;
+        rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.wholesaler.ubah') {
+      let phoneNumberToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.phone_number';
+      });
+      if (event.checked) {
+        phoneNumberToggle2.disabled = false;
+      } else {
+        phoneNumberToggle2.disabled = true;
+      }
+      phoneNumberToggle2.status = false;
+
+      let rekeningToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+      });
+      if (event.checked) {
+        rekeningToggle2.disabled = false;
+      } else {
+        rekeningToggle2.disabled = true;
+      }
+      rekeningToggle2.status = false;
+    }
+    // End Wholesaler Feature
+
+    // Start Retailer Feature
     if (targetItem.value == 'principal.retailer.lihat') {
       let exportRetailerToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.button.export';
@@ -402,6 +490,103 @@ export class RoleCreateComponent {
       }
     }
 
+    if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
+      if (checkRetailer.status == false) {
+        return;
+      }
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.phone_number';
+      });
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        phoneNumberToggle.disabled = false;
+      }
+      if (!event.checked) {
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
+      if (checkRetailer.status == false) {
+        return;
+      }
+      let rekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.rekening_toko';
+      });
+
+      if (!rekeningToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        rekeningToggle.disabled = false;
+      }
+      if (!event.checked) {
+        rekeningToggle.disabled = true;
+        rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.ubah') {
+      let phoneNumberToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.phone_number';
+      });
+      let phoneNumberViewToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.phone_number_view';
+      });
+      if (event.checked) {
+        phoneNumberToggle2.disabled = false;
+        phoneNumberViewToggle.status = true;
+      } else {
+        phoneNumberToggle2.disabled = true;
+        phoneNumberViewToggle.status = false;
+      }
+      phoneNumberToggle2.status = false;
+
+      let rekeningToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.rekening_toko';
+      });
+      let rekeningViewToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.rekening_toko_view';
+      });
+      if (event.checked) {
+        rekeningToggle2.disabled = false;
+        rekeningViewToggle.status = true;
+      } else {
+        rekeningToggle2.disabled = true;
+        rekeningViewToggle.status = false;
+      }
+      rekeningToggle2.status = false;
+    }
+    // End Retailer Feature
+
+    // Start Customer Feature
+    if (targetItem.value == 'principal.customer.lihat') {
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.phone_number_and_DOB_view';
+      });
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        console.log('hasilnya', phoneNumberToggle);
+        phoneNumberToggle.disabled = false;
+        phoneNumberToggle.status = true;
+      }
+      if (!event.checked) {
+        console.log('hasilnya2', phoneNumberToggle);
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+    // End Customer Feature
   }
 
   getCountry() {
@@ -416,6 +601,64 @@ export class RoleCreateComponent {
     );
     console.log("COUNTRY2", this.Country);
 
+  }
+
+  setTargetSubmenu(targetRole, targetItems, status) {
+
+    // drill until target submenu found, then set all submenu status to false
+    this.roles.map((roleValue) => {
+
+      if (roleValue['value'] === targetRole['value']) {
+
+        if (roleValue['nama'] === targetRole['nama']) {
+          
+          roleValue['menu'].map((menuValue) => {
+
+            if (menuValue.nama === targetItems.nama) {
+
+              menuValue['value'].map((targetValue) => {
+                
+                if (targetValue.submenu) {
+
+                  targetValue.status = status;
+                  return targetValue;
+
+                }
+
+              });
+
+            }
+
+          })
+
+        }
+
+      }
+    });
+  }
+
+  clearParents(targetRole, targetItems, name) {
+    this.roles.map((roleValue) => {
+
+      if (roleValue['nama'] === targetRole['nama']) {
+
+
+        roleValue['menu'].map((menuValue) => {
+
+          if (menuValue.nama === targetItems.nama) {
+
+            menuValue['value'].map((targetValue) => {
+              if (targetValue['nama'] === name) {
+                targetValue.status = false;
+                return targetValue;
+              }
+            });
+
+          }
+
+        })
+      }
+    });
   }
 
 }

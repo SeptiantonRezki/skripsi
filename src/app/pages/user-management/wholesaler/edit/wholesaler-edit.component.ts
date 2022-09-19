@@ -28,6 +28,8 @@ export class WholesalerEditComponent {
   formBankAccount: FormGroup;
   formBankAccountError: any;
   frmTotalBranch: FormControl = new FormControl();
+  phoneNumberStatus: Boolean;
+  bankStatus: Boolean;
 
   detailWholesaler: any;
   listStatus: any[] = [
@@ -82,6 +84,17 @@ export class WholesalerEditComponent {
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
+    console.log('permissionnya', this.permission);
+    if (Object.values(this.permission).indexOf('principal.wholesaler.view_phone_number') > -1) {
+      this.phoneNumberStatus = true;
+    } else {
+      this.phoneNumberStatus = false;
+    }
+    if (Object.values(this.permission).indexOf('principal.wholesaler.view_Rekening_toko') > -1) {
+      this.bankStatus = true;
+    } else {
+      this.bankStatus = false;
+    }
     this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {
       name: {},
@@ -360,7 +373,7 @@ export class WholesalerEditComponent {
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
-      phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.reMaskInput(Utils.formatPhoneNumber(this.detailWholesaler.phone), 4) : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1])) : '',
+      phone: (this.detailWholesaler.phone) ? (!this.phoneNumberStatus ? Utils.reMaskInput(Utils.formatPhoneNumber(this.detailWholesaler.phone), 4) : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1])) : '',
       status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
@@ -401,10 +414,10 @@ export class WholesalerEditComponent {
     this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
 
     this.formBankAccount.setValue({
-      account_number: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.bank_account_number, 4) : this.detailWholesaler.bank_account_number || '',
-      account_name: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.bank_account_name, 3) : this.detailWholesaler.bank_account_name || '',
+      account_number: !this.bankStatus ? Utils.reMaskInput(this.detailWholesaler.bank_account_number, 4) : this.detailWholesaler.bank_account_number || '',
+      account_name: !this.bankStatus ? Utils.reMaskInput(this.detailWholesaler.bank_account_name, 3) : this.detailWholesaler.bank_account_name || '',
       bank_name: this.detailWholesaler.bank_name || '',
-      branch: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.branch, 3) : this.detailWholesaler.branch || '',
+      branch: !this.bankStatus ? Utils.reMaskInput(this.detailWholesaler.branch, 3) : this.detailWholesaler.branch || '',
     });
 
     this.formDoc.setValue({

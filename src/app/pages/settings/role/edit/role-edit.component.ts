@@ -107,15 +107,38 @@ export class RoleEditComponent {
         wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
         wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
         wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.lihat' }),
+        phoneNumberToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_phone_number' }),
+        rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_Rekening_toko' }),
+        phoneNumberToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.phone_number' }),
+        rekeningToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.Rekening_toko' }),
 
         retailerRole = _.find(this.roles, { nama: 'retailer' }),
         retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
         retailerExportToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.button.export' }),
-        retailerViewToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.lihat' });
+        retailerViewToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.lihat' }),
+        retailerPhoneNumberToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.phone_number_view' }),
+        retailerRekeningToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko_view' }),
+        retailerPhoneNumberToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.export.phone_number' }),
+        retailerRekeningToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.export.rekening_toko' });
 
       if (wholesalerExportToggle && wholesalerViewToggle && wholesalerViewToggle.status == false) {
         wholesalerExportToggle.disabled = true;
         wholesalerExportToggle.status = false;
+      }
+
+      if (phoneNumberToggleView.status == false) {
+        phoneNumberToggle.disabled = true;
+      }
+
+      if (rekeningToggleView.status == false) {
+        rekeningToggle.disabled = true;
+      }
+      if (retailerPhoneNumberToggleView.status == false) {
+        retailerPhoneNumberToggle.disabled = true;
+      }
+
+      if (retailerRekeningToggleView.status == false) {
+        retailerRekeningToggle.disabled = true;
       }
 
       if (retailerExportToggle && retailerViewToggle && retailerViewToggle.status == false) {
@@ -332,7 +355,7 @@ export class RoleEditComponent {
         for (const menu of classification['menu']) {
           for (const values of menu['value']) {
             if (values['status']) {
-              role.push(values['value'])
+              role.push(values['value']);
             }
           }
         }
@@ -369,28 +392,31 @@ export class RoleEditComponent {
     // drill until target submenu found, then set all submenu status to false
     this.roles.map((roleValue) => {
 
-      if (roleValue['nama'] === targetRole['nama']) {
+      if (roleValue['value'] === targetRole['value']) {
 
+        if (roleValue['nama'] === targetRole['nama']) {
+          
+          roleValue['menu'].map((menuValue) => {
 
-        roleValue['menu'].map((menuValue) => {
+            if (menuValue.nama === targetItems.nama) {
 
-          if (menuValue.nama === targetItems.nama) {
+              menuValue['value'].map((targetValue) => {
+                
+                if (targetValue.submenu) {
 
+                  targetValue.status = status;
+                  return targetValue;
 
-            menuValue['value'].map((targetValue) => {
+                }
 
-              if (targetValue.submenu) {
+              });
 
-                targetValue.status = status;
-                return targetValue;
+            }
 
-              }
+          })
 
-            });
+        }
 
-          }
-
-        })
       }
     });
   }
@@ -448,7 +474,6 @@ export class RoleEditComponent {
 
     }
     else if (targetItem.nama === 'ubah' && event.checked) {
-
       this.setTargetSubmenu(targetRole, targetItems, true);
 
     }
@@ -479,6 +504,87 @@ export class RoleEditComponent {
       }
     }
 
+    let checkWholesaler = targetItems.value.find(item => {
+      return item.value == 'principal.wholesaler.ubah';
+    });
+
+    let checkRetailer = targetItems.value.find(item => {
+      return item.value == 'principal.retailer.ubah';
+    });
+
+    let checkCustomer = targetItems.value.find(item => {
+      return item.value == 'principal.customer.lihat';
+    });
+
+    // Start Wholesaler Feature
+    if (targetItem.value == 'principal.wholesaler.submenu.view_phone_number') {
+      if (checkWholesaler.status == false) {
+        return;
+      }
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.phone_number';
+      });
+
+      console.log('ini', event.checked);
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        phoneNumberToggle.disabled = false;
+      }
+      if (!event.checked) {
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.wholesaler.submenu.view_Rekening_toko') {
+      if (checkWholesaler.status == false) {
+        return;
+      }
+      let rekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+      });
+
+      if (!rekeningToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        rekeningToggle.disabled = false;
+      }
+      if (!event.checked) {
+        rekeningToggle.disabled = true;
+        rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.wholesaler.ubah') {
+      let phoneNumberToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.phone_number';
+      });
+      if (event.checked) {
+        phoneNumberToggle2.disabled = false;
+      } else {
+        phoneNumberToggle2.disabled = true;
+      }
+      phoneNumberToggle2.status = false;
+
+      let rekeningToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+      });
+      if (event.checked) {
+        rekeningToggle2.disabled = false;
+      } else {
+        rekeningToggle2.disabled = true;
+      }
+      rekeningToggle2.status = false;
+    }
+    // End Wholesaler Feature
+
+    // Start Retailer Feature
     if (targetItem.value == 'principal.retailer.lihat') {
       let exportRetailerToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.button.export';
@@ -496,6 +602,104 @@ export class RoleEditComponent {
         exportRetailerToggle.status = false;
       }
     }
+
+    if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
+      if (checkRetailer.status == false) {
+        return;
+      }
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.phone_number';
+      });
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        phoneNumberToggle.disabled = false;
+      }
+      if (!event.checked) {
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
+      if (checkRetailer.status == false) {
+        return;
+      }
+      let rekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.rekening_toko';
+      });
+
+      if (!rekeningToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        rekeningToggle.disabled = false;
+      }
+      if (!event.checked) {
+        rekeningToggle.disabled = true;
+        rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.ubah') {
+      let phoneNumberToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.phone_number';
+      });
+      let phoneNumberViewToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.phone_number_view';
+      });
+      if (event.checked) {
+        phoneNumberToggle2.disabled = false;
+        phoneNumberViewToggle.status = true;
+      } else {
+        phoneNumberToggle2.disabled = true;
+        phoneNumberViewToggle.status = false;
+      }
+      phoneNumberToggle2.status = false;
+
+      let rekeningToggle2 = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.rekening_toko';
+      });
+      let rekeningViewToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.rekening_toko_view';
+      });
+      if (event.checked) {
+        rekeningToggle2.disabled = false;
+        rekeningViewToggle.status = true;
+      } else {
+        rekeningToggle2.disabled = true;
+        rekeningViewToggle.status = false;
+      }
+      rekeningToggle2.status = false;
+    }
+    // End Retailer Feature
+
+    // Start Customer Feature
+    if (targetItem.value == 'principal.customer.lihat') {
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.phone_number_and_DOB_view';
+      });
+
+      if (!phoneNumberToggle) {
+        return;
+      }
+
+      if (event.checked) {
+        console.log('hasilnya', phoneNumberToggle);
+        phoneNumberToggle.disabled = false;
+        phoneNumberToggle.status = true;
+      }
+      if (!event.checked) {
+        console.log('hasilnya2', phoneNumberToggle);
+        phoneNumberToggle.disabled = true;
+        phoneNumberToggle.status = false;
+      }
+    }
+    // End Customer Feature
   }
 
   getCountry() {
