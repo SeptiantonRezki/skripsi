@@ -843,19 +843,13 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'program-loyalty-mitra/create',
-    component: LoyaltyMitraComponent,
-    canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
-  },
-  {
     path: 'program-loyalty-mitra/create/:tab',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'program-loyalty-mitra/edit/:id',
+    path: 'program-loyalty-mitra/create',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
@@ -867,13 +861,19 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'program-loyalty-mitra/detail/:id',
+    path: 'program-loyalty-mitra/edit/:id',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'program-loyalty-mitra/detail/:id/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
