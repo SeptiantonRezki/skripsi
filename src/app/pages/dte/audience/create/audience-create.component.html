@@ -168,10 +168,11 @@
           </div>
 
           <div
-            fxLayout="row"
-            *ngIf="formAudience.get('type').value === 'challenge'"
+            fxLayout="column"
+            fxLayoutGap="16px"
+            fxFlex="40"
           >
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('type').value === 'challenge'">
               <mat-select
                 formControlName="trade_creator_id"
                 placeholder="{{'dte.trade_program.text3' | translate}}"
@@ -198,6 +199,20 @@
               >
                 {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="is-light">
+              <mat-select
+                placeholder="Business Type"
+                formControlName="business_type"
+              > 
+                <mat-option
+                  *ngFor="let item of businessType"
+                  [value]="item.value"
+                >
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </form>
