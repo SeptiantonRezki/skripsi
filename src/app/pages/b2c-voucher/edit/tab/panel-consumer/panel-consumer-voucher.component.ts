@@ -1099,7 +1099,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
-    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
+    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value || (this.isVoucherAutomation.value && this.formConsumerGroup.get('va').value === 'loyalty')) {
       let body = null;
       const bodyArea = {
         'type': 'customer',
