@@ -1,7 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { Component, HostListener, OnInit } from "@angular/core";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PagesName } from "app/classes/pages-name";
 import { AuthenticationService } from "app/services/authentication.service";
 import { environment } from "environments/environment";
@@ -38,8 +38,12 @@ export class LoyaltyMitraComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private authService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+    this.route.params.subscribe(params => {
+      if (params.id || params.tab) this.initPage();
+    });
     this.permission = this.roles.getArrayRoles(
       "principal.dteprogramloyaltymitra"
     );
@@ -47,6 +51,10 @@ export class LoyaltyMitraComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initPage();
+  }
+
+  initPage() {
     const targetPath = this.router.url;
     this.authService.getEncryptedToken().subscribe((res) => {
       const baseurl = environment.REACT_BASE_URL;
