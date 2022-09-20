@@ -274,6 +274,25 @@
           </form>
 
         </mat-step>
+        <mat-step [stepControl]="step8">
+
+          <form [formGroup]="step8">
+
+            <ng-template matStepLabel>Categories</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <recursive-slide-toggle [items]="step8.get('cabilities').controls" [depth]="0" [horizontal]="horizontal" [parent]="step8.get('cabilities')" [fullAccess]="step8.get('cabilities').at(0)"></recursive-slide-toggle>
+            </div>
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(8)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
 
         <mat-step>
 

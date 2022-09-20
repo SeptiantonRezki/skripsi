@@ -39,7 +39,7 @@ export class CountrySetupEditComponent implements OnInit {
   ) {
     this.toggleFullAccess = this.toggleFullAccess.bind(this);
     this.country = dataService.getFromStorage("country_setup_data");
-    
+    this.togglecFullAccess = this.togglecFullAccess.bind(this);
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
@@ -97,6 +97,9 @@ export class CountrySetupEditComponent implements OnInit {
     this.formCountry.get('access_menu').get('abilities').valueChanges.debounceTime(500).subscribe(menus => {
       this.onAccessMenuChange(menus);
     });
+    this.formCountry.get('categories_menu').get('cabilities').valueChanges.debounceTime(500).subscribe(menus => {
+      this.oncAccessMenuChange(menus);
+    });
 
   }
 
@@ -111,40 +114,35 @@ export class CountrySetupEditComponent implements OnInit {
     })
 
     this.countrySetupService.getRetailerMenus().subscribe( ({data}) => {
-      
       const abilities = this.getAbilitiesByType(this.country.access_menus, "retailer");
       const flatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
       const flatabilities = this.flatenedAbilities(abilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
       const filtered = this.assignTrueIfExists(flatMasterAbilities, flatabilities, (left, right) => left.title === right.title);
       const access_menus = this.formCountry.get('access_menu').get('abilities') as FormArray;
       access_menus.push(this.buildFullAccessTogle());
-      // console.log(access_menus.at(0).value);
+       console.log(access_menus);
       access_menus.at(0).valueChanges.subscribe(fullaccess => {
         this.onFullAccessChange(fullaccess);
       })
       this.setAbilities(this.nested(filtered), access_menus);
-      
-      // const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
-      // const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
-      // const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title, this.ACCESS_MENU_MAX_DEPTH );
-      // const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
-      // const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
-      // categories_menus.push(this.buildcFullAccessTogle());
-      // categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
-      //   this.oncFullAccessChange(cfullaccess);
-      // })
-      // this.setAbilities(this.nested(cfiltered), categories_menus);
-      // console.log(categories_menus.value);
 
     }, err => {
 
     })
      // build recursive toggle for categories 
     this.countrySetupService.getRetailerCategoryMenus({ id: this.country.id }).subscribe(({data}) => {
-      const cabilities = this.getAbilitiesByType(this.country.categories_menu, "retailer");
-      const cflatMasterAbilities = this.flatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
-      const cflatabilities = this.flatenedAbilities(cabilities, (item) => item.title, (item) => item.title,  this.ACCESS_MENU_MAX_DEPTH );
-      const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
+      const cflatMasterAbilities = this.cflatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
+      const cfiltered = cflatMasterAbilities.map( item => {
+          if (item.country!== null && item.country.includes(this.country.country_code)) {
+            item.checked = true;
+          }
+          else{
+            item.checked= false
+          }
+          return item;
+      })
+      //const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
+      console.log(cfiltered);
       const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
       categories_menus.push(this.buildcFullAccessTogle());
       categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
@@ -159,7 +157,6 @@ export class CountrySetupEditComponent implements OnInit {
     if(this.isDetail) {
       this.formCountry.disable();
     }
-    console.log(this.formCountry,'check1')
   }
 
   buildFullAccessTogle() {
@@ -187,14 +184,18 @@ export class CountrySetupEditComponent implements OnInit {
   }
   oncFullAccessChange({checked, value}) {
     let menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
-    this.recurseCheck(menus.controls, checked);
+    this.recursecCheck(menus.controls, checked);
   }
 
   toggleFullAccess(checked) {
     const abilities = this.formCountry.get('access_menu').get('abilities') as FormArray;
     abilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
-
+  togglecFullAccess(checked) {
+    console.log(this.formCountry.getRawValue());
+    const cabilities = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
+    cabilities.at(0).get('checked').setValue(checked, {emitEvent: false});
+  }
   recurseCheck(items, checked) {
     items.map( (item: FormGroup) => {
         
@@ -209,11 +210,55 @@ export class CountrySetupEditComponent implements OnInit {
 
     })
   }
+  recursecCheck(items, checked) {
+    items.map( (item: FormGroup) => {
+        
+      if(item.get('title').value !== 'full_access') {
+        item.get('checked').setValue(checked, {emitEvent: false});
+        const childs = item.get('children') as FormArray;
+
+        if(childs && childs.length) {
+          this.recursecCheck(childs.controls, checked);
+        }
+      }
+
+    })
+  }
 
   onAccessMenuChange(menus) {
     const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
     const allChecked = [];
     const debounceChecked = _.debounce(this.toggleFullAccess, 100);
+
+    const recurseChecked = function(_menus: Array<any>, _checked) {
+
+      if(_menus && _menus.length) {
+
+        _menus.map(i => {
+
+          _checked.push(i.checked);
+
+          if(_checked.includes(false)) {
+            debounceChecked(false);
+          } else {
+            debounceChecked(true);
+          }
+
+          if(i.children && i.children.length) {
+            recurseChecked(i.children, _checked);
+          }
+        });  
+      }
+
+    };
+
+    recurseChecked(menusWithoutFullaccess, allChecked);
+    
+  }
+  oncAccessMenuChange(menus) {
+    const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
+    const allChecked = [];
+    const debounceChecked = _.debounce(this.togglecFullAccess, 100);
 
     const recurseChecked = function(_menus: Array<any>, _checked) {
 
@@ -329,13 +374,52 @@ export class CountrySetupEditComponent implements OnInit {
     
     const data = _.find(menus, (item) => item.type === type);
     if(data && data.abilities) {
+      console.log(data.abilities);
       return data.abilities;
     }
+   
     return [];
 
   }
+  getAbilitiesByCountry(menus, country_code) {
 
-  flatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0) {
+    const flatitems = [];
+    let id = 0;
+    const recurse = (items, depth = 0, parentId = null) => {
+      items.forEach( (item) => {
+        if (item.children && item.children.length) {
+          recurse(item.children,depth+1,item.id)
+        }
+        else{
+          if(item.country!== null && item.country.includes(country_code)){
+            
+            Object.assign(item,{checked:true})
+            if (depth == 0) {
+              flatitems.push(item)
+            }
+            else{
+              const reverseRecurse = (items, child) => {
+                let item = items.find(item => item.id === child.parent_id);
+                if (item) {
+                   item.children.push(child)
+                } else {
+                  items.forEach(item => reverseRecurse(item,child))
+                }
+                }
+                Object.assign(item,{checked:true})
+                reverseRecurse(flatitems,item)
+            }
+          }
+        }
+      })
+    }
+
+    recurse(menus);
+
+    return flatitems;
+    
+  };
+  flatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0): any[] {
 
     const flatitems = [];
     let id = 0;
@@ -345,6 +429,30 @@ export class CountrySetupEditComponent implements OnInit {
         
         id += 1;
         const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: id, parent_id: parentId};
+        
+        flatitems.push(menu);
+
+        if(item.children && maxDepth > depth) {
+          recurse(item.children, depth +1, menu.id);
+        }
+      });
+    }
+
+    recurse(abilities);
+
+    return flatitems;
+
+  }
+  cflatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0): any[] {
+
+    const flatitems = [];
+    let id = 0;
+
+    const recurse = (items, depth = 0, parentId = null) => {
+      items.map((item, i) => {
+        
+        id += 1;
+        const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: id, parent_id: parentId, country: item.country};
         
         flatitems.push(menu);
 
@@ -421,7 +529,7 @@ export class CountrySetupEditComponent implements OnInit {
     }]
     body.categories_menu = [{
       ...body.categories_menu,
-      fullaccess: cfullaccess.checked,
+      cfullaccess: cfullaccess.checked,
       cabilities: this.getcAbilities(cabilitiesWithoutFullAccess, []),
     }]
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
