@@ -402,7 +402,7 @@ export class RoleEditComponent {
 
               menuValue['value'].map((targetValue) => {
                 
-                if (targetValue.submenu) {
+                if (targetValue.submenu && targetValue.value !== 'principal.wholesaler.submenu.view_phone_number' && targetValue.value !== 'principal.wholesaler.submenu.view_Rekening_toko' && targetValue.value !== 'principal.wholesaler.submenu.phone_number' && targetValue.value !== 'principal.wholesaler.submenu.Rekening_toko') {
 
                   targetValue.status = status;
                   return targetValue;
@@ -462,7 +462,7 @@ export class RoleEditComponent {
     // if target is submenu, then target dont have active parents, then avoid action
     if (targetItem.submenu) {
 
-      if (!hasActiveParents.includes(true)) {
+      if (!hasActiveParents.includes(true) && targetItem.value !== 'principal.wholesaler.submenu.view_phone_number' && targetItem.value !== 'principal.wholesaler.submenu.view_Rekening_toko' && targetItem.value !== 'principal.wholesaler.submenu.phone_number' && targetItem.value !== 'principal.wholesaler.submenu.Rekening_toko') {
 
         console.log({ event });
         event.source.checked = false;
@@ -518,14 +518,9 @@ export class RoleEditComponent {
 
     // Start Wholesaler Feature
     if (targetItem.value == 'principal.wholesaler.submenu.view_phone_number') {
-      if (checkWholesaler.status == false) {
-        return;
-      }
       let phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.phone_number';
       });
-
-      console.log('ini', event.checked);
 
       if (!phoneNumberToggle) {
         return;
@@ -541,9 +536,6 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.wholesaler.submenu.view_Rekening_toko') {
-      if (checkWholesaler.status == false) {
-        return;
-      }
       let rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.Rekening_toko';
       });
@@ -582,9 +574,6 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
-      if (checkRetailer.status == false) {
-        return;
-      }
       let phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.export.phone_number';
       });
@@ -603,9 +592,6 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
-      if (checkRetailer.status == false) {
-        return;
-      }
       let rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.export.rekening_toko';
       });
