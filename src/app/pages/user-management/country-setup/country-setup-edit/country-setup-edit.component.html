@@ -129,14 +129,48 @@
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.access_retailer}}</h2>
               <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
+              <div fxLayout="column" fxFlex="45">
+                <h2>{{ls.locale.country_setup.customer_service}}</h2>
+                <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
+                  <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                    <mat-form-field fxFlex="100" class="is-light">
+                      <input matInput placeholder="{{ls.locale.bantuan.text10}}" type="text" formControlName="telepon">
+                      <mat-error *ngIf="item.controls['telepon'].hasError('required') && item.controls['telepon'].touched ">
+                        {{ls.locale.bantuan.text10}} {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light">
+                      <input matInput placeholder="{{ls.locale.global.label.email}}" type="text" formControlName="email">
+                      <mat-error *ngIf="item.controls['email'].hasError('required') && item.controls['email'].touched ">
+                        {{ls.locale.global.label.email}} {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                      <label for="">Whatsapp</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="whatsapp"></mat-slide-toggle>
+                    </div>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('whatsapp').value">
+                      <input matInput placeholder="Whatsapp Number" type="text" formControlName="whatsapp_number">
+                      <mat-error *ngIf="item.controls['whatsapp_number'].hasError('required') && item.controls['whatsapp_number'].touched ">
+                        Whatsapp {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                      <label for="">Bude</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="bude"></mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            
             <div fxLayout="column" fxFlex="45">
               <h2>Categories</h2>
               <recursive-slide-toggle [items]="formCountry.get('categories_menu').get('cabilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('categories_menu').get('cabilities')" [fullAccess]="formCountry.get('categories_menu').get('cabilities').at(0)"></recursive-slide-toggle>
             </div>  
           </div>
-          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
-            <div fxLayout="column" fxFlex="45">
+          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between" >
+            <!-- <div fxLayout="column" fxFlex="45" class ="widthfixcs">
               <h2>{{ls.locale.country_setup.customer_service}}</h2>
               <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
                 <div fxFlex="100" [formGroup]="item" fxLayout="column">
@@ -168,7 +202,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
 
