@@ -560,28 +560,6 @@ export class RoleEditComponent {
         rekeningToggle.status = false;
       }
     }
-
-    if (targetItem.value == 'principal.wholesaler.ubah') {
-      let phoneNumberToggle2 = targetItems.value.find(item => {
-        return item.value == 'principal.wholesaler.submenu.phone_number';
-      });
-      if (event.checked) {
-        phoneNumberToggle2.disabled = false;
-      } else {
-        phoneNumberToggle2.disabled = true;
-      }
-      phoneNumberToggle2.status = false;
-
-      let rekeningToggle2 = targetItems.value.find(item => {
-        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
-      });
-      if (event.checked) {
-        rekeningToggle2.disabled = false;
-      } else {
-        rekeningToggle2.disabled = true;
-      }
-      rekeningToggle2.status = false;
-    }
     // End Wholesaler Feature
 
     // Start Retailer Feature
@@ -644,62 +622,7 @@ export class RoleEditComponent {
         rekeningToggle.status = false;
       }
     }
-
-    if (targetItem.value == 'principal.retailer.ubah') {
-      let phoneNumberToggle2 = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.phone_number';
-      });
-      let phoneNumberViewToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.submenu.phone_number_view';
-      });
-      if (event.checked) {
-        phoneNumberToggle2.disabled = false;
-        phoneNumberViewToggle.status = true;
-      } else {
-        phoneNumberToggle2.disabled = true;
-        phoneNumberViewToggle.status = false;
-      }
-      phoneNumberToggle2.status = false;
-
-      let rekeningToggle2 = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.rekening_toko';
-      });
-      let rekeningViewToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.submenu.rekening_toko_view';
-      });
-      if (event.checked) {
-        rekeningToggle2.disabled = false;
-        rekeningViewToggle.status = true;
-      } else {
-        rekeningToggle2.disabled = true;
-        rekeningViewToggle.status = false;
-      }
-      rekeningToggle2.status = false;
-    }
     // End Retailer Feature
-
-    // Start Customer Feature
-    if (targetItem.value == 'principal.customer.lihat') {
-      let phoneNumberToggle = targetItems.value.find(item => {
-        return item.value == 'principal.customer.phone_number_and_DOB_view';
-      });
-
-      if (!phoneNumberToggle) {
-        return;
-      }
-
-      if (event.checked) {
-        console.log('hasilnya', phoneNumberToggle);
-        phoneNumberToggle.disabled = false;
-        phoneNumberToggle.status = true;
-      }
-      if (!event.checked) {
-        console.log('hasilnya2', phoneNumberToggle);
-        phoneNumberToggle.disabled = true;
-        phoneNumberToggle.status = false;
-      }
-    }
-    // End Customer Feature
   }
 
   getCountry() {

@@ -139,9 +139,9 @@ export class RetailerEditComponent {
     console.log('permissionnya', this.permission);
 
     this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.view_phone_number') > -1;
-    this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.view_Rekening_toko') > -1;
+    this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko_view') > -1;
     this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number') > -1;
-    this.editBankStatus = Object.values(this.permission).indexOf('principal.retailer.Rekening_toko') > -1;
+    this.editBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko') > -1;
 
     this.formdataErrors = {
       name: {},
