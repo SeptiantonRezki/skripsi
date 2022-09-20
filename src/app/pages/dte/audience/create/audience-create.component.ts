@@ -62,7 +62,8 @@ export class AudienceCreateComponent {
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
-    { name: "KA", value: "KA" }
+    { name: "KA", value: "KA" },
+    { name: "ISR", value: "ISR" }
   ]; // TODO
   srcClassification: any[] = [
     { name: this.translate.instant('global.label.all_type'), value: "all" }
