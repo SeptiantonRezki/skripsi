@@ -1,3 +1,311 @@
-<p>
-  trs-proposal-create works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat TRS Proposal'">
+  </page-content-header>
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-bg-white">
+      <form autocomplete="off" [formGroup]="formCreateProposal">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
+          <h2 class="">Buat TRS Proposal</h2>
+        </div>
+
+        <div class="ayo-middle pt-8" fxLayout="column">
+          <div class="mt-8" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <div fxFlex="45%">
+              <!-- SISI KIRI -->
+
+              <div formArrayName="areas" *ngFor="let wil of formCreateProposal.get('areas')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
+                        matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
+                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
+                          {{item.code}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                        {{'global.area.area' | translate}} {{ ls.locale.global.messages.mandatory_text }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
+                        matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                        <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
+                          {{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                        {{'global.area.salespoint' | translate}} {{ ls.locale.global.messages.mandatory_text }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
+                    placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateProposal"> <!-- // TODO -->
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
+                    Tanggal Awal Program harus diisi.
+                  </mat-error> <!-- // TODO -->
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
+                    placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"> <!-- // TODO -->
+                  <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                  <mat-datepicker #endDate></mat-datepicker>
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
+                    Tanggal Akhir Program harus diisi.
+                  </mat-error> <!-- // TODO -->
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="number" min="1" formControlName="maxExecutor"
+                    placeholder="Jumlah Executor">
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="executor" (click)="modalExecutor()" 
+                    placeholder="Executor">
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="kecamatan" (click)="modalKecamatan()" 
+                    placeholder="Kecamatan">
+                </mat-form-field>
+              </div>
+
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <mat-select placeholder="Geotagging" formControlName="geotagging">
+                    <mat-option *ngFor="let ogeo of opsiGeotagging" [value]="ogeo.value">{{ ogeo.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="product" (click)="modalProduct()" 
+                    placeholder="Product">
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custCode1" (keyup)="keyUpCust1.next($event.target.value)" 
+                    placeholder="Customer 1 Code">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custCode1'].hasError('required') && formCreateProposal.controls['custCode1'].touched">
+                    Customer1 Code Harus Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custName1" readonly
+                    placeholder="Customer 1 Name">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custName1'].hasError('required') && formCreateProposal.controls['custName1'].touched">
+                    Customer1 Code Harus Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custCode2" (keyup)="keyUpCust2.next($event.target.value)" 
+                    placeholder="Customer 2 Code">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custCode2'].hasError('required') && formCreateProposal.controls['custCode2'].touched">
+                    Customer2 Code Harus Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custName2" readonly
+                    placeholder="Customer 2 Name">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custName2'].hasError('required') && formCreateProposal.controls['custName2'].touched">
+                    Customer2 Code Harus Diisi
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+
+
+
+            </div>
+
+
+
+            <div fxFlex="45%" class="is-light form-primary">
+              
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Executor yang dipilih</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="Executor yang dipilih" formControlName="executor_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['executor_selected'].hasError('required') && formCreateProposal.controls['executor_selected'].touched">
+                      Executor Harus Dipilih
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Kecamatan yang dipilih</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="Kecamatan yang dipilih" formControlName="kecamatan_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['kecamatan_selected'].hasError('required') && formCreateProposal.controls['kecamatan_selected'].touched">
+                      Kecamatan Harus Dipilih
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Product yang dipilih</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="Product yang dipilih" formControlName="product_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['product_selected'].hasError('required') && formCreateProposal.controls['product_selected'].touched">
+                      Product Harus Dipilih
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Background</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
+                        <textarea matInput class="body-text" placeholder="Background" formControlName="background" wrap="soft"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['background'].hasError('required') && formCreateProposal.controls['background'].touched">
+                      Background Harus Diisi
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Objective</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
+                        <textarea matInput class="body-text" placeholder="Objective" formControlName="objective" wrap="soft"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['objective'].hasError('required') && formCreateProposal.controls['objective'].touched">
+                      Objective Harus Diisi
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="">
+                    <h3>{{ ls.locale.katalog_src.template_layout_toko.text7 }}</h3>
+                    <small>{{ ls.locale.katalog_src.template_layout_toko.image_dimension }}</small>
+                    <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                      <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                        [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeImage($event)">
+                        <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                          <!-- <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon> -->
+                          <!-- <br> -->
+                          <span matPrefix>{{ ls.locale.katalog_src.template_layout_toko.text8 }}
+                          </span>
+                          <!-- <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="column">
+                    <div class="" *ngFor="let imgUrl of image_list;let i = index" style="margin-top: 15px;margin-bottom: 15px;">
+                      <div class="delete">
+                        <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
+                      </div>
+                      <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
+                      <div>
+                        <img id="image" [src]='imgUrl' width="410px" height="410px" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+
+
+
+
+
+
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        
+      </form>
+      <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+          Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

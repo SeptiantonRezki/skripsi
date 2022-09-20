@@ -1,18 +1,8 @@
-<div
-  class="page-layout simple fullwidth"
-  fxLayout="column"
-  fusePerfectScrollbar
->
-  <page-content-header contentTitle="TRS System Variable"
-    ><button
-      mat-raised-button
-      aria-label="Simpan"
-      (click)="submit()"
-      type="button"
-    >
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header contentTitle="TRS System Variable">
+    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdate()" type="button" *ngIf="permission.ubah">
       <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>Simpan
-    </button></page-content-header
-  >
+    </button></page-content-header>
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="py-20">
@@ -21,9 +11,14 @@
       <div class="mb-20" style="font-style: italic;">Last update: {{ max_pack_data.updated_date }}</div>
 
       <form [formGroup]="sysvariable" class="py-24" *ngIf="sysvariable">
-        <div fxLayout="row">
+        <div fxLayout="row" class="mt-8">
           <mat-form-field fxFlex="30" class="is-light form-primary">
-            <input matInput type="number" min="0" formControlName="max_pack" placeholder="Max total pack per customer" numericOnly>
+            <input matInput type="number" min="1" formControlName="max_pack" placeholder="Max total pack per customer" numericOnly>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" class="mt-8">
+          <mat-form-field fxFlex="30" class="is-light form-primary">
+            <input matInput type="number" min="1" formControlName="max_period" placeholder="Max TRS period (in days)" numericOnly>
           </mat-form-field>
         </div>
       </form>

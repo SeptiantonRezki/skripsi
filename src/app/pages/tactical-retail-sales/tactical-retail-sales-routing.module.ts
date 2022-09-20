@@ -28,13 +28,6 @@ const routes: Routes = [
     },
   },
   {
-    path: "trs-proposal/:id",
-    component: TrsProposalEditComponent,
-    data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
-    },
-  },
-  {
     path: "trs-proposal/create",
     component: TrsProposalCreateComponent,
     data: {
@@ -47,7 +40,14 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.edit
     },
-  }
+  },
+  {
+    path: "trs-proposal/:id",
+    component: TrsProposalEditComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
+    },
+  },
 ]
 
 @NgModule({

@@ -1,0 +1,74 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>PRODUCT</span>
+      </div>
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
+      <input formControlName="test">
+
+      <div *ngIf="loaded">
+        <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
+        [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
+        >
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+          <ng-template ngx-datatable-header-template>
+          </ng-template>
+
+
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn"
+          >
+            <mat-checkbox [checked]="isSelected" [disabled]="checkDisabled && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
+          </ng-template>
+
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="code" prop="code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.code}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="name" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.name}}
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable>
+      </div>
+    </form>
+
+
+
+
+
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="rows.length === 0">{{ls.locale.global.button.send}}</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">{{ls.locale.global.button.cancel}}</button>
+      </div>
+    </div>
+  </div>
+</div>
