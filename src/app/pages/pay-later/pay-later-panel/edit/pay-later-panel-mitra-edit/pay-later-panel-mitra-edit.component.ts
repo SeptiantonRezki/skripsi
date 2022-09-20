@@ -99,6 +99,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
       territory: []
     }
 
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -325,7 +326,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      paylater_company_id: this.formPanelMitra.get('company').value
+      paylater_company_id: this.formPanelMitra.get('company').value,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(
       res => {
         this.dataService.showLoading(false);
@@ -359,7 +361,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      paylater_company_id: this.formPanelMitra.get('company').value
+      paylater_company_id: this.formPanelMitra.get('company').value,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -383,7 +386,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      paylater_company_id: this.formPanelMitra.get('company').value
+      paylater_company_id: this.formPanelMitra.get('company').value,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -410,7 +414,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
 
     this.mitraPanelService.getMitra(this.pagination, {
       business_id: this.selected.map(mtr => mtr.id),
-      paylater_company_id: this.formPanelMitra.get('company').value
+      paylater_company_id: this.formPanelMitra.get('company').value,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -512,7 +517,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {
       type: 'wholesaler',
-      paylater_company_id: this.formPanelMitra.get('company').value
+      paylater_company_id: this.formPanelMitra.get('company').value,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
@@ -553,7 +559,8 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
           this.loadingIndicator = true;
           this.mitraPanelService.getMitra(this.pagination, {
             business_id: this.selected.map(mtr => mtr.id),
-            paylater_company_id: this.formPanelMitra.get('company').value
+            paylater_company_id: this.formPanelMitra.get('company').value,
+            paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
           }).subscribe(res => {
             Page.renderPagination(this.pagination, res.data);
             this.rows = res.data ? res.data.data : [];
@@ -630,6 +637,7 @@ export class PayLaterPanelMitraEditComponent implements OnInit, OnDestroy {
       this.dataService.showLoading(true);
       let body = {
         paylater_company_id: this.formPanelMitra.get('company').value,
+        paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null,
         type: "wholesaler",
         detail: this.selected.map(mtr => {
           return { business_id: mtr.id };
