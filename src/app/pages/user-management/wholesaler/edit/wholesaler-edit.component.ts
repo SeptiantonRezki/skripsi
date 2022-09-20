@@ -86,7 +86,6 @@ export class WholesalerEditComponent {
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
-    console.log('permissionnya', this.permission);
 
     this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_phone_number') > -1;
     this.viewBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_Rekening_toko') > -1;

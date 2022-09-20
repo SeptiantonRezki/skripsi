@@ -137,7 +137,6 @@ export class RetailerEditComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
-    console.log('permissionnya', this.permission);
 
     this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number_view') > -1;
     this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko_view') > -1;
