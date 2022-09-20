@@ -366,12 +366,14 @@ export class WholesalerEditComponent {
       }
     }
 
+    const phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
-      phone: (this.detailWholesaler.phone) ? (!this.viewPhoneNumberStatus ? Utils.reMaskInput(Utils.formatPhoneNumber(this.detailWholesaler.phone), 4) : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1])) : '',
+      phone: (this.detailWholesaler.phone) ? !this.viewPhoneNumberStatus ? Utils.reMaskInput(String(phone), 4) : phone : '',
       status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
