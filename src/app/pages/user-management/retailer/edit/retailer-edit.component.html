@@ -310,7 +310,7 @@
                   *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
                   {{'global.label.bank_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
-                <div fxFlex="1" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
+                <div fxFlex="1" *ngIf="!isDetail && formBankAccount.get('bank_name').value && editBankStatus">
                   <button mat-icon-button color="" (click)="clearBankName()">
                     <mat-icon class="secondary-text">close</mat-icon>
                   </button>

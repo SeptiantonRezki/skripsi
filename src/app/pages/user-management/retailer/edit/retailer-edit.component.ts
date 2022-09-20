@@ -27,6 +27,10 @@ export class RetailerEditComponent {
   onLoad: Boolean;
   formBankAccount: FormGroup;
   formBankAccountError: any;
+  viewPhoneNumberStatus: Boolean;
+  viewBankStatus: Boolean;
+  editPhoneNumberStatus: Boolean;
+  editBankStatus: Boolean;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -132,6 +136,13 @@ export class RetailerEditComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
+    console.log('permissionnya', this.permission);
+
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.view_phone_number') > -1;
+    this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.view_Rekening_toko') > -1;
+    this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number') > -1;
+    this.editBankStatus = Object.values(this.permission).indexOf('principal.retailer.Rekening_toko') > -1;
+
     this.formdataErrors = {
       name: {},
       address: {},
@@ -443,14 +454,16 @@ export class RetailerEditComponent {
         this.country_phone = Utils.getPhoneCode("", this.detailRetailer.phone);
       }
     }
-    
+
+    const phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
       country: this.detailRetailer.country || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1])) : '',
+      phone: (this.detailRetailer.phone) ? !this.viewPhoneNumberStatus ? Utils.reMaskInput(String(phone), 4) : phone : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
@@ -474,11 +487,11 @@ export class RetailerEditComponent {
     });
 
     this.formBankAccount.setValue({
-      account_number: this.detailRetailer.bank_account_number || '',
-      account_name: this.detailRetailer.bank_account_name || '',
+      account_number: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.bank_account_number, 4) : this.detailRetailer.bank_account_number || '',
+      account_name: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.bank_account_name, 3) : this.detailRetailer.bank_account_name || '',
       bank_final_validation: this.detailRetailer.bank_final_validation ? 1 : 0,
       bank_name: this.detailRetailer.bank_name || '',
-      branch: this.detailRetailer.branch || '',
+      branch: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.branch, 3) : this.detailRetailer.branch || '',
     });
 
     this.formRefferalCode.setValue({
@@ -507,6 +520,10 @@ export class RetailerEditComponent {
       this.npwp.disable();
       this.pkp.disable();
     }
+  }
+
+  remaskSelect(value) {
+    return !this.viewBankStatus ? Utils.reMaskInput(value, 3) : value;
   }
 
   getAudienceArea(selection, id) {
@@ -846,7 +863,7 @@ export class RetailerEditComponent {
 
     }
 
-    if (!this.isCan(['ubah', 'phone_number'])) {
+    if (!this.editPhoneNumberStatus) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
     }
@@ -857,7 +874,7 @@ export class RetailerEditComponent {
       this.rmValidators(fields);
     }
 
-    if (!this.isCan(['ubah', 'rekening_toko'])) {
+    if (!this.editBankStatus) {
 
       const fields = ['account_number', 'bank_name', 'account_name', 'branch', 'bank_final_validation'];
       this.disableFields(fields, this.formBankAccount);
