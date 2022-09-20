@@ -209,7 +209,7 @@ export class PagesName {
       "/tactical-retail-sales/trs-proposal/create": "principal.trsproposal.buat",
       "/tactical-retail-sales/trs-proposal/edit": "principal.trsproposal.ubah",
       "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
-      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.lihat",
+      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
     }
     return PAGES[name];
   }
