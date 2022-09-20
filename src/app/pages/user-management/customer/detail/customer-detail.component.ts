@@ -54,12 +54,13 @@ export class CustomerDetailComponent {
     this.customerService.getDetail({ customer_id: this.customer_id }).subscribe(
       res => {
         this.onLoad = false;
+        const date = res.birth_date.split('-').reverse().join('/');
         this.formCustomer = this.formBuilder.group({
           status: [res.status],
           fullname: [res.fullname],
           gender: [res.gender === 'male' ? "Laki-laki" : "Perempuan"],
           city: [res.city.name],
-          birth_date: [res.birth_date.split('-').reverse().join('/')],
+          birth_date: [!this.viewPhoneNumberStatus ? Utils.reMaskInput(date, 3) : date],
           id_number: [res.id_number],
           phone: [!this.viewPhoneNumberStatus ? Utils.reMaskInput(res.phone, 4) : res.phone],
           is_smoking: [res.is_smoking === 1 ? 'Ya, Saya Merokok' : 'Tidak, Saya Tidak Merokok'],

@@ -609,6 +609,28 @@ export class RoleEditComponent {
       }
     }
     // End Retailer Feature
+
+    // Start Customer Feature
+    if (targetItem.value == 'principal.customer.lihat') {
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.phone_number_and_DOB_view';
+      });
+
+      if (event.checked === false) {
+        phoneNumberToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.customer.phone_number_and_DOB_view') {
+      const seeToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.lihat';
+      });
+      console.log('status', seeToggle.status);
+      if (seeToggle.status === false) {
+        event.source.checked = false;
+      }
+    }
+    // End Customer Feature
   }
 
   getCountry() {
@@ -623,6 +645,18 @@ export class RoleEditComponent {
     );
     console.log("COUNTRY2", this.Country);
 
+  }
+
+  renameTitle(title) {
+    let value = '';
+    if (title.toLowerCase() === 'rekening toko') {
+      value = 'Edit Rekening Toko';
+    } else if (title.toLowerCase() === 'phone number') {
+      value = 'Edit Phone Number';
+    } else {
+      value = title;
+    }
+    return value;
   }
 
 }
