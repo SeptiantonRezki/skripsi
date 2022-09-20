@@ -31,6 +31,7 @@ export class RetailerEditComponent {
   viewBankStatus: Boolean;
   editPhoneNumberStatus: Boolean;
   editBankStatus: Boolean;
+  viewPhoneNumberPBStatus: Boolean;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -138,10 +139,11 @@ export class RetailerEditComponent {
     this.permission = this.roles.getRoles('principal.retailer');
     console.log('permissionnya', this.permission);
 
-    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.view_phone_number') > -1;
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number_view') > -1;
     this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko_view') > -1;
     this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number') > -1;
     this.editBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko') > -1;
+    this.viewPhoneNumberPBStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number_pb_view') > -1;
 
     this.formdataErrors = {
       name: {},
@@ -522,8 +524,8 @@ export class RetailerEditComponent {
     }
   }
 
-  remaskSelect(value) {
-    return !this.viewBankStatus ? Utils.reMaskInput(value, 3) : value;
+  remaskTemplate(validate, value, totalShowChar) {
+    return !validate ? Utils.reMaskInput(value, totalShowChar) : value;
   }
 
   getAudienceArea(selection, id) {
@@ -875,8 +877,14 @@ export class RetailerEditComponent {
     }
 
     if (!this.editBankStatus) {
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      this.disableFields(fields, this.formBankAccount);
+      this.rmValidators(fields, this.formBankAccount);
+    }
 
-      const fields = ['account_number', 'bank_name', 'account_name', 'branch', 'bank_final_validation'];
+    if (!this.isCan(['ubah', 'rekening_toko'])) {
+
+      const fields = ['bank_final_validation'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
       this.npwp.disable();
