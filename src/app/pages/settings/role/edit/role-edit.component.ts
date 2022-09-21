@@ -111,11 +111,13 @@ export class RoleEditComponent {
         rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_Rekening_toko' }),
         phoneNumberToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.phone_number' }),
         rekeningToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.Rekening_toko' }),
+        wholesalerUbahToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.ubah' }),
 
         retailerRole = _.find(this.roles, { nama: 'retailer' }),
         retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
         retailerExportToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.button.export' }),
         retailerViewToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.lihat' }),
+        retailerUbahToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.ubah' }),
         retailerPhoneNumberToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.phone_number_view' }),
         retailerRekeningToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko_view' }),
         retailerPhoneNumberToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.export.phone_number' }),
@@ -126,18 +128,22 @@ export class RoleEditComponent {
         wholesalerExportToggle.status = false;
       }
 
-      if (phoneNumberToggleView.status == false) {
+      if (phoneNumberToggleView.status == false || wholesalerUbahToggle.status == false) {
+        phoneNumberToggle.status = false;
         phoneNumberToggle.disabled = true;
       }
 
-      if (rekeningToggleView.status == false) {
+      if (rekeningToggleView.status == false || wholesalerUbahToggle.status == false) {
+        rekeningToggle.status = false;
         rekeningToggle.disabled = true;
       }
-      if (retailerPhoneNumberToggleView.status == false) {
+      if (retailerPhoneNumberToggleView.status == false || retailerUbahToggle.status == false) {
+        retailerPhoneNumberToggle.status = false;
         retailerPhoneNumberToggle.disabled = true;
       }
 
-      if (retailerRekeningToggleView.status == false) {
+      if (retailerRekeningToggleView.status == false || retailerUbahToggle.status == false) {
+        retailerRekeningToggle.status = false;
         retailerRekeningToggle.disabled = true;
       }
 
@@ -405,6 +411,7 @@ export class RoleEditComponent {
                 if (targetValue.submenu && targetValue.value !== 'principal.wholesaler.submenu.view_phone_number' && targetValue.value !== 'principal.wholesaler.submenu.view_Rekening_toko' && targetValue.value !== 'principal.wholesaler.submenu.phone_number' && targetValue.value !== 'principal.wholesaler.submenu.Rekening_toko') {
 
                   targetValue.status = status;
+                  targetValue.disabled = !status;
                   return targetValue;
 
                 }
@@ -527,7 +534,12 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        phoneNumberToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.wholesaler.ubah';
+        });
+        if (ubahToggle.status === true) {
+          phoneNumberToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         phoneNumberToggle.disabled = true;
@@ -545,11 +557,69 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        rekeningToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.wholesaler.ubah';
+        });
+        if (ubahToggle.status === true) {
+          rekeningToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         rekeningToggle.disabled = true;
         rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.wholesaler.ubah' || targetItem.value == 'principal.wholesaler.lihat') {
+      let viewRekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.view_Rekening_toko';
+      });
+      let editRekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+      });
+      let viewPhoneToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.view_phone_number';
+      });
+      let editPhoneToggle = targetItems.value.find(item => {
+        return item.value == 'principal.wholesaler.submenu.phone_number';
+      });
+
+      if (event.checked) {
+        if (targetItem.value == 'principal.wholesaler.ubah') {
+          if (viewPhoneToggle.status === true) {
+            editPhoneToggle.disabled = false;
+          }
+          if (viewRekeningToggle.status === true) {
+            editRekeningToggle.disabled = false;
+          }
+        }
+        viewRekeningToggle.disabled = false;
+        viewPhoneToggle.disabled = false;
+      }
+      if (!event.checked) {
+        if (targetItem.value == 'principal.wholesaler.ubah') {
+          editPhoneToggle.status = false;
+          editPhoneToggle.disabled = true;
+          editRekeningToggle.status = false;
+          editRekeningToggle.disabled = true;
+        }
+        const lihatToggle = targetItems.value.find(item => {
+          return item.value == 'principal.wholesaler.lihat';
+        });
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.wholesaler.ubah';
+        });
+        if (lihatToggle.status === false && ubahToggle.status === false) {
+          viewRekeningToggle.status = false;
+          viewRekeningToggle.disabled = true;
+          editRekeningToggle.status = false;
+          editRekeningToggle.disabled = true;
+
+          viewPhoneToggle.status = false;
+          viewPhoneToggle.disabled = true;
+          editPhoneToggle.status = false;
+          editPhoneToggle.disabled = true;
+        }
       }
     }
     // End Wholesaler Feature
@@ -565,7 +635,12 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        exportRetailerToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.ubah';
+        });
+        if (ubahToggle.status === true) {
+          exportRetailerToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         exportRetailerToggle.disabled = true;
@@ -583,7 +658,12 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        phoneNumberToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.ubah';
+        });
+        if (ubahToggle.status === true) {
+          phoneNumberToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         phoneNumberToggle.disabled = true;
@@ -606,6 +686,59 @@ export class RoleEditComponent {
       if (!event.checked) {
         rekeningToggle.disabled = true;
         rekeningToggle.status = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.retailer.ubah' || targetItem.value == 'principal.retailer.lihat') {
+      let viewRekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.rekening_toko_view';
+      });
+      let editRekeningToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.rekening_toko';
+      });
+      let viewPhoneToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.submenu.phone_number_view';
+      });
+      let editPhoneToggle = targetItems.value.find(item => {
+        return item.value == 'principal.retailer.export.phone_number';
+      });
+
+      if (event.checked) {
+        if (targetItem.value == 'principal.retailer.ubah') {
+          if (viewPhoneToggle.status === true) {
+            editPhoneToggle.disabled = false;
+          }
+          if (viewRekeningToggle.status === true) {
+            editRekeningToggle.disabled = false;
+          }
+        }
+        viewRekeningToggle.disabled = false;
+        viewPhoneToggle.disabled = false;
+      }
+      if (!event.checked) {
+        if (targetItem.value == 'principal.retailer.ubah') {
+          editPhoneToggle.status = false;
+          editPhoneToggle.disabled = true;
+          editRekeningToggle.status = false;
+          editRekeningToggle.disabled = true;
+        }
+        const lihatToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.lihat';
+        });
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.ubah';
+        });
+        if (lihatToggle.status === false && ubahToggle.status === false) {
+          viewRekeningToggle.status = false;
+          viewRekeningToggle.disabled = true;
+          editRekeningToggle.status = false;
+          editRekeningToggle.disabled = true;
+
+          viewPhoneToggle.status = false;
+          viewPhoneToggle.disabled = true;
+          editPhoneToggle.status = false;
+          editPhoneToggle.disabled = true;
+        }
       }
     }
     // End Retailer Feature
