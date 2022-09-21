@@ -19,6 +19,9 @@ export class LoyaltyMitraComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
   formIsDirty: boolean = false;
+  lang: string = "id";
+  init: boolean = false;
+  private encodeToken: string = "";
 
   @HostListener("window:beforeunload")
   canDeactivate(): Observable<boolean> | boolean {
@@ -28,7 +31,8 @@ export class LoyaltyMitraComponent implements OnInit {
   @HostListener("window:message", ["$event"])
   onMessage({ data }) {
     if (data.type === "form") this.formIsDirty = data.isDirty;
-    if (data.type === "redirect") this.router.navigate(data.path.split("/"));
+    if (data.type === "redirect")
+      this.router.navigate(data.path.split("/"));
     if (data.type === "newtab")
       this.router.navigate([]).then((result) => {
         window.open(data.path, "_blank");
@@ -41,8 +45,10 @@ export class LoyaltyMitraComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.route.params.subscribe(params => {
-      if (params.id || params.tab) this.initPage();
+    this.route.params.subscribe((params) => {
+      if (this.init && (params.id || params.tab)) {
+        this.renderPage();
+      }
     });
     this.permission = this.roles.getArrayRoles(
       "principal.dteprogramloyaltymitra"
@@ -51,26 +57,27 @@ export class LoyaltyMitraComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initPage();
+    this.lang = localStorage.getItem("user_country");
+    this.authService.getEncryptedToken().subscribe((res) => {
+      this.encodeToken = encodeURI(res.data);
+      this.renderPage();
+      this.init = true;
+    });
   }
 
-  initPage() {
+  renderPage() {
+    this.loading = true;
     const targetPath = this.router.url;
-    this.authService.getEncryptedToken().subscribe((res) => {
-      const baseurl = environment.REACT_BASE_URL;
-      const lang = localStorage.getItem("user_country");
-      const encodedToken = encodeURI(res.data);
-      const httpParams = new HttpParams()
-        .set("dceauth", encodedToken)
-        .set("destination", targetPath)
-        .set("platform", "principal")
-        .set("locale", lang)
-        .set("allowBack", "1")
-        .set("_prmdxtrn", JSON.stringify(this.permission));
-      const fullUrl = `${baseurl}?${httpParams.toString()}`;
-
-      this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
-      this.loading = false;
-    });
+    const baseurl = environment.REACT_BASE_URL;
+    const httpParams = new HttpParams()
+      .set("dceauth", this.encodeToken)
+      .set("destination", targetPath)
+      .set("platform", "principal")
+      .set("allowBack", "1")
+      .set("_prmdxtrn", JSON.stringify(this.permission))
+      .set("locale", this.lang);
+    const fullUrl = `${baseurl}?${httpParams.toString()}`;
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
+    this.loading = false;
   }
 }
