@@ -723,8 +723,8 @@ export class InfoBoardEditComponent implements OnInit {
 
       fd.append('_method', body._method);
       fd.append('name', body.name);
-      fd.append('type', body.coin);
-      fd.append('description', body.coin);
+      fd.append('type', body.type);
+      fd.append('description', body.description);
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
 
@@ -940,5 +940,20 @@ export class InfoBoardEditComponent implements OnInit {
       this.audiencePopulation.setValue('');
       // this.formGeo.get('audiencePopulation').setValue('');
     }
+  }
+
+  submitPublishUnpublish() {
+    const id = this.detailFormBoard.id;
+    this.dataService.showLoading(true);
+    const body = {
+      status: (this.detailFormBoard.status === 'unpublish') ? 'publish' : 'unpublish'
+    };
+    this.infoBoardService.publishUnpublish({id: id}, body).subscribe(({data}) => {
+
+    this.dataService.showLoading(false);
+    this.router.navigate(['dte', 'info-board']);
+    }, err => {
+      this.dataService.showLoading(false);
+    })
   }
 }

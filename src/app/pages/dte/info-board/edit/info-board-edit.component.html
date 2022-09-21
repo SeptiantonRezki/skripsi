@@ -206,6 +206,15 @@
                   >
                     {{ ls.locale.global.button.save }}
                   </button>
+
+                  <button 
+                    mat-raised-button 
+                    type="button" 
+                    class="ml-24 confirmation-button" 
+                    (click)="submitPublishUnpublish()" 
+                    fxFlex="20">
+                      {{ detailFormBoard && detailFormBoard.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+                  </button>
                 </div>
 
                 <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">

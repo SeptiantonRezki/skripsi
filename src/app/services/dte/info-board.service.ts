@@ -70,8 +70,8 @@ export class InfoBoardService extends BaseService {
     return this.postApi(url, body);
   }
 
-  publishUnpublish(body?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "update_publish");
+  publishUnpublish(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_publish", context);
     return this.postApi(url, body);
   }
 
