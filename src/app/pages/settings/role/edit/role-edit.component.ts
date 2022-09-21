@@ -618,6 +618,9 @@ export class RoleEditComponent {
 
       if (event.checked === false) {
         phoneNumberToggle.status = false;
+        phoneNumberToggle.disabled = true;
+      } else {
+        phoneNumberToggle.disabled = false;
       }
     }
 
@@ -625,7 +628,6 @@ export class RoleEditComponent {
       const seeToggle = targetItems.value.find(item => {
         return item.value == 'principal.customer.lihat';
       });
-      console.log('status', seeToggle.status);
       if (seeToggle.status === false) {
         event.source.checked = false;
       }
@@ -650,9 +652,21 @@ export class RoleEditComponent {
   renameTitle(title) {
     let value = '';
     if (title.toLowerCase() === 'rekening toko') {
-      value = 'Edit Rekening Toko';
+      value = 'Rek. Edit';
     } else if (title.toLowerCase() === 'phone number') {
-      value = 'Edit Phone Number';
+      value = 'Phone Edit';
+    } else if (title.toLowerCase() === 'phone number and dob view') {
+      value = 'Phone & DOB View';
+    } else if (title.toLowerCase() === 'view rekening toko') {
+      value = 'Rek. View';
+    } else if (title.toLowerCase() === 'view phone number') {
+      value = 'Phone View';
+    } else if (title.toLowerCase() === 'phone number pb view') {
+      value = 'Phone PB View';
+    } else if (title.toLowerCase() === 'rekening toko view') {
+      value = 'Rek. View';
+    } else if (title.toLowerCase() === 'phone number view') {
+      value = 'Phone View';
     } else {
       value = title;
     }
