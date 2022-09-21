@@ -152,6 +152,20 @@ export class RoleEditComponent {
         retailerExportToggle.status = false;
       }
 
+      if (wholesalerViewToggle.status == false && wholesalerUbahToggle.status == false) {
+        phoneNumberToggleView.status = false;
+        phoneNumberToggleView.disabled = true;
+        rekeningToggleView.status = false;
+        rekeningToggleView.disabled = true;
+      }
+
+      if (retailerViewToggle.status == false && retailerUbahToggle.status == false) {
+        retailerPhoneNumberToggleView.status = false;
+        retailerPhoneNumberToggleView.disabled = true;
+        retailerRekeningToggleView.status = false;
+        retailerRekeningToggleView.disabled = true;
+      }
+
       this.onLoad = false;
       this.initArea();
       this.initFormGroup();
