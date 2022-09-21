@@ -505,6 +505,30 @@ export class RoleCreateComponent {
       }
     }
     // End Retailer Feature
+
+    // Start Customer Feature
+    if (targetItem.value == 'principal.customer.lihat') {
+      let phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.phone_number_and_DOB_view';
+      });
+
+      if (event.checked === false) {
+        phoneNumberToggle.status = false;
+        phoneNumberToggle.disabled = true;
+      } else {
+        phoneNumberToggle.disabled = false;
+      }
+    }
+
+    if (targetItem.value == 'principal.customer.phone_number_and_DOB_view') {
+      const seeToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.lihat';
+      });
+      if (seeToggle.status === false) {
+        event.source.checked = false;
+      }
+    }
+    // End Customer Feature
   }
 
   getCountry() {
@@ -577,6 +601,30 @@ export class RoleCreateComponent {
         })
       }
     });
+  }
+
+  renameTitle(title) {
+    let value = '';
+    if (title.toLowerCase() === 'rekening toko') {
+      value = 'Rek. Edit';
+    } else if (title.toLowerCase() === 'phone number') {
+      value = 'Phone Edit';
+    } else if (title.toLowerCase() === 'phone number and dob view') {
+      value = 'Phone & DOB View';
+    } else if (title.toLowerCase() === 'view rekening toko') {
+      value = 'Rek. View';
+    } else if (title.toLowerCase() === 'view phone number') {
+      value = 'Phone View';
+    } else if (title.toLowerCase() === 'phone number pb view') {
+      value = 'Phone PB View';
+    } else if (title.toLowerCase() === 'rekening toko view') {
+      value = 'Rek. View';
+    } else if (title.toLowerCase() === 'phone number view') {
+      value = 'Phone View';
+    } else {
+      value = title;
+    }
+    return value;
   }
 
 }
