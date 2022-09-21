@@ -183,7 +183,7 @@ export class RedeemListComponent implements OnInit {
   }
 
   getId(row) {
-    return row.id;
+    return row.order_id;
   }
 
   getAudienceAreaV2(selection, id, event?) {
