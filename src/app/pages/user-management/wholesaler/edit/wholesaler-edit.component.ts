@@ -364,15 +364,19 @@ export class WholesalerEditComponent {
         this.country_phone = Utils.getPhoneCode("", this.detailWholesaler.phone);
       }
     }
-
-    const phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+    let phone = '';
+    if (this.viewPhoneNumberStatus) {
+      phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+    } else {
+      phone = Utils.reMaskInput(this.detailWholesaler.phone, 4);
+    }
 
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
-      phone: (this.detailWholesaler.phone) ? !this.viewPhoneNumberStatus ? Utils.reMaskInput(String(phone), 4) : phone : '',
+      phone: (this.detailWholesaler.phone) ? phone : '',
       status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',

@@ -455,8 +455,12 @@ export class RetailerEditComponent {
         this.country_phone = Utils.getPhoneCode("", this.detailRetailer.phone);
       }
     }
-
-    const phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+    let phone = '';
+    if (this.viewPhoneNumberStatus) {
+      phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+    } else {
+      phone = Utils.reMaskInput(this.detailRetailer.phone, 4);
+    }
 
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
@@ -464,7 +468,7 @@ export class RetailerEditComponent {
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
       country: this.detailRetailer.country || '',
-      phone: (this.detailRetailer.phone) ? !this.viewPhoneNumberStatus ? Utils.reMaskInput(String(phone), 4) : phone : '',
+      phone: (this.detailRetailer.phone) ? phone : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
