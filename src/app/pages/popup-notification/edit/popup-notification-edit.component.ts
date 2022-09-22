@@ -55,6 +55,7 @@ export class PopupNotificationEditComponent {
   listContentType: any[] = [];
   listLandingPage: any[] = [];
   listGender: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.male'), value: "male" }, { name: this.translate.instant('global.label.female'), value: "female" }];
+  listSmoker: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.smoking'), value: "yes" }, { name: this.translate.instant('global.label.not_smoke'), value: "no" }];
   listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
   listTypeOfRecurrence: Object[] = [
     { id: 'once', name: this.translate.instant('notification.popup_notifikasi.label1') },
@@ -90,11 +91,6 @@ export class PopupNotificationEditComponent {
     { id: 11, name: this.translate.instant('global.calendar.november') },
     { id: 12, name: this.translate.instant('global.calendar.december') },
   ]
-  listContentTypeNew: any[] = [
-    { name: this.translate.instant('global.label.reguler'), value: "all" },
-    { name: this.translate.instant('global.label.cc'), value: "cc" },
-    { name: this.translate.instant('global.label.rrp'), value: "rrp" },
-  ];
 
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
@@ -255,6 +251,7 @@ export class PopupNotificationEditComponent {
       body_wallet: ["", Validators.required],
       verification: ["all"],
       employee: ["all"],
+      is_smoker: ["both"],
       gender: ["both"],
       age_consumer_from: ["", Validators.required],
       age_consumer_to: ["", Validators.required],
@@ -266,8 +263,7 @@ export class PopupNotificationEditComponent {
       subscription: ["all"],
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
-      barcode:[""],
-      content_type_new: ['all'],
+      barcode:[""]
     });
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -477,6 +473,34 @@ export class PopupNotificationEditComponent {
     });
 
     // this.formPopupGroup.controls['user_group'].setValue('wholesaler');
+
+    this.formPopupGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
+      // if (!this.onLoad) {
+      //   this.formPopupGroup.controls['age_consumer_from'].setValue('');
+      //   this.formPopupGroup.controls['age_consumer_to'].setValue('');
+      // }
+
+      if (res === 'yes') {
+        this.formPopupGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
+        this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required]);
+        this.formPopupGroup.updateValueAndValidity();
+      } else {
+        this.formPopupGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(0)]);
+        this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required]);
+        this.formPopupGroup.updateValueAndValidity();
+      }
+
+      if (this.formPopupGroup.get("is_target_audience").value === true) {
+        this.getAudience();
+        if (this.detailPopup && this.detailPopup.audience && this.formPopupGroup.get('user_group').value === this.detailPopup.type) {
+          this.onSelect({ selected: this.detailPopup.audience.map(aud => ({ id: aud.audience_id })) });
+          this.audienceSelected = this.detailPopup.audience.map(aud => ({ id: aud.audience_id }));
+        } else {
+          this.selected.splice(0, this.selected.length);
+          this.audienceSelected = [];
+        }
+      }
+    })
 
     this.formPopupGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
       this.formPopupGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
@@ -1202,13 +1226,24 @@ export class PopupNotificationEditComponent {
       }
 
       if (response.type === 'customer') {
+        let smoker_type = '';
+        if (response.smoker_type === 'smoker') {
+          smoker_type = 'yes';
+        } else if (response.smoker_type === 'non-smoker') {
+          smoker_type = 'no';
+        } else {
+          smoker_type = 'both';
+        }
+
         this.formPopupGroup.get('gender').setValue(response.gender || 'both');
         this.formPopupGroup.get('age_consumer_from').setValue(response.age_from);
         this.formPopupGroup.get('age_consumer_to').setValue(response.age_to);
         this.formPopupGroup.get('employee').setValue(response.employee);
+        this.formPopupGroup.get('is_smoker').setValue(smoker_type);
         this.formPopupGroup.get('subscription').setValue(response.subscription);
-        this.formPopupGroup.get('verification').setValue(response.verification || 'all');
-        this.formPopupGroup.get('content_type_new').setValue(response.content_type);
+        if (smoker_type !== 'yes') {
+          this.formPopupGroup.get('verification').setValue(response.verification || 'all');
+        }
 
         if (!response.target_audience && response.areas.length) {
           this.formPopupGroup.get('is_target_area').setValue(true);
@@ -1405,13 +1440,26 @@ export class PopupNotificationEditComponent {
       }
 
       if (body.type === 'customer') {
+        let smoker_type = '';
+        let is_smoker = this.formPopupGroup.get('is_smoker').value;
+        if (is_smoker === 'yes') {
+          smoker_type = 'smoker';
+        } else if (is_smoker === 'no') {
+          smoker_type = 'non-smoker';
+        } else {
+          smoker_type = 'both';
+        }
+
+        body['smoker_type'] = smoker_type;
         body['age_from'] = this.formPopupGroup.get('age_consumer_from').value;
         body['age_to'] = this.formPopupGroup.get('age_consumer_to').value;
         body['gender'] = this.formPopupGroup.get('gender').value;
         body['employee'] = this.formPopupGroup.get('employee').value;
         body['subscription'] = this.formPopupGroup.get('subscription').value;
-        body['verification'] = this.formPopupGroup.get('verification').value;
-        body['content_type'] = this.formPopupGroup.get('content_type_new').value;
+
+        if (this.formPopupGroup.get('is_smoker').value !== 'yes') {
+          body['verification'] = this.formPopupGroup.get('verification').value;
+        }
       }
 
       if (body.action === 'new-product') {
@@ -1533,6 +1581,17 @@ export class PopupNotificationEditComponent {
       if(this.formPopupGroup.get('recurrence_type').value === 'yearly' && this.listDateChosen.value.length == 0) {
         commonFormValidator.validateFormControl(this.listDateChosen);
       }
+    }
+  }
+
+  onChangeCheckbox(event) {
+    const isSmoker = this.formPopupGroup.get('is_smoker') as FormArray;
+
+    if (event.checked) {
+      isSmoker.push(new FormControl(event.source.value))
+    } else {
+      const i = isSmoker.controls.findIndex(x => x.value === event.source.value);
+      isSmoker.removeAt(i);
     }
   }
 
@@ -1672,11 +1731,13 @@ export class PopupNotificationEditComponent {
     this.pagination['audience'] = this.formPopupGroup.get("user_group").value;
     if (this.formPopupGroup.get("user_group").value === 'retailer') {
       this.pagination['retailer_type'] = this.formPopupGroup.get("group_type").value;
+      delete this.pagination['customer_smoking'];
       delete this.pagination['customer_gender'];
       delete this.pagination['customer_age_from'];
       delete this.pagination['customer_age_to'];
     }
     if (this.formPopupGroup.get("user_group").value === 'customer') {
+      delete this.pagination['customer_smoking'];
       delete this.pagination['customer_gender'];
       delete this.pagination['customer_age_from'];
       delete this.pagination['customer_age_to'];
@@ -1684,6 +1745,7 @@ export class PopupNotificationEditComponent {
     }
     if (this.formPopupGroup.get("user_group").value === 'customer') {
       delete this.pagination['retailer_type'];
+      this.pagination['customer_smoking'] = this.formPopupGroup.get("is_smoker").value;
       this.pagination['customer_gender'] = this.formPopupGroup.get("gender").value;
       this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
