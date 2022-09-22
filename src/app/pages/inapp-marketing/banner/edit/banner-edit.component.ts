@@ -68,22 +68,18 @@ export class BannerEditComponent {
     { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" },
     { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" }
   ];
+  listContentTypeCustomer: any[] = [
+    { name: this.translate.instant('global.label.reguler'), value: "all" },
+    { name: this.translate.instant('global.label.cc'), value: "cc" },
+    { name: this.translate.instant('global.label.rrp'), value: "rrp" },
+  ];
   listContentWallet: any[] = [];
   listLandingPage: any[] = [];
   // listLandingPageConsumer: any[] = [{ name: "Kupon", value: "kupon" }, { name: "Terdekat", value: "terdekat" }, { name: "Profil Saya", value: "profil_saya" }, { name: "Bantuan", value: "bantuan" }];
-  listJenisKonsumen: any[] = [
-    { name: this.translate.instant('global.label.all'), value: "all" },
-    { name: this.translate.instant('global.label.verified'), value: "verified" }
-  ];
   listSubscription: any[] = [
     { name: this.translate.instant('global.label.all'), value: "all" },
     { name: this.translate.instant('global.label.subscribe'), value: "yes" },
     { name: this.translate.instant('global.label.unsubscribe'), value: "no" }
-  ];
-  listSmoker: any[] = [
-    { name: this.translate.instant('global.label.all'), value: "both" },
-    { name: this.translate.instant('global.label.smoking'), value: "yes" },
-    { name: this.translate.instant('global.label.not_smoke'), value: "no" }
   ];
   listGender: any[] = [
     { name: this.translate.instant('global.label.all'), value: "both" },
@@ -283,12 +279,8 @@ export class BannerEditComponent {
       profile: [''],
       url_iframe: ['', [Validators.required, Validators.pattern(urlvalidation)]],
       // is_smoker: this.formBuilder.array([]),
-      verification: ['all'],
       employee: ['all'],
-      is_smoker: ['both'],
       gender: ['both'],
-      age_consumer_from: [''],
-      age_consumer_to: [''],
       promo: ['yes', Validators.required],
       transfer_token: ['yes', Validators.required],
       is_target_audience: [false],
@@ -311,8 +303,8 @@ export class BannerEditComponent {
       barcode: [""],
       kategori: null,
       ticker_body: [""],
-      ticker_title: [""]
-
+      ticker_title: [""],
+      content_type_customer: ['all'],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -346,8 +338,6 @@ export class BannerEditComponent {
           { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
           { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
         ];
-        this.formBannerGroup.controls['age_consumer_from'].disable();
-        this.formBannerGroup.controls['age_consumer_to'].disable();
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       } else {
@@ -364,10 +354,6 @@ export class BannerEditComponent {
           { name: this.translate.instant('global.label.voucher'), value: "voucher_kupon" },
         ];
         this.listContentType.push({ name: this.translate.instant('global.label.ewallet'), value: 'e_wallet' });
-        if (!this.isDetail) {
-          this.formBannerGroup.controls['age_consumer_from'].enable();
-          this.formBannerGroup.controls['age_consumer_to'].enable();
-        }
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
       }
 
@@ -376,57 +362,6 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['landing_page'].setValue('');
     });
 
-    this.formBannerGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
-      // const yes = res.find(item => item === 'yes');
-      // const no = res.find(item => item === 'no');
-
-      // if (yes && no) {
-      //   this.customAge = false;
-      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
-      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
-      //   this.formBannerGroup.updateValueAndValidity();
-      //   console.log('yes & no');
-      // } else if (yes && !no) {
-      //   this.customAge = true;
-      //   this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
-      //   this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
-      //   this.formBannerGroup.updateValueAndValidity();
-      //   console.log('yes only');
-      // } else if (!yes && no) {
-      //   this.customAge = false;
-      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
-      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
-      //   this.formBannerGroup.updateValueAndValidity();
-      //   console.log('no only');
-      // } else {
-      //   this.customAge = false;
-      //   this.formBannerGroup.controls['age_consumer_from'].clearValidators();
-      //   this.formBannerGroup.controls['age_consumer_to'].clearValidators();
-      //   this.formBannerGroup.updateValueAndValidity();
-      // }
-
-      if (!this.isDetail) {
-        this.formBannerGroup.controls['age_consumer_from'].setValue('');
-        this.formBannerGroup.controls['age_consumer_to'].setValue('');
-
-        if (res === 'yes') {
-          this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
-          this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
-          this.formBannerGroup.updateValueAndValidity();
-        } else {
-          this.formBannerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(0)]);
-          this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
-          this.formBannerGroup.updateValueAndValidity();
-        }
-      }
-
-      if (this.formBannerGroup.get('is_target_audience').value === true) {
-        this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
-      }
-    })
-
     this.formBannerGroup.get('landing_page').valueChanges.debounceTime(50).subscribe((res) => {
       if (res === 'profil_saya') {
         this.formBannerGroup.get('profile').setValidators([Validators.required]);
@@ -434,16 +369,6 @@ export class BannerEditComponent {
         this.formBannerGroup.get('profile').setValidators([]);
       }
     });
-
-    this.formBannerGroup.controls['age_consumer_from'].valueChanges.debounceTime(50).subscribe(res => {
-      this.formBannerGroup.controls['age_consumer_to'].setValidators([Validators.required, Validators.min(res)]);
-      this.formBannerGroup.updateValueAndValidity();
-      if (this.formBannerGroup.get('is_target_audience').value === true) {
-        this.getAudience();
-        this.selected.splice(0, this.selected.length);
-        this.audienceSelected = [];
-      }
-    })
 
     // this.formBannerGroup.controls['url_iframe'].disable();
 
@@ -903,26 +828,16 @@ export class BannerEditComponent {
 
     if (this.detailBanner.user_group === 'customer') {
       this.formBannerGroup.get('gender').setValue(this.detailBanner.gender || 'both');
-      this.formBannerGroup.get('age_consumer_from').setValue(this.detailBanner.age_from);
-      this.formBannerGroup.get('age_consumer_to').setValue(this.detailBanner.age_to);
       this.formBannerGroup.get('employee').setValue(this.detailBanner.employee || 'all');
-      this.formBannerGroup.get('is_smoker').setValue(this.detailBanner.smoker || 'both');
-      if (this.detailBanner.smoker !== 'yes') {
-        try {
-          this.formBannerGroup.get('verification').setValue(this.detailBanner.verification || 'all');
-        } catch (ex) { console.log(ex) }
-      }
       this.formBannerGroup.get('subscription').setValue(this.detailBanner.subscription);
       this.formBannerGroup.get('employee').setValidators([Validators.required]);
-      this.formBannerGroup.get('is_smoker').setValidators([Validators.required]);
-      this.formBannerGroup.get('age_consumer_from').setValidators([Validators.required, Validators.min(this.detailBanner.smoker === 'yes' ? 18 : 0)]);
-      this.formBannerGroup.get('age_consumer_to').setValidators([Validators.required, Validators.min(this.detailBanner.age_consumer_from ? this.detailBanner.age_consumer_from : 0)]);
       this.formBannerGroup.get('type_banner').setValue(this.detailBanner.type_banner);
       this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
       this.formBannerGroup.get('profile').setValue(this.detailBanner.target_page.menu);
       setTimeout(() => {
         this.formBannerGroup.get('type_banner').setValue((this.detailBanner.type_banner) ? this.detailBanner.type_banner : 'in-app-banner');
       }, 50);
+      this.formBannerGroup.get('content_type_customer').setValue(this.detailBanner.user_type);
       this.formBannerGroup.updateValueAndValidity();
 
       if (!this.detailBanner.target_audience && this.detailBanner.areas.length) {
@@ -1481,26 +1396,18 @@ export class BannerEditComponent {
       if (body.user_group === 'customer') {
         fd.append('gender', this.formBannerGroup.get('gender').value);
         body['gender'] = this.formBannerGroup.get('gender').value;
-        fd.append('age_from', this.formBannerGroup.get('age_consumer_from').value);
-        body['age_from'] = this.formBannerGroup.get('age_consumer_from').value;
-        fd.append('age_to', this.formBannerGroup.get('age_consumer_to').value);
-        body['age_to'] = this.formBannerGroup.get('age_consumer_to').value;
         fd.append('employee', this.formBannerGroup.get('employee').value);
         body['employee'] = this.formBannerGroup.get('employee').value;
-        fd.append('smoker', this.formBannerGroup.get('is_smoker').value);
-        body['smoker'] = this.formBannerGroup.get('is_smoker').value;
         fd.append('type_banner', this.formBannerGroup.get('type_banner').value);
         body['type_banner'] = this.formBannerGroup.get('type_banner').value;
-        if (this.formBannerGroup.get('is_smoker').value !== 'yes') {
-          fd.append('verification', this.formBannerGroup.get('verification').value);
-          body['verification'] = this.formBannerGroup.get('verification').value;
-        }
         if (this.formBannerGroup.get('content_type').value === 'landing_page' && this.formBannerGroup.get('landing_page').value === 'profil_saya') {
           fd.append('profile', this.formBannerGroup.get('profile').value);
           body['profile'] = this.formBannerGroup.get('profile').value;
         }
         fd.append('subscription', this.formBannerGroup.get('subscription').value);
         body['subscription'] = this.formBannerGroup.get('subscription').value;
+        fd.append('user_type', this.formBannerGroup.get('content_type_customer').value);
+        body['user_type'] = this.formBannerGroup.get('content_type_customer').value;
       }
 
       if (this.formBannerGroup.get('type_banner').value === 'aktivasi-konsumen') {
@@ -1688,17 +1595,6 @@ export class BannerEditComponent {
     }
   }
 
-  onChangeCheckbox(event) {
-    const isSmoker = this.formBannerGroup.get('is_smoker') as FormArray;
-
-    if (event.checked) {
-      isSmoker.push(new FormControl(event.source.value))
-    } else {
-      const i = isSmoker.controls.findIndex(x => x.value === event.source.value);
-      isSmoker.removeAt(i);
-    }
-  }
-
   getToolTipData(value, array) {
     if (value && array.length) {
       let msg = array.filter(item => item.id === value)[0]['name'];
@@ -1866,10 +1762,7 @@ export class BannerEditComponent {
     }
     if (this.formBannerGroup.get('user_group').value === 'customer') {
       delete this.pagination['type'];
-      this.pagination['customer_smoking'] = this.formBannerGroup.get('is_smoker').value;
       this.pagination['customer_gender'] = this.formBannerGroup.get('gender').value;
-      this.pagination['customer_age_from'] = this.formBannerGroup.get('age_consumer_from').value;
-      this.pagination['customer_age_to'] = this.formBannerGroup.get('age_consumer_to').value;
     }
 
     this.bannerService[keyAudience](this.pagination).subscribe(res => {
