@@ -942,41 +942,39 @@ export class TrsProposalComponent {
     });
   }
 
-  directEdit(param?: any): void {
+  goEdit(param?: any): void {
     // this.dataService.setToStorage("detail_wholesaler", param);
     this.dataService.setToStorage("id_wholesaler", param.id);
     this.router.navigate(["user-management", "wholesaler", "edit"]);
   }
 
-  directDetail(param?: any): void {
+  goDetail(param?: any): void {
     // this.dataService.setToStorage("detail_wholesaler", param);
     this.dataService.setToStorage("id_wholesaler", param.id);
     this.router.navigate(["user-management", "wholesaler", "detail"]);
   }
 
-  async export() {
-    this.dataService.showLoading(true);
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.value !== "");
-    let area_id = areaSelected[areaSelected.length - 1].value;
-    console.log('area you selected', area_id, areaSelected[areaSelected.length - 1]);
-    try {
-      const response = await this.TRSService.exportProposal({ area_id: area_id }).toPromise();
-      console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Wholesaler_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
-
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-      // throw error;
-    }
+  goPrint(param?: any): void {
+    // this.dataService.setToStorage("detail_wholesaler", param);
+    this.dataService.setToStorage("id_wholesaler", param.id);
+    this.router.navigate(["user-management", "wholesaler", "detail"]);
   }
 
-  async exportwholesaler(context?, exportFileName?) {
+  directEdit(param?: any): void {
+    // this.dataService.setToStorage("detail_admin_principal", param);
+    this.router.navigate(["user-management", "admin-principal", "edit", param.id]);
+  }
+
+  directDetail(param?: any): void {
+    // this.dataService.setToStorage("detail_admin_principal", param);
+    this.router.navigate(["user-management", "admin-principal", "detail", param.id]);
+  }
+
+
+
+  async exportProposal(context?, exportFileName?) {
     this.dataService.showLoading(true);
-    const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`;
+    const filename = (exportFileName) ? exportFileName : `Export_TRS_Proposal_${new Date().toLocaleString()}.xls`;
     try {
       const response = await this.TRSService.exportProposalNew(this.pagination,context).toPromise();
       console.log('he', response.headers);
@@ -1029,5 +1027,4 @@ export class TrsProposalComponent {
     console.log(error);
     // alert('Open console to see the error')
   }
-  getdataservice() { return this.dataService }
 }

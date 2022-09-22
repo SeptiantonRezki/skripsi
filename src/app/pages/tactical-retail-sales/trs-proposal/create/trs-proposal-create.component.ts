@@ -128,14 +128,16 @@ export class TrsProposalCreateComponent implements OnInit {
       custCode2: ["", Validators.required],
       custName2: ["", Validators.required],
       maxExecutor: [1, Validators.required],      
+      flowingly: [""],
+      
       executor: [""],
       kecamatan: [""],
       product: [""],
 
       //kanan
-      executor_selected: ["-", Validators.required],
-      kecamatan_selected: ["-", Validators.required],
-      product_selected: ["-", Validators.required],
+      executor_selected: ["", Validators.required],
+      kecamatan_selected: ["", Validators.required],
+      product_selected: ["", Validators.required],
 
       background: ["", Validators.required],
       objective: ["", Validators.required],
@@ -267,6 +269,7 @@ export class TrsProposalCreateComponent implements OnInit {
       fd.append('background', this.formCreateProposal.get('background').value);
       fd.append('objective', this.formCreateProposal.get('objective').value);
       fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
+      fd.append('flowingly', this.formCreateProposal.get('flowingly').value);
       
       fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
 

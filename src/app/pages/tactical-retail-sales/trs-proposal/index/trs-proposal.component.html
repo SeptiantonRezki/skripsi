@@ -2,10 +2,14 @@
   <!-- HEADER -->
   <page-content-header contentTitle="TRS Proposal">
     <div class="button-row" fxLayout="row">
+      <button (click)="exportProposal()" mat-raised-button type="button" class="">
+        <mat-icon>arrow_upward</mat-icon> Export XLS
+      </button>
       <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/tactical-retail-sales','trs-proposal','create']">
         <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
       </button>
+
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
@@ -14,10 +18,6 @@
   <div class="content" *ngIf="!onLoad">
     <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
       style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
-      <a #downloadLink></a>
-      <button *ngIf="permission.export" (click)="exportwholesaler()" mat-raised-button type="button" class="is-danger">
-        <mat-icon>arrow_upward</mat-icon> Export XLS
-      </button>
     </div>
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
@@ -121,63 +121,67 @@
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'">
 
-        <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
-          <!-- <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
-            <mat-checkbox [checked]="allRowsSelected"></mat-checkbox>
-          </ng-template> -->
-
-          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn" let-row="row">
-            <mat-checkbox [checked]="selected.includes(row)" (change)="onSelect($event, row)"></mat-checkbox>
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="program_code" prop="program_code">
+        <ngx-datatable-column name="Program Code" prop="program_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.program_code }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="area_name" prop="area_name">
+        <ngx-datatable-column name="Area Name" prop="area_name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.area_name }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="start_date" prop="start_date">
+        <ngx-datatable-column name="Sales Office" prop="salespoint_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.salespoint_name }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Start Date" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.start_date }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="end_date" prop="end_date">
+        <ngx-datatable-column name="End Date" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.end_date }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="created_at" prop="created_at">
+        <ngx-datatable-column name="Created At" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.created_at }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="modified_at" prop="modified_at">
+        <ngx-datatable-column name="Modified At" prop="modified_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.modified_at }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="60" [name]="ls.locale.global.label.action" headerClass="textright"
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.status }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="200" [name]="ls.locale.global.label.action" headerClass="textright"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
+              <button mat-icon-button color="" (click)="goDetail(row)">
+                <mat-icon class="secondary-text">visibility</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="goEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" (click)="goPrint(row)">
+                <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
             </div>
           </ng-template>

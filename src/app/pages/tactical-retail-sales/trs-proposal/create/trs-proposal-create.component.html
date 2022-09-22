@@ -55,10 +55,9 @@
                     placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateProposal"> <!-- // TODO -->
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
-                  <mat-error
-                    *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
+                  <mat-error *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
                     Tanggal Awal Program harus diisi.
-                  </mat-error> <!-- // TODO -->
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -67,10 +66,12 @@
                     placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"> <!-- // TODO -->
                   <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
-                  <mat-error
-                    *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
+                  <mat-error *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
                     Tanggal Akhir Program harus diisi.
-                  </mat-error> <!-- // TODO -->
+                  </mat-error>
+                  <mat-error *ngIf="formCreateProposal.controls['endDate'].invalid">
+                    Tanggal Tidak Valid
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -153,7 +154,12 @@
                 </mat-form-field>
               </div>
 
-
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="flowingly" 
+                    placeholder="Nomor Flowingly">
+                </mat-form-field>
+              </div>
 
 
             </div>
@@ -245,18 +251,15 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="">
-                    <h3>{{ ls.locale.katalog_src.template_layout_toko.text7 }}</h3>
-                    <small>{{ ls.locale.katalog_src.template_layout_toko.image_dimension }}</small>
+                    <h3>Attach File</h3>
+                    <small>Lampirkan Email Approval TRS yang telah disetujui Head of Zone​</small>
                     <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
                       <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
                         [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
                         (fileChange)="changeImage($event)">
                         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-                          <!-- <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon> -->
-                          <!-- <br> -->
                           <span matPrefix>{{ ls.locale.katalog_src.template_layout_toko.text8 }}
                           </span>
-                          <!-- <span matPrefix>Ukuran 800x800 piksel, Maksimum 2mb</span> -->
                         </div>
                       </div>
                     </div>
