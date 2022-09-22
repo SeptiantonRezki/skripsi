@@ -840,43 +840,64 @@ const routes: Routes = [
     path: 'program-loyalty-mitra',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/create/:tab',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/create',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/edit/:id/:tab',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/edit/:id',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/detail/:id/:tab',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'program-loyalty-mitra/detail/:id',
     component: LoyaltyMitraComponent,
     canActivate: [PageGuard],
-    canDeactivate: [PendingChangesGuard]
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'spin-the-wheel',

@@ -45,11 +45,6 @@ export class LoyaltyMitraComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.route.params.subscribe((params) => {
-      if (this.init && (params.id || params.tab)) {
-        this.renderPage();
-      }
-    });
     this.permission = this.roles.getArrayRoles(
       "principal.dteprogramloyaltymitra"
     );
