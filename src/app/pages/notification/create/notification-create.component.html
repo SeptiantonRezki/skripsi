@@ -507,6 +507,35 @@
 
           <!-- Consumer -->
           <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
+            <div class="">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="is_smoking"
+                    placeholder="{{'notification.buat_notifikasi.consumer_type' | translate}}">
+                    <mat-option *ngFor="let item of listConsumentType" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formNotification.controls['is_smoking'].hasError('required') && formNotification.controls['is_smoking'].touched">
+                    {{'notification.buat_notifikasi.consumer_type' | translate}} {{'global.messages.mandatory_text' |
+                    translate}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <mat-select formControlName="verification"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
+                  <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="formNotification.controls['verification'].hasError('required') && formNotification.controls['verification'].touched">
+                  {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
 
             <div class="">
               <div fxLayout="row">
@@ -538,19 +567,6 @@
                 </mat-error>
               </mat-form-field>
             </div>
-          </div>
-
-          <div *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
-            <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
-              <h3 class="">
-                <strong>{{'notification.popup_notifikasi.text15' | translate}}</strong>
-              </h3>
-            </div>
-            <mat-radio-group formControlName="content_type_new" class="radio-group">
-              <mat-radio-button class="radio-button" *ngFor="let item of listContentTypeNew" [value]="item.value">
-                {{item.name}}
-              </mat-radio-button>
-            </mat-radio-group>
           </div>
 
           <div class="pb-16" *ngIf="ALLOW_FOR_TYPE.includes(formNotification.controls['user_group'].value)">
