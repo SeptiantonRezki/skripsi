@@ -947,9 +947,7 @@ export class TrsProposalComponent {
   }
 
   goPrint(param?: any): void {
-    // this.dataService.setToStorage("detail_wholesaler", param);
-    this.dataService.setToStorage("id_wholesaler", param.id);
-    this.router.navigate(["user-management", "wholesaler", "detail"]);
+
   }
 
   goEdit(param?: any): void {
