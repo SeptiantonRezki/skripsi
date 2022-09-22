@@ -83,6 +83,14 @@ export class TrsSystemVariableComponent implements OnInit {
   }
 
   confirmUpdate() {
+    if (!this.sysvariable.valid) {
+      this.validateFormGroup(this.sysvariable);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi data terlebih dahulu!",
+      });
+      return;
+    }
+    
     const data = {
       titleDialog: 'Apakah anda yakin untuk melakukan perubahan ?',
       captionDialog: null,

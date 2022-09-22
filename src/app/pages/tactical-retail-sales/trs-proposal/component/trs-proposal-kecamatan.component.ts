@@ -128,6 +128,9 @@ export class TrsProposalKecamatanComponent {
     };
 
     this.TRSService.getKecamatan(request).subscribe(res => {
+
+      console.log(res);
+
       this.loaded = true;
       this.rows = res.data;
       this.dataService.showLoading(false);

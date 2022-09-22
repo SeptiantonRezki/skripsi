@@ -942,16 +942,8 @@ export class TrsProposalComponent {
     });
   }
 
-  goEdit(param?: any): void {
-    // this.dataService.setToStorage("detail_wholesaler", param);
-    this.dataService.setToStorage("id_wholesaler", param.id);
-    this.router.navigate(["user-management", "wholesaler", "edit"]);
-  }
-
   goDetail(param?: any): void {
-    // this.dataService.setToStorage("detail_wholesaler", param);
-    this.dataService.setToStorage("id_wholesaler", param.id);
-    this.router.navigate(["user-management", "wholesaler", "detail"]);
+
   }
 
   goPrint(param?: any): void {
@@ -960,16 +952,11 @@ export class TrsProposalComponent {
     this.router.navigate(["user-management", "wholesaler", "detail"]);
   }
 
-  directEdit(param?: any): void {
+  goEdit(param?: any): void {
+    console.log(param);
     // this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["user-management", "admin-principal", "edit", param.id]);
+    this.router.navigate(["tactical-retail-sales", "trs-proposal", "edit", param.program_code]);
   }
-
-  directDetail(param?: any): void {
-    // this.dataService.setToStorage("detail_admin_principal", param);
-    this.router.navigate(["user-management", "admin-principal", "detail", param.id]);
-  }
-
 
 
   async exportProposal(context?, exportFileName?) {

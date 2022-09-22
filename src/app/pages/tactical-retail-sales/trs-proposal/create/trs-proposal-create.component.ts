@@ -400,7 +400,7 @@ export class TrsProposalCreateComponent implements OnInit {
         if (typeof response !== "undefined") {
           response.forEach(function (item) {
             result_id.push(item.id);
-            result.push(item.district + " - " + item.territory);
+            result.push(item.regency + " - " + item.district);
           });
   
           this.selectedKecamatan = result_id.join("_");
