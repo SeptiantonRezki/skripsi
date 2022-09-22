@@ -100,7 +100,7 @@ export class CountrySetupEditComponent implements OnInit {
     this.formCountry.get('categories_menu').get('cabilities').valueChanges.debounceTime(500).subscribe(menus => {
       this.oncAccessMenuChange(menus);
     });
- console.log(this.formCountry.getRawValue());
+      //console.log(this.formCountry.getRawValue());
  
   }
 
@@ -121,7 +121,6 @@ export class CountrySetupEditComponent implements OnInit {
       const filtered = this.assignTrueIfExists(flatMasterAbilities, flatabilities, (left, right) => left.title === right.title);
       const access_menus = this.formCountry.get('access_menu').get('abilities') as FormArray;
       access_menus.push(this.buildFullAccessTogle());
-       console.log(access_menus);
       access_menus.at(0).valueChanges.subscribe(fullaccess => {
         this.onFullAccessChange(fullaccess);
       })
@@ -143,7 +142,6 @@ export class CountrySetupEditComponent implements OnInit {
           return item;
       })
       //const cfiltered = this.assignTrueIfExists(cflatMasterAbilities, cflatabilities, (left, right) => left.title === right.title);
-      console.log(cfiltered);
       const categories_menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
       categories_menus.push(this.buildcFullAccessTogle());
       categories_menus.at(0).valueChanges.subscribe(cfullaccess => {
@@ -186,7 +184,7 @@ export class CountrySetupEditComponent implements OnInit {
   oncFullAccessChange({checked, value}) {
     let menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
     this.recursecCheck(menus.controls, checked);
-    console.log(this.formCountry.getRawValue());
+    //console.log(this.formCountry.getRawValue());
     
   }
 
@@ -214,10 +212,10 @@ export class CountrySetupEditComponent implements OnInit {
   }
   recursecCheck(items, checked) {
     items.map( (item: FormGroup) => {
-        console.log(item);
+        //console.log(item);
       if(item.get('title').value !== 'full_access') {
         item.get('checked').setValue(checked, {emitEvent: false});
-        console.log(item.get('country'));
+        //console.log(item.get('country'));
         item.get('country').setValue([this.country.country_code], {emitEvent: false});
         const childs = item.get('children') as FormArray;
 
@@ -320,7 +318,7 @@ export class CountrySetupEditComponent implements OnInit {
         depth: depth,
       });
       form.push(menu);
-      console.log(menu);
+      //console.log(menu);
       if(item.children && item.children.length) {
         let child = menu.controls['children'] as FormArray;
         this.setcAbilities(item.children, child, depth + 1);
@@ -380,7 +378,7 @@ export class CountrySetupEditComponent implements OnInit {
     
     const data = _.find(menus, (item) => item.type === type);
     if(data && data.abilities) {
-      console.log(data.abilities);
+      //console.log(data.abilities);
       return data.abilities;
     }
    
@@ -426,7 +424,6 @@ export class CountrySetupEditComponent implements OnInit {
     
   };
   flatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0): any[] {
-
     const flatitems = [];
     let id = 0;
 
@@ -450,7 +447,6 @@ export class CountrySetupEditComponent implements OnInit {
 
   }
   cflatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0): any[] {
-
     const flatitems = [];
     let id = 0;
 
@@ -458,7 +454,7 @@ export class CountrySetupEditComponent implements OnInit {
       items.map((item, i) => {
         
         id += 1;
-        const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: id, parent_id: parentId, country: item.country};
+        const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: item.id, parent_id: parentId, country: item.country};
         
         flatitems.push(menu);
 
@@ -469,7 +465,6 @@ export class CountrySetupEditComponent implements OnInit {
     }
 
     recurse(abilities);
-
     return flatitems;
 
   }
@@ -505,13 +500,13 @@ export class CountrySetupEditComponent implements OnInit {
   }
   getcAbilities(menus, child) {
 
-    let ccountry_code = this.country.country_code;
+    let ccountry_code = [this.country.country_code]
     menus.map(item => {
       if (item.checked) {
         let cobj = [];
         cobj.push(ccountry_code)
         item.children = this.getcAbilities(item.children, []);
-        child.push({ title: item.title, id: item.id, country: [this.country.country_code], children: item.children });
+        child.push({ title: item.title, id: item.id, country: ccountry_code, children: item.children });
       }
 
     });
