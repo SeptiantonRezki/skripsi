@@ -100,7 +100,8 @@ export class CountrySetupEditComponent implements OnInit {
     this.formCountry.get('categories_menu').get('cabilities').valueChanges.debounceTime(500).subscribe(menus => {
       this.oncAccessMenuChange(menus);
     });
-
+ console.log(this.formCountry.getRawValue());
+ 
   }
 
   ngOnInit() {
@@ -185,6 +186,8 @@ export class CountrySetupEditComponent implements OnInit {
   oncFullAccessChange({checked, value}) {
     let menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
     this.recursecCheck(menus.controls, checked);
+    console.log(this.formCountry.getRawValue());
+    
   }
 
   toggleFullAccess(checked) {
@@ -192,7 +195,6 @@ export class CountrySetupEditComponent implements OnInit {
     abilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
   togglecFullAccess(checked) {
-    console.log(this.formCountry.getRawValue());
     const cabilities = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
     cabilities.at(0).get('checked').setValue(checked, {emitEvent: false});
   }
@@ -212,9 +214,11 @@ export class CountrySetupEditComponent implements OnInit {
   }
   recursecCheck(items, checked) {
     items.map( (item: FormGroup) => {
-        
+        console.log(item);
       if(item.get('title').value !== 'full_access') {
         item.get('checked').setValue(checked, {emitEvent: false});
+        console.log(item.get('country'));
+        item.get('country').setValue([this.country.country_code], {emitEvent: false});
         const childs = item.get('children') as FormArray;
 
         if(childs && childs.length) {
@@ -307,6 +311,7 @@ export class CountrySetupEditComponent implements OnInit {
   setcAbilities(values, form: FormArray, depth = 0) {
     values.map(item => {
       let menu = this.formBuilder.group({
+        country:[],
         title: item.title,
         name: item.name,
         id:item.id,
@@ -315,6 +320,7 @@ export class CountrySetupEditComponent implements OnInit {
         depth: depth,
       });
       form.push(menu);
+      console.log(menu);
       if(item.children && item.children.length) {
         let child = menu.controls['children'] as FormArray;
         this.setcAbilities(item.children, child, depth + 1);
@@ -499,12 +505,13 @@ export class CountrySetupEditComponent implements OnInit {
   }
   getcAbilities(menus, child) {
 
+    let ccountry_code = this.country.country_code;
     menus.map(item => {
-      
-      if(item.checked) {
+      if (item.checked) {
+        let cobj = [];
+        cobj.push(ccountry_code)
         item.children = this.getcAbilities(item.children, []);
-        child.push({title: item.title,id:item.id, children: item.children });
-
+        child.push({ title: item.title, id: item.id, country: [this.country.country_code], children: item.children });
       }
 
     });
