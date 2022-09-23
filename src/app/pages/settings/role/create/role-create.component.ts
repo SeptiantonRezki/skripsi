@@ -94,8 +94,8 @@ export class RoleCreateComponent {
       retailerRekeningToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko_view' }),
       retailerExportToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.button.export' }),
       retailerViewToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.lihat' }),
-      retailerPhoneNumberToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.export.phone_number' }),
-      retailerRekeningToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.export.rekening_toko' });
+      retailerPhoneNumberToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.phone_number' }),
+      retailerRekeningToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko' });
 
       phoneNumberToggle.disabled = true;
       rekeningToggle.disabled = true;
@@ -548,7 +548,7 @@ export class RoleCreateComponent {
 
     if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
       let phoneNumberToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.phone_number';
+        return item.value == 'principal.retailer.submenu.phone_number';
       });
 
       if (!phoneNumberToggle) {
@@ -571,7 +571,7 @@ export class RoleCreateComponent {
 
     if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
       let rekeningToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.rekening_toko';
+        return item.value == 'principal.retailer.submenu.rekening_toko';
       });
 
       if (!rekeningToggle) {
@@ -592,13 +592,13 @@ export class RoleCreateComponent {
         return item.value == 'principal.retailer.submenu.rekening_toko_view';
       });
       let editRekeningToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.rekening_toko';
+        return item.value == 'principal.retailer.submenu.rekening_toko';
       });
       let viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number_view';
       });
       let editPhoneToggle = targetItems.value.find(item => {
-        return item.value == 'principal.retailer.export.phone_number';
+        return item.value == 'principal.retailer.submenu.phone_number';
       });
 
       if (event.checked) {
