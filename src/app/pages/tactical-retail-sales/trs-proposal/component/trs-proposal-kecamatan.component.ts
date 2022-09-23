@@ -76,7 +76,7 @@ export class TrsProposalKecamatanComponent {
   }
 
   getId(row) {
-    return row.id;
+    return row.regency+"_"+row.district;
   }
 
   onSelect({ selected }) {

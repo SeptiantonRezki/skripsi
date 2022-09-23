@@ -13,12 +13,14 @@
       <form [formGroup]="sysvariable" class="py-24" *ngIf="sysvariable">
         <div fxLayout="row" class="mt-8">
           <mat-form-field fxFlex="30" class="is-light form-primary">
-            <input matInput type="number" min="1" formControlName="max_pack" placeholder="Max total pack per customer" numericOnly>
+            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
+            formControlName="max_pack" placeholder="Max total pack per customer" numericOnly>
           </mat-form-field>
         </div>
         <div fxLayout="row" class="mt-8">
           <mat-form-field fxFlex="30" class="is-light form-primary">
-            <input matInput type="number" min="1" formControlName="max_period" placeholder="Max TRS period (in days)" numericOnly>
+            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
+            formControlName="max_period" placeholder="Max TRS period (in days)" numericOnly>
           </mat-form-field>
         </div>
       </form>

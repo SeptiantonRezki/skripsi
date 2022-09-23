@@ -77,7 +77,7 @@
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="number" min="1" formControlName="maxExecutor"
+                  <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
                     placeholder="Jumlah Executor">
                 </mat-form-field>
               </div>
