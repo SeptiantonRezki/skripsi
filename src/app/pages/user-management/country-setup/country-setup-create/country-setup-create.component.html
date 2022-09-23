@@ -293,7 +293,42 @@
           </form>
 
         </mat-step>
+        <mat-step [stepControl]="step9">
 
+          <form [formGroup]="step9">
+
+            <ng-template matStepLabel>Force Logout</ng-template>
+
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <div fxFlex="100" fxLayoutAlign="space-between">
+                <label for="" matTooltip="By enabling this featuere will disable below versions "
+                style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
+                <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout"></mat-slide-toggle>
+              </div>
+              <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout').value">
+                <input matInput type="number" placeholder="Version Number" formControlName="version_number">
+                <mat-error *ngIf="step9.controls['version_number'].hasError('required') && step9.controls['version_number'].touched ">
+                  Version {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout').value">
+                <input matInput type="text" placeholder="Message to Display" formControlName="version_message">
+                <mat-error *ngIf="step9.controls['version_message'].hasError('required') && step9.controls['version_message'].touched ">
+                  Version {{ls.locale.global.messages.mandatory_text}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+
+            <div class="pt-24" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-raised-button matStepperNext (click)="validateStep(9)" type="button" class="confirmation-button">
+                {{ls.locale.global.button.next}}
+              </button>
+            </div>
+
+          </form>
+
+        </mat-step>
         <mat-step>
 
           <ng-template matStepLabel>{{ls.locale.global.button.finish}}</ng-template>

@@ -23,6 +23,7 @@ export class CountrySetupCreateComponent implements OnInit {
   step6: FormGroup;
   step7: FormGroup;
   step8: FormGroup;
+  step9: FormGroup;
 
   languages = [];
 
@@ -93,6 +94,12 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step8 = formBuilder.group({
       cabilities: formBuilder.array([])
     });
+    this.step9 = formBuilder.group({
+      force_logout: [false, Validators.required],
+      version_number: [null],
+      version_message: [null]
+      
+    })
 
     this.step6.get('whatsapp').valueChanges.subscribe(val => {
 
@@ -115,6 +122,21 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step8.get('cabilities').valueChanges.subscribe(menus => {
        this.oncAccessMenuChange(menus);
     });
+    this.step9.get('force_logout').valueChanges.subscribe(val => {
+      if(val) {
+        this.step9.get('version_number').setValidators(Validators.required);
+        this.step9.get('version_message').setValidators(Validators.required);
+      } else {
+        this.step9.get('version_number').setValue(null);
+        this.step9.get('version_number').setValidators([]);
+        this.step9.get('version_message').setValue(null);
+        this.step9.get('version_message').setValidators([]);
+      }
+      this.step9.get('version_number').updateValueAndValidity();
+      this.step9.get('version_message').updateValueAndValidity();
+    });
+  
+  
     
 
   }
@@ -328,6 +350,7 @@ export class CountrySetupCreateComponent implements OnInit {
       case 6: this.step6; break;
       case 7: this.step7; break;
       case 8: this.step8; break;
+      case 9: this.step9; break;
     }
 
     if (!field) return;
@@ -421,6 +444,7 @@ export class CountrySetupCreateComponent implements OnInit {
     Object.assign(rawValues, {customer_service: [this.step6.getRawValue()] });
     Object.assign(rawValues, this.step7.getRawValue());
     Object.assign(rawValues, this.step8.getRawValue());
+    Object.assign(rawValues, {forcelogout_service: [this.step9.getRawValue()] });
     let body = this.mapingBody(rawValues);
 
     this.countrySetupService.create(body).subscribe(res => {
