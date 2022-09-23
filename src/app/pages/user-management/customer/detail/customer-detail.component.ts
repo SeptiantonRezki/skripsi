@@ -47,20 +47,25 @@ export class CustomerDetailComponent {
     this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.customer.phone_number_and_DOB_view') > -1;
     this.activatedRoute.url.subscribe(param => {
       this.customer_id = param[2].path;
-    })
+    });
   }
 
   ngOnInit() {
     this.customerService.getDetail({ customer_id: this.customer_id }).subscribe(
       res => {
         this.onLoad = false;
-        const date = res.birth_date.split('-').reverse().join('/');
+        let date = '';
+        if (this.viewPhoneNumberStatus) {
+          date = res.birth_date.split('-').reverse().join('/');
+        } else {
+          date = Utils.reMaskInput(res.birth_date, 3);
+        }
         this.formCustomer = this.formBuilder.group({
           status: [res.status],
           fullname: [res.fullname],
           gender: [res.gender === 'male' ? "Laki-laki" : "Perempuan"],
           city: [res.city.name],
-          birth_date: [!this.viewPhoneNumberStatus ? Utils.reMaskInput(date, 3) : date],
+          birth_date: [date],
           id_number: [res.id_number],
           phone: [!this.viewPhoneNumberStatus ? Utils.reMaskInput(res.phone, 4) : res.phone],
           is_smoking: [res.is_smoking === 1 ? 'Ya, Saya Merokok' : 'Tidak, Saya Tidak Merokok'],
