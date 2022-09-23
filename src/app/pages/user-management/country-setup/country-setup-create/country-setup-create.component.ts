@@ -125,7 +125,7 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step9.get('force_logout').valueChanges.subscribe(val => {
       if(val) {
         this.step9.get('version_number').setValidators(Validators.required);
-        this.step9.get('version_message').setValidators(Validators.required);
+        this.step9.get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
       } else {
         this.step9.get('version_number').setValue(null);
         this.step9.get('version_number').setValidators([]);
