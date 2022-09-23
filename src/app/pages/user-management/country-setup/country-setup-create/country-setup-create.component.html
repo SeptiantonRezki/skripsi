@@ -278,7 +278,7 @@
 
           <form [formGroup]="step8">
 
-            <ng-template matStepLabel>Categories</ng-template>
+            <ng-template matStepLabel>{{ls.locale.global.label.category}}</ng-template>
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <recursive-slide-toggle [items]="step8.get('cabilities').controls" [depth]="0" [horizontal]="horizontal" [parent]="step8.get('cabilities')" [fullAccess]="step8.get('cabilities').at(0)"></recursive-slide-toggle>

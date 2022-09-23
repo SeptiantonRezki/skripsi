@@ -165,7 +165,7 @@
             </div>
             
             <div fxLayout="column" fxFlex="45">
-              <h2>Categories</h2>
+              <h2>{{ls.locale.global.label.category}}</h2>
               <recursive-slide-toggle [items]="formCountry.get('categories_menu').get('cabilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('categories_menu').get('cabilities')" [fullAccess]="formCountry.get('categories_menu').get('cabilities').at(0)"></recursive-slide-toggle>
             </div>  
           </div>

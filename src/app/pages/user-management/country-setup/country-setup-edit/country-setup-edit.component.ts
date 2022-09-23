@@ -130,7 +130,7 @@ export class CountrySetupEditComponent implements OnInit {
 
     })
      // build recursive toggle for categories 
-    this.countrySetupService.getRetailerCategoryMenus({ id: this.country.id }).subscribe(({data}) => {
+    this.countrySetupService.getRetailerCategoryMenus().subscribe(({data}) => {
       const cflatMasterAbilities = this.cflatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
       const cfiltered = cflatMasterAbilities.map( item => {
           if (item.country!== null && item.country.includes(this.country.country_code)) {
