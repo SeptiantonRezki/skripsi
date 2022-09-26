@@ -928,6 +928,10 @@ export class AudienceCreatePersonalizeComponent implements OnInit {
 
     if (value !== 'fixed-panel') {
       this.audienceFixed.setValue('');
+      this.formAudience.get("business_type").enable();
+    } else {
+      this.formAudience.get("business_type").setValue("all");
+      this.formAudience.get("business_type").disable();
     }
   }
 

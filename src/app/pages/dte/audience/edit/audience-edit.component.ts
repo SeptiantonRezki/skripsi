@@ -1687,6 +1687,15 @@ export class AudienceEditComponent {
     this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
+      this.detailAudience = this.dataService.getFromStorage('detail_audience');
+
+      if (!this.ENABLE_IMPORT_IF.includes(this.detailAudience.import_audience_status)) {
+        this.formAudience.get("business_type").setValue("all");
+        this.formAudience.get("business_type").disable();
+      } else {
+        this.formAudience.get("business_type").enable();
+      }
+
       if (response) {
         
         this.importAudienceResult = {...response};
@@ -1694,7 +1703,6 @@ export class AudienceEditComponent {
         // this.selected = response;
         // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
-      this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });
   }
 

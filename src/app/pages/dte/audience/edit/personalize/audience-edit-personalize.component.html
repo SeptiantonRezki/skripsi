@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column">
   <!-- HEADER -->
-  <page-content-header contentTitle="{{'global.label.edit_entity' | translate:titleParam}}"></page-content-header> <!-- // TODO -->
+  <page-content-header contentTitle="{{(isDetail ? 'global.label.detail_entity' : 'global.label.edit_entity') | translate:titleParam}}"></page-content-header> <!-- // TODO -->
   <!-- / HEADER -->
 
   <div class="content p-24">
@@ -39,6 +39,14 @@
                     {{'dte.audience.publish_mission' | translate}} {{'global.messages.mandatory_text' | translate}} <!-- // TODO -->
                   </mat-error>
                 </mat-form-field>
+              </div>
+
+              <div fxLayout="column">
+                <mat-radio-group class="mb-16" formControlName="audience_filter" (change)="handleAudienceFilter($event.value)">
+                  <mat-radio-button class="mr-24" *ngFor="let item of audienceFilter" [value]="item.value">
+                    {{ item.name }}
+                  </mat-radio-button>
+                </mat-radio-group>
 
                 <mat-form-field class="is-light">
                   <mat-select
@@ -53,14 +61,6 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-              </div>
-
-              <div fxLayout="column">
-                <mat-radio-group class="mb-16" formControlName="audience_filter" (change)="handleAudienceFilter($event.value)">
-                  <mat-radio-button class="mr-24" *ngFor="let item of audienceFilter" [value]="item.value">
-                    {{ item.name }}
-                  </mat-radio-button>
-                </mat-radio-group>
 
                 <form [formGroup]="formFilter" autoComplete="off" fxLayout="column">
                   <mat-form-field class="is-light form-primary">

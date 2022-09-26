@@ -1862,8 +1862,15 @@ export class AudienceCreateComponent {
 
       const newImportStatus = this.dataService.getFromStorage('create_audience_import_status');
       if(newImportStatus) this.importingDataStatus = newImportStatus;
+
+      if (!this.ENABLE_IMPORT_IF.includes(newImportStatus.import_audience_status)) {
+        this.formAudience.get("business_type").setValue("all");
+        this.formAudience.get("business_type").disable();
+      } else {
+        this.formAudience.get("business_type").enable();
+      }
+
       if (response) {
-        
         // this.importAudienceResult = {...response};
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 }); // TODO
         this.router.navigate(["dte", "audience"]);

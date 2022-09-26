@@ -178,6 +178,7 @@ export class ImportAudienceDialogComponent {
 
     const {trade_audience_group_id} = this.detailData;
     const {formAudience, pagination} = this.detailData;
+    if (formAudience) formAudience.business_type = "all";
     console.log({formAudience, pagination});
     
     if (this.requestingPreview) {

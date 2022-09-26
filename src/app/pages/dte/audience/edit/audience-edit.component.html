@@ -10,13 +10,27 @@
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formAudience">
-          <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+          <div fxLayout="column" fxLayoutGap="16px" fxFlex="45">
+            <mat-form-field class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}">
               <mat-error
                 *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
                 {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="is-light">
+              <mat-select
+                placeholder="Business Type"
+                formControlName="business_type"
+              > 
+                <mat-option
+                  *ngFor="let item of businessType"
+                  [value]="item.value"
+                >
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 
@@ -133,20 +147,6 @@
                 *ngIf="formAudience.controls['trade_creator_id'].hasError('required') && formAudience.controls['trade_creator_id'].touched">
                 {{'dte.trade_program.text3' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="is-light">
-              <mat-select
-                placeholder="Business Type"
-                formControlName="business_type"
-              > 
-                <mat-option
-                  *ngFor="let item of businessType"
-                  [value]="item.value"
-                >
-                  {{item.name}}
-                </mat-option>
-              </mat-select>
             </mat-form-field>
           </div>
         </form>
