@@ -91,7 +91,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   private _onDestroy = new Subject<void>();
 
   typeArea: any[] = ['national', 'zone', 'region', 'area', 'salespoint', 'district', 'territory'];
-  listSmoker: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Merokok', value: 'yes' }, { name: 'Tidak Merokok', value: 'no' }];
+  listSmoker: any[] = [{ name: 'Semua', value: 'all' }, { name: 'Perokok CC', value: 'cc' }, { name: 'Pengguna iQOS', value: 'rrp' }, { name: 'Bukan Perokok', value: 'non-smoker' }];
   listGender: any[] = [{ name: 'Semua', value: 'both' }, { name: 'Laki-laki', value: 'male' }, { name: 'Perempuan', value: 'female' }];
   listVA: any[] = [
     { name: 'Referral Code', value: 'referral' },
@@ -110,7 +110,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.isVoucherAutomation.setValue(data.automation ? true : false);
       this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
       this.formConsumerGroup.get('va').setValue(data.automation);
-      this.formConsumerGroup.get('is_smoker').setValue(data.smoker);
+      this.formConsumerGroup.get('content_type').setValue(data.content_type ? data.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [data.content_type] : []);
       this.formConsumerGroup.get('age_consumer_from').setValue(data.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(data.age_to);
       this.formConsumerGroup.get('gender').setValue(data.gender);
@@ -231,7 +231,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
     this.formConsumerGroup = this.formBuilder.group({
       allocationVoucher: [0],
-      is_smoker: ['both', Validators.required],
+      content_type: [['all'], Validators.required],
       gender: ['both', Validators.required],
       age_consumer_from: ['', Validators.required],
       age_consumer_to: ['', Validators.required],
@@ -260,16 +260,16 @@ export class PanelConsumerVoucherComponent implements OnInit {
       territory: ['']
     });
 
-    this.formConsumerGroup.controls['is_smoker'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'yes') {
+    this.formConsumerGroup.controls['content_type'].valueChanges.debounceTime(50).subscribe(res => {
+      if (res.includes('cc') || res.includes('rrp')) {
         this.formConsumerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(18)]);
         this.formConsumerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
-        this.formConsumerGroup.updateValueAndValidity();
       } else {
         this.formConsumerGroup.controls['age_consumer_from'].setValidators([Validators.required, Validators.min(0)]);
         this.formConsumerGroup.controls['age_consumer_to'].setValidators([Validators.required]);
-        this.formConsumerGroup.updateValueAndValidity();
       }
+      this.formConsumerGroup.controls['age_consumer_from'].updateValueAndValidity();
+      this.formConsumerGroup.controls['age_consumer_to'].updateValueAndValidity();
     });
 
     this.initAreaV2();
@@ -316,12 +316,12 @@ export class PanelConsumerVoucherComponent implements OnInit {
 
     this.formConsumerGroup.get("va").valueChanges.subscribe(res => {
       if (res === "loyalty") {
-        this.updateValidator("is_smoker", false);
+        this.updateValidator("content_type", false);
         this.updateValidator("age_consumer_from", false);
         this.updateValidator("age_consumer_to", false);
         this.updateValidator("gender", false);
       } else {
-        this.updateValidator("is_smoker", true);
+        this.updateValidator("content_type", true);
         this.updateValidator("age_consumer_from", true);
         this.updateValidator("age_consumer_to", true);
         this.updateValidator("gender", true);
@@ -544,7 +544,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
-      this.formConsumerGroup.get('is_smoker').setValue(this.detailVoucher.smoker);
+      this.formConsumerGroup.get('content_type').setValue(this.detailVoucher.content_type ? this.detailVoucher.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [this.detailVoucher.content_type] : []);
       this.formConsumerGroup.get('age_consumer_from').setValue(this.detailVoucher.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
@@ -1099,7 +1099,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
-    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
+    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value || (this.isVoucherAutomation.value && this.formConsumerGroup.get('va').value === 'loyalty')) {
       let body = null;
       const bodyArea = {
         'type': 'customer',
@@ -1107,7 +1107,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
         'user_id': this.selected.map(aud => aud.id),
         'area_id': [1],
         'automation': this.formConsumerGroup.get('va').value,
-        'smoker': this.formConsumerGroup.get('is_smoker').value,
+        'content_type': this.formConsumerGroup.get('content_type').value.includes('cc') && this.formConsumerGroup.get('content_type').value.includes('rrp') ? 'cc-rrp' : this.formConsumerGroup.get('content_type').value[0],
         'age_from': this.formConsumerGroup.get('age_consumer_from').value,
         'age_to': this.formConsumerGroup.get('age_consumer_to').value,
         'gender': this.formConsumerGroup.get('gender').value,
@@ -1615,6 +1615,20 @@ export class PanelConsumerVoucherComponent implements OnInit {
     // } else {
       return '';
     // }
+  }
+
+  onChangeConsumer(event) {
+    const target = event.source;
+    let values = this.formConsumerGroup.getRawValue().content_type;
+    if (event.checked) {
+      const exception = ['all', 'non-smoker']
+      if (exception.includes(target.name)) values.splice(0, values.length, target.name);
+      else {
+        if (values.find(item => exception.includes(item))) values.splice(0, values.length);
+        values.push(target.name);
+      };
+    } else this.formConsumerGroup.get('content_type').setValue(values.splice(values.indexOf(target.name), 1));
+    this.formConsumerGroup.get('content_type').setValue(values);
   }
 
 }
