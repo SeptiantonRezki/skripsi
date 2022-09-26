@@ -156,6 +156,10 @@ export class CountrySetupEditComponent implements OnInit {
     if(this.isDetail) {
       this.formCountry.disable();
     }
+    this.countrySetupService.getForceLogoutData({ id: this.country.id }).subscribe(({data}) => {
+      console.log(data,'force logout data ');
+      
+    })
   }
 
   buildFullAccessTogle() {
