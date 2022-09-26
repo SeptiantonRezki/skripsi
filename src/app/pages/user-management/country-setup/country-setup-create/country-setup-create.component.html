@@ -305,6 +305,20 @@
                 style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
                 <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout"></mat-slide-toggle>
               </div>
+              <ng-container  *ngIf = "step9.get('force_logout').value == false" >
+                <mat-form-field fxFlex="100" class="is-light" disabled >
+                  <input matInput type="number" placeholder="Version Number" formControlName="version_number" disabled class="field-disabled">
+                  <mat-error *ngIf="step9.controls['version_number'].hasError('required') && step9.controls['version_number'].touched ">
+                    Version {{ls.locale.global.messages.mandatory_text}}
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="100" class="is-light" disabled>
+                  <input matInput type="text" placeholder="Message to Display" formControlName="version_message" disabled class="field-disabled">
+                  <mat-error *ngIf="step9.controls['version_message'].hasError('required') && step9.controls['version_message'].touched ">
+                    Version {{ls.locale.global.messages.mandatory_text}}
+                  </mat-error>
+                </mat-form-field>
+              </ng-container>
               <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout').value">
                 <input matInput type="number" placeholder="Version Number" formControlName="version_number">
                 <mat-error *ngIf="step9.controls['version_number'].hasError('required') && step9.controls['version_number'].touched ">

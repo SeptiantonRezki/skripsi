@@ -162,6 +162,31 @@
                   </div>
                 </div>
               </div>
+              <!-- Force logout edit option -->
+              <!-- <div fxLayout="column" fxFlex="45">
+                <h2>Force Logout </h2>
+                <div *ngFor="let item of formCountry.get('forcelogout_service').controls; let i=index;">
+                  <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                        <label for="" matTooltip="By enabling this featuere will disable below versions "
+                        style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout"></mat-slide-toggle>
+                    </div>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout').value">
+                      <input matInput placeholder="Version Number" type="text" formControlName="version_number">
+                      <mat-error *ngIf="item.controls['version_number'].hasError('required') && item.controls['version_number'].touched ">
+                        Whatsapp {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout').value">
+                        <input matInput placeholder="Version Message" type="text" formControlName="version_message">
+                        <mat-error *ngIf="item.controls['version_message'].hasError('required') && item.controls['version_message'].touched ">
+                          Message {{ ls.locale.global.messages.mandatory_text }}.
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div> -->
             </div>
             
             <div fxLayout="column" fxFlex="45">

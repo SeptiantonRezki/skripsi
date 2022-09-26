@@ -93,6 +93,20 @@ export class CountrySetupEditComponent implements OnInit {
       customerService.at(0).get('whatsapp_number').updateValueAndValidity();
       
     });
+    // const forceLogoutService = this.formCountry.get('forcelogout_service') as FormArray;
+    // forceLogoutService.at(0).get('force_logout').valueChanges.subscribe(val => {
+    //   if(val) {
+    //     forceLogoutService.at(0).get('version_number').setValidators(Validators.required);
+    //     forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
+    //   } else {
+    //     forceLogoutService.at(0).get('version_number').setValue(null);
+    //     forceLogoutService.at(0).get('version_number').setValidators([]);
+    //     forceLogoutService.at(0).get('version_message').setValue(null);
+    //     forceLogoutService.at(0).get('version_message').setValidators([]);
+    //   }
+    //   forceLogoutService.at(0).get('version_number').updateValueAndValidity();
+    //   forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+    // });
 
     this.formCountry.get('access_menu').get('abilities').valueChanges.debounceTime(500).subscribe(menus => {
       this.onAccessMenuChange(menus);
