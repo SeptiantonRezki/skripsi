@@ -177,7 +177,7 @@ export class RedeemListComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    // console.log(arguments);
+    console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
