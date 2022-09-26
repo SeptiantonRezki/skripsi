@@ -88,9 +88,9 @@ export class WholesalerEditComponent {
     this.permission = this.roles.getRoles('principal.wholesaler');
 
     this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_phone_number') > -1;
-    this.viewBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_Rekening_toko') > -1;
+    this.viewBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_rekening_toko') > -1;
     this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.wholesaler.phone_number') > -1;
-    this.editBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.Rekening_toko') > -1;
+    this.editBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.rekening_toko') > -1;
 
     this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {

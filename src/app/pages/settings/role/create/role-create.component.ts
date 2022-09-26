@@ -79,14 +79,17 @@ export class RoleCreateComponent {
       // territory: [""]
     })
 
-    let wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
+    const wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
       wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
       wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
       wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.lihat' }),
       phoneNumberToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.phone_number' }),
-      rekeningToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.Rekening_toko' }),
+      rekeningToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.rekening_toko' }),
       phoneNumberToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_phone_number' }),
-      rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_Rekening_toko' }),
+      rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_rekening_toko' }),
+
+      customerRole = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'customer' }),
+      phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_DOB_view' }),
 
       retailerRole = _.find(this.roles, { nama: 'retailer' }),
       retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
@@ -106,7 +109,10 @@ export class RoleCreateComponent {
       rekeningToggleView.disabled = true;
       retailerPhoneNumberToggleView.disabled = true;
       retailerRekeningToggleView.disabled = true;
-      
+      retailerRekeningToggleView.disabled = true;
+      console.log('datanya', this.roles);
+      phoneDOBToggle.disabled = true;
+
     if (wholesalerExportToggle && wholesalerViewToggle && wholesalerViewToggle.status == false) {
       wholesalerExportToggle.disabled = true;
       wholesalerExportToggle.status = false;
@@ -367,7 +373,7 @@ export class RoleCreateComponent {
     // if target is submenu, then target dont have active parents, then avoid action
     if (targetItem.submenu) {
 
-      if (!hasActiveParents.includes(true) && targetItem.value !== 'principal.wholesaler.submenu.view_phone_number' && targetItem.value !== 'principal.wholesaler.submenu.view_Rekening_toko' && targetItem.value !== 'principal.wholesaler.submenu.phone_number' && targetItem.value !== 'principal.wholesaler.submenu.Rekening_toko') {
+      if (!hasActiveParents.includes(true) && targetItem.value !== 'principal.wholesaler.submenu.view_phone_number' && targetItem.value !== 'principal.wholesaler.submenu.view_rekening_toko' && targetItem.value !== 'principal.wholesaler.submenu.phone_number' && targetItem.value !== 'principal.wholesaler.submenu.rekening_toko') {
 
         console.log({ event });
         event.source.checked = false;
@@ -445,9 +451,9 @@ export class RoleCreateComponent {
       }
     }
 
-    if (targetItem.value == 'principal.wholesaler.submenu.view_Rekening_toko') {
+    if (targetItem.value == 'principal.wholesaler.submenu.view_rekening_toko') {
       let rekeningToggle = targetItems.value.find(item => {
-        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+        return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
 
       if (!rekeningToggle) {
@@ -470,10 +476,10 @@ export class RoleCreateComponent {
 
     if (targetItem.value == 'principal.wholesaler.ubah' || targetItem.value == 'principal.wholesaler.lihat') {
       let viewRekeningToggle = targetItems.value.find(item => {
-        return item.value == 'principal.wholesaler.submenu.view_Rekening_toko';
+        return item.value == 'principal.wholesaler.submenu.view_rekening_toko';
       });
       let editRekeningToggle = targetItems.value.find(item => {
-        return item.value == 'principal.wholesaler.submenu.Rekening_toko';
+        return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
       let viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.view_phone_number';
@@ -695,7 +701,7 @@ export class RoleCreateComponent {
 
               menuValue['value'].map((targetValue) => {
                 
-                if (targetValue.submenu && targetValue.value !== 'principal.wholesaler.submenu.view_phone_number' && targetValue.value !== 'principal.wholesaler.submenu.view_Rekening_toko' && targetValue.value !== 'principal.wholesaler.submenu.phone_number' && targetValue.value !== 'principal.wholesaler.submenu.Rekening_toko') {
+                if (targetValue.submenu && targetValue.value !== 'principal.wholesaler.submenu.view_phone_number' && targetValue.value !== 'principal.wholesaler.submenu.view_rekening_toko' && targetValue.value !== 'principal.wholesaler.submenu.phone_number' && targetValue.value !== 'principal.wholesaler.submenu.rekening_toko') {
 
                   targetValue.status = status;
                   targetValue.disabled = !status;
