@@ -89,7 +89,7 @@ export class RoleCreateComponent {
       rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_rekening_toko' }),
 
       customerRole = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'customer' }),
-      phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_DOB_view' }),
+      phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_dob_view' }),
 
       retailerRole = _.find(this.roles, { nama: 'retailer' }),
       retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
@@ -650,7 +650,7 @@ export class RoleCreateComponent {
     // Start Customer Feature
     if (targetItem.value == 'principal.customer.lihat') {
       let phoneNumberToggle = targetItems.value.find(item => {
-        return item.value == 'principal.customer.phone_number_and_DOB_view';
+        return item.value == 'principal.customer.phone_number_and_dob_view';
       });
 
       if (event.checked === false) {
@@ -661,7 +661,7 @@ export class RoleCreateComponent {
       }
     }
 
-    if (targetItem.value == 'principal.customer.phone_number_and_DOB_view') {
+    if (targetItem.value == 'principal.customer.phone_number_and_dob_view') {
       const seeToggle = targetItems.value.find(item => {
         return item.value == 'principal.customer.lihat';
       });

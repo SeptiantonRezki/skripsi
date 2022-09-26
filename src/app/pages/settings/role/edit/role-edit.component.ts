@@ -103,7 +103,7 @@ export class RoleEditComponent {
       this.detailRoles = res;
       this.roles = res.role;
 
-      let wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
+      const wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
         wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
         wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
         wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.lihat' }),
@@ -114,9 +114,9 @@ export class RoleEditComponent {
         wholesalerUbahToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.ubah' }),
 
         customerRole = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'customer' }),
-        phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_DOB_view' }),
+        phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_dob_view' }),
         lihatToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.lihat' }),
-  
+
         retailerRole = _.find(this.roles, { nama: 'retailer' }),
         retailerMenu = retailerRole && _.find(retailerRole.menu, { nama: 'Daftar Retailer' }),
         retailerExportToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.button.export' }),
@@ -176,8 +176,8 @@ export class RoleEditComponent {
       }
 
       this.onLoad = false;
-      // this.initArea();
-      // this.initFormGroup();
+      this.initArea();
+      this.initFormGroup();
     })
   }
 
@@ -534,21 +534,9 @@ export class RoleEditComponent {
       }
     }
 
-    let checkWholesaler = targetItems.value.find(item => {
-      return item.value == 'principal.wholesaler.ubah';
-    });
-
-    let checkRetailer = targetItems.value.find(item => {
-      return item.value == 'principal.retailer.ubah';
-    });
-
-    let checkCustomer = targetItems.value.find(item => {
-      return item.value == 'principal.customer.lihat';
-    });
-
     // Start Wholesaler Feature
     if (targetItem.value == 'principal.wholesaler.submenu.view_phone_number') {
-      let phoneNumberToggle = targetItems.value.find(item => {
+      const phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.phone_number';
       });
 
@@ -571,7 +559,7 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.wholesaler.submenu.view_rekening_toko') {
-      let rekeningToggle = targetItems.value.find(item => {
+      const rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
 
@@ -594,16 +582,16 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.wholesaler.ubah' || targetItem.value == 'principal.wholesaler.lihat') {
-      let viewRekeningToggle = targetItems.value.find(item => {
+      const viewRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.view_rekening_toko';
       });
-      let editRekeningToggle = targetItems.value.find(item => {
+      const editRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
-      let viewPhoneToggle = targetItems.value.find(item => {
+      const viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.view_phone_number';
       });
-      let editPhoneToggle = targetItems.value.find(item => {
+      const editPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.phone_number';
       });
 
@@ -649,7 +637,7 @@ export class RoleEditComponent {
 
     // Start Retailer Feature
     if (targetItem.value == 'principal.retailer.lihat') {
-      let exportRetailerToggle = targetItems.value.find(item => {
+      const exportRetailerToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.button.export';
       });
 
@@ -672,7 +660,7 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
-      let phoneNumberToggle = targetItems.value.find(item => {
+      const phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number';
       });
 
@@ -695,7 +683,7 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
-      let rekeningToggle = targetItems.value.find(item => {
+      const rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko';
       });
 
@@ -713,16 +701,16 @@ export class RoleEditComponent {
     }
 
     if (targetItem.value == 'principal.retailer.ubah' || targetItem.value == 'principal.retailer.lihat') {
-      let viewRekeningToggle = targetItems.value.find(item => {
+      const viewRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko_view';
       });
-      let editRekeningToggle = targetItems.value.find(item => {
+      const editRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko';
       });
-      let viewPhoneToggle = targetItems.value.find(item => {
+      const viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number_view';
       });
-      let editPhoneToggle = targetItems.value.find(item => {
+      const editPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number';
       });
 
@@ -768,8 +756,8 @@ export class RoleEditComponent {
 
     // Start Customer Feature
     if (targetItem.value == 'principal.customer.lihat') {
-      let phoneNumberToggle = targetItems.value.find(item => {
-        return item.value == 'principal.customer.phone_number_and_DOB_view';
+      const phoneNumberToggle = targetItems.value.find(item => {
+        return item.value == 'principal.customer.phone_number_and_dob_view';
       });
 
       if (event.checked === false) {
@@ -780,7 +768,7 @@ export class RoleEditComponent {
       }
     }
 
-    if (targetItem.value == 'principal.customer.phone_number_and_DOB_view') {
+    if (targetItem.value == 'principal.customer.phone_number_and_dob_view') {
       const seeToggle = targetItems.value.find(item => {
         return item.value == 'principal.customer.lihat';
       });

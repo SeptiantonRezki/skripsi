@@ -301,7 +301,7 @@
                     <ngx-mat-select-search [formControl]="filterBank" placeholderLabel="{{'global.label.search' | translate}} {{'global.label.bank_name' | translate}}"
                       noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}">
                     </ngx-mat-select-search>
-                    <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
+                    <mat-option *ngFor="let item of filteredBanks | async" [value]="remaskTemplate(viewBankStatus, item.name, 3)">
                       {{remaskTemplate(viewBankStatus, item.name, 3)}}
                     </mat-option>
                   </mat-select>

@@ -44,7 +44,7 @@ export class CustomerDetailComponent {
   ) {
     this.permission = this.roles.getRoles('principal.customer.');
 
-    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.customer.phone_number_and_DOB_view') > -1;
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.customer.phone_number_and_dob_view') > -1;
     this.activatedRoute.url.subscribe(param => {
       this.customer_id = param[2].path;
     });
@@ -58,7 +58,8 @@ export class CustomerDetailComponent {
         if (this.viewPhoneNumberStatus) {
           date = res.birth_date.split('-').reverse().join('/');
         } else {
-          date = Utils.reMaskInput(res.birth_date, 3);
+          const arrDate = res.birth_date.split('-');
+          date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
         }
         this.formCustomer = this.formBuilder.group({
           status: [res.status],

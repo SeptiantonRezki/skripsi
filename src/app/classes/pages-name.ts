@@ -226,7 +226,7 @@ export class PagesName {
     };
 
     if (name.indexOf("customer.") >= 0) {
-      roles["phone_number_and_DOB_view"] = filterPermission.filter((item) => item.indexOf("phone_number_and_DOB_view") >= 0)[0];
+      roles["phone_number_and_dob_view"] = filterPermission.filter((item) => item.indexOf("phone_number_and_dob_view") >= 0)[0];
     }
 
     if (name.indexOf("produk_kasir") >= 0) {
