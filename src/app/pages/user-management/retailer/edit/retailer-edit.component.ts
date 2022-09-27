@@ -750,6 +750,16 @@ export class RetailerEditComponent {
         order_online: this.formRetailer.get('order_online').value,
       };
 
+      if (!this.viewPhoneNumberStatus) {
+        delete body.phone;
+      }
+      if (!this.viewBankStatus) {
+        delete body.bank_account_name;
+        delete body.bank_account_number;
+        delete body.bank_name;
+        delete body.branch;
+      }
+
       console.log(body);
       if (this.pkp.value === '') {
         body['pkp'] = '';

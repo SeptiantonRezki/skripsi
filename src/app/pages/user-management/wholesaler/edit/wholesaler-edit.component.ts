@@ -690,6 +690,16 @@ export class WholesalerEditComponent {
         country: this.formWs.get("country").value,
       };
 
+      if (!this.viewPhoneNumberStatus) {
+        delete body.phone;
+      }
+      if (!this.viewBankStatus) {
+        delete body.bank_account_name;
+        delete body.bank_account_number;
+        delete body.bank_name;
+        delete body.branch;
+      }
+
       if (this.formWs.get("branchShop").value === true) {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
         body['total_branch'] = this.frmTotalBranch.value
