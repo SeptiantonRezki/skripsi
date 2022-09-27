@@ -105,15 +105,19 @@ export class CountrySetupEditComponent implements OnInit {
      forceLogoutService.at(0).get('force_logout_status').valueChanges.subscribe(val => {
       if(val) {
         forceLogoutService.at(0).get('version_number').setValidators(Validators.required);
+        forceLogoutService.at(0).get('apk_type').setValidators(Validators.required);
         forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
       } else {
         forceLogoutService.at(0).get('version_number').setValue(null);
         forceLogoutService.at(0).get('version_number').setValidators([]);
         forceLogoutService.at(0).get('version_message').setValue(null);
         forceLogoutService.at(0).get('version_message').setValidators([]);
+        forceLogoutService.at(0).get('apk_type').setValue(null);
+        forceLogoutService.at(0).get('apk_type').setValidators([]);
       }
       forceLogoutService.at(0).get('version_number').updateValueAndValidity();
       forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+      forceLogoutService.at(0).get('apk_type').updateValueAndValidity();
     });
 
     this.formCountry.get('access_menu').get('abilities').valueChanges.debounceTime(500).subscribe(menus => {
@@ -185,7 +189,11 @@ export class CountrySetupEditComponent implements OnInit {
         console.log(data,'force logout data ');
         const forceLogoutService = this.formCountry.get('force_logout_service') as FormArray;
         forceLogoutService.at(0).get('version_number').setValue(data.version);
-        forceLogoutService.at(0).get('version_message').setValue(data.message);
+        if(data.message){
+          forceLogoutService.at(0).get('version_message').setValue(data.message);
+          forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
+          forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+        }        
         forceLogoutService.at(0).get('apk_type').setValue(data.type);
         if (data.status == 'active') {
           const forcelogoutval = true;
