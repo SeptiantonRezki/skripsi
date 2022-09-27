@@ -646,12 +646,7 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        const ubahToggle = targetItems.value.find(item => {
-          return item.value == 'principal.retailer.ubah';
-        });
-        if (ubahToggle.status === true) {
-          exportRetailerToggle.disabled = false;
-        }
+        exportRetailerToggle.disabled = false;
       }
       if (!event.checked) {
         exportRetailerToggle.disabled = true;
@@ -692,7 +687,12 @@ export class RoleEditComponent {
       }
 
       if (event.checked) {
-        rekeningToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.ubah';
+        });
+        if (ubahToggle.status === true) {
+          rekeningToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         rekeningToggle.disabled = true;

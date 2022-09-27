@@ -415,21 +415,9 @@ export class RoleCreateComponent {
       }
     }
 
-    let checkWholesaler = targetItems.value.find(item => {
-      return item.value == 'principal.wholesaler.ubah';
-    });
-
-    let checkRetailer = targetItems.value.find(item => {
-      return item.value == 'principal.retailer.ubah';
-    });
-
-    let checkCustomer = targetItems.value.find(item => {
-      return item.value == 'principal.customer.lihat';
-    });
-
     // Start Wholesaler Feature
     if (targetItem.value == 'principal.wholesaler.submenu.view_phone_number') {
-      let phoneNumberToggle = targetItems.value.find(item => {
+      const phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.phone_number';
       });
 
@@ -452,7 +440,7 @@ export class RoleCreateComponent {
     }
 
     if (targetItem.value == 'principal.wholesaler.submenu.view_rekening_toko') {
-      let rekeningToggle = targetItems.value.find(item => {
+      const rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
 
@@ -475,16 +463,16 @@ export class RoleCreateComponent {
     }
 
     if (targetItem.value == 'principal.wholesaler.ubah' || targetItem.value == 'principal.wholesaler.lihat') {
-      let viewRekeningToggle = targetItems.value.find(item => {
+      const viewRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.view_rekening_toko';
       });
-      let editRekeningToggle = targetItems.value.find(item => {
+      const editRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.rekening_toko';
       });
-      let viewPhoneToggle = targetItems.value.find(item => {
+      const viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.view_phone_number';
       });
-      let editPhoneToggle = targetItems.value.find(item => {
+      const editPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.wholesaler.submenu.phone_number';
       });
 
@@ -530,7 +518,7 @@ export class RoleCreateComponent {
 
     // Start Retailer Feature
     if (targetItem.value == 'principal.retailer.lihat') {
-      let exportRetailerToggle = targetItems.value.find(item => {
+      const exportRetailerToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.button.export';
       });
 
@@ -539,12 +527,7 @@ export class RoleCreateComponent {
       }
 
       if (event.checked) {
-        const ubahToggle = targetItems.value.find(item => {
-          return item.value == 'principal.retailer.ubah';
-        });
-        if (ubahToggle.status === true) {
-          exportRetailerToggle.disabled = false;
-        }
+        exportRetailerToggle.disabled = false;
       }
       if (!event.checked) {
         exportRetailerToggle.disabled = true;
@@ -553,7 +536,7 @@ export class RoleCreateComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.phone_number_view') {
-      let phoneNumberToggle = targetItems.value.find(item => {
+      const phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number';
       });
 
@@ -576,7 +559,7 @@ export class RoleCreateComponent {
     }
 
     if (targetItem.value == 'principal.retailer.submenu.rekening_toko_view') {
-      let rekeningToggle = targetItems.value.find(item => {
+      const rekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko';
       });
 
@@ -585,7 +568,12 @@ export class RoleCreateComponent {
       }
 
       if (event.checked) {
-        rekeningToggle.disabled = false;
+        const ubahToggle = targetItems.value.find(item => {
+          return item.value == 'principal.retailer.ubah';
+        });
+        if (ubahToggle.status === true) {
+          rekeningToggle.disabled = false;
+        }
       }
       if (!event.checked) {
         rekeningToggle.disabled = true;
@@ -594,16 +582,16 @@ export class RoleCreateComponent {
     }
 
     if (targetItem.value == 'principal.retailer.ubah' || targetItem.value == 'principal.retailer.lihat') {
-      let viewRekeningToggle = targetItems.value.find(item => {
+      const viewRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko_view';
       });
-      let editRekeningToggle = targetItems.value.find(item => {
+      const editRekeningToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.rekening_toko';
       });
-      let viewPhoneToggle = targetItems.value.find(item => {
+      const viewPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number_view';
       });
-      let editPhoneToggle = targetItems.value.find(item => {
+      const editPhoneToggle = targetItems.value.find(item => {
         return item.value == 'principal.retailer.submenu.phone_number';
       });
 
@@ -649,7 +637,7 @@ export class RoleCreateComponent {
 
     // Start Customer Feature
     if (targetItem.value == 'principal.customer.lihat') {
-      let phoneNumberToggle = targetItems.value.find(item => {
+      const phoneNumberToggle = targetItems.value.find(item => {
         return item.value == 'principal.customer.phone_number_and_dob_view';
       });
 
