@@ -507,12 +507,30 @@
                 <!-- <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="name"
                   name="name"> -->
                   <input matInput type="text" placeholder="Frekuensi Belanja B2B Mingguan Yang Dibutuhkan" formControlName="frekuensi_belanja" name="frekuensi_belanja">
+                  <mat-error
+                    *ngIf="
+                      formPM.controls['frekuensi_belanja'].hasError(
+                        'required'
+                      ) && formPM.controls['frekuensi_belanja'].touched
+                    "
+                  >
+                    Frekuensi Belanja B2B wajib diisi
+                  </mat-error>
               </mat-form-field>
               <div fxFlex="1"></div>
               <mat-form-field fxFlex class="is-light form-primary pt-16" fxFlex="50">
                 <!-- <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="name"
                   name="name"> -->
                 <input matInput type="text" placeholder="Maksimal Frekuensi Reward User Per Minggu" formControlName="frekuensi_reward" name="frekuensi_reward">
+                <mat-error
+                  *ngIf="
+                    formPM.controls['frekuensi_reward'].hasError(
+                      'required'
+                    ) && formPM.controls['frekuensi_reward'].touched
+                  "
+                >
+                  Maksimal Frekuensi Reward wajib diisi
+                </mat-error>
               </mat-form-field>
             </div>
             <div fxFlex="100" fxLayout="row" class="px-24" style="margin-bottom: 15px;">
@@ -628,8 +646,17 @@
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Minimum Nilai Transaksi</p>
                 <div fxFlex="1"></div>
-                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="30">
                   <input matInput currencyMask type="tel" placeholder="" formControlName="minimum_transaction" name="minimum_transaction">
+                  <mat-error
+                    *ngIf="
+                      formPM.controls['minimum_transaction'].hasError(
+                        'min'
+                      ) && formPM.controls['minimum_transaction'].touched
+                    "
+                  >
+                    Minimum Nilai Transaksi wajib diisi
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -637,9 +664,18 @@
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Limit Spin</p>
                 <div fxFlex="1"></div>
-                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="30">
                   <input matInput currencyMask type="tel" placeholder="" formControlName="limit_spin"
                     name="limit_spin" (change)="calculatePM($event)" (keyup)="calculatePM($event)">
+                    <mat-error
+                      *ngIf="
+                        formPM.controls['limit_spin'].hasError(
+                          'min'
+                        ) && formPM.controls['limit_spin'].touched
+                      "
+                    >
+                      Limit Spin wajib diisi
+                    </mat-error>
                 </mat-form-field>
                 <div fxFlex="2"></div>
                 <p style="font-weight: bold;font-style: italic;">Average Coin per Spin = {{averageCoin}}</p>
@@ -647,9 +683,18 @@
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Jumlah Variasi Koin</p>
                 <div fxFlex="1"></div>
-                <mat-form-field fxFlex class="is-light form-primary" fxFlex="20">
+                <mat-form-field fxFlex class="is-light form-primary" fxFlex="30">
                   <input min="1" max="100" matInput type="number" placeholder="" formControlName="coin_variation"
                     name="name" (change)="changeCoinVariation($event)" (keyup)="changeCoinVariation($event)">
+                    <mat-error
+                      *ngIf="
+                        formPM.controls['coin_variation'].hasError(
+                          'required'
+                        ) && formPM.controls['coin_variation'].touched
+                      "
+                    >
+                      Jumlah Variasi Koin wajib diisi
+                    </mat-error>
                 </mat-form-field>
               </div>
               <div fxLayout="row" fxFlex="100" class="px-24" *ngIf="formPM.get('coin_variation').value">
