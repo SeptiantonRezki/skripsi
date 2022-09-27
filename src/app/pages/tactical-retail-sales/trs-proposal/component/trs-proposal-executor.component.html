@@ -13,9 +13,16 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
-    <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
-      <input formControlName="test">
+    
+    <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon>search</mat-icon>
+      <mat-form-field class="is-light tab-search">
+        <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="updateFilter($event)"
+          autocomplete="off">
+      </mat-form-field>
+    </div>
 
+    <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
       <div *ngIf="loaded">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"

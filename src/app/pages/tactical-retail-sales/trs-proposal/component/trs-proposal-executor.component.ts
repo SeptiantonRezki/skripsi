@@ -29,6 +29,7 @@ export class TrsProposalExecutorComponent {
   onLoad: boolean;
 
   rows: any[] = [];
+  temp: any[] = [];
 
   selected: any[];
   detailData: any;
@@ -45,6 +46,8 @@ export class TrsProposalExecutorComponent {
 
   totalData: number = 0;
   checkDisabled: boolean = false;
+
+  @ViewChild('table') table: DatatableComponent;
 
   constructor(
     public dialogRef: MatDialogRef<TrsProposalExecutorComponent>,
@@ -69,7 +72,6 @@ export class TrsProposalExecutorComponent {
 
   ngOnInit() {
     this.formExecutor = this.formBuilder.group({
-      test: ["", Validators.required],
     });
 
     this.aturPanelMitra();
@@ -117,6 +119,23 @@ export class TrsProposalExecutorComponent {
     }
   }
 
+  updateFilter(event) {
+    console.log("keyup");
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.temp.filter(function (d) {
+      return d.fullname.toLowerCase().indexOf(val) !== -1 ||
+             d.username.toLowerCase().indexOf(val) !== -1 ||
+             d.salespoint.toLowerCase().indexOf(val) !== -1 ||
+             d.district.toLowerCase().indexOf(val) !== -1 ||
+             d.territory.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.rows = temp;
+  }
+
   aturPanelMitra() {
     this.selectedMitra = [];
     //this.onSelect({ selected: [] });
@@ -131,6 +150,7 @@ export class TrsProposalExecutorComponent {
     this.TRSService.getExecutor(request).subscribe(res => {
       this.loaded = true;
       this.rows = res.data;
+      this.temp = [...res.data];
       this.dataService.showLoading(false);
 
     }, err => {
