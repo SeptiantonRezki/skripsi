@@ -14,6 +14,7 @@ import { DialogYesNoEditComponent } from "./dialog-yes-no-edit/dialog-yes-no-edi
 import moment from 'moment';
 import { DialogCoinEditComponent } from "./dialog-coin-edit/dialog-coin-edit.component";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { TranslateService } from "@ngx-translate/core";
 
 
 @Component({
@@ -65,6 +66,7 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private activatedRoute: ActivatedRoute,
     private ls: LanguagesService,
+    private translate: TranslateService,
   ) {
     activatedRoute.url.takeUntil(this._onDestroy).subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
@@ -236,6 +238,16 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  confirmUpdateStatus() {
+    let data = {
+      titleDialog: "Konfirmasi Publish Misi",
+      captionDialog: "Apakah Anda yakin ingin melakukan publish misi dan tidak ingin melakukan perubahan data apapun?",
+      confirmCallback: this.updateStatus.bind(this),
+      buttonText: [this.translate.instant('global.button.yes_continue'), this.translate.instant('global.button.cancel')]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
   updateStatus() {
     this.task.actions = this.actions;
     const data = this.task;
@@ -305,23 +317,25 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
           })
         }
         
-        this.sequencingService.put(data, { sequencing_id: this.task.id }).subscribe(res => {
-          this.sequencingService.updateStatus({ sequencing_id: this.task.id }, { status: this.task.status === 'publish' ? 'unpublish' : 'publish' }).subscribe(res => {
-            this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({
-              message: "Status berhasil di-update!"
-            });
-            this.router.navigate(['dte', 'task-sequencing']);
-          }, err => {
-            console.log('err', err);
-            this.dataService.showLoading(false);
-          })
-        }, err => {
-          console.log('err', err);
-          this.dataService.showLoading(false);
-        })
+        this.sequencingService
+          .updateStatus(
+            { sequencing_id: this.task.id },
+            { status: this.task.status === "publish" ? "unpublish" : "publish" }
+          )
+          .subscribe(
+            (res) => {
+              this.dataService.showLoading(false);
+              this.dialogService.openSnackBar({
+                message: "Status berhasil di-update!",
+              });
+              this.router.navigate(["dte", "task-sequencing"]);
+            },
+            (err) => {
+              console.log("err", err);
+              this.dataService.showLoading(false);
+            }
+          );
       }
-
     } else {
       this.sequencingService.updateStatus({ sequencing_id: this.task.id }, { status: this.task.status === 'publish' ? 'unpublish' : 'publish' }).subscribe(res => {
         this.dataService.showLoading(false);
@@ -335,6 +349,7 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
       })
     }
 
+    this.dialogService.brodcastCloseConfirmation();
   }
 
   nodeDisabler(type: any) {
