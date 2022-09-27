@@ -1603,6 +1603,7 @@ export class AudienceCreateComponent {
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
           business_type: this.formAudience.get("business_type").value,
+          classification: this.formFilterRetailer.get("retail_classification").value || "all",
         };
 
         body["type"] = this.formAudience.get("type").value;
@@ -1663,6 +1664,7 @@ export class AudienceCreateComponent {
             name: this.formAudience.get("name").value,
             trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
             business_type: this.formAudience.get("business_type").value,
+            classification: this.formFilterRetailer.get("retail_classification").value || "all",
           };
 
           if (this.formAudience.get("limit").value !== "pick-all") {
@@ -1720,6 +1722,7 @@ export class AudienceCreateComponent {
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("trade_creator_id").value,
           business_type: this.formAudience.get("business_type").value,
+          classification: this.formFilterRetailer.get("retail_classification").value || "all",
         };
 
         if (this.formAudience.get("limit").value !== "pick-all") {
