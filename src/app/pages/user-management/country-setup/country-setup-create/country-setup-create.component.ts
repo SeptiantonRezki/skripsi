@@ -42,6 +42,7 @@ export class CountrySetupCreateComponent implements OnInit {
     private languageSetupService: LanguageSetupService,
   ) {
     this.toggleFullAccess = this.toggleFullAccess.bind(this);
+    this.togglecFullAccess = this.togglecFullAccess.bind(this);
     this.step1 = formBuilder.group({
 
       name: ['', Validators.required],
@@ -232,7 +233,7 @@ export class CountrySetupCreateComponent implements OnInit {
     const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
     
     const allChecked = [];
-    const debounceChecked = _.debounce(this.toggleFullAccess, 100);
+    const debounceChecked = _.debounce(this.togglecFullAccess, 100);
 
     const recurseChecked = function(_menus: Array<any>, _checked) {
 
