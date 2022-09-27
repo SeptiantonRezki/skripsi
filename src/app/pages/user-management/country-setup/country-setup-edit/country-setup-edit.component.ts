@@ -26,7 +26,8 @@ export class CountrySetupEditComponent implements OnInit {
   submiting = false;
   isDetail = false;
   horizontal = true;
-
+  listApps: any[] = [{ name: 'Consumer', value: 'customer' }, { name: 'Retailer', value: 'retailer' }, { name: 'AYO SRC Kasir', value: 'cashier' }];
+  forceLogoutinfo: any;
   constructor(
     private router: Router,
     private ls: LanguagesService,
@@ -43,7 +44,6 @@ export class CountrySetupEditComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
-
     this.formCountry = formBuilder.group({
       // status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
       name: [this.country.name, Validators.required],
@@ -78,7 +78,15 @@ export class CountrySetupEditComponent implements OnInit {
         type: ["retailer", Validators.required],
         cfullaccess: false,
         cabilities: formBuilder.array([])
-      })
+      }),
+      // forcelogout_service: formBuilder.array([
+      //   formBuilder.group({
+      //     apk_type:[],
+      //     force_logout: [(this.country.forcelogout_services) ? this.country.forcelogout_services.whatsapp : false, Validators.required],
+      //     version_number: [(this.country.forcelogout_services) ? this.country.forcelogout_services.whatsapp_number : null],
+      //     version_message: [(this.country.forcelogout_services) ? this.country.forcelogout_services.whatsapp_number : null],
+      //   })
+      // ]),
     })
 
     const customerService = this.formCountry.get('customer_service') as FormArray;
@@ -170,10 +178,16 @@ export class CountrySetupEditComponent implements OnInit {
     if(this.isDetail) {
       this.formCountry.disable();
     }
-    // this.countrySetupService.getForceLogoutData({ id: this.country.id }).subscribe(({data}) => {
-    //   console.log(data,'force logout data ');
-      
-    // })
+    this.countrySetupService.getForceLogoutData({ id: this.country.id }).subscribe(({data}) => {
+      console.log(data,'force logout data ');
+      if (data) {
+        this.forceLogoutinfo = data;
+        console.log(data,'force logout data ');
+      } else {
+        
+      }
+    
+    })
   }
 
   buildFullAccessTogle() {
