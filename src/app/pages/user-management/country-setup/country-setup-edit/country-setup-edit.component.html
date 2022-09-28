@@ -168,11 +168,11 @@
                 <div *ngFor="let item of formCountry.get('force_logout_service').controls; let i=index;">
                   <div fxFlex="100" [formGroup]="item" fxLayout="column">
                     <div fxFlex="100" fxLayoutAlign="space-between">
-                        <label for="" matTooltip="By enabling this featuere will disable below versions "
-                        style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
+                        <label for="" matTooltip="By enabling this feature will disable Ayo-src Retailer apk below selected version"
+                        style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align:right;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
                       <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout_status"></mat-slide-toggle>
                     </div>
-                    <ng-container  *ngIf = "!item.get('force_logout_status').value" >
+                    <!-- <ng-container  *ngIf = "!item.get('force_logout_status').value" >
                       <mat-form-field fxFlex="100" class="is-light" disabled >
                         <input matInput type="number" placeholder="Version Number"  disabled class="field-disabled">
                       </mat-form-field>
@@ -184,9 +184,18 @@
                           <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
                         </mat-select>
                       </mat-form-field>
-                    </ng-container>
+                    </ng-container> -->
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
+                      <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
+                        <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="item.controls['apk_type'].hasError('required') && item.controls['apk_type'].touched">
+                        {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
+                      </mat-error>
+                    </mat-form-field>
                     <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value">
-                      <input matInput placeholder="Version Number" type="text" formControlName="version_number">
+                      <input matInput placeholder="Version Number" type="number" formControlName="version_number">
                       <mat-error *ngIf="item.controls['version_number'].hasError('required') && item.controls['version_number'].touched ">
                         Version {{ ls.locale.global.messages.mandatory_text }}.
                       </mat-error>
@@ -199,15 +208,6 @@
                         <mat-error *ngIf="item.controls['version_message'].hasError('maxlength') && item.controls['version_message'].touched ">
                           Version Message Maksimal 150 karakter
                         </mat-error>
-                    </mat-form-field>
-                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
-                      <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
-                        <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
-                      </mat-select>
-                      <mat-error
-                        *ngIf="item.controls['apk_type'].hasError('required') && item.controls['apk_type'].touched">
-                        {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
-                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>

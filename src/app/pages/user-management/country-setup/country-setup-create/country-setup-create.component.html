@@ -301,11 +301,11 @@
 
             <div fxFlex="1 0 auto" fxLayout="column">
               <div fxFlex="100" fxLayoutAlign="space-between">
-                <label for="" matTooltip="By enabling this featuere will disable below versions "
+                <label for="" matTooltip="By enabling this featuere will disable Ayo-src app below selected versions "
                 style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
                 <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout_status"></mat-slide-toggle>
               </div>
-              <ng-container  *ngIf = "step9.get('force_logout_status').value == false" >
+              <!-- <ng-container  *ngIf = "step9.get('force_logout_status').value == false" >
                 <mat-form-field fxFlex="100" class="is-light" disabled >
                   <input matInput type="number" placeholder="Version Number" formControlName="version_number" disabled class="field-disabled">
                   <mat-error *ngIf="step9.controls['version_number'].hasError('required') && step9.controls['version_number'].touched ">
@@ -322,12 +322,21 @@
                   <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
                     <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
-                  <!-- <mat-error
+                  <mat-error
                     *ngIf="item.controls['apk_type'].hasError('required') && item.controls['apk_type'].touched">
                     {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
-                  </mat-error> -->
+                  </mat-error>
                 </mat-form-field>
-              </ng-container>
+              </ng-container> -->
+              <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout_status').value ">
+                <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
+                  <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="step9.controls['apk_type'].hasError('required') && step9.controls['apk_type'].touched">
+                  {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout_status').value">
                 <input matInput type="number" placeholder="Version Number" formControlName="version_number">
                 <mat-error *ngIf="step9.controls['version_number'].hasError('required') && step9.controls['version_number'].touched ">
@@ -341,15 +350,6 @@
                 </mat-error>
                 <mat-error *ngIf="step9.controls['version_message'].hasError('maxlength') && step9.controls['version_message'].touched ">
                   Version Maksimal 150 karakter
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout_status').value ">
-                <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
-                  <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
-                </mat-select>
-                <mat-error
-                  *ngIf="step9.controls['apk_type'].hasError('required') && step9.controls['apk_type'].touched">
-                  {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
                 </mat-error>
               </mat-form-field>
             </div>
