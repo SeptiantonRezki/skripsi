@@ -172,6 +172,19 @@
                         style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align: center;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
                       <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout_status"></mat-slide-toggle>
                     </div>
+                    <ng-container  *ngIf = "!item.get('force_logout_status').value" >
+                      <mat-form-field fxFlex="100" class="is-light" disabled >
+                        <input matInput type="number" placeholder="Version Number"  disabled class="field-disabled">
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" class="is-light" disabled>
+                        <input matInput type="text" placeholder="Message to Display"  disabled class="field-disabled">
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" class="is-light" disabled class="field-disabled">
+                        <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}">
+                          <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-container>
                     <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value">
                       <input matInput placeholder="Version Number" type="text" formControlName="version_number">
                       <mat-error *ngIf="item.controls['version_number'].hasError('required') && item.controls['version_number'].touched ">
@@ -183,9 +196,9 @@
                         <mat-error *ngIf="item.controls['version_message'].hasError('required') && item.controls['version_message'].touched ">
                           Message {{ ls.locale.global.messages.mandatory_text }}.
                         </mat-error>
-                        <mat-error *ngIf="item.controls['version_message'].hasError('maxLength') && item.controls['version_message'].touched">
-                        Isi Pesan Notifikasi maksimal 150 karakter
-                      </mat-error>
+                        <mat-error *ngIf="item.controls['version_message'].hasError('maxlength') && item.controls['version_message'].touched ">
+                          Version Message Maksimal 150 karakter
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
                       <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
@@ -244,7 +257,7 @@
 
 
           <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled] = "!formCountry.valid">
               {{ ls.locale.global.button.save }}
             </button>
           </div>

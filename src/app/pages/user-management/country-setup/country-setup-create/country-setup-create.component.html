@@ -339,6 +339,9 @@
                 <mat-error *ngIf="step9.controls['version_message'].hasError('required') && step9.controls['version_message'].touched ">
                   Version {{ls.locale.global.messages.mandatory_text}}
                 </mat-error>
+                <mat-error *ngIf="step9.controls['version_message'].hasError('maxlength') && step9.controls['version_message'].touched ">
+                  Version Maksimal 150 karakter
+                </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex="100" class="is-light" *ngIf="step9.get('force_logout_status').value ">
                 <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
