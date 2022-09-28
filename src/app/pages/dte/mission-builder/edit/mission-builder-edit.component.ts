@@ -239,9 +239,10 @@ export class MissionBuilderEditComponent implements OnInit, OnDestroy {
   }
 
   confirmUpdateStatus() {
+    const title = this.task.status === "publish" ? "Unpublish" : "Publish";
     let data = {
-      titleDialog: "Konfirmasi Publish Misi",
-      captionDialog: "Apakah Anda yakin ingin melakukan publish misi dan tidak ingin melakukan perubahan data apapun?",
+      titleDialog: `Konfirmasi ${title} Misi`,
+      captionDialog: `Apakah Anda yakin ingin melakukan ${title} Misi dan tidak ingin melakukan perubahan data apapun?`,
       confirmCallback: this.updateStatus.bind(this),
       buttonText: [this.translate.instant('global.button.yes_continue'), this.translate.instant('global.button.cancel')]
     };
