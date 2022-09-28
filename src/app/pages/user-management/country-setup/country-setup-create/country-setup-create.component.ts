@@ -128,12 +128,12 @@ export class CountrySetupCreateComponent implements OnInit {
         this.step9.get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
         this.step9.get('apk_type').setValidators([Validators.required]);
       } else {
-        this.step9.get('version_number').setValue(null);
+        // this.step9.get('version_number').setValue(null);
         this.step9.get('version_number').setValidators([]);
-        this.step9.get('version_message').setValue(null);
+         // this.step9.get('version_message').setValue(null);
         this.step9.get('version_message').setValidators([]);
         this.step9.get('apk_type').setValidators([]);
-        this.step9.get('apk_type').setValue(null);
+        // this.step9.get('apk_type').setValue(null);
       }
       this.step9.get('version_number').updateValueAndValidity();
       this.step9.get('version_message').updateValueAndValidity();
@@ -449,7 +449,14 @@ export class CountrySetupCreateComponent implements OnInit {
     Object.assign(rawValues, {customer_service: [this.step6.getRawValue()] });
     Object.assign(rawValues, this.step7.getRawValue());
     Object.assign(rawValues, this.step8.getRawValue());
-    Object.assign(rawValues, {force_logout_service: [this.step9.getRawValue()] });
+    console.log(this.step9.get('force_logout_status').value);
+    if(this.step9.get('force_logout_status').value == false){
+      Object.assign(rawValues, {force_logout_service: [{apk_type: null, force_logout_status: false, version_number: null, version_message: null}] });
+    }
+    else{
+      Object.assign(rawValues, {force_logout_service: [this.step9.getRawValue()] });
+    }
+    
     let body = this.mapingBody(rawValues);
 
     this.countrySetupService.create(body).subscribe(res => {

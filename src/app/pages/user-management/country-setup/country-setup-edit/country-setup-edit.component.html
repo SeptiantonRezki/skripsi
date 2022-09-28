@@ -195,13 +195,13 @@
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value">
-                      <input matInput placeholder="Version Number" type="number" formControlName="version_number">
+                      <input matInput placeholder="{{ ls.locale.pengaturan.force_update_apps.text5 }}" type="number" formControlName="version_number" decimalNumber>
                       <mat-error *ngIf="item.controls['version_number'].hasError('required') && item.controls['version_number'].touched ">
                         Version {{ ls.locale.global.messages.mandatory_text }}.
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
-                        <input matInput placeholder="Version Message" type="text" formControlName="version_message">
+                        <input matInput placeholder="{{ ls.locale.pengaturan.force_update_apps.text8 }}" type="text" formControlName="version_message">
                         <mat-error *ngIf="item.controls['version_message'].hasError('required') && item.controls['version_message'].touched ">
                           Message {{ ls.locale.global.messages.mandatory_text }}.
                         </mat-error>
