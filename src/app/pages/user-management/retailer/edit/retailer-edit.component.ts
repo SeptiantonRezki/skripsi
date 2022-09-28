@@ -750,10 +750,10 @@ export class RetailerEditComponent {
         order_online: this.formRetailer.get('order_online').value,
       };
 
-      if (!this.viewPhoneNumberStatus) {
+      if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
         delete body.phone;
       }
-      if (!this.viewBankStatus) {
+      if (!this.viewBankStatus || !this.editBankStatus) {
         delete body.bank_account_name;
         delete body.bank_account_number;
         delete body.bank_name;
