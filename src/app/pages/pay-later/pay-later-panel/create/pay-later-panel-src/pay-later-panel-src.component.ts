@@ -24,6 +24,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
   // formPanelSrcError: any;
   allRowsSelected: boolean;
   totalData: number = 0;
+  dataType: any;
 
   rows: any[];
   selected: any[] = [];
@@ -120,7 +121,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     // this.selected = this.dataService.getFromStorage('bussiness_id_selected') ? this.dataService.getFromStorage('bussiness_id_selected') : [];
     // if (this.selected.length === 0) this.dialogService.openSnackBar({ message: "Tidak ada Mitra terpilih di Panel Mitra" });
     // else this.loaded = true;
-
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -139,6 +140,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     // this.formPanelSrc = this.formBuilder.group({
     //   company: ["", Validators.required],
     // });
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
 
     this.formFilter = this.formBuilder.group({
       national: [""],
@@ -213,7 +215,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
   }
 
   getCompanies() {
-    this.panelService.getCompaniesPanel().subscribe(res => {
+    this.panelService.getCompaniesPanel({paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       this.listCompanies = res.data;
     });
   }
@@ -242,7 +244,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
       this.pagination.page = 1;
 
       this.dataService.showLoading(true);
-      this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId }).subscribe(res => {
+      this.panelService.checkPanel({ paylater_company_id: this.paylaterCompanyId, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null }).subscribe(res => {
         // console.log('res', res);
         // this.getPanelSrcList();
         // console.log('res', res);
@@ -357,7 +359,8 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(
       res => {
         this.dataService.showLoading(false);
@@ -397,7 +400,8 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -428,7 +432,8 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -462,7 +467,8 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -507,6 +513,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
       fd.append('business_id[]', item.id);
     })
     fd.append('type', 'retailer');
+    fd.append('paylater_company_type_id', this.dataType === "invoice-financing" ? "1" : this.dataType === "retailer-financing" ? "2" : this.dataType === "kur" ? "3" : "null");
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
@@ -560,7 +567,8 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {
       type: 'retailer',
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
@@ -598,6 +606,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
       let body = {
         // paylater_company_id: this.formPanelSrc.get('company').value,
         paylater_company_id: this.dataService.getFromStorage('company_selected'),
+        paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null,
         type: "retailer",
         detail: await this.selected.map(mtr => {
           return { business_id: mtr.id };
@@ -618,7 +627,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         });
-        this.router.navigate(['paylater', 'panel']);
+        this.router.navigate(['paylater', 'panel'], {queryParams:{type: this.dataType}});
       }, err => {
         console.log('err create panel src', err);
         this.dataService.showLoading(false);

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -15,6 +15,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
   styleUrls: ['./pay-later-panel.component.scss']
 })
 export class PayLaterPanelComponent implements OnInit {
+  @Input() dataType: string;
   rows: any[];
   selected: any[];
   id: any[];
@@ -54,20 +55,20 @@ export class PayLaterPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCompanies();
+    this.getCompanies(true);
   }
 
-  getCompanies() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+  getCompanies(resetPage?) {
+    this.pagination.page = resetPage ? 1 : this.dataService.getFromStorage("page_panel");
+    this.pagination.sort_type = resetPage ? null : this.dataService.getFromStorage("sort_type_panel");
+    this.pagination.sort = resetPage ? null : this.dataService.getFromStorage("sort_panel");
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.dataService.setToStorage("page_panel", this.pagination.page);
+    this.dataService.setToStorage("sort_type_panel", this.pagination.sort_type);
+    this.dataService.setToStorage("sort_panel", this.pagination.sort);
 
-    this.offsetPagination = page ? (page - 1) : 0;
-    this.payLaterPanelServicer.get(this.pagination).subscribe(
+    this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
+    this.payLaterPanelServicer.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -87,10 +88,17 @@ export class PayLaterPanelComponent implements OnInit {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
 
-    this.payLaterPanelServicer.get(this.pagination).subscribe(res => {
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page_panel", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page_panel");
+    }
+
+    this.payLaterPanelServicer.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -103,9 +111,11 @@ export class PayLaterPanelComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page_panel", this.pagination.page);
+    this.dataService.setToStorage("sort_panel", event.column.prop);
+    this.dataService.setToStorage("sort_type_panel", event.newValue);
 
-    this.payLaterPanelServicer.get(this.pagination).subscribe(res => {
+    this.payLaterPanelServicer.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -114,27 +124,37 @@ export class PayLaterPanelComponent implements OnInit {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page_panel");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
-    this.payLaterPanelServicer.get(this.pagination).subscribe(res => {
+    this.payLaterPanelServicer.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
 
+  directAdd(): void {
+    // this.dataService.setToStorage("detail_paylater_panel", param);
+    this.router.navigate(["paylater", "panel", "create"], {queryParams:{type: this.dataType}});
+  }
+
   directEdit(param?: any): void {
     this.dataService.setToStorage("detail_paylater_panel", param);
-    this.router.navigate(["paylater", "panel", "edit"]);
+    this.router.navigate(["paylater", "panel", "edit"], {queryParams:{type: this.dataType}});
   }
 
   directDetail(param?: any): void {
     this.dataService.setToStorage("detail_paylater_panel", param);
-    this.router.navigate(["paylater", "panel", "detail"]);
+    this.router.navigate(["paylater", "panel", "detail"], {queryParams:{type: this.dataType}});
   }
 
   deleteCompany(id) {
@@ -152,7 +172,7 @@ export class PayLaterPanelComponent implements OnInit {
     this.payLaterPanelServicer.delete({ panel_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getCompanies();
+        this.getCompanies(true);
 
         this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
       }
@@ -166,6 +186,7 @@ export class PayLaterPanelComponent implements OnInit {
     // let area_id: any = areaSelected[areaSelected.length - 1].value;
     let fd = new FormData();
     fd.append('paylater_panel_id', id);
+    fd.append('paylater_company_type_id', this.dataType === "invoice-financing" ? "1" : this.dataType === "retailer-financing" ? "2" : this.dataType === "kur" ? "3" : "null");
     try {
       const response = await this.payLaterPanelServicer.exportAllPanel(fd).toPromise();
       console.log('he', response.headers);
