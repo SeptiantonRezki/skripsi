@@ -352,12 +352,12 @@ export class TrsProposalCreateComponent implements OnInit {
             result_id.push(item.id);
             
             if (item.territory != "" && item.territory != "-"){
-              result.push(item.fullname + " (" + item.territory + ")");
+              result.push(item.fullname + " (" + item.territory.trim() + ")");
             } else {
               if (item.district == "" || item.district == "-"){
-                result.push(item.fullname + " (" + item.salespoint + ")");
+                result.push(item.fullname + " (" + item.salespoint.trim() + ")");
               } else {
-                result.push(item.fullname + " (" + item.district + ")");
+                result.push(item.fullname + " (" + item.district.trim() + ")");
               }
             }
           });

@@ -949,12 +949,14 @@ export class TrsProposalComponent {
 
   getDetailOrder(proposalID: any): void {
     this.loadingIndicator = true;
-    // this.onLoad = false;
+    console.log(proposalID);
     this.TRSService.getProposalSummary(proposalID).subscribe(
       async res => {
         if (res.status == "success") {
           res = res.data;
           this.detailOrder = res;
+          
+          /*
           let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
           this.detailOrder.total = 0;
 
@@ -964,7 +966,12 @@ export class TrsProposalComponent {
           await res.order_products.map((item: any, idx: number) => {
             this.detailOrder.total = parseInt(this.detailOrder.total) + parseInt(item.total_price);
           });
+          */
+
+          this.loadingIndicator = false;
+          console.log("print");
           this.print();
+          
         }
       }, err => {
         console.log('err', err);
@@ -973,10 +980,11 @@ export class TrsProposalComponent {
     )
   }
 
-  async print() {
+  print() {
     let bodyHtml = {
       ...this.detailOrder,
       created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
+      /*
       products: this.detailOrder.order_products.map(obj => {
         return {
           ...obj,
@@ -985,6 +993,7 @@ export class TrsProposalComponent {
         };
       }),
       total_str: (this.detailOrder.total)
+      */
     };
 
     let popupWin;
