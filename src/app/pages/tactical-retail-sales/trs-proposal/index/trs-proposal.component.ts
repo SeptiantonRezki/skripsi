@@ -13,6 +13,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { GeotreeService } from "app/services/geotree.service";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { LanguagesService } from "app/services/languages/languages.service";
+import moment from 'moment';
+import { GenerateTRS } from "app/classes/generate-trs";
 
 @Component({
   selector: 'app-trs-proposal',
@@ -71,6 +73,9 @@ export class TrsProposalComponent {
   // @Input() wholesalerSelectable = false;
   // @Output() onSelectWholesaler = new EventEmitter();
   @Input() paramsPaginate = {};
+
+  detailOrder: any = null;
+  generateTRS: GenerateTRS = new GenerateTRS();
 
   constructor(
     private router: Router,
@@ -942,12 +947,51 @@ export class TrsProposalComponent {
     });
   }
 
-  goDetail(param?: any): void {
+  getDetailOrder(proposalID: any): void {
+    this.loadingIndicator = true;
+    // this.onLoad = false;
+    this.TRSService.getProposalSummary(proposalID).subscribe(
+      async res => {
+        if (res.status == "success") {
+          res = res.data;
+          this.detailOrder = res;
+          let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
+          this.detailOrder.total = 0;
 
+          this.loadingIndicator = false;
+          this.onLoad = false;
+
+          await res.order_products.map((item: any, idx: number) => {
+            this.detailOrder.total = parseInt(this.detailOrder.total) + parseInt(item.total_price);
+          });
+          this.print();
+        }
+      }, err => {
+        console.log('err', err);
+        this.loadingIndicator = false;
+      }
+    )
   }
 
-  goPrint(param?: any): void {
+  async print() {
+    let bodyHtml = {
+      ...this.detailOrder,
+      created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
+      products: this.detailOrder.order_products.map(obj => {
+        return {
+          ...obj,
+          price_str: (obj.price),
+          total_price_str: (obj.total_price),
+        };
+      }),
+      total_str: (this.detailOrder.total)
+    };
 
+    let popupWin;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(this.generateTRS.html(bodyHtml));
+    popupWin.document.close();
   }
 
   goEdit(param?: any): void {

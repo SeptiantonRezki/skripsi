@@ -1158,6 +1158,8 @@ export class Endpoint {
 
         export_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/data?area=${context.area_id}`,
         export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/list`,
+      
+        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

@@ -86,6 +86,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.postBlobApi(url, body);
   }
 
+  getProposalSummary(id): Observable<any> {
+    const url = this.getUrl(this.namespace, "proposal_summary", { id: id });
+    return this.getApi(url);
+  }
+
 
 
 
