@@ -1,0 +1,56 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="start center" class="top-table pt-8">
+        <form fxFlex="100" *ngIf="{results: filteredOptions | async} as obs">
+          <div class="search-field" fxLayout="row" [style.width.%]="30" style="align-items: center;">
+            <mat-icon>search</mat-icon>
+            <mat-form-field class="is-light tab-search">
+              <input matInput type="text" placeholder="Cari Template Financing" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            </mat-form-field>
+          </div>
+        </form>
+        <button mat-button matSuffix mat-raised-button color="primary" class="add-btn" aria-label="add" (click)="addTemplate()" *ngIf="permission?.buat">
+        <!-- <button mat-button matSuffix mat-raised-button color="primary" class="add-btn" aria-label="add" (click)="addTemplate()"> -->
+          <mat-icon>add</mat-icon>TAMBAH
+        </button>
+      </div>
+
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" 
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+        
+        <ngx-datatable-column name="Template Financing" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-name" (click)="editTemplate(row)" *ngIf="permission?.ubah">{{row.name}}</span>
+            <span *ngIf="!permission?.ubah">{{row.name}}</span>
+            <!-- <span class="row-name" (click)="editTemplate(row)">{{row.name}}</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Last Updated At" prop="updated_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.updated_at}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="primary" (click)="deleteTemplate(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center">
+              <!-- <button mat-icon-button color="primary" (click)="deleteTemplate(row.id)" fxLayoutAlign="center center"> -->
+                <!-- <mat-spinner diameter="10"></mat-spinner> -->
+                <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
+                <ng-template #showIcon>
+                  <mat-icon>delete</mat-icon>
+                </ng-template>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

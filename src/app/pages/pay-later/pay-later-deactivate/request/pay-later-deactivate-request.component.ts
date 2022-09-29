@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -16,6 +16,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
   styleUrls: ['./pay-later-deactivate-request.component.scss']
 })
 export class PayLaterDeactivateRequestComponent implements OnInit {
+  @Input() dataType: string;
   rows: any[];
   selected: any[];
   id: any[];
@@ -57,20 +58,20 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getListDeactivation();
+    this.getListDeactivation(true);
   }
 
-  getListDeactivation() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+  getListDeactivation(resetPage?) {
+    this.pagination.page = resetPage ? 1 : this.dataService.getFromStorage("page_deactivate_request");
+    this.pagination.sort_type = resetPage ? null : this.dataService.getFromStorage("sort_type_deactivate_request");
+    this.pagination.sort = resetPage ? null : this.dataService.getFromStorage("sort_deactivate_request");
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.dataService.setToStorage("page_deactivate_request", this.pagination.page);
+    this.dataService.setToStorage("sort_type_deactivate_request", this.pagination.sort_type);
+    this.dataService.setToStorage("sort_deactivate_request", this.pagination.sort);
 
-    this.offsetPagination = page ? (page - 1) : 0;
-    this.payLaterDeactivateService.get(this.pagination).subscribe(
+    this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
+    this.payLaterDeactivateService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -90,10 +91,17 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
   }
 
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
 
-    this.payLaterDeactivateService.get(this.pagination).subscribe(res => {
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page_deactivate_request", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page_deactivate_request");
+    }
+
+    this.payLaterDeactivateService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -106,9 +114,11 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page_deactivate_request", this.pagination.page);
+    this.dataService.setToStorage("sort_deactivate_request", event.column.prop);
+    this.dataService.setToStorage("sort_type_deactivate_request", event.newValue);
 
-    this.payLaterDeactivateService.get(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -117,13 +127,18 @@ export class PayLaterDeactivateRequestComponent implements OnInit {
 
   updateFilter(string) {
     this.loadingIndicator = true;
-    this.table.offset = 0;
     this.pagination.search = string;
-    this.pagination.page = 1;
 
-    console.log(this.pagination);
+    if (string) {
+      this.pagination.page = 1;
+      this.offsetPagination = 0;
+    } else {
+      const page = this.dataService.getFromStorage("page_deactivate_request");
+      this.pagination.page = page;
+      this.offsetPagination = page ? (page - 1) : 0;
+    }
 
-    this.payLaterDeactivateService.get(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
