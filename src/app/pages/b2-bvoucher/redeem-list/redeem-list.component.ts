@@ -720,8 +720,12 @@ export class RedeemListComponent implements OnInit {
   async exportRedeem() {
     this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let body = {
+      voucher_id: this.detailVoucher.id,
+      selected: this.selected.map(item => item.order_id)
+    }
     try {
-      const response = await this.b2bVoucherService.redeemExport({ voucher_id: this.detailVoucher.id }).toPromise();
+      const response = await this.b2bVoucherService.redeemPaymentExport(body).toPromise();
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
       this.dataService.showLoading(false);
     } catch (error) {
