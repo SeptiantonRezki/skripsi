@@ -276,7 +276,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       coin_variation: ['', Validators.required],
       coins: [],
       limit_spin: [0, [Validators.required, Validators.min(1)]],
-      minimum_transaction: [0, [Validators.required, Validators.min(1)]],
+      minimum_transaction: [0],
       frekuensi_belanja: ['', Validators.required],
       frekuensi_reward: ['', Validators.required]
     });
@@ -1594,6 +1594,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].coin = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
     await this.formPM.get('coins').setValue(newArr);
     this.averageCoin = Math.floor(this.sumCoins());
   }
@@ -1609,6 +1610,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].probability = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
     this.averageCoin = Math.floor(this.sumCoins());
     await this.formPM.get('coins').setValue(newArr);
   }
@@ -1619,6 +1621,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
+        newArr[i].budget_left = newArr[i].total_budget;
       }
       await this.formPM.get('coins').setValue(newArr);
     }
