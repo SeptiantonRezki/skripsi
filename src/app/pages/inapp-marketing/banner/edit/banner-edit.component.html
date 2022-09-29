@@ -187,18 +187,6 @@
                 </mat-radio-group>
               </div>
             </div>
-            <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'customer'">
-              <div class="pb-16 px-24">
-                <div class="" fxLayout="row" fxLayoutAlign="start center">
-                  <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.text22' | translate}}</strong>
-                </div>
-                <mat-radio-group formControlName="content_type_customer" class="radio-group">
-                  <mat-radio-button class="radio-button" *ngFor="let item of listContentTypeCustomer" [value]="item.value">
-                    {{item.name}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
-            </div>
             <div fxFlex *ngIf="formBannerGroup.get('user_group').value === 'retailer'">
               <div class="pb-16 px-24">
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
@@ -266,12 +254,70 @@
             <div class="px-24">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="is_smoker" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}}">
+                    <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['is_smoker'].hasError('required') && formBannerGroup.controls['is_smoker'].touched">
+                    {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="px-24" *ngIf="formBannerGroup.get('is_smoker').value !== 'yes'">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
+                  <mat-select formControlName="verification" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}}">
+                    <mat-option *ngFor="let item of listJenisKonsumen" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['verification'].hasError('required') && formBannerGroup.controls['verification'].touched">
+                    {{'iklan_dalam_aplikasi.spanduk_online.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="px-24">
+              <div fxLayout="row">
+                <mat-form-field fxFlex="45" class="is-light form-primary">
                   <mat-select formControlName="subscription" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
                     <mat-option *ngFor="let item of listSubscription" [value]="item.value">{{item.name}}</mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formBannerGroup.controls['subscription'].hasError('required') && formBannerGroup.controls['subscription'].touched">
                     Status berlangganan {{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="pb-16 px-24">
+              <div class="pb-8" fxLayout="row" fxLayoutAlign="start center">
+                <strong class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.text16' | translate}}</strong>
+              </div>
+              <div class="" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="15" class="is-light form-primary">
+                  <input matInput type="number" formControlName="age_consumer_from" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}">
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('required') && formBannerGroup.controls['age_consumer_from'].touched">
+                  {{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}{{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['age_consumer_from'].hasError('min') && formBannerGroup.get('age_consumer_from').touched">
+                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{formBannerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field fxFlex="15" class="is-light form-primary">
+                  <input matInput type="number" formControlName="age_consumer_to" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}">
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('required') && formBannerGroup.controls['age_consumer_to'].touched">
+                    {{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}{{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="formBannerGroup.controls['age_consumer_to'].hasError('min') && formBannerGroup.get('age_consumer_to').touched">
+                    {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} minimal batasan umur yg telah di isi
                   </mat-error>
                 </mat-form-field>
               </div>

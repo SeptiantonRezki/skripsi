@@ -1131,7 +1131,10 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
         get_menus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/retailer/menu`,
+        get_category_menus: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/categoryproduct`,
         get_option_country: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-country`,
+        get_force_logout_data: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/force-logout-data/${context.id}`,
+
       },
       language_setup: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,

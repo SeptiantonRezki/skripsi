@@ -27,6 +27,7 @@ export class RetailerEditComponent {
   onLoad: Boolean;
   formBankAccount: FormGroup;
   formBankAccountError: any;
+  Busin_code:any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -132,6 +133,19 @@ export class RetailerEditComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
+    if(this.dataService.getDecryptedProfile().country == 'PH'){
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"},
+        { name: "ISR", value: "ISR"}
+      ]
+        }
     this.formdataErrors = {
       name: {},
       address: {},
@@ -348,6 +362,31 @@ export class RetailerEditComponent {
   }
 
   handleCountryPhone(event){
+    if(this.formRetailer.get('country').value !== 'PH'){
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"}
+      ]
+    }
+    else{
+      this.listIC = [
+        { name: "NON-SRC", value: "NON-SRC" },
+        { name: "SRC", value: "SRC" },
+        { name: "GT", value: "GT" },
+        { name: "IMO", value: "IMO" },
+        { name: "LAMP/HOP", value: "LAMP/HOP" },
+        { name: "KA", value: "KA"},
+        { name: "Official Store", value: "Official Store"},
+        { name: "RRP", value: "RRP"},
+        { name: "ISR", value: "ISR"}
+      ]
+    }
     this.country_phone = Utils.getPhoneCode(event.value);
   }
 
@@ -643,10 +682,16 @@ export class RetailerEditComponent {
 
 
   classificationSelectionChange(event) {
+    this.Busin_code = this.detailRetailer.code;
     if (event.value === 'NON-SRC') {
       this.formRetailer.controls['business_code'].setValue('');
       this.formRetailer.controls['business_code'].disable();
-    } else {
+    }
+    else if (event.value === 'ISR') {
+      this.formRetailer.controls['business_code'].setValue(this.Busin_code);
+      this.formRetailer.controls['business_code'].disable();
+    }
+     else {
       this.formRetailer.controls['business_code'].enable();
     }
   }
@@ -699,7 +744,7 @@ export class RetailerEditComponent {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
       const icValue = this.formRetailer.get('InternalClassification').value;
-      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP"];
+      let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP", "ISR"];
 
       let body = {
         _method: 'PUT',
@@ -817,7 +862,7 @@ export class RetailerEditComponent {
     // this.seeSalestree = ( this.isCan(['lihat', 'salestree_toko']) ) ? true : false;
     // this.seeRekening = ( this.isCan(['lihat', 'rekening_toko']) ) ? true : false;
     // this.seeAksesKasir = ( this.isCan(['lihat', 'akses_kasir']) ) ? true : false;
-    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'salestree_toko', 'akses_kasir'];
+    const ALL_ROLES = ['profile_toko', 'status_user_and_business', 'phone_number', 'gsr', 'salestree_toko', 'akses_kasir'];
 
 
     console.log('SEE', this.seePhone);
@@ -849,6 +894,10 @@ export class RetailerEditComponent {
     if (!this.isCan(['ubah', 'phone_number'])) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
+    }
+
+    if (!this.isCan(['ubah', 'gsr'])) {
+      this.disableFields(['gsr']);
     }
 
     if (!this.isCan(['ubah', 'salestree_toko'])) {
