@@ -79,9 +79,9 @@ export class TrsProposalExecutorComponent {
 
   getId(row) {
     let wilayah = row.territory;
-    if(wilayah == ""){
+    if(wilayah == "-"){
       wilayah = row.district;
-      if(wilayah == ""){
+      if(wilayah == "-"){
         wilayah = row.salespoint;
       }
     }

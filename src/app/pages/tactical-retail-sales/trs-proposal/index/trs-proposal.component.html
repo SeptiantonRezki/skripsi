@@ -80,36 +80,36 @@
           <div fxFlex="1%" class=""></div>
 
           <mat-form-field fxFlex="7%" class="orders datepicker is-light">
-            <input matInput #date_start [matDatepicker]="dari" (focus)="dari.open()" placeholder="{{ls.locale.dte.pengatur_jadwal_program.text5}}"
+            <input matInput #date_start [matDatepicker]="date_start" (focus)="date_start.open()" placeholder="{{ls.locale.dte.pengatur_jadwal_program.text5}}"
               formControlName="date_start" (dateChange)="setMinDate(formFilter.get('date_start').value)" readonly>
             <button mat-button *ngIf="formFilter.get('date_start').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('date_start').setValue('')">
               <mat-icon>close</mat-icon>
             </button>
-            <mat-datepicker-toggle matSuffix [for]="dari">
+            <mat-datepicker-toggle matSuffix [for]="date_start">
               <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
             </mat-datepicker-toggle>
-            <mat-datepicker #dari></mat-datepicker>
+            <mat-datepicker #date_start></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field fxFlex="7%" class="orders datepicker is-light">
-            <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
+            <input matInput [matDatepicker]="date_end" (focus)="date_end.open()" [min]="minDate"
               placeholder="{{ls.locale.dte.pengatur_jadwal_program.text6}}" formControlName="date_end" readonly>
             <button mat-button *ngIf="formFilter.get('date_end').value" matSuffix mat-icon-button aria-label="Clear"
               (click)="formFilter.get('date_end').setValue('')">
               <mat-icon>close</mat-icon>
             </button>
-            <mat-datepicker-toggle matSuffix [for]="sampai">
+            <mat-datepicker-toggle matSuffix [for]="date_end">
               <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
             </mat-datepicker-toggle>
-            <mat-datepicker #sampai></mat-datepicker>
+            <mat-datepicker #date_end></mat-datepicker>
           </mat-form-field>
 
           <div fxFlex="1%" class=""></div>
 
-          <mat-form-field fxFlex="10.5%" class="orders dropdown">
-            <mat-select formControlName="status">
-              <mat-option [value]="formFilter.get('status').value" *ngFor="let status of statusList">{{status.name}}</mat-option>
+          <mat-form-field fxFlex="10.5%" class="orders dropdown is-light form-primary">
+            <mat-select placeholder="Status TRS Proposal" formControlName="status">
+              <mat-option *ngFor="let status of statusList" [value]="status.value">{{status.name}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

@@ -135,12 +135,12 @@ export class TrsProposalComponent {
       district: new FormControl(),
       territory: new FormControl(),
 
-      status: "",
+      
       date_start: "",
-      date_end: ""
+      date_end: "",
+      status: "",
     })
 
-    // this.initArea();
     this.initAreaV2();
     this.getTRSProposalList();
 
@@ -544,197 +544,6 @@ export class TrsProposalComponent {
     }
   }
 
-
-  initArea() {
-    this.areaFromLogin.map(area_types => {
-      area_types.map((item, index) => {
-        let level_desc = '';
-        switch (item.type.trim()) {
-          case 'national':
-            level_desc = 'zone';
-            this.formFilter.get('national').setValue(item.id);
-            this.formFilter.get('national').disable();
-            break
-          case 'division':
-            level_desc = 'region';
-            this.formFilter.get('zone').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('zone').disable();
-            break;
-          case 'region':
-            level_desc = 'area';
-            this.formFilter.get('region').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('region').disable();
-            break;
-          case 'area':
-            level_desc = 'salespoint';
-            this.formFilter.get('area').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('area').disable();
-            break;
-          case 'salespoint':
-            level_desc = 'district';
-            this.formFilter.get('salespoint').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('salespoint').disable();
-            break;
-          case 'district':
-            level_desc = 'territory';
-            this.formFilter.get('district').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('district').disable();
-            break;
-          case 'territory':
-            this.formFilter.get('territory').setValue(item.id);
-            if (index !== area_types.length - 1) this.formFilter.get('territory').disable();
-            break;
-        }
-        this.getAudienceArea(level_desc, item.id);
-      });
-    });
-    // this.areaFromLogin.map(item => {
-    //   let level_desc = '';
-    //   switch (item.type.trim()) {
-    //     case 'national':
-    //       level_desc = 'zone';
-    //       this.formFilter.get('national').setValue(item.id);
-    //       this.formFilter.get('national').disable();
-    //       break
-    //     case 'division':
-    //       level_desc = 'region';
-    //       this.formFilter.get('zone').setValue(item.id);
-    //       this.formFilter.get('zone').disable();
-    //       break;
-    //     case 'region':
-    //       level_desc = 'area';
-    //       this.formFilter.get('region').setValue(item.id);
-    //       this.formFilter.get('region').disable();
-    //       break;
-    //     case 'area':
-    //       level_desc = 'salespoint';
-    //       this.formFilter.get('area').setValue(item.id);
-    //       this.formFilter.get('area').disable();
-    //       break;
-    //     case 'salespoint':
-    //       level_desc = 'district';
-    //       this.formFilter.get('salespoint').setValue(item.id);
-    //       this.formFilter.get('salespoint').disable();
-    //       break;
-    //     case 'district':
-    //       level_desc = 'territory';
-    //       this.formFilter.get('district').setValue(item.id);
-    //       this.formFilter.get('district').disable();
-    //       break;
-    //     case 'territory':
-    //       this.formFilter.get('territory').setValue(item.id);
-    //       this.formFilter.get('territory').disable();
-    //       break;
-    //   }
-    //   this.getAudienceArea(level_desc, item.id);
-    // });
-  }
-
-  getAudienceArea(selection, id) {
-    let item: any;
-    switch (selection) {
-      case 'zone':
-        this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-          this.list[selection] = res;
-        });
-
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['region'] = [];
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'region':
-        item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'area':
-        item = this.list['region'].length > 0 ? this.list['region'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'salespoint':
-        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'district':
-        item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['territory'] = [];
-        break;
-      case 'territory':
-        item = this.list['district'].length > 0 ? this.list['district'].filter(item => item.id === id)[0] : {};
-        if (item.name !== 'all') {
-          this.TRSService.getListOtherChildren({ parent_id: id }).subscribe(res => {
-            this.list[selection] = res;
-          });
-        } else {
-          this.list[selection] = []
-        }
-
-        this.formFilter.get('territory').setValue('');
-        break;
-
-      default:
-        break;
-    }
-  }
-
   filteringGeotree(areaList) {
     return areaList;
   }
@@ -767,7 +576,12 @@ export class TrsProposalComponent {
   }
 
   getTRSProposalList(body?) {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }))
+      .filter((item: any) => item.key != "date_start" && item.key != "date_end" && item.key != "status" && item.value !== null && item.value !== "" && item.value.length !== 0);
+
+console.log("areaSelected");
+console.log(areaSelected);
+
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
     // this.pagination.sort_type = "asc";
@@ -844,9 +658,14 @@ export class TrsProposalComponent {
     this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
-    this.pagination['gsw'] = this.gsw.value;
-    this.pagination['date_start'] = this.formFilter.get('date_start').value;
-    this.pagination['date_end'] = this.formFilter.get('date_end').value;
+    //this.pagination['gsw'] = this.gsw.value;
+    this.pagination['start_date'] = moment(this.formFilter.get('date_start').value).format("YYYY-MM-DD");
+    this.pagination['end_date'] = moment(this.formFilter.get('date_end').value).format("YYYY-MM-DD");
+
+    //menghindari invalid
+    if (!this.formFilter.get('date_start').value) delete this.pagination['start_date'];
+    if (!this.formFilter.get('date_end').value) delete this.pagination['end_date'];
+
     this.pagination['status'] = this.formFilter.get('status').value;
     if (this.formFilter.get('status').value === 'all') this.pagination['status'] = null;
 
