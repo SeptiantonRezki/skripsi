@@ -81,7 +81,6 @@ export class TrsProposalCreateComponent implements OnInit {
   selectedKecamatan: any = [];
   selectedProduct: any = [];
 
-  image_list: Array<any> = [];
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
@@ -125,8 +124,8 @@ export class TrsProposalCreateComponent implements OnInit {
       geotagging: ['wajib', Validators.required],
       custCode1: ["", Validators.required],
       custName1: ["", Validators.required],
-      custCode2: ["", Validators.required],
-      custName2: ["", Validators.required],
+      custCode2: [""],
+      custName2: [""],
       maxExecutor: [1, Validators.required],      
       flowingly: [""],
       
@@ -226,19 +225,14 @@ export class TrsProposalCreateComponent implements OnInit {
     this.fileList = [
       ...this.fileList,
       file
-    ]
-    var myReader: FileReader = new FileReader();
+    ];
 
-    myReader.onloadend = (e) => {
-      this.image_list = [...this.image_list, myReader.result];
-    }
-
-    myReader.readAsDataURL(file);
+    console.log("this.fileList");
+    console.log(this.fileList);
   }
 
   removeImage(idx) {
     console.log('index you find!', idx);
-    this.image_list.splice(idx, 1);
     this.fileList.splice(idx, 1);
   }
 
@@ -362,7 +356,7 @@ export class TrsProposalCreateComponent implements OnInit {
             }
           });
   
-          this.selectedExecutor = result_id.join("_");
+          this.selectedExecutor = result_id.join("__");
           this.formCreateProposal.get('executor_selected').setValue(result.join(", "));
   
           console.log(result);
@@ -392,18 +386,17 @@ export class TrsProposalCreateComponent implements OnInit {
       this.dialogRef = this.dialog.open(TrsProposalKecamatanComponent, dialogConfig);
   
       this.dialogRef.afterClosed().subscribe(response => {
-        
-        console.log("asdfasdfaf");
-        console.log(response);
+        // regency = kabupaten
+        // district = kecamatan
         var result = [];
         var result_id = [];
         if (typeof response !== "undefined") {
           response.forEach(function (item) {
-            result_id.push(item.id);
+            result_id.push(item.regency + "_" + item.district);
             result.push(item.regency + " - " + item.district);
           });
   
-          this.selectedKecamatan = result_id.join("_");
+          this.selectedKecamatan = result_id.join("__");
           this.formCreateProposal.get('kecamatan_selected').setValue(result.join(", "));
   
           console.log(result);
@@ -449,8 +442,6 @@ export class TrsProposalCreateComponent implements OnInit {
       });
     }
   }
-
-
 
   parseArea(type) {
     // return type === 'division' ? 'zone' : type;

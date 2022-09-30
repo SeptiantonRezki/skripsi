@@ -17,9 +17,22 @@
 .body-layout:focus-within {
   background-color: #fff;
 }
-
 .field-label {
   font-size: 14px;
   transform: scale(0.75);
   transform-origin: 0 0;
+}
+
+:host ::ng-deep .mat-form-field.readonly{
+  div{
+    div{
+      background-color: #ddd;
+    }
+  }
+}
+
+.deleteFile {
+  position: absolute;
+  top: 3px;
+  right: 5px;
 }

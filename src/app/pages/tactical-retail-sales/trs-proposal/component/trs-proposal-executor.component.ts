@@ -78,15 +78,7 @@ export class TrsProposalExecutorComponent {
   }
 
   getId(row) {
-    let wilayah = row.territory;
-    if(wilayah == "-"){
-      wilayah = row.district;
-      if(wilayah == "-"){
-        wilayah = row.salespoint;
-      }
-    }
-
-    return row.id+"_"+wilayah;
+    return row.id;
   }
 
   onSelect({ selected }) {
