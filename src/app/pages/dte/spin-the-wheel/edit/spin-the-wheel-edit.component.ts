@@ -273,12 +273,12 @@ export class SpinTheWheelEditComponent implements OnInit {
       category: [''],
       product_srcc: [''],
       category_srcc: [''],
-      coin_variation: '',
+      coin_variation: ['', Validators.required],
       coins: [],
-      limit_spin: '',
-      minimum_transaction: '',
-      frekuensi_belanja: '',
-      frekuensi_reward: ''
+      limit_spin: [0, [Validators.required, Validators.min(1)]],
+      minimum_transaction: [0],
+      frekuensi_belanja: ['', Validators.required],
+      frekuensi_reward: ['', Validators.required]
     });
 
     if(this.isDetail){
@@ -1586,7 +1586,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     }
     await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = Math.floor(this.sumPM('coin') / event.target.value);
+    this.averageCoin = Math.floor(this.sumCoins());
   }
 
   async changeCoin(event, index) {
@@ -1594,8 +1594,9 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].coin = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
     await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = Math.floor(this.sumPM('coin') / this.formPM.get('coin_variation').value);
+    this.averageCoin = Math.floor(this.sumCoins());
   }
 
   async changeSlice(event, index) {
@@ -1609,6 +1610,8 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].probability = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
+    this.averageCoin = Math.floor(this.sumCoins());
     await this.formPM.get('coins').setValue(newArr);
   }
 
@@ -1618,6 +1621,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
+        newArr[i].budget_left = newArr[i].total_budget;
       }
       await this.formPM.get('coins').setValue(newArr);
     }
@@ -1634,18 +1638,52 @@ export class SpinTheWheelEditComponent implements OnInit {
     return sum;
   }
 
+  sumCoins() {
+    const coins = this.formPM.get('coins').value;
+    let sum = 0;
+    if (coins !== null) {
+      for (let i = 0; i < coins.length; i++) {
+        sum += coins[i]['coin'] * coins[i]['probability'] / 100;
+      }
+    }
+    return sum;
+  }
+
+  checkCoins() {
+    let coin = '';
+    let slice = '';
+    let probability = '';
+
+    const coins = this.formPM.get('coins').value;
+    if (coins !== null) {
+      for (let i = 0; i < coins.length; i++) {
+        if (coins[i]['coin'] === '') {
+          coin = 'Coin';
+        }
+        if (coins[i]['slice'] === '') {
+          slice = coin !== '' ? ', Slice' : 'Slice';
+        }
+        if (coins[i]['probability'] === '') {
+          probability = slice !== '' ? ', Probability' : 'Probability';
+        }
+      }
+    }
+    return coin + slice + probability;
+  }
+
   async submitPM() {
     const sumProbability = this.sumPM('probability');
-    console.log(sumProbability);
-    if (this.formPM.get('frekuensi_belanja').value === '') {
-      this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
-      return false;
-    } else if (this.formPM.get('frekuensi_reward').value === '') {
-      this.dialogService.openSnackBar({ message: 'Maksimal Frekuensi Reward wajib diisi.' });
-      return false;
-    }
 
-    if (sumProbability === 100) {
+    if (this.formPM.valid) {
+      const checkCoins = this.checkCoins();
+      if ( checkCoins !== '') {
+        this.dialogService.openSnackBar({ message: `${checkCoins} wajib diisi` });
+        return false;
+      }
+      if (sumProbability !== 100) {
+        this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+        return false;
+      }
       let body = {
         task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
         limit_spin: this.formPM.get('limit_spin').value,
@@ -1700,6 +1738,9 @@ export class SpinTheWheelEditComponent implements OnInit {
             this.isChecked = true;
             this.panelBlast = res.data.panel_count;
           }
+          this.editableCoin = false;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
           this.dialogRef.close();
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
@@ -1713,7 +1754,8 @@ export class SpinTheWheelEditComponent implements OnInit {
         processCheck.unsubscribe();
       });
     } else {
-      this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+      commonFormValidator.validateAllFields(this.formPM);
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 
