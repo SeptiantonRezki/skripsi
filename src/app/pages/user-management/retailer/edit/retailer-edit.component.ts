@@ -28,6 +28,11 @@ export class RetailerEditComponent {
   formBankAccount: FormGroup;
   formBankAccountError: any;
   Busin_code:any;
+  viewPhoneNumberStatus: Boolean;
+  viewBankStatus: Boolean;
+  editPhoneNumberStatus: Boolean;
+  editBankStatus: Boolean;
+  viewPhoneNumberPBStatus: Boolean;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -133,7 +138,7 @@ export class RetailerEditComponent {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.onLoad = false;
     this.permission = this.roles.getRoles('principal.retailer');
-    if(this.dataService.getDecryptedProfile().country == 'PH'){
+    if(this.dataService.getDecryptedProfile().country == 'PH') {
       this.listIC = [
         { name: "NON-SRC", value: "NON-SRC" },
         { name: "SRC", value: "SRC" },
@@ -145,7 +150,14 @@ export class RetailerEditComponent {
         { name: "RRP", value: "RRP"},
         { name: "ISR", value: "ISR"}
       ]
-        }
+    }
+
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number_view') > -1;
+    this.viewBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko_view') > -1;
+    this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number') > -1;
+    this.editBankStatus = Object.values(this.permission).indexOf('principal.retailer.rekening_toko') > -1;
+    this.viewPhoneNumberPBStatus = Object.values(this.permission).indexOf('principal.retailer.phone_number_pb_view') > -1;
+
     this.formdataErrors = {
       name: {},
       address: {},
@@ -482,14 +494,20 @@ export class RetailerEditComponent {
         this.country_phone = Utils.getPhoneCode("", this.detailRetailer.phone);
       }
     }
-    
+    let phone = '';
+    if (this.viewPhoneNumberStatus) {
+      phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+    } else {
+      phone = Utils.reMaskInput(this.detailRetailer.phone, 4);
+    }
+
     this.formRetailer.setValue({
       name: this.detailRetailer.name || '',
       address: this.detailRetailer.address || '',
       business_code: this.detailRetailer.classification !== 'NON-SRC' ? this.detailRetailer.code : '',
       owner: this.detailRetailer.owner || '',
       country: this.detailRetailer.country || '',
-      phone: (this.detailRetailer.phone) ? (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1])) : '',
+      phone: (this.detailRetailer.phone) ? phone : '',
       status: this.detailRetailer.status || '',
       status_user: this.detailRetailer.status_user || 'active',
       latitude: this.detailRetailer.latitude || '',
@@ -513,11 +531,11 @@ export class RetailerEditComponent {
     });
 
     this.formBankAccount.setValue({
-      account_number: this.detailRetailer.bank_account_number || '',
-      account_name: this.detailRetailer.bank_account_name || '',
+      account_number: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.bank_account_number, 4) : this.detailRetailer.bank_account_number || '',
+      account_name: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.bank_account_name, 3) : this.detailRetailer.bank_account_name || '',
       bank_final_validation: this.detailRetailer.bank_final_validation ? 1 : 0,
       bank_name: this.detailRetailer.bank_name || '',
-      branch: this.detailRetailer.branch || '',
+      branch: !this.viewBankStatus ? Utils.reMaskInput(this.detailRetailer.branch, 3) : this.detailRetailer.branch || '',
     });
 
     this.formRefferalCode.setValue({
@@ -546,6 +564,10 @@ export class RetailerEditComponent {
       this.npwp.disable();
       this.pkp.disable();
     }
+  }
+
+  remaskTemplate(validate, value, totalShowChar) {
+    return !validate ? Utils.reMaskInput(value, totalShowChar) : value;
   }
 
   getAudienceArea(selection, id) {
@@ -773,6 +795,16 @@ export class RetailerEditComponent {
         order_online: this.formRetailer.get('order_online').value,
       };
 
+      if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
+        delete body.phone;
+      }
+      if (!this.viewBankStatus || !this.editBankStatus) {
+        delete body.bank_account_name;
+        delete body.bank_account_number;
+        delete body.bank_name;
+        delete body.branch;
+      }
+
       console.log(body);
       if (this.pkp.value === '') {
         body['pkp'] = '';
@@ -891,7 +923,7 @@ export class RetailerEditComponent {
 
     }
 
-    if (!this.isCan(['ubah', 'phone_number'])) {
+    if (!this.editPhoneNumberStatus) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
     }
@@ -906,9 +938,15 @@ export class RetailerEditComponent {
       this.rmValidators(fields);
     }
 
+    if (!this.editBankStatus) {
+      const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
+      this.disableFields(fields, this.formBankAccount);
+      this.rmValidators(fields, this.formBankAccount);
+    }
+
     if (!this.isCan(['ubah', 'rekening_toko'])) {
 
-      const fields = ['account_number', 'bank_name', 'account_name', 'branch', 'bank_final_validation'];
+      const fields = ['bank_final_validation'];
       this.disableFields(fields, this.formBankAccount);
       this.rmValidators(fields, this.formBankAccount);
       this.npwp.disable();
