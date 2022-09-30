@@ -115,6 +115,7 @@ export class ImportAudiencePersonalizeComponent implements OnInit {
     let fd = new FormData();
     this.idbService.reset();
     fd.append('file', this.files);
+    fd.append('create_data[business_type]', this.detailData.business_type);
     
     this.dataService.showLoading(true);
     

@@ -178,6 +178,7 @@ export class ImportAudienceDialogComponent {
 
     const {trade_audience_group_id} = this.detailData;
     const {formAudience, pagination} = this.detailData;
+    if (formAudience) formAudience.business_type = "all";
     console.log({formAudience, pagination});
     
     if (this.requestingPreview) {
@@ -422,6 +423,10 @@ export class ImportAudienceDialogComponent {
     // this.p_pagination = { page: this.p_page, per_page: 15, last_page: this.lastPage, total: this.totalData };
     Page.renderPagination(this.pagination, data.data);
     this.dataService.showLoading(false);
+
+    if (!data.is_valid) {
+      this.dialogService.openSnackBar({ message: "File yang Anda upload tidak sesuai" });
+    }
   }
 
   setRequesting(reqType) {

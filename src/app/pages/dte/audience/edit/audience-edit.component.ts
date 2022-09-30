@@ -53,6 +53,12 @@ export class AudienceEditComponent {
     { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
+  businessType: any = [
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
+    { name: this.translate.instant('global.menu.retailer'), value: "retailer" },
+    { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" }
+  ];
+
   selected = [];
   area: Array<any>;
   queries: any;
@@ -208,7 +214,8 @@ export class AudienceEditComponent {
       // district: [""],
       // teritory: [""],
       trade_scheduler_id: [""],
-      trade_creator_id: [""]
+      trade_creator_id: [""],
+      business_type: ["all"],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -339,6 +346,18 @@ export class AudienceEditComponent {
     });
 
     this.formFilterRetailer.valueChanges.debounceTime(1000).subscribe((res) => {
+      this.getRetailer();
+    });
+
+    this.formAudience.get("business_type").valueChanges.debounceTime(1000).subscribe((res) => {
+      this.selected = [];
+
+      if (res) {
+        this.pagination['business_type'] = res;
+      } else {
+        delete this.pagination['business_type'];
+      }
+
       this.getRetailer();
     });
 
@@ -898,6 +917,7 @@ export class AudienceEditComponent {
     this.formAudience.get('max').setValue(this.detailAudience.max);
     this.formAudience.get('limit').setValue('limit');
     this.formAudience.get('audience_type').setValue(this.detailAudience.audience_type);
+    this.formAudience.get('business_type').setValue(this.detailAudience.business_type);
     this.formAudience.get('type').setValue(this.detailAudience.type);
     if (this.detailAudience.type === 'mission' && this.detailAudience.audience_type === 'scheduler') this.formAudience.get('trade_scheduler_id').setValue(this.detailAudience.trade_scheduler_id);
     if (this.detailAudience.type === 'challenge') this.formAudience.get('trade_creator_id').setValue(this.detailAudience.trade_creator_id);
@@ -1232,6 +1252,7 @@ export class AudienceEditComponent {
           _method: 'PUT',
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
+          business_type: this.formAudience.get("business_type").value,
         };
   
         body["type"] = this.formAudience.get("type").value;
@@ -1290,8 +1311,8 @@ export class AudienceEditComponent {
           let body = {
             _method: 'PUT',
             name: this.formAudience.get("name").value,
-            trade_scheduler_id: this.formAudience.get("trade_scheduler_id")
-              .value,
+            trade_scheduler_id: this.formAudience.get("trade_scheduler_id").value,
+            business_type: this.formAudience.get("business_type").value,
           };
 
           if (this.formAudience.get("limit").value !== "pick-all") {
@@ -1349,6 +1370,7 @@ export class AudienceEditComponent {
           _method: 'PUT',
           name: this.formAudience.get("name").value,
           trade_creator_id: this.formAudience.get("trade_creator_id").value,
+          business_type: this.formAudience.get("business_type").value,
         };
 
         if (this.formAudience.get("limit").value !== "pick-all") {
@@ -1665,6 +1687,15 @@ export class AudienceEditComponent {
     this.dialogRef = this.dialog.open(ImportAudienceDialogComponent, dialogConfig);
 
     this.dialogRef.afterClosed().subscribe(response => {
+      this.detailAudience = this.dataService.getFromStorage('detail_audience');
+
+      if (!this.ENABLE_IMPORT_IF.includes(this.detailAudience.import_audience_status)) {
+        this.formAudience.get("business_type").setValue("all");
+        this.formAudience.get("business_type").disable();
+      } else {
+        this.formAudience.get("business_type").enable();
+      }
+
       if (response) {
         
         this.importAudienceResult = {...response};
@@ -1672,7 +1703,6 @@ export class AudienceEditComponent {
         // this.selected = response;
         // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
-      this.detailAudience = this.dataService.getFromStorage('detail_audience');
     });
   }
 
