@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from 'app/services/user-management/customer.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { PagesName } from 'app/classes/pages-name';
+import { Utils } from 'app/classes/utils';
 
 @Component({
   selector: 'app-customer-detail',
@@ -13,6 +15,9 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 export class CustomerDetailComponent {
   formCustomer: FormGroup;
   onLoad = true;
+  permission: any;
+  roles: PagesName = new PagesName();
+  viewPhoneNumberStatus: Boolean;
 
   customer_id: any;
   detailCustomer: any;
@@ -37,23 +42,33 @@ export class CustomerDetailComponent {
     private customerService: CustomerService,
     private ls: LanguagesService
   ) {
+    this.permission = this.roles.getRoles('principal.customer.');
+
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.customer.phone_number_and_dob_view') > -1;
     this.activatedRoute.url.subscribe(param => {
       this.customer_id = param[2].path;
-    })
+    });
   }
 
   ngOnInit() {
     this.customerService.getDetail({ customer_id: this.customer_id }).subscribe(
       res => {
         this.onLoad = false;
+        let date = '';
+        if (this.viewPhoneNumberStatus) {
+          date = res.birth_date.split('-').reverse().join('/');
+        } else {
+          const arrDate = res.birth_date.split('-');
+          date = `${arrDate[2]}/${arrDate[1]}/${arrDate[0]}`;
+        }
         this.formCustomer = this.formBuilder.group({
           status: [res.status],
           fullname: [res.fullname],
           gender: [res.gender === 'male' ? "Laki-laki" : "Perempuan"],
           city: [res.city.name],
-          birth_date: [res.birth_date.split('-').reverse().join('/')],
+          birth_date: [date],
           id_number: [res.id_number],
-          phone: [res.phone],
+          phone: [!this.viewPhoneNumberStatus ? Utils.reMaskInput(res.phone, 4) : res.phone],
           is_smoking: [res.is_smoking === 1 ? 'Ya, Saya Merokok' : 'Tidak, Saya Tidak Merokok'],
           email: [res.email || '-'],
           refferal_name: [res.refferal_name || '-'],
