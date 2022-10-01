@@ -133,6 +133,27 @@ export class TrsProposalProductComponent {
 
       this.loaded = true;
       this.rows = res.data;
+
+      console.log("this.detailData.selected");
+      console.log(this.detailData.selected);
+
+      if (this.detailData.selected != ""){
+        let IDselected = (this.detailData.selected).split('__');
+
+        for (let index = 0; index < this.rows.length; index++) {
+          if (IDselected.includes(this.rows[index].id.toString())){
+            this.selected.push(this.rows[index]);
+          }
+        }
+
+        if(this.selected.length >= this.detailData.max){
+          //alert("jumlah executor sudah sesuai, jangan memilih lagi !");
+          this.checkDisabled = true;
+        } else if(this.selected.length < this.detailData.max){
+          this.checkDisabled = false;
+        }
+      }
+
       this.dataService.showLoading(false);
 
     }, err => {

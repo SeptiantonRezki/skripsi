@@ -325,6 +325,7 @@ export class TrsProposalCreateComponent implements OnInit {
         IMPORT_FROM_METHOD: 'CREATE',
         max: this.formCreateProposal.get('maxExecutor').value,
         area: this.selectedArea,
+        selected: this.selectedExecutor,
         formCreateProposal,
       };
   
@@ -375,6 +376,7 @@ export class TrsProposalCreateComponent implements OnInit {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
         area: this.selectedSalesPoint,
+        selected: this.selectedKecamatan,
         formCreateProposal,
       };
   
@@ -387,7 +389,7 @@ export class TrsProposalCreateComponent implements OnInit {
         var result_id = [];
         if (typeof response !== "undefined") {
           response.forEach(function (item) {
-            result_id.push(item.regency + "_" + item.district);
+            result_id.push(item.id);
             result.push(item.regency + " - " + item.district);
           });
   
@@ -415,6 +417,7 @@ export class TrsProposalCreateComponent implements OnInit {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
         area: this.selectedArea,
+        selected: this.selectedProduct,
         formCreateProposal,
       };
   
@@ -429,7 +432,7 @@ export class TrsProposalCreateComponent implements OnInit {
             result.push(item.code + " (" + item.name + ")");
           });
   
-          this.selectedProduct = result_id.join("_");
+          this.selectedProduct = result_id.join("__");
           this.formCreateProposal.get('product_selected').setValue(result.join(", "));
   
           console.log(result);

@@ -76,7 +76,7 @@ export class TrsProposalKecamatanComponent {
   }
 
   getId(row) {
-    return row.regency+"_"+row.district;
+    return row.id;
   }
 
   onSelect({ selected }) {
@@ -133,6 +133,24 @@ export class TrsProposalKecamatanComponent {
 
       this.loaded = true;
       this.rows = res.data;
+
+      if (this.detailData.selected != ""){
+        let IDselected = (this.detailData.selected).split('__');
+
+        for (let index = 0; index < this.rows.length; index++) {
+          if (IDselected.includes(this.rows[index].id)){
+            this.selected.push(this.rows[index]);
+          }
+        }
+
+        if(this.selected.length >= this.detailData.max){
+          //alert("jumlah executor sudah sesuai, jangan memilih lagi !");
+          this.checkDisabled = true;
+        } else if(this.selected.length < this.detailData.max){
+          this.checkDisabled = false;
+        }
+      }
+
       this.dataService.showLoading(false);
 
     }, err => {
