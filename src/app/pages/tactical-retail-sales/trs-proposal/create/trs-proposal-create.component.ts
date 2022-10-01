@@ -210,7 +210,7 @@ export class TrsProposalCreateComponent implements OnInit {
   }
 
   
-  changeImage(evt) {
+  changeFile(evt) {
     this.readThis(evt);
   }
 
@@ -272,15 +272,10 @@ export class TrsProposalCreateComponent implements OnInit {
       fd.append('products', this.selectedProduct);
 
       this.fileList.map(imgr => {
-        fd.append('images[]', imgr)
+        fd.append('files[]', imgr)
       })
 
-      console.log("asdf");
-
       this.TRSService.putProposal(fd).subscribe(res => {
-
-        console.log("ggggg");
-
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22

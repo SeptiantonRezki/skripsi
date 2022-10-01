@@ -248,7 +248,7 @@
                     <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
                       <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
                         [accept]="accept" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                        (fileChange)="changeImage($event)">
+                        (fileChange)="changeFile($event)">
                         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                           <span matPrefix>Pilih File
                           </span>
@@ -258,7 +258,7 @@
                   </div>
                   <div fxLayout="column" style="margin-top: 5px;">
                     <div class="" *ngFor="let item of fileList;let i = index" style="margin: 5px 0 5px 0;">
-                      <div style="padding: 10px 10px 1px;background-color: #ff9bbb;position: relative;">
+                      <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
                         {{ item.name }}
                         <div class="deleteFile">
                           <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
