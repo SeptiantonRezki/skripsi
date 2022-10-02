@@ -108,7 +108,7 @@ export class GenerateTRS {
                 : ${detailProposal.area_name}<br />
                 : ${detailProposal.salespoint_name}<br />
                 : ${detailProposal.created_by} (${detailProposal.created_at})<br />
-                : ${detailProposal.modified_by}  (${detailProposal.modified_at})
+                : ${detailProposal.updated}
               </div>
             </div>
           </div>

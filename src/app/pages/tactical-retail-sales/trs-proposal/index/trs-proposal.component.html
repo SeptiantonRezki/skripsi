@@ -120,7 +120,7 @@
         [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
         (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'"
-        [sorts]="[{prop: 'program_code', dir: 'desc'}]">
+        [sorts]="[{prop: 'created_at', dir: 'desc'}]">
 
         <ngx-datatable-column name="Program Code" prop="program_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -160,7 +160,7 @@
 
         <ngx-datatable-column name="Modified At" prop="modified_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.modified_at }}
+            {{row.updated_at }}
           </ng-template>
         </ngx-datatable-column>
 

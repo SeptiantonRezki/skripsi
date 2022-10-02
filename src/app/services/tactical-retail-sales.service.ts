@@ -74,16 +74,9 @@ export class TacticalRetailSalesService extends BaseService {
   }
 
 
-
-  exportProposal(context?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_proposal", context); //export
-    return this.getBlobApi(url);
-  }
-
   exportProposalNew(queryParams?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_proposal_new", body);
-    // return this.getBlobApi(url, queryParams);
-    return this.postBlobApi(url, body);
+    const url = this.getUrl(this.namespace, "export_proposal_new");
+    return this.getBlobApi(url, queryParams);
   }
 
   getProposalSummary(id): Observable<any> {
