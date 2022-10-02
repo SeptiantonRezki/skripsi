@@ -92,6 +92,7 @@ export class TrsProposalComponent {
     this.selected = [];
 
     this.permission = this.roles.getRoles('principal.trsproposal');
+    console.log("this.permission");
     console.log(this.permission);
 
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
@@ -803,16 +804,6 @@ console.log(areaSelected);
     let bodyHtml = {
       ...this.detailOrder,
       created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
-      /*
-      products: this.detailOrder.order_products.map(obj => {
-        return {
-          ...obj,
-          price_str: (obj.price),
-          total_price_str: (obj.total_price),
-        };
-      }),
-      total_str: (this.detailOrder.total)
-      */
     };
 
     let popupWin;

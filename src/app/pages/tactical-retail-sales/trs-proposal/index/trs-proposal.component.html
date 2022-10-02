@@ -5,7 +5,7 @@
       <button (click)="exportProposal()" mat-raised-button type="button" class="">
         <mat-icon>arrow_upward</mat-icon> Export XLS
       </button>
-      <button *ngIf="permission?.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      <button *ngIf="permission.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/tactical-retail-sales','trs-proposal','create']">
         <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
       </button>
@@ -119,7 +119,8 @@
         [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
         [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'">
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'"
+        [sorts]="[{prop: 'program_code', dir: 'desc'}]">
 
         <ngx-datatable-column name="Program Code" prop="program_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -174,10 +175,10 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">
-              <button mat-icon-button color="" (click)="goDetail(row)">
+              <button mat-icon-button color="" (click)="goDetail(row)" *ngIf="permission.lihat">
                 <mat-icon class="secondary-text">visibility</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="goEdit(row)">
+              <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="" (click)="getDetailOrder(row.program_code)">
