@@ -730,6 +730,9 @@ export class RedeemListComponent implements OnInit {
       voucher_id: this.detailVoucher.id,
       order_id: this.selected.map(item => item.order_id)
     }
+    if(this.allRowsSelected){
+      body.order_id = this.rows.map(item => item.order_id)
+    }
     try {
        const response = await this.b2bVoucherService.redeemPaymentExport(body).toPromise();
       console.log(response);
