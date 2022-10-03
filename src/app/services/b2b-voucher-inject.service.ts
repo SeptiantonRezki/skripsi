@@ -128,7 +128,7 @@ export class B2BVoucherInjectService extends BaseService {
   }
   redeemPaymentExport(body: any, context?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "redeemPaymentExport", context);
-    return this.postApi(url, body);
+    return this.postBlobAsJsonApi(url, body);
   }
 
   

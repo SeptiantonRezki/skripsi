@@ -14,11 +14,6 @@
         <mat-icon>vertical_align_top</mat-icon> Export XLS
       </button>
     </div>
-    <div class="button-row">
-      <button mat-flat-button style="width: 160px" color="white" (click)="getexportRedeem()">
-        <mat-icon>vertical_align_top</mat-icon> Get Export XLS
-      </button>
-    </div>
   </div>
 
   <!-- <h4 style="text-align: center;">Page Under Construction!</h4> -->
@@ -150,7 +145,7 @@
     </ngx-datatable-column>
     
     <ngx-datatable-column name="{{ ls.locale.global.label.order_id_payment }}" prop="order_id">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_id}}</ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value" >{{row.order_id}}</ng-template>
     </ngx-datatable-column>
 
     <ngx-datatable-column name="Tanggal" prop="payment_date"> <!-- // TODO -->

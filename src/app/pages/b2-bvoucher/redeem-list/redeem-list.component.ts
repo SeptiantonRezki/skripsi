@@ -718,32 +718,32 @@ export class RedeemListComponent implements OnInit {
   }
 
   async exportRedeem() {
-    // this.dataService.showLoading(true);
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: this.ls.locale.global.messages.text12
+      })
+      return;
+    }
+    this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     let body = {
       voucher_id: this.detailVoucher.id,
-      selected: this.selected.map(item => item.order_id)
+      order_id: this.selected.map(item => item.order_id)
     }
-    this.b2bVoucherService.redeemPaymentExport(body).subscribe(response => {
+    try {
+       const response = await this.b2bVoucherService.redeemPaymentExport(body).toPromise();
       console.log(response);
-      // this.dataService.showLoading(false);
-      this.downLoadFile(response,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
-      })
-    // try {
-    //   const response = await this.b2bVoucherService.redeemPaymentExport(body).toPromise();
-    //   console.log(response);
-    //   this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
-    //   this.dataService.showLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   debugger;
-    //   if (!(error instanceof HttpErrorResponse)) {
-    //     error = error.rejection;
-    //   }
-    //   console.log('err', error);
-    //   alert('Terjadi kesalahan saat Export File');
-    //   this.dataService.showLoading(false);
-    // }
+       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
+       this.dataService.showLoading(false);
+     } catch (error) {
+       console.log(error);
+       if (!(error instanceof HttpErrorResponse)) {
+        error = error.rejection;
+       }
+       console.log('err', error);
+      alert('Terjadi kesalahan saat Export File');
+       this.dataService.showLoading(false);
+    }
   }
 
   downLoadFile(data: any, type: string, fileName: string) {
@@ -776,29 +776,5 @@ export class RedeemListComponent implements OnInit {
     }, 100);
   }
 
-  async getexportRedeem() {
-    // this.dataService.showLoading(true);
-    const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
-    this.b2bVoucherService.redeemExport({ voucher_id: this.detailVoucher.id }).subscribe(response => {
-      console.log(response);
-      this.downLoadFile(response,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
-      // this.dataService.showLoading(false);
-      })
-    // try {
-    //   const response = await this.b2bVoucherService.redeemPaymentExport(body).toPromise();
-    //   console.log(response);
-    //   this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
-    //   this.dataService.showLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   debugger;
-    //   if (!(error instanceof HttpErrorResponse)) {
-    //     error = error.rejection;
-    //   }
-    //   console.log('err', error);
-    //   alert('Terjadi kesalahan saat Export File');
-    //   this.dataService.showLoading(false);
-    // }
-  }
 
 }

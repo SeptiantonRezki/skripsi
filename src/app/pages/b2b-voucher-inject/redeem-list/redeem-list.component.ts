@@ -724,9 +724,15 @@ export class RedeemListComponent implements OnInit {
   }
 
   async exportRedeem() {
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: this.ls.locale.global.messages.text12
+      })
+      return;
+    }
     let body = {
       voucher_id: this.detailVoucher.id,
-      selected: this.selected.map(item => item.id)
+      order_id: this.selected.map(item => item.id)
     }
     this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
