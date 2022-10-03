@@ -15,16 +15,17 @@
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
     
     <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-      <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
+      <mat-form-field fxFlex="25%" class="dropdown is-light form-primary">
         <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="changeSales($event)">
           <mat-option *ngFor="let sp of salespointList" [value]="sp">{{sp}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
+      <mat-form-field fxFlex="25%" class="dropdown is-light form-primary">
         <mat-select placeholder="District" formControlName="district" (selectionChange)="changeDistrict($event)">
           <mat-option *ngFor="let diss of districtList" [value]="diss">{{diss}}</mat-option>
         </mat-select>
       </mat-form-field>
+      <div fxFlex="10%" class=""></div>
       <div class="search-field" fxFlex="30%" class="dropdown is-light form-primary">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
@@ -39,6 +40,7 @@
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
         [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
+        [sorts]="[{prop: 'fullname', dir: 'asc'}]"
         >
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template>
@@ -57,7 +59,7 @@
 
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Name" prop="name">
+        <ngx-datatable-column name="Name" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.fullname}}
           </ng-template>

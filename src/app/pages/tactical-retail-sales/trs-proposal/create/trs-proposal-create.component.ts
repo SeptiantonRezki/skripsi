@@ -287,17 +287,21 @@ export class TrsProposalCreateComponent implements OnInit {
   setCustName(id, component_name): void {
     if (id) {
       if (id.length == 10) {
-        id = id+"__"+this.selectedArea;
-        this.dataService.showLoading(true);
-        this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
-          this.dataService.showLoading(false);
-          if (res.status ==  'success'){
-            this.formCreateProposal.get(component_name).setValue(res.data.name);
-          } else {
-            alert(res.message);
-            this.formCreateProposal.get(component_name).setValue("");
-          }
-        })
+        if (this.selectedSalesPoint == ""){
+          alert("Pilih salespoint terlebih dahulu !");
+        } else {
+          id = id+"__"+this.selectedSalesPoint;
+          this.dataService.showLoading(true);
+          this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
+            this.dataService.showLoading(false);
+            if (res.status ==  'success'){
+              this.formCreateProposal.get(component_name).setValue(res.data.name);
+            } else {
+              alert(res.message);
+              this.formCreateProposal.get(component_name).setValue("");
+            }
+          })
+        }
       }
     }
   }

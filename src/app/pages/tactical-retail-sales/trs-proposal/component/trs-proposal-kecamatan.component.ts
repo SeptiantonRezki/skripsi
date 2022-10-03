@@ -187,8 +187,10 @@ export class TrsProposalKecamatanComponent {
       this.temp = [...res.data];
       this.kabupatenList = this.rows.map(a => a.regency.trim());
       this.kabupatenList = this.kabupatenList.filter((x, i, a) => a.indexOf(x) == i);
-      this.kabupatenList = ["SEMUA KABUPATEN", ...this.kabupatenList];
-
+      if (this.kabupatenList.length > 1){
+        this.kabupatenList = ["SEMUA KABUPATEN", ...this.kabupatenList];
+      }
+      
       if (this.detailData.selected != ""){
         let IDselected = (this.detailData.selected).split('__');
 
