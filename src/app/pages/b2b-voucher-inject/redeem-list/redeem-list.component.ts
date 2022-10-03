@@ -190,7 +190,7 @@ export class RedeemListComponent implements OnInit {
   }
 
   getId(row) {
-    return row.id;
+    return row.order_id;
   }
 
   getAudienceAreaV2(selection, id, event?) {
@@ -732,7 +732,7 @@ export class RedeemListComponent implements OnInit {
     }
     let body = {
       voucher_id: this.detailVoucher.id,
-      order_id: this.selected.map(item => item.id)
+      order_id: this.selected.map(item => item.order_id)
     }
     this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;

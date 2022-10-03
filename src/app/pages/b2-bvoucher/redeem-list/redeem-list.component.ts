@@ -690,7 +690,7 @@ export class RedeemListComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.getRedeemList();
+    this.getRedeemList(string);
   }
 
   directDetail(param?: any): void {
