@@ -39,7 +39,7 @@ export class TacticalRetailSalesService extends BaseService {
   }
 
   putProposalDetail(body, id): Observable<any> {
-    const url = this.getUrl(this.namespace, "proposal_detail" { id: id });
+    const url = this.getUrl(this.namespace, "proposal_detail", { id: id });
     return this.postApi(url, body);
   }
 
