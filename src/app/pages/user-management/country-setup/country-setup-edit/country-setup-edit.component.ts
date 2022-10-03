@@ -26,7 +26,8 @@ export class CountrySetupEditComponent implements OnInit {
   submiting = false;
   isDetail = false;
   horizontal = true;
-
+  listApps: any[] = [{ name: 'Retailer', value: 'retailer' }];
+  forceLogoutinfo: any;
   constructor(
     private router: Router,
     private ls: LanguagesService,
@@ -43,7 +44,6 @@ export class CountrySetupEditComponent implements OnInit {
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     });
-
     this.formCountry = formBuilder.group({
       // status: [(this.country.status) ? this.country.status : 'inactive', Validators.required],
       name: [this.country.name, Validators.required],
@@ -53,9 +53,9 @@ export class CountrySetupEditComponent implements OnInit {
         formBuilder.group({
           telepon: [(this.country.customer_services) ? this.country.customer_services.telepon : '', Validators.required],
           email: [(this.country.customer_services) ? this.country.customer_services.email : '', Validators.required],
-          whatsapp: [(this.country.customer_services) ? this.country.customer_services.whatsapp : false, Validators.required],
+          whatsapp: [(this.country.customer_services) ? this.country.customer_services.whatsapp : false],
           whatsapp_number: [(this.country.customer_services) ? this.country.customer_services.whatsapp_number : null],
-          bude: [(this.country.customer_services) ? this.country.customer_services.bude : false, Validators.required]
+          bude: [(this.country.customer_services) ? this.country.customer_services.bude : false]
         })
       ]),
       currencies: formBuilder.group({
@@ -78,7 +78,15 @@ export class CountrySetupEditComponent implements OnInit {
         type: ["retailer", Validators.required],
         cfullaccess: false,
         cabilities: formBuilder.array([])
-      })
+      }),
+      force_logout_service: formBuilder.array([
+        formBuilder.group({
+          apk_type:[''],
+          force_logout_status: [],
+          version_number: [],
+          version_message: [],
+        })
+      ]),
     })
 
     const customerService = this.formCountry.get('customer_service') as FormArray;
@@ -92,6 +100,25 @@ export class CountrySetupEditComponent implements OnInit {
       }
       customerService.at(0).get('whatsapp_number').updateValueAndValidity();
       
+    });
+     const forceLogoutService = this.formCountry.get('force_logout_service') as FormArray;
+     forceLogoutService.at(0).get('force_logout_status').valueChanges.subscribe(val => {
+      if(val) {
+        forceLogoutService.at(0).get('version_number').setValidators(Validators.required);
+        forceLogoutService.at(0).get('apk_type').setValidators(Validators.required);
+        forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
+      } 
+      else {
+        // forceLogoutService.at(0).get('version_number').setValue(null);
+        forceLogoutService.at(0).get('version_number').setValidators([]);
+        // forceLogoutService.at(0).get('version_message').setValue(null);
+        forceLogoutService.at(0).get('version_message').setValidators([]);
+        // forceLogoutService.at(0).get('apk_type').setValue(null);
+        forceLogoutService.at(0).get('apk_type').setValidators([]);
+      }
+      forceLogoutService.at(0).get('version_number').updateValueAndValidity();
+      forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+      forceLogoutService.at(0).get('apk_type').updateValueAndValidity();
     });
 
     this.formCountry.get('access_menu').get('abilities').valueChanges.debounceTime(500).subscribe(menus => {
@@ -156,10 +183,35 @@ export class CountrySetupEditComponent implements OnInit {
     if(this.isDetail) {
       this.formCountry.disable();
     }
-    // this.countrySetupService.getForceLogoutData({ id: this.country.id }).subscribe(({data}) => {
-    //   console.log(data,'force logout data ');
-      
-    // })
+    this.countrySetupService.getForceLogoutData({ id: this.country.id }).subscribe(({data}) => {
+      console.log(data,'force logout data ');
+      if (data) {
+        this.forceLogoutinfo = data;
+        console.log(data,'force logout data ');
+        const forceLogoutService = this.formCountry.get('force_logout_service') as FormArray;
+        forceLogoutService.at(0).get('version_number').setValue(data.version);
+        if(data.message){
+          forceLogoutService.at(0).get('version_message').setValue(data.message);
+          forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
+          forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+        }        
+        forceLogoutService.at(0).get('apk_type').setValue(data.type);
+        if (data.status == 'active') {
+          const forcelogoutval = true;
+          forceLogoutService.at(0).get('force_logout_status').setValue(forcelogoutval);
+          forceLogoutService.at(0).get('force_logout_status').updateValueAndValidity();
+          return true;
+        }else{
+          forceLogoutService.at(0).get('force_logout_status').setValue(false);
+        }
+        forceLogoutService.at(0).get('version_number').updateValueAndValidity();
+        forceLogoutService.at(0).get('version_message').updateValueAndValidity();
+        forceLogoutService.at(0).get('apk_type').updateValueAndValidity();
+      } else {
+        
+      }
+    
+    })
   }
 
   buildFullAccessTogle() {
@@ -538,6 +590,18 @@ export class CountrySetupEditComponent implements OnInit {
       cfullaccess: cfullaccess.checked,
       cabilities: this.getcAbilities(cabilitiesWithoutFullAccess, []),
     }]
+    const forceLogoutService = this.formCountry.get('force_logout_service') as FormArray;
+    if(forceLogoutService.at(0).get('force_logout_status').value == false ){
+      body.force_logout_service = [
+        {apk_type: null, force_logout_status: false, version_number: null, version_message: null}
+      ]
+    }else{
+      body.force_logout_service = [
+        ...body.force_logout_service,
+      ]
+    }
+    
+    console.log(body.force_logout_service);
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });

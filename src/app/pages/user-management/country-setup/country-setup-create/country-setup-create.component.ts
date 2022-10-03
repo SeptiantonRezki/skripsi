@@ -23,6 +23,7 @@ export class CountrySetupCreateComponent implements OnInit {
   step6: FormGroup;
   step7: FormGroup;
   step8: FormGroup;
+  step9: FormGroup;
 
   languages = [];
 
@@ -30,7 +31,7 @@ export class CountrySetupCreateComponent implements OnInit {
 
   ACCESS_MENU_MAX_DEPTH = 1;
   horizontal = true;
-
+  listApps: any[] = [{ name: 'Retailer', value: 'retailer' }];
   constructor(
     private formBuilder: FormBuilder,
     private dialogService: DialogService,
@@ -93,6 +94,12 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step8 = formBuilder.group({
       cabilities: formBuilder.array([])
     });
+    this.step9 = formBuilder.group({
+      force_logout_status: [false, Validators.required],
+      version_number: [null],
+      version_message: [null],
+      apk_type:[null]
+    })
 
     this.step6.get('whatsapp').valueChanges.subscribe(val => {
 
@@ -115,6 +122,25 @@ export class CountrySetupCreateComponent implements OnInit {
     this.step8.get('cabilities').valueChanges.subscribe(menus => {
        this.oncAccessMenuChange(menus);
     });
+    this.step9.get('force_logout_status').valueChanges.subscribe(val => {
+      if(val) {
+        this.step9.get('version_number').setValidators(Validators.required);
+        this.step9.get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
+        this.step9.get('apk_type').setValidators([Validators.required]);
+      } else {
+        // this.step9.get('version_number').setValue(null);
+        this.step9.get('version_number').setValidators([]);
+         // this.step9.get('version_message').setValue(null);
+        this.step9.get('version_message').setValidators([]);
+        this.step9.get('apk_type').setValidators([]);
+        // this.step9.get('apk_type').setValue(null);
+      }
+      this.step9.get('version_number').updateValueAndValidity();
+      this.step9.get('version_message').updateValueAndValidity();
+      this.step9.get('apk_type').updateValueAndValidity();
+    });
+  
+  
     
 
   }
@@ -328,6 +354,7 @@ export class CountrySetupCreateComponent implements OnInit {
       case 6: this.step6; break;
       case 7: this.step7; break;
       case 8: this.step8; break;
+      case 9: this.step9; break;
     }
 
     if (!field) return;
@@ -402,7 +429,8 @@ export class CountrySetupCreateComponent implements OnInit {
           fullaccess: cfullaccess.checked,
           cabilities: this.getcAbilities(cabilities, []),
         }
-      ]
+      ],
+      force_logout_service: body.force_logout_service,
     }
 
     return _body;
@@ -421,6 +449,14 @@ export class CountrySetupCreateComponent implements OnInit {
     Object.assign(rawValues, {customer_service: [this.step6.getRawValue()] });
     Object.assign(rawValues, this.step7.getRawValue());
     Object.assign(rawValues, this.step8.getRawValue());
+    console.log(this.step9.get('force_logout_status').value);
+    if(this.step9.get('force_logout_status').value == false){
+      Object.assign(rawValues, {force_logout_service: [{apk_type: null, force_logout_status: false, version_number: null, version_message: null}] });
+    }
+    else{
+      Object.assign(rawValues, {force_logout_service: [this.step9.getRawValue()] });
+    }
+    
     let body = this.mapingBody(rawValues);
 
     this.countrySetupService.create(body).subscribe(res => {
