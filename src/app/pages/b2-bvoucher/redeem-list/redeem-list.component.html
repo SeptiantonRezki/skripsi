@@ -5,7 +5,7 @@
 
   <div class='p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
     <div class="button-row">
-      <button mat-flat-button style="width: 160px" color="white" (click)="importRedeem()">
+      <button mat-flat-button style="width: 160px" color="white" (click)="importRedeem()" disabled>
         <mat-icon>vertical_align_bottom</mat-icon> Import XLS
       </button>
     </div>
@@ -80,8 +80,21 @@
   <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
     [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
     [count]="pagination.total" [limit]="pagination.per_page" [offset]="offsetPagination" [externalPaging]="true"
-    [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+    [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" [selected]="selected"
+    [selectAllRowsOnPage]="false" [selectionType]="'checkbox'" (select)="onSelect($event)" [rowIdentity]="getId" >
+    <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+      <ng-template ngx-datatable-header-template>
+        <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
+      </ng-template>
 
+      <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+        let-onCheckboxChangeFn="onCheckboxChangeFn">
+        <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected"
+          *ngIf="!allRowsSelected"></mat-checkbox>
+        <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected" class="mat-checkbox-all">
+        </mat-checkbox>
+      </ng-template>
+    </ngx-datatable-column>
     <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
@@ -132,7 +145,7 @@
     </ngx-datatable-column>
     
     <ngx-datatable-column name="{{ ls.locale.global.label.order_id_payment }}" prop="order_id">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.order_id}}</ng-template>
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value" >{{row.order_id}}</ng-template>
     </ngx-datatable-column>
 
     <ngx-datatable-column name="Tanggal" prop="payment_date"> <!-- // TODO -->
