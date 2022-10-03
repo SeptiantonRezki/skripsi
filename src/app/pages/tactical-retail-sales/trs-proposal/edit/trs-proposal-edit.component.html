@@ -77,7 +77,7 @@
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="number" min="1" formControlName="maxExecutor"
+                  <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
                     placeholder="Jumlah Executor">
                 </mat-form-field>
               </div>
@@ -123,7 +123,7 @@
                 </mat-form-field>
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
                   <input matInput type="text" formControlName="custName1" readonly
                     placeholder="Customer 1 Name">
                   <mat-error
@@ -136,28 +136,20 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="custCode2" (keyup)="keyUpCust2.next($event.target.value)" 
-                    placeholder="Customer 2 Code">
-                  <mat-error
-                    *ngIf="formCreateProposal.controls['custCode2'].hasError('required') && formCreateProposal.controls['custCode2'].touched">
-                    Customer2 Code Harus Diisi
-                  </mat-error>
+                    placeholder="Customer 2 Code (optional)">
                 </mat-form-field>
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
                   <input matInput type="text" formControlName="custName2" readonly
                     placeholder="Customer 2 Name">
-                  <mat-error
-                    *ngIf="formCreateProposal.controls['custName2'].hasError('required') && formCreateProposal.controls['custName2'].touched">
-                    Customer2 Code Harus Diisi
-                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="flowingly" 
-                    placeholder="Nomor Flowingly">
+                    placeholder="Nomor Flowingly (optional)">
                 </mat-form-field>
               </div>
 
@@ -251,62 +243,47 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="">
-                    <h3>Attach File</h3>
+                    <h3>Attach File (optional)</h3>
                     <small>Lampirkan Email Approval TRS yang telah disetujui Head of Zone​</small>
                     <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
                       <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-                        [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                        (fileChange)="changeImage($event)">
+                        [accept]="accept" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeFile($event)">
                         <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
-                          <span matPrefix>{{ ls.locale.katalog_src.template_layout_toko.text8 }}
+                          <span matPrefix>Pilih File
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div fxLayout="column">
-                    <div class="" *ngFor="let imgUrl of image_list;let i = index" style="margin-top: 15px;margin-bottom: 15px;">
-                      <div class="delete">
-                        <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
-                      </div>
-                      <!-- <div class="previewIcon" [ngfBackground]="files"></div> -->
-                      <div>
-                        <img id="image" [src]='imgUrl' width="410px" height="410px" />
+                  <div fxLayout="column" style="margin-top: 5px;">
+                    <div class="" *ngFor="let item of fileList;let i = index" style="margin: 5px 0 5px 0;">
+                      <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
+                        {{ item.name }}
+                        <div class="deleteFile">
+                          <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              
-
-
-
-
-
-
             </div>
           </div>
-
-
-
         </div>
-
-
-
-
-
-
-
-
-
-
-
-        
       </form>
       <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)">
           Simpan
+        </button>
+        <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData.status=='draft'">
+          Submit TRS Proposal
+        </button>
+        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData.status=='ready to execute'">
+          Cancel TRS Proposal
+        </button>
+        <button mat-raised-button type="button" class="cancel-button" fxFlex="20" (click)="batal()">
+          Batal
         </button>
       </div>
     </div>

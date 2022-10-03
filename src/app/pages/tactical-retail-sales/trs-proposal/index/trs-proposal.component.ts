@@ -814,8 +814,7 @@ console.log(areaSelected);
   }
 
   goEdit(param?: any): void {
-    console.log(param);
-    // this.dataService.setToStorage("detail_admin_principal", param);
+    this.dataService.setToStorage('trs_program_code', param.program_code);
     this.router.navigate(["tactical-retail-sales", "trs-proposal", "edit", param.program_code]);
   }
 

@@ -16,6 +16,7 @@ import { TacticalRetailSalesService } from "app/services/tactical-retail-sales.s
 import { TrsProposalExecutorComponent } from "../component/trs-proposal-executor.component";
 import { TrsProposalKecamatanComponent } from "../component/trs-proposal-kecamatan.component";
 import { TrsProposalProductComponent } from "../component/trs-proposal-product.component";
+import { TrsCancelReasonComponent } from "../component/trs-cancel-reason.component";
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { LanguagesService } from 'app/services/languages/languages.service';
 
@@ -81,11 +82,13 @@ export class TrsProposalEditComponent implements OnInit {
   selectedKecamatan: any = [];
   selectedProduct: any = [];
 
-  image_list: Array<any> = [];
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
   validComboDrag: Boolean;
+
+  proposalData: any;
+  trs_program_code: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -125,8 +128,8 @@ export class TrsProposalEditComponent implements OnInit {
       geotagging: ['wajib', Validators.required],
       custCode1: ["", Validators.required],
       custName1: ["", Validators.required],
-      custCode2: ["", Validators.required],
-      custName2: ["", Validators.required],
+      custCode2: [""],
+      custName2: [""],
       maxExecutor: [1, Validators.required],      
       flowingly: [""],
       
@@ -146,7 +149,6 @@ export class TrsProposalEditComponent implements OnInit {
       salespoint: [""],
     })
 
-
     // =========== GET AREA AWAL ===========
     let areas = this.dataService.getDecryptedProfile()['area_id'];
 
@@ -155,14 +157,71 @@ export class TrsProposalEditComponent implements OnInit {
       area_id: areas
     };
 
-    this.TRSService.getAreaByUser(request).subscribe(res => {
-      this.listLevelArea = res.data;
-      this.addArea();
+    const thisURL = this.router.url;
+    this.trs_program_code = thisURL.split('/').pop();
+
+    this.dataService.showLoading(true);
+    this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
+      this.proposalData = resProposal.data;
+
+      this.formCreateProposal.patchValue({
+        startDate: this.proposalData.start_date,
+        endDate: this.proposalData.end_date,
+        geotagging: this.proposalData.geotag_flag,
+        custCode1: this.proposalData.customer1_code,
+        custName1: this.proposalData.customer1_name,
+        custCode2: this.proposalData.customer2_code,
+        custName2: this.proposalData.customer2_name,
+        maxExecutor: this.proposalData.max_executor,
+        flowingly: this.proposalData.flowingly,
+        background: this.proposalData.background,
+        objective: this.proposalData.objective,
+
+        executor_selected: this.proposalData.textarea_executors,
+        kecamatan_selected: this.proposalData.textarea_kecamatans,
+        product_selected: this.proposalData.textarea_products,
+        
+        /*
+        executor: [""],
+        kecamatan: [""],
+        product: [""],
+
+        //kanan
+        executor_selected: ["", Validators.required],
+        kecamatan_selected: ["", Validators.required],
+        product_selected: ["", Validators.required],
+        */
+
+      });
+
+      this.selectedArea = this.proposalData.area_id;
+      this.selectedSalesPoint = this.proposalData.salespoint_id;
+
+      this.selectedExecutor = this.proposalData.selected_executors;
+      this.selectedKecamatan = this.proposalData.selected_kecamatans;
+      this.selectedProduct = this.proposalData.selected_products;
+
+      // disable form
+      if(this.proposalData.status !== 'draft') {
+        //this.formDetailVoucher.disable();
+        //this.disableForm = true;
+      };
+      
+
+
+
+      this.dataService.showLoading(false);
+      this.TRSService.getAreaByUser(request).subscribe(res => {
+        this.listLevelArea = res.data;
+        this.addArea();
+      }, err => {
+        console.log('err occured', err);
+        this.dataService.showLoading(false);
+      });
+
     }, err => {
       console.log('err occured', err);
-      this.dataService.showLoading(false);
     })
-
 
     // ============== SET END DATE ================
     this.TRSService.getSysVar().subscribe((res) => {
@@ -176,23 +235,6 @@ export class TrsProposalEditComponent implements OnInit {
       this.dataService.showLoading(false);
     })
     
-    /*
-    this.formCreateProposal.get("startDate").valueChanges.subscribe(selectedValue => {
-      console.log('dateOfAppointment value changed')
-      console.log(selectedValue)                              //latest value of dateOfAppointment
-      console.log(this.formCreateProposal.get("dateOfAppointment").value)   //latest value of dateOfAppointment
-    })
-    */
-    
-
-
-
-
-
-
-
-
-
     this.keyUpCust1.debounceTime(300)
       .flatMap(key => {
         return Observable.of(key).delay(300);
@@ -211,7 +253,7 @@ export class TrsProposalEditComponent implements OnInit {
   }
 
   
-  changeImage(evt) {
+  changeFile(evt) {
     this.readThis(evt);
   }
 
@@ -226,19 +268,14 @@ export class TrsProposalEditComponent implements OnInit {
     this.fileList = [
       ...this.fileList,
       file
-    ]
-    var myReader: FileReader = new FileReader();
+    ];
 
-    myReader.onloadend = (e) => {
-      this.image_list = [...this.image_list, myReader.result];
-    }
-
-    myReader.readAsDataURL(file);
+    console.log("this.fileList");
+    console.log(this.fileList);
   }
 
   removeImage(idx) {
     console.log('index you find!', idx);
-    this.image_list.splice(idx, 1);
     this.fileList.splice(idx, 1);
   }
 
@@ -250,7 +287,7 @@ export class TrsProposalEditComponent implements OnInit {
     this.maxDateProposal = moment(param).add(parseInt(this.maxPeriodProposal), 'd');
   }
 
-  submit() {
+  submit(mode) {
     console.log("qqqq");
     if (this.formCreateProposal.valid) {
       this.dataService.showLoading(true);
@@ -277,24 +314,30 @@ export class TrsProposalEditComponent implements OnInit {
       fd.append('kecamatans', this.selectedKecamatan);
       fd.append('products', this.selectedProduct);
 
+      if (mode == 1){
+        fd.append('status', 'ready to execute');
+      } else {
+        fd.append('status', "");
+      }
+
       this.fileList.map(imgr => {
-        fd.append('images[]', imgr)
+        fd.append('files[]', imgr)
       })
 
-      console.log("asdf");
-
-      this.TRSService.putProposal(fd).subscribe(res => {
-
-        console.log("ggggg");
-
-        this.dataService.showLoading(false);
-        this.dialogService.openSnackBar({
-          message: this.ls.locale.notification.popup_notifikasi.text22
-        });
-        this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
-      }, err => {
-        this.dataService.showLoading(false);
-      })
+      if (mode == 1){
+        console.log(fd['flowingly']);
+        console.log(this.fileList.length);
+      } else {
+        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+        }, err => {
+          this.dataService.showLoading(false);
+        })
+      }
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
@@ -302,6 +345,29 @@ export class TrsProposalEditComponent implements OnInit {
       });
       commonFormValidator.validateAllFields(this.formCreateProposal);
     }
+  }
+
+  batal(){
+    var result = confirm("Jika dibatalkan, semua data yang sudah diisi akan hilang. Yakin akan membatalkan?");
+    if (result) {
+      this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+    }
+  }
+
+  cancel(){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.maxWidth = "90vw";
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {
+      password: 'P@ssw0rd',
+      IMPORT_FROM_METHOD: 'CREATE',
+      program_code: this.trs_program_code
+    };
+
+    this.dialogRef = this.dialog.open(TrsCancelReasonComponent, dialogConfig);
   }
 
   setCustName(id, component_name): void {
@@ -336,6 +402,7 @@ export class TrsProposalEditComponent implements OnInit {
         IMPORT_FROM_METHOD: 'CREATE',
         max: this.formCreateProposal.get('maxExecutor').value,
         area: this.selectedArea,
+        selected: this.selectedExecutor,
         formCreateProposal,
       };
   
@@ -352,17 +419,17 @@ export class TrsProposalEditComponent implements OnInit {
             result_id.push(item.id);
             
             if (item.territory != "" && item.territory != "-"){
-              result.push(item.fullname + " (" + item.territory + ")");
+              result.push(item.fullname + " (" + item.territory.trim() + ")");
             } else {
               if (item.district == "" || item.district == "-"){
-                result.push(item.fullname + " (" + item.salespoint + ")");
+                result.push(item.fullname + " (" + item.salespoint.trim() + ")");
               } else {
-                result.push(item.fullname + " (" + item.district + ")");
+                result.push(item.fullname + " (" + item.district.trim() + ")");
               }
             }
           });
   
-          this.selectedExecutor = result_id.join("_");
+          this.selectedExecutor = result_id.join("__");
           this.formCreateProposal.get('executor_selected').setValue(result.join(", "));
   
           console.log(result);
@@ -386,24 +453,24 @@ export class TrsProposalEditComponent implements OnInit {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
         area: this.selectedSalesPoint,
+        selected: this.selectedKecamatan,
         formCreateProposal,
       };
   
       this.dialogRef = this.dialog.open(TrsProposalKecamatanComponent, dialogConfig);
   
       this.dialogRef.afterClosed().subscribe(response => {
-        
-        console.log("asdfasdfaf");
-        console.log(response);
+        // regency = kabupaten
+        // district = kecamatan
         var result = [];
         var result_id = [];
         if (typeof response !== "undefined") {
           response.forEach(function (item) {
             result_id.push(item.id);
-            result.push(item.district + " - " + item.territory);
+            result.push(item.regency + " - " + item.district);
           });
   
-          this.selectedKecamatan = result_id.join("_");
+          this.selectedKecamatan = result_id.join("__");
           this.formCreateProposal.get('kecamatan_selected').setValue(result.join(", "));
   
           console.log(result);
@@ -427,6 +494,7 @@ export class TrsProposalEditComponent implements OnInit {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
         area: this.selectedArea,
+        selected: this.selectedProduct,
         formCreateProposal,
       };
   
@@ -441,7 +509,7 @@ export class TrsProposalEditComponent implements OnInit {
             result.push(item.code + " (" + item.name + ")");
           });
   
-          this.selectedProduct = result_id.join("_");
+          this.selectedProduct = result_id.join("__");
           this.formCreateProposal.get('product_selected').setValue(result.join(", "));
   
           console.log(result);
@@ -449,8 +517,6 @@ export class TrsProposalEditComponent implements OnInit {
       });
     }
   }
-
-
 
   parseArea(type) {
     // return type === 'division' ? 'zone' : type;
@@ -507,7 +573,7 @@ export class TrsProposalEditComponent implements OnInit {
 
   createArea(): FormGroup {
     return this.formBuilder.group({
-      area: [this.listLevelArea[0]["id"], Validators.required],
+      area: [this.proposalData.area_id, Validators.required],
       salespoint: [""],
       list_area: this.formBuilder.array(this.listLevelArea),
       list_salespoint: this.formBuilder.array([]),
@@ -519,7 +585,7 @@ export class TrsProposalEditComponent implements OnInit {
     wilayah.push(this.createArea());
     const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
     this.initArea(index);
-    this.generataList('salespoint', this.listLevelArea[0]["id"], index, 'render');
+    this.generataList('salespoint', this.proposalData.area_id, index, 'render');
   }
 
   initArea(index) {
@@ -566,6 +632,9 @@ export class TrsProposalEditComponent implements OnInit {
         if (type !== 'render') {
           wilayah.at(index).get('salespoint').setValue('');
         }
+
+        //editchan
+        wilayah.at(index).get('salespoint').setValue(this.proposalData.salespoint_id);
 
         this.selectedArea = id;
         break;

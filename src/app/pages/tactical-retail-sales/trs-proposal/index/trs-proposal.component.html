@@ -178,7 +178,7 @@
               <button mat-icon-button color="" (click)="goDetail(row)" *ngIf="permission.lihat">
                 <mat-icon class="secondary-text">visibility</mat-icon>
               </button>
-              <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah">
+              <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah && row.status != 'finish' && row.status != 'cancel'">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="" (click)="getDetailOrder(row.program_code)">

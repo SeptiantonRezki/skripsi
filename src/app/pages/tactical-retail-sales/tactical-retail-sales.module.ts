@@ -45,6 +45,7 @@ import { TrsSystemVariableComponent } from './trs-system-variable/trs-system-var
 import { TrsProposalExecutorComponent } from './trs-proposal/component/trs-proposal-executor.component';
 import { TrsProposalKecamatanComponent } from './trs-proposal/component/trs-proposal-kecamatan.component';
 import { TrsProposalProductComponent } from './trs-proposal/component/trs-proposal-product.component';
+import { TrsCancelReasonComponent } from './trs-proposal/component/trs-cancel-reason.component';
 import { ConfirmationDialogComponent } from './trs-system-variable/confirmation-dialog/confirmation-dialog.component';
 
 export const MY_FORMATS = {
@@ -89,7 +90,7 @@ export const MY_FORMATS = {
     MatMenuModule,
     TranslateModule.forChild(),
   ],
-  declarations: [TrsProposalComponent, TrsProposalCreateComponent, TrsProposalEditComponent, TrsSystemVariableComponent, TrsProposalExecutorComponent, TrsProposalKecamatanComponent, TrsProposalProductComponent, ConfirmationDialogComponent],
+  declarations: [TrsProposalComponent, TrsProposalCreateComponent, TrsProposalEditComponent, TrsSystemVariableComponent, TrsProposalExecutorComponent, TrsProposalKecamatanComponent, TrsProposalProductComponent, TrsCancelReasonComponent, ConfirmationDialogComponent],
   providers: [
     TrsProposalExecutorComponent,
     {
@@ -104,6 +105,7 @@ export const MY_FORMATS = {
     TrsProposalExecutorComponent,
     TrsProposalKecamatanComponent,
     TrsProposalProductComponent,
+    TrsCancelReasonComponent,
     ConfirmationDialogComponent
   ],
 })

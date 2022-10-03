@@ -175,22 +175,6 @@ export class TrsProposalCreateComponent implements OnInit {
       this.dataService.showLoading(false);
     })
     
-    /*
-    this.formCreateProposal.get("startDate").valueChanges.subscribe(selectedValue => {
-      console.log('dateOfAppointment value changed')
-      console.log(selectedValue)                              //latest value of dateOfAppointment
-      console.log(this.formCreateProposal.get("dateOfAppointment").value)   //latest value of dateOfAppointment
-    })
-    */
-    
-
-
-
-
-
-
-
-
 
     this.keyUpCust1.debounceTime(300)
       .flatMap(key => {
@@ -293,16 +277,24 @@ export class TrsProposalCreateComponent implements OnInit {
     }
   }
 
+  batal(){
+    var result = confirm("Jika dibatalkan, semua data yang sudah diisi akan hilang. Yakin akan membatalkan?");
+    if (result) {
+      this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+    }
+  }
+
   setCustName(id, component_name): void {
     if (id) {
       if (id.length == 10) {
+        id = id+"__"+this.selectedArea;
         this.dataService.showLoading(true);
         this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
           this.dataService.showLoading(false);
-          if (res.data == null){
-            alert("Cust tidak di temukan");
-          } else {
+          if (res.status ==  'success'){
             this.formCreateProposal.get(component_name).setValue(res.data.name);
+          } else {
+            alert(res.message);
           }
         })
       }
