@@ -29,6 +29,7 @@ export class TrsProposalKecamatanComponent {
   onLoad: boolean;
 
   rows: any[] = [];
+  temp: any[] = [];
 
   selected: any[];
   detailData: any;
@@ -45,6 +46,11 @@ export class TrsProposalKecamatanComponent {
 
   totalData: number = 0;
   checkDisabled: boolean = false;
+
+  kabupatenList: any[];
+
+  filterKabupaten: any = "";
+  filterSearch: any = "";
 
   constructor(
     public dialogRef: MatDialogRef<TrsProposalKecamatanComponent>,
@@ -117,6 +123,51 @@ export class TrsProposalKecamatanComponent {
     }
   }
 
+  updateFilter(event) {
+    console.log("keyup");
+    const val = event.target.value.toLowerCase();
+    this.filterSearch = val;
+
+    this.updateTable();
+  }
+
+  changeKab(e: any) {
+    if (e.value == "SEMUA KABUPATEN"){
+      this.filterKabupaten = '';
+    } else {
+      this.filterKabupaten = e.value.toLowerCase();
+    }
+
+    this.updateTable();
+  }
+
+  updateTable(){
+    //filterSalespoint: any = "";
+    //filterDistrict: any = "";
+    //filterStatus: any = "";
+    //filterSearch: any = "";
+    let temp = this.temp;
+
+    if (this.filterKabupaten != ""){
+      const val = this.filterKabupaten;
+      temp = temp.filter(function (d) {
+        return d.regency.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterSearch != ""){
+      const val = this.filterSearch;
+      temp = temp.filter(function (d) {
+        return d.regency.toLowerCase().indexOf(val) !== -1 ||
+               d.district.toLowerCase().indexOf(val) !== -1 ||
+               !val;
+      });
+    }
+
+    // update the rows
+    this.rows = temp;
+  }
+
   aturPanelMitra() {
     this.selectedMitra = [];
     //this.onSelect({ selected: [] });
@@ -133,6 +184,10 @@ export class TrsProposalKecamatanComponent {
 
       this.loaded = true;
       this.rows = res.data;
+      this.temp = [...res.data];
+      this.kabupatenList = this.rows.map(a => a.regency.trim());
+      this.kabupatenList = this.kabupatenList.filter((x, i, a) => a.indexOf(x) == i);
+      this.kabupatenList = ["SEMUA KABUPATEN", ...this.kabupatenList];
 
       if (this.detailData.selected != ""){
         let IDselected = (this.detailData.selected).split('__');

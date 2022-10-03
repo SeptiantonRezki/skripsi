@@ -14,12 +14,24 @@
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
     
-    <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-      <mat-icon>search</mat-icon>
-      <mat-form-field class="is-light tab-search">
-        <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="updateFilter($event)"
-          autocomplete="off">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+      <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
+        <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="changeSales($event)">
+          <mat-option *ngFor="let sp of salespointList" [value]="sp">{{sp}}</mat-option>
+        </mat-select>
       </mat-form-field>
+      <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
+        <mat-select placeholder="District" formControlName="district" (selectionChange)="changeDistrict($event)">
+          <mat-option *ngFor="let diss of districtList" [value]="diss">{{diss}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="search-field" fxFlex="30%" class="dropdown is-light form-primary">
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="is-light tab-search">
+          <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="updateFilter($event)"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
     </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive">

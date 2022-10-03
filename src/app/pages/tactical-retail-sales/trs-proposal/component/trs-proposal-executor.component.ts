@@ -47,6 +47,22 @@ export class TrsProposalExecutorComponent {
   totalData: number = 0;
   checkDisabled: boolean = false;
 
+  salespointList: any[];
+  districtList: any[];
+  statusList: any[] = [
+    { name: 'Semua', value: '' }, 
+    { name: 'Dapat diassign di TRS program ini', value: 'bisa' },
+    { name: 'Sudah diassign di TRS program ini', value: 'sedang' },
+    { name: 'Sudah diassign di TRS program lain', value: 'lain' },
+  ];
+
+  filterSalespoint: any = "";
+  filterDistrict: any = "";
+  filterStatus: any = "";
+  filterSearch: any = "";
+
+  multiSales: boolean = true;
+
   @ViewChild('table') table: DatatableComponent;
 
   constructor(
@@ -122,15 +138,65 @@ export class TrsProposalExecutorComponent {
   updateFilter(event) {
     console.log("keyup");
     const val = event.target.value.toLowerCase();
+    this.filterSearch = val;
 
-    // filter our data
-    const temp = this.temp.filter(function (d) {
-      return d.fullname.toLowerCase().indexOf(val) !== -1 ||
-             d.username.toLowerCase().indexOf(val) !== -1 ||
-             d.salespoint.toLowerCase().indexOf(val) !== -1 ||
-             d.district.toLowerCase().indexOf(val) !== -1 ||
-             d.territory.toLowerCase().indexOf(val) !== -1 || !val;
-    });
+    this.updateTable();
+  }
+
+  changeSales(e: any) {
+    this.filterSalespoint = e.value.toLowerCase();
+
+    if (this.multiSales){
+      this.districtList = this.rows.map(a => a.district.trim());
+      this.districtList = this.districtList.filter((x, i, a) => a.indexOf(x) == i);
+    }
+
+    this.updateTable();
+  }
+
+  changeDistrict(e: any) {
+    this.filterDistrict =  e.value.toLowerCase();
+    this.updateTable();
+  }
+
+  updateTable(){
+    //filterSalespoint: any = "";
+    //filterDistrict: any = "";
+    //filterStatus: any = "";
+    //filterSearch: any = "";
+    let temp = this.temp;
+
+    if (this.filterSalespoint != ""){
+      const val = this.filterSalespoint;
+      temp = temp.filter(function (d) {
+        return d.salespoint.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterDistrict != ""){
+      const val = this.filterDistrict;
+      temp = temp.filter(function (d) {
+        return d.district.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterStatus != ""){
+      temp = temp.filter(function (d) {
+        return d.status.toLowerCase().indexOf(this.filterStatus) !== -1;
+      });
+    }
+
+    if (this.filterSearch != ""){
+      const val = this.filterSearch;
+      temp = temp.filter(function (d) {
+        return d.fullname.toLowerCase().indexOf(val) !== -1 ||
+               d.username.toLowerCase().indexOf(val) !== -1 ||
+               d.salespoint.toLowerCase().indexOf(val) !== -1 ||
+               d.district.toLowerCase().indexOf(val) !== -1 ||
+               d.territory.toLowerCase().indexOf(val) !== -1 || 
+               !val;
+      });
+    }
 
     // update the rows
     this.rows = temp;
@@ -151,6 +217,16 @@ export class TrsProposalExecutorComponent {
       this.loaded = true;
       this.rows = res.data;
       this.temp = [...res.data];
+      this.salespointList = this.rows.map(a => a.salespoint.trim());
+      this.salespointList = this.salespointList.filter((x, i, a) => a.indexOf(x) == i);
+
+      if (this.salespointList.length == 1){
+        this.districtList = this.rows.map(a => a.district.trim());
+        this.districtList = this.districtList.filter((x, i, a) => a.indexOf(x) == i);
+        this.multiSales = false;
+      } else if (this.salespointList.length > 1){
+        this.multiSales = true;
+      }
 
       if (this.detailData.selected != ""){
         let IDselected = (this.detailData.selected).split('__');
