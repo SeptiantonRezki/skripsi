@@ -31,6 +31,30 @@
   }
 }
 
+:host ::ng-deep .mat-form-field-label.ng-star-inserted:not(.mat-empty){
+  background-color: #fff;
+}
+
+:host ::ng-deep .mat-form-field.readonly.static{
+  div{
+    padding-bottom:0px;
+
+    div{
+      padding-bottom:0px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field.readonly.hung{
+  div{
+    padding-top:0px;
+    
+    div{
+      padding-top:0px;
+    }
+  }
+}
+
 .deleteFile {
   position: absolute;
   top: 3px;

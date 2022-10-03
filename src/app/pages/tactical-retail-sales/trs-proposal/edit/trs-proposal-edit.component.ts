@@ -325,8 +325,14 @@ export class TrsProposalEditComponent implements OnInit {
       })
 
       if (mode == 1){
-        console.log(fd['flowingly']);
-        console.log(this.fileList.length);
+        if (this.fileList.length == 0 || fd['flowingly'] === undefined || fd['flowingly'].trim() == ""){
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: "Nomor Flowingly dan Attach File wajib diisi !"
+          });
+        } else {
+          alert("komplit");
+        }
       } else {
         this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
           this.dataService.showLoading(false);
@@ -373,13 +379,15 @@ export class TrsProposalEditComponent implements OnInit {
   setCustName(id, component_name): void {
     if (id) {
       if (id.length == 10) {
+        id = id+"__"+this.selectedArea;
         this.dataService.showLoading(true);
         this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
           this.dataService.showLoading(false);
-          if (res.data == null){
-            alert("Cust tidak di temukan");
-          } else {
+          if (res.status ==  'success'){
             this.formCreateProposal.get(component_name).setValue(res.data.name);
+          } else {
+            alert(res.message);
+            this.formCreateProposal.get(component_name).setValue("");
           }
         })
       }

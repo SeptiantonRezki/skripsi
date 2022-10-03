@@ -52,7 +52,7 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
-                    placeholder="Tanggal Awal Program" formControlName="startDate" [min]="minDateProposal"> <!-- // TODO -->
+                    placeholder="Tanggal Awal Program" formControlName="startDate"> <!-- // TODO -->
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
                   <mat-error *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
@@ -149,17 +149,44 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="flowingly" 
-                    placeholder="Nomor Flowingly (optional)">
+                    placeholder="Nomor Flowingly">
                 </mat-form-field>
               </div>
 
 
+              <div class="px-24" style="margin-top:15px;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
+                  <input matInput type="text" [value]="proposalData.program_code" readonly
+                    placeholder="Program Code">
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData.created_by" readonly
+                    placeholder="Created By">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData.created_at" readonly>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData.updated_by" readonly
+                    placeholder="Modified By">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData.updated_at" readonly>
+                </mat-form-field>
+              </div>
+
             </div>
 
 
-
             <div fxFlex="45%" class="is-light form-primary">
-              
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="mb-8">
@@ -243,7 +270,7 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="">
-                    <h3>Attach File (optional)</h3>
+                    <h3>Attach File</h3>
                     <small>Lampirkan Email Approval TRS yang telah disetujui Head of Zone​</small>
                     <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
                       <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
@@ -276,10 +303,10 @@
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)">
           Simpan
         </button>
-        <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData.status=='draft'">
+        <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
           Submit TRS Proposal
         </button>
-        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData.status=='ready to execute'">
+        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData?.status=='ready to execute'">
           Cancel TRS Proposal
         </button>
         <button mat-raised-button type="button" class="cancel-button" fxFlex="20" (click)="batal()">

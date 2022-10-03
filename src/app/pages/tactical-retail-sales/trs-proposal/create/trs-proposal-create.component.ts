@@ -295,6 +295,7 @@ export class TrsProposalCreateComponent implements OnInit {
             this.formCreateProposal.get(component_name).setValue(res.data.name);
           } else {
             alert(res.message);
+            this.formCreateProposal.get(component_name).setValue("");
           }
         })
       }
