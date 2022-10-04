@@ -36,7 +36,8 @@
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                         matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
-                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
+                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                         <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                           {{item.name}}</mat-option>
                       </mat-select>
@@ -307,18 +308,18 @@
           </div>
         </div>
       </form>
-      <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <div class="confirm pt-24 pb-24" style="padding-left: 22px;" fxLayout="row" fxLayoutGap="20px">
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)">
           Simpan
         </button>
         <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
           Submit TRS Proposal
         </button>
-        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData?.status=='ready to execute'">
+        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData?.status=='draft' || proposalData?.status=='ready to execute'">
           Cancel TRS Proposal
         </button>
         <button mat-raised-button type="button" class="cancel-button" fxFlex="20" (click)="batal()">
-          Batal
+          Kembali ke TRS List
         </button>
       </div>
     </div>

@@ -80,10 +80,10 @@
     <div class="p-16">
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
-        <button type="button" mat-raised-button color="primary" (click)="submit()"
+        <button type="button" style="margin-right: 20px;background-color:#dc1e2d; color: #fff;" mat-raised-button color="primary" (click)="submit()"
           [disabled]="rows.length === 0">Simpan</button>
-        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
-          [disabled]="uploading">{{ls.locale.global.button.cancel}}</button>
+        <button type="button" mat-raised-button color="secondary" (click)="dialogRef.close()"
+          [disabled]="uploading">Batal</button>
       </div>
     </div>
   </div>

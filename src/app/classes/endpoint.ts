@@ -1147,6 +1147,7 @@ export class Endpoint {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
         proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal`,
         proposal_detail: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
+        cancel_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/cancel_proposal/${context.id}`,
         customer_name: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/getcustname/${context.id}`,
         
         list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_executor`,

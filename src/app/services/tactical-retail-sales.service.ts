@@ -43,6 +43,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.postApi(url, body);
   }
 
+  cancelProposal(body, id): Observable<any> {
+    const url = this.getUrl(this.namespace, "cancel_proposal", { id: id });
+    return this.postApi(url, body);
+  }
+
   getCustName(id): Observable<any> {
     const url = this.getUrl(this.namespace, "customer_name", {id:id});
     return this.getApi(url);

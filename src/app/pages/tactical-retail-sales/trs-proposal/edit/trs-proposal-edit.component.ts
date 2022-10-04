@@ -165,6 +165,13 @@ export class TrsProposalEditComponent implements OnInit {
     this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
       this.proposalData = resProposal.data;
 
+      if (this.proposalData.status == 'cancel' || this.proposalData.status == 'finish'){
+        this.dialogService.openSnackBar({
+          message: "Program tidak dapat diedit"
+        });
+        this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+      }
+
       this.formCreateProposal.patchValue({
         startDate: this.proposalData.start_date,
         endDate: this.proposalData.end_date,
@@ -379,7 +386,7 @@ export class TrsProposalEditComponent implements OnInit {
   }
 
   batal(){
-    var result = confirm("Jika dibatalkan, semua data yang sudah diisi akan hilang. Yakin akan membatalkan?");
+    var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
     if (result) {
       this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
     }
@@ -399,6 +406,15 @@ export class TrsProposalEditComponent implements OnInit {
     };
 
     this.dialogRef = this.dialog.open(TrsCancelReasonComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+        
+      console.log("kakakaka");
+      console.log(response);
+      if (response == 'success'){
+        this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+      }
+    });
   }
 
   setCustName(id, component_name): void {

@@ -278,7 +278,7 @@ export class TrsProposalCreateComponent implements OnInit {
   }
 
   batal(){
-    var result = confirm("Jika dibatalkan, semua data yang sudah diisi akan hilang. Yakin akan membatalkan?");
+    var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
     if (result) {
       this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
     }

@@ -1,3 +1,54 @@
-<p>
-  trs-cancel-reason works!
-</p>
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>REASON</span>
+      </div>
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    
+    <form autocomplete="off" [formGroup]="formCacelation">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">Tulis alasan pembatalan program</h2>
+      </div>
+
+      <div class="ayo-middle" fxLayout="column">
+        <div class="mt-8" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+          <div fxFlex="100%" class="is-light form-primary">
+            <div fxLayout="column" class="mb-8">
+              <div fxLayout="row" >
+                <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="200">
+                  <textarea matInput class="body-text" placeholder="Tulis di sini" formControlName="reason" wrap="soft"></textarea>
+                </div>
+              </div>
+              <mat-error *ngIf="formCacelation.controls['reason'].hasError('required') && formCacelation.controls['reason'].touched">
+                Reason harus diisi !
+              </mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" style="margin-right: 20px;background-color:#dc1e2d; color: #fff;" mat-raised-button color="primary" (click)="submit()"
+          >Simpan</button>
+        <button type="button" mat-raised-button color="secondary" (click)="dialogRef.close()"
+          >Batal</button>
+      </div>
+    </div>
+  </div>
+</div>
