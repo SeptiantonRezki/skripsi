@@ -1,13 +1,13 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Edit TRS Proposal'">
+  <page-content-header [contentTitle]="'Detail TRS Proposal'">
   </page-content-header>
 
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-bg-white">
       <form autocomplete="off" [formGroup]="formCreateProposal">
         <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
-          <h2 class="">Edit TRS Proposal</h2>
+          <h2 class="">Detail TRS Proposal</h2>
         </div>
 
         <div class="ayo-middle pt-8" fxLayout="column">
@@ -22,7 +22,7 @@
                       <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                         matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
                         (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
-                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        [disabled] = "true">
                         <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
                           {{item.code}}
                         </mat-option>
@@ -38,7 +38,7 @@
                       <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                         matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
                         (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
-                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        [disabled] = "true">
                         <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                           {{item.name}}</mat-option>
                       </mat-select>
@@ -55,7 +55,7 @@
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
                     placeholder="Tanggal Awal Program" formControlName="startDate"
-                    [disabled] = "proposalData?.status == 'ongoing'">
+                    [disabled] = "true">
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
                   <mat-error *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
@@ -67,7 +67,7 @@
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
                     placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"
-                    [disabled] = "proposalData?.status == 'ongoing'">
+                    [disabled] = "true">
                   <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
                   <mat-error *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
@@ -81,30 +81,14 @@
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
+                  <input matInput [attr.disabled]="true" type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
                     placeholder="Jumlah Executor">
                 </mat-form-field>
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="executor" (click)="modalExecutor()" 
-                    placeholder="Executor">
-                </mat-form-field>
-              </div>
-
-              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" 
-              *ngIf = "proposalData?.status != 'ongoing' && proposalData?.status != 'ready to execute'">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="kecamatan" (click)="modalKecamatan()" 
-                    placeholder="Kecamatan">
-                </mat-form-field>
-              </div>
-
-
-              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <mat-select placeholder="Geotagging" formControlName="geotagging">
+                  <mat-select placeholder="Geotagging" formControlName="geotagging" [disabled] = "true">
                     <mat-option *ngFor="let ogeo of opsiGeotagging" [value]="ogeo.value">{{ ogeo.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -112,16 +96,9 @@
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="product" (click)="modalProduct()" 
-                    placeholder="Product">
-                </mat-form-field>
-              </div>
-
-              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="custCode1" (keyup)="keyUpCust1.next($event.target.value)" 
                     placeholder="Customer 1 Code"
-                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                    [attr.disabled] = "true">
                   <mat-error
                     *ngIf="formCreateProposal.controls['custCode1'].hasError('required') && formCreateProposal.controls['custCode1'].touched">
                     Customer1 Code Harus Diisi
@@ -143,7 +120,7 @@
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="custCode2" (keyup)="keyUpCust2.next($event.target.value)" 
                     placeholder="Customer 2 Code (optional)"
-                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                    [attr.disabled] = "true">
                 </mat-form-field>
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -156,7 +133,7 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="text" formControlName="flowingly" placeholder="Nomor Flowingly"
-                  [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                  [attr.disabled] = "true">
                 </mat-form-field>
               </div>
 
@@ -248,7 +225,7 @@
                     <label class="field-label">Background</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="Background" formControlName="background" wrap="soft"></textarea>
+                        <textarea matInput class="body-text" placeholder="Background" formControlName="background" wrap="soft" [readonly]="true"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['background'].hasError('required') && formCreateProposal.controls['background'].touched">
@@ -264,7 +241,7 @@
                     <label class="field-label">Objective</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="Objective" formControlName="objective" wrap="soft"></textarea>
+                        <textarea matInput class="body-text" placeholder="Objective" formControlName="objective" wrap="soft" [readonly]="true"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['objective'].hasError('required') && formCreateProposal.controls['objective'].touched">
@@ -291,14 +268,6 @@
                     </div>
                   </div>
                   <div fxLayout="column" style="margin-top: 5px;">
-                    <div class="" *ngFor="let item of fileList;let i = index" style="margin: 5px 0 5px 0;">
-                      <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
-                        {{ item.name }}
-                        <div class="deleteFile">
-                          <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
-                        </div>
-                      </div>
-                    </div>
                     <div class="" *ngFor="let item of proposalData?.attachments;let i = index" style="margin: 5px 0 5px 0;">
                       <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
                         <a id="{{ item.id }}" href="{{ item.attachment }}">{{ item.attachment }}</a>
@@ -315,15 +284,6 @@
         </div>
       </form>
       <div class="confirm pt-24 pb-24" style="padding-left: 22px;" fxLayout="row" fxLayoutGap="20px">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)">
-          Simpan
-        </button>
-        <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
-          Submit TRS Proposal
-        </button>
-        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData?.status=='draft' || proposalData?.status=='ready to execute'">
-          Cancel TRS Proposal
-        </button>
         <button mat-raised-button type="button" class="cancel-button" fxFlex="20" (click)="batal()">
           Kembali ke TRS List
         </button>

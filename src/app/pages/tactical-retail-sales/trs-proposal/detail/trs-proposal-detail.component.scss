@@ -1,0 +1,80 @@
+.body-layout {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 5px;
+  .body-text {
+    width: 100%;
+    height: 80px;
+    resize: none;
+  }
+  .body-text:focus {
+    background-color: #fff;
+    color: #222;
+  }
+}
+.body-layout:focus-within {
+  background-color: #fff;
+}
+.field-label {
+  font-size: 14px;
+  transform: scale(0.75);
+  transform-origin: 0 0;
+}
+
+:host ::ng-deep .mat-form-field.readonly{
+  div{
+    div{
+      background-color: #ddd;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field-label.ng-star-inserted:not(.mat-empty){
+  background-color: #fff;
+}
+
+:host ::ng-deep .mat-form-field.readonly.static{
+  div{
+    padding-bottom:0px;
+
+    div{
+      padding-bottom:0px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field.readonly.hung{
+  div{
+    padding-top:0px;
+    
+    div{
+      padding-top:0px;
+    }
+  }
+}
+
+.deleteFile {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+}
+
+button.cancel-button {
+  border: 1px solid #dc1e2d;
+  color: #000;
+  font-weight: 300;
+}
+
+button.submit-button {
+  background-color: #00a01d;
+  color: #fff;
+  font-weight: 300;
+}
+
+button.warning-button {
+  background-color: #eba800;
+  color: #fff;
+  font-weight: 300;
+}

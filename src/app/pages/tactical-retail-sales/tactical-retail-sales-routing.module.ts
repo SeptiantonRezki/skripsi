@@ -5,6 +5,7 @@ import { PageGuard } from "app/classes/auth.guard";
 import { brConfig } from "app/classes/breadcrumbs.config";
 import { TrsProposalCreateComponent } from "./trs-proposal/create/trs-proposal-create.component";
 import { TrsProposalEditComponent } from "./trs-proposal/edit/trs-proposal-edit.component";
+import { TrsProposalDetailComponent } from "./trs-proposal/detail/trs-proposal-detail.component";
 import { TrsSystemVariableComponent } from "./trs-system-variable/trs-system-variable.component";
 
 const routes: Routes = [
@@ -42,8 +43,8 @@ const routes: Routes = [
     },
   },
   {
-    path: "trs-proposal/:id",
-    component: TrsProposalEditComponent,
+    path: "trs-proposal/detail/:id",
+    component: TrsProposalDetailComponent,
     data: {
       breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
     },

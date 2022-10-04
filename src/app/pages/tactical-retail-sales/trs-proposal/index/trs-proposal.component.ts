@@ -818,6 +818,10 @@ console.log(areaSelected);
     this.router.navigate(["tactical-retail-sales", "trs-proposal", "edit", param.program_code]);
   }
 
+  goDetail(param?: any): void {
+    this.dataService.setToStorage('trs_program_code', param.program_code);
+    this.router.navigate(["tactical-retail-sales", "trs-proposal", "detail", param.program_code]);
+  }
 
   async exportProposal(context?, exportFileName?) {
     this.dataService.showLoading(true);

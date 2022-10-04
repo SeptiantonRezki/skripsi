@@ -41,6 +41,7 @@ import { TacticalRetailSalesRoutingModule } from './tactical-retail-sales-routin
 import { TrsProposalComponent } from './trs-proposal/index/trs-proposal.component';
 import { TrsProposalCreateComponent } from './trs-proposal/create/trs-proposal-create.component';
 import { TrsProposalEditComponent } from './trs-proposal/edit/trs-proposal-edit.component';
+import { TrsProposalDetailComponent } from './trs-proposal/detail/trs-proposal-detail.component';
 import { TrsSystemVariableComponent } from './trs-system-variable/trs-system-variable.component';
 import { TrsProposalExecutorComponent } from './trs-proposal/component/trs-proposal-executor.component';
 import { TrsProposalKecamatanComponent } from './trs-proposal/component/trs-proposal-kecamatan.component';
@@ -90,7 +91,7 @@ export const MY_FORMATS = {
     MatMenuModule,
     TranslateModule.forChild(),
   ],
-  declarations: [TrsProposalComponent, TrsProposalCreateComponent, TrsProposalEditComponent, TrsSystemVariableComponent, TrsProposalExecutorComponent, TrsProposalKecamatanComponent, TrsProposalProductComponent, TrsCancelReasonComponent, ConfirmationDialogComponent],
+  declarations: [TrsProposalComponent, TrsProposalCreateComponent, TrsProposalEditComponent, TrsProposalDetailComponent, TrsSystemVariableComponent, TrsProposalExecutorComponent, TrsProposalKecamatanComponent, TrsProposalProductComponent, TrsCancelReasonComponent, ConfirmationDialogComponent],
   providers: [
     TrsProposalExecutorComponent,
     {
