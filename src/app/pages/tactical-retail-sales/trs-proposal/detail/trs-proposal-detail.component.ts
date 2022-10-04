@@ -165,13 +165,6 @@ export class TrsProposalDetailComponent implements OnInit {
     this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
       this.proposalData = resProposal.data;
 
-      if (this.proposalData.status == 'cancel' || this.proposalData.status == 'finish'){
-        this.dialogService.openSnackBar({
-          message: "Program tidak dapat diedit"
-        });
-        this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
-      }
-
       this.formCreateProposal.patchValue({
         startDate: this.proposalData.start_date,
         endDate: this.proposalData.end_date,
