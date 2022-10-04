@@ -78,9 +78,9 @@ export class RoleCreateComponent {
       // district: [""],
       // territory: [""]
     })
-
-    const wholesalerRole = _.find(this.roles, { nama: 'management pengguna' }),
-      wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'wholesaler' }),
+    const country = localStorage.getItem('user_country');
+    const wholesalerRole = _.find(this.roles, { nama: (country === 'km') ? 'ការគ្រប់គ្រងអ្នកប្រើប្រាស់' : 'management pengguna' }),
+      wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: (country === 'km') ? 'អ្នកលក់ដុំ' : 'wholesaler' }),
       wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
       wholesalerViewToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.lihat' }),
       phoneNumberToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.phone_number' }),
@@ -88,7 +88,7 @@ export class RoleCreateComponent {
       phoneNumberToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_phone_number' }),
       rekeningToggleView = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.submenu.view_rekening_toko' }),
 
-      customerRole = wholesalerRole && _.find(wholesalerRole.menu, { nama: 'customer' }),
+      customerRole = wholesalerRole && _.find(wholesalerRole.menu, { nama: (country === 'km') ? 'អតិថិជន' : 'customer' }),
       phoneDOBToggle = customerRole && _.find(customerRole.value, { value: 'principal.customer.phone_number_and_dob_view' }),
 
       retailerRole = _.find(this.roles, { nama: 'retailer' }),
@@ -660,9 +660,9 @@ export class RoleCreateComponent {
     // End Customer Feature
   }
 
-  getCountry() {
+  async getCountry() {
 
-    this.accessService.getCountry().subscribe(
+    await this.accessService.getCountry().subscribe(
       res => {
         this.Country = res.data;
       },
