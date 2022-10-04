@@ -270,7 +270,7 @@
                   <div fxLayout="column" style="margin-top: 5px;">
                     <div class="" *ngFor="let item of proposalData?.attachments;let i = index" style="margin: 5px 0 5px 0;">
                       <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
-                        <a id="{{ item.id }}" href="{{ item.attachment }}">{{ item.attachment }}</a>
+                        <a id="{{ item.id }}" target="_blank" href="{{ item.attachment }}">{{ item.attachment }}</a>
                         <div class="deleteFile">
                           <mat-icon style="cursor: pointer;" (click)="removeExistingImage(i, item.id)">cancel_outline</mat-icon>
                         </div>

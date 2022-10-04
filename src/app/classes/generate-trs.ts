@@ -83,8 +83,8 @@ export class GenerateTRS {
           }
 
           .jumbo{
-            font-size: 60px;
-            text-align: center;
+            font-size: 15px;
+            text-align: left;
           }
         </style>
       </head>
