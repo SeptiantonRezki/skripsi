@@ -85,6 +85,7 @@ export class TrsProposalEditComponent implements OnInit {
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
+  deleteFile: any = [];
   validComboDrag: Boolean;
 
   proposalData: any;
@@ -201,6 +202,9 @@ export class TrsProposalEditComponent implements OnInit {
       this.selectedKecamatan = this.proposalData.selected_kecamatans;
       this.selectedProduct = this.proposalData.selected_products;
 
+      console.log("this.proposalData.attachments");
+      console.log(this.proposalData.attachments);
+
       // disable form
       if(this.proposalData.status !== 'draft') {
         //this.formDetailVoucher.disable();
@@ -279,6 +283,11 @@ export class TrsProposalEditComponent implements OnInit {
     this.fileList.splice(idx, 1);
   }
 
+  removeExistingImage(idx, id) {
+    this.proposalData.attachments.splice(idx, 1);
+    this.deleteFile.push(id);
+  }
+
   setMinDate(param?: any): void {
     this.formCreateProposal.get("endDate").setValue("");
     this.minMaxDateProposal = param;
@@ -306,7 +315,7 @@ export class TrsProposalEditComponent implements OnInit {
       fd.append('background', this.formCreateProposal.get('background').value);
       fd.append('objective', this.formCreateProposal.get('objective').value);
       fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
-      fd.append('flowingly', this.formCreateProposal.get('flowingly').value);
+      fd.append('flowingly', this.formCreateProposal.get('flowingly').value.trim());
       
       fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
 
@@ -314,6 +323,10 @@ export class TrsProposalEditComponent implements OnInit {
       fd.append('kecamatans', this.selectedKecamatan);
       fd.append('products', this.selectedProduct);
 
+      if (this.deleteFile.length > 0){
+        fd.append('remove_files', this.deleteFile.join("__"));
+      }
+      
       if (mode == 1){
         fd.append('status', 'ready to execute');
       } else {
@@ -325,13 +338,25 @@ export class TrsProposalEditComponent implements OnInit {
       })
 
       if (mode == 1){
-        if (this.fileList.length == 0 || fd['flowingly'] === undefined || fd['flowingly'].trim() == ""){
+        let sisa_attchments = this.proposalData.attachments.length - this.deleteFile.length;
+
+        if ((sisa_attchments < 1 && this.fileList.length == 0) || this.formCreateProposal.get('flowingly').value.trim() == ""){
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({
             message: "Nomor Flowingly dan Attach File wajib diisi !"
           });
         } else {
-          alert("komplit");
+          console.log("submit bisa dilakukan");
+
+          this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: this.ls.locale.notification.popup_notifikasi.text22
+            });
+            this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+          }, err => {
+            this.dataService.showLoading(false);
+          })
         }
       } else {
         this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
