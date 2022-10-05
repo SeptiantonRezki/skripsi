@@ -300,6 +300,9 @@ export class TrsProposalCreateComponent implements OnInit {
               alert(res.message);
               this.formCreateProposal.get(component_name).setValue("");
             }
+          }, err => {
+            this.dataService.showLoading(false);
+            console.log('err occured', err);
           })
         }
       }

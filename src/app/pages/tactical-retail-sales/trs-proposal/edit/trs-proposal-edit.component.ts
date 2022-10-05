@@ -231,6 +231,7 @@ export class TrsProposalEditComponent implements OnInit {
       });
 
     }, err => {
+      this.dataService.showLoading(false);
       console.log('err occured', err);
     })
 
@@ -433,6 +434,9 @@ export class TrsProposalEditComponent implements OnInit {
               alert(res.message);
               this.formCreateProposal.get(component_name).setValue("");
             }
+          }, err => {
+            this.dataService.showLoading(false);
+            console.log('err occured', err);
           })
         }
       }

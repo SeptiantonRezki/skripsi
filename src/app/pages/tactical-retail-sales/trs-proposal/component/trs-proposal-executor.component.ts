@@ -32,6 +32,7 @@ export class TrsProposalExecutorComponent {
   temp: any[] = [];
 
   selected: any[];
+  selected_userid: any[];
   detailData: any;
 
   selectedMitra: any[] = [];
@@ -104,6 +105,12 @@ export class TrsProposalExecutorComponent {
 
     console.log("onselected");
     console.log(this.selected);
+
+    /*
+    let execid = this.selected['id'];
+    let userid = execid.split('_');
+    selected_userid.push()
+    */
   }
 
   onCheckboxChange(event: any, row: any) {
