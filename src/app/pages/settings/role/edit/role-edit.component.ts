@@ -103,7 +103,6 @@ export class RoleEditComponent {
       this.detailRoles = res;
       this.roles = res.role;
       const country = localStorage.getItem('user_country');
-      console.log('countrynya', country);
       const wholesalerRole = _.find(this.roles, { nama: (country === 'km') ? 'ការគ្រប់គ្រងអ្នកប្រើប្រាស់' : country === 'en-ph' ? 'User Management' : 'management pengguna' }),
         wholesalerMenu = wholesalerRole && _.find(wholesalerRole.menu, { nama: (country === 'km') ? 'អ្នកលក់ដុំ' : 'wholesaler' }),
         wholesalerExportToggle = wholesalerMenu && _.find(wholesalerMenu.value, { value: 'principal.wholesaler.button.export' }),
