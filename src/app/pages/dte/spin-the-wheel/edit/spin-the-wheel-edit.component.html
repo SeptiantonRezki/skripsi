@@ -559,9 +559,9 @@
                     <mat-form-field fxFlex="100" class="" *ngIf="formPM.get('limit_by_product').value">
                       <mat-chip-list #chipList aria-label="Product List">
                         <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
-                          (removed)="remove(product)">
+                          (removed)="remove(product.sku_id)">
                           {{product.name}}
-                          <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                         </mat-chip>
                         <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
                           (input)="keyUpProduct.next($event.target.value)" formControlName="product" [matAutocomplete]="auto"
@@ -581,9 +581,40 @@
 
                     <mat-form-field fxFlex="50">
                       <mat-select placeholder="{{ls.locale.cn_reward.b2b_voucher.text30}}" formControlName="category" multiple> <!-- // TODO -->
-                        <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                        <mat-option *ngFor="let cat of listCategories" [value]="cat.id" (onSelectionChange)="limitCategoryChange($event)">{{ cat.name }}</mat-option>
                       </mat-select>
                     </mat-form-field>
+
+                    <ng-container *ngIf="formPM.controls.limit_purchase.length">
+                      <div class="my-16" formArrayName="limit_purchase">
+                        <div fxLayout="row" fxLayoutGap="16px">
+                          <div fxFlex="40"><strong>{{formPM.controls.limit_by_product.value ? 'Produk' : 'Kategori'}}</strong></div>
+                          <div fxFlex="60"><strong>Nilai Transaksi (Minimal)</strong></div>
+                        </div>
+                        <div fxLayout="row" fxLayoutGap="16px" *ngFor="let p of formPM.controls.limit_purchase.controls;let pi = index" [formGroupName]="pi">
+                          <div fxFlex="40">
+                            <p *ngIf="formPM.controls.limit_by_product.value && limitProduct">{{ limitProduct[p.controls.id.value] }}</p>
+                            <p *ngIf="formPM.controls.limit_by_category.value && limitCategory">{{ limitCategory[p.controls.id.value] }}</p>
+                          </div>
+                          <div fxLayout="row" fxFlex="60">
+                            <mat-form-field fxFlex="80" class="is-light">
+                              <input formControlName="value" matInput type="tel" currencyMask />
+                              <mat-error *ngIf="(p.controls.value.hasError('required') || p.controls.value.hasError('min')) && p.controls.value.touched">
+                                Nilai Transaksi harap diisi
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-16" *ngIf="formPM.controls.limit_purchase.length > 1">
+                        <div class="mb-8"><strong>Kombinasi Pembatasan Produk/Kategori</strong></div>
+                        <mat-radio-group fxLayout="row" fxLayoutGap="32px" formControlName="limit_option">
+                          <mat-radio-button value="AND">AND</mat-radio-button>
+                          <mat-radio-button value="OR">OR</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                    </ng-container>
+
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,7 +31,7 @@ import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/imp
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number;
+  selectedTab: number = 2;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -156,6 +156,9 @@ export class SpinTheWheelEditComponent implements OnInit {
   showDetail: any;
   isDetail: Boolean;
 
+  limitProduct: any = {};
+  limitCategory: any = {};
+
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private supplierCompanyService: SupplierCompanyService,
@@ -269,6 +272,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_by_category: [false],
       limit_by_product_srcc: [false],
       limit_by_category_srcc: [false],
+      limit_option: ['AND'],
+      limit_purchase: this.formBuilder.array([]),
       product: [''],
       category: [''],
       product_srcc: [''],
@@ -307,7 +312,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         return Observable.of(key).delay(300);
       })
       .subscribe(res => {
-        // console.log('reas ngetik cuk', res);
         this.getListProduct(res);
         this.resetField(res);
       });
@@ -412,18 +416,25 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
             } else if (res.data.settings.details[i].category_type === 'limit') {
               this.changeType('ppk');
+              const limitOnly = res.data.settings.details[i].limit_only;
+              for (let data of limitOnly) this.addLimitPurchase(data);
+              this.formPM.controls.limit_option.setValue(res.data.settings.details[i].limit_option || 'AND');
               if (res.data.settings.details[i].limit_by === 'product') {
                 this.formPM.get('limit_by_category').setValue(false);
                 this.formPM.get('limit_by_product').setValue(true);
                 // this.productList = res.data.settings.details[i].limit_only;
                 this.productList = res.data.settings.details[i].limit_only_data;
+                this.limitProduct = this.productList.reduce((sum, item) => {
+                  sum[item.sku_id] = item.name;
+                  return sum;
+                }, {});
               } else {
                 this.formPM.get('limit_by_category').setValue(true);
                 this.formPM.get('limit_by_product').setValue(false);
                 this.selectedCategory = res.data.settings.details[i].limit_only;
                 this.formPM.get('category').enable();
                 const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x, 10);
+                  return parseInt(x.id, 10);
                 });
                 this.formPM.get('category').setValue(resultCat);
               }
@@ -473,7 +484,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   initAreaSelected(data = null) {
-    console.log('=================');
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
@@ -495,9 +505,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
       });
     }
-    console.log(arr_area);
-    console.log(arr_region);
-    console.log(arr_zone);
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
@@ -592,7 +599,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   getTradePrograms() {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
-        console.log("res trade programs", res);
         this.listTradePrograms = res.data;
         this.filteredTradeProgram.next(res.data);
       },
@@ -625,8 +631,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     let fd = new FormData();
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -638,7 +642,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -651,7 +654,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
@@ -659,11 +661,9 @@ export class SpinTheWheelEditComponent implements OnInit {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           })
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -693,10 +693,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
 
       if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
-      // console.log('on set', thisAreaOnSet, selection, id);
     }
 
-    console.log('XYZ--------')
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
@@ -723,7 +721,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -765,7 +762,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -799,7 +795,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -884,19 +879,10 @@ export class SpinTheWheelEditComponent implements OnInit {
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
-    // console.log('[checkAreaLocation:area]', area);
-    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
-    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
     if (area.value !== 1) {
-      // console.log('[checkAreaLocation:list]', this.list[area.key]);
-      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
-      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
-        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
-        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
       }
     }
 
@@ -909,7 +895,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
-    // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
@@ -947,22 +932,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
           else this.pagination['last_self_area'] = [last_self_area[0]];
         } else {
-          // console.log('its hitted [other level]');
           this.pagination['after_level'] = true;
           this.pagination['last_self_area'] = newLastSelfArea;
         }
       } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
         this.pagination['after_level'] = true;
         if (newLastSelfArea.length > 0) {
           this.pagination['last_self_area'] = newLastSelfArea;
@@ -1005,8 +985,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       body['start_date'] = `${moment(this.formSpin.get('start_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('start_time').value}:00`;
       body['end_date'] = `${moment(this.formSpin.get('end_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('end_time').value}:00`;
 
-      console.log(body);
-
       this.dataService.showLoading(true);
       this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
@@ -1023,7 +1001,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submitAudience() {
-    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
@@ -1267,16 +1244,59 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
+  addLimitPurchase(data: any) {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    const formControl = this.formBuilder.group({
+      id: [data.sku_id || data.id],
+      value: [data.value || 0, [Validators.required, Validators.min(1)]],
+    })
+    limitPurchase.push(formControl);
+  }
+
+  removeLimitPurchase(id: any) {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    const index = Object.values(limitPurchase.controls).findIndex(i => i.value.id.toString() === id.toString());
+    limitPurchase.removeAt(index);
+  }
+
+  resetLimitPurchase() {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    while (limitPurchase.length > 0) limitPurchase.removeAt(0);
+  }
+
+  limitCategoryChange(event: any) {
+    if (!event.isUserInput) return;
+    const id = event.source.value;
+    if (event.source.selected) {
+      this.addLimitPurchase({ id });
+    } else {
+      this.removeLimitPurchase(id);
+    }
+  }
+
+  addTier(data: any) {
+    const tier = this.formPM.controls.tier as FormArray;
+    const formControl = this.formBuilder.group({
+      type: [data.type],
+      type_value: [data.typeValue, [Validators.required]],
+      slice: [data.slice, [Validators.required]],
+      probability: [data.probability, [Validators.required]],
+    });
+    tier.push(formControl);
+  }
+
   getCategories() {
     this.productService.getListCategory(null).subscribe(res => {
-      console.log(res.data);
       this.listCategories = res.data ? res.data.data : [];
+      this.limitCategory = this.listCategories.reduce((sum, item) => {
+        sum[item.id] = item.name;
+        return sum;
+      }, {});
     });
   }
 
   getCategoriesSRCC() {
     this.productService.getListCategory(null).subscribe(res => {
-      console.log(res.data);
       this.listCategoriesSRCC = res.data ? res.data.data : [];
     });
   }
@@ -1284,6 +1304,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   getProductObj(event, obj) {
     const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
     if (index === -1) {
+      this.limitProduct[obj.sku_id] = obj.name;
+      this.addLimitPurchase(obj);
       this.productList.push(obj);
     }
     if (this.productInput) {
@@ -1302,7 +1324,6 @@ export class SpinTheWheelEditComponent implements OnInit {
            */
           this.listProductSkuBank = [];
         } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank);
           this.product.setValue(itemClick.toString());
           if (this.productInput) {
             this.productInput.nativeElement.value = itemClick.toString();
@@ -1356,10 +1377,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   isCheckedPM(type, event) {
-    console.log('X -', type);
-    console.log('Y -', event);
     if (type === 'product') {
-      // this.formPM.get('category').setValue('');
+      this.formPM.get('category').setValue('');
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(true);
       if (!event.checked) {
@@ -1383,16 +1402,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event.checked) {
-        // this.formPM.get('category').setValue('');
+        this.formPM.get('category').setValue('');
         this.formPM.get('category').enable();
       } else {
-        // this.formPM.get('category').setValue('');
+        this.formPM.get('category').setValue('');
         this.formPM.get('category').disable();
       }
       if (this.productInput) {
         this.productInput.nativeElement.value = null;
       }
     }
+    this.resetLimitPurchase();
   }
 
   add(event: MatChipInputEvent): void {
@@ -1416,6 +1436,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     if (index >= 0) {
       this.productList.splice(index, 1);
+      this.removeLimitPurchase(id);
     }
   }
 
@@ -1440,7 +1461,6 @@ export class SpinTheWheelEditComponent implements OnInit {
            */
           this.listProductSkuBankSRCC = [];
         } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank)
           this.productSRCC.setValue(itemClick.toString());
           if (this.productInputSRCC) {
             this.productInputSRCC.nativeElement.value = itemClick.toString();
@@ -1494,8 +1514,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   isCheckedSRCC(type, event) {
-    console.log('X SRCC', type);
-    console.log('Y SRCC', event);
     if (type === 'product') {
       this.formPM.get('category_srcc').setValue('');
       this.formPM.get('limit_by_category_srcc').setValue(false);
@@ -1775,6 +1793,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('limit_by_product').setValue(false);
       this.formPM.get('category').setValue([]);
     }
+    this.resetLimitPurchase();
   }
   
   setValueDetail() {
