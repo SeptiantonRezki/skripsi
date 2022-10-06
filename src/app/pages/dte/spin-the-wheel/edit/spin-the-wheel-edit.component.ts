@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,7 +31,7 @@ import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/imp
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number;
+  selectedTab: number = 2;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -156,6 +156,9 @@ export class SpinTheWheelEditComponent implements OnInit {
   showDetail: any;
   isDetail: Boolean;
 
+  limitProduct: any = {};
+  limitCategory: any = {};
+
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private supplierCompanyService: SupplierCompanyService,
@@ -269,6 +272,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_by_category: [false],
       limit_by_product_srcc: [false],
       limit_by_category_srcc: [false],
+      limit_option: ['AND'],
+      limit_purchase: this.formBuilder.array([]),
       product: [''],
       category: [''],
       product_srcc: [''],
@@ -411,18 +416,25 @@ export class SpinTheWheelEditComponent implements OnInit {
               this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
             } else if (res.data.settings.details[i].category_type === 'limit') {
               this.changeType('ppk');
+              const limitOnly = res.data.settings.details[i].limit_only;
+              for (let data of limitOnly) this.addLimitPurchase(data);
+              this.formPM.controls.limit_option.setValue(res.data.settings.details[i].limit_option || 'AND');
               if (res.data.settings.details[i].limit_by === 'product') {
                 this.formPM.get('limit_by_category').setValue(false);
                 this.formPM.get('limit_by_product').setValue(true);
                 // this.productList = res.data.settings.details[i].limit_only;
                 this.productList = res.data.settings.details[i].limit_only_data;
+                this.limitProduct = this.productList.reduce((sum, item) => {
+                  sum[item.sku_id] = item.name;
+                  return sum;
+                }, {});
               } else {
                 this.formPM.get('limit_by_category').setValue(true);
                 this.formPM.get('limit_by_product').setValue(false);
                 this.selectedCategory = res.data.settings.details[i].limit_only;
                 this.formPM.get('category').enable();
                 const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x, 10);
+                  return parseInt(x.id, 10);
                 });
                 this.formPM.get('category').setValue(resultCat);
               }
@@ -1232,9 +1244,54 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
+  addLimitPurchase(data: any) {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    const formControl = this.formBuilder.group({
+      id: [data.sku_id || data.id],
+      value: [data.value || 0, [Validators.required, Validators.min(1)]],
+    })
+    limitPurchase.push(formControl);
+  }
+
+  removeLimitPurchase(id: any) {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    const index = Object.values(limitPurchase.controls).findIndex(i => i.value.id.toString() === id.toString());
+    limitPurchase.removeAt(index);
+  }
+
+  resetLimitPurchase() {
+    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
+    while (limitPurchase.length > 0) limitPurchase.removeAt(0);
+  }
+
+  limitCategoryChange(event: any) {
+    if (!event.isUserInput) return;
+    const id = event.source.value;
+    if (event.source.selected) {
+      this.addLimitPurchase({ id });
+    } else {
+      this.removeLimitPurchase(id);
+    }
+  }
+
+  addTier(data: any) {
+    const tier = this.formPM.controls.tier as FormArray;
+    const formControl = this.formBuilder.group({
+      type: [data.type],
+      type_value: [data.typeValue, [Validators.required]],
+      slice: [data.slice, [Validators.required]],
+      probability: [data.probability, [Validators.required]],
+    });
+    tier.push(formControl);
+  }
+
   getCategories() {
     this.productService.getListCategory(null).subscribe(res => {
       this.listCategories = res.data ? res.data.data : [];
+      this.limitCategory = this.listCategories.reduce((sum, item) => {
+        sum[item.id] = item.name;
+        return sum;
+      }, {});
     });
   }
 
@@ -1247,6 +1304,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   getProductObj(event, obj) {
     const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
     if (index === -1) {
+      this.limitProduct[obj.sku_id] = obj.name;
+      this.addLimitPurchase(obj);
       this.productList.push(obj);
     }
     if (this.productInput) {
@@ -1319,7 +1378,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   isCheckedPM(type, event) {
     if (type === 'product') {
-      // this.formPM.get('category').setValue('');
+      this.formPM.get('category').setValue('');
       this.formPM.get('limit_by_category').setValue(false);
       this.formPM.get('limit_by_product').setValue(true);
       if (!event.checked) {
@@ -1343,16 +1402,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.listProductSkuBank = [];
       this.inputChipList = [];
       if (event.checked) {
-        // this.formPM.get('category').setValue('');
+        this.formPM.get('category').setValue('');
         this.formPM.get('category').enable();
       } else {
-        // this.formPM.get('category').setValue('');
+        this.formPM.get('category').setValue('');
         this.formPM.get('category').disable();
       }
       if (this.productInput) {
         this.productInput.nativeElement.value = null;
       }
     }
+    this.resetLimitPurchase();
   }
 
   add(event: MatChipInputEvent): void {
@@ -1376,6 +1436,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     if (index >= 0) {
       this.productList.splice(index, 1);
+      this.removeLimitPurchase(id);
     }
   }
 
@@ -1592,6 +1653,11 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   async submitPM() {
+    if (!this.formPM.valid) {
+      commonFormValidator.validateAllFields(this.formPM);
+      return;
+    }
+
     const sumProbability = this.sumPM('probability');
     if (this.formPM.get('frekuensi_belanja').value === '') {
       this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
@@ -1689,6 +1755,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('limit_by_product').setValue(false);
       this.formPM.get('category').setValue([]);
     }
+    this.resetLimitPurchase();
   }
   
   setValueDetail() {
