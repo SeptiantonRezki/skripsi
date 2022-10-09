@@ -29,6 +29,7 @@ export class TrsProposalProductComponent {
   onLoad: boolean;
 
   rows: any[] = [];
+  temp: any[] = [];
 
   selected: any[];
   detailData: any;
@@ -118,6 +119,22 @@ export class TrsProposalProductComponent {
     }
   }
 
+  updateFilter(event) {
+    console.log("keyup");
+    const val = event.target.value.toLowerCase();
+
+    let temp = this.temp;
+
+    temp = temp.filter(function (d) {
+      return d.code.toLowerCase().indexOf(val) !== -1 ||
+             d.name.toLowerCase().indexOf(val) !== -1 ||
+             !val;
+    });
+    
+    // update the rows
+    this.rows = temp;
+  }
+
   aturPanelMitra() {
     this.selectedMitra = [];
     //this.onSelect({ selected: [] });
@@ -133,6 +150,7 @@ export class TrsProposalProductComponent {
 
       this.loaded = true;
       this.rows = res.data;
+      this.temp = [...res.data];
 
       console.log("this.detailData.selected");
       console.log(this.detailData.selected);

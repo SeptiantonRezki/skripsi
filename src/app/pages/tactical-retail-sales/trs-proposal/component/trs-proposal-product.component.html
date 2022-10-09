@@ -12,15 +12,26 @@
     <!-- / CLOSE DIALOG BUTTON -->
   </mat-toolbar>
 
-  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar  style="position: relative;">
+    
+    <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+      <div class="search-field" fxFlex="40%" class="dropdown is-light form-primary">
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="is-light tab-search">
+          <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="updateFilter($event)"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
       <input formControlName="test">
 
-      <div *ngIf="loaded">
+      <div *ngIf="loaded" style="padding-bottom: 40px;">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
         [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
-        >
+        style="position: unset; display: unset;">
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template>
           </ng-template>

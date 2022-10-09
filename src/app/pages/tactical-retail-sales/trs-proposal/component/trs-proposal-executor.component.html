@@ -12,7 +12,7 @@
     <!-- / CLOSE DIALOG BUTTON -->
   </mat-toolbar>
 
-  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar  style="position: relative;">
     
     <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
       <mat-form-field fxFlex="25%" class="dropdown is-light form-primary">
@@ -36,11 +36,11 @@
     </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
-      <div *ngIf="loaded">
+      <div *ngIf="loaded" style="padding-bottom: 40px;">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
         [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
-        [sorts]="[{prop: 'fullname', dir: 'asc'}]"
+        [sorts]="[{prop: 'fullname', dir: 'asc'}]" style="position: unset; display: unset;"
         >
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template>
@@ -54,7 +54,7 @@
             let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn"
           >
-            <mat-checkbox [checked]="isSelected" [disabled]="checkDisabled && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" [disabled]="(checkDisabled || disabled_exec.includes(row.idUser)) && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
           </ng-template>
 
         </ngx-datatable-column>

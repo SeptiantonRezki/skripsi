@@ -152,15 +152,15 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Created At" prop="created_at">
+        <ngx-datatable-column name="Created At & By" prop="created_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.created_at }}
+            {{row.created_at }}<br />{{row.created_by }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Modified At" prop="modified_at">
+        <ngx-datatable-column name="Modified At & By" prop="updated_at">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.updated_at }}
+            {{row.updated_at }}<br />{{row.updated_by }}
           </ng-template>
         </ngx-datatable-column>
 
@@ -179,6 +179,9 @@
                 <mat-icon class="secondary-text">visibility</mat-icon>
               </button>
               <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah && row.status != 'finish' && row.status != 'cancel'">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" class="disabled" (click)="doNothing(row)" *ngIf="permission.ubah && (row.status == 'finish' || row.status == 'cancel')">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <button mat-icon-button color="" (click)="getDetailOrder(row.program_code)">

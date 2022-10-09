@@ -7,28 +7,80 @@ export class GenerateTRS {
         <title>TRS Proposal - ${detailProposal.program_code}</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
         <style type="text/css">
-          @media print {
-            body {
-               -webkit-print-color-adjust: exact;
+          :root {
+            --bleeding: 0.0cm;
+            --margin: 1.5cm;
+          }
+          
+          @page {
+            size: A4;
+            margin: 0;
+          }
+          * {
+            box-sizing: border-box;
+          }
+          
+          body {
+            margin: 0 auto;
+            padding: 0;
+            background: rgb(204, 204, 204);
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .page {
+            display: inline-block;
+            position: relative;
+            height: 297mm;
+            width: 210mm;
+            font-size: 12pt;
+            margin: 2em auto;
+            padding: calc(var(--bleeding) + var(--margin));
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            background: white;
+          }
+          
+          @media screen {
+            .page::after {
+              position: absolute;
+              content: '';
+              top: 0;
+              left: 0;
+              width: calc(100% - var(--bleeding) * 2);
+              height: calc(100% - var(--bleeding) * 2);
+              margin: var(--bleeding);
+              outline: thin dashed black;
+              pointer-events: none;
+              z-index: 9999;
             }
           }
-          :root {
-            --bleeding: 0cm;
-            --margin: 00.5cm;
+          
+          @media print {
+            body {
+              -webkit-print-color-adjust: exact;
+            }
+
+            .page {
+              margin: 0;
+              overflow: hidden;
+            }
           }
-      
-          @page{size:A4;margin:0}*{box-sizing:border-box}body{margin:0 auto;padding:0;background:#ccc;display:flex;flex-direction:column}.page{display:inline-block;position:relative;height:297mm;width:210mm;font-size:12pt;margin:2em auto;box-shadow:0 0 .5cm rgba(0,0,0,.5);background:#fff}@media screen{.page::after{position:absolute;content:'';top:0;left:0;width:calc(100% - var(--bleeding) * 2);height:calc(100% - var(--bleeding) * 2);margin:var(--bleeding);outline:black dashed thin;pointer-events:none;z-index:9999}}@media print{.page{margin:0;overflow:hidden}}
-      
+
           .page{
-            border: 2px solid;
             font-family: Helvetica, sans-serif;
+          }
+
+          .content{
+            width: 100%;
+            heigh: 100%;
+            border: 2px solid;
           }
       
           .title{
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 150px;
+            height: 110px;
             text-align: center;
             line-height: 33px;
             font-size: 22px;
@@ -80,6 +132,11 @@ export class GenerateTRS {
             padding: 5px;
             font-size: 15px;
             height: 150px;
+            overflow:hidden;
+          }
+
+          .kecamatan {
+            font-size: 10px;
           }
 
           .jumbo{
@@ -91,6 +148,7 @@ export class GenerateTRS {
       
       <body onload="load()">
         <div class="page">
+        <div class="content">
           <div class="title">
             Proposal<br />
             Tactical Retail Sales Activity
@@ -108,7 +166,7 @@ export class GenerateTRS {
                 : ${detailProposal.area_name}<br />
                 : ${detailProposal.salespoint_name}<br />
                 : ${detailProposal.created_by} (${detailProposal.created_at})<br />
-                : ${detailProposal.updated}
+                : ${detailProposal.updated_by} (${detailProposal.updated_at})
               </div>
             </div>
           </div>
@@ -169,7 +227,7 @@ export class GenerateTRS {
                 </div>
                 <div class="textarea" style="margin: 0 0 10px 5px;">
                   Kecamatan :<br />
-                  <ul>`;
+                  <ul class="kecamatan">`;
                   
                   for (const obj of detailProposal.kecamatans) {
                     html += `<li>${obj.dati2} - ${obj.kecamatan}</li>`;
@@ -183,6 +241,7 @@ export class GenerateTRS {
           </div>
 
 
+        </div>
         </div>
         <script>
           function load() { 

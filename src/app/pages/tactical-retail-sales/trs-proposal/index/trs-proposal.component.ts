@@ -803,7 +803,6 @@ console.log(areaSelected);
   print() {
     let bodyHtml = {
       ...this.detailOrder,
-      created_at: moment(this.detailOrder.created_at).format("DD/MM/YYYY HH:mm"),
     };
 
     let popupWin;
@@ -816,6 +815,10 @@ console.log(areaSelected);
   goEdit(param?: any): void {
     this.dataService.setToStorage('trs_program_code', param.program_code);
     this.router.navigate(["tactical-retail-sales", "trs-proposal", "edit", param.program_code]);
+  }
+
+  doNothing(param?: any): void {
+    
   }
 
   goDetail(param?: any): void {

@@ -420,7 +420,7 @@ export class TrsProposalEditComponent implements OnInit {
 
   setCustName(id, component_name): void {
     if (id) {
-      if (id.length == 10) {
+      if (id.length >= 10) {
         if (this.selectedSalesPoint == ""){
           alert("Pilih salespoint terlebih dahulu !");
         } else {

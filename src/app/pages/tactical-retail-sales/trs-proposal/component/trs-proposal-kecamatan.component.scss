@@ -181,3 +181,14 @@
     border: 1px solid #ddd;
   }
 }
+
+.ngx-datatable.material .datatable-footer{
+  position: absolute;
+  bottom: 0;
+  width: 1030px;
+  background-color: #fff;
+  z-index: 10;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  color: #444;
+}

@@ -19,7 +19,7 @@
                 <div [formGroupName]="i">
                   <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
-                      <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
+                      <mat-select placeholder="Area" formControlName="area"
                         matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
                         (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
                         [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
@@ -29,13 +29,13 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
-                        {{'global.area.area' | translate}} {{ ls.locale.global.messages.mandatory_text }}
+                        Area wajib diisi
                       </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
-                      <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
+                      <mat-select placeholder="Salespoint" formControlName="salespoint"
                         matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
                         (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
                         [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
@@ -44,7 +44,7 @@
                       </mat-select>
                       <mat-error
                         *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
-                        {{'global.area.salespoint' | translate}} {{ ls.locale.global.messages.mandatory_text }}
+                        Salespoint wajib diisi
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -82,7 +82,8 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
-                    placeholder="Jumlah Executor">
+                    placeholder="Jumlah Executor" 
+                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                 </mat-form-field>
               </div>
 
