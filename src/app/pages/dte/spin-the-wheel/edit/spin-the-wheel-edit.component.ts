@@ -31,7 +31,7 @@ import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/imp
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number = 2;
+  selectedTab: number;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -159,6 +159,28 @@ export class SpinTheWheelEditComponent implements OnInit {
   limitProduct: any = {};
   limitCategory: any = {};
 
+  point_valuation: number;
+
+  defaultTier: any = {
+    minimum_transaction: 0,
+    maximum_transaction: 0,
+    limit_spin: 0,
+    average_coin_spin: 0,
+    coin_variation: 0,
+  }
+
+  defaultRewards: any = {
+    value: 0,
+    slice: 0,
+    probability: 0,
+    limit_attempt: 0,
+    total_budget: 0,
+    actual_spin: 0,
+    actual_budget: 0,
+    spin_left: 0,
+    budget_left: 0,
+  }
+
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private supplierCompanyService: SupplierCompanyService,
@@ -182,6 +204,8 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
+
+    this.point_valuation = parseInt(localStorage.getItem('point_valuation'));
 
     this.listLevelArea = [
       {
@@ -283,7 +307,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_spin: [0, [Validators.required, Validators.min(1)]],
       minimum_transaction: [0],
       frekuensi_belanja: ['', Validators.required],
-      frekuensi_reward: ['', Validators.required]
+      frekuensi_reward: ['', Validators.required],
+      tier: this.formBuilder.array([]),
     });
 
     if(this.isDetail){
@@ -390,97 +415,109 @@ export class SpinTheWheelEditComponent implements OnInit {
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
-    
+
+    this.addTier();
+
     this.setValueDetail();
   }
 
   setStorageDetail() {
-    // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
-      if(res.data){
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => {
+      if (res.data) {
         this.dataService.setToStorage('spin_the_wheel', res.data);
-        if (res.data.settings) {
-          this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
-          
-          this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
-          this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
-          this.averageCoin = res.data.settings.average_coin_spin;
-          for (let i = 0; i < res.data.settings.details.length; i++) {
-            if (res.data.settings.details[i].category_type === 'belanja') {
-              this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'reward') {
-              this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
-              this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'limit') {
-              this.changeType('ppk');
-              const limitOnly = res.data.settings.details[i].limit_only;
-              for (let data of limitOnly) this.addLimitPurchase(data);
-              this.formPM.controls.limit_option.setValue(res.data.settings.details[i].limit_option || 'AND');
-              if (res.data.settings.details[i].limit_by === 'product') {
-                this.formPM.get('limit_by_category').setValue(false);
-                this.formPM.get('limit_by_product').setValue(true);
-                // this.productList = res.data.settings.details[i].limit_only;
-                this.productList = res.data.settings.details[i].limit_only_data;
-                this.limitProduct = this.productList.reduce((sum, item) => {
-                  sum[item.sku_id] = item.name;
-                  return sum;
-                }, {});
-              } else {
-                this.formPM.get('limit_by_category').setValue(true);
-                this.formPM.get('limit_by_product').setValue(false);
-                this.selectedCategory = res.data.settings.details[i].limit_only;
-                this.formPM.get('category').enable();
-                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x.id, 10);
-                });
-                this.formPM.get('category').setValue(resultCat);
-              }
-            } else if (res.data.settings.details[i].category_type === 'exclude') {
-              this.changeType('exclude');
-              if (res.data.settings.details[i].limit_by === 'product') {
-                this.formPM.get('limit_by_category_srcc').setValue(false);
-                this.formPM.get('limit_by_product_srcc').setValue(true);
-                // this.productList = res.data.settings.details[i].limit_only;
-                this.productListSRCC = res.data.settings.details[i].limit_only_data;
-              } else {
-                this.formPM.get('limit_by_category_srcc').setValue(true);
-                this.formPM.get('limit_by_product_srcc').setValue(false);
-                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x, 10);
-                });
-                this.formPM.get('category_srcc').setValue(resultCat);
-              }
-            }
-          }
-
-          this.formPM.get('coins').setValue(res.data.settings.coins);
-        } else {
-          this.editableCoin = true;
+        const settings = res.data.settings;
+        if (settings) {
+          this.formPM.controls.frekuensi_belanja.setValue(settings.frekuensi_belanja);
+          this.formPM.controls.frekuensi_reward.setValue(settings.frekuensi_reward);
         }
-        // this.changeBlastType(res.data.audience_filter);
-        if(res.data.audience_filter === 'population-blast'){
-          this.formGeo.get('classification').setValue(res.data.class_groups);
-        }
-
-        let zone = [];
-        if (res.data.areas) {
-          for (let i = 0; i < res.data.areas.length; i++) {
-            if (res.data.areas[i].level_desc === 'zone') {
-              if (!( res.data.areas[i].area_id in zone )) {
-                zone.push(res.data.areas[i].area_id);
-              }
-            }
-          }
-        }
-        this.selectedZone = zone;
-        this.imageConverted = res.data.icon_url;
-
-        this.initAreaSelected(res.data);
       }
     });
+    // Show detail
+    // this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+    //   if(res.data){
+    //     this.dataService.setToStorage('spin_the_wheel', res.data);
+    //     if (res.data.settings) {
+    //       this.editableCoin = false;
+    //       this.formPM.get('limit_spin').disable();
+    //       this.formPM.get('coin_variation').disable();
+          
+    //       this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
+    //       this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
+    //       this.averageCoin = res.data.settings.average_coin_spin;
+    //       for (let i = 0; i < res.data.settings.details.length; i++) {
+    //         if (res.data.settings.details[i].category_type === 'belanja') {
+    //           this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
+    //         } else if (res.data.settings.details[i].category_type === 'reward') {
+    //           this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
+    //         } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
+    //           this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
+    //         } else if (res.data.settings.details[i].category_type === 'limit') {
+    //           this.changeType('ppk');
+    //           const limitOnly = res.data.settings.details[i].limit_only;
+    //           for (let data of limitOnly) this.addLimitPurchase(data);
+    //           this.formPM.controls.limit_option.setValue(res.data.settings.details[i].limit_option || 'AND');
+    //           if (res.data.settings.details[i].limit_by === 'product') {
+    //             this.formPM.get('limit_by_category').setValue(false);
+    //             this.formPM.get('limit_by_product').setValue(true);
+    //             // this.productList = res.data.settings.details[i].limit_only;
+    //             this.productList = res.data.settings.details[i].limit_only_data;
+    //             this.limitProduct = this.productList.reduce((sum, item) => {
+    //               sum[item.sku_id] = item.name;
+    //               return sum;
+    //             }, {});
+    //           } else {
+    //             this.formPM.get('limit_by_category').setValue(true);
+    //             this.formPM.get('limit_by_product').setValue(false);
+    //             this.selectedCategory = res.data.settings.details[i].limit_only;
+    //             this.formPM.get('category').enable();
+    //             const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+    //               return parseInt(x.id, 10);
+    //             });
+    //             this.formPM.get('category').setValue(resultCat);
+    //           }
+    //         } else if (res.data.settings.details[i].category_type === 'exclude') {
+    //           this.changeType('exclude');
+    //           if (res.data.settings.details[i].limit_by === 'product') {
+    //             this.formPM.get('limit_by_category_srcc').setValue(false);
+    //             this.formPM.get('limit_by_product_srcc').setValue(true);
+    //             // this.productList = res.data.settings.details[i].limit_only;
+    //             this.productListSRCC = res.data.settings.details[i].limit_only_data;
+    //           } else {
+    //             this.formPM.get('limit_by_category_srcc').setValue(true);
+    //             this.formPM.get('limit_by_product_srcc').setValue(false);
+    //             const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
+    //               return parseInt(x, 10);
+    //             });
+    //             this.formPM.get('category_srcc').setValue(resultCat);
+    //           }
+    //         }
+    //       }
+
+    //       this.formPM.get('coins').setValue(res.data.settings.coins);
+    //     } else {
+    //       this.editableCoin = true;
+    //     }
+    //     // this.changeBlastType(res.data.audience_filter);
+    //     if(res.data.audience_filter === 'population-blast'){
+    //       this.formGeo.get('classification').setValue(res.data.class_groups);
+    //     }
+
+    //     let zone = [];
+    //     if (res.data.areas) {
+    //       for (let i = 0; i < res.data.areas.length; i++) {
+    //         if (res.data.areas[i].level_desc === 'zone') {
+    //           if (!( res.data.areas[i].area_id in zone )) {
+    //             zone.push(res.data.areas[i].area_id);
+    //           }
+    //         }
+    //       }
+    //     }
+    //     this.selectedZone = zone;
+    //     this.imageConverted = res.data.icon_url;
+
+    //     this.initAreaSelected(res.data);
+    //   }
+    // });
   }
 
   initAreaSelected(data = null) {
@@ -1274,15 +1311,190 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  addTier(data: any) {
+  addTier(data: any = ({} = this.defaultTier)) {
     const tier = this.formPM.controls.tier as FormArray;
     const formControl = this.formBuilder.group({
-      type: [data.type],
-      type_value: [data.typeValue, [Validators.required]],
-      slice: [data.slice, [Validators.required]],
-      probability: [data.probability, [Validators.required]],
+      minimum_transaction: [data.minimum_transaction, [Validators.required]],
+      maximum_transaction: [data.maximum_transaction, [Validators.required]],
+      limit_spin: [data.limit_spin, [Validators.required, Validators.min(1)]],
+      average_coin_spin: [data.average_coin_spin],
+      coin_variation: [
+        data.coin_variation,
+        [Validators.required, Validators.min(2), Validators.max(32)],
+      ],
+      rewards_coin: this.formBuilder.array([]),
+      rewards_non_coin: this.formBuilder.array([]),
+      rewards_xp: this.formBuilder.array([]),
+      probability_left: [100, [Validators.min(0)]],
     });
     tier.push(formControl);
+    this.validateTier(true);
+  }
+
+  getTier(tierId?: number): any {
+    const tiers = this.formPM.controls.tier as FormArray;
+    if (isNaN(tierId)) return tiers;
+    return tiers.at(tierId) as FormGroup;
+  }
+
+  removeTier(tierId: number) {
+    const dialog = {
+      titleDialog: "Hapus Tier",
+      captionDialog: `Apa Anda yakin menghapus Tier ${tierId + 1}`,
+      confirmCallback: () => {
+        const tiers = this.getTier();
+        tiers.removeAt(tierId);
+        this.dialogService.brodcastCloseConfirmation();
+      },
+      buttonText: ["Hapus", "Batal"],
+    };
+    this.dialogService.openCustomConfirmationDialog(dialog);
+  }
+
+  validateTier(isAdd?: boolean) {
+    const tiers = this.getTier();
+    let currentId = 1;
+    for (let i = 0; i < tiers.controls.length; i++) {
+      if (currentId > tiers.controls.length) break;
+      const tier = tiers.at(i);
+      if (i > 0) {
+        const prevTier = tiers.at(i - 1);
+        const prevMax = prevTier.controls.maximum_transaction.value + 1;
+        if (isAdd) tier.controls.minimum_transaction.setValue(prevMax);
+        tier.controls.minimum_transaction.setValidators([
+          Validators.required,
+          Validators.min(prevMax),
+        ]);
+        tier.controls.minimum_transaction.updateValueAndValidity();
+      }
+      const currentMin = tier.controls.minimum_transaction.value;
+      tier.controls.maximum_transaction.setValidators([
+        Validators.required,
+        Validators.min(currentMin),
+      ]);
+      tier.controls.maximum_transaction.updateValueAndValidity();
+      currentId += 1;
+    }
+  }
+
+  getRewards(type: string, tierId: number): any {
+    const tier = this.getTier(tierId);
+    const rewards = tier.controls[type] as FormArray;
+    return rewards;
+  }
+
+  addRewards(type: string, tierId: number, data: any = this.defaultRewards) {
+    const rewards = this.getRewards(type, tierId);
+    const valueValidity =
+      type === "rewards_non_coin"
+        ? [Validators.required]
+        : [Validators.required, Validators.min(1)];
+    const formControl = this.formBuilder.group({
+      value: [data.value, valueValidity],
+      slice: [data.slice, [Validators.required, Validators.min(1)]],
+      probability: [data.probability, [Validators.required, Validators.min(1)]],
+      limit_attempt: [data.limit_attempt],
+      total_budget: [data.total_budget],
+      actual_spin: [data.actual_spin],
+      actual_budget: [data.actual_budget],
+      spin_left: [data.spin_left],
+      budget_left: [data.budget_left],
+    });
+    rewards.push(formControl);
+  }
+
+  removeReward(type: string, tierId: number, rewardId: number) {
+    const rewards = this.getRewards(type, tierId);
+    rewards.removeAt(rewardId);
+    this.setProbability(tierId);
+  }
+
+  resetRewards(type: string, tierId: number) {
+    const rewards = this.getRewards(type, tierId);
+    while (rewards.length > 0) rewards.removeAt(0);
+  }
+
+  coinVariationChange(event: any, tierId: number) {
+    const len = event.target.value;
+    if (len >= 2 && len <= 32) {
+      this.resetRewards("rewards_coin", tierId);
+      if (len)
+        for (let i = 0; i < event.target.value; i++)
+          this.addRewards("rewards_coin", tierId);
+    }
+  }
+
+  setLimitAttempt(tierId: any, reward: any) {
+    const tier = this.getTier(tierId);
+    const limit_attempt = Math.ceil(
+      (tier.controls.limit_spin.value * reward.controls.probability.value) / 100
+    );
+    reward.controls.limit_attempt.setValue(limit_attempt);
+  }
+
+  setTotalBudget(reward: any) {
+    const total_budget =
+      reward.controls.value.value *
+      reward.controls.limit_attempt.value *
+      this.point_valuation;
+    reward.controls.total_budget.setValue(total_budget);
+  }
+
+  setAverageCoin(tierId: number) {
+    const tier = this.getTier(tierId);
+    const total_budget = this.updateTierSum(
+      tierId,
+      "rewards_coin",
+      "total_budget"
+    );
+    const average_coin_spin =
+      Math.ceil(
+        total_budget / this.point_valuation / tier.controls.limit_spin.value
+      ) || 0;
+    tier.controls.average_coin_spin.setValue(average_coin_spin);
+  }
+
+  setProbability(tierId: number) {
+    const tier = this.getTier(tierId);
+    const probability =
+      this.updateTierSum(tierId, "rewards_coin", "probability") +
+      this.updateTierSum(tierId, "rewards_non_coin", "probability") +
+      this.updateTierSum(tierId, "rewards_xp", "probability");
+    tier.controls.probability_left.setValue(100 - probability);
+  }
+
+  setTierData(tierId: number, reward: any, isCoin: boolean) {
+    this.setLimitAttempt(tierId, reward);
+    if (isCoin) {
+      this.setTotalBudget(reward);
+      this.setAverageCoin(tierId);
+    }
+    this.setProbability(tierId);
+  }
+
+  updateTierData(
+    tierId: number,
+    isCoin: boolean,
+    rewardType: string,
+    rewardId?: number
+  ) {
+    const rewards = this.getRewards(rewardType, tierId);
+    if (isNaN(rewardId)) {
+      for (let reward of rewards.controls)
+        this.setTierData(tierId, reward, isCoin);
+      return;
+    }
+    const reward = rewards.at(rewardId) as FormGroup;
+    this.setTierData(tierId, reward, isCoin);
+  }
+
+  updateTierSum(tierId: number, type: string, name: string) {
+    const rewards = this.getRewards(type, tierId);
+    let sum = 0;
+    for (let reward of rewards.controls) {
+      sum += reward.controls[name].value;
+    }
+    return sum;
   }
 
   getCategories() {
@@ -1576,36 +1788,36 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  async changeCoinVariation(event) {
-    let arr = [];
-    let coins = await this.formPM.get('coins').value;
-    if (coins === null) {
-      coins = [];
-    }
-    if (event.target.value <= 100) {
-      for (let i = 0; i < event.target.value; i++) {
-        if (i > coins.length - 1 || i === 0 && coins.length === 0) {
-          arr.push(
-            {
-              coin: '',
-              slice: '',
-              probability: '',
-              limit_atempt: '',
-              total_budget: '',
-              actual_spin: 0,
-              actual_budget: 0,
-              spin_left: 0,
-              budget_left: 0
-            }
-          );
-        } else {
-          arr.push(coins[i]);
-        }
-      }
-    }
-    await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = Math.floor(this.sumCoins());
-  }
+  // async changeCoinVariation(event) {
+  //   let arr = [];
+  //   let coins = await this.formPM.get('coins').value;
+  //   if (coins === null) {
+  //     coins = [];
+  //   }
+  //   if (event.target.value <= 100) {
+  //     for (let i = 0; i < event.target.value; i++) {
+  //       if (i > coins.length - 1 || i === 0 && coins.length === 0) {
+  //         arr.push(
+  //           {
+  //             coin: '',
+  //             slice: '',
+  //             probability: '',
+  //             limit_atempt: '',
+  //             total_budget: '',
+  //             actual_spin: 0,
+  //             actual_budget: 0,
+  //             spin_left: 0,
+  //             budget_left: 0
+  //           }
+  //         );
+  //       } else {
+  //         arr.push(coins[i]);
+  //       }
+  //     }
+  //   }
+  //   await this.formPM.get('coins').setValue(arr);
+  //   this.averageCoin = Math.floor(this.sumCoins());
+  // }
 
   async changeCoin(event, index) {
     let newArr = this.formPM.get('coins').value;

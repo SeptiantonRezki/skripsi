@@ -600,7 +600,7 @@
                             <mat-form-field fxFlex="80" class="is-light">
                               <input formControlName="value" matInput type="tel" currencyMask />
                               <mat-error *ngIf="(p.controls.value.hasError('required') || p.controls.value.hasError('min')) && p.controls.value.touched">
-                                Nilai Transaksi harap diisi
+                                Nilai Transaksi wajib diisi
                               </mat-error>
                             </mat-form-field>
                           </div>
@@ -672,8 +672,311 @@
                 </div>
               </div>
             </div>
-              <div fxFlex="1"></div>
-            <div fxLayout="column" fxFlex="80">
+            <div class="px-24" formArrayName="tier">
+              <div class="table-wrapper" *ngFor="let tier of formPM.controls.tier.controls; let i=index" [formGroupName]="i">
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="px-24 py-16" style="background:#3a3a3a;color:#fff">
+                  <h3 style="line-height:1">Tier {{i + 1}}</h3>
+                  <div fxLayout="row wrap" fxLayoutAlign="end center" fxLayoutGap="16px">
+                    <button *ngIf="i == formPM.controls.tier.controls.length - 1" mat-raised-button type="button" (click)="addTier()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button *ngIf="formPM.controls.tier.controls.length > 1" mat-raised-button color="primary" type="button" (click)="removeTier(i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="p-24">
+                  <div fxLayout="row" fxLayoutGap="16px">
+                    <p style="width:180px">Minimum Nilai Transaksi</p>
+                    <mat-form-field class="is-light form-primary">
+                      <input
+                        matInput
+                        type="tel"
+                        formControlName="minimum_transaction"
+                        currencyMask
+                        (focusout)="validateTier()"
+                      />
+                      <mat-error *ngIf="tier.controls.minimum_transaction.hasError('required') && tier.controls.minimum_transaction.touched">
+                        Minimum Nilai Transaksi wajib diisi
+                      </mat-error>
+                      <mat-error *ngIf="tier.controls.minimum_transaction.hasError('min') && tier.controls.minimum_transaction.touched">
+                        Nilai Transaksi wajib lebih besar
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="16px">
+                    <p style="width:180px">Maksimum Nilai Transaksi</p>
+                    <mat-form-field class="is-light form-primary">
+                      <input
+                        matInput
+                        type="tel"
+                        formControlName="maximum_transaction"
+                        currencyMask
+                        (focusout)="validateTier()"
+                      />
+                      <mat-error *ngIf="tier.controls.maximum_transaction.hasError('required') && tier.controls.maximum_transaction.touched">
+                        Maksimum Nilai Transaksi wajib diisi
+                      </mat-error>
+                      <mat-error *ngIf="tier.controls.maximum_transaction.hasError('min') && tier.controls.maximum_transaction.touched">
+                        Nilai Transaksi wajib lebih besar
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="16px">
+                    <p style="width:180px">Limit Spin</p>
+                    <mat-form-field class="is-light form-primary">
+                      <input
+                        matInput
+                        type="tel"
+                        formControlName="limit_spin"
+                        currencyMask
+                        (focusout)="updateTierData(i, true, 'rewards_coin')"
+                      />
+                      <mat-error *ngIf="(tier.controls.limit_spin.hasError('required') || tier.controls.limit_spin.hasError('min')) && tier.controls.limit_spin.touched">
+                        Limit spin wajib diisi
+                      </mat-error>
+                    </mat-form-field>
+                    <p style="font-style: italic">Avarage Coin per Spin = {{ tier.controls.average_coin_spin.value }}</p>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="16px">
+                    <p style="width:180px">Jumlah Variasi Koin</p>
+                    <mat-form-field class="is-light form-primary">
+                      <input
+                        matInput
+                        type="tel"
+                        formControlName="coin_variation"
+                        currencyMask
+                        (focusout)="coinVariationChange($event, i)"
+                      />
+                      <mat-error *ngIf="tier.controls.coin_variation.hasError('required') && tier.controls.coin_variation.touched">
+                        Variasi koin wajib diisi
+                      </mat-error>
+                      <mat-error *ngIf="tier.controls.coin_variation.hasError('min') && tier.controls.coin_variation.touched">
+                        Variasi koin minimal 2
+                      </mat-error>
+                      <mat-error *ngIf="tier.controls.coin_variation.hasError('max') && tier.controls.coin_variation.touched">
+                        Variasi koin maksimal 32
+                      </mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="button" style="height:40px" (click)="addRewards('rewards_non_coin', i, { value: '' })">
+                      + Reward Non Coin
+                    </button>
+                    <button mat-raised-button color="primary" type="button" style="height:40px" (click)="addRewards('rewards_xp', i)">
+                      + Reward XP
+                    </button>
+                  </div>
+                  <div class="table-tier">
+                    <table *ngIf="tier.controls.rewards_coin.controls.length" formArrayName="rewards_coin">
+                      <tr>
+                        <th>#Coin</th>
+                        <th>#Slice</th>
+                        <th>%Probability</th>
+                        <th></th>
+                        <th>Limit Attempt</th>
+                        <th>Total Budget</th>
+                        <th>Actual Spin</th>
+                        <th>Actual Budget</th>
+                        <th>Sisa Spin</th>
+                        <th>Sisa Budget</th>
+                      </tr>
+                      <tr *ngFor="let reward of tier.controls.rewards_coin.controls; let j=index" [formGroupName]="j">
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="value"
+                                currencyMask
+                                (focusout)="updateTierData(i, true, 'rewards_coin', j)"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="slice"
+                                currencyMask
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:80px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="probability"
+                                currencyMask
+                                (focusout)="updateTierData(i, true, 'rewards_coin', j)"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:100px"></div>
+                        </td>
+                        <td><div style="width:100px">{{reward.controls.limit_attempt.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.total_budget.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.actual_spin.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.actual_budget.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.spin_left.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.budget_left.value | rupiahFormaterWithoutRp }}</div></td>
+                      </tr>
+                      <tr>
+                        <td colspan="4"></td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'limit_attempt') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'total_budget') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'actual_spin') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'actual_budget') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'spin_left') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_coin', 'budget_left') | rupiahFormaterWithoutRp }}</td>
+                      </tr>
+                    </table>
+                    <table *ngIf="tier.controls.rewards_non_coin.controls.length" formArrayName="rewards_non_coin">
+                      <tr>
+                        <th>#Non Coin</th>
+                        <th>#Slice</th>
+                        <th>%Probability</th>
+                        <th></th>
+                        <th>Limit Attempt</th>
+                        <th>Actual Spin</th>
+                        <th>Sisa Spin</th>
+                      </tr>
+                      <tr *ngFor="let reward of tier.controls.rewards_non_coin.controls; let j=index" [formGroupName]="j">
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:180px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="value"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="slice"
+                                currencyMask
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:80px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="probability"
+                                currencyMask
+                                (focusout)="updateTierData(i, false, 'rewards_non_coin', j)"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:100px">
+                            <button mat-icon-button color="primary" (click)="removeReward('rewards_non_coin', i, j)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                        </td>
+                        <td><div style="width:100px">{{reward.controls.limit_attempt.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.actual_spin.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.spin_left.value | rupiahFormaterWithoutRp }}</div></td>
+                      </tr>
+                      <tr>
+                        <td colspan="4"></td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_non_coin', 'limit_attempt') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_non_coin', 'actual_spin') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_non_coin', 'spin_left') | rupiahFormaterWithoutRp }}</td>
+                      </tr>
+                    </table>
+                    <table *ngIf="tier.controls.rewards_xp.controls.length" formArrayName="rewards_xp">
+                      <tr>
+                        <th>#XP</th>
+                        <th>#Slice</th>
+                        <th>%Probability</th>
+                        <th></th>
+                        <th>Limit Attempt</th>
+                        <th>Actual Spin</th>
+                        <th>Sisa Spin</th>
+                      </tr>
+                      <tr *ngFor="let reward of tier.controls.rewards_xp.controls; let j=index" [formGroupName]="j">
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="value"
+                                currencyMask
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:180px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="slice"
+                                currencyMask
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:80px">
+                            <mat-form-field style="width:50px" class="is-light form-primary">
+                              <input
+                                matInput
+                                type="tel"
+                                formControlName="probability"
+                                currencyMask
+                                (focusout)="updateTierData(i, false, 'rewards_xp', j)"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div style="width:100px">
+                            <button mat-icon-button color="primary" (click)="removeReward('rewards_xp', i, j)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                        </td>
+                        <td><div style="width:100px">{{reward.controls.limit_attempt.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.actual_spin.value | rupiahFormaterWithoutRp }}</div></td>
+                        <td><div style="width:100px">{{reward.controls.spin_left.value | rupiahFormaterWithoutRp }}</div></td>
+                      </tr>
+                      <tr>
+                        <td colspan="4"></td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_xp', 'limit_attempt') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_xp', 'actual_spin') | rupiahFormaterWithoutRp }}</td>
+                        <td class="table-sum">{{ updateTierSum(i, 'rewards_xp', 'spin_left') | rupiahFormaterWithoutRp }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <mat-error *ngIf="tier.controls.probability_left.hasError('min')">
+                    Probability tidak boleh melebihi 100%
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <!-- <div fxLayout="column" fxFlex="80">
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Minimum Nilai Transaksi</p>
                 <div fxFlex="1"></div>
@@ -690,8 +993,8 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-            </div>
-            <div fxLayout="column" fxFlex="80">
+            </div> -->
+            <!-- <div fxLayout="column" fxFlex="80">
               <div fxLayout="row" fxFlex="100" class="px-24">
                 <p fxFlex="15">Limit Spin</p>
                 <div fxFlex="1"></div>
@@ -761,7 +1064,7 @@
                         </mat-form-field>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">{{item.limit_atempt | rupiahFormaterWithoutRp}}</p>
+                        <p style="font-style: italic;padding:15px;">{{item.limit_attempt | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
                         <p style="font-style: italic;padding:15px;">{{item.total_budget | rupiahFormaterWithoutRp}}</p>
@@ -787,7 +1090,7 @@
                       <td>
                       </td>
                       <td>
-                        <p style="font-style: italic;padding:15px;">{{sumPM('limit_atempt') | rupiahFormaterWithoutRp}}</p>
+                        <p style="font-style: italic;padding:15px;">{{sumPM('limit_attempt') | rupiahFormaterWithoutRp}}</p>
                       </td>
                       <td>
                         <p style="font-style: italic;padding:15px;">{{sumPM('total_budget') | rupiahFormaterWithoutRp}}</p>
@@ -808,7 +1111,7 @@
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> -->
             <div class="confirm pt-24 pb-24 px-24" fxLayout="row" *ngIf="!isDetail">
               <button
                 id="btn-simpan"

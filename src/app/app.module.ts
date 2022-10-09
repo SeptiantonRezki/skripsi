@@ -166,6 +166,7 @@ class CustomLoader implements TranslateLoader {
 
   getTranslation(lang: string): Observable<any> {
     return this.service.getTranslation({type: 'principal'}).map(({data}) => {
+      localStorage.setItem('point_valuation', data.point_valuation);
       return data.json_format;
     })
 
