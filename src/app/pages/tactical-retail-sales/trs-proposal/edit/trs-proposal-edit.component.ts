@@ -424,20 +424,26 @@ export class TrsProposalEditComponent implements OnInit {
         if (this.selectedSalesPoint == ""){
           alert("Pilih salespoint terlebih dahulu !");
         } else {
-          id = id+"__"+this.selectedSalesPoint;
-          this.dataService.showLoading(true);
-          this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
-            this.dataService.showLoading(false);
-            if (res.status ==  'success'){
-              this.formCreateProposal.get(component_name).setValue(res.data.name);
-            } else {
-              alert(res.message);
-              this.formCreateProposal.get(component_name).setValue("");
-            }
-          }, err => {
-            this.dataService.showLoading(false);
-            console.log('err occured', err);
-          })
+          let custCode1 = this.formCreateProposal.get('custCode1').value;
+          let custCode2 = this.formCreateProposal.get('custCode2').value;
+          if (custCode1 == custCode2){
+            alert('Customer tidak boleh sama');
+          } else {
+            id = id+"__"+this.selectedSalesPoint;
+            this.dataService.showLoading(true);
+            this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
+              this.dataService.showLoading(false);
+              if (res.status ==  'success'){
+                this.formCreateProposal.get(component_name).setValue(res.data.name);
+              } else {
+                alert(res.message);
+                this.formCreateProposal.get(component_name).setValue("");
+              }
+            }, err => {
+              this.dataService.showLoading(false);
+              console.log('err occured', err);
+            })
+          }
         }
       }
     }
@@ -446,6 +452,8 @@ export class TrsProposalEditComponent implements OnInit {
   modalExecutor() {
     if (this.selectedArea == ""){
       alert("Tunggu, data Area sedang di load");
+    } else if (this.formCreateProposal.get('startDate').value == null || this.formCreateProposal.get('endDate').value == null){
+      alert("Tanggal Awal dan Tanggal Akhir wajib diisi");
     } else {
       const dialogConfig = new MatDialogConfig();
       const formCreateProposal = this.formCreateProposal.getRawValue();
@@ -460,6 +468,9 @@ export class TrsProposalEditComponent implements OnInit {
         max: this.formCreateProposal.get('maxExecutor').value,
         area: this.selectedArea,
         selected: this.selectedExecutor,
+        program_code: this.trs_program_code,
+        start_date: moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"),
+        end_date: moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"),
         formCreateProposal,
       };
   

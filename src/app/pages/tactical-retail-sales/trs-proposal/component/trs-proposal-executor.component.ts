@@ -48,6 +48,8 @@ export class TrsProposalExecutorComponent {
   totalData: number = 0;
   checkDisabled: boolean = false;
 
+  disabled_exec: any;
+
   salespointList: any[];
   districtList: any[];
   statusList: any[] = [
@@ -83,6 +85,7 @@ export class TrsProposalExecutorComponent {
     this.detailData = data;
     this.profile = null;
     this.dataService.showLoading(false);
+    this.disabled_exec = [];
 
     console.log(this.detailData.area);
   }
@@ -103,8 +106,7 @@ export class TrsProposalExecutorComponent {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
 
-    console.log("onselected");
-    console.log(this.selected);
+    this.disabled_exec = this.selected.map(a => a.idUser);
 
     /*
     let execid = this.selected['id'];
@@ -114,6 +116,8 @@ export class TrsProposalExecutorComponent {
   }
 
   onCheckboxChange(event: any, row: any) {
+
+
     /*
     if (event) {
       const temp = [...this.selected];
@@ -217,7 +221,8 @@ export class TrsProposalExecutorComponent {
 
     let request = {
       level: 6,
-      area_id: this.detailData.area
+      area_id: this.detailData.area,
+      program_code: this.detailData.program_code
     };
 
     this.TRSService.getExecutor(request).subscribe(res => {
@@ -243,6 +248,8 @@ export class TrsProposalExecutorComponent {
             this.selected.push(this.rows[index]);
           }
         }
+
+        this.disabled_exec = this.selected.map(a => a.idUser);
 
         if(this.selected.length >= this.detailData.max){
           //alert("jumlah executor sudah sesuai, jangan memilih lagi !");
