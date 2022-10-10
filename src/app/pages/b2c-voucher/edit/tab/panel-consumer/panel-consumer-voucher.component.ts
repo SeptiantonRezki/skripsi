@@ -110,7 +110,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
       this.isVoucherAutomation.setValue(data.automation ? true : false);
       this.formConsumerGroup.get('allocationVoucher').setValue(data.allocation_voucher);
       this.formConsumerGroup.get('va').setValue(data.automation);
-      this.formConsumerGroup.get('content_type').setValue(data.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [data.content_type]);
+      this.formConsumerGroup.get('content_type').setValue(data.content_type ? data.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [data.content_type] : []);
       this.formConsumerGroup.get('age_consumer_from').setValue(data.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(data.age_to);
       this.formConsumerGroup.get('gender').setValue(data.gender);
@@ -544,7 +544,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   async getDetail() {
     this.detailVoucher = this.dataService.getFromStorage('detail_voucher_b2c');
     if (this.detailVoucher) {
-      this.formConsumerGroup.get('content_type').setValue(this.detailVoucher.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [this.detailVoucher.content_type]);
+      this.formConsumerGroup.get('content_type').setValue(this.detailVoucher.content_type ? this.detailVoucher.content_type === 'cc-rrp' ? ['cc', 'rrp'] : [this.detailVoucher.content_type] : []);
       this.formConsumerGroup.get('age_consumer_from').setValue(this.detailVoucher.age_from);
       this.formConsumerGroup.get('age_consumer_to').setValue(this.detailVoucher.age_to);
       this.formConsumerGroup.get('gender').setValue(this.detailVoucher.gender);
@@ -1099,7 +1099,7 @@ export class PanelConsumerVoucherComponent implements OnInit {
   }
 
   onSave() {
-    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value) {
+    if (this.formConsumerGroup.valid || this.formConsumerGroup.get('isTargetAudience').value || (this.isVoucherAutomation.value && this.formConsumerGroup.get('va').value === 'loyalty')) {
       let body = null;
       const bodyArea = {
         'type': 'customer',

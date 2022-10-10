@@ -119,7 +119,7 @@
                     [placeholderLabel]="ls.locale.wholesaler.search_bank_name"
                     [noEntriesFoundLabel]="'Tidak ada Nama Bank yang ditemukan'">
                   </ngx-mat-select-search>
-                  <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
+                  <mat-option *ngFor="let item of filteredBanks | async" [value]="remaskSelect(item.name)">
                     {{remaskSelect(item.name)}}
                   </mat-option>
                 </mat-select>
@@ -128,7 +128,7 @@
                 *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
                 {{ ls.locale.global.label.bank_name }} {{ ls.locale.global.messages.mandatory_text }}
               </mat-error>
-              <div fxFlex="2" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
+              <div fxFlex="2" *ngIf="!isDetail && formBankAccount.get('bank_name').value && editBankStatus">
                 <button mat-icon-button color="" (click)="clearBankName()">
                   <mat-icon class="secondary-text">close</mat-icon>
                 </button>

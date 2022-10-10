@@ -33,12 +33,18 @@ export class CountrySetupService extends BaseService {
       const url = this.getUrl(this.namespace, "get_menus");
       return this.getApi(url, queryParams);
   }
-
+  getRetailerCategoryMenus(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_category_menus");
+    return this.getApi(url);
+  }
   getOptionCountry(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "get_option_country");
       return this.getApi(url, queryParams);
   }
-
+  getForceLogoutData(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_force_logout_data",context);
+    return this.getApi(url);
+  }
 //   getDetail(context?): Observable<any> {
 //     const url = this.getUrl(this.namespace, "detail", context);
 //     return this.getApi(url);

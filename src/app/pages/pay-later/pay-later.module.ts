@@ -52,7 +52,7 @@ import { PayLaterActivationTabComponent } from './pay-later-activation/pay-later
 import { PayLaterActivationComponent } from './pay-later-activation/pay-later-activation-mitra/pay-later-activation.component';
 import { PayLaterActivationSrcComponent } from './pay-later-activation/pay-later-activation-src/pay-later-activation-src.component';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { PayLaterDistributionListComponent } from './pay-later-distribution-list/pay-later-distribution-list/index/pay-later-distribution-list.component';
+import { PayLaterDistributionListComponent } from './pay-later-distribution-list/index/pay-later-distribution-list.component';
 import { PayLaterTemplateFinancingTabComponent } from './pay-later-template-financing/pay-later-template-financing-tab.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { PayLaterDeactivateTabComponent } from './pay-later-deactivate/pay-later-deactivate-tab.component';

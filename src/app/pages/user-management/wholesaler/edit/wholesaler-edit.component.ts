@@ -28,6 +28,10 @@ export class WholesalerEditComponent {
   formBankAccount: FormGroup;
   formBankAccountError: any;
   frmTotalBranch: FormControl = new FormControl();
+  viewPhoneNumberStatus: Boolean;
+  viewBankStatus: Boolean;
+  editPhoneNumberStatus: Boolean;
+  editBankStatus: Boolean;
 
   detailWholesaler: any;
   listStatus: any[] = [
@@ -82,6 +86,12 @@ export class WholesalerEditComponent {
   ) {
     this.country_phone = this.ls.locale.global.country_calling_code;
     this.permission = this.roles.getRoles('principal.wholesaler');
+
+    this.viewPhoneNumberStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_phone_number') > -1;
+    this.viewBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.view_rekening_toko') > -1;
+    this.editPhoneNumberStatus = Object.values(this.permission).indexOf('principal.wholesaler.phone_number') > -1;
+    this.editBankStatus = Object.values(this.permission).indexOf('principal.wholesaler.rekening_toko') > -1;
+
     this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {
       name: {},
@@ -354,13 +364,19 @@ export class WholesalerEditComponent {
         this.country_phone = Utils.getPhoneCode("", this.detailWholesaler.phone);
       }
     }
+    let phone = '';
+    if (this.viewPhoneNumberStatus) {
+      phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+    } else {
+      phone = Utils.reMaskInput(this.detailWholesaler.phone, 4);
+    }
 
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
-      phone: (this.detailWholesaler.phone) ? (this.isDetail ? Utils.reMaskInput(Utils.formatPhoneNumber(this.detailWholesaler.phone), 4) : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1])) : '',
+      phone: (this.detailWholesaler.phone) ? phone : '',
       status: this.detailWholesaler.status || '',
       national: this.getArea('national') ? this.getArea('national') : '',
       zone: this.getArea('division') ? this.getArea('division') : '',
@@ -401,10 +417,10 @@ export class WholesalerEditComponent {
     this.frmTotalBranch.setValue(this.detailWholesaler.total_branch ? this.detailWholesaler.total_branch : 0);
 
     this.formBankAccount.setValue({
-      account_number: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.bank_account_number, 4) : this.detailWholesaler.bank_account_number || '',
-      account_name: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.bank_account_name, 3) : this.detailWholesaler.bank_account_name || '',
+      account_number: !this.viewBankStatus ? Utils.reMaskInput(this.detailWholesaler.bank_account_number, 4) : this.detailWholesaler.bank_account_number || '',
+      account_name: !this.viewBankStatus ? Utils.reMaskInput(this.detailWholesaler.bank_account_name, 3) : this.detailWholesaler.bank_account_name || '',
       bank_name: this.detailWholesaler.bank_name || '',
-      branch: this.isDetail ? Utils.reMaskInput(this.detailWholesaler.branch, 3) : this.detailWholesaler.branch || '',
+      branch: !this.viewBankStatus ? Utils.reMaskInput(this.detailWholesaler.branch, 3) : this.detailWholesaler.branch || '',
     });
 
     this.formDoc.setValue({
@@ -421,7 +437,7 @@ export class WholesalerEditComponent {
   }
 
   remaskSelect(value) {
-    return this.isDetail ? Utils.reMaskInput(value, 3) : value;
+    return !this.viewBankStatus ? Utils.reMaskInput(value, 3) : value;
   }
 
   onChangeBranchType(event: any, i: number) {
@@ -674,6 +690,16 @@ export class WholesalerEditComponent {
         country: this.formWs.get("country").value,
       };
 
+      if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
+        delete body.phone;
+      }
+      if (!this.viewBankStatus || !this.editBankStatus) {
+        delete body.bank_account_name;
+        delete body.bank_account_number;
+        delete body.bank_name;
+        delete body.branch;
+      }
+
       if (this.formWs.get("branchShop").value === true) {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
         body['total_branch'] = this.frmTotalBranch.value
@@ -803,12 +829,12 @@ export class WholesalerEditComponent {
 
     }
 
-    if (!this.isCan(['ubah', 'phone_number'])) {
+    if (!this.editPhoneNumberStatus) {
       this.disableFields(['phone']);
       this.rmValidators(['phone']);
     }
 
-    if (!this.isCan(['ubah', 'rekening_toko'])) {
+    if (!this.editBankStatus) {
 
       const fields = ['account_number', 'bank_name', 'account_name', 'branch'];
       this.disableFields(fields, this.formBankAccount);

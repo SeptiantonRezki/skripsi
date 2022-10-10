@@ -234,6 +234,10 @@ export class PagesName {
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
 
+    if (name.indexOf("customer.") >= 0) {
+      roles["phone_number_and_dob_view"] = filterPermission.filter((item) => item.indexOf("phone_number_and_dob_view") >= 0)[0];
+    }
+
     if (name.indexOf("produk_kasir") >= 0) {
       roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];
     }

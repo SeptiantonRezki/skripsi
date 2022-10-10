@@ -125,7 +125,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       district: [],
       territory: []
     }
-
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -360,7 +360,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(
       res => {
         this.dataService.showLoading(false);
@@ -400,7 +401,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -431,7 +433,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -465,7 +468,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
     this.panelService.getSrc(this.pagination, {
       wholesaler_id: this.mitraSelected, business_id: businessIds,
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
@@ -568,7 +572,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     dialogConfig.panelClass = 'scrumboard-card-dialog';
     dialogConfig.data = {
       type: 'retailer',
-      paylater_company_id: this.paylaterCompanyId
+      paylater_company_id: this.paylaterCompanyId,
+      paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
     };
 
     this.dialogRef = this.dialog.open(PayLaterPanelImportDialogComponent, dialogConfig);
@@ -615,7 +620,8 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
           this.panelService.getSrc(this.pagination, {
             wholesaler_id: this.mitraSelected, business_id: businessIds,
-            paylater_company_id: this.paylaterCompanyId
+            paylater_company_id: this.paylaterCompanyId,
+            paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
           }).subscribe(res => {
             Page.renderPagination(this.pagination, res.data);
             this.rows = res.data ? res.data.data : [];
@@ -662,6 +668,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
       this.dataService.showLoading(true);
       let body = {
         paylater_company_id: this.paylaterCompanyId,
+        paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null,
         type: "retailer",
         detail: await this.selected.map(mtr => {
           return { business_id: mtr.id };

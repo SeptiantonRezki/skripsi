@@ -129,8 +129,98 @@
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.access_retailer}}</h2>
               <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
+              <div fxLayout="column" fxFlex="45">
+                <h2>{{ls.locale.country_setup.customer_service}}</h2>
+                <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
+                  <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                    <mat-form-field fxFlex="100" class="is-light">
+                      <input matInput placeholder="{{ls.locale.bantuan.text10}}" type="text" formControlName="telepon">
+                      <mat-error *ngIf="item.controls['telepon'].hasError('required') && item.controls['telepon'].touched ">
+                        {{ls.locale.bantuan.text10}} {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light">
+                      <input matInput placeholder="{{ls.locale.global.label.email}}" type="text" formControlName="email">
+                      <mat-error *ngIf="item.controls['email'].hasError('required') && item.controls['email'].touched ">
+                        {{ls.locale.global.label.email}} {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                      <label for="">Whatsapp</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="whatsapp"></mat-slide-toggle>
+                    </div>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('whatsapp').value">
+                      <input matInput placeholder="Whatsapp Number" type="text" formControlName="whatsapp_number">
+                      <mat-error *ngIf="item.controls['whatsapp_number'].hasError('required') && item.controls['whatsapp_number'].touched ">
+                        Whatsapp {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                      <label for="">Bude</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="bude"></mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Force logout edit option -->
+              <div fxLayout="column" fxFlex="45">
+                <h2>Force Logout </h2>
+                <div *ngFor="let item of formCountry.get('force_logout_service').controls; let i=index;">
+                  <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                        <label for="" matTooltip="By enabling this feature will disable Ayo-src Retailer apk below selected version"
+                        style="cursor: pointer;min-width: 100px !important;min-height: 20px;text-align:right;font-size: .9em;border-radius: 3px; text-transform: uppercase;">Enable Force Logout</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="force_logout_status"></mat-slide-toggle>
+                    </div>
+                    <!-- <ng-container  *ngIf = "!item.get('force_logout_status').value" >
+                      <mat-form-field fxFlex="100" class="is-light" disabled >
+                        <input matInput type="number" placeholder="Version Number"  disabled class="field-disabled">
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" class="is-light" disabled>
+                        <input matInput type="text" placeholder="Message to Display"  disabled class="field-disabled">
+                      </mat-form-field>
+                      <mat-form-field fxFlex="100" class="is-light" disabled class="field-disabled">
+                        <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}">
+                          <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-container> -->
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
+                      <mat-select placeholder="{{ ls.locale.pengaturan.force_update_apps.text13 }}" formControlName="apk_type">
+                        <mat-option *ngFor="let item of listApps" [value]="item.value">{{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="item.controls['apk_type'].hasError('required') && item.controls['apk_type'].touched">
+                        {{ ls.locale.pengaturan.force_update_apps.text13 }} {{ ls.locale.global.messages.mandatory_text }}
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value">
+                      <input matInput placeholder="{{ ls.locale.pengaturan.force_update_apps.text5 }}" type="number" formControlName="version_number" decimalNumber>
+                      <mat-error *ngIf="item.controls['version_number'].hasError('required') && item.controls['version_number'].touched ">
+                        Version {{ ls.locale.global.messages.mandatory_text }}.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="100" class="is-light" *ngIf="item.get('force_logout_status').value ">
+                        <input matInput placeholder="{{ ls.locale.pengaturan.force_update_apps.text8 }}" type="text" formControlName="version_message">
+                        <mat-error *ngIf="item.controls['version_message'].hasError('required') && item.controls['version_message'].touched ">
+                          Message {{ ls.locale.global.messages.mandatory_text }}.
+                        </mat-error>
+                        <mat-error *ngIf="item.controls['version_message'].hasError('maxlength') && item.controls['version_message'].touched ">
+                          Version Message Maksimal 150 karakter
+                        </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
             </div>
+            
             <div fxLayout="column" fxFlex="45">
+              <h2>{{ls.locale.global.label.category}}</h2>
+              <recursive-slide-toggle [items]="formCountry.get('categories_menu').get('cabilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('categories_menu').get('cabilities')" [fullAccess]="formCountry.get('categories_menu').get('cabilities').at(0)"></recursive-slide-toggle>
+            </div>  
+          </div>
+          <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between" >
+            <!-- <div fxLayout="column" fxFlex="45" class ="widthfixcs">
               <h2>{{ls.locale.country_setup.customer_service}}</h2>
               <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
                 <div fxFlex="100" [formGroup]="item" fxLayout="column">
@@ -162,11 +252,12 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
+
           <div *ngIf="!isDetail" class="confirm btn-confirm" fxLayout="row" fxLayoutGap="25px">
-            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+            <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" [disabled] = "!formCountry.valid">
               {{ ls.locale.global.button.save }}
             </button>
           </div>

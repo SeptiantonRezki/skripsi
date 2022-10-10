@@ -315,7 +315,7 @@ export class Endpoint {
         list_scheduler: `${AYO_API}/api/principal/scheduler/list/all`,
         list_trade_program: `${AYO_API}/api/principal/creator/list/all`,
         // list_retailer: `${AYO_API}/api/${type_api}/audience/all/retailer`,
-        list_retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/dte/get-all-audience`,
+        list_retailer: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/dte/get-all-type-audience`,
         list_retailer_selected: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/group/${context.audience_id}`,
         validate_budget: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/count/budget`,
         list_level: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/level`,
@@ -934,6 +934,7 @@ export class Endpoint {
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
         redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
+        redeem_PaymentExport:`${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/redeem-export`,
         redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
         redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
         listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`,
@@ -1048,7 +1049,7 @@ export class Endpoint {
         redeemImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/import`,
         redeemSubmitImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/submit-import`,
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
-
+        redeemPaymentExport:`${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/redeem-export`,
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
         change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/status`
@@ -1131,7 +1132,9 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
         delete: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/${context.id}`,
         get_menus: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/retailer/menu`,
+        get_category_menus: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/categoryproduct`,
         get_option_country: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-country`,
+        get_force_logout_data: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/force-logout-data/${context.id}`,
       },
       language_setup: {
         get: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/languages`,
