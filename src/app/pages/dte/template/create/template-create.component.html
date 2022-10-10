@@ -616,10 +616,8 @@
                         <div fxFlex>{{'upc_code.upc_coin_conversion' | translate}}:</div>
                         <div fxLayout="row" fxFlex>
                           <mat-form-field fxFlex="100" class="question is-light">
-                            <input class="inputUPC" 
-                            formControlName="upcCoin" 
-                            matInput type="number" min="1" 
-                            onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
+                            <input class="inputUPC" formControlName="upcCoin" matInput type="number" min="0"
+                              onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? true : false'>
                             <mat-error>
                               {{'upc_code.upc_coin_conversion_required' | translate}}
                             </mat-error>
