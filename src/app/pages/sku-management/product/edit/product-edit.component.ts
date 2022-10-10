@@ -440,6 +440,10 @@ export class ProductEditComponent {
         }, 1500);
 
         if (this.isDetail) this.formProductGroup.disable();
+        if (this.ls.selectedLanguages == 'km'){
+          this.formProductGroup.disable();
+          this.formProductGroup.get("subCategory").enable();
+          this.formProductGroup.get("category").enable();
 
       })
     } catch (ex) {
