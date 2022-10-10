@@ -210,6 +210,18 @@ export class PagesName {
       "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
       "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
       "/discount-coins-order/detail": "principal.koin_potongan_belanja.lihat",
+
+      "/tactical-retail-sales/trs-proposal": "principal.trsproposal.lihat",
+      "/tactical-retail-sales/trs-proposal/create": "principal.trsproposal.buat",
+      "/tactical-retail-sales/trs-proposal/edit": "principal.trsproposal.ubah",
+      "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
+      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
+      "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
+      "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
+      "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
+      "/content-management/privacy": "principal.kebijakanprivasi.lihat",
+      "/content-management/privacy/create": "principal.kebijakanprivasi.buat",
+      "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
     }
     return PAGES[name];
   }
@@ -246,7 +258,6 @@ export class PagesName {
     if (name.indexOf("b2b_voucher") > -1) {
       roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }
-
     if (name.indexOf("popupnotification") > -1) {
       roles['new_product'] = filterPermission.filter(item => item.indexOf('popupnotification.new_product') >= 0)[0]
     }
@@ -278,7 +289,6 @@ export class PagesName {
         roles[submenuKey] = value.replace('.export.', '.');
       });
     }
-
     return roles
   }
 
