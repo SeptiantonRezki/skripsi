@@ -8,7 +8,7 @@ import { DataService } from '../../../../services/data.service';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
-
+import { PagesName } from 'app/classes/pages-name';
 @Component({
   selector: 'app-tnc-edit',
   templateUrl: './tnc-edit.component.html',
@@ -29,10 +29,10 @@ export class TncEditComponent {
   ];
   countryList: any[] = [];
   companyList: any[] = [];
-
+  roles: PagesName = new PagesName();
   files: File;
   public options: Object = Config.FROALA_CONFIG;
-
+  permission: {}
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -49,7 +49,7 @@ export class TncEditComponent {
       group_id: {},
       country: {},
     };
-
+    this.permission = this.roles.getRoles('principal.syaratketentuan');
     this.detailTnc = this.dataService.getFromStorage('detail_tnc');
   }
 

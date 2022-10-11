@@ -72,7 +72,7 @@
           <mat-checkbox formControlName="is_notif">{{ ls.locale.manajemen_konten.tnc.text6 }}</mat-checkbox>
         </div>
         <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+          <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" *ngIf="permission?.ubah">
             {{ ls.locale.global.button.save }}
           </button>
         </div>
