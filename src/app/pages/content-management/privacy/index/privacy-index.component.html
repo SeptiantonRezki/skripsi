@@ -27,13 +27,9 @@
 
         <ngx-datatable-column [width]="200" name="{{ ls.locale.manajemen_konten.kebijakan_privasi.text3 }}"
           prop="title">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" *ngIf="permission?.lihat;else other_content">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-name" (click)="directEdit(row)" >{{row.title}}</span>
           </ng-template>
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value" #other_content>
-            <span class="row-name">{{row.title}}</span>
-          </ng-template>
-          
         </ngx-datatable-column>
         <ngx-datatable-column [width]="200" name="{{ ls.locale.notification.buat_notifikasi.text4 }}" prop="user">
         </ngx-datatable-column>
