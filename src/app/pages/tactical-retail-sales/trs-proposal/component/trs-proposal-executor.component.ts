@@ -222,7 +222,7 @@ export class TrsProposalExecutorComponent {
     let request = {
       level: 6,
       area_id: this.detailData.area,
-      program_code: this.detailData.program_code
+      program_code: this.detailData.program_code,
     };
 
     this.TRSService.getExecutor(request).subscribe(res => {

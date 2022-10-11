@@ -34,6 +34,9 @@
         </mat-form-field>
       </div>
     </div>
+    <div style="margin-top: 20px;">
+      <span class="bintang">*</span> = Sedang ditugaskan untuk TRS Program yang lain
+    </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive">
       <div *ngIf="loaded" style="padding-bottom: 40px;">
@@ -54,36 +57,36 @@
             let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn"
           >
-            <mat-checkbox [checked]="isSelected" [disabled]="(checkDisabled || disabled_exec.includes(row.idUser)) && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" [disabled]="(checkDisabled || disabled_exec.includes(row.idUser) || row.isDisable) && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
           </ng-template>
 
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Name" prop="fullname">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.fullname}}
+            {{row.fullname}} <span class="bintang" *ngIf="row.isDisable">*</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Username" prop="username">
+        <ngx-datatable-column name="Username" prop="username" [ngClass]="{'disabled': row?.isDisable}">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.username}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Salespoint" prop="salespoint">
+        <ngx-datatable-column name="Salespoint" prop="salespoint" [ngClass]="{'disabled': row?.isDisable}">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.salespoint}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="District" prop="district">
+        <ngx-datatable-column name="District" prop="district" [ngClass]="{'disabled': row?.isDisable}">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.district}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Territory" prop="territory">
+        <ngx-datatable-column name="Territory" prop="territory" [ngClass]="{'disabled': row?.isDisable}">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.territory}}
           </ng-template>
