@@ -68,6 +68,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getMasterReason(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "master_reason");
+    return this.getApi(url, queryParams);
+  }
+
   getArea(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_area");
     return this.getApi(url, queryParams);

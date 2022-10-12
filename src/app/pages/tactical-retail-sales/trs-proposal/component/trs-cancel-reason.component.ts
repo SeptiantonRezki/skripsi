@@ -30,13 +30,13 @@ export class TrsCancelReasonComponent {
   reorderable = true;
   onLoad: boolean;
 
-  rows: any[] = [];
+  rows: any[];
   temp: any[] = [];
 
   selected: any[];
   detailData: any;
 
-  selectedMitra: any[] = [];
+  selectedMitra: any;
   profile: any;
 
   previewData: any = {
@@ -75,7 +75,33 @@ export class TrsCancelReasonComponent {
       reason: ["", Validators.required]
     })
 
-    //this.aturPanelMitra();
+    this.aturPanelMitra();
+  }
+
+  aturPanelMitra() {
+    this.selectedMitra = [];
+    //this.onSelect({ selected: [] });
+
+    this.dataService.showLoading(true);
+
+    let request = {
+      level: 6,
+    };
+
+    this.TRSService.getMasterReason(request).subscribe(res => {
+      this.loaded = true;
+      this.selectedMitra = res.data;
+
+      this.rows = [];
+      res.data.forEach(function(detail) {
+        this.rows.push({ name: detail.reason, value: detail.id });
+      });
+      this.dataService.showLoading(false);
+
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    })
   }
 
   submit() {

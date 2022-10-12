@@ -1153,6 +1153,7 @@ export class Endpoint {
         list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_executor`,
         list_kecamatan: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_kecamatan`,
         list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_product`,
+        master_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/master_reason`,
         
         list_area: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area`,
         list_area_by_user: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area_by_user`,
