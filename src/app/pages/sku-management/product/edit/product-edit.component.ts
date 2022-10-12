@@ -444,7 +444,7 @@ export class ProductEditComponent {
           this.formProductGroup.disable();
           this.formProductGroup.get("subCategory").enable();
           this.formProductGroup.get("category").enable();
-
+        }
       })
     } catch (ex) {
       console.log('ex', ex);
