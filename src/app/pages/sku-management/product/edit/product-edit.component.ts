@@ -441,6 +441,7 @@ export class ProductEditComponent {
 
         if (this.isDetail) this.formProductGroup.disable();
         if (this.ls.selectedLanguages == 'km'){
+          this.isDetail = true;
           this.formProductGroup.disable();
           this.formProductGroup.get("subCategory").enable();
           this.formProductGroup.get("category").enable();
