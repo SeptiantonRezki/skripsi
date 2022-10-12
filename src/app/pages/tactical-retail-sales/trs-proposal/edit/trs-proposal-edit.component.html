@@ -22,7 +22,7 @@
                       <mat-select placeholder="Area" formControlName="area"
                         matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
                         (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
-                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        [disabled] = "true">
                         <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
                           {{item.code}}
                         </mat-option>
