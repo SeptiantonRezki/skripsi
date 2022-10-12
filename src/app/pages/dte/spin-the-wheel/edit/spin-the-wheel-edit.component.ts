@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -156,30 +156,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   showDetail: any;
   isDetail: Boolean;
 
-  limitProduct: any = {};
-  limitCategory: any = {};
-
-  point_valuation: number;
-
-  defaultTier: any = {
-    minimum_transaction: 0,
-    maximum_transaction: 0,
-    limit_spin: 0,
-    average_coin_spin: 0,
-    coin_variation: 0,
-  }
-
-  defaultRewards: any = {
-    value: 0,
-    slice: 0,
-    probability: 0,
-    limit_attempt: 0,
-    total_budget: 0,
-    actual_spin: 0,
-    actual_budget: 0,
-    spin_left: 0,
-    budget_left: 0,
-  }
+  settingsData: any = null;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -204,8 +181,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
-
-    this.point_valuation = parseInt(localStorage.getItem('point_valuation'));
 
     this.listLevelArea = [
       {
@@ -288,28 +263,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_date').disable();
       this.formSpin.get('end_time').disable();
     }
-    
-
-    this.formPM = this.formBuilder.group({
-      limit_only: [''],
-      limit_by_product: [false],
-      limit_by_category: [false],
-      limit_by_product_srcc: [false],
-      limit_by_category_srcc: [false],
-      limit_option: [''],
-      limit_purchase: this.formBuilder.array([]),
-      product: [''],
-      category: [''],
-      product_srcc: [''],
-      category_srcc: [''],
-      coin_variation: [''],
-      coins: [],
-      limit_spin: [0],
-      minimum_transaction: [0],
-      frekuensi_belanja: ['', Validators.required],
-      frekuensi_reward: ['', Validators.required],
-      tier: this.formBuilder.array([]),
-    });
 
     if(this.isDetail){
       this.formPM.get('limit_only').disable();
@@ -328,27 +281,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('frekuensi_belanja').disable();
       this.formPM.get('frekuensi_reward').disable();
     }
-
-    // if(this.isDetail){
-    // }
-
-    this.keyUpProduct.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        this.getListProduct(res);
-        this.resetField(res);
-      });
-
-    this.keyUpProductSRCC.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        this.getListProductSRCC(res);
-        this.resetField(res);
-      });
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -396,13 +328,6 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.setStorageDetail();
 
-    // *MEKANISME
-    this.getCategories();
-    this.getCategoriesSRCC();
-    
-    this.formPM.get('category').disable();
-    this.formPM.get('category_srcc').disable();
-
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
       this.getLevel('division');
@@ -415,142 +340,41 @@ export class SpinTheWheelEditComponent implements OnInit {
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
-
+    
     this.setValueDetail();
   }
 
   setStorageDetail() {
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => {
-      if (res.data) {
+    // Show detail
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+      if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
-        const settings = res.data.settings;
-        if (settings) {
-          this.formPM.controls.frekuensi_belanja.setValue(settings.frekuensi_belanja);
-          this.formPM.controls.frekuensi_reward.setValue(settings.frekuensi_reward);
-          if (settings.limit_by) {
-            this.isPPK = true;
-            if (settings.limit_by === 'product') {
-              this.formPM.controls.limit_by_product.setValue(true);
-              // this.productList = settings.limit_only_data;
-              // this.limitProduct = this.productList.reduce((sum, item) => {
-              //   sum[item.sku_id] = item.name;
-              //   return sum;
-              // }, {});
+        this.settingsData = res.data.settings;
+        // this.changeBlastType(res.data.audience_filter);
+        if(res.data.audience_filter === 'population-blast'){
+          this.formGeo.get('classification').setValue(res.data.class_groups);
+        }
+
+        let zone = [];
+        if (res.data.areas) {
+          for (let i = 0; i < res.data.areas.length; i++) {
+            if (res.data.areas[i].level_desc === 'zone') {
+              if (!( res.data.areas[i].area_id in zone )) {
+                zone.push(res.data.areas[i].area_id);
+              }
             }
-            if (settings.limit_by === 'category') this.formPM.controls.limit_by_product.setValue(true);
-          }
-          if (settings.exclude_by) {
-            this.isExclude = true;
-          }
-          const spins = settings.setting_details;
-          let tierId = 0;
-          if (spins.length) {
-            for (let spin of spins) {
-              const { rewards, ...spinData } = spin;
-              this.addTier({ ...spinData });
-              if (rewards.coin) for (let reward of rewards.coin)
-                this.addRewards('rewards_coin', tierId, { ...reward, value: reward.coin });
-              if (rewards.non_coin) for (let reward of rewards.non_coin)
-                this.addRewards('rewards_non_coin', tierId, { ...reward, value: reward.item_name });
-              if (rewards.xp) for (let reward of rewards.xp)
-                this.addRewards('rewards_xp', tierId, { ...reward, value: reward.xp });
-              tierId += 1;
-            };
-          } else {
-            this.addTier();
           }
         }
+        this.selectedZone = zone;
+        this.imageConverted = res.data.icon_url;
+
+        this.initAreaSelected(res.data);
       }
     });
-    // Show detail
-    // this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
-    //   if(res.data){
-    //     this.dataService.setToStorage('spin_the_wheel', res.data);
-    //     if (res.data.settings) {
-    //       this.editableCoin = false;
-    //       this.formPM.get('limit_spin').disable();
-    //       this.formPM.get('coin_variation').disable();
-          
-    //       this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
-    //       this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
-    //       this.averageCoin = res.data.settings.average_coin_spin;
-    //       for (let i = 0; i < res.data.settings.details.length; i++) {
-    //         if (res.data.settings.details[i].category_type === 'belanja') {
-    //           this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
-    //         } else if (res.data.settings.details[i].category_type === 'reward') {
-    //           this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
-    //         } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
-    //           this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
-    //         } else if (res.data.settings.details[i].category_type === 'limit') {
-    //           this.changeType('ppk');
-    //           const limitOnly = res.data.settings.details[i].limit_only;
-    //           for (let data of limitOnly) this.addLimitPurchase(data);
-    //           this.formPM.controls.limit_option.setValue(res.data.settings.details[i].limit_option || 'AND');
-    //           if (res.data.settings.details[i].limit_by === 'product') {
-    //             this.formPM.get('limit_by_category').setValue(false);
-    //             this.formPM.get('limit_by_product').setValue(true);
-    //             // this.productList = res.data.settings.details[i].limit_only;
-    //             this.productList = res.data.settings.details[i].limit_only_data;
-    //             this.limitProduct = this.productList.reduce((sum, item) => {
-    //               sum[item.sku_id] = item.name;
-    //               return sum;
-    //             }, {});
-    //           } else {
-    //             this.formPM.get('limit_by_category').setValue(true);
-    //             this.formPM.get('limit_by_product').setValue(false);
-    //             this.selectedCategory = res.data.settings.details[i].limit_only;
-    //             this.formPM.get('category').enable();
-    //             const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-    //               return parseInt(x.id, 10);
-    //             });
-    //             this.formPM.get('category').setValue(resultCat);
-    //           }
-    //         } else if (res.data.settings.details[i].category_type === 'exclude') {
-    //           this.changeType('exclude');
-    //           if (res.data.settings.details[i].limit_by === 'product') {
-    //             this.formPM.get('limit_by_category_srcc').setValue(false);
-    //             this.formPM.get('limit_by_product_srcc').setValue(true);
-    //             // this.productList = res.data.settings.details[i].limit_only;
-    //             this.productListSRCC = res.data.settings.details[i].limit_only_data;
-    //           } else {
-    //             this.formPM.get('limit_by_category_srcc').setValue(true);
-    //             this.formPM.get('limit_by_product_srcc').setValue(false);
-    //             const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-    //               return parseInt(x, 10);
-    //             });
-    //             this.formPM.get('category_srcc').setValue(resultCat);
-    //           }
-    //         }
-    //       }
-
-    //       this.formPM.get('coins').setValue(res.data.settings.coins);
-    //     } else {
-    //       this.editableCoin = true;
-    //     }
-    //     // this.changeBlastType(res.data.audience_filter);
-    //     if(res.data.audience_filter === 'population-blast'){
-    //       this.formGeo.get('classification').setValue(res.data.class_groups);
-    //     }
-
-    //     let zone = [];
-    //     if (res.data.areas) {
-    //       for (let i = 0; i < res.data.areas.length; i++) {
-    //         if (res.data.areas[i].level_desc === 'zone') {
-    //           if (!( res.data.areas[i].area_id in zone )) {
-    //             zone.push(res.data.areas[i].area_id);
-    //           }
-    //         }
-    //       }
-    //     }
-    //     this.selectedZone = zone;
-    //     this.imageConverted = res.data.icon_url;
-
-    //     this.initAreaSelected(res.data);
-    //   }
-    // });
   }
 
   initAreaSelected(data = null) {
+    console.log('=================');
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
@@ -572,6 +396,9 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
       });
     }
+    console.log(arr_area);
+    console.log(arr_region);
+    console.log(arr_zone);
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
@@ -666,6 +493,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   getTradePrograms() {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
+        console.log("res trade programs", res);
         this.listTradePrograms = res.data;
         this.filteredTradeProgram.next(res.data);
       },
@@ -698,6 +526,8 @@ export class SpinTheWheelEditComponent implements OnInit {
     let fd = new FormData();
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
+    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
+    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -709,6 +539,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -721,6 +552,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
+      // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
@@ -728,9 +560,11 @@ export class SpinTheWheelEditComponent implements OnInit {
           areaSelected[0].value.map(ar => {
             fd.append('area_id[]', ar);
           })
+          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
+            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -760,8 +594,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
 
       if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
+      // console.log('on set', thisAreaOnSet, selection, id);
     }
 
+    console.log('XYZ--------')
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
@@ -788,6 +624,7 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
+        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -829,6 +666,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
+          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -862,6 +700,7 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
+          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -946,10 +785,19 @@ export class SpinTheWheelEditComponent implements OnInit {
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
+    // console.log('[checkAreaLocation:area]', area);
+    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
+    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
     if (area.value !== 1) {
+      // console.log('[checkAreaLocation:list]', this.list[area.key]);
+      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
+      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
+        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
+        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
       }
     }
 
@@ -962,6 +810,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
+    // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
@@ -999,17 +848,22 @@ export class SpinTheWheelEditComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
+        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
           else this.pagination['last_self_area'] = [last_self_area[0]];
         } else {
+          // console.log('its hitted [other level]');
           this.pagination['after_level'] = true;
           this.pagination['last_self_area'] = newLastSelfArea;
         }
       } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
         this.pagination['after_level'] = true;
         if (newLastSelfArea.length > 0) {
           this.pagination['last_self_area'] = newLastSelfArea;
@@ -1052,6 +906,8 @@ export class SpinTheWheelEditComponent implements OnInit {
       body['start_date'] = `${moment(this.formSpin.get('start_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('start_time').value}:00`;
       body['end_date'] = `${moment(this.formSpin.get('end_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('end_time').value}:00`;
 
+      console.log(body);
+
       this.dataService.showLoading(true);
       this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
@@ -1068,6 +924,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submitAudience() {
+    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
@@ -1311,803 +1168,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  addLimitPurchase(data: any) {
-    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
-    const formControl = this.formBuilder.group({
-      id: [data.sku_id || data.id],
-      value: [data.value || 0, [Validators.required, Validators.min(1)]],
-    })
-    limitPurchase.push(formControl);
-    if (limitPurchase.controls.length > 1) {
-      this.formPM.controls.limit_option.setValidators([Validators.required]);
-      this.formPM.controls.limit_option.updateValueAndValidity();
-    } 
-  }
-
-  removeLimitPurchase(id: any) {
-    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
-    const index = Object.values(limitPurchase.controls).findIndex(i => i.value.id.toString() === id.toString());
-    limitPurchase.removeAt(index);
-    if (limitPurchase.controls.length <= 1) {
-      this.formPM.controls.limit_option.setValue('');
-      this.formPM.controls.limit_option.clearValidators();
-      this.formPM.controls.limit_option.updateValueAndValidity();
-    }
-  }
-
-  resetLimitPurchase() {
-    const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
-    while (limitPurchase.length > 0) limitPurchase.removeAt(0);
-    this.formPM.controls.limit_option.setValue('');
-    this.formPM.controls.limit_option.clearValidators();
-    this.formPM.controls.limit_option.updateValueAndValidity();
-  }
-
-  limitCategoryChange(event: any) {
-    if (!event.isUserInput) return;
-    const id = event.source.value;
-    if (event.source.selected) {
-      this.addLimitPurchase({ id });
-    } else {
-      this.removeLimitPurchase(id);
-    }
-  }
-
-  addTier(data: any = this.defaultTier) {
-    const tier = this.formPM.controls.tier as FormArray;
-    const formControl = this.formBuilder.group({
-      minimum_transaction: [data.minimum_transaction, [Validators.required]],
-      maximum_transaction: [data.maximum_transaction, [Validators.required]],
-      limit_spin: [data.limit_spin, [Validators.required, Validators.min(1)]],
-      average_coin_spin: [data.average_coin_spin],
-      coin_variation: [
-        data.coin_variation,
-        [Validators.required, Validators.min(1)],
-      ],
-      rewards_coin: this.formBuilder.array([]),
-      rewards_non_coin: this.formBuilder.array([]),
-      rewards_xp: this.formBuilder.array([]),
-      probability_left: [100, [Validators.min(0)]],
-    });
-    tier.push(formControl);
-    this.validateTier();
-  }
-
-  getTier(tierId?: number): any {
-    const tiers = this.formPM.controls.tier as FormArray;
-    if (isNaN(tierId)) return tiers;
-    return tiers.at(tierId) as FormGroup;
-  }
-
-  removeTier(tierId: number) {
-    const dialog = {
-      titleDialog: "Hapus Tier",
-      captionDialog: `Apa Anda yakin menghapus Tier ${tierId + 1}`,
-      confirmCallback: () => {
-        const tiers = this.getTier();
-        tiers.removeAt(tierId);
-        this.validateTier();
-        this.dialogService.brodcastCloseConfirmation();
-      },
-      buttonText: ["Hapus", "Batal"],
-    };
-    this.dialogService.openCustomConfirmationDialog(dialog);
-  }
-
-  validateTier() {
-    const tiers = this.getTier();
-    for (let i = 0; i < tiers.controls.length; i++) {
-      const tier = tiers.at(i);
-      const tierMin = tier.controls.minimum_transaction;
-      const tierMax = tier.controls.maximum_transaction;
-      if (i === tiers.controls.length - 1) {
-        tierMin.enable();
-        tierMax.enable();
-      } else {
-        tierMin.disable();
-        tierMax.disable();
-      }
-      if (i > 0) {
-        const prevTier = tiers.at(i - 1);
-        const prevTierMax = prevTier.controls.maximum_transaction;
-        if (!tierMin.value) {
-          tierMin.setValue(prevTierMax.value);
-          tierMax.setValue(prevTierMax.value);
-          prevTierMax.setValue(prevTierMax.value - 1);
-        } else {
-          prevTierMax.setValue(tierMin.value - 1);
-        }
-      }
-      tierMax.setValidators([
-        Validators.required, Validators.min(tierMin.value)
-      ]);
-      tierMax.updateValueAndValidity();
-    }
-  }
-
-  getRewards(type: string, tierId: number): any {
-    const tier = this.getTier(tierId);
-    const rewards = tier.controls[type] as FormArray;
-    return rewards;
-  }
-
-  addRewards(type: string, tierId: number, data: any = this.defaultRewards) {
-    const rewards = this.getRewards(type, tierId);
-    const valueValidity =
-      type === "rewards_non_coin"
-        ? [Validators.required]
-        : [Validators.required, Validators.min(1)];
-    const formControl = this.formBuilder.group({
-      value: [data.value, valueValidity],
-      slice: [data.slice, [Validators.required, Validators.min(1)]],
-      probability: [data.probability, [Validators.required, Validators.min(1)]],
-      limit_attempt: [data.limit_attempt],
-      total_budget: [data.total_budget],
-      actual_spin: [data.actual_spin],
-      actual_budget: [data.actual_budget],
-      spin_left: [data.spin_left],
-      budget_left: [data.budget_left],
-    });
-    rewards.push(formControl);
-  }
-
-  removeReward(type: string, tierId: number, rewardId: number) {
-    const rewards = this.getRewards(type, tierId);
-    rewards.removeAt(rewardId);
-    this.setProbability(tierId);
-  }
-
-  resetRewards(type: string, tierId: number) {
-    const rewards = this.getRewards(type, tierId);
-    while (rewards.length > 0) rewards.removeAt(0);
-  }
-
-  coinVariationChange(event: any, tierId: number) {
-    const len = event.target.value;
-    this.resetRewards("rewards_coin", tierId);
-    if (len)
-      for (let i = 0; i < event.target.value; i++)
-        this.addRewards("rewards_coin", tierId);
-  }
-
-  setLimitAttempt(tierId: any, reward: any) {
-    const tier = this.getTier(tierId);
-    const limit_attempt = Math.ceil(
-      (tier.controls.limit_spin.value * reward.controls.probability.value) / 100
-    );
-    reward.controls.limit_attempt.setValue(limit_attempt);
-  }
-
-  setTotalBudget(reward: any) {
-    const total_budget =
-      reward.controls.value.value *
-      reward.controls.limit_attempt.value *
-      this.point_valuation;
-    reward.controls.total_budget.setValue(total_budget);
-  }
-
-  setAverageCoin(tierId: number) {
-    const tier = this.getTier(tierId);
-    const total_budget = this.updateTierSum(
-      tierId,
-      "rewards_coin",
-      "total_budget"
-    );
-    const average_coin_spin =
-      Math.ceil(
-        total_budget / this.point_valuation / tier.controls.limit_spin.value
-      ) || 0;
-    tier.controls.average_coin_spin.setValue(average_coin_spin);
-  }
-
-  setProbability(tierId: number) {
-    const tier = this.getTier(tierId);
-    const probability =
-      this.updateTierSum(tierId, "rewards_coin", "probability") +
-      this.updateTierSum(tierId, "rewards_non_coin", "probability") +
-      this.updateTierSum(tierId, "rewards_xp", "probability");
-    tier.controls.probability_left.setValue(100 - probability);
-  }
-
-  setTierData(tierId: number, reward: any, isCoin: boolean) {
-    this.setLimitAttempt(tierId, reward);
-    if (isCoin) {
-      this.setTotalBudget(reward);
-      this.setAverageCoin(tierId);
-    }
-    this.setProbability(tierId);
-  }
-
-  updateTierData(
-    tierId: number,
-    isCoin: boolean,
-    rewardType: string,
-    rewardId?: number
-  ) {
-    const rewards = this.getRewards(rewardType, tierId);
-    if (isNaN(rewardId)) {
-      for (let reward of rewards.controls)
-        this.setTierData(tierId, reward, isCoin);
-      return;
-    }
-    const reward = rewards.at(rewardId) as FormGroup;
-    this.setTierData(tierId, reward, isCoin);
-  }
-
-  updateTierSum(tierId: number, type: string, name: string) {
-    const rewards = this.getRewards(type, tierId);
-    let sum = 0;
-    for (let reward of rewards.controls) {
-      sum += reward.controls[name].value;
-    }
-    return sum;
-  }
-
-  getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
-      this.listCategories = res.data ? res.data.data : [];
-      this.limitCategory = this.listCategories.reduce((sum, item) => {
-        sum[item.id] = item.name;
-        return sum;
-      }, {});
-    });
-  }
-
-  getCategoriesSRCC() {
-    this.productService.getListCategory(null).subscribe(res => {
-      this.listCategoriesSRCC = res.data ? res.data.data : [];
-    });
-  }
-
-  getProductObj(event, obj) {
-    if (!event.isUserInput) return;
-    const index = this.productList.findIndex(prd => prd.sku_id.toString() === obj.sku_id.toString());
-    if (index === -1) {
-      this.limitProduct[obj.sku_id] = obj.name;
-      this.addLimitPurchase(obj);
-      this.productList.push(obj);
-    }
-
-    if (this.productInput) {
-      this.productInput.nativeElement.value = null;
-    }
-
-    if (this.inputChipList && this.inputChipList.length > 0) {
-      const itemClick = this.inputChipList.filter((item) => {
-        return item.toLowerCase().search(obj.name.toLowerCase());
-      });
-
-      if (itemClick && itemClick.length > 0) {
-        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
-          /**
-           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
-           */
-          this.listProductSkuBank = [];
-        } else {
-          this.product.setValue(itemClick.toString());
-          if (this.productInput) {
-            this.productInput.nativeElement.value = itemClick.toString();
-          }
-          this.getListProduct(itemClick.toString());
-        }
-      } else {
-        this.product.setValue(null);
-        if (this.productInput) {
-          this.productInput.nativeElement.value = null;
-        }
-        this.listProductSkuBank = [];
-      }
-      setTimeout(() => {
-        if (this.productInput) {
-          this.productInput.nativeElement.blur();
-          this.productInput.nativeElement.focus();
-        }
-      }, 500);
-    }
-  }
-  
-  getListProduct(param?): void {
-    if (param) {
-      const list = param.split(';').join(',').split(',');
-      this.inputChipList = list.map((item: any) => {
-        if (item.substr(0, 1) === ' ') { // remove space from first char
-          item = item.substr(1, item.length);
-        }
-        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
-          item = item.substr(0, item.length - 1);
-        }
-        return item;
-      });
-    }
-    if (param.length >= 3) {
-      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBank = res.data ? res.data : [];
-        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-      });
-
-    } else {
-      this.listProductSkuBank = [];
-      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-    }
-  }
-
-  _filterSku(value): any[] {
-    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
-    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
-
-  isCheckedPM(type, event) {
-    if (type === 'product') {
-      this.formPM.get('category').setValue('');
-      this.formPM.get('limit_by_category').setValue(false);
-      this.formPM.get('limit_by_product').setValue(true);
-      if (!event.checked) {
-        this.productList = [];
-        this.product.setValue(null);
-        // this.product.disable();
-        this.listProductSkuBank = [];
-        this.inputChipList = [];
-        if (this.productInput) {
-          this.productInput.nativeElement.value = null;
-        }
-      } else {
-        this.formPM.get('category').disable();
-        this.product.enable();
-      }
-    } else {
-      this.formPM.get('limit_by_category').setValue(true);
-      this.formPM.get('limit_by_product').setValue(false);
-      this.productList = [];
-      this.product.setValue(null);
-      this.listProductSkuBank = [];
-      this.inputChipList = [];
-      if (event.checked) {
-        this.formPM.get('category').setValue('');
-        this.formPM.get('category').enable();
-      } else {
-        this.formPM.get('category').setValue('');
-        this.formPM.get('category').disable();
-      }
-      if (this.productInput) {
-        this.productInput.nativeElement.value = null;
-      }
-    }
-    this.resetLimitPurchase();
-  }
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (value) {
-      this.productList.push(value);
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.product.setValue(null);
-  }
-
-  remove(id: string): void {
-    const index = this.productList.findIndex((prd: any) => prd.sku_id.toString() === id.toString());
-    if (index >= 0) {
-      this.productList.splice(index, 1);
-      this.removeLimitPurchase(id);
-    }
-  }
-
-  getProductObjSRCC(event, obj) {
-    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
-    if (index === -1) {
-      this.productListSRCC.push(obj);
-    }
-    if (this.productInputSRCC) {
-      this.productInputSRCC.nativeElement.value = null;
-    }
-
-    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
-      const itemClick = this.inputChipListSRCC.filter((item) => {
-        return item.toLowerCase().search(obj.name.toLowerCase());
-      });
-
-      if (itemClick && itemClick.length > 0) {
-        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
-          /**
-           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
-           */
-          this.listProductSkuBankSRCC = [];
-        } else {
-          this.productSRCC.setValue(itemClick.toString());
-          if (this.productInputSRCC) {
-            this.productInputSRCC.nativeElement.value = itemClick.toString();
-          }
-          this.getListProductSRCC(itemClick.toString());
-        }
-      } else {
-        this.productSRCC.setValue(null);
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.value = null;
-        }
-        this.listProductSkuBankSRCC = [];
-      }
-      setTimeout(() => {
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.blur();
-          this.productInputSRCC.nativeElement.focus();
-        }
-      }, 500);
-    }
-  }
-
-  getListProductSRCC(param?): void {
-    if (param) {
-      const list = param.split(';').join(',').split(',');
-      this.inputChipListSRCC = list.map((item: any) => {
-        if (item.substr(0, 1) === ' ') { // remove space from first char
-          item = item.substr(1, item.length);
-        }
-        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
-          item = item.substr(0, item.length - 1);
-        }
-        return item;
-      });
-    }
-    if (param.length >= 3) {
-      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBankSRCC = res.data ? res.data : [];
-        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
-      });
-
-    } else {
-      this.listProductSkuBankSRCC = [];
-      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
-    }
-  }
-
-  _filterSkuSRCC(value): any[] {
-    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
-    return this.listProductSkuBankSRCC.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
-
-  isCheckedSRCC(type, event) {
-    if (type === 'product') {
-      this.formPM.get('category_srcc').setValue('');
-      this.formPM.get('limit_by_category_srcc').setValue(false);
-      this.formPM.get('limit_by_product_srcc').setValue(true);
-      if (!event.checked) {
-        this.productListSRCC = [];
-        this.productSRCC.setValue(null);
-        // this.product.disable();
-        this.listProductSkuBankSRCC = [];
-        this.inputChipListSRCC = [];
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.value = null;
-        }
-      } else {
-        this.formPM.get('category_srcc').disable();
-        this.productSRCC.enable();
-      }
-    } else {
-      this.formPM.get('limit_by_category_srcc').setValue(true);
-      this.formPM.get('limit_by_product_srcc').setValue(false);
-      this.productListSRCC = [];
-      this.productSRCC.setValue(null);
-      // this.product.disable();
-      this.listProductSkuBankSRCC = [];
-      this.inputChipListSRCC = [];
-      if (event.checked) {
-        this.formPM.get('category_srcc').setValue('');
-        this.formPM.get('category_srcc').enable();
-      } else {
-        this.formPM.get('category_srcc').setValue('');
-        this.formPM.get('category_srcc').disable();
-      }
-      if (this.productInputSRCC) {
-        this.productInputSRCC.nativeElement.value = null;
-      }
-    }
-  }
-
-  addSRCC(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (value) {
-      this.productListSRCC.push(value);
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.productSRCC.setValue(null);
-  }
-
-  removeSRCC(id: string): void {
-    const index = this.productListSRCC.findIndex((prd: any) => prd.sku_id === id);
-
-    if (index >= 0) {
-      this.productListSRCC.splice(index, 1);
-    }
-  }
-
-  // async changeCoinVariation(event) {
-  //   let arr = [];
-  //   let coins = await this.formPM.get('coins').value;
-  //   if (coins === null) {
-  //     coins = [];
-  //   }
-  //   if (event.target.value <= 100) {
-  //     for (let i = 0; i < event.target.value; i++) {
-  //       if (i > coins.length - 1 || i === 0 && coins.length === 0) {
-  //         arr.push(
-  //           {
-  //             coin: '',
-  //             slice: '',
-  //             probability: '',
-  //             limit_atempt: '',
-  //             total_budget: '',
-  //             actual_spin: 0,
-  //             actual_budget: 0,
-  //             spin_left: 0,
-  //             budget_left: 0
-  //           }
-  //         );
-  //       } else {
-  //         arr.push(coins[i]);
-  //       }
-  //     }
-  //   }
-  //   await this.formPM.get('coins').setValue(arr);
-  //   this.averageCoin = Math.floor(this.sumCoins());
-  // }
-
-  async changeCoin(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].coin = event.target.value;
-    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
-    newArr[index].budget_left = newArr[index].total_budget;
-    await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = Math.floor(this.sumCoins());
-  }
-
-  async changeSlice(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].slice = event.target.value;
-    await this.formPM.get('coins').setValue(newArr);
-  }
-
-  async changeProbability(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].probability = event.target.value;
-    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
-    newArr[index].budget_left = newArr[index].total_budget;
-    this.averageCoin = Math.floor(this.sumCoins());
-    await this.formPM.get('coins').setValue(newArr);
-  }
-
-  async calculatePM(event) {
-    let newArr = this.formPM.get('coins').value;
-    if (newArr !== null && newArr.length > 0) {
-      for (let i = 0; i < newArr.length; i++) {
-        newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
-        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
-        newArr[i].budget_left = newArr[i].total_budget;
-      }
-      await this.formPM.get('coins').setValue(newArr);
-    }
-  }
-
-  sumPM(field) {
-    const coins = this.formPM.get('coins').value;
-    let sum = 0;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        sum += coins[i][field] * 1;
-      }
-    }
-    return sum;
-  }
-
-  sumCoins() {
-    const coins = this.formPM.get('coins').value;
-    let sum = 0;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        sum += coins[i]['coin'] * coins[i]['probability'] / 100;
-      }
-    }
-    return sum;
-  }
-
-  checkCoins() {
-    let coin = '';
-    let slice = '';
-    let probability = '';
-
-    const coins = this.formPM.get('coins').value;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        if (coins[i]['coin'] === '') {
-          coin = 'Coin';
-        }
-        if (coins[i]['slice'] === '') {
-          slice = coin !== '' ? ', Slice' : 'Slice';
-        }
-        if (coins[i]['probability'] === '') {
-          probability = slice !== '' ? ', Probability' : 'Probability';
-        }
-      }
-    }
-    return coin + slice + probability;
-  }
-
-  async submitPM() {
-    const sumProbability = this.sumPM('probability');
-
-    if (this.formPM.valid) {
-      const tiers = this.formPM.controls.tier as FormArray;
-      const limitByProduct = this.formPM.get('limit_by_product').value;
-      const excludeByProduct = this.formPM.get('limit_by_product_srcc').value;
-      let body = {
-        task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
-        frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
-        frekuensi_reward: this.formPM.get('frekuensi_reward').value,
-        setting_details: [],
-        setting_varians: tiers.controls.length,
-      };
-      let product = [];
-      let newArr = {};
-      if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
-
-        let limit_purchase_data = [];
-        const limit_purchase = this.formPM.controls.limit_purchase as FormArray;
-        for (let data of limit_purchase.controls) limit_purchase_data.push({
-          id: data.get('id').value,
-          value: data.get('value').value
-        });
-
-        product = this.productList.map(r => r.sku_id);
-        if (product.length > 0 || this.formPM.get('category').value.length > 0) {
-          const limitBy = limitByProduct ? 'product' : 'category';
-          newArr = {
-            limit_by: limitBy,
-            limit_only: limit_purchase_data,
-            limit_option: this.formPM.controls.limit_option.value,
-          };
-          body = {...body, ...newArr};
-        }
-      }
-      if (excludeByProduct === true || this.formPM.get('limit_by_category_srcc').value === true) {
-        product = this.productListSRCC.map(r => r.sku_id);
-        if (product.length > 0 || this.formPM.get('category_srcc').value.length > 0) {
-          const excludeBy = excludeByProduct ? 'product' : 'category';
-          newArr = {
-            exclude_by: excludeBy,
-            exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
-          };
-          body = {...body, ...newArr};
-        }
-      }
-      for (let tier of tiers.controls) {
-        const rewards_coin = tier.get('rewards_coin') as FormArray;
-        let coin = [];
-        for (let reward of rewards_coin.controls) {
-          let data = {
-            coin: reward.get('value').value,
-            slice: reward.get('slice').value,
-            probability: reward.get('probability').value,
-            limit_attempt: reward.get('limit_attempt').value,
-            total_budget: reward.get('total_budget').value,
-            actual_spin: reward.get('actual_spin').value,
-            actual_budget: reward.get('actual_budget').value,
-            spin_left: reward.get('spin_left').value,
-            budget_left: reward.get('budget_left').value,
-          }
-          coin.push(data);
-        }
-        const rewards_non_coin = tier.get('rewards_non_coin') as FormArray;
-        let non_coin = [];
-        for (let reward of rewards_non_coin.controls) {
-          let data = {
-            item_name: reward.get('value').value,
-            slice: reward.get('slice').value,
-            probability: reward.get('probability').value,
-            limit_attempt: reward.get('limit_attempt').value,
-            actual_spin: reward.get('actual_spin').value,
-            spin_left: reward.get('spin_left').value,
-          }
-          non_coin.push(data);
-        }
-        const rewards_xp = tier.get('rewards_xp') as FormArray;
-        let xp = [];
-        for (let reward of rewards_xp.controls) {
-          let data = {
-            xp: reward.get('value').value,
-            slice: reward.get('slice').value,
-            probability: reward.get('probability').value,
-            limit_attempt: reward.get('limit_attempt').value,
-            actual_spin: reward.get('actual_spin').value,
-            spin_left: reward.get('spin_left').value,
-          }
-          xp.push(data);
-        }
-        let details = {
-          limit_spin: tier.get('limit_spin').value,
-          coin_variation: tier.get('coin_variation').value,
-          average_coin_spin: tier.get('average_coin_spin').value,
-          minimum_transaction: tier.get('minimum_transaction').value,
-          maximum_transaction: tier.get('maximum_transaction').value,
-          rewards: [{
-            coin,
-            non_coin,
-            xp
-          }],
-        };
-        body['setting_details'].push(details);
-      }
-
-      const dialogConfig = new MatDialogConfig();
-
-      dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.panelClass = "scrumboard-card-dialog";
-      dialogConfig.data = { password: "P@ssw0rd" };
-
-      this.dialogRef = this.dialog.open(
-        DialogProcessSaveComponentSPW,
-        {...dialogConfig, width: '400px'}
-      );
-
-      const processCheck = this.spinTheWheelService.saveSettings(body).subscribe(
-        (res) => {
-          if (res.data) {
-            this.isChecked = true;
-            this.panelBlast = res.data.panel_count;
-          }
-          this.editableCoin = false;
-          this.dialogRef.close();
-          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        },
-        (err) => {
-          this.dialogRef.close();
-        }
-      );
-
-      this.dialogRef.afterClosed().subscribe(() => {
-        processCheck.unsubscribe();
-      });
-    } else {
-      commonFormValidator.validateAllFields(this.formPM);
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-    }
-  }
-
-  changeType(value) {
-    if (value === 'ppk') {
-      this.productListSRCC = [];
-      this.isPPK = true;
-      this.isExclude = false;
-      this.formPM.get('limit_by_category_srcc').setValue(false);
-      this.formPM.get('limit_by_product_srcc').setValue(false);
-      this.formPM.get('category_srcc').setValue([]);
-    } else {
-      this.productList = [];
-      this.isPPK = false;
-      this.isExclude = true;
-      this.formPM.get('limit_by_category').setValue(false);
-      this.formPM.get('limit_by_product').setValue(false);
-      this.formPM.get('category').setValue([]);
-    }
-    this.resetLimitPurchase();
-  }
-  
   setValueDetail() {
     
     this.panelBlast = this.detailFormSpin.panel_count;

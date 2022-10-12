@@ -27,18 +27,33 @@
           fxLayoutAlign="start stretch"
           fxLayoutGap="16px"
         >
+          <mat-form-field fxFlex="50" class="is-light form-primary">
+            <input
+              matInput
+              type="text"
+              formControlName="title"
+              placeholder="Judul"
+            />
+            <mat-error
+              *ngIf="
+                formNotif.controls.title.hasError('required') &&
+                formNotif.controls.title.touched
+              "
+              >harus diisi</mat-error
+            >
+          </mat-form-field>
           <div class="mb-24">
             <div class="mb-8"><strong>Deskripsi Push Notifikasi</strong></div>
             <textarea
               [froalaEditor]="froalaConfig"
-              formControlName="description"
+              formControlName="content"
               fxFlex="100"
             ></textarea>
             <mat-error
               class="mt-8"
               *ngIf="
-                formNotif.controls.description.hasError('required') &&
-                formNotif.controls.description.touched
+                formNotif.controls.content.hasError('required') &&
+                formNotif.controls.content.touched
               "
             >
               Deskripsi wajib diisi
@@ -66,17 +81,39 @@
                 Tanggal mulai wajib diisi
               </mat-error>
             </mat-form-field>
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input
+                matInput
+                formControlName="end_date"
+                [min]="formNotif.controls.start_date.value"
+                (focus)="endDate.open()"
+                [matDatepicker]="endDate"
+                placeholder="Tanggal Berakhir"
+              />
+              <mat-datepicker-toggle matSuffix [for]="endDate">
+                <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #endDate></mat-datepicker>
+              <mat-error
+                *ngIf="
+                  formNotif.controls.end_date.hasError('required') &&
+                  formNotif.controls.end_date.touched
+                "
+              >
+                Tanggal berakhir wajib diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16px">
             <mat-form-field
-              fxFlex="30"
+              fxFlex="50"
               class="is-light form-primary"
               id="start_time"
             >
               <input
                 matInput
-                formControlName="start_time"
-                placeholder="{{
-                  'notification.popup_notifikasi.text8' | translate
-                }}"
+                formControlName="at"
+                placeholder="Set Waktu"
                 [ngxTimepicker]="timePicker"
                 [format]="24"
                 readonly
@@ -85,12 +122,31 @@
               <ngx-material-timepicker #timePicker></ngx-material-timepicker>
               <mat-error
                 *ngIf="
-                  formNotif.controls.start_time.hasError('required') &&
-                  formNotif.controls.start_time.touched
+                  formNotif.controls.at.hasError('required') &&
+                  formNotif.controls.at.touched
                 "
               >
-                Jam mulai wajib diisi
+                Set waktu wajib diisi
               </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="50" class="is-light form-primary">
+              <mat-select
+                placeholder="Interval pengiriman"
+                formControlName="day"
+                [compareWith]="isChecked"
+                [multiple]="true"
+              >
+                <mat-option *ngFor="let i of dayList" [value]="i">{{
+                  i[0].toUpperCase() + i.substring(1)
+                }}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  formNotif.controls.day.hasError('required') &&
+                  formNotif.controls.day.touched
+                "
+                >Interval pengiriman wajib dipilih</mat-error
+              >
             </mat-form-field>
           </div>
           <div class="confirm pt-24" fxLayout="row">
