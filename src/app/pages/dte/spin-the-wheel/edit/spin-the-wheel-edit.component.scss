@@ -71,6 +71,13 @@
   }
 
   td {
+    vertical-align: top;
     padding-left: 4px;
+  }
+
+  td > div {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
   }
 }

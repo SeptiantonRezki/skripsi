@@ -31,7 +31,7 @@ import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/imp
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number;
+  selectedTab: number = 2;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;
@@ -296,15 +296,15 @@ export class SpinTheWheelEditComponent implements OnInit {
       limit_by_category: [false],
       limit_by_product_srcc: [false],
       limit_by_category_srcc: [false],
-      limit_option: ['AND'],
+      limit_option: [''],
       limit_purchase: this.formBuilder.array([]),
       product: [''],
       category: [''],
       product_srcc: [''],
       category_srcc: [''],
-      coin_variation: ['', Validators.required],
+      coin_variation: [''],
       coins: [],
-      limit_spin: [0, [Validators.required, Validators.min(1)]],
+      limit_spin: [0],
       minimum_transaction: [0],
       frekuensi_belanja: ['', Validators.required],
       frekuensi_reward: ['', Validators.required],
@@ -416,8 +416,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formGeo.get('classification').setValue(['all']);
     }
 
-    this.addTier();
-
     this.setValueDetail();
   }
 
@@ -429,6 +427,38 @@ export class SpinTheWheelEditComponent implements OnInit {
         if (settings) {
           this.formPM.controls.frekuensi_belanja.setValue(settings.frekuensi_belanja);
           this.formPM.controls.frekuensi_reward.setValue(settings.frekuensi_reward);
+          if (settings.limit_by) {
+            this.isPPK = true;
+            if (settings.limit_by === 'product') {
+              this.formPM.controls.limit_by_product.setValue(true);
+              // this.productList = settings.limit_only_data;
+              // this.limitProduct = this.productList.reduce((sum, item) => {
+              //   sum[item.sku_id] = item.name;
+              //   return sum;
+              // }, {});
+            }
+            if (settings.limit_by === 'category') this.formPM.controls.limit_by_product.setValue(true);
+          }
+          if (settings.exclude_by) {
+            this.isExclude = true;
+          }
+          const spins = settings.setting_details;
+          let tierId = 0;
+          if (spins.length) {
+            for (let spin of spins) {
+              const { rewards, ...spinData } = spin;
+              this.addTier({ ...spinData });
+              if (rewards.coin) for (let reward of rewards.coin)
+                this.addRewards('rewards_coin', tierId, { ...reward, value: reward.coin });
+              if (rewards.non_coin) for (let reward of rewards.non_coin)
+                this.addRewards('rewards_non_coin', tierId, { ...reward, value: reward.item_name });
+              if (rewards.xp) for (let reward of rewards.xp)
+                this.addRewards('rewards_xp', tierId, { ...reward, value: reward.xp });
+              tierId += 1;
+            };
+          } else {
+            this.addTier();
+          }
         }
       }
     });
@@ -1288,17 +1318,29 @@ export class SpinTheWheelEditComponent implements OnInit {
       value: [data.value || 0, [Validators.required, Validators.min(1)]],
     })
     limitPurchase.push(formControl);
+    if (limitPurchase.controls.length > 1) {
+      this.formPM.controls.limit_option.setValidators([Validators.required]);
+      this.formPM.controls.limit_option.updateValueAndValidity();
+    } 
   }
 
   removeLimitPurchase(id: any) {
     const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
     const index = Object.values(limitPurchase.controls).findIndex(i => i.value.id.toString() === id.toString());
     limitPurchase.removeAt(index);
+    if (limitPurchase.controls.length <= 1) {
+      this.formPM.controls.limit_option.setValue('');
+      this.formPM.controls.limit_option.clearValidators();
+      this.formPM.controls.limit_option.updateValueAndValidity();
+    }
   }
 
   resetLimitPurchase() {
     const limitPurchase = this.formPM.controls.limit_purchase as FormArray;
     while (limitPurchase.length > 0) limitPurchase.removeAt(0);
+    this.formPM.controls.limit_option.setValue('');
+    this.formPM.controls.limit_option.clearValidators();
+    this.formPM.controls.limit_option.updateValueAndValidity();
   }
 
   limitCategoryChange(event: any) {
@@ -1311,7 +1353,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  addTier(data: any = ({} = this.defaultTier)) {
+  addTier(data: any = this.defaultTier) {
     const tier = this.formPM.controls.tier as FormArray;
     const formControl = this.formBuilder.group({
       minimum_transaction: [data.minimum_transaction, [Validators.required]],
@@ -1320,7 +1362,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       average_coin_spin: [data.average_coin_spin],
       coin_variation: [
         data.coin_variation,
-        [Validators.required, Validators.min(2), Validators.max(32)],
+        [Validators.required, Validators.min(1)],
       ],
       rewards_coin: this.formBuilder.array([]),
       rewards_non_coin: this.formBuilder.array([]),
@@ -1328,7 +1370,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       probability_left: [100, [Validators.min(0)]],
     });
     tier.push(formControl);
-    this.validateTier(true);
+    this.validateTier();
   }
 
   getTier(tierId?: number): any {
@@ -1344,6 +1386,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       confirmCallback: () => {
         const tiers = this.getTier();
         tiers.removeAt(tierId);
+        this.validateTier();
         this.dialogService.brodcastCloseConfirmation();
       },
       buttonText: ["Hapus", "Batal"],
@@ -1351,29 +1394,34 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.dialogService.openCustomConfirmationDialog(dialog);
   }
 
-  validateTier(isAdd?: boolean) {
+  validateTier() {
     const tiers = this.getTier();
-    let currentId = 1;
     for (let i = 0; i < tiers.controls.length; i++) {
-      if (currentId > tiers.controls.length) break;
       const tier = tiers.at(i);
+      const tierMin = tier.controls.minimum_transaction;
+      const tierMax = tier.controls.maximum_transaction;
+      if (i === tiers.controls.length - 1) {
+        tierMin.enable();
+        tierMax.enable();
+      } else {
+        tierMin.disable();
+        tierMax.disable();
+      }
       if (i > 0) {
         const prevTier = tiers.at(i - 1);
-        const prevMax = prevTier.controls.maximum_transaction.value + 1;
-        if (isAdd) tier.controls.minimum_transaction.setValue(prevMax);
-        tier.controls.minimum_transaction.setValidators([
-          Validators.required,
-          Validators.min(prevMax),
-        ]);
-        tier.controls.minimum_transaction.updateValueAndValidity();
+        const prevTierMax = prevTier.controls.maximum_transaction;
+        if (!tierMin.value) {
+          tierMin.setValue(prevTierMax.value);
+          tierMax.setValue(prevTierMax.value);
+          prevTierMax.setValue(prevTierMax.value - 1);
+        } else {
+          prevTierMax.setValue(tierMin.value - 1);
+        }
       }
-      const currentMin = tier.controls.minimum_transaction.value;
-      tier.controls.maximum_transaction.setValidators([
-        Validators.required,
-        Validators.min(currentMin),
+      tierMax.setValidators([
+        Validators.required, Validators.min(tierMin.value)
       ]);
-      tier.controls.maximum_transaction.updateValueAndValidity();
-      currentId += 1;
+      tierMax.updateValueAndValidity();
     }
   }
 
@@ -1416,12 +1464,10 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   coinVariationChange(event: any, tierId: number) {
     const len = event.target.value;
-    if (len >= 2 && len <= 32) {
-      this.resetRewards("rewards_coin", tierId);
-      if (len)
-        for (let i = 0; i < event.target.value; i++)
-          this.addRewards("rewards_coin", tierId);
-    }
+    this.resetRewards("rewards_coin", tierId);
+    if (len)
+      for (let i = 0; i < event.target.value; i++)
+        this.addRewards("rewards_coin", tierId);
   }
 
   setLimitAttempt(tierId: any, reward: any) {
@@ -1514,12 +1560,14 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   getProductObj(event, obj) {
-    const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (!event.isUserInput) return;
+    const index = this.productList.findIndex(prd => prd.sku_id.toString() === obj.sku_id.toString());
     if (index === -1) {
       this.limitProduct[obj.sku_id] = obj.name;
       this.addLimitPurchase(obj);
       this.productList.push(obj);
     }
+
     if (this.productInput) {
       this.productInput.nativeElement.value = null;
     }
@@ -1644,8 +1692,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   remove(id: string): void {
-    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
-
+    const index = this.productList.findIndex((prd: any) => prd.sku_id.toString() === id.toString());
     if (index >= 0) {
       this.productList.splice(index, 1);
       this.removeLimitPurchase(id);
@@ -1905,36 +1952,34 @@ export class SpinTheWheelEditComponent implements OnInit {
     const sumProbability = this.sumPM('probability');
 
     if (this.formPM.valid) {
-      const checkCoins = this.checkCoins();
-      if ( checkCoins !== '') {
-        this.dialogService.openSnackBar({ message: `${checkCoins} wajib diisi` });
-        return false;
-      }
-      if (sumProbability !== 100) {
-        this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
-        return false;
-      }
-      let body = {
-        task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
-        limit_spin: this.formPM.get('limit_spin').value,
-        coin_variation: this.formPM.get('coin_variation').value,
-        average_coin_spin: this.averageCoin,
-        frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
-        frekuensi_reward: this.formPM.get('frekuensi_reward').value,
-        minimum_transaction: this.formPM.get('minimum_transaction').value,
-        coins: this.formPM.get('coins').value
-      };
+      const tiers = this.formPM.controls.tier as FormArray;
       const limitByProduct = this.formPM.get('limit_by_product').value;
       const excludeByProduct = this.formPM.get('limit_by_product_srcc').value;
+      let body = {
+        task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
+        frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
+        frekuensi_reward: this.formPM.get('frekuensi_reward').value,
+        setting_details: [],
+        setting_varians: tiers.controls.length,
+      };
       let product = [];
       let newArr = {};
       if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
+
+        let limit_purchase_data = [];
+        const limit_purchase = this.formPM.controls.limit_purchase as FormArray;
+        for (let data of limit_purchase.controls) limit_purchase_data.push({
+          id: data.get('id').value,
+          value: data.get('value').value
+        });
+
         product = this.productList.map(r => r.sku_id);
         if (product.length > 0 || this.formPM.get('category').value.length > 0) {
           const limitBy = limitByProduct ? 'product' : 'category';
           newArr = {
             limit_by: limitBy,
-            limit_only: limitByProduct ? product : this.formPM.get('category').value
+            limit_only: limit_purchase_data,
+            limit_option: this.formPM.controls.limit_option.value,
           };
           body = {...body, ...newArr};
         }
@@ -1950,6 +1995,64 @@ export class SpinTheWheelEditComponent implements OnInit {
           body = {...body, ...newArr};
         }
       }
+      for (let tier of tiers.controls) {
+        const rewards_coin = tier.get('rewards_coin') as FormArray;
+        let coin = [];
+        for (let reward of rewards_coin.controls) {
+          let data = {
+            coin: reward.get('value').value,
+            slice: reward.get('slice').value,
+            probability: reward.get('probability').value,
+            limit_attempt: reward.get('limit_attempt').value,
+            total_budget: reward.get('total_budget').value,
+            actual_spin: reward.get('actual_spin').value,
+            actual_budget: reward.get('actual_budget').value,
+            spin_left: reward.get('spin_left').value,
+            budget_left: reward.get('budget_left').value,
+          }
+          coin.push(data);
+        }
+        const rewards_non_coin = tier.get('rewards_non_coin') as FormArray;
+        let non_coin = [];
+        for (let reward of rewards_non_coin.controls) {
+          let data = {
+            item_name: reward.get('value').value,
+            slice: reward.get('slice').value,
+            probability: reward.get('probability').value,
+            limit_attempt: reward.get('limit_attempt').value,
+            actual_spin: reward.get('actual_spin').value,
+            spin_left: reward.get('spin_left').value,
+          }
+          non_coin.push(data);
+        }
+        const rewards_xp = tier.get('rewards_xp') as FormArray;
+        let xp = [];
+        for (let reward of rewards_xp.controls) {
+          let data = {
+            xp: reward.get('value').value,
+            slice: reward.get('slice').value,
+            probability: reward.get('probability').value,
+            limit_attempt: reward.get('limit_attempt').value,
+            actual_spin: reward.get('actual_spin').value,
+            spin_left: reward.get('spin_left').value,
+          }
+          xp.push(data);
+        }
+        let details = {
+          limit_spin: tier.get('limit_spin').value,
+          coin_variation: tier.get('coin_variation').value,
+          average_coin_spin: tier.get('average_coin_spin').value,
+          minimum_transaction: tier.get('minimum_transaction').value,
+          maximum_transaction: tier.get('maximum_transaction').value,
+          rewards: [{
+            coin,
+            non_coin,
+            xp
+          }],
+        };
+        body['setting_details'].push(details);
+      }
+
       const dialogConfig = new MatDialogConfig();
 
       dialogConfig.disableClose = true;
@@ -1969,11 +2072,8 @@ export class SpinTheWheelEditComponent implements OnInit {
             this.panelBlast = res.data.panel_count;
           }
           this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
           this.dialogRef.close();
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
         },
         (err) => {
           this.dialogRef.close();

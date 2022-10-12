@@ -1,0 +1,112 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <page-content-header contentTitle="Buat Spin The Wheel Notifikasi">
+  </page-content-header>
+  <div
+    *ngIf="onLoad"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    class="pt-48"
+  >
+    <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
+  </div>
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="ayo-main-wrapper mat-white-bg">
+      <form
+        autocomplete="off"
+        [formGroup]="formNotif"
+        (keydown.enter)="$event.preventDefault()"
+        class="py-24"
+      >
+        <div
+          fxLayout="column"
+          fxFlex="70"
+          fxLayoutAlign="start stretch"
+          fxLayoutGap="16px"
+        >
+          <div class="mb-24">
+            <div class="mb-8"><strong>Deskripsi Push Notifikasi</strong></div>
+            <textarea
+              [froalaEditor]="froalaConfig"
+              formControlName="description"
+              fxFlex="100"
+            ></textarea>
+            <mat-error
+              class="mt-8"
+              *ngIf="
+                formNotif.controls.description.hasError('required') &&
+                formNotif.controls.description.touched
+              "
+            >
+              Deskripsi wajib diisi
+            </mat-error>
+          </div>
+          <div fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field fxFlex="50%" class="is-light form-primary">
+              <input
+                matInput
+                formControlName="start_date"
+                (focus)="startDate.open()"
+                [matDatepicker]="startDate"
+                placeholder="Tanggal Mulai"
+              />
+              <mat-datepicker-toggle matSuffix [for]="startDate">
+                <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #startDate></mat-datepicker>
+              <mat-error
+                *ngIf="
+                  formNotif.controls.start_date.hasError('required') &&
+                  formNotif.controls.start_date.touched
+                "
+              >
+                Tanggal mulai wajib diisi
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              fxFlex="30"
+              class="is-light form-primary"
+              id="start_time"
+            >
+              <input
+                matInput
+                formControlName="start_time"
+                placeholder="{{
+                  'notification.popup_notifikasi.text8' | translate
+                }}"
+                [ngxTimepicker]="timePicker"
+                [format]="24"
+                readonly
+              />
+              <mat-icon matSuffix>access_time</mat-icon>
+              <ngx-material-timepicker #timePicker></ngx-material-timepicker>
+              <mat-error
+                *ngIf="
+                  formNotif.controls.start_time.hasError('required') &&
+                  formNotif.controls.start_time.touched
+                "
+              >
+                Jam mulai wajib diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="confirm pt-24" fxLayout="row">
+            <button
+              id="btn-simpan"
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              fxFlex="20"
+              (click)="submit()"
+            >
+              {{ ls.locale.global.button.save }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
