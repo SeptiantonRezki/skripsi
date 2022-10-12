@@ -223,6 +223,8 @@ export class TrsProposalExecutorComponent {
       level: 6,
       area_id: this.detailData.area,
       program_code: this.detailData.program_code,
+      start_date: this.detailData.start_date,
+      end_date: this.detailData.end_date,
     };
 
     this.TRSService.getExecutor(request).subscribe(res => {
