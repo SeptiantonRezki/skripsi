@@ -30,7 +30,7 @@ export class TrsCancelReasonComponent {
   reorderable = true;
   onLoad: boolean;
 
-  rows: any[];
+  rows: any;
   temp: any[] = [];
 
   selected: any[];
@@ -65,6 +65,7 @@ export class TrsCancelReasonComponent {
     private translate: TranslateService,
   ) {
     this.selected = [];
+    this.rows = [];
     this.detailData = data;
     this.profile = null;
     this.dataService.showLoading(false);
@@ -92,10 +93,12 @@ export class TrsCancelReasonComponent {
       this.loaded = true;
       this.selectedMitra = res.data;
 
-      this.rows = [];
+      let rows = [];
       res.data.forEach(function(detail) {
-        this.rows.push({ name: detail.reason, value: detail.id });
+        rows.push({ name: detail.reason, value: detail.id });
       });
+
+      this.rows = rows;
       this.dataService.showLoading(false);
 
     }, err => {
@@ -106,14 +109,10 @@ export class TrsCancelReasonComponent {
 
   submit() {
     if (this.formCacelation.valid) {
-      if (this.formCacelation.get('reason').value.trim() == ""){
-        this.dialogService.openSnackBar({
-          message: "Reason harus diisi!"
-        });
-      } else {
+      if (true){
         this.dataService.showLoading(true);
         let fd = new FormData();
-        fd.append('reason', this.formCacelation.get('reason').value.trim());
+        fd.append('reason', this.formCacelation.get('reason').value);
         
         this.TRSService.cancelProposal(fd, this.detailData.program_code).subscribe(res => {
           this.dataService.showLoading(false);

@@ -16,7 +16,7 @@
     
     <form autocomplete="off" [formGroup]="formCacelation">
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <h2 class="">Tulis alasan pembatalan program</h2>
+        <h2 class="">Pilih alasan pembatalan program</h2>
       </div>
 
       <div class="ayo-middle" fxLayout="column">
@@ -39,7 +39,7 @@
 
 
           <mat-form-field fxFlex="100%" class="dropdown is-light form-primary" *ngIf="loaded">
-            <mat-select placeholder="Select Reason" formControlName="reason">
+            <mat-select placeholder="Pilih alasan pembatalan" formControlName="reason">
               <mat-option *ngFor="let sp of rows" [value]="sp.value">{{sp.name}}</mat-option>
             </mat-select>
           </mat-form-field>
