@@ -563,6 +563,18 @@ export class TrsProposalCreateComponent implements OnInit {
 
         if (type !== 'render') {
           wilayah.at(index).get('salespoint').setValue('');
+
+          this.selectedSalesPoint = "";
+          this.selectedExecutor = [];
+          this.selectedKecamatan = [];
+          this.selectedProduct = [];
+          this.formCreateProposal.get('executor_selected').setValue("");
+          this.formCreateProposal.get('kecamatan_selected').setValue("");
+          this.formCreateProposal.get('product_selected').setValue("");
+          this.formCreateProposal.get('custCode1').setValue("");
+          this.formCreateProposal.get('custName1').setValue("");
+          this.formCreateProposal.get('custCode2').setValue("");
+          this.formCreateProposal.get('custName2').setValue("");
         }
 
         this.selectedArea = id;
@@ -570,6 +582,15 @@ export class TrsProposalCreateComponent implements OnInit {
 
       case 'district':
         this.selectedSalesPoint = id;
+
+        if (type !== 'render') {
+          this.selectedKecamatan = [];
+          this.formCreateProposal.get('kecamatan_selected').setValue("");
+          this.formCreateProposal.get('custCode1').setValue("");
+          this.formCreateProposal.get('custName1').setValue("");
+          this.formCreateProposal.get('custCode2').setValue("");
+          this.formCreateProposal.get('custName2').setValue("");
+        }
         break;
   
 
