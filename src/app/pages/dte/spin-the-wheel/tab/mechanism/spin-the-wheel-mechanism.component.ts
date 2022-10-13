@@ -314,8 +314,8 @@ export class SpinTheWheelMechanismComponent implements OnInit {
   addTier(data: any = this.defaultTier) {
     const tier = this.form.controls.tier as FormArray;
     const formControl = this.fb.group({
-      minimum_transaction: [data.minimum_transaction, [Validators.required]],
-      maximum_transaction: [data.maximum_transaction, [Validators.required]],
+      minimum_transaction: [data.minimum_transaction],
+      maximum_transaction: [data.maximum_transaction],
       limit_spin: [data.limit_spin, [Validators.required, Validators.min(1)]],
       average_coin_spin: [data.average_coin_spin],
       coin_variation: [data.coin_variation, [Validators.required]],
@@ -349,35 +349,52 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     this.dialogService.openCustomConfirmationDialog(dialog);
   }
 
-  validateTier() {
+  validateEqual(isEqual: boolean): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null =>
+      isEqual ? null : { validateEqual: true };
+  }
+
+  validateTier(tierId?: number, action?: string) {
     const tiers = this.getTier();
+    if (tierId > 0 && action === "min") {
+      const ct = tiers.at(tierId);
+      const pt = tiers.at(tierId - 1);
+      const ctmin = ct.controls.minimum_transaction;
+      const ptmax = pt.controls.maximum_transaction;
+      ptmax.setValue(ctmin.value - 1);
+    }
+    if (
+      tiers.controls.length > 1 &&
+      tierId < tiers.controls.length - 1 &&
+      action === "max"
+    ) {
+      const ct = tiers.at(tierId);
+      const nt = tiers.at(tierId + 1);
+      const ctmax = ct.controls.maximum_transaction;
+      const ntmin = nt.controls.minimum_transaction;
+      ntmin.setValue(ctmax.value + 1);
+    }
     for (let i = 0; i < tiers.controls.length; i++) {
-      const tier = tiers.at(i);
-      const tierMin = tier.controls.minimum_transaction;
-      const tierMax = tier.controls.maximum_transaction;
-      if (i === tiers.controls.length - 1) {
-        tierMin.enable();
-        tierMax.enable();
+      const ct = tiers.at(i);
+      const ctmin = ct.controls.minimum_transaction;
+      const ctmax = ct.controls.maximum_transaction;
+      if (i === 0 && tiers.controls.length > 1) {
+        ctmax.setValidators([Validators.min(ctmin.value)]);
       } else {
-        tierMin.disable();
-        tierMax.disable();
+        ctmax.clearValidators();
       }
       if (i > 0) {
-        const prevTier = tiers.at(i - 1);
-        const prevTierMax = prevTier.controls.maximum_transaction;
-        if (!tierMin.value) {
-          tierMin.setValue(prevTierMax.value);
-          tierMax.setValue(prevTierMax.value);
-          prevTierMax.setValue(prevTierMax.value - 1);
-        } else {
-          prevTierMax.setValue(tierMin.value - 1);
-        }
+        const pt = tiers.at(i - 1);
+        const ptmin = pt.controls.minimum_transaction;
+        const ptmax = pt.controls.maximum_transaction;
+        ctmin.setValidators([
+          Validators.min(ptmin.value + 1),
+          this.validateEqual(ptmax.value - ctmin.value === -1),
+        ]);
+        ctmax.setValidators([Validators.min(ctmin.value)]);
       }
-      tierMax.setValidators([
-        Validators.required,
-        Validators.min(tierMin.value + 1),
-      ]);
-      tierMax.updateValueAndValidity();
+      ctmin.updateValueAndValidity();
+      ctmax.updateValueAndValidity();
     }
   }
 

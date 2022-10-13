@@ -31,7 +31,7 @@ import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/imp
   styleUrls: ['./spin-the-wheel-edit.component.scss']
 })
 export class SpinTheWheelEditComponent implements OnInit {
-  selectedTab: number = 2;
+  selectedTab: number;
   panelBlast: number;
   exportTemplate: Boolean;
   isChecked: boolean = false;

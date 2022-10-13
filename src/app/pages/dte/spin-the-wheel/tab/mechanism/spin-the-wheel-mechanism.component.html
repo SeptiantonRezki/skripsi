@@ -358,12 +358,7 @@
             fxLayoutGap="16px"
           >
             <button
-              *ngIf="
-                i == form.controls.tier.controls.length - 1 &&
-                tier.controls.maximum_transaction.value > 0 &&
-                tier.controls.maximum_transaction.value >
-                  tier.controls.minimum_transaction.value + 1
-              "
+              *ngIf="i == form.controls.tier.controls.length - 1"
               mat-raised-button
               type="button"
               (click)="addTier()"
@@ -390,18 +385,21 @@
                 type="tel"
                 formControlName="minimum_transaction"
                 currencyMask
-                (focusout)="validateTier()"
+                (keyup)="validateTier(i, 'min')"
               />
               <mat-error
                 *ngIf="
-                  tier.controls.minimum_transaction.hasError('required') &&
+                  tier.controls.minimum_transaction.hasError('validateEqual') &&
                   tier.controls.minimum_transaction.touched
                 "
               >
-                Minimum Nilai Transaksi harus diisi
+                harus selisih 1
               </mat-error>
               <mat-error
                 *ngIf="
+                  !tier.controls.minimum_transaction.hasError(
+                    'validateEqual'
+                  ) &&
                   tier.controls.minimum_transaction.hasError('min') &&
                   tier.controls.minimum_transaction.touched
                 "
@@ -418,16 +416,8 @@
                 type="tel"
                 formControlName="maximum_transaction"
                 currencyMask
-                (focusout)="validateTier()"
+                (keyup)="validateTier(i, 'max')"
               />
-              <mat-error
-                *ngIf="
-                  tier.controls.maximum_transaction.hasError('required') &&
-                  tier.controls.maximum_transaction.touched
-                "
-              >
-                harus diisi
-              </mat-error>
               <mat-error
                 *ngIf="
                   tier.controls.maximum_transaction.hasError('min') &&
@@ -446,7 +436,7 @@
                 type="tel"
                 formControlName="limit_spin"
                 currencyMask
-                (focusout)="updateTierData(i, true, 'rewards_coin')"
+                (keyup)="updateTierData(i, true, 'rewards_coin')"
               />
               <mat-error
                 *ngIf="
@@ -471,7 +461,7 @@
                 type="tel"
                 formControlName="coin_variation"
                 currencyMask
-                (focusout)="coinVariationChange($event, i)"
+                (keyup)="coinVariationChange($event, i)"
               />
               <mat-error
                 *ngIf="
@@ -537,7 +527,7 @@
                         type="tel"
                         formControlName="value"
                         currencyMask
-                        (focusout)="updateTierData(i, true, 'rewards_coin', j)"
+                        (keyup)="updateTierData(i, true, 'rewards_coin', j)"
                       />
                     </mat-form-field>
                   </div>
@@ -568,7 +558,7 @@
                         type="tel"
                         formControlName="probability"
                         currencyMask
-                        (focusout)="updateTierData(i, true, 'rewards_coin', j)"
+                        (keyup)="updateTierData(i, true, 'rewards_coin', j)"
                       />
                     </mat-form-field>
                   </div>
@@ -727,7 +717,7 @@
                         type="tel"
                         formControlName="probability"
                         currencyMask
-                        (focusout)="
+                        (keyup)="
                           updateTierData(i, false, 'rewards_non_coin', j)
                         "
                       />
@@ -852,7 +842,7 @@
                         type="tel"
                         formControlName="probability"
                         currencyMask
-                        (focusout)="updateTierData(i, false, 'rewards_xp', j)"
+                        (keyup)="updateTierData(i, false, 'rewards_xp', j)"
                       />
                     </mat-form-field>
                   </div>
@@ -917,8 +907,11 @@
           </div>
           <mat-error
             *ngIf="
-              tier.controls.probability_left.hasError('min') ||
-              tier.controls.probability_left.hasError('max')
+              (tier.controls.rewards_coin.controls.length ||
+                tier.controls.rewards_non_coin.controls.length ||
+                tier.controls.rewards_xp.controls.length) &&
+              (tier.controls.probability_left.hasError('min') ||
+                tier.controls.probability_left.hasError('max'))
             "
           >
             Total Probability harus 100%
