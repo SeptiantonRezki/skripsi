@@ -110,6 +110,10 @@ export class TradeEditComponent {
   }
 
   ngOnInit() {
+    if (this.detailFormTrade.status === "active") {
+      this.minBudget = Number(this.detailFormTrade.budget);
+    }
+
     this.formTradeProgram = this.formBuilder.group({
       name: ["", Validators.required],
       start_date: ["", Validators.required],
@@ -154,14 +158,6 @@ export class TradeEditComponent {
     if (this.detailFormTrade.status === "active") {
       this.formTradeProgram.disable();
       this.formTradeProgram.controls["budget"].enable();
-      this.minBudget = Number(this.detailFormTrade.budget);
-      this.formTradeProgram
-        .get("budget")
-        .setValidators([
-          Validators.required,
-          Validators.min(this.minBudget),
-          Validators.max(999999999999999),
-        ]);
     }
 
     this.formTradeProgram.controls["status"].enable();
