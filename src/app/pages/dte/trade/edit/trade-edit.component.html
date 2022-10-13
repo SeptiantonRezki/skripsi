@@ -109,14 +109,19 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
-              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator" min="0" formControlName="budget" placeholder="{{'dte.trade_program.text4' | translate}}">
+              <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator"
+                min="0" formControlName="budget" placeholder="{{'dte.trade_program.text4' | translate}}">
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 {{'dte.trade_program.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('min') && formTradeProgram.controls['budget'].touched">
-                {{'dte.trade_program.text4' | translate}} {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} 0
+                {{'dte.trade_program.text4' | translate}} {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}}
+                {{minBudget | rupiahFormaterWithoutRp}}
+                </mat-error>
+                <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('max') && formTradeProgram.controls['budget'].touched">
+                  {{'dte.trade_program.text4' | translate}} {{'dte.trade_program.max_limit_budget' | translate}} 999.999.999.999.999
               </mat-error>
             </mat-form-field>
           </div>
