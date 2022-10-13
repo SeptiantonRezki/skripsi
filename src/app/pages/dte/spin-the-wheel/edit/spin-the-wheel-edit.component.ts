@@ -157,6 +157,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   isDetail: Boolean;
 
   settingsData: any = null;
+  taskSpinId: number;
 
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
@@ -349,6 +350,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
+        this.taskSpinId = res.data.id;
         this.settingsData = res.data.settings;
         // this.changeBlastType(res.data.audience_filter);
         if(res.data.audience_filter === 'population-blast'){

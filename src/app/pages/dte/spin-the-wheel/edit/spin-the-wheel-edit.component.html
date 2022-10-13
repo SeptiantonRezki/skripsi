@@ -499,7 +499,7 @@
         </mat-tab>
         <mat-tab label="Pengaturan Mekanisme" [disabled]="false">
           <ng-container *ngIf="settingsData">
-            <app-spin-the-wheel-mechanism [settings]="settingsData"></app-spin-the-wheel-mechanism>
+            <app-spin-the-wheel-mechanism [taskSpinId]="taskSpinId" [settings]="settingsData"></app-spin-the-wheel-mechanism>
           </ng-container>
         </mat-tab>
         <mat-tab label="Preview" [disabled]="false">

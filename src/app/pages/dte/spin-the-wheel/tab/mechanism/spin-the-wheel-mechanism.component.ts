@@ -24,6 +24,7 @@ import { debounceTime, filter, switchMap, tap } from "rxjs/operators";
   styleUrls: ["./spin-the-wheel-mechanism.component.scss"],
 })
 export class SpinTheWheelMechanismComponent implements OnInit {
+  @Input() taskSpinId: any = null;
   @Input() settings: any = null;
   isDetail: boolean = false;
   form: FormGroup;
@@ -341,7 +342,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       confirmCallback: () => {
         const tiers = this.getTier();
         tiers.removeAt(tierId);
-        this.validateTier();
+        this.validateTier(tierId, "remove");
         this.dialogService.brodcastCloseConfirmation();
       },
       buttonText: ["Hapus", "Batal"],
@@ -373,6 +374,13 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       const ctmax = ct.controls.maximum_transaction;
       const ntmin = nt.controls.minimum_transaction;
       ntmin.setValue(ctmax.value + 1);
+    }
+    if (tierId > 0 && tierId < tiers.controls.length && action === "remove") {
+      const pt = tiers.at(tierId - 1);
+      const ct = tiers.at(tierId);
+      pt.controls.maximum_transaction.setValue(
+        ct.controls.minimum_transaction.value - 1
+      );
     }
     for (let i = 0; i < tiers.controls.length; i++) {
       const ct = tiers.at(i);
@@ -406,14 +414,10 @@ export class SpinTheWheelMechanismComponent implements OnInit {
 
   addRewards(type: string, tierId: number, data: any = this.defaultRewards) {
     const rewards = this.getRewards(type, tierId);
-    const valueValidity =
-      type === "rewards_non_coin"
-        ? [Validators.required]
-        : [Validators.required, Validators.min(1)];
     const formControl = this.fb.group({
-      value: [data.value, valueValidity],
+      value: [data.value, [Validators.required]],
       slice: [data.slice, [Validators.required, Validators.min(1)]],
-      probability: [data.probability, [Validators.required, Validators.min(1)]],
+      probability: [data.probability, [Validators.required]],
       limit_attempt: [data.limit_attempt],
       total_budget: [data.total_budget],
       actual_spin: [data.actual_spin],
@@ -456,8 +460,9 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       reward.controls.value.value *
       reward.controls.limit_attempt.value *
       this.point_valuation;
+    const budget_left = total_budget - reward.controls.actual_budget.value;
     reward.controls.total_budget.setValue(total_budget);
-    reward.controls.budget_left.setValue(total_budget);
+    reward.controls.budget_left.setValue(budget_left);
   }
 
   setAverageCoin(tierId: number) {
@@ -527,7 +532,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     }
     const tiers = this.form.controls.tier as FormArray;
     let body = {
-      task_spin_id: this.settings.task_spin_id,
+      task_spin_id: this.taskSpinId,
       frekuensi_belanja: this.form.controls.shop_freq.value,
       frekuensi_reward: this.form.controls.reward_freq.value,
       setting_details: [],

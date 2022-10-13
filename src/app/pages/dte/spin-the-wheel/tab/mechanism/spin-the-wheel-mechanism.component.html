@@ -393,7 +393,7 @@
                   tier.controls.minimum_transaction.touched
                 "
               >
-                harus selisih 1
+                harus lebih besar dari maks tier {{ i }}
               </mat-error>
               <mat-error
                 *ngIf="
@@ -408,7 +408,14 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div fxLayout="row" fxLayoutGap="16px">
+          <div
+            *ngIf="
+              form.controls.tier.controls.length > 1 ||
+              tier.controls.maximum_transaction.value > 0
+            "
+            fxLayout="row"
+            fxLayoutGap="16px"
+          >
             <p style="width: 180px">Maksimum Nilai Transaksi</p>
             <mat-form-field class="is-light form-primary">
               <input
@@ -519,7 +526,7 @@
                 <td>
                   <div style="width: 180px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -535,7 +542,7 @@
                 <td>
                   <div style="width: 180px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -544,13 +551,21 @@
                         formControlName="slice"
                         currencyMask
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.slice.hasError('min') &&
+                          reward.controls.slice.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
                 <td>
                   <div style="width: 80px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -688,13 +703,21 @@
                         cdkAutosizeMinRows="1"
                         #autosize="cdkTextareaAutosize"
                       ></textarea>
+                      <mat-error
+                        *ngIf="
+                          reward.controls.value.hasError('required') &&
+                          reward.controls.value.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
                 <td>
                   <div style="width: 180px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -703,13 +726,21 @@
                         formControlName="slice"
                         currencyMask
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.slice.hasError('min') &&
+                          reward.controls.slice.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
                 <td>
                   <div style="width: 80px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -804,7 +835,7 @@
                 <td>
                   <div style="width: 180px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -819,7 +850,7 @@
                 <td>
                   <div style="width: 180px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
@@ -828,13 +859,21 @@
                         formControlName="slice"
                         currencyMask
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.slice.hasError('min') &&
+                          reward.controls.slice.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
                 <td>
                   <div style="width: 80px">
                     <mat-form-field
-                      style="width: 50px"
+                      style="width: 60px"
                       class="is-light form-primary"
                     >
                       <input
