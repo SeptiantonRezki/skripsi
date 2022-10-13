@@ -157,7 +157,7 @@ export class TradeEditComponent {
 
     if (this.detailFormTrade.status === "active") {
       this.formTradeProgram.disable();
-      this.formTradeProgram.controls["budget"].enable();
+      this.formTradeProgram.controls.budget.enable();
     }
 
     this.formTradeProgram.controls["status"].enable();
