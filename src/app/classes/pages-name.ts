@@ -205,7 +205,9 @@ export class PagesName {
       "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
       "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
       "/discount-coins-order/detail": "principal.koin_potongan_belanja.lihat",
-    }
+      "/content-management/keyword-management": "principal.keywordmanagement.lihat",
+      "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
+    };
     return PAGES[name];
   }
 

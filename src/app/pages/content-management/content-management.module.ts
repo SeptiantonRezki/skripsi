@@ -30,7 +30,8 @@ import {
   MatChipsModule,
   DateAdapter,
   MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
+  MAT_DATE_FORMATS,
+  MatToolbarModule
 } from "@angular/material";
 import { ngfModule } from "angular-file";
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
@@ -44,6 +45,10 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { PipesModule } from "app/pipe/pipes.module";
 import { YtVideoPreviewComponent } from './help/yt-video-preview/yt-video-preview.component';
 import { InfoPreviewComponent } from './help/info-preview/info-preview.component';
+import { KeywordManagementComponent } from "./keyword-management/keyword-management-component";
+import { TranslateModule } from "@ngx-translate/core";
+import { ImportKeywordListDialogComponent } from "./keyword-management/import-keyword-list-dialog/import-keyword-list-dialog.component";
+import { PageGuard } from "app/classes/auth.guard";
 
 export const MY_FORMATS = {
   parse: {
@@ -80,8 +85,10 @@ export const MY_FORMATS = {
     MatTabsModule,
     MatChipsModule,
     MatDatepickerModule,
+    TranslateModule.forChild(),
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    MatToolbarModule,
   ],
   declarations: [
     TncIndexComponent,
@@ -101,6 +108,11 @@ export const MY_FORMATS = {
     DetailReportComponent,
     YtVideoPreviewComponent,
     InfoPreviewComponent,
+    KeywordManagementComponent,
+    ImportKeywordListDialogComponent,
+  ],
+  entryComponents: [
+    ImportKeywordListDialogComponent,
   ],
   exports: [
     TncIndexComponent,
@@ -112,8 +124,10 @@ export const MY_FORMATS = {
     HelpIndexComponent,
     HelpCreateComponent,
     HelpEditComponent,
+    KeywordManagementComponent
   ],
   providers: [
+    PageGuard,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
