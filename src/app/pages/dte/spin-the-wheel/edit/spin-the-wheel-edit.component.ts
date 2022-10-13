@@ -265,24 +265,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_time').disable();
     }
 
-    if(this.isDetail){
-      this.formPM.get('limit_only').disable();
-      this.formPM.get('limit_by_product').disable();
-      this.formPM.get('limit_by_category').disable();
-      this.formPM.get('limit_by_product_srcc').disable();
-      this.formPM.get('limit_by_category_srcc').disable();
-      this.formPM.get('product').disable();
-      this.formPM.get('category').disable();
-      this.formPM.get('product_srcc').disable();
-      this.formPM.get('category_srcc').disable();
-      this.formPM.get('coin_variation').disable();
-      this.formPM.get('coins').disable();
-      this.formPM.get('limit_spin').disable();
-      this.formPM.get('minimum_transaction').disable();
-      this.formPM.get('frekuensi_belanja').disable();
-      this.formPM.get('frekuensi_reward').disable();
-    }
-
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
       division: [""],

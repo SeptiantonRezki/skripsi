@@ -353,6 +353,7 @@
         >
           <h3 style="line-height: 1">Tier {{ i + 1 }}</h3>
           <div
+            *ngIf="isEditableRewards"
             fxLayout="row wrap"
             fxLayoutAlign="end center"
             fxLayoutGap="16px"
@@ -480,24 +481,26 @@
                 harus diisi
               </mat-error>
             </mat-form-field>
-            <button
-              mat-raised-button
-              color="primary"
-              type="button"
-              style="height: 40px"
-              (click)="addRewards('rewards_non_coin', i, { value: '' })"
-            >
-              + Reward Non Coin
-            </button>
-            <button
-              mat-raised-button
-              color="primary"
-              type="button"
-              style="height: 40px"
-              (click)="addRewards('rewards_xp', i)"
-            >
-              + Reward XP
-            </button>
+            <ng-container *ngIf="isEditableRewards">
+              <button
+                mat-raised-button
+                color="primary"
+                type="button"
+                style="height: 40px"
+                (click)="addRewards('rewards_non_coin', i, { value: '' })"
+              >
+                + Reward Non Coin
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="button"
+                style="height: 40px"
+                (click)="addRewards('rewards_xp', i)"
+              >
+                + Reward XP
+              </button>
+            </ng-container>
           </div>
           <div class="table-tier">
             <table
@@ -758,6 +761,7 @@
                 <td>
                   <div style="width: 100px">
                     <button
+                      *ngIf="isEditableRewards"
                       mat-icon-button
                       color="primary"
                       (click)="removeReward('rewards_non_coin', i, j)"
@@ -889,6 +893,7 @@
                 <td>
                   <div style="width: 100px">
                     <button
+                      *ngIf="isEditableRewards"
                       mat-icon-button
                       color="primary"
                       (click)="removeReward('rewards_xp', i, j)"

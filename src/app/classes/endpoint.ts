@@ -1162,6 +1162,7 @@ export class Endpoint {
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/spin/audience/show-import`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
         save_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
+        get_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

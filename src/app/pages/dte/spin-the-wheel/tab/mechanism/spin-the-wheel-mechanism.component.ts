@@ -27,6 +27,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
   @Input() taskSpinId: any = null;
   @Input() settings: any = null;
   isDetail: boolean = false;
+  isEditableRewards: boolean = true;
   form: FormGroup;
   point_valuation: number;
   defaultTier: any = {
@@ -216,8 +217,38 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         this.setProbability(tierId);
         tierId += 1;
       }
+      this.isEditableRewards = false;
+      this.disableRewards();
     } else {
       this.addTier();
+    }
+  }
+
+  disableRewards() {
+    let tierId = 0;
+    const tiers = this.getTier();
+    for (let tier of tiers.controls) {
+      tier.controls.limit_spin.disable();
+      tier.controls.coin_variation.disable();
+      const coin = this.getRewards("rewards_coin", tierId);
+      for (let reward of coin.controls) {
+        reward.controls.value.disable();
+        reward.controls.slice.disable();
+        reward.controls.probability.disable();
+      }
+      const non_coin = this.getRewards("rewards_non_coin", tierId);
+      for (let reward of non_coin.controls) {
+        reward.controls.value.disable();
+        reward.controls.slice.disable();
+        reward.controls.probability.disable();
+      }
+      const xp = this.getRewards("rewards_xp", tierId);
+      for (let reward of xp.controls) {
+        reward.controls.value.disable();
+        reward.controls.slice.disable();
+        reward.controls.probability.disable();
+      }
+      tierId += 1;
     }
   }
 
@@ -312,21 +343,22 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     }
   }
 
-  addTier(data: any = this.defaultTier) {
+  addTier(data: any = {}) {
     const tier = this.form.controls.tier as FormArray;
+    const values = { ...this.defaultTier, ...data };
     const formControl = this.fb.group({
-      minimum_transaction: [data.minimum_transaction],
-      maximum_transaction: [data.maximum_transaction],
-      limit_spin: [data.limit_spin, [Validators.required, Validators.min(1)]],
-      average_coin_spin: [data.average_coin_spin],
-      coin_variation: [data.coin_variation, [Validators.required]],
+      minimum_transaction: [values.minimum_transaction],
+      maximum_transaction: [values.maximum_transaction],
+      limit_spin: [values.limit_spin, [Validators.required, Validators.min(1)]],
+      average_coin_spin: [values.average_coin_spin],
+      coin_variation: [values.coin_variation, [Validators.required]],
       rewards_coin: this.fb.array([]),
       rewards_non_coin: this.fb.array([]),
       rewards_xp: this.fb.array([]),
       probability_left: [0, [Validators.min(100), Validators.max(100)]],
     });
     tier.push(formControl);
-    this.validateTier();
+    this.validateTier(null, "add");
   }
 
   getTier(tierId?: number): any {
@@ -382,6 +414,15 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         ct.controls.minimum_transaction.value - 1
       );
     }
+    if (action === "add" && tiers.controls.length > 1) {
+      const pt = tiers.at(tiers.controls.length - 2);
+      const nt = tiers.at(tiers.controls.length - 1);
+      if (pt.controls.maximum_transaction.value) {
+        nt.controls.minimum_transaction.setValue(
+          pt.controls.maximum_transaction.value + 1
+        );
+      }
+    }
     for (let i = 0; i < tiers.controls.length; i++) {
       const ct = tiers.at(i);
       const ctmin = ct.controls.minimum_transaction;
@@ -412,18 +453,19 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     return rewards;
   }
 
-  addRewards(type: string, tierId: number, data: any = this.defaultRewards) {
+  addRewards(type: string, tierId: number, data: any = {}) {
     const rewards = this.getRewards(type, tierId);
+    const values = { ...this.defaultRewards, ...data };
     const formControl = this.fb.group({
-      value: [data.value, [Validators.required]],
-      slice: [data.slice, [Validators.required, Validators.min(1)]],
-      probability: [data.probability, [Validators.required]],
-      limit_attempt: [data.limit_attempt],
-      total_budget: [data.total_budget],
-      actual_spin: [data.actual_spin],
-      actual_budget: [data.actual_budget],
-      spin_left: [data.spin_left],
-      budget_left: [data.budget_left],
+      value: [values.value, [Validators.required]],
+      slice: [values.slice, [Validators.required, Validators.min(1)]],
+      probability: [values.probability, [Validators.required]],
+      limit_attempt: [values.limit_attempt],
+      total_budget: [values.total_budget],
+      actual_spin: [values.actual_spin],
+      actual_budget: [values.actual_budget],
+      spin_left: [values.spin_left],
+      budget_left: [values.budget_left],
     });
     rewards.push(formControl);
   }
@@ -634,6 +676,8 @@ export class SpinTheWheelMechanismComponent implements OnInit {
 
     const processCheck = this.spinTheWheelService.saveSettings(body).subscribe(
       (res) => {
+        this.isEditableRewards = false;
+        this.disableRewards();
         this.dialogRef.close();
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22,

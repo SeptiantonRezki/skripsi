@@ -83,4 +83,8 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, "save_pushnotif");
     return this.postApi(url, body);
   }
+  getPushnotif(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_pushnotif");
+    return this.getApi(url);
+  }
 }
