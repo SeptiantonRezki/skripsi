@@ -55,7 +55,10 @@ export class PopupNotificationCreateComponent {
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: this.translate.instant('global.label.src'), value: "src" }, { name: this.translate.instant('global.label.ws_downline'), value: "downline" }];
   listContentType: any[] = [];
+  listContentType_2: any[] =[];
   listLandingPage: any[] = [];
+  listLandingPage_2: any[] = [];
+  appLinkValue: any[] =[];
   listGender: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.male'), value: "male" }, { name: this.translate.instant('global.label.female'), value: "female" }];
   listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
   listTypeOfRecurrence: Object[] = [
@@ -244,8 +247,10 @@ export class PopupNotificationCreateComponent {
       user_group: ["", Validators.required],
       areas: this.formBuilder.array([]),
       content_type: ["iframe", Validators.required],
+      content_type_2: ["close"],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
+      landing_page_2: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       url_web: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       button_text: ["", [Validators.required, Validators.maxLength(30)]],
@@ -267,6 +272,8 @@ export class PopupNotificationCreateComponent {
       recurrence_type: ["daily", Validators.required],
       barcode: [""],
       content_type_new: ['all'],
+      app_link: [""],
+      app_link_2: [""],
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -458,11 +465,21 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
           { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
           { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" },
-          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }
+          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+          { name: 'App Link', value: "app_link" }
+        ];
+
+        this.listLandingPage_2 = [
+          { name: 'App Link', value: "app_link" }
+        ];
+
+        this.listContentType_2 = [
+          { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
+          { name: "Close Popup", value: "close" }
         ];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-
+        // Content Type Positive
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
@@ -479,12 +496,19 @@ export class PopupNotificationCreateComponent {
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
         }
+        
+        // Content Type Negative
+        if (this.formPopupGroup.controls['content_type_2'].value === 'landing-page') {
+          this.formPopupGroup.controls['landing_page_2'].enable();
+        }
+
       }
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
       };
 
       this.formPopupGroup.controls['landing_page'].setValue('');
+      this.formPopupGroup.controls['landing_page_2'].setValue('');
 
       this.formPopupGroup.updateValueAndValidity();
     });
@@ -594,8 +618,26 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.get("button_text").enable();
       }
 
+      if(
+        value === 'landing-page' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('app_link').setValidators(Validators.required);
+        this.formPopupGroup.get('content_type_2').setValidators(Validators.required);
+      }
+
       this.formPopupGroup.updateValueAndValidity();
     });
+    this.formPopupGroup.get('content_type_2').valueChanges.subscribe(value => {
+      if(
+        value === 'landing-page' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('landing_page_2').setValidators(Validators.required);
+        this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
+      }
+    })
+    
 
     this.filterProduct
       .valueChanges
@@ -1449,6 +1491,15 @@ export class PopupNotificationCreateComponent {
     }
   }
 
+  contentType_2(value) {
+    if (value === 'landing-page') {
+      this.formPopupGroup.controls['landing_page_2'].enable();
+    } else {
+      this.formPopupGroup.controls['landing_page_2'].setValue('');
+      this.formPopupGroup.controls['landing_page_2'].disable();
+    }
+  }
+
   selectChange(e: any) {
     if (e.source.name === 'is_mission_builder' && e.checked) {
       this.formPopupGroup.get('is_mission_builder').patchValue(true);
@@ -1500,6 +1551,12 @@ export class PopupNotificationCreateComponent {
 
       if (body.type === 'retailer') {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
+        body['positive_action_data'] = null;
+        body['negative_action_data'] = null
+        body['positive_action'] = null;
+        body['negative_action'] = null;
+        body['positive_url_app'] = null;
+        body['negative_url_app'] = null;
       }
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
@@ -1642,8 +1699,22 @@ export class PopupNotificationCreateComponent {
       } else {
         if (body['target_audience']) delete body['target_audience'];
       }
+      if (body.type === 'retailer' && body.action === 'landing-page') {
+        body['action'] = null;
+        body['action_data'] = null;
+        body['url_app'] = null;
 
-      // console.log(body)
+        body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
+        body['positive_action'] = this.formPopupGroup.get('content_type').value;
+        body['positive_url_app'] = (this.formPopupGroup.get('app_link').value !== '')? this.formPopupGroup.get('app_link').value : null;
+
+        body['negative_action'] = this.formPopupGroup.get('content_type_2').value;
+        body['negative_action_data'] = this.formPopupGroup.get('landing_page_2').value;
+        body['negative_url_app'] = (this.formPopupGroup.get('app_link_2').value !== '')? this.formPopupGroup.get('app_link_2').value : null;
+        
+      }
+      
+      // console.log('# DATA BODY ',body)
       this.notificationService.createPopup(body).subscribe(
         res => {
           this.dataService.showLoading(false);
@@ -1707,6 +1778,16 @@ export class PopupNotificationCreateComponent {
   }
 
   previewImage(image) {
+    let album = {
+      src: image,
+      caption: '',
+      thumb: image
+    };
+
+    this._lightbox.open([album], 0);
+  }
+
+  previewImage_2(image) {
     let album = {
       src: image,
       caption: '',
@@ -1830,7 +1911,8 @@ export class PopupNotificationCreateComponent {
       this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
     }
-    if (this.formPopupGroup.get("user_group").value === 'retailer' && this.formPopupGroup.get("landing_page").value === 'pojok-modal') {
+    if (this.formPopupGroup.get("user_group").value === 'retailer' && 
+    (this.formPopupGroup.get("landing_page").value === 'pojok-modal' || this.formPopupGroup.get("landing_page_2").value === 'pojok-modal') ) {
       this.pagination['type'] = 'pojok-modal'
     } else {
       delete this.pagination['type'];
