@@ -26,7 +26,7 @@ import { debounceTime, filter, switchMap, tap } from "rxjs/operators";
 export class SpinTheWheelMechanismComponent implements OnInit {
   @Input() taskSpinId: any = null;
   @Input() settings: any = null;
-  isDetail: boolean = false;
+  @Input() isDetail: boolean;
   isEditableRewards: boolean = true;
   form: FormGroup;
   point_valuation: number;
@@ -90,8 +90,11 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       exclude_by: [{ value: "", disabled: true }],
       product: [""],
       category: [""],
-      shop_freq: ["", Validators.required],
-      reward_freq: ["", Validators.required],
+      shop_freq: [{ value: "", disabled: this.isDetail }, Validators.required],
+      reward_freq: [
+        { value: "", disabled: this.isDetail },
+        Validators.required,
+      ],
       tier: this.fb.array([]),
     });
   }
@@ -314,7 +317,10 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     const limitPurchase = this.form.controls.limit_purchase as FormArray;
     const formControl = this.fb.group({
       id: [data.sku_id || data.id],
-      value: [data.value || 0, [Validators.required, Validators.min(1)]],
+      value: [
+        { value: data.value || 0, disabled: this.isDetail },
+        [Validators.required, Validators.min(1)],
+      ],
     });
     limitPurchase.push(formControl);
   }
@@ -347,15 +353,19 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     const tier = this.form.controls.tier as FormArray;
     const values = { ...this.defaultTier, ...data };
     const formControl = this.fb.group({
-      minimum_transaction: [values.minimum_transaction],
-      maximum_transaction: [values.maximum_transaction],
+      minimum_transaction: [
+        { value: values.minimum_transaction, disabled: this.isDetail },
+      ],
+      maximum_transaction: [
+        { value: values.maximum_transaction, disabled: this.isDetail },
+      ],
       limit_spin: [values.limit_spin, [Validators.required, Validators.min(1)]],
       average_coin_spin: [values.average_coin_spin],
       coin_variation: [values.coin_variation, [Validators.required]],
       rewards_coin: this.fb.array([]),
       rewards_non_coin: this.fb.array([]),
       rewards_xp: this.fb.array([]),
-      probability_left: [0, [Validators.min(100), Validators.max(100)]],
+      probability_left: [0],
     });
     tier.push(formControl);
     this.validateTier(null, "add");
@@ -407,12 +417,18 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       const ntmin = nt.controls.minimum_transaction;
       ntmin.setValue(ctmax.value + 1);
     }
-    if (tierId > 0 && tierId < tiers.controls.length && action === "remove") {
-      const pt = tiers.at(tierId - 1);
+    if (action === "remove") {
       const ct = tiers.at(tierId);
-      pt.controls.maximum_transaction.setValue(
-        ct.controls.minimum_transaction.value - 1
-      );
+      if (tierId > 0 && tierId < tiers.controls.length) {
+        const pt = tiers.at(tierId - 1);
+        ct.controls.minimum_transaction.setValue(
+          pt.controls.maximum_transaction.value + 1
+        );
+      }
+      if (tiers.controls.length === 1) {
+        const pt = tiers.at(tierId - 1);
+        pt.controls.maximum_transaction.setValue(0);
+      }
     }
     if (action === "add" && tiers.controls.length > 1) {
       const pt = tiers.at(tiers.controls.length - 2);
@@ -427,7 +443,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       const ct = tiers.at(i);
       const ctmin = ct.controls.minimum_transaction;
       const ctmax = ct.controls.maximum_transaction;
-      if (i === 0 && tiers.controls.length > 1) {
+      if (i < tiers.controls.length - 1) {
         ctmax.setValidators([Validators.min(ctmin.value)]);
       } else {
         ctmax.clearValidators();
@@ -440,10 +456,29 @@ export class SpinTheWheelMechanismComponent implements OnInit {
           Validators.min(ptmin.value + 1),
           this.validateEqual(ptmax.value - ctmin.value === -1),
         ]);
-        ctmax.setValidators([Validators.min(ctmin.value)]);
       }
       ctmin.updateValueAndValidity();
       ctmax.updateValueAndValidity();
+    }
+  }
+
+  validateRewards(tierId: number, action: string) {
+    const tier = this.getTier(tierId);
+    if (action === "probability_left") {
+      const hasRewards =
+        tier.controls.rewards_coin.controls.length +
+        tier.controls.rewards_non_coin.controls.length +
+        tier.controls.rewards_xp.controls.length;
+      if (hasRewards === 1) {
+        tier.controls.probability_left.setValidators([
+          Validators.min(100),
+          Validators.max(100),
+        ]);
+        tier.controls.probability_left.updateValueAndValidity();
+      } else if (hasRewards === 0) {
+        tier.controls.probability_left.clearValidators();
+        tier.controls.probability_left.updateValueAndValidity();
+      }
     }
   }
 
@@ -468,17 +503,20 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       budget_left: [values.budget_left],
     });
     rewards.push(formControl);
+    this.validateRewards(tierId, "probability_left");
   }
 
   removeReward(type: string, tierId: number, rewardId: number) {
     const rewards = this.getRewards(type, tierId);
     rewards.removeAt(rewardId);
     this.setProbability(tierId);
+    this.validateRewards(tierId, "probability_left");
   }
 
   resetRewards(type: string, tierId: number) {
     const rewards = this.getRewards(type, tierId);
     while (rewards.length > 0) rewards.removeAt(0);
+    this.validateRewards(tierId, "probability_left");
   }
 
   coinVariationChange(event: any, tierId: number) {
@@ -593,7 +631,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         });
       body["limit_by"] = limit_by;
       body["limit_only"] = limit_purchase_data;
-      if (limit_purchase_data.length > 1)
+      if (limit_purchase_data.length)
         body["limit_option"] = this.form.controls.limit_option.value;
     }
     if (condition === "exclude" && exclude_by) {

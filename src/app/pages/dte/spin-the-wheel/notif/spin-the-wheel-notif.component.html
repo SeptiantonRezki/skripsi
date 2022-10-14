@@ -66,6 +66,7 @@
                 formControlName="start_date"
                 (focus)="startDate.open()"
                 [matDatepicker]="startDate"
+                [min]="minDate"
                 placeholder="Tanggal Mulai"
               />
               <mat-datepicker-toggle matSuffix [for]="startDate">

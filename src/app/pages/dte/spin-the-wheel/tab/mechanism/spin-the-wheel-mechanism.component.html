@@ -37,6 +37,7 @@
         fxLayout="row"
         fxLayoutGap="24px"
         formControlName="condition"
+        [disabled]="isDetail"
       >
         <div fxFlex="50">
           <mat-radio-button value="include"
@@ -56,6 +57,7 @@
             fxLayout="row"
             fxLayoutGap="32px"
             formControlName="limit_by"
+            [disabled]="isDetail"
           >
             <mat-radio-button value="product"
               >Batasi dengan Produk</mat-radio-button
@@ -84,6 +86,7 @@
                       >
                     </mat-chip>
                     <input
+                      *ngIf="!isDetail"
                       placeholder="Batasan berdasarkan produk"
                       formControlName="product"
                       [matAutocomplete]="auto"
@@ -220,20 +223,13 @@
                 fxLayout="row"
                 fxLayoutGap="32px"
                 formControlName="limit_option"
+                [disabled]="isDetail"
               >
                 <mat-radio-button value="AND">AND</mat-radio-button>
                 <mat-radio-button value="OR">OR</mat-radio-button>
               </mat-radio-group>
             </div>
           </ng-container>
-          <mat-error
-            *ngIf="
-              form.controls.limit_by.value &&
-              !form.controls.limit_purchase.controls.length
-            "
-          >
-            Batasan wajib dipilih
-          </mat-error>
         </div>
       </div>
       <div fxFlex="50">
@@ -243,6 +239,7 @@
             fxLayout="row"
             fxLayoutGap="32px"
             formControlName="exclude_by"
+            [disabled]="isDetail"
           >
             <mat-radio-button value="product"
               >Batasi dengan Produk</mat-radio-button
@@ -273,6 +270,7 @@
                       >
                     </mat-chip>
                     <input
+                      *ngIf="!isDetail"
                       placeholder="Batasan berdasarkan produk"
                       formControlName="product"
                       [matAutocomplete]="auto"
@@ -410,10 +408,7 @@
             </mat-form-field>
           </div>
           <div
-            *ngIf="
-              form.controls.tier.controls.length > 1 ||
-              tier.controls.maximum_transaction.value > 0
-            "
+            *ngIf="i < form.controls.tier.controls.length - 1"
             fxLayout="row"
             fxLayoutGap="16px"
           >
@@ -573,9 +568,8 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="probability"
-                        currencyMask
                         (keyup)="updateTierData(i, true, 'rewards_coin', j)"
                       />
                     </mat-form-field>
@@ -748,9 +742,8 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="probability"
-                        currencyMask
                         (keyup)="
                           updateTierData(i, false, 'rewards_non_coin', j)
                         "
@@ -882,9 +875,8 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="probability"
-                        currencyMask
                         (keyup)="updateTierData(i, false, 'rewards_xp', j)"
                       />
                     </mat-form-field>
@@ -963,7 +955,7 @@
         </div>
       </div>
     </div>
-    <div class="pt-24" fxLayout="row">
+    <div *ngIf="!isDetail" class="pt-24" fxLayout="row">
       <button
         mat-raised-button
         type="button"

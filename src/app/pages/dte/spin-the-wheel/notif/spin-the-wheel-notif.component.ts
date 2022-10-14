@@ -29,6 +29,8 @@ export class SpinTheWheelNotifComponent implements OnInit {
     "minggu",
   ];
 
+  minDate: Date = new Date();
+
   constructor(
     private fb: FormBuilder,
     private dialogService: DialogService,
@@ -59,20 +61,20 @@ export class SpinTheWheelNotifComponent implements OnInit {
 
   getDetails() {
     this.spinTheWheelService.getPushnotif().subscribe((res: any) => {
-      const data = res.data.data || [];
-      if (data.length) {
-        this.formNotif.controls.title.setValue(data[0].title);
-        this.formNotif.controls.content.setValue(data[0].content);
+      const data = res.data;
+      if (data) {
+        this.formNotif.controls.title.setValue(data.title);
+        this.formNotif.controls.content.setValue(data.content);
         this.formNotif.controls.start_date.setValue(
-          moment(data[0].start_date, "YYYY-MM-DD HH:mm:ss")
+          moment(data.start_date, "YYYY-MM-DD HH:mm:ss")
         );
         this.formNotif.controls.end_date.setValue(
-          moment(data[0].end_date, "YYYY-MM-DD HH:mm:ss")
+          moment(data.end_date, "YYYY-MM-DD HH:mm:ss")
         );
         this.formNotif.controls.at.setValue(
-          moment(data[0].at, "HH:mm:ss").format("HH:mm")
+          moment(data.at, "HH:mm:ss").format("HH:mm")
         );
-        this.formNotif.controls.day.setValue(JSON.parse(data[0].day));
+        this.formNotif.controls.day.setValue(JSON.parse(data.day));
       }
     });
     this.onLoad = false;
