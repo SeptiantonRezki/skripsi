@@ -1524,19 +1524,13 @@ export class PopupNotificationCreateComponent {
   }
 
   submit() {
-    // console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
+    let missionVal = this.formPopupGroup.value.is_mission_builder;
     if (this.formPopupGroup.valid) {
       if (this.formPopupGroup.get('content_type').value !== 'new-product' && !this.files) {
         this.dialogService.openSnackBar({ message: "Gambar popup notifikasi belum dipilih!" });
         return;
       }
-
       this.dataService.showLoading(true);
-
-      this.formPopupGroup.get('is_mission_builder').patchValue(
-        this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
-      );
-
       let body = {
         title: this.formPopupGroup.get('title').value,
         type: this.formPopupGroup.get('user_group').value,
@@ -1545,7 +1539,7 @@ export class PopupNotificationCreateComponent {
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
         country: this.Country,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        is_mission_builder: (missionVal === false)? 0 : 1,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
@@ -1700,8 +1694,8 @@ export class PopupNotificationCreateComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
       if (body.type === 'retailer' && body.action === 'landing-page') {
-        body['action'] = null;
-        body['action_data'] = null;
+        body['action'] = this.formPopupGroup.get('content_type').value;
+        body['action_data'] = this.formPopupGroup.get('landing_page').value;
         body['url_app'] = null;
 
         body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
@@ -1725,7 +1719,6 @@ export class PopupNotificationCreateComponent {
           this.dataService.showLoading(false);
         }
       );
-
     } else {
       let msg;
       if (this.formPopupGroup.invalid) {
