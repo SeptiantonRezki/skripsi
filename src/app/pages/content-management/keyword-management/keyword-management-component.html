@@ -33,7 +33,7 @@
 
               <div class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                  <mat-select placeholder="Konten Keyword Promo Mandiri" formControlName="category">
+                  <mat-select style="min-width: 160px" placeholder="Konten Keyword Promo Mandiri" formControlName="category">
                     <mat-option [value]="" selected>{{ls.locale.global.label.all}} Kategori</mat-option>
                     <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
@@ -42,10 +42,10 @@
             </form>
             <div class='import-export-bar p-16 ml-16 mr-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" >
               <div *ngIf="permission['ubah']" class="button-row">
-                <button mat-flat-button style="min-width: 160px" color="white" (click)="importRetailer()"><mat-icon>vertical_align_bottom</mat-icon> Import XLS (Coming Soon)</button>
+                <button mat-flat-button style="min-width: 160px" color="white" (click)="importKeyword()"><mat-icon>vertical_align_bottom</mat-icon>Import XLS</button>
               </div>
               <div class="button-row">
-                <button mat-flat-button style="min-width: 160px" color="white" (click)="exportRetailer()"><mat-icon>vertical_align_top</mat-icon> Export XLS (Coming Soon)</button>
+                <button mat-flat-button style="min-width: 160px" color="white" (click)="exportKeyword()"><mat-icon>vertical_align_top</mat-icon>Export XLS</button>
               </div>
             </div>
             <div>
@@ -56,7 +56,7 @@
                   [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
           
                   <!-- <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name" [sortable]="true"> -->
-                    <ngx-datatable-column name="Nama" prop="name" [sortable]="true"> 
+                  <ngx-datatable-column name="Nama" prop="name" [sortable]="true"> 
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.name}}</span>
                     </ng-template>
@@ -81,7 +81,7 @@
                       <span class="row-address">{{row.block_promo_mandiri}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <!-- <ngx-datatable-column name="Add (1) / Remove (0)" prop="medal_name" [sortable]="true">
+                  <!-- <ngx-datatable-column name="Add (1) / Remove (0)" prop="add_or_remove" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.add_or_remove}}</span>
                     </ng-template>
@@ -108,4 +108,5 @@
         </div>
     </div>
   </div>
+  <a #downloadLink></a>
 </div>

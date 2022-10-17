@@ -47,8 +47,8 @@ import { YtVideoPreviewComponent } from './help/yt-video-preview/yt-video-previe
 import { InfoPreviewComponent } from './help/info-preview/info-preview.component';
 import { KeywordManagementComponent } from "./keyword-management/keyword-management-component";
 import { TranslateModule } from "@ngx-translate/core";
-import { ImportKeywordListDialogComponent } from "./keyword-management/import-keyword-list-dialog/import-keyword-list-dialog.component";
 import { PageGuard } from "app/classes/auth.guard";
+import { ImportKeyword } from "./keyword-management/import/personalize/import-keyword.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -109,10 +109,10 @@ export const MY_FORMATS = {
     YtVideoPreviewComponent,
     InfoPreviewComponent,
     KeywordManagementComponent,
-    ImportKeywordListDialogComponent,
+    ImportKeyword,
   ],
   entryComponents: [
-    ImportKeywordListDialogComponent,
+    ImportKeyword,
   ],
   exports: [
     TncIndexComponent,

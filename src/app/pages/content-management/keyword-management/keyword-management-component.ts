@@ -4,6 +4,8 @@ import {
   Input,
   Output,
   EventEmitter,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -11,12 +13,13 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ImportKeywordListDialogComponent } from './import-keyword-list-dialog/import-keyword-list-dialog.component';
+// import { ImportKeywordListDialogComponent } from './import-keyword-list-dialog/import-keyword-list-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { ProductService } from 'app/services/sku-management/product.service';
 import { KeywordService } from 'app/services/content-management/keyword.service';
 import { PagesName } from 'app/classes/pages-name';
+import { ImportKeyword } from './import/personalize/import-keyword.component';
 
 @Component({
   selector: 'app-keyword-management-component',
@@ -24,6 +27,8 @@ import { PagesName } from 'app/classes/pages-name';
   styleUrls: ['./keyword-management-component.scss']
 })
 export class KeywordManagementComponent implements OnInit {
+
+  @ViewChild('downloadLink') downloadLink: ElementRef;
 
   rows: any[];
   onLoad: boolean;
@@ -48,6 +53,7 @@ export class KeywordManagementComponent implements OnInit {
       name: 'Customer'
     }
   ];
+  importID = [];
 
   private _data: any = null;
   @Input() set data(data: any) {
@@ -121,7 +127,7 @@ export class KeywordManagementComponent implements OnInit {
 
   ngOnInit() {
     this.formKeyword = this.formBuilder.group({
-      userGroup: [''],
+      userGroup: [['wholesaler', 'retailer', 'customer']],
       category: '',
     });
     this.getCategories();
@@ -185,17 +191,14 @@ export class KeywordManagementComponent implements OnInit {
   }
 
   getKeywordList(searchValue?: any) {
-    console.log('Search', searchValue);
     try {
       this.dataService.showLoading(true);
+      this.loadingIndicator = true;
       this.pagination.per_page = 25;
       if (searchValue) { this.pagination.search = searchValue; } else { delete this.pagination.search; }
 
-      this.loadingIndicator = true;
-
       const userGroup = this.formKeyword.get('userGroup').value;
       const category = this.formKeyword.get('category').value;
-      console.log('datanya', userGroup);
       if (userGroup.length > 0) {
         this.pagination['group_pengguna'] = userGroup;
       } else {
@@ -246,65 +249,42 @@ export class KeywordManagementComponent implements OnInit {
 
   }
 
-  importRetailer(): void {
+  importKeyword() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = { password: 'P@ssw0rd' };
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = { password: "P@ssw0rd" };
 
-    this.dialogRef = this.dialog.open(ImportKeywordListDialogComponent, dialogConfig);
+    this.dialogRef = this.dialog.open(
+      ImportKeyword,
+      dialogConfig
+    );
 
-    this.dialogRef.afterClosed().subscribe(response => {
+    this.dialogRef.afterClosed().subscribe((response) => {
       if (response) {
-        this.getKeywordList();
-        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+        this.importID = response.importID;
       }
     });
   }
-  async exportRetailer() {
+
+  async exportKeyword() {
     this.dataService.showLoading(true);
     try {
-      const response = await this.keywordService.exportRetailer().toPromise();
-      console.log('he', response.headers);
-      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_MedalBadge_Retailer_${new Date().toLocaleString()}.xls`);
+      const body = {
+        group_pengguna: this.formKeyword.get('userGroup').value,
+        category: this.formKeyword.get('category').value,
+      };
+      const response = await this.keywordService.exportKeyword(body).toPromise();
+      this.downloadLink.nativeElement.href = response.data;
+      this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);
       this.dataService.showLoading(false);
       // throw error;
     }
-  }
-
-  downLoadFile(data: any, type: string, fileName: string) {
-    // It is necessary to create a new blob object with mime-type explicitly set
-    // otherwise only Chrome works like it should
-    const newBlob = new Blob([data], { type: type });
-
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
-    }
-
-    // For other browsers:
-    // Create a link pointing to the ObjectURL containing the blob.
-    const url = window.URL.createObjectURL(newBlob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    // this is necessary as link.click() does not work on the latest firefox
-    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-    setTimeout(function () {
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      this.dataService.showLoading(false);
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    }, 100);
   }
 
   handleError(error) {
@@ -316,6 +296,21 @@ export class KeywordManagementComponent implements OnInit {
     }
     console.log(error);
     // alert('Open console to see the error')
+  }
+
+  submit() {
+    this.dataService.showLoading(true);
+    const body = {
+      _method: 'PUT',
+      group_pengguna: this.formKeyword.get('userGroup').value
+    };
+    this.keywordService.put(body, {id: this.importID}).subscribe(res => {
+      this.getKeywordList();
+    }, err => {
+      console.warn(err);
+      this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Penyimpanan' });
+      this.dataService.showLoading(false);
+    });
   }
 
 }

@@ -36,30 +36,42 @@
       <table class="table">
         <thead>
           <tr>
-            <!-- <th nowrap>Nama Toko</th> -->
             <th nowrap>{{ls.locale.global.label.owner_name}}</th>
-            <th nowrap>Id_Medal</th>
-            <!-- <th nowrap>Nama Pemilik</th>
-            <th nowrap>Medal</th> -->
+            <th nowrap>Kategori</th>
+            <th nowrap>Blok Di Produk</th>
+            <th nowrap>Produk Maping</th>
+            <th nowrap>Blok di Promo Mandiri</th>
+            <th nowrap>Add (1) / Remove (0)</th>
+            <th nowrap>Country</th>
+            <th nowrap>SKU ID</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of rows">
-            <!-- <td nowrap>
+            <td nowrap>
               {{ item.name ? item.name : '-' }}
-            </td> -->
-            <td nowrap>
-              {{ item.code ? item.code : '-' }}
             </td>
             <td nowrap>
-              {{ item.medal_id ? item.medal_id : '-' }}
-            </td>
-            <!-- <td nowrap>
-              {{ item.owner ? item.owner : '-' }}
+              {{ item.category_name ? item.category_name : '-' }}
             </td>
             <td nowrap>
-              {{ item.medal_name ? item.medal_name : '-' }}
-            </td> -->
+              {{ item.block_product ? item.block_product : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.product_mapping ? item.product_mapping : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.block_promo_mandiri ? item.block_promo_mandiri : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.country ? item.country : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.add_or_remove ? item.add_or_remove : '-' }}
+            </td>
+            <td nowrap>
+              {{ item.sku_id ? item.sku_id : '-' }}
+            </td>
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">

@@ -2,8 +2,8 @@ import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
-import { MedalBadgeService } from 'app/services/user-management/retailer/medal-badge.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { KeywordService } from 'app/services/content-management/keyword.service';
 @Component({
   selector: 'app-import-keyword-list-dialog',
   templateUrl: './import-keyword-list-dialog.component.html',
@@ -25,7 +25,7 @@ export class ImportKeywordListDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ImportKeywordListDialogComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
-    private medalBadgeService: MedalBadgeService,
+    private keywordService: KeywordService,
     private dataService: DataService,
     private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data,
@@ -52,10 +52,15 @@ export class ImportKeywordListDialogComponent implements OnInit {
 
     fd.append('file', this.files);
     this.dataService.showLoading(true);
-    this.medalBadgeService.previewImportRetailer(fd).subscribe(preview => {
-      console.log('preview res', preview);
-      this.rows = preview.data;
-      this.dataService.showLoading(false);
+    this.keywordService.importExcel(fd).subscribe(res => {
+      this.keywordService.showImport().subscribe(preview => {
+        console.log('preview res', preview);
+        this.rows = preview.data;
+        this.dataService.showLoading(false);
+      }, (err: any) => {
+        console.warn('Error Upload', err);
+        this.dataService.showLoading(false);
+      });
     }, (err: any) => {
       this.dataService.showLoading(false);
       this.files = undefined;
@@ -68,12 +73,12 @@ export class ImportKeywordListDialogComponent implements OnInit {
 
   submit() {
     if (this.rows.length > 0) {
-      this.medalBadgeService.importRetailer().subscribe(() => {
+      // this.keywordService.importExcel().subscribe(() => {
         this.dataService.showLoading(false);
         this.dialogRef.close(this.rows);
-      }, (err: any) => {
-        this.dataService.showLoading(false);
-      });
+      // }, (err: any) => {
+      //   this.dataService.showLoading(false);
+      // });
     } else {
       this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
     }
