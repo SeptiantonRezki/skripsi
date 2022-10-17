@@ -114,6 +114,8 @@ import { VirtualAccountBinService } from './services/virtual-account/virtual-acc
 import { VirtualAccountPanelService } from './services/virtual-account/virtual-account-panel.service';
 import { VirtualAccountTncService } from './services/virtual-account/virtual-account-tnc.service';
 import { MedalBadgeService } from './services/user-management/retailer/medal-badge.service';
+import { OrdersService } from './services/user-management/retailer/orders.service';
+import { GoogleTagManagerService } from './services/gtm.service';
 
 // firebase notification
 import { AngularFireModule } from '@angular/fire';
@@ -291,6 +293,8 @@ class CustomLoader implements TranslateLoader {
     VirtualAccountPanelService,
     VirtualAccountTncService,
     MedalBadgeService,
+    OrdersService,
+    GoogleTagManagerService,
     CoinAdjustmentApprovalService,
     CoinDisburstmentService,
     AreaService,

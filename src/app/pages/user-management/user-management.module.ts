@@ -34,6 +34,7 @@ import {
   MatListModule,
   MatSlideToggleModule,
   MatRadioModule,
+  MatMenuModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -136,6 +137,13 @@ import { LanguageSetupCreateComponent } from './language-setup/language-setup-cr
 import { LanguageSetupEditComponent } from './language-setup/language-setup-edit/language-setup-edit.component';
 import { DialogUploadLanguageComponent } from './language-setup/dialog-upload-language/dialog-upload-language.component';
 import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
+import { OrdersRrpComponent } from './retailer/orders-rrp/index/orders-rrp.component';
+import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe";
+import { OrdersRrpDetailComponent } from './retailer/orders-rrp/detail/orders-rrp-detail.component';
+import { TierPriceDialogComponent } from './retailer/orders-rrp/detail/tier-price-dialog/tier-price-dialog.component';
+import { CancelConfirmationDialogComponent } from './retailer/orders-rrp/detail/cancel-confirmation-dialog/cancel-confirmation-dialog.component';
+import { NgxMaterialTimepicker24HoursFaceComponent } from "ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component";
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 
 export const MY_FORMATS = {
   parse: {
@@ -180,6 +188,8 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
+    MatMenuModule,
+    NgxMaterialTimepickerModule,
     MatSlideToggleModule
   ],
   exports: [
@@ -308,6 +318,10 @@ export const MY_FORMATS = {
 
     DialogUploadLanguageComponent,
     CTAExternalWebComponent,
+    OrdersRrpComponent,
+    OrdersRrpDetailComponent,
+    TierPriceDialogComponent,
+    CancelConfirmationDialogComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -342,6 +356,7 @@ export const MY_FORMATS = {
     ListAllCategoryProdukResolver,
     RupiahFormaterWithoutRpPipe,
     PageGuard,
+    TranslateInterpolatePipe
   ],
 })
 export class UserManagementModule { }

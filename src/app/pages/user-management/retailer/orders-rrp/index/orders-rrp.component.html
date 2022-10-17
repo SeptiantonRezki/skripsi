@@ -1,0 +1,424 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <!-- <page-content-header [contentTitle]="ls.locale.lihat_pesanan.text1">
+  </page-content-header> -->
+  <page-content-header [contentTitle]="'Lihat Pesanan'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
+      <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
+      <div class="header-bar" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px"
+        *ngIf="selected?.length && updateableStatus">
+        <div *ngFor="let item of updateableStatus">
+          <button mat-raised-button (click)="bulkUpdateStatus(item.value)">{{item.label}}</button>
+        </div>
+      </div>
+
+<!-- START CONTENT (Mulai dari TAB Status pesanan) -->
+      <div class="content">
+      <!-- <div class="content" *ngIf="!onLoad"> -->
+
+<!-- Tab Status Pesanan -->
+        <mat-tab-group [selectedIndex]="selectedTabMain" (selectedIndexChange)="selectedTabMainChange($event)">
+          <!-- <mat-tab *ngFor="let item of statusFilter" label="{{item.name}}"></mat-tab> -->
+          <mat-tab *ngFor="let item of statusFilter" class="label-area">
+            <ng-template matTabLabel>
+              <div [id]="'id-'+item.status_title">{{item.status_value}} {{ (item.status_count)? '('+item.status_count+')' : ''  }}
+                <mat-icon *ngIf="item.is_sign === true" class="warning-badge">error</mat-icon> 
+              </div>
+            </ng-template>
+
+    <!-- Status Pesanan Child-->
+            <div class="child-area-tab" *ngIf="item.child.length > 0">
+              <div 
+                *ngFor="let child of item.child" 
+                (click)="getFilterChild(child.status_title);" 
+                [ngClass]="{'tab-child-active': childStatus === child.status_title, 'tab-child': true}"
+                [id]="'child-id-'+child.status_title"
+                >
+                {{child.status_value}}
+              </div>
+            </div>
+    <!-- END Status Pesanan Child-->
+
+          </mat-tab>  
+        </mat-tab-group>
+<!-- END Tab Status Pesanan -->
+
+<!-- Form Filter -->
+        <form [formGroup]="formFilter" autoComplete="off">
+          <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px" class="top-table p-12">
+            <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+              <!-- <mat-form-field autoComplete="off" class="is-light tab-search" appearance = "standard"> -->
+                <input class="textbox-search" matInput placeholder="{{ ls.locale.global.label.search }} {{ ls.locale.global.label.on_order }}" (keyup)="keyUp.next($event.target.value)">
+                <div class="icon-search">
+                  <mat-icon class="mat-icon-search">search</mat-icon>
+                </div>
+                <!-- </mat-form-field> -->
+            </div>
+            <!-- <mat-form-field fxFlex="15" class="orders dropdown">
+              <mat-select formControlName="status" multiple>
+                <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+
+    <!-- Semua Metode Pengiriman Dropdown List -->
+            <mat-form-field fxFlex="15" class="orders dropdown">
+              <mat-select formControlName="shipping" (ngModelChange)="changeShipping($event)" [compareWith]="compareFn" multiple>
+                <!-- <mat-option [value]="''">Semua Metode Pengiriman</mat-option> -->
+                <mat-option [value]="item" *ngFor="let item of courierFilter">{{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+    <!-- END Semua Metode Pengiriman Dropdown List -->
+    
+    <!-- Filter Tanggal From and To -->
+        <!-- FROM -->
+            <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
+              <input matInput #from [matDatepicker]="dari" (focus)="dari.open()"
+                placeholder="{{ ls.locale.global.label.start_date }}" formControlName="from"
+                (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
+              <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
+                (click)="setMinDate('')">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-datepicker-toggle matSuffix [for]="dari">
+                <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #dari></mat-datepicker>
+            </mat-form-field>
+        <!-- END FROM -->
+            
+        <!-- TO -->
+            <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
+              <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
+              (dateChange)="setMaxDate(formFilter.get('to').value)" placeholder="{{ ls.locale.global.label.end_date }}" formControlName="to" readonly>
+              <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
+                (click)="setMaxDate('')">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-datepicker-toggle matSuffix [for]="sampai">
+                <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #sampai></mat-datepicker>
+            </mat-form-field>
+        <!-- END TO -->
+    <!-- END Filter Tanggal from to -->
+
+    <!-- Filter Menampilkan Kolom -->
+            <mat-form-field fxFlex="15" class="orders dropdown">
+              <mat-select [formControl]="formColumn" multiple>
+                <mat-option *ngFor="let column of columns" [value]="column">{{column}}</mat-option>
+                <div class="mat-option mat-option-multiple">
+                  <!-- <button mat-raised-button width="100%" color="primary" (click)="resetColum()">{{
+                    ls.locale.lihat_pesanan.text6 }}</button> -->
+                  <button mat-raised-button width="100%" color="primary" (click)="resetColum()">Reset Kolom</button>
+                </div>
+              </mat-select>
+            </mat-form-field>
+    <!-- END Filter Menampilkan Kolom -->
+
+    <!-- Button EXPORT dan Print Invoices-->
+            <div class="button-row pb-16">
+              <a #downloadLink></a>
+              <button (click)="export()" mat-raised-button type="button" class="is-danger" style="margin-left: 10px;">
+                <mat-icon>arrow_upward</mat-icon> {{ ls.locale.global.button.export }} XLS
+              </button>
+              <button (click)="printAll()" mat-raised-button type="button" class="is-danger" style="margin-left: 10px;" [disabled]="print_invoice_disabled" *ngIf="show_printinvoicebtn">
+                <mat-icon class="secondary-text">print</mat-icon> Print Invoices
+              </button>
+            </div>
+          </div>
+        </form>
+    <!-- END Button EXPORT dan Print Invoices-->
+<!-- END Form Filter -->
+
+
+<!-- START TABLE -->
+        <!-- <ngx-datatable class="material" [ngStyle]="{'height': innerHeight, 'border-top': 'border-top: 1px solid #e3e3e3'}" [rows]="rows"
+          [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+          [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+          [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+          (page)="setPage($event)" (sort)="onSort($event)" [reorderable]="reorderable" [selectionType]="'checkbox'"
+          [selected]="selected" [rowIdentity]="getRowId" [virtualization]="false" [scrollbarV]="statusScroll" [scrollbarH]="true"> -->
+        <ngx-datatable class="material" [ngStyle]="{'height': innerHeight, 'border-top': 'border-top: 1px solid #e3e3e3'}" [rows]="rows"
+          [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+          [rowHeight]="auto" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'"
+          [selected]="selected" [rowIdentity]="getRowId" [virtualization]="false" [scrollbarV]="statusScroll" [scrollbarH]="true">
+
+      <!-- Checkbox Column -->
+          <ngx-datatable-column [cellClass]="getCellClass" [width]="68" [canAutoResize]="false" [sortable]="false" [frozenLeft]="true">
+            <ng-template ngx-datatable-header-template let-value="value">
+              <mat-checkbox [checked]="selectAllOnPage[offsetPagination]" (change)="onAllRowsChange($event, rows)">
+              </mat-checkbox>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
+              let-onCheckboxChangeFn="onCheckboxChangeFn">
+              <mat-checkbox [checked]="isSelected" (change)="onSelect($event, row)"
+                *ngIf="enableCheckboxStatus.includes(row.status)"></mat-checkbox>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Checkbox Column -->
+      
+      <!-- Tanggal -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.date }}" prop="created_at"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.date)" [frozenLeft]="true">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              {{row.created_at | date: 'dd/MM/yyyy HH:mm'}}
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Tanggal -->
+      
+      <!-- Kode Pesanan -->
+          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.order_code }}" prop="invoice_number"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.order_code)" [frozenLeft]="true">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <span class="row-name" [routerLink]="['/user-management','order-rrp', 'detail']"
+                (click)="getDetailTransaction(row)">{{row.invoice_number}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Kode Pesanan -->
+      
+      <!-- Kode Pelanggan -->
+          <ngx-datatable-column name="{{ ls.locale.global.label.customer_code }}" prop="customer_code"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.customer_code) && showcustomercode">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <span class="row-name" [routerLink]="['/user-management','order-rrp', 'detail']"
+                (click)="getDetailTransaction(row)">{{row.customer_code}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Kode Pelanggan -->
+
+      <!-- Name -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.name }}" prop="name"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.name)"></ngx-datatable-column>
+      <!-- END Name -->
+      
+      <!-- Pesan Melalui -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.order_via }}" prop="order_from"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.order_via)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="status text-truncate h6 p-4 pesan-melalui"
+                [ngClass]="row.order_from == 'app' ? 'mat-app-color' : 'mat-otc-color'">
+                {{row.order_from? row.order_from?.toUpperCase() : ''}}
+              </p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Pesan Melalui -->
+
+      <!-- Metode Pengiriman -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.delivery_method }}" prop="shipping_method"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.delivery_method)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="status text-truncate h6 p-4 pesan-melalui mat-otc-color" style="text-transform: capitalize;">
+                {{row.order_from? row.shipping_method : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Metode Pengiriman -->
+      
+          <!-- <ngx-datatable-column name="{{ ls.locale.global.label.address }}" prop="address2"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.address)"></ngx-datatable-column> -->
+      
+      <!-- Alamat -->
+          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.address }}" prop="address2"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.address)" [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+              <div matTooltip="{{row.address2}}">{{row.address2 || row.address}}</div>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Alamat -->
+      
+      <!-- Status -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.status }}" prop="status" [width]="170"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.status)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <div fxLayout="row">
+                <div class="status-container" *ngIf="!checkValidate(row)">
+                  <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'"
+                    [routerLink]="['/user-management','order-rrp', 'detail']" (click)="getDetailTransaction(row)">
+                    {{row.status_indo? row.status_indo.replace('-', ' ')?.toUpperCase() : '-'}}
+                  </p>
+                  <span class="chat-badge"
+                    *ngIf="row.dataQiscus && row.dataQiscus.count_notif > 0">{{row.dataQiscus.count_notif > 9 ? '9+' :
+                    row.dataQiscus.count_notif }}</span>
+                </div>
+                <div fxLayout="row" [matMenuTriggerFor]="appMenu" matTooltip="{{ls.locale.global.label.change_status_tooltip}}"
+                  *ngIf="checkValidate(row)">
+                  <div class="status-container">
+                    <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
+                      {{row.status_indo? row.status_indo.replace('-', ' ')?.toUpperCase() : '-'}}
+                    </p>
+                    <span class="chat-badge"
+                      *ngIf="row.dataQiscus && row.dataQiscus.count_notif > 0">{{row.dataQiscus.count_notif > 9 ? '9+' :
+                      row.dataQiscus.count_notif }}</span>
+                  </div>
+                  <mat-icon class="status-order-icon-arrow-down">keyboard_arrow_down</mat-icon>
+                </div>
+                <mat-menu #appMenu="matMenu">
+                  <button mat-menu-item *ngFor="let status of row.orderStatuses"
+                    (click)="updateStatus(row, status)">{{status.name}}</button>
+                </mat-menu>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Status -->
+
+      <!-- Metode Pembayaran -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.payment_method }}" prop="payment_type_indo"
+          *ngIf="formColumn.value.includes(ls.locale.global.label.payment_method)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <div fxLayout="row">
+                <div class="status-container" [routerLink]="['/user-management','order-rrp', 'detail']"
+                  (click)="getDetailTransaction(row)">
+                  <p [class]="'status text-truncate h6 p-4 status-order mat-' + (row.payment_type) + '-color'">
+                    <!-- {{row.payment_type ? row.payment_type.replace('-', ' ')?.toUpperCase() : 'BAYAR DI TEMPAT'}} -->
+                    {{row.payment_type_indo ? row.payment_type_indo.replace('-', ' ')?.toUpperCase() : 'BAYAR DI TEMPAT'}}
+                  </p>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Metode Pembayaran -->
+
+      <!-- Total -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.total }}" prop="total"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.total)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">{{row.total_payment_format_currency}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Total -->
+      
+          <!-- EXTENDED -->
+
+      <!-- Diskon Voucher -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.voucher_discount }}" prop="voucher_nominal"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.voucher_discount)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.voucher_nominal? row.voucher_nominal : 0 | rupiahFormater}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Diskon Voucher -->
+
+      <!-- Tipe Pelanggan -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.customer_type }}" prop="classification"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.customer_type)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.classification? row.classification : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Tipe Pelanggan -->
+
+      <!-- Tier Pelanggan -->
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.customer_tier }}" prop="tier"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.customer_tier)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.tier? row.tier : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Tier Pelanggan -->
+
+      <!-- Nomor Ponsel -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.phone_number }}" prop="phone"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.phone_number)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.phone? row.phone : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Nomor Ponsel -->
+
+      <!-- Kode Promo -->
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.menu.promo_code }}" prop="promo_code"
+            *ngIf="formColumn.value.includes(ls.locale.global.menu.promo_code)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.promo_code? row.promo_code : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Kode Promo -->
+      
+      <!-- Diskon Promo -->
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.discount_promo }}" prop="promo_nominal"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.discount_promo)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.promo_nominal? row.promo_nominal : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Diskon Promo -->
+
+      <!-- Tanggal Status Diterima -->
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.received_status_date }}" prop="date_order_status_diterima"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.received_status_date)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.date_order_status_diterima? row.date_order_status_diterima : '' | date: 'dd/MM/yyyy HH:mm'}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Tanggal Status Diterima -->
+
+      <!-- Tanggal Terakhir diperbarui -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.last_updated_date }}" prop="updated_at"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.last_updated_date)">
+            <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.updated_at? row.updated_at : '' | date: 'dd/MM/yyyy HH:mm'}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Tanggal Terakhir diperbarui -->
+      
+      <!-- Catatan -->
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.note }}" prop="note"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.note)">
+            <ng-template ngx-datatabxle-cell-template let-value="value" let-row="row">
+              <p class="text-truncate" style="text-align: right !important;">
+                {{row.note? row.note : ''}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+      <!-- END Catatan -->
+
+      <!-- START FOOTER -->
+          <ngx-datatable-footer>
+            <ng-template
+              ngx-datatable-footer-template
+              let-rowCount="rowCount"
+              let-pageSize="pageSize"
+              let-selectedCount="selectedCount"
+              let-curPage="curPage"
+              let-offset="offset"
+            >
+              <div class="search-field" fxLayout="row" fxLayoutAlign="flex-start center">
+                <label style="margin-right: 14px">{{ ls.locale.global.label.order_per_page }}</label>
+                <mat-form-field>
+                  <mat-select (selectionChange)="changePerPage($event)" [(value)]="selectedPerPage">
+                    <mat-option *ngFor="let r of listPerPage" [value]="r">{{r}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <datatable-pager
+                  [pagerLeftArrowIcon]="'datatable-icon-left'"
+                  [pagerRightArrowIcon]="'datatable-icon-right'"
+                  [pagerPreviousIcon]="'datatable-icon-prev'"
+                  [pagerNextIcon]="'datatable-icon-skip'"
+                  [page]="curPage"
+                  [size]="pageSize"
+                  [count]="rowCount"
+                  [hidden]="!((rowCount / pageSize) > 1)"
+                  (change)="table.onFooterPage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+      <!-- END FOOTER -->
+        </ngx-datatable>
+<!-- END TABLE -->
+      </div>
+<!-- END CONTENT -->
+    </div>
+  </div>
+</div>

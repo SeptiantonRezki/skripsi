@@ -123,4 +123,18 @@ export class Emitter {
     this.notifDetailEmitter.next(message);
   }
 
+  //CUSTOM DIALOG
+  private customDialogEmitter = new BehaviorSubject<object>({});
+  listenCustomDialogEmitter = this.customDialogEmitter.asObservable();
+  emitCustomDialogEmitter(message: any) {
+    this.customDialogEmitter.next(message);
+  }
+
+  //MENU ORDER - SIGN (!)
+  private menuSignEmitter = new BehaviorSubject<object>({});
+  listenMenuSignEmitter = this.menuSignEmitter.asObservable();
+  emitMenuSignEmitter(message: any) {
+    this.menuSignEmitter.next(message);
+  }
+
 }
