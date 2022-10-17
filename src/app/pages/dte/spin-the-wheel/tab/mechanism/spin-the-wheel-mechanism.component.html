@@ -529,11 +529,18 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="value"
-                        currencyMask
                         (keyup)="updateTierData(i, true, 'rewards_coin', j)"
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.value.hasError('required') &&
+                          reward.controls.value.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
@@ -545,13 +552,13 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="slice"
-                        currencyMask
                       />
                       <mat-error
                         *ngIf="
-                          reward.controls.slice.hasError('min') &&
+                          (reward.controls.slice.hasError('required') ||
+                            reward.controls.slice.hasError('min')) &&
                           reward.controls.slice.touched
                         "
                       >
@@ -572,6 +579,14 @@
                         formControlName="probability"
                         (keyup)="updateTierData(i, true, 'rewards_coin', j)"
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.probability.hasError('required') &&
+                          reward.controls.probability.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
@@ -719,13 +734,13 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="slice"
-                        currencyMask
                       />
                       <mat-error
                         *ngIf="
-                          reward.controls.slice.hasError('min') &&
+                          (reward.controls.slice.hasError('required') ||
+                            reward.controls.slice.hasError('min')) &&
                           reward.controls.slice.touched
                         "
                       >
@@ -748,6 +763,14 @@
                           updateTierData(i, false, 'rewards_non_coin', j)
                         "
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.probability.hasError('required') &&
+                          reward.controls.probability.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
@@ -837,10 +860,17 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="value"
-                        currencyMask
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.value.hasError('required') &&
+                          reward.controls.value.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
@@ -852,13 +882,13 @@
                     >
                       <input
                         matInput
-                        type="tel"
+                        type="number"
                         formControlName="slice"
-                        currencyMask
                       />
                       <mat-error
                         *ngIf="
-                          reward.controls.slice.hasError('min') &&
+                          (reward.controls.slice.hasError('required') ||
+                            reward.controls.slice.hasError('min')) &&
                           reward.controls.slice.touched
                         "
                       >
@@ -879,6 +909,14 @@
                         formControlName="probability"
                         (keyup)="updateTierData(i, false, 'rewards_xp', j)"
                       />
+                      <mat-error
+                        *ngIf="
+                          reward.controls.probability.hasError('required') &&
+                          reward.controls.probability.touched
+                        "
+                      >
+                        harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </td>
@@ -943,9 +981,6 @@
           </div>
           <mat-error
             *ngIf="
-              (tier.controls.rewards_coin.controls.length ||
-                tier.controls.rewards_non_coin.controls.length ||
-                tier.controls.rewards_xp.controls.length) &&
               (tier.controls.probability_left.hasError('min') ||
                 tier.controls.probability_left.hasError('max'))
             "

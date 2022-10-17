@@ -38,9 +38,9 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     coin_variation: 0,
   };
   defaultRewards: any = {
-    value: 0,
-    slice: 0,
-    probability: 0,
+    value: null,
+    slice: null,
+    probability: "",
     limit_attempt: 0,
     total_budget: 0,
     actual_spin: 0,
@@ -164,6 +164,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     if (this.settings.limit_by) {
       this.form.controls.condition.setValue("include");
       this.form.controls.limit_by.setValue(this.settings.limit_by);
+      this.form.controls.limit_option.setValue(this.settings.limit_option);
       if (this.settings.limit_by === "product") {
         this.productList = this.settings.limit_only.map((data: any) => {
           const obj = { sku_id: data.id, name: data.name, value: data.value };
@@ -193,6 +194,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     const spins = this.settings.setting_details;
     let tierId = 0;
     if (spins.length) {
+      this.isEditableRewards = false;
       for (let spin of spins) {
         const { rewards, ...spinData } = spin;
         this.addTier({ ...spinData });
@@ -220,7 +222,6 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         this.setProbability(tierId);
         tierId += 1;
       }
-      this.isEditableRewards = false;
       this.disableRewards();
     } else {
       this.addTier();
@@ -469,7 +470,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         tier.controls.rewards_coin.controls.length +
         tier.controls.rewards_non_coin.controls.length +
         tier.controls.rewards_xp.controls.length;
-      if (hasRewards === 1) {
+      if (hasRewards === 1 && this.isEditableRewards) {
         tier.controls.probability_left.setValidators([
           Validators.min(100),
           Validators.max(100),
