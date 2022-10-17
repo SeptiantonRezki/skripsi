@@ -155,19 +155,21 @@ const config = {
   appId: '1:651041534914:web:be573accf451ec608e1c5b'
 };
 
-export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService) {
+export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService, dataService: DataService) {
   // return new TranslateHttpLoader(http, '../assets/languages/', '.json');
 
-  return new CustomLoader(languageSetupService, http);
+  return new CustomLoader(languageSetupService, http, dataService);
 
 }
 
 class CustomLoader implements TranslateLoader {
 
-  constructor(private service: LanguageSetupService, private http: HttpClient) {}
+  constructor(private service: LanguageSetupService, private http: HttpClient, private dataService: DataService) {}
 
   getTranslation(lang: string): Observable<any> {
     return this.service.getTranslation({type: 'principal'}).map(({data}) => {
+      this.dataService.setToStorage('json_locale', data);
+      this.dataService.setJsonLocale(data);
       return data.json_format;
     })
 
@@ -191,7 +193,7 @@ class CustomLoader implements TranslateLoader {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient, LanguageSetupService]
+        deps: [HttpClient, LanguageSetupService, DataService]
       }
     }),
     // Fuse Main and Shared modules
@@ -303,6 +305,7 @@ class CustomLoader implements TranslateLoader {
     OrderToMitraHubService,
     CountrySetupService,
     LanguageSetupService,
+    DataService,
     LotteryService,
     {
       provide: HTTP_INTERCEPTORS,

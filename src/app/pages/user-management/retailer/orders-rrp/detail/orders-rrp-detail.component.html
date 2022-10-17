@@ -1,6 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Detail Pemesanan'">
+  <page-content-header [contentTitle]="ls.locale.katalog_src.lihat_pesanan.text10">
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -10,11 +10,11 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
       <mat-tab-group [selectedIndex]="selectedTab">
-        <mat-tab label="{{ ls.locale.global.label.order_detail }}">
+        <mat-tab label="{{ ls.locale.katalog_src.lihat_pesanan.text10 }}">
           <div class="ayo-middle p-24" fxLayout="column" fusePerfectScrollbar>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">account_circle</mat-icon>
-              <div class="h2 secondary-text">{{ ls.locale.global.menu.customer }}</div>
+              <div class="h2 secondary-text">{{ ls.locale.rca_grouping.customer }}</div>
             </div>
 
             <div class="customer">
@@ -23,7 +23,7 @@
                   <tr>
                     <th>{{ ls.locale.global.label.name }}</th>
                     <th>{{ ls.locale.global.label.phone }}</th>
-                    <th>{{ ls.locale.global.label.customer_type }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text12 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -55,7 +55,7 @@
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>{{ ls.locale.global.label.delivery_address }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text13 }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,7 +86,7 @@
             </div>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">av_timer</mat-icon>
-              <div class="h2 secondary-text">{{ ls.locale.global.label.status_order }}</div>
+              <div class="h2 secondary-text">{{ ls.locale.global.label.order_status }}</div>
             </div>
             <div class="customer">
               <table class="simple">
@@ -129,7 +129,7 @@
                 fxLayoutAlign="start center">
                 <mat-form-field class="mr-16 is-light" fxFlex>
                   <mat-select name="newStatus" formControlName="newStatus"
-                    placeholder="Produk Yang Dibeli" required>
+                    placeholder="{{ ls.locale.katalog_src.lihat_pesanan.text14 }}" required>
                     <mat-option *ngFor="let status of orderStatuses" [value]="status.value">{{status.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -146,9 +146,9 @@
               <table class="simple">
                 <thead>
                   <tr>
-                    <th>{{ ls.locale.global.label.payment_number }}</th>
-                    <th>{{ ls.locale.global.label.total_payment }}</th>
-                    <th *ngIf="detailOrder?.payment_type !== 'pay-later'">{{ ls.locale.global.label.payment_date }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text15 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text16 }}</th>
+                    <th *ngIf="detailOrder?.payment_type !== 'pay-later'">{{ ls.locale.katalog_src.lihat_pesanan.text17 }}</th>
                     <th *ngIf="detailOrder?.payment_type === 'pay-later'">{{ ls.locale.global.label.payment_method }}
                     </th>
                     <th *ngIf="detailOrder?.payment_type === 'pay-later'">{{ ls.locale.global.label.paylater_status }}
@@ -203,7 +203,7 @@
             </div>
             <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">local_shipping_outline</mat-icon>
-              <div class="h2 secondary-text">{{ ls.locale.global.label.delivery_status }}</div>
+              <div class="h2 secondary-text">{{ ls.locale.katalog_src.lihat_pesanan.delivery_status }}</div>
             </div>
             <div class="customer">
               <table class="simple">
@@ -211,8 +211,8 @@
                   <tr>
                     <th *ngIf="detailOrder?.payment_type === 'virtual-account'">{{ ls.locale.global.label.tracking_code
                       }}</th>
-                    <th>{{ ls.locale.global.label.delivery_type }}</th>
-                    <th>{{ ls.locale.global.label.delivery_cost }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text18 }}</th>
+                    <th>{{ ls.locale.katalog_src.lihat_pesanan.text19 }}</th>
                     <th>{{ ls.locale.global.label.date }}</th>
                   </tr>
                 </thead>
@@ -237,7 +237,7 @@
             </div>
           </div>
         </mat-tab>
-        <mat-tab label="Produk Yang Dibeli">
+        <mat-tab label="{{ ls.locale.katalog_src.lihat_pesanan.text21 }}">
           <div class="ayo-middle p-24" fxLayout="column">
             <div *ngIf="productLoadingIndicator" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
               <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
@@ -248,8 +248,8 @@
                   <tr>
                     <th>No</th>
                     <th></th>
-                    <th>{{ ls.locale.global.label.product_name }}</th>
-                    <th>{{ ls.locale.global.label.company }}</th>
+                    <th>{{ ls.locale.manajemen_barang_sku.produk.text4 }}</th>
+                    <th>{{ ls.locale.manajemen_barang_sku.produk.text6 }}</th>
                     <th>{{ ls.locale.global.label.category }}</th>
                     <th>{{ ls.locale.global.label.price }}</th>
                     <!-- <th *ngIf="onEdit && editable">{{ ls.locale.global.label.tier_price }}</th> -->
@@ -257,7 +257,7 @@
                     <th style="text-align: center;" *ngIf="editable">{{ ls.locale.global.label.action }}</th>
                   </tr>
                 </thead>
-                <!-- <tbody [formGroup]="productsForm">
+                <tbody [formGroup]="productsForm">
                   <tr class="product-row" formArrayName="listProducts"
                     *ngFor="let product of productsForm.get('listProducts')['controls']; let i = index;"
                     [ngStyle]="{ 'background-color': (product.get('price_discount').value == 0) && product.get('price_update_status').value === true && showRedBG(detailOrder?.status) ? '#f28383' : 'white' }">
@@ -301,14 +301,14 @@
                           (click)="updatePrice(i)">PERBARUI
                           HARGA</button>
                       </div>
-                      <strong>{{product.get("price").value | rupiahFormater}}</strong>
+                      <!-- <strong>{{product.get("price").value | rupiahFormater}}</strong> -->
                     </td>
-                    <td *ngIf="onEdit">
+                    <!-- <td *ngIf="onEdit">
                       <mat-icon
                         *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value"
                         class="secondary-text price-per-tier-check" fxFlex="5" (click)="showTier(i, $event)">{{
                         product.get('tierShowed').value ? 'check_box' :'check_box_outline_blank'}}</mat-icon>
-                    </td>
+                    </td> -->
                     <td align="center">
                       <div class="w-80" [formGroupName]="i">
                         <span *ngIf="!product.get('editable').value">{{product.get("amount").value}}</span>
@@ -330,7 +330,7 @@
                       </div>
                     </td>
                   </tr>
-                </tbody> -->
+                </tbody>
               </table>
               <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
                 <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
@@ -339,13 +339,13 @@
                 </button>
                 <button mat-raised-button *ngIf="showRedBG(detailOrder?.status) && isAnyUpdate > -1" fxFlex="20"
                   (click)="updateAllPrice()" style="margin-left: 10px;">
-                  {{ ls.locale.global.label.update_all_price?.toUpperCase() }}
+                  PERBARUI SEMUA HARGA
                 </button>
               </div>
             </div>
           </div>
         </mat-tab>
-        <mat-tab [label]="ls.locale.global.label.nota">
+        <mat-tab [label]="ls.locale.global.label.shopping_note">
           <div *ngIf="productLoadingIndicator" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
             <mat-spinner [strokeWidth]="6" [diameter]="50" color="accent"></mat-spinner>
           </div>
@@ -367,11 +367,11 @@
                   <div fxFlex="90" class="py-16 pr-16">
                     <!-- TOP HEADER -->
                     <div class="text-center">
-                      <div class="text-bold">{{ ls.locale.global.label.delivery_detail?.toUpperCase() }}</div>
+                      <div class="text-bold">{{ ls.locale.katalog_src.lihat_pesanan.text22 }}</div>
                       <div class="text-bold">{{detailOrder?.wholesaler_name}}</div>
                       <div>{{detailOrder?.wholesaler_phone || '-'}}</div>
                       <div class="py-16" fxFlex="100" fxLayout="row" fxLayoutAlign="center center">
-                        <span>{{ ls.locale.global.label.order_code }}: {{detailOrder?.invoice_number}}</span>
+                        <span>{{ ls.locale.katalog_src.lihat_pesanan.text8 }}: {{detailOrder?.invoice_number}}</span>
                       </div>
                     </div>
                     <!-- <ng-template #customTopHeader>
@@ -383,17 +383,18 @@
                     
                     <!-- BOTTOM HEADER -->
                     <div class="text-center">
-                      <div class="pt-8">{{ ls.locale.global.label.order_detail?.toUpperCase() }}</div>
+                      <div class="pt-8">{{ ls.locale.katalog_src.lihat_pesanan.text10?.toUpperCase() }}</div>
                       <div class="mt-8 detail-order2" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
                         <div class="text-bold">{{detailOrder?.name}}</div>
                         <div>{{detailOrder?.address || '-'}}</div>
                         <div>Detail alamat: {{detailOrder?.retailer_address_detail || '-'}}</div>
                         <div>{{detailOrder?.phone || '-'}}</div>
-                        <div class="text-bold">
+                        <!-- <div class="text-bold">
                           {{ detailOrder?.payment_type === 'pay-later' ?
                           ls.locale.global.menu.capital_corner?.toUpperCase() : detailOrder?.payment_type ===
                           'virtual-account' ? ls.locale.global.label.virtual_account?.toUpperCase() :
-                          ls.locale.global.label.collect_cash?.toUpperCase() }}</div>
+                          ls.locale.global.label.collect_cash?.toUpperCase() }}</div> -->
+                        <div class="text-bold">{{ ls.locale.global.label.cash_bill?.toUpperCase() }}</div>
                       </div>
                     </div>
                     <!-- <ng-template #customBottomHeader>
@@ -437,15 +438,11 @@
                         fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span fxFlex="50"
                           [ngClass]="{'text-bold' : item.title === 'Total Pembayaran', 'ml-15': item.title === 'Total Rokok' || item.title === 'Total Non Rokok'}"
-                          [ngStyle]="{'display': item.title === 'Total Rokok' || item.title === 'Total Non Rokok' ? 'list-item' : 'inline'}">{{item.title?.toUpperCase()
-                          ===
-                          'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title?.toUpperCase()}}</span>
-                        <!-- <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}"
-                          class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
-                          {{checkOngkirWithProductExisting(item)}}</span> -->
+                          [ngStyle]="{'display': item.title === 'Total Rokok' || item.title === 'Total Non Rokok' ? 'list-item' : 'inline'}">
+                          {{item.title?.toUpperCase() === 'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title?.toUpperCase()}}</span>
                         <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}"
                           class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
-                          </span>
+                          {{checkOngkirWithProductExisting(item)}}</span>
 
                         <!-- <ng-container *ngIf="item.child">
                           <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
@@ -458,7 +455,7 @@
                     </div>
                     <div class="py-16">
                       <div class="py-4" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
-                        <span fxFlex="50">{{ ls.locale.global.label.total_save_spend?.toUpperCase() }}</span>
+                        <span fxFlex="50">{{ ls.locale.katalog_src.lihat_pesanan.text23 }}</span>
                         <span class="text-right" fxFlex="50">{{detailOrder?.total_discount | rupiahFormaterWithoutRp}}</span>
                       </div>
                       <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">

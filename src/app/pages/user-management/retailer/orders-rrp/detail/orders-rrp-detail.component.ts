@@ -65,7 +65,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     "delivery_courier_name": null,
     "delivery_courier_service_id": null,
     "delivery_courier_service_name": null,
-    "address": "Jakarta Pusat, Indonesia",
+    "address": "Jalan Kampung Tenggilis No.269, RT.001/RW.012, Mustika Jaya, Kec. Mustika Jaya, Kota Bks, Jawa Barat 17158, Indonesia",
     "note": "",
     "order_from": "otc",
     "device_id": null,
@@ -154,7 +154,7 @@ export class OrdersRrpDetailComponent implements OnInit {
             "type": "normal"
         }
     ],
-    "total_discount": 0,
+    "total_discount": 5000,
     "order_prepared_by": "Elis",
     "tracking": null,
     "discounts": [],
@@ -164,10 +164,10 @@ export class OrdersRrpDetailComponent implements OnInit {
             "order_id": 8409,
             "user_id": 270845,
             "name": "Elis",
-            "status": "pesanan-dilihat",
+            "status": "pesanan-baru",
             "created_at": "2022-04-08 10:20:00",
             "updated_at": "2022-04-08 10:20:00",
-            "status_indo": "Pesanan Dilihat"
+            "status_indo": "Pesanan Baru"
         },
         {
             "id": "olsgrkbkKEN7mIlovT18",
@@ -298,6 +298,64 @@ export class OrdersRrpDetailComponent implements OnInit {
     // this.onLoad = true;
     // this.getDetailOrder();
     this.detailOrder;
+    this.productsForm = this.formBuilder.group({
+      listProducts: this.formBuilder.array([])
+    });
+    let listProducts = this.productsForm.get("listProducts") as FormArray;
+      while (listProducts.length > 0) {
+        listProducts.removeAt(listProducts.length - 1);
+      }
+    listProducts.push(
+      this.formBuilder.group({
+        id: 1,
+        name: "Marlboro Lights 20",
+        other_name: "Marlboro Lights 20",
+        image_url: "https://assets.dev.src.id/2019%2F04%2F12%2Fx7ogZCmjnloxITnxusa0q8ChbRRYNrIDkwXlN1tk.jpeg",
+        brand: "PT.HM Sampoerna",
+        category: "ROKOK",
+        packaging: "pack",
+        price: 20000,
+        price_currency: "RP 20.000",
+        price_discount: 0,
+        // price: tierPriceFound ? tierPriceFound.price : (item.levels ? item.levels[0]['price'] : item.price),
+        // price_discount: tierPriceFound ? tierPriceFound.price_discount : (item.levels ? item.levels[0]['price_discount'] : item.price_discount),
+        amount: [
+          1,
+          [Validators.min(0), Validators.max(1)]
+        ],
+        // levels: tierPriceFound ? tierPriceFound : resProduct[idx].levels,
+        editable: false,
+        edited: false,
+        tierShowed: false,
+        tierHasDisc: false,
+        priceUpdated: false,
+        price_update_status: false
+      })
+    );
+    this.productsNota = [
+      {
+        id: 1,
+        name: "Marlboro Lights 20",
+        other_name: "Marlboro Lights 20",
+        image_url: "https://assets.dev.src.id/2019%2F04%2F12%2Fx7ogZCmjnloxITnxusa0q8ChbRRYNrIDkwXlN1tk.jpeg",
+        brand: "PT.HM Sampoerna",
+        category: "ROKOK",
+        packaging: "pack",
+        price: 20000,
+        price_currency: "RP 20.000",
+        price_discount: 5000,
+        // price: tierPriceFound ? tierPriceFound.price : (item.levels ? item.levels[0]['price'] : item.price),
+        // price_discount: tierPriceFound ? tierPriceFound.price_discount : (item.levels ? item.levels[0]['price_discount'] : item.price_discount),
+        amount: 1,
+        // levels: tierPriceFound ? tierPriceFound : resProduct[idx].levels,
+        editable: false,
+        edited: false,
+        tierShowed: false,
+        tierHasDisc: false,
+        priceUpdated: false,
+        price_update_status: false
+      }
+    ]
   }
 
   ngOnDestroy() {
@@ -1015,7 +1073,7 @@ export class OrdersRrpDetailComponent implements OnInit {
         return {
           ...obj,
           title: obj.title.toUpperCase() === this.ls.locale.global.label.total_payment ? this.ls.locale.global.label.total_order : obj.title.toUpperCase(),
-          // value: this.checkOngkirWithProductExisting(obj)
+          value: this.checkOngkirWithProductExisting(obj)
         };
       })
     };
@@ -1036,19 +1094,19 @@ export class OrdersRrpDetailComponent implements OnInit {
     return image.src;
   }
 
-  // checkOngkirWithProductExisting(item) {
-  //   let symbol = this.jsonLocale.currencies.symbol;
-  //   const _value = String(item.value).toLowerCase();
-  //   const _symbol = String(symbol).toLowerCase();
-  //   const splited = _value.split(`${_symbol}`);
-  //   let value = (splited[1]) ? splited[1] : _value.split(`${_symbol} `)[1];
+  checkOngkirWithProductExisting(item) {
+    let symbol = this.jsonLocale.currencies.symbol;
+    const _value = String(item.value).toLowerCase();
+    const _symbol = String(symbol).toLowerCase();
+    const splited = _value.split(`${_symbol}`);
+    let value = (splited[1]) ? splited[1] : _value.split(`${_symbol} `)[1];
 
-  //   if (item.title === 'Ongkos Pengiriman' || item.title === this.ls.locale.pesan_produk.text69) {
-  //     return this.productsNota.length === 0 ? 0 : value;
-  //   } else {
-  //     return value;
-  //   }
-  // }
+    if (item.title === 'Ongkos Pengiriman' || item.title === 'Total Pembayaran') {
+      return this.productsNota.length === 0 ? 0 : value;
+    } else {
+      return value;
+    }
+  }
 
   qiscusCheck(res: any) {
     if (this.qs.qiscus.isLogin) {

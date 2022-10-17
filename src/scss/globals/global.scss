@@ -575,6 +575,25 @@ mat-form-field.quantity {
   }
 }
 
+mat-form-field.price-change {
+  .mat-form-field-infix {
+    margin-top: 15px !important;
+    text-align: center !important;
+    border: 1px solid #ececec;
+    border-radius: 3px !important;
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  input {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    font-size: 0.9em;
+  }
+}
+
 mat-form-field.search-customer {
   .mat-form-field-wrapper {
     padding: 0;

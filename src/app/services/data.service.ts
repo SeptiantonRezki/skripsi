@@ -98,4 +98,8 @@ export class DataService {
       getDataSequencingInfo() {
         return this.newData.asObservable();
       }
+
+    setJsonLocale(data) {
+    this.jsonLocale.next(data);
+    }
 }
