@@ -4,3 +4,16 @@
 mat-form-field.mat-form-field.paguyuban {
   font-size: 16px;
 }
+
+table {
+  width: 100%;
+}
+
+table, th, td {
+  border: 1px solid;
+}
+
+.checkbox-center {
+  display: flex;
+  justify-content: center;
+}

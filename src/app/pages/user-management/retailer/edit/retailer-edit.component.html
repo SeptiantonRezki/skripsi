@@ -475,6 +475,126 @@
               </mat-form-field>
             </div>
           </div>
+
+        <!-- Detail RRP -->
+          <div>
+            <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+              <h3>Detail RRP</h3>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55" class="mb-12">
+              <div fxLayout="row" fxFlex="50">
+                <div>
+                  <mat-label>
+                    Order RRP
+                  </mat-label>
+                  <mat-radio-group formControlName="order_rrp" class="radio-group pb-16" fxLayout="row wrap">
+                    <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
+                    <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div fxLayout="row" fxFlex="50" *ngIf="formRetailer.get('order_rrp').value === 1">
+                <div>
+                  <mat-label>
+                    Blok Pemesanan
+                  </mat-label>
+                  <mat-radio-group formControlName="blok_pemesanan" class="radio-group pb-16" fxLayout="row wrap">
+                    <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
+                    <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="formRetailer.get('order_rrp').value === 1">
+              <div class="mb-24">
+                <div class="mb-8">
+                  Jadwal Pengiriman
+                </div>
+                <table>
+                  <tr>
+                    <th>Senin</th>
+                    <th>Selasa</th>
+                    <th>Rabu</th>
+                    <th>Kamis</th>
+                    <th>Jumat</th>
+                    <th>Sabtu</th>
+                    <th>Minggu</th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Senin')" (change)="onSelectedDay($event, 'Senin')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Selasa')" (change)="onSelectedDay($event, 'Selasa')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Rabu')" (change)="onSelectedDay($event, 'Rabu')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Kamis')" (change)="onSelectedDay($event, 'Kamis')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Jumat')" (change)="onSelectedDay($event, 'Jumat')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Sabtu')" (change)="onSelectedDay($event, 'Sabtu')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="selectedDay.includes('Minggu')" (change)="onSelectedDay($event, 'Minggu')">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div>
+                <div>
+                  Cut Off Hours
+                </div>
+                <div>
+                  <mat-form-field
+                  fxFlex="30"
+                  class="is-light form-primary"
+                  id="cut_off_hours"
+                >
+                  <input
+                    matInput
+                    formControlName="cut_off_hours"
+                    [ngxTimepicker]="fullTime1"
+                    [format]="24"
+                    readonly
+                    style="width: 50px"
+                  />
+                  <mat-icon matSuffix>access_time</mat-icon>
+                  <ngx-material-timepicker
+                    #fullTime1
+                  ></ngx-material-timepicker>
+                </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- END Detail RRP -->
+
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
               fxFlex="20" (click)="submit()">

@@ -33,6 +33,7 @@ export class RetailerEditComponent {
   editPhoneNumberStatus: Boolean;
   editBankStatus: Boolean;
   viewPhoneNumberPBStatus: Boolean;
+  selectedDay: any[] = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -232,6 +233,9 @@ export class RetailerEditComponent {
       type: [''],
       is_chat_bot: [0],
       order_online: [0],
+      order_rrp: this.selectedDay ? [1] : [0],
+      blok_pemesanan: [0],
+      cut_off_hours: ["15:00"],
       // cashier: ["", Validators.required],
       InternalClassification: ['', Validators.required],
       gsr: [0],
@@ -239,6 +243,15 @@ export class RetailerEditComponent {
       version_retailer: [''],
       version_cashier: [''],
       country: [""],
+    });
+
+    this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
+      console.log(value);
+      if (value === 1) {
+        this.formRetailer.get('blok_pemesanan').setValue(0);
+        this.selectedDay = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        this.formRetailer.get('cut_off_hours').setValue("15:00");
+      }
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -352,6 +365,15 @@ export class RetailerEditComponent {
     if (!this.isDetail) {
       this.setFormAbility();
     }
+  }
+
+  onSelectedDay(event, day) {
+    if (event.checked === true) {
+      this.selectedDay.push(day);
+    } else {
+      this.selectedDay = this.selectedDay.filter(item => item !== day);
+    }
+    console.log('SELECTED DAY', this.selectedDay);
   }
 
   getBanks() {
@@ -525,6 +547,9 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
       is_chat_bot: this.detailRetailer.is_chat_bot ? 1 : 0,
       order_online: this.detailRetailer.order_online ? 1 : 0,
+      // order_rrp: this.detailRetailer.order_rrp ? 1 : 0,
+      // blok_pemesanan: this.detailRetailer.blok_pemesanan ? 1 : 0,
+      // cut_off_hours: this.detailRetailer.cut_off_hours || '00:00:00',
       // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
@@ -793,6 +818,9 @@ export class RetailerEditComponent {
         status_user: this.formRetailer.get('status_user').value,
         is_chat_bot: this.formRetailer.get('is_chat_bot').value,
         order_online: this.formRetailer.get('order_online').value,
+        // order_rrp: this.formRetailer.get('order_rrp').value,
+        // blok_pemesanan: this.formRetailer.get('blok_pemesanan').value
+        // cut_off_hours: `${this.formRetailer.get('cut_off_hours').value}:00`,
       };
 
       if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
