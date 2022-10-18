@@ -253,6 +253,8 @@ export class RetailerEditComponent {
 
     if (!this.permission.detail_rrp) {
       this.formRetailer.get('order_rrp').disable();
+    } else {
+      this.formRetailer.get('order_rrp').enable();
     }
 
     this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
