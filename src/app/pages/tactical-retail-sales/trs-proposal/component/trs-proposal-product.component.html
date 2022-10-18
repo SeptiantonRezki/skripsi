@@ -25,8 +25,6 @@
     </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive spesial-prod" style="margin-top: 50px;">
-      <input formControlName="test">
-
       <div *ngIf="loaded" style="padding-bottom: 40px;">
         <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
