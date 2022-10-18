@@ -78,7 +78,7 @@
         <!-- FROM -->
             <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
               <input matInput #from [matDatepicker]="dari" (focus)="dari.open()"
-                placeholder="{{ ls.locale.global.label.start_date }}" formControlName="from"
+                placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text5 }}" formControlName="from"
                 (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
               <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="setMinDate('')">
@@ -94,7 +94,7 @@
         <!-- TO -->
             <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
               <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-              (dateChange)="setMaxDate(formFilter.get('to').value)" placeholder="{{ ls.locale.global.label.end_date }}" formControlName="to" readonly>
+              (dateChange)="setMaxDate(formFilter.get('to').value)" placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text6 }}" formControlName="to" readonly>
               <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="setMaxDate('')">
                 <mat-icon>close</mat-icon>
@@ -172,8 +172,8 @@
       <!-- END Tanggal -->
       
       <!-- Kode Pesanan -->
-          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.order_code }}" prop="invoice_number"
-            *ngIf="formColumn.value.includes(ls.locale.global.label.order_code)" [frozenLeft]="true">
+          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.katalog_src.lihat_pesanan.text8 }}" prop="invoice_number"
+            *ngIf="formColumn.value.includes(ls.locale.katalog_src.lihat_pesanan.text8)" [frozenLeft]="true">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               <span class="row-name" [routerLink]="['/user-management','order-rrp', 'detail']"
                 (click)="getDetailTransaction(row)">{{row.invoice_number}}</span>
@@ -266,8 +266,8 @@
       <!-- END Status -->
 
       <!-- Metode Pembayaran -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.payment_method }}" prop="payment_type_indo"
-          *ngIf="formColumn.value.includes(ls.locale.global.label.payment_method)">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.produk_prinsipal.text28 }}" prop="payment_type_indo"
+          *ngIf="formColumn.value.includes(ls.locale.produk_prinsipal.text28)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <div fxLayout="row">
                 <div class="status-container" [routerLink]="['/user-management','order-rrp', 'detail']"
@@ -394,7 +394,7 @@
               let-offset="offset"
             >
               <div class="search-field" fxLayout="row" fxLayoutAlign="flex-start center">
-                <label style="margin-right: 14px">{{ ls.locale.global.label.order_per_page }}</label>
+                <label style="margin-right: 14px">Pesanan per halaman</label>
                 <mat-form-field>
                   <mat-select (selectionChange)="changePerPage($event)" [(value)]="selectedPerPage">
                     <mat-option *ngFor="let r of listPerPage" [value]="r">{{r}}</mat-option>

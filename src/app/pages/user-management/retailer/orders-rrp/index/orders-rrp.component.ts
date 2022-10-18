@@ -144,7 +144,7 @@ export class OrdersRrpComponent implements OnInit {
   updateableStatus = [];
   defaultShipping = { id: '', name: "Semua Metode Pengiriman" };
   defaultColumns = [
-    this.ls.locale.global.label.order_code,
+    this.ls.locale.katalog_src.lihat_pesanan.text8,
     this.ls.locale.global.label.name,
     this.ls.locale.global.label.delivery_method,
     this.ls.locale.global.label.address,
@@ -154,7 +154,7 @@ export class OrdersRrpComponent implements OnInit {
     this.ls.locale.global.label.customer_code
   ];
   formColumn: FormControl = new FormControl([
-    this.ls.locale.global.label.order_code,
+    this.ls.locale.katalog_src.lihat_pesanan.text8,
     this.ls.locale.global.label.name,
     this.ls.locale.global.label.customer_code,
     this.ls.locale.global.label.delivery_method,
@@ -165,13 +165,13 @@ export class OrdersRrpComponent implements OnInit {
     this.ls.locale.global.label.customer_code
   ]);
   columns = [
-    this.ls.locale.global.label.order_code,
+    this.ls.locale.katalog_src.lihat_pesanan.text8,
     this.ls.locale.global.label.name,
     this.ls.locale.global.label.order_via,
     this.ls.locale.global.label.delivery_method,
     this.ls.locale.global.label.address,
     this.ls.locale.global.label.status,
-    this.ls.locale.global.label.payment_method,
+    this.ls.locale.produk_prinsipal.text28,
     this.ls.locale.global.label.date,
     this.ls.locale.global.label.total,
     this.ls.locale.global.label.voucher_discount,
@@ -246,8 +246,14 @@ export class OrdersRrpComponent implements OnInit {
         name: "Dummy Test",
         order_from: "otc",
         shipping_method: "diambil",
+        address2: "Jakarta, Indonesia",
         status: "pesanan-dilihat",
-        status_indo: "Pesanan Dilihat"
+        status_indo: "Pesanan Dilihat",
+        total: 20000,
+        total_payment: 20000,
+        total_payment_format_currency: "RP 20.000",
+        payment_type: "cod",
+        payment_type_indo: "Bayar Di Tempat"
       }
     ];
     this.onLoad = true;

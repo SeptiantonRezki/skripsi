@@ -298,6 +298,14 @@ export class OrdersRrpDetailComponent implements OnInit {
     // this.onLoad = true;
     // this.getDetailOrder();
     this.detailOrder;
+
+    this.orderStatuses = Object.entries(this.detailOrder.available_status).map(
+      ([value, name]) => ({ value, name })
+    );
+    this.statusForm = this.formBuilder.group({
+      newStatus: ""
+    });
+
     this.productsForm = this.formBuilder.group({
       listProducts: this.formBuilder.array([])
     });

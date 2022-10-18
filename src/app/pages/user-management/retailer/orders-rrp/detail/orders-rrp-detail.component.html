@@ -135,7 +135,7 @@
                 </mat-form-field>
 
                 <button mat-raised-button class="mat-accent" (click)="updateStatus()" [disabled]="statusForm.invalid">{{
-                  ls.locale.global.label.update_status }}</button>
+                  ls.locale.global.button.update_status }}</button>
               </form>
             </div>
             <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
@@ -174,7 +174,7 @@
                         }}</span>
                     </td>
                     <td *ngIf="(detailOrder?.payment_type !== 'pay-later') && (detailOrder?.payment_type !== 'virtual-account')">
-                      <span class="email text-truncate">{{detailOrder?.date_payment | date: 'dd/MM/yyyy HH:mm'}}</span>
+                      <span class="email text-truncate">{{ (detailOrder?.date_payment | date: 'dd/MM/yyyy HH:mm') || '-' }}</span>
                     </td>
                     <td *ngIf="detailOrder?.payment_type === 'pay-later'">
                       {{ detailOrder?.payment_type === 'pay-later' ? ls.locale.global.menu.capital_corner?.toUpperCase()
@@ -184,10 +184,10 @@
                     <td *ngIf="detailOrder?.payment_type === 'pay-later'">{{ detailOrder?.paylater_payment_status }}</td>
                     <td *ngIf="detailOrder?.payment_type === 'pay-later'">{{ detailOrder?.transaction_id }}</td>
                     <td *ngIf="detailOrder?.payment_type === 'pay-later'">
-                      {{ detailOrder?.paylater_payment_status_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                      {{ (detailOrder?.paylater_payment_status_date | date: 'dd/MM/yyyy HH:mm') || '-' }}</td>
 
                     <td *ngIf="detailOrder?.payment_type === 'virtual-account'">
-                      {{ detailOrder?.virtual_account_payment_date | date: 'dd/MM/yyyy HH:mm' }}</td>
+                      {{ (detailOrder?.virtual_account_payment_date | date: 'dd/MM/yyyy HH:mm') || '-' }}</td>
                     <td *ngIf="detailOrder?.payment_type === 'virtual-account'">
                       {{ detailOrder?.payment_type === 'virtual-account' ?
                       ls.locale.global.label.virtual_account?.toUpperCase() : (detailOrder?.payment_type ?
