@@ -251,6 +251,19 @@
                 </div>
               </div>
 
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" *ngIf="proposalData?.status == 'cancel'">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">Alasan pembatalan</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
+                        <textarea matInput class="body-text" placeholder="Alasan Pembatalan" formControlName="reason" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="">

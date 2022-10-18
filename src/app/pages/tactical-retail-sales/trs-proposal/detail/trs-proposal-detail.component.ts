@@ -145,6 +145,7 @@ export class TrsProposalDetailComponent implements OnInit {
 
       background: ["", Validators.required],
       objective: ["", Validators.required],
+      reason: ["", Validators.required],
 
       area: [""],
       salespoint: [""],
@@ -177,6 +178,7 @@ export class TrsProposalDetailComponent implements OnInit {
         flowingly: this.proposalData.flowingly,
         background: this.proposalData.background,
         objective: this.proposalData.objective,
+        reason: this.proposalData.reason,
 
         executor_selected: this.proposalData.textarea_executors,
         kecamatan_selected: this.proposalData.textarea_kecamatans,
