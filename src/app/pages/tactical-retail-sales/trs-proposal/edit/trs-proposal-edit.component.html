@@ -55,7 +55,7 @@
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
                     placeholder="Tanggal Awal Program" formControlName="startDate"
-                    [disabled] = "proposalData?.status == 'ongoing'">
+                    [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
                   <mat-error *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
@@ -67,7 +67,7 @@
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
                     placeholder="Tanggal Akhir Program" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"
-                    [disabled] = "proposalData?.status == 'ongoing'">
+                    [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                   <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
                   <mat-error *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
@@ -82,7 +82,7 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
-                    placeholder="Jumlah Executor" 
+                    placeholder="Jumlah Maksimal Executor" 
                     [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                 </mat-form-field>
               </div>
@@ -249,7 +249,7 @@
                     <label class="field-label">Background</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="Background" formControlName="background" wrap="soft"></textarea>
+                        <textarea matInput class="body-text" placeholder="Background" formControlName="background" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['background'].hasError('required') && formCreateProposal.controls['background'].touched">
@@ -265,7 +265,7 @@
                     <label class="field-label">Objective</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="Objective" formControlName="objective" wrap="soft"></textarea>
+                        <textarea matInput class="body-text" placeholder="Objective" formControlName="objective" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['objective'].hasError('required') && formCreateProposal.controls['objective'].touched">

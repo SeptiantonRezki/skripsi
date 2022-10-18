@@ -182,7 +182,7 @@
   }
 }
 
-.spesial .ngx-datatable.material .datatable-footer{
+.spesial-prod .ngx-datatable.material .datatable-footer{
   position: absolute;
   bottom: 0;
   width: 1030px;
@@ -191,4 +191,15 @@
   border-top: 1px solid #ddd;
   font-size: 14px;
   color: #444;
+}
+
+.spesial-prod .ngx-datatable.material .datatable-header{
+  position: absolute;
+  top: 107px;
+  width: 1030px;
+  z-index: 10;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }

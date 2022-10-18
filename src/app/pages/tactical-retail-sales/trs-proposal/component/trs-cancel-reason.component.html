@@ -40,7 +40,7 @@
 
           <mat-form-field fxFlex="100%" class="dropdown is-light form-primary" *ngIf="loaded">
             <mat-select placeholder="Pilih alasan pembatalan" formControlName="reason">
-              <mat-option *ngFor="let sp of rows" [value]="sp.value">{{sp.name}}</mat-option>
+              <mat-option *ngFor="let sp of rows" [value]="sp.name">{{sp.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
