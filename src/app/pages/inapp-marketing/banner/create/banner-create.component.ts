@@ -276,6 +276,7 @@ export class BannerCreateComponent {
       kategori: ['red'],
       ticker_body: [""],
       content_type_customer: ['all'],
+      app_link: [""],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -301,6 +302,7 @@ export class BannerCreateComponent {
           { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
           { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
           { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+          { name: 'App Link', value: "app_link" }
         ];
         this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value));
         this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
@@ -1048,6 +1050,7 @@ export class BannerCreateComponent {
   }
 
   contentType(value) {
+    console.log('VAL contentType # ', value)
     if (this.imageContentTypeBase64 && this.imageContentType) {
       this.imageContentType = undefined;
       this.imageContentTypeBase64 = undefined;
@@ -1084,6 +1087,13 @@ export class BannerCreateComponent {
 
     if (value === 'landing_page') {
       this.formBannerGroup.controls['landing_page'].setValue('');
+    }
+
+    if(
+      value === 'landing_page' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
     }
   }
 
@@ -1147,7 +1157,7 @@ export class BannerCreateComponent {
         }
         let body = {
           user_group: this.formBannerGroup.get('user_group').value,
-          content_type: this.formBannerGroup.get('content_type').value
+          content_type: this.formBannerGroup.get('content_type').value,
         }
 
         let fd = new FormData();
@@ -1185,7 +1195,7 @@ export class BannerCreateComponent {
         } else if (body.content_type === 'landing_page') {
           fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
           body['landing_page'] = this.formBannerGroup.get('landing_page').value;
-        } else if (body.content_type === 'iframe') {
+          } else if (body.content_type === 'iframe') {
           fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
           body['iframe'] = this.formBannerGroup.get('url_iframe').value;
           fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
@@ -1225,6 +1235,14 @@ export class BannerCreateComponent {
           if (this.formBannerGroup.get('type_banner').value === 'ticker') {
             fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
             body['type_ticker'] = this.formBannerGroup.get('kategori').value;
+          }
+          if (this.formBannerGroup.get('landing_page').value === 'app_link' && body.content_type === 'landing_page') {
+            let urlAPP = (this.formBannerGroup.get('app_link').value !== '')? this.formBannerGroup.get('app_link').value : null
+            fd.append('url_app', urlAPP);
+            body['url_app'] = urlAPP;
+          }else{
+            fd.append('url_app', null);
+            body['url_app'] = null;
           }
         }
 

@@ -413,6 +413,20 @@
             </div>
           </div>
 
+          <!-- App Link -->
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'app_link' && formBannerGroup.get('user_group').value === 'retailer'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" formControlName="app_link"
+                  placeholder="Masukan App Link">
+                <mat-error
+                  *ngIf="formBannerGroup.controls['app_link'].hasError('required') && formBannerGroup.controls['app_link'].touched">
+                  App Link {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div class="px-24"
             *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'profil_saya'">
             <div fxLayout="row">
