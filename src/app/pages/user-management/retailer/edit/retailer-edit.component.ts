@@ -33,7 +33,6 @@ export class RetailerEditComponent {
   editPhoneNumberStatus: Boolean;
   editBankStatus: Boolean;
   viewPhoneNumberPBStatus: Boolean;
-  selectedDay: any[] = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -233,9 +232,16 @@ export class RetailerEditComponent {
       type: [''],
       is_chat_bot: [0],
       order_online: [0],
-      order_rrp: this.selectedDay ? [1] : [0],
-      blok_pemesanan: [0],
-      cut_off_hours: ["15:00"],
+      order_rrp: [1],
+      block_order: [0],
+      is_monday_deliv: [0],
+      is_tuesday_deliv: [0],
+      is_wednesday_deliv: [0],
+      is_thursday_deliv: [0],
+      is_friday_deliv: [0],
+      is_saturday_deliv: [0],
+      is_sunday_deliv: [0],
+      cut_off_hours: ["00:00"],
       // cashier: ["", Validators.required],
       InternalClassification: ['', Validators.required],
       gsr: [0],
@@ -245,14 +251,50 @@ export class RetailerEditComponent {
       country: [""],
     });
 
+    if (!this.permission.detail_rrp) {
+      this.formRetailer.get('order_rrp').disable();
+    }
+
     this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
-      console.log(value);
-      if (value === 1) {
-        this.formRetailer.get('blok_pemesanan').setValue(0);
-        this.selectedDay = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-        this.formRetailer.get('cut_off_hours').setValue("15:00");
+      if (value !== 1 || !this.permission.detail_rrp) {
+        this.formRetailer.get('block_order').disable();
+      } else {
+        this.formRetailer.get('block_order').enable();
+      }
+
+      if (value !== 1 || !this.permission.jadwal_pengiriman) {
+        this.formRetailer.get('is_monday_deliv').disable();
+        this.formRetailer.get('is_tuesday_deliv').disable();
+        this.formRetailer.get('is_wednesday_deliv').disable();
+        this.formRetailer.get('is_thursday_deliv').disable();
+        this.formRetailer.get('is_friday_deliv').disable();
+        this.formRetailer.get('is_saturday_deliv').disable();
+        this.formRetailer.get('is_sunday_deliv').disable();
+      } else {
+        this.formRetailer.get('is_monday_deliv').enable();
+        this.formRetailer.get('is_tuesday_deliv').enable();
+        this.formRetailer.get('is_wednesday_deliv').enable();
+        this.formRetailer.get('is_thursday_deliv').enable();
+        this.formRetailer.get('is_friday_deliv').enable();
+        this.formRetailer.get('is_saturday_deliv').enable();
+        this.formRetailer.get('is_sunday_deliv').enable();
       }
     });
+
+    // this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
+    //   console.log(value);
+    //   if (value === 1) {
+    //     this.formRetailer.get('block_order').setValue(0);
+    //     this.formRetailer.get('is_monday_deliv').setValue(1);
+    //     this.formRetailer.get('is_tuesday_deliv').setValue(1);
+    //     this.formRetailer.get('is_wednesday_deliv').setValue(1);
+    //     this.formRetailer.get('is_thursday_deliv').setValue(1);
+    //     this.formRetailer.get('is_friday_deliv').setValue(1);
+    //     this.formRetailer.get('is_saturday_deliv').setValue(1);
+    //     this.formRetailer.get('is_sunday_deliv').setValue(1);
+    //     this.formRetailer.get('cut_off_hours').setValue("00:00");
+    //   }
+    // });
 
     this.formBankAccount = this.formBuilder.group({
       account_number: [''],
@@ -287,6 +329,10 @@ export class RetailerEditComponent {
         }
       } catch (error) {
         throw error;
+      }
+
+      if (this.detailRetailer.classification !== 'RRP') {
+        this.formRetailer.get('order_rrp').setValue(0);
       }
 
       if (this.detailRetailer.status === 'not-registered') {
@@ -369,11 +415,14 @@ export class RetailerEditComponent {
 
   onSelectedDay(event, day) {
     if (event.checked === true) {
-      this.selectedDay.push(day);
+      this.formRetailer.get(day).setValue(1);
+      console.log("day checked >>> ", day, this.formRetailer.get(day).value);
+      // this.selectedDay.push(day);
     } else {
-      this.selectedDay = this.selectedDay.filter(item => item !== day);
+      this.formRetailer.get(day).setValue(0);
+      console.log("day unchecked >>> ", day, this.formRetailer.get(day).value);
+      // this.selectedDay = this.selectedDay.filter(item => item !== day);
     }
-    console.log('SELECTED DAY', this.selectedDay);
   }
 
   getBanks() {
@@ -547,9 +596,16 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
       is_chat_bot: this.detailRetailer.is_chat_bot ? 1 : 0,
       order_online: this.detailRetailer.order_online ? 1 : 0,
-      // order_rrp: this.detailRetailer.order_rrp ? 1 : 0,
-      // blok_pemesanan: this.detailRetailer.blok_pemesanan ? 1 : 0,
-      // cut_off_hours: this.detailRetailer.cut_off_hours || '00:00:00',
+      order_rrp: this.detailRetailer.order_rrp || 0,
+      block_order: this.detailRetailer.block_order || 0,
+      is_monday_deliv: this.detailRetailer.is_monday_deliv || 0,
+      is_tuesday_deliv: this.detailRetailer.is_tuesday_deliv || 0,
+      is_wednesday_deliv: this.detailRetailer.is_wednesday_deliv || 0,
+      is_thursday_deliv: this.detailRetailer.is_thursday_deliv || 0,
+      is_friday_deliv: this.detailRetailer.is_friday_deliv || 0,
+      is_saturday_deliv: this.detailRetailer.is_saturday_deliv || 0,
+      is_sunday_deliv: this.detailRetailer.is_sunday_deliv || 0,
+      cut_off_hours: this.detailRetailer.cut_off_hours || '00:00',
       // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
@@ -790,6 +846,21 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
+      if (
+        this.formRetailer.get('is_monday_deliv').value === 0 &&
+        this.formRetailer.get('is_tuesday_deliv').value === 0 &&
+        this.formRetailer.get('is_wednesday_deliv').value === 0 &&
+        this.formRetailer.get('is_thursday_deliv').value === 0 &&
+        this.formRetailer.get('is_friday_deliv').value === 0 &&
+        this.formRetailer.get('is_saturday_deliv').value === 0 &&
+        this.formRetailer.get('is_sunday_deliv').value === 0
+      ) {
+        this.dialogService.openSnackBar({
+          message: "Jadwal Pengiriman Tidak Boleh Kosong"
+        });
+        return;
+      }
+
       const icValue = this.formRetailer.get('InternalClassification').value;
       let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP", "ISR"];
 
@@ -818,9 +889,17 @@ export class RetailerEditComponent {
         status_user: this.formRetailer.get('status_user').value,
         is_chat_bot: this.formRetailer.get('is_chat_bot').value,
         order_online: this.formRetailer.get('order_online').value,
-        // order_rrp: this.formRetailer.get('order_rrp').value,
-        // blok_pemesanan: this.formRetailer.get('blok_pemesanan').value
+        order_rrp: this.formRetailer.get('order_rrp').value,
+        block_order: this.formRetailer.get('block_order').value,
+        is_monday_deliv: this.formRetailer.get('is_monday_deliv').value,
+        is_tuesday_deliv: this.formRetailer.get('is_tuesday_deliv').value,
+        is_wednesday_deliv: this.formRetailer.get('is_wednesday_deliv').value,
+        is_thursday_deliv: this.formRetailer.get('is_thursday_deliv').value,
+        is_friday_deliv: this.formRetailer.get('is_friday_deliv').value,
+        is_saturday_deliv: this.formRetailer.get('is_saturday_deliv').value,
+        is_sunday_deliv: this.formRetailer.get('is_sunday_deliv').value,
         // cut_off_hours: `${this.formRetailer.get('cut_off_hours').value}:00`,
+        cut_off_hours: this.formRetailer.get('cut_off_hours').value,
       };
 
       if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
