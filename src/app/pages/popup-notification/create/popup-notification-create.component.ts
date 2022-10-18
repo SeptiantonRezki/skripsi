@@ -1696,7 +1696,7 @@ export class PopupNotificationCreateComponent {
       if (body.type === 'retailer' && body.action === 'landing-page') {
         body['action'] = this.formPopupGroup.get('content_type').value;
         body['action_data'] = this.formPopupGroup.get('landing_page').value;
-        body['url_app'] = null;
+        body['url_app'] = (this.formPopupGroup.get('app_link').value !== '')? this.formPopupGroup.get('app_link').value : null;
 
         body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
         body['positive_action'] = this.formPopupGroup.get('content_type').value;
