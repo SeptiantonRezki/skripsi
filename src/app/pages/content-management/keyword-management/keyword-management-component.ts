@@ -190,7 +190,7 @@ export class KeywordManagementComponent implements OnInit {
     this.getKeywordList();
   }
 
-  getKeywordList(searchValue?: any) {
+  getKeywordList(searchValue?: any, saveStatus?: boolean) {
     try {
       this.dataService.showLoading(true);
       this.loadingIndicator = true;
@@ -228,12 +228,18 @@ export class KeywordManagementComponent implements OnInit {
           this.pagination.sort = 'name';
           this.pagination.sort_type = 'asc';
           this.dataService.showLoading(false);
+          if (saveStatus === true) {
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          }
         } else {
           this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Pencarian' });
           Page.renderPagination(this.pagination, res.data);
           this.rows = [];
           this.loadingIndicator = false;
           this.dataService.showLoading(false);
+          if (saveStatus === true) {
+            this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          }
         }
         this.onLoad = false;
       }, err => {
@@ -242,6 +248,9 @@ export class KeywordManagementComponent implements OnInit {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         this.onLoad = false;
+        if (saveStatus === true) {
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+        }
       });
     } catch (ex) {
       console.warn('ex', ex);
@@ -302,10 +311,10 @@ export class KeywordManagementComponent implements OnInit {
     this.dataService.showLoading(true);
     const body = {
       _method: 'PUT',
-      group_pengguna: this.formKeyword.get('userGroup').value
+      // group_pengguna: this.formKeyword.get('userGroup').value
     };
-    this.keywordService.put(body, {id: this.importID}).subscribe(res => {
-      this.getKeywordList();
+    this.keywordService.put(body, {id: this.importID}).subscribe(async res => {
+      this.getKeywordList(null, true);
     }, err => {
       console.warn(err);
       this.dialogService.openSnackBar({ message: 'Terjadi Kesalahan Penyimpanan' });
