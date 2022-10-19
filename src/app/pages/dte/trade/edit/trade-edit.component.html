@@ -110,7 +110,7 @@
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="47%" class="is-light form-primary">
               <input matInput type="text" [mask]="ls.locale.global.input_mask" [thousandSeparator]="ls.locale.global.input_separator"
-                min="0" formControlName="budget" placeholder="{{'dte.trade_program.text4' | translate}}">
+                min="0" [max]="maxBudget" formControlName="budget" placeholder="{{'dte.trade_program.text4' | translate}}"  (keydown)="limitNumber($event, 'budget')">
               <mat-error
                 *ngIf="formTradeProgram.controls['budget'].hasError('required') && formTradeProgram.controls['budget'].touched">
                 {{'dte.trade_program.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
@@ -121,7 +121,9 @@
                 {{minBudget | rupiahFormaterWithoutRp}}
                 </mat-error>
                 <mat-error *ngIf="formTradeProgram.controls['budget'].hasError('max') && formTradeProgram.controls['budget'].touched">
-                  {{'dte.trade_program.text4' | translate}} {{'dte.trade_program.max_limit_budget' | translate}} 999.999.999.999.999
+                  {{'dte.trade_program.text4' | translate}} {{'dte.trade_program.max_limit_budget' | translate}}
+                  {{maxBudget | rupiahFormaterWithoutRp}}
+
               </mat-error>
             </mat-form-field>
           </div>

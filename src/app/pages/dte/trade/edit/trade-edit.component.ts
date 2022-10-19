@@ -28,6 +28,7 @@ export class TradeEditComponent {
   minExpireDate: any;
 
   minBudget: number;
+  maxBudget: number;
 
   files: File;
   validComboDrag: boolean;
@@ -91,6 +92,7 @@ export class TradeEditComponent {
     this.minExpireDate = moment();
     this.saveData = false;
     this.minBudget = 0;
+    this.maxBudget = 999999999999999;
 
     this.formTradeProgramError = {
       name: {},
@@ -123,7 +125,7 @@ export class TradeEditComponent {
         [
           Validators.required,
           Validators.min(this.minBudget),
-          Validators.max(999999999999999),
+          Validators.max(this.maxBudget),
         ],
       ],
       coin_expiry_date: ["", Validators.required],
@@ -354,6 +356,13 @@ export class TradeEditComponent {
           console.log(err.error.message);
         }
       );
+  }
+
+  limitNumber(event: any, key: any) {
+    const currentValue = this.formTradeProgram.controls[key].value.toString();
+    if (Number(currentValue + event.key) > Number(event.target.max)) {
+      event.preventDefault();
+    }
   }
 
   convertDate(param: Date) {
