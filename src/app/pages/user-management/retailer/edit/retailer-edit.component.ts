@@ -232,7 +232,7 @@ export class RetailerEditComponent {
       type: [''],
       is_chat_bot: [0],
       order_online: [0],
-      order_rrp: [1],
+      order_rrp: [0],
       block_order: [0],
       is_monday_deliv: [0],
       is_tuesday_deliv: [0],
@@ -331,10 +331,6 @@ export class RetailerEditComponent {
         }
       } catch (error) {
         throw error;
-      }
-
-      if (this.detailRetailer.classification !== 'RRP') {
-        this.formRetailer.get('order_rrp').setValue(0);
       }
 
       if (this.detailRetailer.status === 'not-registered') {
@@ -598,7 +594,7 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
       is_chat_bot: this.detailRetailer.is_chat_bot ? 1 : 0,
       order_online: this.detailRetailer.order_online ? 1 : 0,
-      order_rrp: this.detailRetailer.order_rrp || 0,
+      order_rrp: ((this.detailRetailer.classification === 'RRP') && (this.detailRetailer.order_rrp === null)) || this.detailRetailer.order_rrp ? 1 : 0,
       block_order: this.detailRetailer.block_order || 0,
       is_monday_deliv: this.detailRetailer.is_monday_deliv || 0,
       is_tuesday_deliv: this.detailRetailer.is_tuesday_deliv || 0,
