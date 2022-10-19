@@ -2,6 +2,16 @@
   <!-- HEADER -->
   <!-- <page-content-header contentTitle="{{ls.locale.global.menu.medal_badge}}"> -->
   <page-content-header contentTitle="Keyword Management">
+    <button
+      *ngIf="permission['ubah']"
+      id="btn-simpan-trade"
+      style="width: 170px"
+      (click)="submit()"
+      mat-raised-button
+      type="button"
+    >
+      <mat-icon>save</mat-icon> {{ "global.button.save" | translate }}
+    </button>
   </page-content-header>
 
   <div *ngIf="onLoad" fxLayout="row" fxLayoutAlign="center center" class="pt-48">
@@ -96,12 +106,22 @@
                       <span class="row-address">{{row.sku_id}}</span>
                     </ng-template>
                   </ngx-datatable-column>
+                  <ngx-datatable-column name="Wholesaler" prop="wholesaler" [sortable]="true">
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                      <span class="row-address">{{row.wholesaler}}</span>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Retailer" prop="retailer" [sortable]="true">
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                      <span class="row-address">{{row.retailer}}</span>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Customer" prop="customer" [sortable]="true">
+                    <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                      <span class="row-address">{{row.customer}}</span>
+                    </ng-template>
+                  </ngx-datatable-column>
                 </ngx-datatable>
-                <div *ngIf="permission['ubah']" class="confirm pt-24 pb-24 px-24" fxLayout="row">
-                  <button id="btn-simpan-trade" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
-                    {{ls.locale.global.button.save}}
-                  </button>
-                </div>
               </div>
             </div>
           </div>
