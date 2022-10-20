@@ -2,7 +2,7 @@
   <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{'tactical_retail_sales.proposal_regency_district' | translate}}</span>
+        <span>{{ls.locale.tactical_retail_sales.proposal_regency_district}}</span>
       </div>
     </div>
     <!-- CLOSE DIALOG BUTTON -->
@@ -16,7 +16,7 @@
 
     <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
       <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
-        <mat-select placeholder="{{'tactical_retail_sales.proposal_regency' | translate}}" formControlName="kabupaten" (selectionChange)="changeKab($event)">
+        <mat-select placeholder="{{ls.locale.tactical_retail_sales.proposal_regency}}" formControlName="kabupaten" (selectionChange)="changeKab($event)">
           <mat-option *ngFor="let sp of kabupatenList" [value]="sp">{{sp}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -52,13 +52,13 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{'tactical_retail_sales.proposal_regency' | translate}}" prop="regency">
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_regency}}" prop="regency">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.regency}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{'tactical_retail_sales.proposal_district' | translate}}" prop="district">
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_district}}" prop="district">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.district}}
           </ng-template>
@@ -79,9 +79,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" style="margin-right: 20px;background-color:#dc1e2d; color: #fff;" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0">{{'tactical_retail_sales.save' | translate}}</button>
+          [disabled]="rows.length === 0">{{ls.locale.tactical_retail_sales.save}}</button>
         <button type="button" mat-raised-button color="secondary" (click)="dialogRef.close()"
-          [disabled]="uploading">{{'tactical_retail_sales.cancel' | translate}}</button>
+          [disabled]="uploading">{{ls.locale.tactical_retail_sales.cancel}}</button>
       </div>
     </div>
   </div>

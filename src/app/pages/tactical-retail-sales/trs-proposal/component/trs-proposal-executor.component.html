@@ -35,7 +35,7 @@
       </div>
     </div>
     <div style="margin-top: 20px;">
-      <span class="bintang">{{'tactical_retail_sales.proposal_red' | translate}}</span> = {{'tactical_retail_sales.proposal_red_explanation' | translate}}
+      <span class="bintang">{{ls.locale.tactical_retail_sales.proposal_red}}</span> = {{ls.locale.tactical_retail_sales.proposal_red_explanation}}
     </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive spesial-exec" style="margin-top: 50px;">
@@ -62,7 +62,7 @@
 
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{'tactical_retail_sales.proposal_name' | translate}}" prop="fullname" [width]="200">
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_name}}" prop="fullname" [width]="200">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.fullname}} <span class="bintang" *ngIf="row.isDisable">({{row.disableProgramCode}})</span>
           </ng-template>
@@ -107,9 +107,9 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" style="margin-right: 20px;background-color:#dc1e2d; color: #fff;" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="rows.length === 0">{{'tactical_retail_sales.save' | translate}}</button>
+          [disabled]="rows.length === 0">{{ls.locale.tactical_retail_sales.save}}</button>
         <button type="button" mat-raised-button color="secondary" (click)="dialogRef.close()"
-          [disabled]="uploading">{{'tactical_retail_sales.cancel' | translate}}</button>
+          [disabled]="uploading">{{ls.locale.tactical_retail_sales.cancel}}</button>
       </div>
     </div>
   </div>
