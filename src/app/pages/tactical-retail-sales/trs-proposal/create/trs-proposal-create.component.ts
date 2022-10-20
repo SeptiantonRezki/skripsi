@@ -226,6 +226,11 @@ export class TrsProposalCreateComponent implements OnInit {
     console.log("kaaaa");
     console.log(this.maxPeriodProposal);
     this.maxDateProposal = moment(param).add(parseInt(this.maxPeriodProposal), 'd');
+
+    this.selectedExecutor = [];
+    this.selectedKecamatan = [];
+    this.formCreateProposal.get('executor_selected').setValue("");
+    this.formCreateProposal.get('kecamatan_selected').setValue("");
   }
 
   submit() {
@@ -577,6 +582,9 @@ export class TrsProposalCreateComponent implements OnInit {
           this.formCreateProposal.get('custName1').setValue("");
           this.formCreateProposal.get('custCode2').setValue("");
           this.formCreateProposal.get('custName2').setValue("");
+
+          this.formCreateProposal.get("startDate").setValue("");
+          this.formCreateProposal.get("endDate").setValue("");
         }
 
         this.selectedArea = id;
