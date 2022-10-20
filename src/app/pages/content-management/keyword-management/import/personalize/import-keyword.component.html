@@ -43,27 +43,27 @@
 
     <div class="responsive" *ngIf="!requestingPreview">
       <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
-        <ngx-datatable-column name="Nama" prop="name"> 
+        <ngx-datatable-column [name]="'global.label.name' | translate" prop="name"> 
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Kategori" prop="category">
+        <ngx-datatable-column [name]="'global.label.category' | translate" prop="category">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.category}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Blok Di Produk" prop="block_product">
+        <ngx-datatable-column [name]="'global.label.block_in_product' | translate" prop="block_product">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.block_product}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Produk Maping" prop="product_mapping">
+        <ngx-datatable-column [name]="'global.label.maping_product' | translate" prop="product_mapping">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.product_mapping}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Blok Di Promo Mandiri" prop="block_promo_mandiri">
+        <ngx-datatable-column [name]="'global.label.block_in_mandiri_promo' | translate" prop="block_promo_mandiri">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.block_promo_mandiri}}</span>
           </ng-template>
@@ -83,17 +83,17 @@
             {{ row.reason ? row.reason : '-' }}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Wholesaler" prop="wholesaler">
+        <ngx-datatable-column [name]="'global.menu.wholesaler' | translate" prop="wholesaler">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.wholesaler ? row.wholesaler : '-' }}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Retailer" prop="retailer">
+        <ngx-datatable-column [name]="'global.menu.retailer' | translate"  prop="retailer">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.retailer ? row.retailer : '-' }}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Customer" prop="customer">
+        <ngx-datatable-column [name]="'global.menu.customer' | translate" prop="customer">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{ row.customer ? row.customer : '-' }}
           </ng-template>
