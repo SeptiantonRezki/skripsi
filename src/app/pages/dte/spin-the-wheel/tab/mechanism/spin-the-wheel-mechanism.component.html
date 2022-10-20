@@ -122,6 +122,7 @@
                   formControlName="category"
                   placeholder="Batasan berdasarkan kategori"
                   multiple
+                  [disabled]="isDetail"
                 >
                   <mat-option
                     *ngFor="let item of categoryList"
@@ -308,6 +309,7 @@
                   formControlName="category"
                   placeholder="Batasan berdasarkan kategori"
                   multiple
+                  [disabled]="isDetail"
                 >
                   <mat-option
                     *ngFor="let item of categoryList"
