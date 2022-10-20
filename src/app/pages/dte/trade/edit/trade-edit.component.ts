@@ -313,7 +313,7 @@ export class TradeEditComponent {
         .subscribe(
           (res) => {
             this.dialogService.openSnackBar({
-              message: this.translate.instant("global.message.text2"),
+              message: this.ls.locale.global.messages.text2,
             });
             this.router.navigate(["dte", "trade-program"]);
           },
@@ -348,7 +348,7 @@ export class TradeEditComponent {
       .subscribe(
         (res) => {
           this.dialogService.openSnackBar({
-            message: this.translate.instant("global.message.text2"),
+            message: this.ls.locale.global.messages.text2,
           });
           this.router.navigate(["dte", "trade-program"]);
         },
@@ -358,7 +358,7 @@ export class TradeEditComponent {
       );
   }
 
-  limitNumber(event: any, key: any) {
+  limitNumber(event: any, key: string) {
     const currentValue = this.formTradeProgram.controls[key].value.toString();
     if (Number(currentValue + event.key) > Number(event.target.max)) {
       event.preventDefault();
