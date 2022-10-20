@@ -155,6 +155,28 @@ export class SpinTheWheelMechanismComponent implements OnInit {
     });
   }
 
+  setLimitData(limit_by: string, limit_only: string) {
+    if (this.settings[limit_by] === "product") {
+      this.productList = this.settings[limit_only].map((data: any) => {
+        const obj = { sku_id: data.id, name: data.name, value: data.value };
+        this.addLimitPurchase(obj);
+        return obj;
+      });
+      this.limitProduct = this.productList.reduce((sum, data) => {
+        sum[data.sku_id] = data.name;
+        return sum;
+      }, {});
+    }
+    if (this.settings[limit_by] === "category") {
+      const cat = this.settings[limit_only].map((data: any) => {
+        const obj = { id: data.id, value: data.value };
+        this.addLimitPurchase(obj);
+        return parseInt(obj.id);
+      });
+      this.form.controls.category.setValue(cat);
+    }
+  }
+
   getDetails() {
     if (!this.settings) return;
 
@@ -165,30 +187,13 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       this.form.controls.condition.setValue("include");
       this.form.controls.limit_by.setValue(this.settings.limit_by);
       this.form.controls.limit_option.setValue(this.settings.limit_option);
-      if (this.settings.limit_by === "product") {
-        this.productList = this.settings.limit_only.map((data: any) => {
-          const obj = { sku_id: data.id, name: data.name, value: data.value };
-          this.addLimitPurchase(obj);
-          return obj;
-        });
-        this.limitProduct = this.productList.reduce((sum, data) => {
-          sum[data.sku_id] = data.name;
-          return sum;
-        }, {});
-      }
-      if (this.settings.limit_by === "category") {
-        const cat = this.settings.limit_only.map((data: any) => {
-          const obj = { id: data.id, value: data.value };
-          this.addLimitPurchase(obj);
-          return parseInt(obj.id);
-        });
-        this.form.controls.category.setValue(cat);
-      }
+      this.setLimitData("limit_by", "limit_only");
     }
 
     if (this.settings.exclude_by) {
       this.form.controls.condition.setValue("exclude");
       this.form.controls.exclude_by.setValue(this.settings.exclude_by);
+      this.setLimitData("exclude_by", "exclude_only");
     }
 
     const spins = this.settings.setting_details;
