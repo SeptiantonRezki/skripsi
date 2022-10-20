@@ -632,7 +632,7 @@
                   <input
                     matInput
                     formControlName="cut_off_hours"
-                    [value]="formRetailer.get('cut_off_hours').value"
+                    [value]="formRetailer.get('cut_off_hours').value.length === 8 ? formRetailer.get('cut_off_hours').value.slice(0, 5) : formRetailer.get('cut_off_hours').value"
                     readonly
                     style="width: 50px"
                   />
