@@ -3,11 +3,25 @@
   <!-- <page-content-header contentTitle="{{ls.locale.global.menu.medal_badge}}"> -->
   <page-content-header contentTitle="Keyword Management">
     <button
-      *ngIf="permission['ubah']"
+      *ngIf="permission['ubah'] && importID !== ''"
       id="btn-simpan-trade"
       style="width: 170px"
       (click)="submit()"
       mat-raised-button
+      type="button"
+      class="vibrate"
+    >
+      <mat-icon>save</mat-icon> {{ "global.button.save" | translate }}
+    </button>
+
+    <button
+      *ngIf="permission['ubah'] && importID === ''"
+      id="btn-simpan-trade"
+      style="width: 170px; color: rgba(255, 255, 255, 0.7) !important"
+      (click)="submit()"
+      mat-raised-button
+      disabled
+      matTooltip="Silahkan import data terlebih dahulu"
       type="button"
     >
       <mat-icon>save</mat-icon> {{ "global.button.save" | translate }}

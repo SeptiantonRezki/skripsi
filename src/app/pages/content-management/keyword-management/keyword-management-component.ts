@@ -53,7 +53,7 @@ export class KeywordManagementComponent implements OnInit {
       name: 'Customer'
     }
   ];
-  importID = [];
+  importID = '';
 
   private _data: any = null;
   @Input() set data(data: any) {
@@ -314,6 +314,7 @@ export class KeywordManagementComponent implements OnInit {
       // group_pengguna: this.formKeyword.get('userGroup').value
     };
     this.keywordService.put(body, {id: this.importID}).subscribe(async res => {
+      this.importID = '';
       this.getKeywordList(null, true);
     }, err => {
       console.warn(err);
