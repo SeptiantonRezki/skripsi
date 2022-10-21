@@ -2075,13 +2075,6 @@
 			"create": "បង្កើត",
 			"edit": "ផ្លាស់ប្តូរ"
 		},
-    "tactical_retail_sales": {
-      "sysvar": "TRS System Variable",
-      "proposal": "TRS Proposal",
-      "proposal_create": "Create",
-      "proposal_edit": "Edit",
-      "proposal_detail": "Detail"
-    },
 		"privatelabel": {
 			"index": "ផលិតផលសំខាន់",
 			"suppliercompany": {
