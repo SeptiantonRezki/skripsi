@@ -62,7 +62,7 @@
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput (focus)="endDate.open()" [matDatepicker]="endDate"
+                  <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" (dateChange)="dateChanged()"
                     placeholder="{{ls.locale.tactical_retail_sales.proposal_program_end_date}}" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"> <!-- // TODO -->
                   <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>

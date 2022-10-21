@@ -309,6 +309,13 @@ export class TrsProposalEditComponent implements OnInit {
     this.formCreateProposal.get('kecamatan_selected').setValue("");
   }
 
+  dateChanged(): void {
+    this.selectedExecutor = [];
+    this.selectedKecamatan = [];
+    this.formCreateProposal.get('executor_selected').setValue("");
+    this.formCreateProposal.get('kecamatan_selected').setValue("");
+  }
+
   submit(mode) {
     console.log("qqqq");
     if (this.formCreateProposal.valid) {
@@ -457,7 +464,7 @@ export class TrsProposalEditComponent implements OnInit {
   modalExecutor() {
     if (this.selectedArea == ""){
       alert("Tunggu, data Area sedang di load");
-    } else if (this.formCreateProposal.get('startDate').value == null || this.formCreateProposal.get('endDate').value == null){
+    } else if (this.formCreateProposal.get('startDate').value == null || this.formCreateProposal.get('endDate').value == null || this.formCreateProposal.get('endDate').value == ""){
       alert("Tanggal Awal dan Tanggal Akhir wajib diisi");
     } else {
       const dialogConfig = new MatDialogConfig();
