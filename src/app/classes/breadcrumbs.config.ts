@@ -3469,7 +3469,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "tactical_retail_sales.proposal_create"
         }
       ],
       edit: [
@@ -3481,7 +3481,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "tactical_retail_sales.proposal_edit"
         }
       ],
       detail: [
@@ -3493,7 +3493,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "tactical_retail_sales.proposal_detail"
         }
       ]
     },
