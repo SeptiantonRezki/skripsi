@@ -631,6 +631,16 @@ export class PopupNotificationEditComponent {
         this.formPopupGroup.get('landing_page_2').setValidators(Validators.required);
         this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
       }
+      if(
+        value === 'close' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('landing_page_2').clearValidators();
+        this.formPopupGroup.get('landing_page_2').updateValueAndValidity();
+        this.formPopupGroup.get('app_link_2').clearValidators();
+        this.formPopupGroup.get('app_link_2').updateValueAndValidity();
+        console.log('INIT');
+      }
     })
 
     this.filterProduct
@@ -1183,7 +1193,7 @@ export class PopupNotificationEditComponent {
       this.formPopupGroup.controls['title'].setValue(response.title);
       this.formPopupGroup.controls['user_group'].setValue(response.type);
       this.formPopupGroup.controls['content_type'].setValue((response.action)? response.action : (response.positive_action)? response.positive_action : null);
-      this.formPopupGroup.controls['content_type_2'].setValue((response.negative_action)? response.negative_action : null);
+      this.formPopupGroup.controls['content_type_2'].setValue((response.negative_action)? response.negative_action : 'close');
 
       if(response.recurring.length > 0) {
         this.formPopupGroup.controls['type_of_recurrence'].setValue('recurring');

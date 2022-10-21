@@ -629,12 +629,23 @@ export class PopupNotificationCreateComponent {
       this.formPopupGroup.updateValueAndValidity();
     });
     this.formPopupGroup.get('content_type_2').valueChanges.subscribe(value => {
+      console.log('XXX ', value);
       if(
         value === 'landing-page' && 
         this.formPopupGroup.get('user_group').value === 'retailer'
       ){
         this.formPopupGroup.get('landing_page_2').setValidators(Validators.required);
         this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
+      }
+      if(
+        value === 'close' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('landing_page_2').clearValidators();
+        this.formPopupGroup.get('landing_page_2').updateValueAndValidity();
+        this.formPopupGroup.get('app_link_2').clearValidators();
+        this.formPopupGroup.get('app_link_2').updateValueAndValidity();
+        console.log('INIT');
       }
     })
     

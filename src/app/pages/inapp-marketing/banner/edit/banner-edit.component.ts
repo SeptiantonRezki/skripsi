@@ -1613,6 +1613,8 @@ export class BannerEditComponent {
       this.formBannerGroup.get('user_group').value === 'retailer'
     ){
       this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
     }
   }
 

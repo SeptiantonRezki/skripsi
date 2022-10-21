@@ -174,13 +174,24 @@ export class LotteryComponent implements OnInit {
     this.dialogService.openCustomConfirmationDialog(data);
   }
 
+  copyLink(data) {
+    const linkLottery = 'retailer://link/undian/' + data.id;
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (linkLottery));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
+    this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text25', { status: this.translate.instant('global.label.copy_link')}) });
+  }
+
   confirmDelete() {
     this.lotteryService.delete({ id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
         this.getLottery();
 
-        this.dialogService.openSnackBar({ message: 'Berhasil' });
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text25', { status: this.translate.instant('global.button.delete')}) });
       }
     });
   }
