@@ -744,6 +744,11 @@ export class TrsProposalEditComponent implements OnInit {
           this.formCreateProposal.get('custName1').setValue("");
           this.formCreateProposal.get('custCode2').setValue("");
           this.formCreateProposal.get('custName2').setValue("");
+
+          this.selectedExecutor = [];
+          this.formCreateProposal.get('executor_selected').setValue("");
+          this.formCreateProposal.get("startDate").setValue("");
+          this.formCreateProposal.get("endDate").setValue("");
         }
         break;
   
