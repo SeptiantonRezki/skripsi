@@ -283,20 +283,20 @@ export class RetailerEditComponent {
       }
     });
 
-    // this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
-    //   console.log(value);
-    //   if (value === 1) {
-    //     this.formRetailer.get('block_order').setValue(0);
-    //     this.formRetailer.get('is_monday_deliv').setValue(1);
-    //     this.formRetailer.get('is_tuesday_deliv').setValue(1);
-    //     this.formRetailer.get('is_wednesday_deliv').setValue(1);
-    //     this.formRetailer.get('is_thursday_deliv').setValue(1);
-    //     this.formRetailer.get('is_friday_deliv').setValue(1);
-    //     this.formRetailer.get('is_saturday_deliv').setValue(1);
-    //     this.formRetailer.get('is_sunday_deliv').setValue(1);
-    //     this.formRetailer.get('cut_off_hours').setValue("00:00");
-    //   }
-    // });
+    this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
+      console.log('order_rrp value', value);
+      if (value === 0) {
+        this.formRetailer.get('block_order').setValue(0);
+        this.formRetailer.get('is_monday_deliv').setValue(0);
+        this.formRetailer.get('is_tuesday_deliv').setValue(0);
+        this.formRetailer.get('is_wednesday_deliv').setValue(0);
+        this.formRetailer.get('is_thursday_deliv').setValue(0);
+        this.formRetailer.get('is_friday_deliv').setValue(0);
+        this.formRetailer.get('is_saturday_deliv').setValue(0);
+        this.formRetailer.get('is_sunday_deliv').setValue(0);
+        this.formRetailer.get('cut_off_hours').setValue("00:00");
+      }
+    });
 
     this.formBankAccount = this.formBuilder.group({
       account_number: [''],
@@ -844,14 +844,14 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
-      if (
-        this.formRetailer.get('is_monday_deliv').value === 0 &&
+      if ( this.formRetailer.get('order_rrp').value === 1 &&
+        (this.formRetailer.get('is_monday_deliv').value === 0 &&
         this.formRetailer.get('is_tuesday_deliv').value === 0 &&
         this.formRetailer.get('is_wednesday_deliv').value === 0 &&
         this.formRetailer.get('is_thursday_deliv').value === 0 &&
         this.formRetailer.get('is_friday_deliv').value === 0 &&
         this.formRetailer.get('is_saturday_deliv').value === 0 &&
-        this.formRetailer.get('is_sunday_deliv').value === 0
+        this.formRetailer.get('is_sunday_deliv').value === 0)
       ) {
         this.dialogService.openSnackBar({
           message: "Jadwal Pengiriman Tidak Boleh Kosong"

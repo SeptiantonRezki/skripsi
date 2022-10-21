@@ -478,13 +478,11 @@
 
         <!-- Detail RRP -->
           <div>
-            <!-- <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="permission?.detail_rrp || permission?.jadwal_pengiriman"> -->
-            <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="permission?.detail_rrp || permission?.jadwal_pengiriman">
               <h3>Detail RRP</h3>
             </div>
             <div fxLayout="row wrap" fxFlex="55" class="mb-12">
-              <!-- <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp"> -->
-              <div fxLayout="row" fxFlex="50">
+              <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp">
                 <div>
                   <mat-label [ngStyle]="{'color': permission?.detail_rrp ? '#000000' : '#a0a0a0'}">
                     Order RRP
@@ -495,8 +493,7 @@
                   </mat-radio-group>
                 </div>
               </div>
-              <!-- <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp && (formRetailer.get('order_rrp').value === 1)"> -->
-              <div fxLayout="row" fxFlex="50">
+              <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp && (formRetailer.get('order_rrp').value === 1)">
                 <div>
                   <mat-label [ngStyle]="{'color': (permission?.detail_rrp && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
                     Blok Pemesanan
@@ -508,8 +505,7 @@
                 </div>
               </div>
             </div>
-            <!-- <div *ngIf="permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)"> -->
-            <div>
+            <div *ngIf="permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)">
               <div class="mb-24">
                 <div class="mb-8" [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
                   Jadwal Pengiriman
@@ -603,7 +599,8 @@
                 <div [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
                   Cut Off Hours
                 </div>
-                <div *ngIf="permission?.jadwal_pengiriman && formRetailer.get('order_rrp').value === 1">
+                <div>
+                <!-- <div *ngIf="permission?.jadwal_pengiriman && formRetailer.get('order_rrp').value === 1"> -->
                   <mat-form-field
                   fxFlex="30"
                   class="is-light form-primary"
@@ -617,13 +614,14 @@
                     readonly
                     style="width: 50px"
                   />
+                  <span>WIB</span>
                   <mat-icon matSuffix>access_time</mat-icon>
                   <ngx-material-timepicker
                     #fullTime1
                   ></ngx-material-timepicker>
                 </mat-form-field>
                 </div>
-                <div *ngIf="!permission?.jadwal_pengiriman || (formRetailer.get('order_rrp').value === 0)">
+                <!-- <div *ngIf="!permission?.jadwal_pengiriman || (formRetailer.get('order_rrp').value === 0)">
                   <mat-form-field
                   fxFlex="30"
                   class="is-light form-primary"
@@ -636,9 +634,10 @@
                     readonly
                     style="width: 50px"
                   />
+                  <span>WIB</span>
                   <mat-icon matSuffix>access_time</mat-icon>
                 </mat-form-field>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
