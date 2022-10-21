@@ -42,7 +42,7 @@
     </div>
 
     <div class="responsive" *ngIf="!requestingPreview">
-      <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
+      <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
         <ngx-datatable-column [name]="'global.label.name' | translate" prop="name"> 
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.name}}</span>
@@ -68,7 +68,7 @@
             <span class="row-address">{{row.block_promo_mandiri}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Add (1) / Remove (0)" prop="add_or_remove">
+        <ngx-datatable-column name="Edit (2) / Add (1) / Remove (0)" prop="add_or_remove">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.add_or_remove}}</span>
           </ng-template>

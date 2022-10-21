@@ -57,9 +57,16 @@
 
               <div class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                  <mat-select style="min-width: 160px" placeholder="Konten Keyword Promo Mandiri" formControlName="category">
+                  <mat-select style="min-width: 160px" placeholder="Konten Keyword Promo Mandiri" formControlName="category" #singleSelect>
+                    <ngx-mat-select-search
+                      [formControl]="filterCategory"
+                      placeholderLabel="{{ 'global.label.search' | translate }}"
+                      noEntriesFoundLabel="{{
+                        'global.messages.data_not_found' | translate
+                      }}"
+                    ></ngx-mat-select-search>
                     <mat-option [value]="" selected>{{ls.locale.global.label.all}} {{ "global.label.category" | translate }}</mat-option>
-                    <mat-option *ngFor="let cat of listCategories" [value]="cat.id">{{ cat.name }}</mat-option>
+                    <mat-option *ngFor="let cat of filteredCategory | async" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>

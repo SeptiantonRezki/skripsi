@@ -49,6 +49,7 @@ import { KeywordManagementComponent } from "./keyword-management/keyword-managem
 import { TranslateModule } from "@ngx-translate/core";
 import { PageGuard } from "app/classes/auth.guard";
 import { ImportKeyword } from "./keyword-management/import/personalize/import-keyword.component";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 export const MY_FORMATS = {
   parse: {
@@ -89,6 +90,7 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatToolbarModule,
+    NgxMatSelectSearchModule,
   ],
   declarations: [
     TncIndexComponent,

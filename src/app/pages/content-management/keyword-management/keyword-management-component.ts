@@ -7,7 +7,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, ReplaySubject } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
@@ -20,6 +20,7 @@ import { ProductService } from 'app/services/sku-management/product.service';
 import { KeywordService } from 'app/services/content-management/keyword.service';
 import { PagesName } from 'app/classes/pages-name';
 import { ImportKeyword } from './import/personalize/import-keyword.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-keyword-management-component',
@@ -29,6 +30,12 @@ import { ImportKeyword } from './import/personalize/import-keyword.component';
 export class KeywordManagementComponent implements OnInit {
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
+
+  public filterCategory: FormControl = new FormControl();
+  private _onDestroy = new Subject<void>();
+  public filteredCategory: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
 
   rows: any[];
   onLoad: boolean;
@@ -128,7 +135,7 @@ export class KeywordManagementComponent implements OnInit {
   ngOnInit() {
     this.formKeyword = this.formBuilder.group({
       userGroup: [['wholesaler', 'retailer', 'customer']],
-      category: '',
+      category: ''
     });
     this.getCategories();
     this.getKeywordList();
@@ -146,6 +153,31 @@ export class KeywordManagementComponent implements OnInit {
       this.pagination.page = 1;
       this.getKeywordList();
     });
+    this.filterCategory.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringKeyword();
+      });
+  }
+
+  filteringKeyword() {
+    if (!this.listCategories) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterCategory.value;
+    if (!search) {
+      this.filteredCategory.next(this.listCategories.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredCategory.next(
+      this.listCategories.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
   }
 
   openCreateMedal() {
@@ -162,6 +194,7 @@ export class KeywordManagementComponent implements OnInit {
   getCategories() {
     this.productService.getListCategory(null).subscribe(res => {
       this.listCategories = res.data ? res.data.data : [];
+      this.filteredCategory.next(res.data ? res.data.data : []);
     });
   }
 
