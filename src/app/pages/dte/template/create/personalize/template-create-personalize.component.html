@@ -978,13 +978,13 @@
           <div class="footer mb-48">
             <div class="template-task__header mb-24">{{'dte.template_tugas.text34' | translate}}</div>
             <div formArrayName="rejected_reason_choices"
-              *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
+              *ngFor="let rejected of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
               <div [formGroupName]="k" class="question-list mb-8" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center" fxFlex="1 0 auto">
                 <mat-form-field appearance="fill" class="custom-form-field">
                   <mat-label>{{'dte.template_tugas.select_reason' | translate}} {{ (k+1) }}</mat-label>
-                  <mat-select formControlName="reason" id="reason" #singleSelect>
+                  <mat-select formControlName="reason" id="reason" #singleSelect [disabled]="rejected.value.reason.toLowerCase() === 'others'">
                     <ngx-mat-select-search [formControl]="filterReason" placeholderLabel="{{'global.label.search' | translate}}" noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
-                    <mat-option *ngFor="let item of filteredReason | async" [value]="item.name">
+                    <mat-option *ngFor="let item of filteredReason | async" [value]="item.name" [disabled]="item.name.toLowerCase() === 'others'">
                       {{item.name}}
                     </mat-option>
                   </mat-select>
@@ -993,8 +993,14 @@
                   </mat-error>
                 </mat-form-field>
 
-                <button mat-icon-button *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1"
-                  matTooltip="{{'global.button.delete' | translate}}" matTooltipPosition="below" class="close--reason" (click)="deleteReason(k)">
+                <button
+                  mat-icon-button
+                  *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && rejected.value.reason.toLowerCase() !== 'others'"
+                  matTooltip="{{'global.button.delete' | translate}}"
+                  matTooltipPosition="below"
+                  class="close--reason"
+                  (click)="deleteReason(k)"
+                >
                   <mat-icon class="secondary-text">close</mat-icon>
                 </button>
               </div>

@@ -857,16 +857,23 @@
 
             <!-- REJECTED -->
             <div class="footer pt-48">
-              <div class="note">{{'dte.template_tugas.text34' | translate}}</div>
+              <div class="note mb-8">{{'dte.template_tugas.text34' | translate}}</div>
               <div formArrayName="rejected_reason_choices"
-                *ngFor="let item of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
+                *ngFor="let rejected of templateTaskForm.get('rejected_reason_choices')['controls']; let k=index;">
                 <div [formGroupName]="k" class="question-list" fxLayout="row" fxLayoutAlign="start start"
                   fxFlex="1 0 auto">
                   <mat-form-field fxFlex="50" class="is-light form-primary">
-                    <mat-select formControlName="reason" placeholder="{{'dte.template_tugas.select_reason' | translate}} {{ k+1 }}" id="reason" (click)="selectForm('reason')" #singleSelect>
+                    <mat-select
+                      formControlName="reason"
+                      placeholder="{{'dte.template_tugas.select_reason' | translate}} {{ k+1 }}"
+                      id="reason"
+                      (click)="selectForm('reason')"
+                      #singleSelect
+                      [disabled]="rejected.value.reason.toLowerCase() === 'others'"
+                    >
                       <ngx-mat-select-search id="select-search-reason" [formControl]="filterReason" placeholderLabel="{{'global.label.search' | translate}}"
                         noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
-                      <mat-option *ngFor="let item of filteredReason | async" [value]="item.name">
+                      <mat-option *ngFor="let item of filteredReason | async" [value]="item.name" [disabled]="checkRejectedOption(item.name)">
                         {{item.name}}
                       </mat-option>
                     </mat-select>
@@ -875,9 +882,15 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <button mat-icon-button fxFlex="5"
-                    *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && !isDetail" matTooltip="{{'global.button.delete' | translate}}"
-                    matTooltipPosition="below" class="add-image secondary-text" (click)="deleteReason(k)">
+                  <button
+                    mat-icon-button
+                    fxFlex="5"
+                    matTooltip="{{'global.button.delete' | translate}}"
+                    matTooltipPosition="below"
+                    class="secondary-text"
+                    (click)="deleteReason(k)"
+                    *ngIf="templateTaskForm.get('rejected_reason_choices').length > 1 && !isDetail && rejected.value.reason.toLowerCase() !== 'others'"
+                  >
                     <mat-icon class="secondary-text">close</mat-icon>
                   </button>
                 </div>
@@ -885,7 +898,7 @@
               <div style="padding-top: 6px;" fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"
                 *ngIf="!isDetail">
                 <div class="more-option">
-                  <span id="add-option" class="add-option" (click)="addRejectedReason()">{{'dte.template_tugas.text36' | translate}} </span>
+                  <span id="add-option" class="add-option add-option__rejected" (click)="addRejectedReason()">{{'dte.template_tugas.text36' | translate}} </span>
                 </div>
               </div>
             </div>
