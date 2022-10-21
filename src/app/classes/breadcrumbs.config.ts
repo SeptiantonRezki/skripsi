@@ -3449,7 +3449,7 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "TRS System Variable"
+        name: "breadcrumbs.tactical_retail_sales.sysvar"
       }
     ],
     trs_proposal: {
@@ -3457,43 +3457,43 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "TRS Proposal"
+          name: "breadcrumbs.tactical_retail_sales.proposal"
         }
       ],
       create: [
         {
           type: "parent",
           url: "/tactical-retail-sales/trs-proposal",
-          name: "TRS Proposal"
+          name: "breadcrumbs.tactical_retail_sales.proposal"
         },
         {
           type: "current",
           url: "",
-          name: "tactical_retail_sales.proposal_create"
+          name: "breadcrumbs.tactical_retail_sales.proposal_create"
         }
       ],
       edit: [
         {
           type: "parent",
           url: "/tactical-retail-sales/trs-proposal",
-          name: "TRS Proposal"
+          name: "breadcrumbs.tactical_retail_sales.proposal"
         },
         {
           type: "current",
           url: "",
-          name: "tactical_retail_sales.proposal_edit"
+          name: "breadcrumbs.tactical_retail_sales.proposal_edit"
         }
       ],
       detail: [
         {
           type: "parent",
           url: "/tactical-retail-sales/trs-proposal",
-          name: "TRS Proposal"
+          name: "breadcrumbs.tactical_retail_sales.proposal"
         },
         {
           type: "current",
           url: "",
-          name: "tactical_retail_sales.proposal_detail"
+          name: "breadcrumbs.tactical_retail_sales.proposal_detail"
         }
       ]
     },

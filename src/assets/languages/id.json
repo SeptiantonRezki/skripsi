@@ -2075,6 +2075,13 @@
       "create": "Create",
       "edit": "Ubah"
     },
+    "tactical_retail_sales": {
+      "sysvar": "TRS System Variable",
+      "proposal": "TRS Proposal",
+      "proposal_create": "Buat TRS Proposal",
+      "proposal_edit": "Edit TRS Proposal",
+      "proposal_detail": "Detail TRS Proposal"
+    },
     "privatelabel": {
       "index": "Produk Prinsipal",
       "suppliercompany": {
