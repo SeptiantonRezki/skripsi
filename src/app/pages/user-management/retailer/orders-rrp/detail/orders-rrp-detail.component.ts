@@ -36,6 +36,8 @@ export class OrdersRrpDetailComponent implements OnInit {
   orderId: any;
   body: any;
   // detailOrder: any;
+
+  // // Dummy Data // //
   detailOrder: any = {
     "id": 8409,
     "uuid": "b25bf5ce-644c-46c7-913b-46f752b24ecc",
@@ -144,6 +146,16 @@ export class OrdersRrpDetailComponent implements OnInit {
             ]
         },
         {
+          "title": "Total Rokok",
+          "value": "RP 20.000",
+          "type": "normal"
+        },
+        {
+          "title": "Total Non Rokok",
+          "value": "RP 0",
+          "type": "normal"
+        },
+        {
             "title": "Total",
             "value": "RP 20.000",
             "type": "normal"
@@ -190,9 +202,12 @@ export class OrdersRrpDetailComponent implements OnInit {
             "status_indo": "Pesanan Selesai"
         }
     ]
-};
+  };
+  // // End Dummy Data // //
+
   loadingIndicator = false;
   onLoad: Boolean;
+  blockOrder: any = 0;
 
   generateReceipt: GenerateReceipt = new GenerateReceipt(this.ls, this.translateInterpolatePipe, this.dataService);
 
@@ -297,6 +312,8 @@ export class OrdersRrpDetailComponent implements OnInit {
   ngOnInit() {
     // this.onLoad = true;
     // this.getDetailOrder();
+    
+    // // Dummy Data // //
     this.detailOrder;
 
     this.orderStatuses = Object.entries(this.detailOrder.available_status).map(
@@ -364,6 +381,7 @@ export class OrdersRrpDetailComponent implements OnInit {
         price_update_status: false
       }
     ]
+    // // End Dummy Data // //
   }
 
   ngOnDestroy() {
@@ -471,6 +489,14 @@ export class OrdersRrpDetailComponent implements OnInit {
         return userData;
       }
     });
+  }
+
+  blockNextOrder() {
+    if (this.blockOrder === 0) {
+      this.blockOrder = 1;
+    } else {
+      this.blockOrder = 0;
+    }
   }
 
   getDetailOrder(): void {

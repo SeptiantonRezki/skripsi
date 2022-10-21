@@ -5,7 +5,7 @@ import { Observable } from '../../../../../node_modules/rxjs';
 
 @Injectable()
 export class OrdersService extends BaseService {
-  public namespace = "orders";
+  public namespace = "order_rrp";
 
   constructor(http: HttpClient) {
     super(http);
