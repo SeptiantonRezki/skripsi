@@ -8,7 +8,7 @@ import { PrivacyService } from 'app/services/content-management/privacy.service'
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
-
+import { PagesName } from 'app/classes/pages-name';
 @Component({
   selector: 'app-privacy-edit',
   templateUrl: './privacy-edit.component.html',
@@ -19,7 +19,7 @@ export class PrivacyEditComponent {
   formPrivacy: FormGroup;
   formPrivacyError: any;
   detailPrivacy: any;
-
+  roles: PagesName = new PagesName();
   userGroup: any[] = [
     // { name: "Field Force", value: "field-force" },
     // { name: "Wholesaler", value: "wholesaler" },
@@ -31,7 +31,7 @@ export class PrivacyEditComponent {
 
   files: File;
   public options: Object = Config.FROALA_CONFIG;
-
+  permission: {}
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -47,7 +47,7 @@ export class PrivacyEditComponent {
       user: {},
       country: {}
     };
-
+    this.permission = this.roles.getRoles('principal.kebijakanprivasi');
     this.detailPrivacy = this.dataService.getFromStorage('detail_privacy');
   }
 
