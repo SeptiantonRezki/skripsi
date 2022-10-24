@@ -33,7 +33,7 @@
                 >
                 <mat-form-field fxFlex="50" class="is-light form-primary">
                   <mat-select formControlName="type" placeholder="Jenis Info Board">
-                      <mat-option *ngFor="let item of infoBoard" [value]="item.value">{{item.name}}</mat-option>
+                    <mat-option *ngFor="let item of infoBoard" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 </div>
@@ -194,6 +194,19 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div
+                  fxLayout="row"
+                  fxLayout.lt-md="column"
+                  fxLayoutGap="60px"
+                  fxLayoutGap.lt-md="0px"
+                  class="px-24"
+                >
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="status" placeholder="Status">
+                      <mat-option *ngFor="let item of status" [value]="item.value">{{item.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
 
                 <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
                   <button
@@ -205,15 +218,6 @@
                     (click)="submit()"
                   >
                     {{ ls.locale.global.button.save }}
-                  </button>
-
-                  <button 
-                    mat-raised-button 
-                    type="button" 
-                    class="ml-24 confirmation-button" 
-                    (click)="submitPublishUnpublish()" 
-                    fxFlex="20">
-                      {{ detailFormBoard && detailFormBoard.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
                   </button>
                 </div>
 

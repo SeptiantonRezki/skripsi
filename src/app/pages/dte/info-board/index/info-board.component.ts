@@ -74,10 +74,10 @@ export class InfoBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLottery();
+    this.getInfoBoard();
   }
 
-  getLottery() {
+  getInfoBoard() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -92,6 +92,7 @@ export class InfoBoardComponent implements OnInit {
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
+        console.log('datanya', this.rows);
 
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -178,7 +179,7 @@ export class InfoBoardComponent implements OnInit {
     this.infoBoardService.delete({ id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getLottery();
+        this.getInfoBoard();
 
         this.dialogService.openSnackBar({ message: 'Berhasil' });
       }

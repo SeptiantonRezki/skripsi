@@ -96,6 +96,10 @@ export class InfoBoardEditComponent implements OnInit {
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" }
   ];
+  status: any[] = [
+    { name: 'Publish', value: 'publish' },
+    { name: 'Unpublish', value: 'unpublish' }
+  ];
 
   geoLevel: string[] = ["national", "division", "region", "area"];
   geoList: any = {
@@ -156,7 +160,16 @@ export class InfoBoardEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-    })
+      status: [""]
+    });
+    this.infoBoardService.type().subscribe(
+      res => {
+        this.infoBoard = res.data ? res.data.data : [];
+      },
+      err => {
+        console.error(err);
+      }
+    );
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -183,7 +196,7 @@ export class InfoBoardEditComponent implements OnInit {
     this.setStorageDetail();
 
     this.formBoard.get('type').valueChanges.subscribe(res => {
-      if (res === 'task-free-text') {
+      if (res === 1) {
         this.isFreeText = true;
       } else {
         this.isFreeText = false;
@@ -198,15 +211,6 @@ export class InfoBoardEditComponent implements OnInit {
       this.loadingArea = true;
       this.getLevel('region');
     });
-    // this.formBoard.setValue({
-    //   name_board: this.detailFormBoard.name,
-    //   description_board: this.detailFormBoard.description,
-    //   type: this.detailFormBoard.jenis,
-    //   start_date: this.convertDate(this.detailFormBoard.start_date),
-    //   start_time: this.convertTime(this.detailFormBoard.start_date ? this.detailFormBoard.start_date : ''),
-    //   end_date: this.convertDate(this.detailFormBoard.end_date),
-    //   end_time: this.convertTime(this.detailFormBoard.end_date ? this.detailFormBoard.end_date : ''),
-    // });
 
 
     if (this.isDetail) {
@@ -217,6 +221,7 @@ export class InfoBoardEditComponent implements OnInit {
       this.formBoard.get('start_time').disable();
       this.formBoard.get('end_date').disable();
       this.formBoard.get('end_time').disable();
+      this.formBoard.get('status').disable();
     }
   }
 
@@ -225,6 +230,17 @@ export class InfoBoardEditComponent implements OnInit {
     this.showDetail = this.infoBoardService.detail(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
+
+        this.formBoard.setValue({
+          name_board: res.data.name,
+          description_board: res.data.description,
+          type: res.data.business_infoboard_type_id,
+          start_date: this.convertDate(res.data.start_date),
+          start_time: this.convertTime(res.data.start_date ? res.data.start_date : ''),
+          end_date: this.convertDate(res.data.end_date),
+          end_time: this.convertTime(res.data.end_date ? res.data.end_date : ''),
+          status: res.data.status
+        });
 
         // this.changeBlastType(res.data.audience_filter);
         if(res.data.audience_filter === 'population-blast'){
@@ -712,26 +728,18 @@ export class InfoBoardEditComponent implements OnInit {
     if (this.formBoard.valid) {
       let fd = new FormData();
 
-      const body = {
-        _method: 'PUT',
-        name: this.formBoard.get('name_board').value,
-        type: this.formBoard.get('type').value,
-        description: this.formBoard.get('description_board').value,
-        start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
-        end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
-      }
-
-      fd.append('_method', body._method);
-      fd.append('name', body.name);
-      fd.append('type', body.type);
-      fd.append('description', body.description);
-      fd.append('start_date', body.start_date);
-      fd.append('end_date', body.end_date);
+      fd.append('_method', 'PUT');
+      fd.append('name', this.formBoard.get('name_board').value);
+      fd.append('type_id', this.formBoard.get('type').value);
+      fd.append('description', this.formBoard.get('description_board').value);
+      fd.append('start_date', `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`);
+      fd.append('end_date', `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`);
+      fd.append('status', this.formBoard.get('status').value);
 
       this.infoBoardService.put(fd, { id: this.detailFormBoard.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          this.router.navigate(['dte', 'lottery']);
+          this.router.navigate(['dte', 'info-board']);
         },
         err => {
           console.log(err.error.message);

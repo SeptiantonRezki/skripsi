@@ -63,20 +63,7 @@ export class InfoBoardCreateComponent implements OnInit {
   imageConverted: any;
   preview_header: FormControl = new FormControl("");
 
-  infoBoard: any[] =
-  [
-      { name: 'Ensure new order is processed within 6 hours (P0)', value: 'task-ensure-new-order-opt-p0' },
-      { name: 'Ensure process order is ready / sent within 24 hours (P0)', value: 'task-ensure-process-order-opt-p0' },
-      { name: 'Upload HMS products (P0)', value: 'task-upload-hms-product-sc-p0' },
-      { name: 'Upload Top Selling Products (P0)', value: 'task-upload-top-selling-sc-p0' },
-      { name: 'Upload NPL from HMS products (P0)', value: 'task-upload-npl-product-sc-p0' },
-      { name: 'Upload product image for SKU without image (P1)', value: 'task-upload-product-image-sku-sc-p1' },
-      { name: 'Revise wrong product data Name & Category (P1)', value: 'task-revise-wrong-product-sc-p1' },
-      { name: 'Revise wrong / unclear product image (P2)', value: 'task-revise-wrong-unclear-sc-p2' },
-      { name: 'Create Reward Catalog (P1)', value: 'task-create-reward-catalog-plp-p1' },
-      { name: 'Create loyalty poin scheme (P1)', value: 'task-create-loyalty-poin-plp-p1' },
-      { name: 'FREE TEXT', value: 'task-free-text' },
-  ]
+  infoBoard: any[] = [];
 
   public audienceFixed: FormControl = new FormControl();
   public audiencePopulation: FormControl = new FormControl();
@@ -157,7 +144,16 @@ export class InfoBoardCreateComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-    })
+    });
+
+    this.infoBoardService.type().subscribe(
+      res => {
+        this.infoBoard = res.data ? res.data.data : [];
+      },
+      err => {
+        console.error(err);
+      }
+    );
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -181,7 +177,7 @@ export class InfoBoardCreateComponent implements OnInit {
     this.onLoad = false;
 
     this.formBoard.get('type').valueChanges.subscribe(res => {
-      if (res === 'task-free-text') {
+      if (res === 1) {
         this.isFreeText = true;
       } else {
         this.isFreeText = false;
@@ -213,15 +209,16 @@ export class InfoBoardCreateComponent implements OnInit {
       }
 
       fd.append('name', body.name);
-      fd.append('type', body.type);
+      fd.append('type_id', body.type);
       fd.append('description', body.description);
       fd.append('start_date', body.start_date);
       fd.append('end_date', body.end_date);
+      fd.append('status', 'unpublish');
 
       this.infoBoardService.create(fd).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          this.router.navigate(['dte', 'lottery']);
+          this.router.navigate(['dte', 'info-board']);
         },
         err => {
           console.log(err.error.message);

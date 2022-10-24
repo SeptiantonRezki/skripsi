@@ -54,12 +54,12 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Publish" prop="status_publish" [sortable]="false">
+        <ngx-datatable-column name="Publish" prop="publish" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="name-container">
               <p id="status" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
-                [ngClass]="row.status_publish.toLowerCase() === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
-                {{ row.status_publish }}
+                [ngClass]="row.publish.toLowerCase() === 'publish' ? 'mat-blue-800-bg' : 'mat-blue-900-bg'">
+                {{ row.publish }}
               </p>
             </div>
           </ng-template>

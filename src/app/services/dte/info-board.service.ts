@@ -19,6 +19,11 @@ export class InfoBoardService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  type(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'type');
+    return this.getApi(url, queryParams);
+  }
+
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
