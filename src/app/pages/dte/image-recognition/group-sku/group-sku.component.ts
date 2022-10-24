@@ -18,36 +18,23 @@ export class GroupSkuComponent implements OnInit {
   loading = true;
   permission: any;
   roles: PagesName = new PagesName();
-  isChange: boolean = false;
+  formIsDirty: boolean = false;
 
   @HostListener("window:beforeunload")
   canDeactivate(): Observable<boolean> | boolean {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
-    if (this.isChange) return false;
-
-    return true;
+    return !this.formIsDirty;
   }
 
   @HostListener("window:message", ["$event"])
-  onPostMessage({ data: resData }) {
-    this.isChange = resData.isChange ? resData.isChange : false;
-
-    if (this.isChange) {
-      window.localStorage.setItem("isReactChanged", 'true');
-    } else {
-      window.localStorage.setItem("isReactChanged", 'false');
-    }
+  onMessage({ data }) {
+    if (data.type === "form") this.formIsDirty = data.isDirty;
+    if (data.type === "redirect") this.router.navigate(data.path.split("/"));
   }
 
   constructor(
     private sanitizer: DomSanitizer,
     private authService: AuthenticationService,
-    private dataService: DataService,
     private router: Router,
-    private route: ActivatedRoute,
-    // private serializer: UrlSerializer,
   ) {
     this.permission = this.roles.getArrayRoles('principal.dte_image_recognition_master_brand_group');
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl('');
