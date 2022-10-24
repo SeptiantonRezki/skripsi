@@ -76,6 +76,11 @@ export class ProductCreateComponent {
     { name: "Kanvas", value: "Kanvas" },
   ]
 
+  statusUPC: any[] = [
+    { name: this.translate.instant('global.label.yes'), status: 1 },
+    { name: this.translate.instant('global.label.no'), status: 0 }
+  ];
+
   filteredSkuOptions: Observable<string[]>;
 
   public filterCategory: FormControl = new FormControl();
@@ -272,7 +277,8 @@ export class ProductCreateComponent {
       is_private_label: [false],
       is_paylater: [false],
       // prioritas_produk: ["", Validators.required],
-      listProdukPrivateLabel: this.formBuilder.array([])
+      listProdukPrivateLabel: this.formBuilder.array([]),
+      upc: [0, Validators.required],
     });
   }
 
@@ -682,6 +688,7 @@ export class ProductCreateComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
+          upc: this.formProductGroup.get("upc").value,
 
           // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
           // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
@@ -703,6 +710,7 @@ export class ProductCreateComponent {
         fd.append("status", body.status);
         fd.append("is_promo_src", body.is_promo_src);
         fd.append("priority_product", body.priority_product);
+        fd.append("upc", body.upc);
 
         if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
           fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);

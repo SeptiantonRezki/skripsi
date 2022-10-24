@@ -16,6 +16,7 @@ export class PayLaterCompanyCreateComponent implements OnInit {
   formCompany: FormGroup;
   listStatus: Array<any> = [{ name: 'Aktif', value: 'active' }, { name: 'Tidak Aktif', value: 'inactive' }];
   companies: Array<any> = [];
+  dataType: any;
 
   constructor(
     private router: Router,
@@ -29,6 +30,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
+    
     this.formCompany = this.formBuilder.group({
       name: ["", Validators.required],
       contact_number: ["", Validators.required],
@@ -76,7 +79,8 @@ export class PayLaterCompanyCreateComponent implements OnInit {
         paylater_group_id: this.formCompany.get('paylater_group_id').value,
         status: this.formCompany.get('status').value,
         min_transaction: this.formCompany.get('minimum_transaction').value,
-        status_product_src: this.formCompany.get('status_product_src').value
+        status_product_src: this.formCompany.get('status_product_src').value,
+        paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null
       }
 
       this.paylaterCompanyService.create(body).subscribe(res => {
@@ -84,7 +88,7 @@ export class PayLaterCompanyCreateComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         })
-        this.router.navigate(['paylater', 'companies']);
+        this.router.navigate(['paylater', 'companies'], {queryParams:{type: this.dataType}});
       }, err => {
         this.dataService.showLoading(false);
       })

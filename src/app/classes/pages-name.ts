@@ -53,12 +53,16 @@ export class PagesName {
       "/sku-management/product/create": "principal.produk.buat",
       "/sku-management/product/edit/": "principal.produk.ubah",
       "/sku-management/product/detail/": "principal.produk.lihat",
-      "/sku-management/product-cashier": "principal.produk_kasir.lihat",
-      "/sku-management/product-cashier/create": "principal.produk_kasir.buat",
-      "/sku-management/product-cashier/edit/": "principal.produk_kasir.ubah",
-      "/sku-management/product-cashier/detail/": "principal.produk_kasir.lihat",
-      "/sku-management/product-cashier/submission": "principal.produk_kasir.pengajuan_produk",
-      "/sku-management/product-cashier/submission/detail/": "principal.produk_kasir.pengajuan_produk",
+      "/sku-management/product-cashier": "principal.produk_kasir.pengajuan_produk",
+      "/sku-management/product-cashier/detail/": "principal.produk_kasir.pengajuan_produk",
+      "/sku-management/product-cashier/list": "principal.produk_kasir.lihat",
+      "/sku-management/product-cashier/list/create": "principal.produk_kasir.buat",
+      "/sku-management/product-cashier/list/edit/": "principal.produk_kasir.ubah",
+      "/sku-management/product-cashier/list/detail/": "principal.produk_kasir.lihat",
+      "/sku-management/product-cashier/rrp": "principal.produk_kasir_rrp.lihat",
+      "/sku-management/product-cashier/rrp/create": "principal.produk_kasir_rrp.buat",
+      "/sku-management/product-cashier/rrp/edit/": "principal.produk_kasir_rrp.ubah",
+      "/sku-management/product-cashier/rrp/detail/": "principal.produk_kasir_rrp.lihat",
       "/sku-management/db-product-submission": "principal.pengajuan_produk_db.pengajuan_produk",
       "/sku-management/db-product-submission/detail/": "principal.pengajuan_produk_db.pengajuan_produk",
       "/sku-management/db-product-submission/approval": "principal.pengajuan_produk_db.pengaturan_approval",
@@ -197,6 +201,11 @@ export class PagesName {
       "/dte/xp/create/xp": "principal.dtexp.buat",
       "/dte/xp/edit/": "principal.dtexp.ubah",
       "/dte/xp/detail/": "principal.dtexp.lihat",
+      "/dte/program-loyalty-mitra": "principal.dteprogramloyaltymitra.lihat",
+      "/dte/program-loyalty-mitra/create": "principal.dteprogramloyaltymitra.buat",
+      "/dte/program-loyalty-mitra/create/": "principal.dteprogramloyaltymitra.buat",
+      "/dte/program-loyalty-mitra/edit/": "principal.dteprogramloyaltymitra.ubah",
+      "/dte/program-loyalty-mitra/detail/": "principal.dteprogramloyaltymitra.lihat",
       "/discount-coins-order": "principal.koin_potongan_belanja.lihat",
       "/discount-coins-order/create": "principal.koin_potongan_belanja.buat",
       "/discount-coins-order/edit": "principal.koin_potongan_belanja.ubah",
@@ -220,6 +229,10 @@ export class PagesName {
       "ubah": filterPermission.filter(item => item.indexOf('ubah') >= 0)[0],
       "hapus": filterPermission.filter(item => item.indexOf('hapus') >= 0)[0],
     };
+
+    if (name.indexOf("customer.") >= 0) {
+      roles["phone_number_and_dob_view"] = filterPermission.filter((item) => item.indexOf("phone_number_and_dob_view") >= 0)[0];
+    }
 
     if (name.indexOf("produk_kasir") >= 0) {
       roles["pengajuan_produk"] = filterPermission.filter((item) => item.indexOf("pengajuan_produk") >= 0)[0];

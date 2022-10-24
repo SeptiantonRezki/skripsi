@@ -62,6 +62,9 @@ import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
 import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
+import { LotteryComponent } from "./lottery/index/lottery.component";
+import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
+import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
@@ -70,6 +73,7 @@ import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-
 import { InfoBoardComponent } from "./info-board/index/info-board.component";
 import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
+import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
 
 const routes: Routes = [
   {
@@ -775,6 +779,42 @@ const routes: Routes = [
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
+  
+  // {
+  //   path: "audience",
+  //   component: AudienceIndexComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.index
+  //   },
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/create",
+  //   component: AudienceCreateComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.create
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+  // {
+  //   path: "audience/edit",
+  //   component: AudienceEditComponent,
+  //   data: {
+  //     breadcrumbs: brConfig.dte.audience.edit
+  //   },
+  //   resolve: {
+  //     // listScheduler: ListSchedulerResolver,
+  //     // listRetailer: ListRetailerResolver
+  //   },
+  //   canDeactivate: [PendingChangesGuard],
+  //   canActivate: [PageGuard]
+  // },
+
   {
     path: 'xp',
     component: XpComponent,
@@ -798,6 +838,69 @@ const routes: Routes = [
     component: XpComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'program-loyalty-mitra',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/create/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/create',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/edit/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id/:tab',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
+  },
+  {
+    path: 'program-loyalty-mitra/detail/:id',
+    component: LoyaltyMitraComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard],
+    data: {
+      reuse: false,
+    }
   },
   {
     path: 'spin-the-wheel',
@@ -831,7 +934,38 @@ const routes: Routes = [
     },
     //canActivate: [PageGuard]
   },
-
+  {
+    path: 'lottery',
+    component: LotteryComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/create',
+    component: LotteryCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'lottery/edit',
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "lottery/detail",
+    component: LotteryEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.lottery.detail
+    },
+    //canActivate: [PageGuard]
+  },
   {
     path: 'info-board',
     component: InfoBoardComponent,

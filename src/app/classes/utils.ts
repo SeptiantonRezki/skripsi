@@ -23,4 +23,12 @@ export class Utils {
 
     return temp[country_code].phone_code;
   }
+
+  static reMaskInput(value, totalShowChar) {
+    let newValue = '';
+    for (let i = 0; i < value.length; i++) {
+      newValue += (i >= (value.length - totalShowChar)) ? value[i] : '*';
+    }
+    return newValue;
+  }
 }

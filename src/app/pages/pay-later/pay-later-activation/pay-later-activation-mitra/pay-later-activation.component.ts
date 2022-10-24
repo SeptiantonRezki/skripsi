@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
 import { Page } from 'app/classes/laravel-pagination';
@@ -18,6 +18,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
   styleUrls: ['./pay-later-activation.component.scss']
 })
 export class PayLaterActivationComponent implements OnInit {
+  @Input() dataType: string;
   selectedTab: any;
 
   rows: any[];
@@ -188,7 +189,7 @@ export class PayLaterActivationComponent implements OnInit {
     if (!this.start_date.value) delete this.pagination['start_date'];
     if (!this.end_date.value) delete this.pagination['end_date'];
     this.offsetPagination = page ? (page - 1) : 0;
-    this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(
+    this.payLaterDeactivateService.getActivationMitra({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -275,7 +276,7 @@ export class PayLaterActivationComponent implements OnInit {
 
     if (!this.start_date.value) delete this.pagination['start_date'];
     if (!this.end_date.value) delete this.pagination['end_date'];
-    this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.getActivationMitra({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -354,7 +355,7 @@ export class PayLaterActivationComponent implements OnInit {
     if (!this.end_date.value) delete this.pagination['end_date'];
     console.log('check pagination', this.pagination);
 
-    this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.getActivationMitra({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -432,7 +433,7 @@ export class PayLaterActivationComponent implements OnInit {
     if (!this.end_date.value) delete this.pagination['end_date'];
     console.log(this.pagination);
 
-    this.payLaterDeactivateService.getActivationMitra(this.pagination).subscribe(res => {
+    this.payLaterDeactivateService.getActivationMitra({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;

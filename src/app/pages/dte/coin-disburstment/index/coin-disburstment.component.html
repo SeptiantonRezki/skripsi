@@ -8,7 +8,7 @@
   <!-- / HEADER -->
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <mat-tab-group>
+      <mat-tab-group [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)">
         <mat-tab label="{{'dte.coin_disbursement.text1' | translate}}">
           <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
             <h2 class="pl-8">{{'dte.coin_disbursement.text1' | translate}}</h2>
@@ -109,7 +109,7 @@
           </ngx-datatable>
         </mat-tab>
         <mat-tab label="Data Log">
-          <app-data-log></app-data-log>
+          <app-data-log [isTabActive]="selectedTab.value"></app-data-log>
         </mat-tab>
       </mat-tab-group>
     </div>

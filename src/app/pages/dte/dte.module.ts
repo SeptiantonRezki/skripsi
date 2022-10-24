@@ -157,9 +157,12 @@ import { TaskSequencingIndexPersonalizeComponent } from './task-sequencing/index
 import { PublishMisiComponent } from './publish-misi/publish-misi.component';
 import { DialogPanelBlastComponent } from './audience/dialog/dialog-panel-blast/dialog-panel-blast.component';
 import { DialogProcessComponent } from './audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessComponentLottery } from './lottery/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponent } from './audience/dialog/dialog-process-save/dialog-process-save.component';
+import { DialogProcessSaveComponentLottery } from './lottery/dialog/dialog-process-save/dialog-process-save.component';
 import { AudienceEditPersonalizeComponent } from './audience/edit/personalize/audience-edit-personalize.component';
 import { ImportAudiencePersonalizeComponent } from './audience/import/personalize/import-audience-personalize.component';
+import { ImportAudiencePersonalizeComponentLottery } from './lottery/import/personalize/import-audience-personalize.component';
 import { ApprovalHistoryComponent } from './coin-adjustment-approval/detail/approval-history/approval-history.component';
 import { GroupSkuComponent } from './image-recognition/group-sku/group-sku.component';
 import { SkuComponent } from './image-recognition/sku/sku.component';
@@ -175,7 +178,11 @@ import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.co
 import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
 import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
+import { LotteryComponent } from './lottery/index/lottery.component';
+import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
+import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
 import { XpComponent } from './xp/xp.component';
+import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
@@ -183,7 +190,9 @@ import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-
 import { InfoBoardComponent } from './info-board/index/info-board.component';
 import { InfoBoardCreateComponent } from './info-board/create/info-board-create.component';
 import { InfoBoardEditComponent } from './info-board/edit/info-board-edit.component';
-
+import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
+import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -357,9 +366,15 @@ export const MY_FORMATS = {
     PublishMisiComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessComponentLottery,
     DialogProcessSaveComponent,
+    DialogProcessSaveComponentLottery,
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
+    ImportAudiencePersonalizeComponentLottery,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
     ApprovalHistoryComponent,
     GroupSkuComponent,
     SkuComponent,
@@ -374,7 +389,11 @@ export const MY_FORMATS = {
     TemplatePlanogramComponent,
     JobsRequestComponent,
     CheckImageComponent,
+    LotteryComponent,
+    LotteryCreateComponent,
+    LotteryEditComponent,
     XpComponent,
+    LoyaltyMitraComponent,
     VerificationApprovalComponent,
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
@@ -487,8 +506,15 @@ export const MY_FORMATS = {
     ImportExchangeCoinComponent,
     DialogPanelBlastComponent,
     DialogProcessComponent,
+    DialogProcessComponentLottery,
     DialogProcessSaveComponent,
-    ImportAudiencePersonalizeComponent
+    DialogProcessSaveComponentLottery,
+    ImportAudiencePersonalizeComponent,
+    ImportAudiencePersonalizeComponentLottery,
+    ImportAudiencePersonalizeComponent,
+    DialogProcessComponentSPW,
+    DialogProcessSaveComponentSPW,
+    ImportAudiencePersonalizeComponentSPW,
   ],
 })
 export class DteModule { }

@@ -28,7 +28,7 @@
     </button>
     <button
       style="min-width: 170px"
-      [routerLink]="['/sku-management', 'product-cashier', 'create']"
+      [routerLink]="['/sku-management', 'product-cashier', activeTabs, 'create']"
       mat-raised-button
       aria-label="Produk"
       type="button"
@@ -44,11 +44,23 @@
         <a
           *ngIf="permission.pengajuan_produk"
           mat-tab-link
-          [routerLink]="['/sku-management', 'product-cashier', 'submission']"
+          [routerLink]="['/sku-management', 'product-cashier']"
           class="tab-link"
           >Produk Diajukan</a
         >
-        <a mat-tab-link [active]="true" class="tab-link">Daftar Produk Kasir</a>
+        <a
+          mat-tab-link
+          [routerLink]="['/sku-management', 'product-cashier', 'list']"
+          [active]="activeTabs === 'list'"
+          class="tab-link"
+        >Daftar Produk Kasir</a>
+        <a
+          mat-tab-link
+          [routerLink]="['/sku-management', 'product-cashier', 'rrp']"
+          [active]="activeTabs === 'rrp'"
+          class="tab-link"
+          >Daftar Produk Kasir RRP</a
+        >
         <div class="search-field">
           <input
             matInput
@@ -102,6 +114,7 @@
                 [routerLink]="[
                   '/sku-management',
                   'product-cashier',
+                  activeTabs,
                   'detail',
                   row.id
                 ]"
@@ -144,12 +157,13 @@
               <div class="button-row" style="white-space: nowrap">
                 <button
                   mat-icon-button
-                  *ngIf="!permission?.ubah"
+                  *ngIf="activeTabs === 'rrp' ? !permissionRRP?.ubah : !permission?.ubah"
                   color=""
                   matTooltip="Detail Produk"
                   [routerLink]="[
                     '/sku-management',
                     'product-cashier',
+                    activeTabs,
                     'detail',
                     row.id
                   ]"
@@ -158,12 +172,13 @@
                 </button>
                 <button
                   mat-icon-button
-                  *ngIf="permission?.ubah"
+                  *ngIf="activeTabs === 'rrp' ? permissionRRP?.ubah : permission?.ubah"
                   color=""
                   matTooltip="Ubah Produk"
                   [routerLink]="[
                     '/sku-management',
                     'product-cashier',
+                    activeTabs,
                     'edit',
                     row.id
                   ]"
@@ -175,8 +190,8 @@
                   color="primary"
                   matTooltip="Hapus Produk"
                   (click)="deleteProduct(row.id)"
-                  [ngStyle]="{ cursor: !permission?.hapus ? 'no-drop' : '' }"
-                  [disabled]="!permission?.hapus"
+                  [ngStyle]="{ cursor: (activeTabs !== 'rrp' && !permission?.hapus) || (activeTabs === 'rrp' && !permissionRRP?.hapus) ? 'no-drop' : '' }"
+                  [disabled]="activeTabs === 'rrp' ? !permissionRRP?.hapus : !permission?.hapus"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>

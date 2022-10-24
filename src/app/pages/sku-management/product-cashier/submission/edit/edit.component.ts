@@ -30,8 +30,8 @@ export class CashierSubmissionEditComponent implements OnInit {
     private router: Router
   ) {
     this.activatedRoute.url.subscribe((params) => {
-      this.productId = params[3].path;
-      this.isDetail = params[2].path === "detail" ? true : false;
+      this.productId = params[2].path;
+      this.isDetail = params[1].path === "detail" ? true : false;
     });
   }
 
@@ -59,11 +59,8 @@ export class CashierSubmissionEditComponent implements OnInit {
           purchase_price: data.price.purchase.raw,
           selling_price: data.price.selling.raw,
         });
-        console.log('LOOK DATA', data);
       });
-      console.log('LOOK DATA DETAIL', this.product.value);
     } catch (error) {
-      console.log(error);
       this.onLoad = false;
     }
   }

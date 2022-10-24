@@ -1,4 +1,5 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { RouteReuseStrategy } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,6 +27,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FuseFakeDbService } from './fuse-fake-db/fuse-fake-db.service';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { SharedModule } from './shared/shared.module';
+import { RouteReuseService } from './services/route-reuse-service';
 
 // internal guard
 import { AuthGuard } from './classes/auth.guard';
@@ -88,6 +90,7 @@ import { PanelMitraService } from './services/user-management/private-label/pane
 import { OrdertoSupplierService } from './services/user-management/private-label/orderto-supplier.service';
 import { PayMethodService } from './services/user-management/private-label/pay-method.service';
 import { PLStockService } from './services/user-management/private-label/stock.service';
+import { LotteryService } from './services/dte/lottery.service';
 
 import { UserIdleModule } from 'angular-user-idle';
 import { IdleService } from './services/idle.service';
@@ -298,9 +301,14 @@ class CustomLoader implements TranslateLoader {
     AreaService,
     LanguagesService,
     VoucherPrivateLabelService,
+    {
+      provide: RouteReuseStrategy,
+      useClass: RouteReuseService,
+    },
     OrderToMitraHubService,
     CountrySetupService,
     LanguageSetupService,
+    LotteryService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NgProgressInterceptor,

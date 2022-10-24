@@ -109,7 +109,7 @@
                 *ngIf="items.nama !== 'approval coin adjustment' && items.nama !== 'task verification'">
                 <div fxLayout="row wrap" fxLayoutAlign="start center">
                   <div fxFlex="25" *ngFor="let item of items.value">
-                    <div class="access-name">{{item.nama | toCapitalize}}</div>
+                    <div class="access-name">{{renameTitle(item.nama) | toCapitalize}}</div>
                     <mat-slide-toggle class="example-margin" [color]="'primary'" [(ngModel)]="item.status"
                       [disabled]="item.disabled" (change)="onToggleChange(item, items, role, $event)">
                     </mat-slide-toggle>

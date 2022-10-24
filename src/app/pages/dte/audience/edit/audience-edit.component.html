@@ -10,13 +10,27 @@
       </div>
       <div class="ayo-middle py-24" fxLayout="column">
         <form autocomplete="off" [formGroup]="formAudience">
-          <div fxLayout="row">
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+          <div fxLayout="column" fxLayoutGap="16px" fxFlex="45">
+            <mat-form-field class="is-light form-primary">
               <input matInput type="text" formControlName="name" placeholder="{{'dte.audience.text4' | translate }}">
               <mat-error
                 *ngIf="formAudience.controls['name'].hasError('required') && formAudience.controls['name'].touched">
                 {{'dte.audience.text4' | translate }} {{'global.messages.mandatory_text' | translate}}
               </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="is-light">
+              <mat-select
+                placeholder="Business Type"
+                formControlName="business_type"
+              > 
+                <mat-option
+                  *ngFor="let item of businessType"
+                  [value]="item.value"
+                >
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 
@@ -117,10 +131,11 @@
           </div>
 
           <div
-            fxLayout="row"
-            *ngIf="formAudience.get('type').value === 'challenge'"
+            fxLayout="column"
+            fxLayoutGap="16px"
+            fxFlex="40"
           >
-            <mat-form-field fxFlex="45" class="is-light form-primary">
+            <mat-form-field class="is-light form-primary" *ngIf="formAudience.get('type').value === 'challenge'">
               <mat-select formControlName="trade_creator_id" placeholder="{{'dte.trade_program.text3' | translate}}">
                 <ngx-mat-select-search [formControl]="filterTradeProgram" placeholderLabel="{{'global.label.search' | translate}}"
                   noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
@@ -346,8 +361,6 @@
           name="{{'dte.audience.text15' | translate}}"
           prop="src_type"
         ></ngx-datatable-column>
-        <!--[R]-->
-        <ngx-datatable-column name="{{'call_objective.text13' | translate}}" prop="ff_name" [sortable]="false"></ngx-datatable-column>
         <ngx-datatable-column name="{{'dte.audience.text16' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span *ngIf="row.status === 'active' || row.status === 'inactive'">{{'global.label.yes' | translate}}</span>

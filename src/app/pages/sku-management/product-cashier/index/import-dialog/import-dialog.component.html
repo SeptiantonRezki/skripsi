@@ -46,10 +46,9 @@
               <td nowrap class="price">
                 {{ item.harga_jual | rupiahFormater }}
               </td>
-              <td *ngIf="item.reason" nowrap class="status">
-                {{ item.reason }}
+              <td nowrap [ngClass]="{'status': item.reason?.length == 0}">
+                {{item.reason?.length == 0 ? '-' : item.reason }}
               </td>
-              <td *ngIf="!item.reason" nowrap class="status">-</td>
             </tr>
           </tbody>
         </table>

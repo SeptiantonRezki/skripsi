@@ -1,13 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header [contentTitle]="'Daftar Perusahaan'">
-    <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/paylater', 'companies', 'create']">
+  <!-- <page-content-header [contentTitle]="'Daftar Perusahaan'"> -->
+    <div class="button-row" fxLayout="row" style="padding-right: 24px; padding-top: 24px; justify-content: end">
+      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" (click)="directAdd()">
         <mat-icon>add</mat-icon>BUAT
       </button>
     </div>
-  </page-content-header>
+  <!-- </page-content-header> -->
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
@@ -23,8 +22,8 @@
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" 
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
 
         <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

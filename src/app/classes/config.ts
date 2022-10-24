@@ -126,13 +126,13 @@ export class Config {
       },
       'froalaEditor.keyup': function (e, editor, event) {
         if (event.keyCode === 32) {
-          var value = event.target.textContent;
+          var value = event.target.innerHTML;
           value = value.replace(
             /(##[0-9]+)/g,
-            (match: any) => { return `<strong>${match}</strong>`}
+            (match: any) => { return (value.includes(`<strong>${match}</strong>`) ? match : `<strong>${match}</strong>`)}
           );
-    
-          if (value !== event.target.textContent) {
+          
+          if (value !== event.target.innerHTML) {
             const el = event.target;
             el.innerHTML = value;
       
@@ -160,6 +160,20 @@ export class Config {
     pasteImage: false,
     enter: 'ENTER_BR',
     toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'paragraphFormat', 'align', 'formatOL', 'formatUL', '|', 'outdent', 'indent', 'clearFormatting', 'insertTable', 'quote'],
+    htmlSimpleAmpersand: true,
+    entities: ''
+  })
+
+  public static FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG = (height?, placeholderText?) => ({
+    key: 'mA4B4C1C3vA1E1F1C4B8D7D7E1E5D3ieeD-17A2sF-11==',
+    placeholderText: placeholderText ? placeholderText : 'Isi Halaman',
+    height: height ? height : 150,
+    quickInsertTags: [''],
+    quickInsertButtons: [''],
+    imageUpload: false,
+    pasteImage: false,
+    enter: 'ENTER_BR',
+    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'subscript', 'superscript', 'quote'],
     htmlSimpleAmpersand: true,
     entities: ''
   })

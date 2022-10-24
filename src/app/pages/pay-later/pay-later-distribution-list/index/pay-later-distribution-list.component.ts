@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -14,6 +14,7 @@ import { PagesName } from 'app/classes/pages-name';
   styleUrls: ['./pay-later-distribution-list.component.scss']
 })
 export class PayLaterDistributionListComponent implements OnInit {
+  @Input() dataType: string;
   rows: any[];
   selected: any[];
   id: any[];
@@ -61,13 +62,14 @@ export class PayLaterDistributionListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getList();
+    this.getList(true);
   }
+
   private _filter(value: any): Observable<any[]> {
     const filterValue = value.toLowerCase();
     this.loadingIndicator = true;
     this.loadingSearch = true;
-    return this.paylaterDistributionListService.autocomplete({search: filterValue})
+    return this.paylaterDistributionListService.autocomplete({search: filterValue, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null})
       .pipe(
         map(response => {
           this.loadingIndicator = false;
@@ -86,17 +88,17 @@ export class PayLaterDistributionListComponent implements OnInit {
     return (option && option[this.FILTER_BY]) ? option[this.FILTER_BY] : '';
   }
 
-  getList() {
-    const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+  getList(resetPage?) {
+    this.pagination.page = resetPage ? 1 : this.dataService.getFromStorage("page_distribution");
+    this.pagination.sort_type = resetPage ? null : this.dataService.getFromStorage("sort_type_distribution");
+    this.pagination.sort = resetPage ? null : this.dataService.getFromStorage("sort_distribution");
 
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    this.dataService.setToStorage("page_distribution", this.pagination.page);
+    this.dataService.setToStorage("sort_type_distribution", this.pagination.sort_type);
+    this.dataService.setToStorage("sort_distribution", this.pagination.sort);
 
-    this.offsetPagination = page ? (page - 1) : 0;
-    this.paylaterDistributionListService.get(this.pagination).subscribe(
+    this.offsetPagination = this.pagination.page ? (this.pagination.page - 1) : 0;
+    this.paylaterDistributionListService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
@@ -110,10 +112,17 @@ export class PayLaterDistributionListComponent implements OnInit {
     );
   }
   setPage(pageInfo) {
+    this.offsetPagination = pageInfo.offset;
     this.loadingIndicator = true;
-    this.pagination.page = pageInfo.offset + 1;
 
-    this.paylaterDistributionListService.get(this.pagination).subscribe(res => {
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page_distribution", pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage("page_distribution");
+    }
+
+    this.paylaterDistributionListService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -125,9 +134,11 @@ export class PayLaterDistributionListComponent implements OnInit {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    console.log("check pagination", this.pagination);
+    this.dataService.setToStorage("page_distribution", this.pagination.page);
+    this.dataService.setToStorage("sort_distribution", event.column.prop);
+    this.dataService.setToStorage("sort_type_distribution", event.newValue);
 
-    this.paylaterDistributionListService.get(this.pagination).subscribe(res => {
+    this.paylaterDistributionListService.get({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
@@ -137,12 +148,12 @@ export class PayLaterDistributionListComponent implements OnInit {
   addDistribution() {
     this.loadingIndicator = true;
     this.loadingSearch = true;
-    this.paylaterDistributionListService.create({user_id: this.distributionControl.value.id}).subscribe(res => {
+    this.paylaterDistributionListService.create({user_id: this.distributionControl.value.id, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       
       this.loadingIndicator = false;
       this.loadingSearch = false;
       this.clear();
-      this.getList();
+      this.getList(true);
     }, err => {
       this.loadingIndicator = false;
       this.loadingSearch = false;
@@ -161,7 +172,7 @@ export class PayLaterDistributionListComponent implements OnInit {
       this.loadingIndicator = false;
       this.loadingSearch = false;
       this.onDeleting = null;
-      this.getList();
+      this.getList(true);
 
     }, err => {
       

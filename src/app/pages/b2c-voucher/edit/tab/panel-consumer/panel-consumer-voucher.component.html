@@ -27,14 +27,25 @@
               Jumlah Total Alokasi Voucher harus diisi.
             </mat-error> <!-- // TODO -->
           </mat-form-field>
-          <mat-form-field fxFlex="50" class="is-light form-primary" *ngIf="!isLoyaltySelected()">
-            <mat-select formControlName="is_smoker" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}}">
-              <mat-option *ngFor="let item of listSmoker" [value]="item.value">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="formConsumerGroup.controls['is_smoker'].hasError('required') && formConsumerGroup.controls['is_smoker'].touched">
+          <div class="pb-20" fxFlex="50" *ngIf="!isLoyaltySelected()">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <span class="font-size-16">{{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}}</span>
+            </div>
+            <div class="mt-12">
+              <mat-checkbox
+                *ngFor="let item of listSmoker"
+                class="mt-4 ml-4 mb-8 mr-16"
+                (change)="onChangeConsumer($event)"
+                [name]="item.value"
+                [checked]="this.formConsumerGroup.get('content_type').value.includes(item.value)"
+              >
+                {{item.name}}
+              </mat-checkbox>
+            </div>
+            <mat-error *ngIf="formConsumerGroup.controls['content_type'].hasError('required') && formConsumerGroup.controls['content_type'].touched">
               {{'iklan_dalam_aplikasi.spanduk_online.text14' | translate}} harus diisi
             </mat-error> <!-- // TODO -->
-          </mat-form-field>
+          </div>
         </div>
 
         <div class="py-16 px-12" fxLayout="column" *ngIf="isVoucherAutomation.value === true && formConsumerGroup.controls['va'].value === 'coo'">
@@ -134,7 +145,7 @@
                 Dari harus diisi
               </mat-error> <!-- // TODO -->
               <mat-error *ngIf="formConsumerGroup.controls['age_consumer_from'].hasError('min') && formConsumerGroup.get('age_consumer_from').touched">
-                {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{formConsumerGroup.controls['is_smoker'].value === 'yes' ? '18' : '0'}}
+                {{'iklan_dalam_aplikasi.spanduk_online.cannot_less_than' | translate}} {{formConsumerGroup.controls['content_type'].value.includes('cc') || formConsumerGroup.controls['content_type'].value.includes('rrp') ? '18' : '0'}}
               </mat-error> <!-- // TODO -->
             </mat-form-field>
             <mat-form-field class="is-light form-primary" fxFlex.xs="50">

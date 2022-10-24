@@ -121,26 +121,27 @@
                     <input matInput type="number" formControlName="convertion" placeholder="Konversi">
                   </mat-form-field> -->
                 </div>
-                <div fxLayout="row wrap">
-                  <div class="pt-16" fxLayout="column">
+
+                <div fxLayout="row wrap" class="pt-16" style="gap: 24px 40px;">
+                  <div fxLayout="column">
                     <strong>{{'manajemen_barang_sku.produk.text16' | translate}}</strong>
-                    <mat-radio-group formControlName="status" class="radio-group pb-16">
+                    <mat-radio-group formControlName="status" class="radio-group">
                       <mat-radio-button class="radio-button" *ngFor="let item of statusProduk" [value]="item.status">
                         {{item.name}}
                       </mat-radio-button>
                     </mat-radio-group>
                   </div>
-                  <div fxLayout="row" style="margin-left: 50px;" *ngIf="detailProduct.is_private_label_editable">
-                    <div class="pt-16" fxLayout="column">
+                  <div fxLayout="row" style="gap: 24px 40px;" *ngIf="detailProduct.is_private_label_editable">
+                    <div fxLayout="column">
                       <strong>{{'manajemen_barang_sku.produk.text7' | translate}}</strong>
-                      <mat-radio-group formControlName="status_pin_up" class="radio-group pb-16">
+                      <mat-radio-group formControlName="status_pin_up" class="radio-group">
                         <mat-radio-button class="radio-button" *ngFor="let item of listPinUpProduct"
                           [value]="item.value">
                           {{item.name}}
                         </mat-radio-button>
                       </mat-radio-group>
                     </div>
-                    <div class="pt-16" fxLayout="column" style="margin-left: 50px;"
+                    <div fxLayout="column"
                       *ngIf="formProductGroup.get('status_pin_up').value == 1">
                       <strong>{{'manajemen_barang_sku.produk.pinup_duration' | translate}}</strong>
                       <div fxLayout="row">
@@ -168,7 +169,7 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div class="pt-16" fxLayout="column" style="margin-left: 50px;">
+                    <div fxLayout="column">
                       <mat-form-field fxFlex="100" class="is-light form-primary">
                         <!-- <strong>{{'manajemen_barang_sku.produk.text8' | translate}}</strong> -->
                         <input matInput type="text" (keypress)="numberOnly($event)" placeholder="{{'manajemen_barang_sku.produk.text8' | translate}}"
@@ -179,6 +180,15 @@
                         </mat-error> -->
                       </mat-form-field>
                     </div>
+                  </div>
+
+                  <div fxLayout="column">
+                    <strong>Unique Product Code (UPC)</strong>
+                    <mat-radio-group formControlName="upc" class="radio-group">
+                      <mat-radio-button class="radio-button" *ngFor="let item of statusUPC" [value]="item.status">
+                        {{item.name}}
+                      </mat-radio-button>
+                    </mat-radio-group>
                   </div>
                 </div>
 

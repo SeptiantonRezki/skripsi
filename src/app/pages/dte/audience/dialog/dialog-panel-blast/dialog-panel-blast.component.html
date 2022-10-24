@@ -24,7 +24,7 @@
       [reorderable]="reorderable" [selectionType]="'checkbox'" [count]="pagination.total"
       [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
 
-      <ngx-datatable-column name="{{'dte.approval_coin_adjustment.retailer_id' | translate}}" prop="retailer_id"></ngx-datatable-column>
+      <ngx-datatable-column name="Business ID" prop="retailer_id"></ngx-datatable-column>
 
       <ngx-datatable-column name="{{'dte.template_tugas.copywriting' | translate}}" prop="copywrites"></ngx-datatable-column>
 

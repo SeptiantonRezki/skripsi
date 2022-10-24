@@ -18,12 +18,12 @@ import { DialogService } from 'app/services/dialog.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
-import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
-import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
-import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { DialogProcessComponentSPW } from '../dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponentSPW } from '../dialog/dialog-process-save/dialog-process-save.component';
+import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/import-audience-personalize.component';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -273,12 +273,12 @@ export class SpinTheWheelEditComponent implements OnInit {
       category: [''],
       product_srcc: [''],
       category_srcc: [''],
-      coin_variation: '',
+      coin_variation: ['', Validators.required],
       coins: [],
-      limit_spin: '',
-      minimum_transaction: '',
-      frekuensi_belanja: '',
-      frekuensi_reward: ''
+      limit_spin: [0, [Validators.required, Validators.min(1)]],
+      minimum_transaction: [0],
+      frekuensi_belanja: ['', Validators.required],
+      frekuensi_reward: ['', Validators.required]
     });
 
     if(this.isDetail){
@@ -364,8 +364,6 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.getLevel('national');
     this.getTradePrograms();
-
-    this.initAreaV2();
 
     this.setStorageDetail();
 
@@ -457,10 +455,12 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
 
         let zone = [];
-        for (let i = 0; i < res.data.areas.length; i++) {
-          if (res.data.areas[i].level_desc === 'zone') {
-            if (!( res.data.areas[i].area_id in zone )) {
-              zone.push(res.data.areas[i].area_id);
+        if (res.data.areas) {
+          for (let i = 0; i < res.data.areas.length; i++) {
+            if (res.data.areas[i].level_desc === 'zone') {
+              if (!( res.data.areas[i].area_id in zone )) {
+                zone.push(res.data.areas[i].area_id);
+              }
             }
           }
         }
@@ -478,21 +478,23 @@ export class SpinTheWheelEditComponent implements OnInit {
     let arr_area = [];
     let arr_region = [];
     let arr_zone = [];
-    arr.map((area, index) => {
-      if (area.level_desc === 'area') {
-        if (arr_area.indexOf(area.area_id) == -1) {
-          arr_area.push(area.area_id);
+    if (arr) {
+      arr.map((area, index) => {
+        if (area.level_desc === 'area') {
+          if (arr_area.indexOf(area.area_id) == -1) {
+            arr_area.push(area.area_id);
+          }
+        } else if (area.level_desc === 'region') {
+          if (arr_region.indexOf(area.area_id) == -1) {
+            arr_region.push(area.area_id);
+          }
+        } else {
+          if (arr_zone.indexOf(area.area_id) == -1) {
+            arr_zone.push(area.area_id);
+          }
         }
-      } else if (area.level_desc === 'region') {
-        if (arr_region.indexOf(area.area_id) == -1) {
-          arr_region.push(area.area_id);
-        }
-      } else {
-        if (arr_zone.indexOf(area.area_id) == -1) {
-          arr_zone.push(area.area_id);
-        }
-      }
-    });
+      });
+    }
     console.log(arr_area);
     console.log(arr_region);
     console.log(arr_zone);
@@ -604,65 +606,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   //   if (type === 'population-blast') this.isPopulation = true;
   //   else this.isPopulation = false
   // }
-
-  initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
-    this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
-    this.lastLevel = areasDisabled;
-    let lastLevelDisabled = null;
-    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
-
-    if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
-      this.formFilter.get('national').setValue(1);
-      this.formFilter.get('national').disable();
-      lastLevelDisabled = 'national';
-    }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            // console.log('ff value', this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
-
-              this.formFilter.get(this.parseArea(level.type)).disable();
-            }
-
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            // console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
-          }
-
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
-          level['area_type'] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
-            ...this.list[this.parseArea(level.type)],
-            level
-          ];
-          // console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
-          }
-        }
-      });
-    });
-
-    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
-    // mutableAreas.areas.map((ar, i) => {
-    //   this.list[ar].splice(1, 1);
-    // });
-  }
 
   parseArea(type) {
     // return type === 'division' ? 'zone' : type;
@@ -1108,7 +1051,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
   
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessComponentSPW,
         {...dialogConfig, width: '400px'}
       );
 
@@ -1161,7 +1104,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessSaveComponent,
+      DialogProcessSaveComponentSPW,
       {...dialogConfig, width: '400px'}
     );
 
@@ -1245,7 +1188,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.spinTheWheelService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -1268,7 +1211,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      ImportAudiencePersonalizeComponent,
+      ImportAudiencePersonalizeComponentSPW,
       dialogConfig
     );
 
@@ -1643,7 +1586,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
     }
     await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = Math.floor(this.sumPM('coin') / event.target.value);
+    this.averageCoin = Math.floor(this.sumCoins());
   }
 
   async changeCoin(event, index) {
@@ -1651,8 +1594,9 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].coin = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
     await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = Math.floor(this.sumPM('coin') / this.formPM.get('coin_variation').value);
+    this.averageCoin = Math.floor(this.sumCoins());
   }
 
   async changeSlice(event, index) {
@@ -1666,6 +1610,8 @@ export class SpinTheWheelEditComponent implements OnInit {
     newArr[index].probability = event.target.value;
     newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
     newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
+    newArr[index].budget_left = newArr[index].total_budget;
+    this.averageCoin = Math.floor(this.sumCoins());
     await this.formPM.get('coins').setValue(newArr);
   }
 
@@ -1675,6 +1621,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       for (let i = 0; i < newArr.length; i++) {
         newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
         newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
+        newArr[i].budget_left = newArr[i].total_budget;
       }
       await this.formPM.get('coins').setValue(newArr);
     }
@@ -1691,18 +1638,52 @@ export class SpinTheWheelEditComponent implements OnInit {
     return sum;
   }
 
+  sumCoins() {
+    const coins = this.formPM.get('coins').value;
+    let sum = 0;
+    if (coins !== null) {
+      for (let i = 0; i < coins.length; i++) {
+        sum += coins[i]['coin'] * coins[i]['probability'] / 100;
+      }
+    }
+    return sum;
+  }
+
+  checkCoins() {
+    let coin = '';
+    let slice = '';
+    let probability = '';
+
+    const coins = this.formPM.get('coins').value;
+    if (coins !== null) {
+      for (let i = 0; i < coins.length; i++) {
+        if (coins[i]['coin'] === '') {
+          coin = 'Coin';
+        }
+        if (coins[i]['slice'] === '') {
+          slice = coin !== '' ? ', Slice' : 'Slice';
+        }
+        if (coins[i]['probability'] === '') {
+          probability = slice !== '' ? ', Probability' : 'Probability';
+        }
+      }
+    }
+    return coin + slice + probability;
+  }
+
   async submitPM() {
     const sumProbability = this.sumPM('probability');
-    console.log(sumProbability);
-    if (this.formPM.get('frekuensi_belanja').value === '') {
-      this.dialogService.openSnackBar({ message: 'Frekuensi belanja B2B Mingguan Yang Dibutuhkan wajib diisi.' });
-      return false;
-    } else if (this.formPM.get('frekuensi_reward').value === '') {
-      this.dialogService.openSnackBar({ message: 'Maksimal Frekuensi Reward wajib diisi.' });
-      return false;
-    }
 
-    if (sumProbability === 100) {
+    if (this.formPM.valid) {
+      const checkCoins = this.checkCoins();
+      if ( checkCoins !== '') {
+        this.dialogService.openSnackBar({ message: `${checkCoins} wajib diisi` });
+        return false;
+      }
+      if (sumProbability !== 100) {
+        this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+        return false;
+      }
       let body = {
         task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
         limit_spin: this.formPM.get('limit_spin').value,
@@ -1747,7 +1728,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
 
       this.dialogRef = this.dialog.open(
-        DialogProcessSaveComponent,
+        DialogProcessSaveComponentSPW,
         {...dialogConfig, width: '400px'}
       );
 
@@ -1757,6 +1738,9 @@ export class SpinTheWheelEditComponent implements OnInit {
             this.isChecked = true;
             this.panelBlast = res.data.panel_count;
           }
+          this.editableCoin = false;
+          this.formPM.get('limit_spin').disable();
+          this.formPM.get('coin_variation').disable();
           this.dialogRef.close();
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
@@ -1770,7 +1754,8 @@ export class SpinTheWheelEditComponent implements OnInit {
         processCheck.unsubscribe();
       });
     } else {
-      this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
+      commonFormValidator.validateAllFields(this.formPM);
+      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
     }
   }
 

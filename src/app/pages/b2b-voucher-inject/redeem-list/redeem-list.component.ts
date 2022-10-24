@@ -177,7 +177,7 @@ export class RedeemListComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    // console.log(arguments);
+    console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
@@ -190,7 +190,7 @@ export class RedeemListComponent implements OnInit {
   }
 
   getId(row) {
-    return row.id;
+    return row.order_id;
   }
 
   getAudienceAreaV2(selection, id, event?) {
@@ -724,10 +724,23 @@ export class RedeemListComponent implements OnInit {
   }
 
   async exportRedeem() {
+    if (this.selected.length === 0) {
+      this.dialogService.openSnackBar({
+        message: this.ls.locale.global.messages.text12
+      })
+      return;
+    }
+    let body = {
+      voucher_id: this.detailVoucher.id,
+      order_id: this.selected.map(item => item.order_id)
+    }
+    if(this.allRowsSelected){
+      body.order_id = this.rows.map(item => item.order_id)
+    }
     this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
     try {
-      const response = await this.b2bVoucherInjectService.redeemExport({ voucher_id: this.detailVoucher.id }).toPromise();
+      const response = await this.b2bVoucherInjectService.redeemPaymentExport(body).toPromise();
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName);
       this.dataService.showLoading(false);
     } catch (error) {

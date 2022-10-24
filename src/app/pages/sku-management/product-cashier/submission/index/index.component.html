@@ -10,9 +10,15 @@
         <a mat-tab-link [active]="true" class="tab-link">Produk Diajukan</a>
         <a
           mat-tab-link
-          [routerLink]="['/sku-management', 'product-cashier']"
+          [routerLink]="['/sku-management', 'product-cashier', 'list']"
           class="tab-link"
           >Daftar Produk Kasir</a
+        >
+        <a
+          mat-tab-link
+          [routerLink]="['/sku-management', 'product-cashier', 'rrp']"
+          class="tab-link"
+          >Daftar Produk Kasir RRP</a
         >
       </nav>
       <div
@@ -200,7 +206,6 @@
                       [routerLink]="[
                         '/sku-management',
                         'product-cashier',
-                        'submission',
                         'detail',
                         row.id
                       ]"

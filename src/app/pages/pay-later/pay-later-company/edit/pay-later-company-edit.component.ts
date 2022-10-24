@@ -19,6 +19,7 @@ export class PayLaterCompanyEditComponent implements OnInit {
   detailCompany: any;
   isDetail: Boolean;
   companies: Array<any> = [];
+  dataType: any;
 
   constructor(
     private router: Router,
@@ -36,6 +37,8 @@ export class PayLaterCompanyEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataType = this.router.routerState.root.queryParams['value'].type;
+    
     this.formCompany = this.formBuilder.group({
       name: ["", Validators.required],
       contact_number: ["", Validators.required],
@@ -64,7 +67,7 @@ export class PayLaterCompanyEditComponent implements OnInit {
 
   getDetail() {
     this.dataService.showLoading(true);
-    this.paylaterCompanyService.show({ company_id: this.shortDetail.id }).subscribe(res => {
+    this.paylaterCompanyService.show({ company_id: this.shortDetail.id }, {paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).subscribe(res => {
       this.detailCompany = res.data;
 
       this.formCompany.setValue({
@@ -113,7 +116,7 @@ export class PayLaterCompanyEditComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         })
-        this.router.navigate(['paylater', 'companies']);
+        this.router.navigate(['paylater', 'companies'], {queryParams:{type: this.dataType}});
       }, err => {
         this.dataService.showLoading(false);
       })

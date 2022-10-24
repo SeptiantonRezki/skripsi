@@ -77,8 +77,13 @@ export class ProductEditComponent {
     { name: "SRO", value: "SRO" },
     { name: "Kanvas", value: "Kanvas" },
   ]
-  minDate: any;
+  
+  statusUPC: any[] = [
+    { name: this.translate.instant('global.label.yes'), status: 1 },
+    { name: this.translate.instant('global.label.no'), status: 0 }
+  ];
 
+  minDate: any;
   filteredSkuOptions: Observable<string[]>;
 
   public filterCategory: FormControl = new FormControl();
@@ -255,6 +260,7 @@ export class ProductEditComponent {
         this.formProductGroup.get("brand").setValue(res.data.brand_id);
         this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
         this.formProductGroup.get("status").setValue(res.data.status);
+        this.formProductGroup.get("upc").setValue(res.data.upc);
         this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
         this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
         this.formProductGroup.get("is_paylater").setValue(res.data.is_paylater === 1 ? true : false);
@@ -1008,7 +1014,8 @@ export class ProductEditComponent {
       // convertion: ["", [Validators.min(0)]]
       is_private_label: [false],
       is_paylater: [false],
-      listProdukPrivateLabel: this.formBuilder.array([])
+      listProdukPrivateLabel: this.formBuilder.array([]),
+      upc: [0, Validators.required],
     });
   }
 
@@ -1143,13 +1150,14 @@ export class ProductEditComponent {
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
-          // convertion: this.formProductGroup.get("convertion").value,
+          upc: this.formProductGroup.get("upc").value,
         };
 
         let fd = new FormData();
         fd.append("_method", "PUT");
         fd.append("code", body.code);
         fd.append("name", body.name);
+        fd.append("upc", body.upc);
 
         if (body.barcode) fd.append("barcode", body.barcode);
 

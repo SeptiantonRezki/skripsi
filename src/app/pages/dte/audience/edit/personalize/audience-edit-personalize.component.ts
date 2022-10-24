@@ -78,6 +78,12 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     { name: this.translate.instant('global.label.all_type'), value: "all" }
   ];
 
+  businessType: any = [
+    { name: this.translate.instant('global.label.all_type'), value: "all" },
+    { name: this.translate.instant('global.menu.retailer'), value: "retailer" },
+    { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" }
+  ];
+
   selected = [];
   area: Array<any>;
   queries: any;
@@ -104,7 +110,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   detailAudience: any;
   isDetail: boolean;
   isChecked: boolean = false;
-  data_imported: any = [];
+  data_imported: any = {};
   initDetailGeoTree: any = {
     zone: false,
     region: false,
@@ -213,6 +219,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     this.formAudience = this.formBuilder.group({
       name: ["", Validators.required],
       mission_publication_id: ["", Validators.required],
+      business_type: ["all"],
       audience_filter: ["population-blast"],
       panel_count: ["---"],
       est_task_compliance: [""]
@@ -239,6 +246,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
     merge(
       this.formAudience.get('mission_publication_id').valueChanges,
+      this.formAudience.get('business_type').valueChanges,
       this.formFilter.valueChanges,
       this.formFilterRetailer.valueChanges,
     ).subscribe((res) => {
@@ -275,6 +283,14 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       console.log("area", res, this.formFilter.value["area"]);
       if (res) {
         this.getAudienceAreaV2("salespoint", res);
+      }
+    });
+
+    this.formAudience.get("business_type").valueChanges.debounceTime(500).subscribe((res) => {
+      const retail = this.formFilterRetailer.get("retail_classification");
+
+      if (res === "wholesaler") {
+        retail.setValue(["all"]);
       }
     });
 
@@ -943,8 +959,11 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
     if (value !== 'fixed-panel') {
       this.audienceFixed.setValue('');
+      this.formAudience.get("business_type").enable();
     } else {
       this.audienceFixed.setValue(value);
+      this.formAudience.get("business_type").setValue("all");
+      this.formAudience.get("business_type").disable();
     }
   }
 
@@ -982,6 +1001,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           _method: "PUT",
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
           name: this.formAudience.get("name").value,
+          business_type: this.formAudience.get("business_type").value,
           panel_count: this.formAudience.get("panel_count").value,
           est_task_compliance: this.formAudience.get("est_task_compliance").value,
           audience_filter: audience_filter,
@@ -1003,11 +1023,13 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           _method: "PUT",
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
           name: this.formAudience.get("name").value,
+          business_type: this.formAudience.get("business_type").value,
           panel_count: this.formAudience.get("panel_count").value,
           est_task_compliance: this.formAudience.get("est_task_compliance").value,
           audience_filter: audience_filter,
 
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         }
       }
 
@@ -1052,11 +1074,21 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
   importAudience() {
     const dialogConfig = new MatDialogConfig();
+    const {
+      import_audience_status,
+      import_audience_status_type,
+    } = this.detailAudience;
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
+    dialogConfig.data = {
+      IMPORT_TYPE: 'AUDIENCE',
+      pagination: this.pagination,
+      import_audience_status,
+      import_audience_status_type,
+      business_type: this.formAudience.get("business_type").value
+    };
 
     this.dialogRef = this.dialog.open(
       ImportAudiencePersonalizeComponent,
@@ -1078,7 +1110,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.audienceService.exportExcelPerso(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -1125,6 +1157,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
       if (audience_filter !== "fixed-panel") {
         body = {
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          business_type: this.formAudience.get("business_type").value,
           audience_filter: audience_filter,
           
           class_groups: this.formFilterRetailer.get("retail_classification").value,
@@ -1140,7 +1173,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
           };
         }
       } else {
-        if (!this.data_imported.length) {
+        if (!this.data_imported.preview_id || !this.data_imported.preview_task_id) {
           this.dialogService.openSnackBar({
             message: this.translate.instant('global.label.please_import_file'),
           });
@@ -1149,8 +1182,10 @@ export class AudienceEditPersonalizeComponent implements OnInit {
 
         body = {
           mission_publication_id: this.formAudience.get("mission_publication_id").value,
+          business_type: this.formAudience.get("business_type").value,
           audience_filter: audience_filter,
-          retailers: this.data_imported.map(item => item.id)
+          import_status_id: this.data_imported.preview_id,
+          import_status_task_id: this.data_imported.preview_task_id,
         };
       }
 
@@ -1200,6 +1235,7 @@ export class AudienceEditPersonalizeComponent implements OnInit {
   setValueDetail() {
     this.formAudience.get('name').setValue(this.detailAudience.name);
     this.formAudience.get('mission_publication_id').setValue(this.detailAudience.mission_publication_id);
+    this.formAudience.get('business_type').setValue(this.detailAudience.business_type);
     this.formAudience.get('panel_count').setValue(this.detailAudience.panel_count);
     this.formAudience.get('est_task_compliance').setValue(this.detailAudience.est_task_compliance);
     

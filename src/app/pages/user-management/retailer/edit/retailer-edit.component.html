@@ -301,8 +301,8 @@
                     <ngx-mat-select-search [formControl]="filterBank" placeholderLabel="{{'global.label.search' | translate}} {{'global.label.bank_name' | translate}}"
                       noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}">
                     </ngx-mat-select-search>
-                    <mat-option *ngFor="let item of filteredBanks | async" [value]="item.name">
-                      {{item.name}}
+                    <mat-option *ngFor="let item of filteredBanks | async" [value]="remaskTemplate(viewBankStatus, item.name, 3)">
+                      {{remaskTemplate(viewBankStatus, item.name, 3)}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -310,7 +310,7 @@
                   *ngIf="formBankAccount.controls['bank_name'].hasError('required') && formBankAccount.controls['bank_name'].touched">
                   {{'global.label.bank_name' | translate}} {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
-                <div fxFlex="1" *ngIf="!isDetail && formBankAccount.get('bank_name').value">
+                <div fxFlex="1" *ngIf="!isDetail && formBankAccount.get('bank_name').value && editBankStatus">
                   <button mat-icon-button color="" (click)="clearBankName()">
                     <mat-icon class="secondary-text">close</mat-icon>
                   </button>
@@ -367,7 +367,7 @@
               <mat-label>
                 {{'retailer.list.text4' | translate}}:
               </mat-label>
-              <mat-radio-group formControlName="order_online" class="radio-group pb-16" fxLayout="row wrap">
+              <mat-radio-group disabled formControlName="order_online" class="radio-group pb-16" fxLayout="row wrap">
                 <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
                 <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
               </mat-radio-group>
@@ -384,7 +384,7 @@
               [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5">
               <ngx-datatable-column name="{{'global.label.phone' | translate}} {{'retailer.detail.pojok_bayar' | translate}}" prop="no_pojok_bayar">
                 <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                  <div class="name-container">{{row.no_pojok_bayar || '-'}}</div>
+                  <div class="name-container">{{remaskTemplate(viewPhoneNumberPBStatus, row.no_pojok_bayar, 4) || '-'}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="First Validation" prop="first_validation">

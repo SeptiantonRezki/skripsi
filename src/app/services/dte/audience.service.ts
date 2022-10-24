@@ -82,11 +82,26 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "request_preview_import");
     return this.postApi(url, body);
   }
-  
+  requestPreviewImportPerso(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "request_preview_import_perso");
+    return this.postApi(url, body);
+  }
+
+  showPreviewImportNew(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_preview_import");
+    return this.getApi(url, queryParams);
+  }
+
+  showPreviewImportPerso(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_preview_import_perso");
+    return this.getApi(url, queryParams);
+  }
+
   showPreviewImport(body?, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "show_preview_import");
     return this.postApi(url, body, queryParams);
   }
+  
   requestImportExcel(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "request_import");
     return this.postApi(url, body);
@@ -99,6 +114,11 @@ export class AudienceService extends BaseService {
 
   exportExcel(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export");
+    return this.postApi(url, body);
+  }
+
+  exportExcelPerso(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_perso");
     return this.postApi(url, body);
   }
 

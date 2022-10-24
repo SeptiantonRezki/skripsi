@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,6 +36,7 @@ export class CoinDisburstmentComponent implements OnInit {
 
   pageName = this.translate.instant('dte.coin_disbursement.text1');
   titleParam = {entity: this.pageName}
+  selectedTab = new FormControl(0);
 
   constructor(
     private dialogService: DialogService,

@@ -18,9 +18,9 @@ export class PayLaterCompanyService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  show(context): Observable<any> {
+  show(context, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'show', context);
-    return this.getApi(url);
+    return this.getApi(url, queryParams);
   }
 
   put(body, context): Observable<any> {

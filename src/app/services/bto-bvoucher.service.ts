@@ -131,6 +131,10 @@ export class BtoBVoucherService extends BaseService {
     const url = this.getUrl(this.namespace, "change_status", context);
     return this.postApi(url, body);
   }
+  redeemPaymentExport(body: any, context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "redeem_PaymentExport", context);
+    return this.postBlobAsJsonApi(url, body);
+  } 
   // update(body?, context?): Observable<any> {
   //   const url = this.getUrl(this.namespace, "update", context);
   //   return this.putApi(url, body);

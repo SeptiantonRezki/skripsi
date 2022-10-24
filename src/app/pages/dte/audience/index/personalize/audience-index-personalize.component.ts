@@ -201,7 +201,6 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
   }
 
   confirmDelete() {
-    // TODO: ubah service
     this.audienceService.delete({ audience_id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
@@ -224,7 +223,7 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
     else if (job_status === 'running') {
       classes += `mat-orange-700-bg`;
     }
-    else if (job_status === 'done') {
+    else if (job_status === 'done' || job_status === 'completed') {
       if (status === 'rejected') {
         classes += `mat-red-700-bg`;
       }
@@ -248,6 +247,7 @@ export class AudienceIndexPersonalizeComponent implements OnInit {
       case "running":
         return this.translate.instant('global.label.processing');
       case "done":
+      case "completed":
         switch (status) {
           case "rejected":
             // return real_status;

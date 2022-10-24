@@ -113,6 +113,14 @@
               Harga Jual harus diisi
             </mat-error>
           </mat-form-field>
+          <mat-slide-toggle
+            *ngIf="productCashierType === 'rrp'"
+            labelPosition="before"
+            [disabled]="isDetail"
+            formControlName="is_sync_price"
+          >
+            Berlaku untuk seluruh outlet
+          </mat-slide-toggle>
         </div>
       </form>
     </div>

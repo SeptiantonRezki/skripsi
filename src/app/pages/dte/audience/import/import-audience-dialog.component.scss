@@ -181,3 +181,7 @@
     border: 1px solid #ddd;
   }
 }
+
+/deep/ .row-invalid {
+  background-color: #efaea8;
+}

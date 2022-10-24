@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-pay-later-deactivate',
-  templateUrl: './paylater-deactivate-component.html',
-  styleUrls: ['./paylater-deactivate.component.scss']
+  templateUrl: './pay-later-deactivate.component.html',
+  styleUrls: ['./pay-later-deactivate.component.scss']
 })
 export class PayLaterDeactivateComponent implements OnInit {
+  @Input() dataType: string;
   selectedTab: any;
 
   constructor(

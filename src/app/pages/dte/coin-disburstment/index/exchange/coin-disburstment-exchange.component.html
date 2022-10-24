@@ -104,17 +104,17 @@
 <div class="p-16">
   <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
     fxLayoutAlign="end center" class="p-16 export">
-    <button mat-raised-button type="button" class="is-danger" (click)="exportExchange(true)">
+    <button id="btnExportDetail" mat-raised-button type="button" class="is-danger" (click)="exportExchange(true)">
       <mat-icon>arrow_upward</mat-icon> {{'dte.coin_disbursement.export_detail_by_trade_program' | translate}}
     </button>
-    <button mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
+    <button id="btnImport" mat-raised-button type="button" class="is-danger" (click)="onDocUpload()">
       <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
     </button>
-    <button mat-raised-button type="button" class="is-danger" (click)="exportExchange(false)">
+    <button id="btnExport" mat-raised-button type="button" class="is-danger" (click)="exportExchange(false)">
       <mat-icon>arrow_upward</mat-icon> {{'global.button.export' | translate}} XLS
     </button>
   </div>
-  <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+  <ngx-datatable id="tableListExchange" class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
     [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
     [rowHeight]="48" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
     [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
