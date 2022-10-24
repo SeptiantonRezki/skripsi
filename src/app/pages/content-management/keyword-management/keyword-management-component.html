@@ -57,7 +57,7 @@
 
               <div class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                  <mat-select style="min-width: 160px" placeholder="Konten Keyword Promo Mandiri" formControlName="category" #singleSelect>
+                  <mat-select style="min-width: 160px" [placeholder]="'global.label.category' | translate" formControlName="category" #singleSelect>
                     <ngx-mat-select-search
                       [formControl]="filterCategory"
                       placeholderLabel="{{ 'global.label.search' | translate }}"
