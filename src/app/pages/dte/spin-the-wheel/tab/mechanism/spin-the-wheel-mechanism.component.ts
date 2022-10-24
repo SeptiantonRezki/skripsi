@@ -371,6 +371,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
       rewards_coin: this.fb.array([]),
       rewards_non_coin: this.fb.array([]),
       rewards_xp: this.fb.array([]),
+      rewards_count: [0, [Validators.min(1)]],
       probability_left: [0],
     });
     tier.push(formControl);
@@ -475,6 +476,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         tier.controls.rewards_coin.controls.length +
         tier.controls.rewards_non_coin.controls.length +
         tier.controls.rewards_xp.controls.length;
+      tier.controls.rewards_count.setValue(hasRewards);
       if (hasRewards === 1 && this.isEditableRewards) {
         tier.controls.probability_left.setValidators([
           Validators.min(100),

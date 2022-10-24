@@ -991,8 +991,17 @@
           </div>
           <mat-error
             *ngIf="
-              (tier.controls.probability_left.hasError('min') ||
-                tier.controls.probability_left.hasError('max'))
+              tier.controls.rewards_count.hasError('min') &&
+              tier.controls.coin_variation.touched
+            "
+          >
+            Reward
+            <span style="font-style: italic">coin/non coin/xp</span> wajib diisi
+          </mat-error>
+          <mat-error
+            *ngIf="
+              tier.controls.probability_left.hasError('min') ||
+              tier.controls.probability_left.hasError('max')
             "
           >
             Total Probability harus 100%
