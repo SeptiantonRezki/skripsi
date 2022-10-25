@@ -324,7 +324,7 @@
           <a #downloadLink></a>
         </mat-tab>
 
-        <mat-tab label="{{'dte.coin_disbursement.coin_exchange_list' | translate}}" *ngIf="isEdit && detailCoin.status === 'publish'">
+        <mat-tab label="{{'dte.coin_disbursement.coin_exchange_list' | translate}}" *ngIf="isEdit && (detailCoin.status === 'publish' || detailCoin.status === 'unpublish')">
           <app-coin-disburstment-exchange [isTabActive]="selectedTab"></app-coin-disburstment-exchange>
         </mat-tab>
       </mat-tab-group>
