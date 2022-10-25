@@ -77,6 +77,9 @@
               <button matTooltip="Edit" id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
+              <button id="btn-copy-link" mat-icon-button color="secondary" matTooltip="{{'global.label.copy_link' | translate}}" (click)="copyLink(row)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
               <button id="btn-delete" mat-icon-button color="primary" matTooltip="{{'global.button.delete' | translate}}" (click)="deleteTp(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>

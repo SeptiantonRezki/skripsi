@@ -406,9 +406,24 @@
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
                 <mat-select formControlName="landing_page"
+                  (selectionChange)="landingPageChange(formBannerGroup.get('landing_page').value)"
                   placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- App Link -->
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'app_link' && formBannerGroup.get('user_group').value === 'retailer'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" formControlName="app_link"
+                  placeholder="Masukan App Link">
+                <mat-error
+                  *ngIf="formBannerGroup.controls['app_link'].hasError('required') && formBannerGroup.controls['app_link'].touched">
+                  App Link {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
