@@ -1399,7 +1399,7 @@ export class BannerEditComponent {
           body['type_ticker'] = this.formBannerGroup.get('kategori').value;
         }
         if (this.formBannerGroup.get('landing_page').value === 'app_link' && body.content_type === 'landing_page') {
-          let urlAPP = (this.formBannerGroup.get('app_link').value !== '')? this.formBannerGroup.get('app_link').value : null
+          let urlAPP = this.formBannerGroup.get('app_link').value;
           fd.append('url_app', urlAPP);
           body['url_app'] = urlAPP;
         }else{
@@ -1608,6 +1608,7 @@ export class BannerEditComponent {
     if (value === 'landing_page') {
       this.formBannerGroup.controls['landing_page'].setValue('');
     }
+    
     if(
       value === 'landing_page' && 
       this.formBannerGroup.get('user_group').value === 'retailer'
@@ -1615,6 +1616,20 @@ export class BannerEditComponent {
       this.formBannerGroup.get('app_link').setValidators(Validators.required);
     } else {
       this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+      this.formBannerGroup.controls['app_link'].setValue('');
     }
   }
 

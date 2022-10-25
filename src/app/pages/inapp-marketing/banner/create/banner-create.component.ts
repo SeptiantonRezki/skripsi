@@ -1050,7 +1050,6 @@ export class BannerCreateComponent {
   }
 
   contentType(value) {
-    console.log('VAL contentType # ', value)
     if (this.imageContentTypeBase64 && this.imageContentType) {
       this.imageContentType = undefined;
       this.imageContentTypeBase64 = undefined;
@@ -1096,6 +1095,20 @@ export class BannerCreateComponent {
       this.formBannerGroup.get('app_link').setValidators(Validators.required);
     } else {
       this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+      this.formBannerGroup.controls['app_link'].setValue('');
     }
   }
 
@@ -1239,7 +1252,7 @@ export class BannerCreateComponent {
             body['type_ticker'] = this.formBannerGroup.get('kategori').value;
           }
           if (this.formBannerGroup.get('landing_page').value === 'app_link' && body.content_type === 'landing_page') {
-            let urlAPP = (this.formBannerGroup.get('app_link').value !== '')? this.formBannerGroup.get('app_link').value : null
+            let urlAPP = this.formBannerGroup.get('app_link').value;
             fd.append('url_app', urlAPP);
             body['url_app'] = urlAPP;
           }else{

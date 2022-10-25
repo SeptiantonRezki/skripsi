@@ -637,9 +637,10 @@ export class PopupNotificationEditComponent {
       ){
         this.formPopupGroup.get('landing_page_2').clearValidators();
         this.formPopupGroup.get('landing_page_2').updateValueAndValidity();
+        this.formPopupGroup.controls['landing_page_2'].setValue('');
         this.formPopupGroup.get('app_link_2').clearValidators();
         this.formPopupGroup.get('app_link_2').updateValueAndValidity();
-        console.log('INIT');
+        this.formPopupGroup.controls['app_link_2'].setValue('');
       }
     })
 
@@ -1390,6 +1391,32 @@ export class PopupNotificationEditComponent {
     }
   }
 
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formPopupGroup.get('user_group').value === 'retailer'
+    ){
+      this.formPopupGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formPopupGroup.get('app_link').clearValidators();
+      this.formPopupGroup.get('app_link').updateValueAndValidity();
+      this.formPopupGroup.controls['app_link'].setValue('');
+    }
+  }
+
+  landingPageChange_2(value) {
+    if(
+      value === 'app_link' && 
+      this.formPopupGroup.get('user_group').value === 'retailer'
+    ){
+      this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
+    } else {
+      this.formPopupGroup.get('app_link_2').clearValidators();
+      this.formPopupGroup.get('app_link_2').updateValueAndValidity();
+      this.formPopupGroup.controls['app_link_2'].setValue('');
+    }
+  }
+
   selectChange(e: any) {
     if (e.source.name === 'is_mission_builder' && e.checked) {
       this.formPopupGroup.get('is_mission_builder').patchValue(true);
@@ -1576,11 +1603,11 @@ export class PopupNotificationEditComponent {
 
         body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
         body['positive_action'] = this.formPopupGroup.get('content_type').value;
-        body['positive_url_app'] = (this.formPopupGroup.get('app_link').value !== '')? this.formPopupGroup.get('app_link').value : null;
+        body['positive_url_app'] = this.formPopupGroup.get('app_link').value;
 
         body['negative_action'] = this.formPopupGroup.get('content_type_2').value;
         body['negative_action_data'] = this.formPopupGroup.get('landing_page_2').value;
-        body['negative_url_app'] = (this.formPopupGroup.get('app_link_2').value !== '')? this.formPopupGroup.get('app_link_2').value : null;
+        body['negative_url_app'] = this.formPopupGroup.get('app_link_2').value;
         
       }
 

@@ -412,7 +412,9 @@
           <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="landing_page" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
+                <mat-select formControlName="landing_page" 
+                  (selectionChange)="landingPageChange(formBannerGroup.get('landing_page').value)"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
