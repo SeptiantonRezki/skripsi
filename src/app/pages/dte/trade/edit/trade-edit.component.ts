@@ -99,6 +99,7 @@ export class TradeEditComponent {
       start_date: {},
       end_date: {},
       budget: {},
+      remaining_budget: {},
       coin_expiry_date: {},
     };
 
@@ -128,6 +129,7 @@ export class TradeEditComponent {
           Validators.max(this.maxBudget),
         ],
       ],
+      remaining_budget: [""],
       coin_expiry_date: ["", Validators.required],
       status: ["", Validators.required],
       group_trade_program_id: [""],
@@ -146,6 +148,7 @@ export class TradeEditComponent {
       start_date: this.detailFormTrade.start_date,
       end_date: this.detailFormTrade.end_date,
       budget: Number(this.detailFormTrade.budget),
+      remaining_budget: Number(this.detailFormTrade.remaining_budget),
       coin_expiry_date: this.detailFormTrade.coin_expiry_date,
       status: this.detailFormTrade.status_publish,
       group_trade_program_id: this.detailFormTrade.trade_creator_group_id
@@ -286,6 +289,7 @@ export class TradeEditComponent {
         ),
         end_date: this.convertDate(this.formTradeProgram.get("end_date").value),
         budget: this.formTradeProgram.get("budget").value,
+        remaining_budget: this.formTradeProgram.get("remaining_budget").value,
         coin_expiry_date: this.convertDate(
           this.formTradeProgram.get("coin_expiry_date").value
         ),
@@ -297,6 +301,7 @@ export class TradeEditComponent {
       fd.append("start_date", body.start_date);
       fd.append("end_date", body.end_date);
       fd.append("budget", body.budget);
+      fd.append("remaining_budget", body.remaining_budget);
       fd.append("coin_expiry_date", body.coin_expiry_date);
       fd.append("status", body.status);
       fd.append(
@@ -340,6 +345,7 @@ export class TradeEditComponent {
       start_date: this.convertDate(formTradeProgram.start_date),
       end_date: this.convertDate(formTradeProgram.end_date),
       budget: formTradeProgram.budget,
+      remaining_budget: formTradeProgram.remaining_budget,
       coin_expiry_date: this.convertDate(formTradeProgram.coin_expiry_date),
       status: formTradeProgram.status,
     };

@@ -125,6 +125,15 @@
                   {{maxBudget | rupiahFormaterWithoutRp}}
 
               </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex="47%" class="is-light form-primary">
+                <input matInput type="text" [mask]="ls.locale.global.input_mask"
+                  [thousandSeparator]="ls.locale.global.input_separator" min="0" [max]="maxBudget" formControlName="remaining_budget"
+                  placeholder="{{'dte.trade_program.text11' | translate}}" (keydown)="limitNumber($event, 'budget')">
+                <mat-error
+                  *ngIf="formTradeProgram.controls['remaining_budget'].hasError('required') && formTradeProgram.controls['remaining_budget'].touched">
+                  {{'dte.trade_program.text11' | translate}} {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
