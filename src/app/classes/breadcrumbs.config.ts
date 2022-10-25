@@ -3486,6 +3486,60 @@ export const brConfig = {
       }
     ],
   },
+  tactical_retail_sales: {
+    trs_system_variable: [
+      {
+        type: "current",
+        url: "",
+        name: "TRS System Variable"
+      }
+    ],
+    trs_proposal: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "TRS Proposal"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/tactical-retail-sales/trs-proposal",
+          name: "TRS Proposal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat TRS Proposal"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/tactical-retail-sales/trs-proposal",
+          name: "TRS Proposal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Edit TRS Proposal"
+        }
+      ],
+      detail: [
+        {
+          type: "parent",
+          url: "/tactical-retail-sales/trs-proposal",
+          name: "TRS Proposal"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Detail TRS Proposal"
+        }
+      ]
+    },
+  },
   country_setup: {
     index: [
       {

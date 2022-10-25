@@ -1,0 +1,44 @@
+.body-layout {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 5px;
+  .body-text {
+    width: 100%;
+    height: 80px;
+    resize: none;
+  }
+  .body-text:focus {
+    background-color: #fff;
+    color: #222;
+  }
+}
+.body-layout:focus-within {
+  background-color: #fff;
+}
+.field-label {
+  font-size: 14px;
+  transform: scale(0.75);
+  transform-origin: 0 0;
+}
+
+:host ::ng-deep .mat-form-field.readonly{
+  div{
+    div{
+      background-color: #ddd;
+    }
+  }
+}
+
+.deleteFile {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+}
+
+button.cancel-button {
+  border: 1px solid #dc1e2d;
+  color: #000;
+  font-weight: 300;
+}
