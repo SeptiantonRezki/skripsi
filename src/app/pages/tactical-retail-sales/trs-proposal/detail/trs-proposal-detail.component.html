@@ -95,10 +95,10 @@
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
                   <input matInput type="text" formControlName="custCode1" (keyup)="keyUpCust1.next($event.target.value)" 
-                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_1}}"
-                    [attr.disabled] = "true">
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_1}}" 
+                    readonly>
                   <mat-error
                     *ngIf="formCreateProposal.controls['custCode1'].hasError('required') && formCreateProposal.controls['custCode1'].touched">
                     {{ls.locale.tactical_retail_sales.proposal_cust_code_1}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
@@ -117,10 +117,10 @@
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                <mat-form-field fxFlex="90%" class="is-light form-primary" readonly>
                   <input matInput type="text" formControlName="custCode2" (keyup)="keyUpCust2.next($event.target.value)" 
-                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_2}} ({{ls.locale.tactical_retail_sales.proposal_optional}})"
-                    [attr.disabled] = "true">
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_2}} ({{ls.locale.tactical_retail_sales.proposal_optional}})" 
+                    readonly>
                 </mat-form-field>
               </div>
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
@@ -131,9 +131,9 @@
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
-                <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="flowingly" placeholder="{{ls.locale.tactical_retail_sales.proposal_flowingly}}"
-                  [attr.disabled] = "true">
+                <mat-form-field fxFlex="90%" class="is-light form-primary" readonly>
+                  <input matInput type="text" formControlName="flowingly" placeholder="{{ls.locale.tactical_retail_sales.proposal_flowingly}}" 
+                  readonly>
                 </mat-form-field>
               </div>
 
@@ -225,7 +225,7 @@
                     <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_backgorund}}</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_backgorund}}" formControlName="background" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_backgorund}}" formControlName="background" wrap="soft" [readonly]="true"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['background'].hasError('required') && formCreateProposal.controls['background'].touched">
@@ -241,7 +241,7 @@
                     <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_objective}}</label>
                     <div fxLayout="row" >
                       <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
-                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_objective}}" formControlName="objective" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_objective}}" formControlName="objective" wrap="soft" [readonly]="true"></textarea>
                       </div>
                     </div>
                     <mat-error *ngIf="formCreateProposal.controls['objective'].hasError('required') && formCreateProposal.controls['objective'].touched">
