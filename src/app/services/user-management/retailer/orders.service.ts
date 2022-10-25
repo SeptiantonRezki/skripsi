@@ -31,10 +31,15 @@ export class OrdersService extends BaseService {
     return this.postApi(url, body);
   }
 
-  // generateReceipt(body): Observable<any> {
-  //   const url = this.getUrl(this.namespace, "html")
-  //   return this.postApi(url, body);
-  // }
+  blockNextOrder(body, context): Observable<any> {
+    const url = this.getUrl(this.namespace, "block_next_order", context)
+    return this.postApi(url, body);
+  }
+
+  generateReceipt(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "html")
+    return this.postApi(url, body);
+  }
 
   updatePrice(body): Observable<any> {
     const url = this.getUrl(this.namespace, "update_price")

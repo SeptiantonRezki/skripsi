@@ -16,9 +16,8 @@
         </div>
       </div>
 
-<!-- START CONTENT (Mulai dari TAB Status pesanan) -->
-      <div class="content">
-      <!-- <div class="content" *ngIf="!onLoad"> -->
+<!-- START CONTENT (Start on TAB Status Pesanan) -->
+      <div class="content" *ngIf="!onLoad">
 
 <!-- Tab Status Pesanan -->
         <mat-tab-group [selectedIndex]="selectedTabMain" (selectedIndexChange)="selectedTabMainChange($event)">
@@ -137,15 +136,11 @@
 
 
 <!-- START TABLE -->
-        <!-- <ngx-datatable class="material" [ngStyle]="{'height': innerHeight, 'border-top': 'border-top: 1px solid #e3e3e3'}" [rows]="rows"
+        <ngx-datatable class="material" [ngStyle]="{'height': innerHeight, 'border-top': 'border-top: 1px solid #e3e3e3'}" [rows]="rows"
           [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
           [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
           [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
           (page)="setPage($event)" (sort)="onSort($event)" [reorderable]="reorderable" [selectionType]="'checkbox'"
-          [selected]="selected" [rowIdentity]="getRowId" [virtualization]="false" [scrollbarV]="statusScroll" [scrollbarH]="true"> -->
-        <ngx-datatable class="material" [ngStyle]="{'height': innerHeight, 'border-top': 'border-top: 1px solid #e3e3e3'}" [rows]="rows"
-          [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-          [rowHeight]="auto" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable" [selectionType]="'checkbox'"
           [selected]="selected" [rowIdentity]="getRowId" [virtualization]="false" [scrollbarV]="statusScroll" [scrollbarH]="true">
 
       <!-- Checkbox Column -->
@@ -175,7 +170,7 @@
           <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.katalog_src.lihat_pesanan.text8 }}" prop="invoice_number"
             *ngIf="formColumn.value.includes(ls.locale.katalog_src.lihat_pesanan.text8)" [frozenLeft]="true">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              <span class="row-name" [routerLink]="['/user-management','order-rrp', 'detail']"
+              <span class="row-name" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
                 (click)="getDetailTransaction(row)">{{row.invoice_number}}</span>
             </ng-template>
           </ngx-datatable-column>
@@ -185,7 +180,7 @@
           <ngx-datatable-column name="{{ ls.locale.global.label.customer_code }}" prop="customer_code"
             *ngIf="formColumn.value.includes(ls.locale.global.label.customer_code) && showcustomercode">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              <span class="row-name" [routerLink]="['/user-management','order-rrp', 'detail']"
+              <span class="row-name" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
                 (click)="getDetailTransaction(row)">{{row.customer_code}}</span>
             </ng-template>
           </ngx-datatable-column>
@@ -237,7 +232,7 @@
               <div fxLayout="row">
                 <div class="status-container" *ngIf="!checkValidate(row)">
                   <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'"
-                    [routerLink]="['/user-management','order-rrp', 'detail']" (click)="getDetailTransaction(row)">
+                    [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]" (click)="getDetailTransaction(row)">
                     {{row.status_indo? row.status_indo.replace('-', ' ')?.toUpperCase() : '-'}}
                   </p>
                   <span class="chat-badge"
@@ -270,7 +265,7 @@
           *ngIf="formColumn.value.includes(ls.locale.produk_prinsipal.text28)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <div fxLayout="row">
-                <div class="status-container" [routerLink]="['/user-management','order-rrp', 'detail']"
+                <div class="status-container" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
                   (click)="getDetailTransaction(row)">
                   <p [class]="'status text-truncate h6 p-4 status-order mat-' + (row.payment_type) + '-color'">
                     <!-- {{row.payment_type ? row.payment_type.replace('-', ' ')?.toUpperCase() : 'BAYAR DI TEMPAT'}} -->

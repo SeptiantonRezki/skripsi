@@ -35,9 +35,12 @@
                           <span class="name text-truncate">{{detailOrder?.name}}</span>
                         </div>
                         <div fxFlex="50" fxLayoutAlign="center center">
-                          <button mat-raised-button type="button" [ngClass]="blockOrder === 0 ? 'confirmation-button' : 'mat-green-800-bg'" (click)="blockNextOrder()">
-                            {{ blockOrder === 0 ? 'Block Next Order' : 'Unblock Next Order' }}
+                          <button mat-raised-button *ngIf="blockOrder === 0 && permission?.detail_rrp" type="button" class="confirmation-button" (click)="blockNextOrder()">
+                            Block Next Order
                           </button>
+                          <span class="mat-cod-color" *ngIf="blockOrder === 1">
+                            Next Order Blocked
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -109,7 +112,7 @@
                       <span class="email text-truncate">Matthew Gray</span>
                     </td>
                   </tr> -->
-                  <tr *ngFor="let item of detailOrder?.status_logs">
+                  <tr *ngFor="let item of statusLogs">
                     <td class="w-200">
                       <div [class]="'status text-truncate h6 p-4 status-order mat-' + item.status + '-color'">
                         {{(item.status_indo?.replace('-', ' '))?.toUpperCase()}}
@@ -606,7 +609,67 @@
           </div> -->
         </mat-tab>
         <mat-tab label="Bukti Pembayaran">
-          <div class="ayo-middle p-24" fxLayout="column"></div>
+          <div class="ayo-middle p-24" fxLayout="column">
+            <!-- <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="start center">
+              <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                  <h3>Jumlah Pembayaran</h3>
+                </div>
+                <div class="text-right">
+                  100.000
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="start center">
+              <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                  <h3>Metode Pembayaran</h3>
+                </div>
+                <div class="text-right">
+                  Kredit - Virtual Account
+                </div>
+              </div>
+            </div>
+            <div class="mb-8" style="border-bottom: 1px dashed rgba(0, 0, 0, 0.54);"></div> -->
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="100">
+              <div>
+                <div fxLayout="column">
+                  <h4>Bukti Pembayaran 1</h4>
+                </div>
+                <div fxLayout="column">
+                  <div class="mr-24">
+                    <div class="mr-24">
+                      <img id="image" [src]="imageUrl1" width="410px" height="410px" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div fxLayout="column">
+                  <h4>Bukti Pembayaran 2</h4>
+                </div>
+                <div fxLayout="column">
+                  <div class="mr-24">
+                    <div class="mr-24">
+                      <img id="image" [src]="imageUrl2" width="410px" height="410px" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div fxLayout="column">
+                  <h4>Bukti Pembayaran 3</h4>
+                </div>
+                <div fxLayout="column">
+                  <div class="mr-24">
+                    <div class="mr-24">
+                      <img id="image" [src]="imageUrl3" width="410px" height="410px" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>

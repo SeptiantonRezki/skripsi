@@ -44,88 +44,88 @@ export class OrdersRrpComponent implements OnInit {
   childStatus = '';
   showcustomercode : boolean = false;
   generateReceipt: GenerateReceipt = new GenerateReceipt(this.ls, this.translateInterpolatePipe, this.dataService);
-  loadingIndicator = false;
+  loadingIndicator = true;
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
   body: any;
   selectedOrderToUpdate: any;
   selectedTabMain = 0;
-  // statusFilter: any[] = [];
+  statusFilter: any[] = [];
 
   // // Dummy Data // //
-  statusFilter: any[] = [
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "semua-pesanan",
-      status_value: "Semua Pesanan"
-    },
-    {
-      child: [
-        {status_title: "pesanan-baru", status_value: "Pesanan Baru", status_count: 0},
-        {status_title: "pesanan-dilihat", status_value: "Pesanan Dilihat", status_count: 1}
-      ],
-      is_sign: true,
-      status_count: 1,
-      status_title: "pesanan-baru",
-      status_value: "Pesanan Baru"
-    },
-    {
-      child: [
-        {status_title: "konfirmasi-perubahan", status_value: "Konfirmasi Perubahan", status_count: 0},
-        {status_title: "perubahan-disetujui", status_value: "Perubahan Disetujui", status_count: 0},
-        {status_title: "diproses", status_value: "Pesanan Diproses", status_count: 0}
-      ],
-      is_sign: false,
-      status_count: 0,
-      status_title: "diproses",
-      status_value: "Pesanan Diproses"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "siap-diambil",
-      status_value: "Siap Diambil"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "dalam-pengiriman",
-      status_value: "Dalam Pengiriman"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "pesanan-diterima",
-      status_value: "Pesanan Diterima"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "belum-lunas",
-      status_value: "Belum Lunas"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "selesai",
-      status_value: "Pesanan Selesai"
-    },
-    {
-      child: [],
-      is_sign: false,
-      status_count: 0,
-      status_title: "pesanan-dibatalkan",
-      status_value: "Pesanan Dibatalkan"
-    },
-  ];
+  // statusFilter: any[] = [
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "semua-pesanan",
+  //     status_value: "Semua Pesanan"
+  //   },
+  //   {
+  //     child: [
+  //       {status_title: "pesanan-baru", status_value: "Pesanan Baru", status_count: 0},
+  //       {status_title: "pesanan-dilihat", status_value: "Pesanan Dilihat", status_count: 1}
+  //     ],
+  //     is_sign: true,
+  //     status_count: 1,
+  //     status_title: "pesanan-baru",
+  //     status_value: "Pesanan Baru"
+  //   },
+  //   {
+  //     child: [
+  //       {status_title: "konfirmasi-perubahan", status_value: "Konfirmasi Perubahan", status_count: 0},
+  //       {status_title: "perubahan-disetujui", status_value: "Perubahan Disetujui", status_count: 0},
+  //       {status_title: "diproses", status_value: "Pesanan Diproses", status_count: 0}
+  //     ],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "diproses",
+  //     status_value: "Pesanan Diproses"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "siap-diambil",
+  //     status_value: "Siap Diambil"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "dalam-pengiriman",
+  //     status_value: "Dalam Pengiriman"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "pesanan-diterima",
+  //     status_value: "Pesanan Diterima"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "belum-lunas",
+  //     status_value: "Belum Lunas"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "selesai",
+  //     status_value: "Pesanan Selesai"
+  //   },
+  //   {
+  //     child: [],
+  //     is_sign: false,
+  //     status_count: 0,
+  //     status_title: "pesanan-dibatalkan",
+  //     status_value: "Pesanan Dibatalkan"
+  //   },
+  // ];
   // // End Dummy Data // //
 
   courierFilter: any[] = [];
@@ -251,37 +251,37 @@ export class OrdersRrpComponent implements OnInit {
     // });
 
     this.adapter.setLocale('en');
-    // this.rows = [];
+    this.rows = [];
 
     // // Dummy Data // //
-    this.rows = [
-      {
-        id: 1,
-        available_status: {
-          "diproses": "Pesanan Diproses", 
-          "pesanan-dibatalkan": "Pesanan Dibatalkan"
-        },
-        created_at: "2022-01-27 09:28:15",
-        invoice_number: "AYO.220127092815.130330",
-        name: "Dummy Test",
-        order_from: "otc",
-        shipping_method: "diambil",
-        address2: "Jakarta, Indonesia",
-        status: "pesanan-dilihat",
-        status_indo: "Pesanan Dilihat",
-        total: 20000,
-        total_payment: 20000,
-        total_payment_format_currency: "RP 20.000",
-        payment_type: "cod",
-        payment_type_indo: "Bayar Di Tempat"
-      }
-    ];
+    // this.rows = [
+    //   {
+    //     id: 1,
+    //     available_status: {
+    //       "diproses": "Pesanan Diproses", 
+    //       "pesanan-dibatalkan": "Pesanan Dibatalkan"
+    //     },
+    //     created_at: "2022-01-27 09:28:15",
+    //     invoice_number: "AYO.220127092815.130330",
+    //     name: "Dummy Test",
+    //     order_from: "otc",
+    //     shipping_method: "diambil",
+    //     address2: "Jakarta, Indonesia",
+    //     status: "pesanan-dilihat",
+    //     status_indo: "Pesanan Dilihat",
+    //     total: 20000,
+    //     total_payment: 20000,
+    //     total_payment_format_currency: "RP 20.000",
+    //     payment_type: "cod",
+    //     payment_type_indo: "Bayar Di Tempat"
+    //   }
+    // ];
     // // End Dummy Data // //
 
     // // For Dummy Data // //
-    this.rows.map((item) => {
-      item['orderStatuses'] = Object.entries(item.available_status).map(([value, name]) => ({value,name}));
-    });
+    // this.rows.map((item) => {
+    //   item['orderStatuses'] = Object.entries(item.available_status).map(([value, name]) => ({value,name}));
+    // });
     // // End For Dummy Data // //
 
     this.onLoad = true;
@@ -321,47 +321,49 @@ export class OrdersRrpComponent implements OnInit {
 
   async ngOnInit() {
     // // For Dummy Data // //
-    this.rows;
-    this.statusFilter;
+    // this.loadingIndicator = false;
+    // this.rows;
+    // this.statusFilter;
     // // End For Dummy Data // //
-
+    
+    this.courierFilter = [this.defaultShipping];
     const staticWindowHeight = window.innerWidth < 1714 ? 500 : 449;
     this.innerHeight = window.innerWidth <= 984 || window.innerHeight < 834 ? 'auto' : (window.innerHeight - staticWindowHeight) + 'px';
     this.statusScroll = window.innerWidth <= 984 || window.innerHeight < 834 ? false : true;
     
-    // const profile = this.dataService.getDecryptedProfile();
-    // this.gtmService.userTracking(profile.id, profile.role_name);
-    // // this.generalService.updateLastOpen({ type: "wholesaler" }).subscribe(res => { });
+    const profile = this.dataService.getDecryptedProfile();
+    this.gtmService.userTracking(profile.id, profile.role_name);
+    // this.generalService.updateLastOpen({ type: "wholesaler" }).subscribe(res => { });
     
-    // await this.getTab();
+    await this.getTab();
 
-    // // this.route.queryParams.subscribe(({status, from, to, shipping, payment_type}) => {
+    // this.route.queryParams.subscribe(({status, from, to, shipping, payment_type}) => {
 
-    // // })
-    // // from = moment(from);
-    // // to = moment(to);
+    // })
+    // from = moment(from);
+    // to = moment(to);
     // this.getCourierList();
-    // this.getListOrders();
-    // // this.formFilter.controls['status'].valueChanges.subscribe(formFilterStatusValue => { this.isSelectable(); })
-    // this.isSelectable();
+    this.getListOrders();
+    // this.formFilter.controls['status'].valueChanges.subscribe(formFilterStatusValue => { this.isSelectable(); })
+    this.isSelectable();
 
-    // this.selectedTabMainChange(0);
-    // this.formFilter.get('shipping').setValue(this.dataService.getFromStorage("filter_orders_shipping") ? this.dataService.getFromStorage("filter_orders_shipping") : [this.defaultShipping]);
-    // this.route.queryParams.subscribe(params => {
-    //   if(params['from']) {
-    //     this.formFilter.get('from').setValue(this.dataService.getFromStorage("filter_orders_from"));
-    //   }
-    //   if(params['to']) {
-    //     this.formFilter.get('to').setValue(this.dataService.getFromStorage("filter_orders_to"));
-    //   }
-    //   if(params['from'] || params['to'] || params['status']){
-    //     this.formFilter.get('shipping').setValue([this.defaultShipping]);
-    //   }
-    // });
+    this.selectedTabMainChange(0);
+    this.formFilter.get('shipping').setValue(this.dataService.getFromStorage("filter_orders_shipping") ? this.dataService.getFromStorage("filter_orders_shipping") : [this.defaultShipping]);
+    this.route.queryParams.subscribe(params => {
+      if(params['from']) {
+        this.formFilter.get('from').setValue(this.dataService.getFromStorage("filter_orders_from"));
+      }
+      if(params['to']) {
+        this.formFilter.get('to').setValue(this.dataService.getFromStorage("filter_orders_to"));
+      }
+      if(params['from'] || params['to'] || params['status']){
+        this.formFilter.get('shipping').setValue([this.defaultShipping]);
+      }
+    });
 
-    // if(!this.dataService.getFromStorage("page")){
-    //   this.dataService.setToStorage("page", 1);
-    // }
+    if(!this.dataService.getFromStorage("page")){
+      this.dataService.setToStorage("page", 1);
+    }
 
   }
   ngOnDestroy() {
@@ -1297,14 +1299,13 @@ export class OrdersRrpComponent implements OnInit {
   }
 
   selectedTabMainChange(index: any) {
-    return;
-    // this.selectedTabMain = index;
-    // if (index !== 0 && index !== 7) {
-    //   this.setValFilter(true);
-    // } else {
-    //   this.setValFilter(false);
-    // }
-    // // this.updateFilter(null, null);
+    this.selectedTabMain = index;
+    if (index !== 0 && index !== 7) {
+      this.setValFilter(true);
+    } else {
+      this.setValFilter(false);
+    }
+    // this.updateFilter(null, null);
   }
   getCellClass({ row, column, value }): any {
     let color = ' white-strip ';

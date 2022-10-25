@@ -24,6 +24,7 @@ import { isNgTemplate } from "@angular/compiler";
 import { LanguagesService } from "app/services/languages/languages.service";
 // import { CurrencyPipe } from '@angular/common';
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
+import { PagesName } from 'app/classes/pages-name';
 import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe";
 
 
@@ -33,8 +34,13 @@ import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe"
   styleUrls: ['./orders-rrp-detail.component.scss']
 })
 export class OrdersRrpDetailComponent implements OnInit {
-  orderId: any;
+  orderId: any = 1;
+  retailerId: any;
+  blockOrder: any = 0;
   body: any;
+  bodyBlockOrder: any;
+  permission: any;
+  roles: PagesName = new PagesName();
   // detailOrder: any;
 
   // // Dummy Data // //
@@ -43,7 +49,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     "uuid": "b25bf5ce-644c-46c7-913b-46f752b24ecc",
     "transaction_id": null,
     "wholesaler_id": 130330,
-    "retailer_id": null,
+    "retailer_id": 130047,
     "retailer_discount_amount": null,
     "user_id": 270845,
     "invoice_number": "AYO.220127092815.130330",
@@ -207,7 +213,6 @@ export class OrdersRrpDetailComponent implements OnInit {
 
   loadingIndicator = false;
   onLoad: Boolean;
-  blockOrder: any = 0;
 
   generateReceipt: GenerateReceipt = new GenerateReceipt(this.ls, this.translateInterpolatePipe, this.dataService);
 
@@ -222,6 +227,9 @@ export class OrdersRrpDetailComponent implements OnInit {
 
   navigationSubscription;
   imageConverted: any;
+  imageUrl1: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
+  imageUrl2: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
+  imageUrl3: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
 
   onEdit: boolean = false;
   dialogRef: any;
@@ -269,6 +277,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     private translateInterpolatePipe: TranslateInterpolatePipe,
   ) {
     this.user_country = localStorage.getItem('user_country');
+    this.permission = this.roles.getRoles('principal.retailer');
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -280,7 +289,7 @@ export class OrdersRrpDetailComponent implements OnInit {
 
     this.edited = false;
     this.activatedRoute.url.subscribe(params => {
-      this.orderId = params[1].path;
+      this.orderId = params[2].path;
     });
     // this.listLevel = this.activatedRoute.snapshot.data["listLevel"].data
 
@@ -297,7 +306,7 @@ export class OrdersRrpDetailComponent implements OnInit {
       // If it is a NavigationEnd event re-initalise the component
       if (
         e instanceof NavigationEnd &&
-        e.url === `/orders/detail/${this.orderId}`
+        e.url === `/user-management/rrp-retailer/detail/${this.orderId}`
       ) {
         // this.ngOnInit();
       }
@@ -491,14 +500,6 @@ export class OrdersRrpDetailComponent implements OnInit {
     });
   }
 
-  blockNextOrder() {
-    if (this.blockOrder === 0) {
-      this.blockOrder = 1;
-    } else {
-      this.blockOrder = 0;
-    }
-  }
-
   getDetailOrder(): void {
     this.loadingIndicator = true;
     this.allProductLevels = [];
@@ -509,6 +510,8 @@ export class OrdersRrpDetailComponent implements OnInit {
           res.paylater_va = JSON.parse(res.paylater_va);
         }
         this.detailOrder = res;
+        this.retailerId = this.detailOrder.retailer_id;
+        this.blockOrder = this.detailOrder.block_order;
         if (res.payment_type === 'virtual-account' && res.status === 'pesanan-diterima') {
           this.vaValidated = false;
         }
@@ -695,6 +698,27 @@ export class OrdersRrpDetailComponent implements OnInit {
       });
       window.localStorage.removeItem('timeStartPesananDetail');
     }
+  }
+
+  blockNextOrder() {
+    let bodyBlockOrder: Object = {
+      _method: "PUT",
+      // block_order: this.blockOrder
+      retailer_id: this.detailOrder.retailer_id,
+      business_id: this.detailOrder.wholesaler_id
+    };
+    this.ordersService.blockNextOrder(bodyBlockOrder, { retailer_id: this.detailOrder.retailer_id }).subscribe(res => {
+      if (res.status) {
+        this.blockOrder = 1;
+      } else {
+        this.dialogService.openSnackBar({ message: "Block Next Order Failed" })
+      }
+      },
+      err => {
+        this.dialogService.openSnackBar({ message: "Block Next Order Failed" })
+        // console.log('block error');
+      }
+    );
   }
 
   updateQty(index): void {
@@ -1026,7 +1050,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     setTimeout(() => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
-        message: this.ls.locale.lihat_pesanan.text18
+        message: 'Semua harga berhasil diperbarui, tekan tombol simpan untuk menyimpan semua perubahan.'
       });
     }, 2000);
     // let fd = new FormData();

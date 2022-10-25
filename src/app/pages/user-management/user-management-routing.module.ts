@@ -267,7 +267,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "order-rrp",
+    path: "rrp-retailer",
     component: OrdersRrpComponent,
     data: {
       breadcrumbs: brConfig.order_rrp.index
@@ -275,7 +275,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "order-rrp/detail",
+    path: "rrp-retailer/detail/:id",
     component: OrdersRrpDetailComponent,
     data: {
       breadcrumbs: brConfig.order_rrp.detail
