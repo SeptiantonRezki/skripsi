@@ -80,10 +80,10 @@
         <ngx-datatable-column [width]="120" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button matTooltip="Download Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportCoupon(row)">
+              <button matTooltip="Download Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="export(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
               </button>
-              <button matTooltip="Download Detail Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportDetailCoupon(row)">
+              <button matTooltip="Download Detail Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportDetail(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
               </button>
               <button matTooltip="Edit" id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">

@@ -4,20 +4,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from 'app/classes/config';
 import { LanguagesService } from 'app/services/languages/languages.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { InfoBoardService } from "app/services/dte/info-board.service";
 import { DialogService } from 'app/services/dialog.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
-import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
-import { AudienceService } from 'app/services/dte/audience.service';
+import { ImportAudiencePersonalizeInfoBoardComponent } from '../import/personalize/import-audience-personalize.component';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -126,7 +123,6 @@ export class InfoBoardEditComponent implements OnInit {
     private geoService: GeotreeService,
     private geotreeService: GeotreeService,
     private dataService: DataService,
-    private audienceService: AudienceService,
     private activatedRoute: ActivatedRoute,
   ) {
     this.onLoad = true;
@@ -152,6 +148,11 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    const status = this.dataService.getFromStorage('free_text');
+    if (status ===  true) {
+      this.selectedTab = 1;
+      this.dataService.setToStorage('free_text', false);
+    }
     this.formBoard = this.formBuilder.group({
       name_board: ["", Validators.required],
       description_board: ["", Validators.required],
@@ -808,9 +809,8 @@ export class InfoBoardEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('detail_info_board').id;
     if (this.isPopulation === true) {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'population-blast',
-        class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
         regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
         areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
@@ -866,7 +866,7 @@ export class InfoBoardEditComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.infoBoardService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -889,7 +889,7 @@ export class InfoBoardEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      ImportAudiencePersonalizeComponent,
+      ImportAudiencePersonalizeInfoBoardComponent,
       dialogConfig
     );
 

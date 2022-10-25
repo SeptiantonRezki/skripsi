@@ -34,11 +34,6 @@ export class InfoBoardService extends BaseService {
     return this.postApi(url, body);
   }
 
-  put_audience(body, context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'put_audience', context);
-    return this.postApi(url, body);
-  }
-
   delete(context): Observable<any> {
     console.log('contextnya', context);
     const url = this.getUrl(this.namespace, 'delete', context);
@@ -80,13 +75,24 @@ export class InfoBoardService extends BaseService {
     return this.postApi(url, body);
   }
 
-  exportDetailCoupon(context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_detail_coupon", {id: context});
+  exportDetail(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_detail", {id: context});
     return this.getApi(url, {});
   }
-
-  exportCoupon(context?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_coupon", {id: context});
+  export(context?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export", {id: context});
     return this.getApi(url, {});
+  }
+  exportExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_info_board");
+    return this.postApi(url, body);
+  }
+  importExcel(body): Observable<any> {
+    const url = this.getUrl(this.namespace, "import_info_board");
+    return this.postApi(url, body);
+  }
+  showImport(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_import_info_board");
+    return this.getApi(url, queryParams);
   }
 }

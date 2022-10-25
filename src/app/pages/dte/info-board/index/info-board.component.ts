@@ -191,10 +191,10 @@ export class InfoBoardComponent implements OnInit {
     this.router.navigate(['dte', 'info-board', 'detail']);
   }
 
-  async exportDetailCoupon(param?: any) {
+  async exportDetail(param?: any) {
     this.dataService.showLoading(true);
     try {
-      const response = await this.infoBoardService.exportDetailCoupon(param.id).toPromise();
+      const response = await this.infoBoardService.exportDetail(param.id).toPromise();
       this.downloadLinkDetailCoupon.nativeElement.href = response.data;
       this.downloadLinkDetailCoupon.nativeElement.click();
       setTimeout(() => {
@@ -206,10 +206,10 @@ export class InfoBoardComponent implements OnInit {
     }
   }
 
-  async exportCoupon(param?: any) {
+  async export(param?: any) {
     this.dataService.showLoading(true);
     try {
-      const response = await this.infoBoardService.exportCoupon(param.id).toPromise();
+      const response = await this.infoBoardService.export(param.id).toPromise();
       this.downloadLinkCoupon.nativeElement.href = response.data;
       this.downloadLinkCoupon.nativeElement.click();
       setTimeout(() => {

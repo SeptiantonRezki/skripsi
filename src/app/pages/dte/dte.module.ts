@@ -193,6 +193,7 @@ import { InfoBoardEditComponent } from './info-board/edit/info-board-edit.compon
 import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
+import { ImportAudiencePersonalizeInfoBoardComponent } from "./info-board/import/personalize/import-audience-personalize.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -372,6 +373,7 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
+    ImportAudiencePersonalizeInfoBoardComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
     ImportAudiencePersonalizeComponentSPW,
@@ -511,6 +513,7 @@ export const MY_FORMATS = {
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
+    ImportAudiencePersonalizeInfoBoardComponent,
     ImportAudiencePersonalizeComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
