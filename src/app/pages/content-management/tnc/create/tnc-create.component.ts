@@ -7,7 +7,7 @@ import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Config } from 'app/classes/config';
 import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
-
+import { PagesName } from 'app/classes/pages-name';
 @Component({
   selector: 'app-tnc-create',
   templateUrl: './tnc-create.component.html',
@@ -17,7 +17,7 @@ export class TncCreateComponent {
 
   formTnc: FormGroup;
   formTncError: any;
-
+  roles: PagesName = new PagesName();
   userGroup: any[] = [
     // { name: "Field Force", value: "field-force" },
     // { name: "Wholesaler", value: "wholesaler" },
@@ -27,7 +27,7 @@ export class TncCreateComponent {
   ];
   countryList: any[] = [];
   companyList: any[] = [];
-
+  permission: {}
   files: File;
   public options: Object = Config.FROALA_CONFIG;
 
@@ -46,6 +46,7 @@ export class TncCreateComponent {
       group_id: {},
       country: {},
     };
+    this.permission = this.roles.getRoles('principal.syaratketentuan');
   }
 
   ngOnInit() {

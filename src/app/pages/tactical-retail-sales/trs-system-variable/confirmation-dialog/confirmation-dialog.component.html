@@ -1,0 +1,7 @@
+<div class="dialog-container p-12">
+  <h4 *ngIf="data.titleDialog" mat-dialog-title>{{data.titleDialog}}</h4>
+  <div mat-dialog-actions class="actions">
+    <button mat-button class="reject" style="cursor: pointer;" (click)="closeDialog()">Tidak, Batalkan</button>
+    <button mat-button class="confirm" style="cursor: pointer;" (click)="data.confirmCallback()">Ya, Lanjutkan</button>
+  </div>
+</div>
