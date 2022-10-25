@@ -215,14 +215,12 @@ export class PagesName {
       "/tactical-retail-sales/trs-proposal/edit": "principal.trsproposal.ubah",
       "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
       "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
-
       "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
       "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
       "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
       "/content-management/privacy": "principal.kebijakanprivasi.lihat",
       "/content-management/privacy/create": "principal.kebijakanprivasi.buat",
       "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
-
     }
     return PAGES[name];
   }

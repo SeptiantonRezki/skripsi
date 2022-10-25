@@ -288,13 +288,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
         }
       }
     }
-    const page = this.dataService.getFromStorage('page');
-    const sort_type = this.dataService.getFromStorage('sort_type');
-    const sort = this.dataService.getFromStorage('sort');
-
-    this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    
     this.pagination['coin_disbursement_id'] = this.detailCoin.id;
 
     if (this.formFilterExchange.get("group_trade_program").value) {
@@ -319,7 +313,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       delete this.pagination['name'];
     }
 
-    this.offsetPagination = page ? (page - 1) : 0;
+    this.offsetPagination = 0;
 
     this.coinDisburstmentService.getExhanges(this.pagination).subscribe(
       res => {
