@@ -1162,6 +1162,26 @@ export class Endpoint {
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/spin/audience/show-import`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
       },
+      tactical_retail_sales: {
+        sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
+        proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal`,
+        proposal_detail: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
+        cancel_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/cancel_proposal/${context.id}`,
+        customer_name: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/getcustname/${context.id}`,
+        
+        list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_executor`,
+        list_kecamatan: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_kecamatan`,
+        list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_product`,
+        master_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/master_reason`,
+        
+        list_area: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area`,
+        list_area_by_user: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area_by_user`,
+
+        export_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/data?area=${context.area_id}`,
+        export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/list`,
+      
+        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
