@@ -54,7 +54,7 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
                   <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
-                    placeholder="{{ls.locale.tactical_retail_sales.proposal_program_start_date}}" formControlName="startDate"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_program_start_date}}" formControlName="startDate" [min]="minDateProposal"
                     [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>

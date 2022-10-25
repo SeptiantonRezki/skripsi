@@ -111,8 +111,9 @@ export class TrsProposalCreateComponent implements OnInit {
     this.list = {
       salespoint: [],
     }
-
-    this.maxDateProposal.setDate(this.minDateProposal.getDate() + this.maxPeriodProposal);
+    
+    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+    this.maxDateProposal.setDate(this.minDateProposal.getDate()+1 + this.maxPeriodProposal);
   }
 
   ngOnInit() {

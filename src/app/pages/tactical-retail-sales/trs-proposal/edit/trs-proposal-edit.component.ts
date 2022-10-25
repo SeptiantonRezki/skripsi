@@ -117,7 +117,9 @@ export class TrsProposalEditComponent implements OnInit {
       salespoint: [],
     }
 
-    this.maxDateProposal.setDate(this.minDateProposal.getDate() + this.maxPeriodProposal);
+    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+    this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
+    this.maxDateProposal.setDate(this.minDateProposal.getDate()+1 + this.maxPeriodProposal);
   }
 
   ngOnInit() {
@@ -218,6 +220,8 @@ export class TrsProposalEditComponent implements OnInit {
         //this.disableForm = true;
       };
       
+      this.minMaxDateProposal = this.formCreateProposal.get('startDate').value;
+      this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
 
 
 
@@ -240,6 +244,7 @@ export class TrsProposalEditComponent implements OnInit {
       res.data.forEach((item) => {
         if (item.param === 'max_period') {
           this.maxPeriodProposal = parseInt(item.value);
+          this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
         }
       });
     }, err => {
