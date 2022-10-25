@@ -32,6 +32,7 @@ export class ImportKeyword implements OnInit {
   loadingIndicator = false;
   reorderable = true;
   onLoad: boolean;
+  isValidData: 0;
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -147,6 +148,9 @@ export class ImportKeyword implements OnInit {
             this.currPage += 1;
             this.lastPage = response.data.last_page;
             this.totalData = response.data.total;
+            if (typeof response.data['is_valid'] !== 'undefined') {
+              this.isValidData = response.data.is_valid;
+            }
 
             this.idbService.bulkUpdate(data).then(res => {
               this.recursiveImport();
@@ -240,7 +244,7 @@ export class ImportKeyword implements OnInit {
           this.idbService.bulkUpdate(bowls).then(resUpdate => {
             this.pagination['per_page'] = 15;
             this.idbService.paginate(this.pagination).then(resPaginate => {
-              this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+              this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData, is_valid: this.isValidData };
               Page.renderPagination(this.pagination, this.p_pagination);
               this.rows = resPaginate && resPaginate[0] ? resPaginate[0] : [];
               this.dataService.showLoading(false);
@@ -267,7 +271,7 @@ export class ImportKeyword implements OnInit {
         this.pagination['per_page'] = 15;
         this.idbService.paginate(this.pagination)
           .then(res => {
-            this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+            this.p_pagination = { page: this.p_page, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData, is_valid: this.isValidData };
             Page.renderPagination(this.pagination, this.p_pagination);
             this.rows = res && res[0] ? res[0] : [];
             this.dataService.showLoading(false);
@@ -331,7 +335,7 @@ export class ImportKeyword implements OnInit {
     this.p_pagination['page'] = pageInfo.offset + 1;
 
     this.idbService.paginate(this.p_pagination).then(res => {
-      this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData };
+      this.p_pagination = { page: pageInfo.offset + 1, per_page: 15, last_page: Math.ceil(this.totalData / 15), total: this.totalData, is_valid: this.isValidData };
       Page.renderPagination(this.pagination, this.p_pagination);
       this.rows = res && res[0] ? res[0] : [];
       this.dataService.showLoading(false);
@@ -369,6 +373,10 @@ export class ImportKeyword implements OnInit {
   setPreview(data) {
     this.lastPage = data.data.last_page;
     this.totalData = data.data.total;
+    if (typeof data.data['is_valid'] !== 'undefined') {
+      this.isValidData = data.data.is_valid;
+      data.data['is_valid'] = this.isValidData;
+    }
     this.rows = (data.data.data || []).map(item => item.preview);
     this.previewData = {
       is_valid: data.is_valid,
