@@ -166,6 +166,7 @@ export class TradeEditComponent {
 
     this.formTradeProgram.valueChanges.subscribe((res) => {
       this.valueChange = true;
+      this.saveData = false;
     });
 
     this.filterGTP.valueChanges
