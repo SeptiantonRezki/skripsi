@@ -185,8 +185,10 @@ import { XpComponent } from './xp/xp.component';
 import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
 import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
+import { SpinTheWheelNotifComponent } from './spin-the-wheel/notif/spin-the-wheel-notif.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
+import { SpinTheWheelMechanismComponent } from './spin-the-wheel/tab/mechanism/spin-the-wheel-mechanism.component';
 import { DialogProcessComponentSPW } from "./spin-the-wheel/dialog/dialog-process/dialog-process.component";
 import { DialogProcessSaveComponentSPW } from "./spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component";
 import { ImportAudiencePersonalizeComponentSPW } from "./spin-the-wheel/import/personalize/import-audience-personalize.component";
@@ -394,6 +396,8 @@ export const MY_FORMATS = {
     LoyaltyMitraComponent,
     VerificationApprovalComponent,
     SpinTheWheelComponent,
+    SpinTheWheelMechanismComponent,
+    SpinTheWheelNotifComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
   ],
