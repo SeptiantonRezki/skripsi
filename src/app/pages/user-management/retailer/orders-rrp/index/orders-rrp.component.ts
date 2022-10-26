@@ -53,81 +53,6 @@ export class OrdersRrpComponent implements OnInit {
   selectedTabMain = 0;
   statusFilter: any[] = [];
 
-  // // Dummy Data // //
-  // statusFilter: any[] = [
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "semua-pesanan",
-  //     status_value: "Semua Pesanan"
-  //   },
-  //   {
-  //     child: [
-  //       {status_title: "pesanan-baru", status_value: "Pesanan Baru", status_count: 0},
-  //       {status_title: "pesanan-dilihat", status_value: "Pesanan Dilihat", status_count: 1}
-  //     ],
-  //     is_sign: true,
-  //     status_count: 1,
-  //     status_title: "pesanan-baru",
-  //     status_value: "Pesanan Baru"
-  //   },
-  //   {
-  //     child: [
-  //       {status_title: "konfirmasi-perubahan", status_value: "Konfirmasi Perubahan", status_count: 0},
-  //       {status_title: "perubahan-disetujui", status_value: "Perubahan Disetujui", status_count: 0},
-  //       {status_title: "diproses", status_value: "Pesanan Diproses", status_count: 0}
-  //     ],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "diproses",
-  //     status_value: "Pesanan Diproses"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "siap-diambil",
-  //     status_value: "Siap Diambil"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "dalam-pengiriman",
-  //     status_value: "Dalam Pengiriman"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "pesanan-diterima",
-  //     status_value: "Pesanan Diterima"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "belum-lunas",
-  //     status_value: "Belum Lunas"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "selesai",
-  //     status_value: "Pesanan Selesai"
-  //   },
-  //   {
-  //     child: [],
-  //     is_sign: false,
-  //     status_count: 0,
-  //     status_title: "pesanan-dibatalkan",
-  //     status_value: "Pesanan Dibatalkan"
-  //   },
-  // ];
-  // // End Dummy Data // //
-
   courierFilter: any[] = [];
 
   formFilter: FormGroup;
@@ -146,12 +71,11 @@ export class OrdersRrpComponent implements OnInit {
   ];
   selectAllOnPage: any[] = [];
   updateableStatus = [];
-  defaultShipping = { id: '', name: "Semua Metode Pengiriman" };
+  defaultShipping = { id: '', name: this.ls.locale.lihat_pesanan.text5 };
   defaultColumns = [
-    this.ls.locale.katalog_src.lihat_pesanan.text8,
+    this.ls.locale.global.label.order_code,
     this.ls.locale.global.label.name,
-    // this.ls.locale.global.label.delivery_method,
-    "Metode Pengiriman",
+    this.ls.locale.global.label.delivery_method,
     this.ls.locale.global.label.address,
     this.ls.locale.global.label.status,
     this.ls.locale.global.label.date,
@@ -159,11 +83,10 @@ export class OrdersRrpComponent implements OnInit {
     this.ls.locale.global.label.customer_code
   ];
   formColumn: FormControl = new FormControl([
-    this.ls.locale.katalog_src.lihat_pesanan.text8,
+    this.ls.locale.global.label.order_code,
     this.ls.locale.global.label.name,
     this.ls.locale.global.label.customer_code,
-    // this.ls.locale.global.label.delivery_method,
-    "Metode Pengiriman",
+    this.ls.locale.global.label.delivery_method,
     this.ls.locale.global.label.address,
     this.ls.locale.global.label.status,
     this.ls.locale.global.label.date,
@@ -171,31 +94,23 @@ export class OrdersRrpComponent implements OnInit {
     this.ls.locale.global.label.customer_code
   ]);
   columns = [
-    this.ls.locale.katalog_src.lihat_pesanan.text8,
+    this.ls.locale.global.label.order_code,
     this.ls.locale.global.label.name,
-    // this.ls.locale.global.label.order_via,
-    "Pesan Melalui",
-    // this.ls.locale.global.label.delivery_method,
-    "Metode Pengiriman",
+    this.ls.locale.global.label.order_via,
+    this.ls.locale.global.label.delivery_method,
     this.ls.locale.global.label.address,
     this.ls.locale.global.label.status,
-    this.ls.locale.produk_prinsipal.text28,
+    this.ls.locale.global.label.payment_method,
     this.ls.locale.global.label.date,
     this.ls.locale.global.label.total,
-    // this.ls.locale.global.label.voucher_discount,
-    "Diskon Voucher",
-    this.ls.locale.katalog_src.lihat_pesanan.text12,
-    // this.ls.locale.global.label.customer_tier,
-    "Tier Pelanggan",
-    this.ls.locale.global.label.phone,
-    // this.ls.locale.global.menu.promo_code,
-    "Kode Promo",
-    // this.ls.locale.global.label.discount_promo,
-    "Diskon Promo",
-    // this.ls.locale.global.label.received_status_date,
-    "Tanggal Status Diterima",
-    // this.ls.locale.global.label.last_updated_date,
-    "Tanggal Terakhir Diperbarui",
+    this.ls.locale.global.label.voucher_discount,
+    this.ls.locale.global.label.customer_type,
+    this.ls.locale.global.label.customer_tier,
+    this.ls.locale.global.label.phone_number,
+    this.ls.locale.global.menu.promo_code,
+    this.ls.locale.global.label.discount_promo,
+    this.ls.locale.global.label.received_status_date,
+    this.ls.locale.global.label.last_updated_date,
     this.ls.locale.global.label.note,
   ];
   enableCheckboxStatus = ['diproses', 'pesanan-dilihat', 'pesanan-diterima'];
@@ -253,37 +168,6 @@ export class OrdersRrpComponent implements OnInit {
     this.adapter.setLocale('en');
     this.rows = [];
 
-    // // Dummy Data // //
-    // this.rows = [
-    //   {
-    //     id: 1,
-    //     available_status: {
-    //       "diproses": "Pesanan Diproses", 
-    //       "pesanan-dibatalkan": "Pesanan Dibatalkan"
-    //     },
-    //     created_at: "2022-01-27 09:28:15",
-    //     invoice_number: "AYO.220127092815.130330",
-    //     name: "Dummy Test",
-    //     order_from: "otc",
-    //     shipping_method: "diambil",
-    //     address2: "Jakarta, Indonesia",
-    //     status: "pesanan-dilihat",
-    //     status_indo: "Pesanan Dilihat",
-    //     total: 20000,
-    //     total_payment: 20000,
-    //     total_payment_format_currency: "RP 20.000",
-    //     payment_type: "cod",
-    //     payment_type_indo: "Bayar Di Tempat"
-    //   }
-    // ];
-    // // End Dummy Data // //
-
-    // // For Dummy Data // //
-    // this.rows.map((item) => {
-    //   item['orderStatuses'] = Object.entries(item.available_status).map(([value, name]) => ({value,name}));
-    // });
-    // // End For Dummy Data // //
-
     this.onLoad = true;
 
     this.keyUp
@@ -320,12 +204,6 @@ export class OrdersRrpComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // // For Dummy Data // //
-    // this.loadingIndicator = false;
-    // this.rows;
-    // this.statusFilter;
-    // // End For Dummy Data // //
-    
     this.courierFilter = [this.defaultShipping];
     const staticWindowHeight = window.innerWidth < 1714 ? 500 : 449;
     this.innerHeight = window.innerWidth <= 984 || window.innerHeight < 834 ? 'auto' : (window.innerHeight - staticWindowHeight) + 'px';

@@ -503,19 +503,19 @@ export const brConfig = {
       {
         type: "current",
         url: "",
-        name: "Lihat Pesanan"
+        name: "lihat_pesanan.text1"
       }
     ],
     detail: [
       {
         type: "parent",
-        url: "/user-management/order-rrp",
-        name: "Lihat Pesanan"
+        url: "/user-management/rrp-retailer",
+        name: "lihat_pesanan.text1"
       },
       {
         type: "current",
         url: "",
-        name: "Detail Pemesanan"
+        name: "global.label.order_detail"
       }
     ],
   },

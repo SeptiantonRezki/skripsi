@@ -22,6 +22,7 @@
                 <thead>
                   <tr>
                     <th>{{ ls.locale.global.label.name }}</th>
+                    <th></th>
                     <th>{{ ls.locale.global.label.phone }}</th>
                     <th>{{ ls.locale.katalog_src.lihat_pesanan.text12 }}</th>
                   </tr>
@@ -29,19 +30,19 @@
                 <tbody>
                   <tr>
                     <td class="w-100">
-                      <div fxLayout="row" fxLayoutAlign="space-between center">
-                        <div fxLayout="row" fxFlex="50" fxLayoutAlign="start center">
-                          <img class="avatar" [src]="'assets/images/avatars/profile.jpg'">
-                          <span class="name text-truncate">{{detailOrder?.name}}</span>
-                        </div>
-                        <div fxFlex="50" fxLayoutAlign="center center">
-                          <button mat-raised-button *ngIf="blockOrder === 0 && permission?.detail_rrp" type="button" class="confirmation-button" (click)="blockNextOrder()">
-                            Block Next Order
-                          </button>
-                          <span class="mat-cod-color" *ngIf="blockOrder === 1">
-                            Next Order Blocked
-                          </span>
-                        </div>
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <img class="avatar" [src]="'assets/images/avatars/profile.jpg'">
+                        <span class="name text-truncate">{{detailOrder?.name}}</span>
+                      </div>
+                    </td>
+                    <td class="w-100">
+                      <div fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-raised-button *ngIf="(blockOrder === 0) && permission?.detail_rrp && (orderRrp === 1)" type="button" class="confirmation-button" (click)="blockNextOrder()">
+                          Block Next Order
+                        </button>
+                        <span class="mat-cod-color" *ngIf="(blockOrder === 1) && permission?.detail_rrp && (orderRrp === 1)">
+                          Next Order Blocked
+                        </span>
                       </div>
                     </td>
                     <td class="w-100">
@@ -342,7 +343,7 @@
                 </button>
                 <button mat-raised-button *ngIf="showRedBG(detailOrder?.status) && isAnyUpdate > -1" fxFlex="20"
                   (click)="updateAllPrice()" style="margin-left: 10px;">
-                  PERBARUI SEMUA HARGA
+                  {{ ls.locale.global.label.update_all_price?.toUpperCase() }}
                 </button>
               </div>
             </div>
@@ -369,8 +370,7 @@
                   fxLayoutGap.lt-md="0px">
                   <div fxFlex="90" class="py-16 pr-16">
                     <!-- TOP HEADER -->
-                    <div class="text-center">
-                    <!-- <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.top_header; else customTopHeader"> -->
+                    <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.top_header; else customTopHeader">
                       <div class="text-bold">{{ ls.locale.katalog_src.lihat_pesanan.text22 }}</div>
                       <div class="text-bold">{{detailOrder?.wholesaler_name}}</div>
                       <div>{{detailOrder?.wholesaler_phone || '-'}}</div>
@@ -378,16 +378,15 @@
                         <span>{{ ls.locale.katalog_src.lihat_pesanan.text8 }}: {{detailOrder?.invoice_number}}</span>
                       </div>
                     </div>
-                    <!-- <ng-template #customTopHeader>
+                    <ng-template #customTopHeader>
                       <div class="text-center" *ngIf="detailOrder">
                         <div *ngFor="let item of ls.locale.global.nota.custom?.top_header" [innerHTML]="item | translateInterpolate:detailOrder | async"></div>
                       </div>
-                    </ng-template> -->
+                    </ng-template>
                     <!--/ TOP HEADER -->
                     
                     <!-- BOTTOM HEADER -->
-                    <div class="text-center">
-                    <!-- <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.bottom_header; else customBottomHeader"> -->
+                    <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.bottom_header; else customBottomHeader">
                       <div class="pt-8">{{ ls.locale.katalog_src.lihat_pesanan.text10?.toUpperCase() }}</div>
                       <div class="mt-8 detail-order2" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
                         <div class="text-bold">{{detailOrder?.name}}</div>
@@ -401,11 +400,11 @@
                           ls.locale.global.label.cash_bill?.toUpperCase() }}</div>
                       </div>
                     </div>
-                    <!-- <ng-template #customBottomHeader>
+                    <ng-template #customBottomHeader>
                       <div class="mt-8 detail-order2 text-center" *ngIf="detailOrder">
                         <div *ngFor="let item of ls.locale.global.nota.custom?.bottom_header" [innerHTML]="item | translateInterpolate:detailOrder | async"></div>
                       </div>
-                    </ng-template> -->
+                    </ng-template>
                     
                     <!--/ BOTTOM HEADER -->
 
@@ -437,24 +436,27 @@
                     <div class="pt-8 border-bottom-custom"></div>
                     <div class="">
                       <div *ngFor="let item of detailOrder?.summary"
-                        [ngStyle]="{'border-top': item.title === 'Total Pembayaran' ? '1px dashed rgba(0,0,0,0.54)' : ''}"
-                        [ngClass]="{'py-8' : item.title === 'Total Pembayaran', 'py-4' : item.title !== 'Total Pembayaran'}"
+                        [ngStyle]="{'border-top': item.title === ls.locale.pesan_produk.text69 ? '1px dashed rgba(0,0,0,0.54)' : ''}"
+                        [ngClass]="{'py-8' : item.title === ls.locale.pesan_produk.text69, 'py-4' : item.title !== ls.locale.pesan_produk.text69}"
                         fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
                         <span fxFlex="50"
-                          [ngClass]="{'text-bold' : item.title === 'Total Pembayaran', 'ml-15': item.title === 'Total Rokok' || item.title === 'Total Non Rokok'}"
-                          [ngStyle]="{'display': item.title === 'Total Rokok' || item.title === 'Total Non Rokok' ? 'list-item' : 'inline'}">{{item.title.toUpperCase()
+                          [ngClass]="{'text-bold' : item.title === ls.locale.pesan_produk.text69, 'ml-15': item.title === 'Total Rokok' || item.title === 'Total Non Rokok'}"
+                          [ngStyle]="{'display': item.title === 'Total Rokok' || item.title === 'Total Non Rokok' ? 'list-item' : 'inline'}">{{item.title?.toUpperCase()
                           ===
-                          'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title.toUpperCase()}}</span>
-                        <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}" class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
+                          ls.locale.global.label.total_payment?.toUpperCase() ?
+                          ls.locale.global.label.total_order?.toUpperCase() :
+                          item.title?.toUpperCase()}}</span>
+                        <span fxFlex="50" [ngClass]="{'text-bold' : item.title === ls.locale.pesan_produk.text69}"
+                          class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
                           {{checkOngkirWithProductExisting(item)}}</span>
 
                         <!-- <ng-container *ngIf="item.child">
-                              <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
-                                <span>test</span>
-                                <span>test</span>
-                                <span>test</span>
-                              </div>
-                            </ng-container> -->
+                          <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                            <span>test</span>
+                            <span>test</span>
+                            <span>test</span>
+                          </div>
+                        </ng-container> -->
                       </div>
                     </div>
                     <div class="py-16">
@@ -482,11 +484,11 @@
                       </span>
                     </div>
                     <div class="text-center" *ngIf="detailOrder?.point_curs > 0">
-                      <div>DAPATKAN POIN DENGAN SETIAP PEMESANAN</div>
+                      <div>{{ ls.locale.global.nota.text1?.toUpperCase() }}</div>
                       <div class="mat-caption">{{detailOrder?.point_curs | rupiahFormaterWithoutRp}}</div>
                     </div>
                     <div *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'">
-                      <p><strong>PEMBAYARAN DILAKUKAN KE 
+                      <p><strong>{{ ls.locale.global.nota.text2?.toUpperCase() }}
                           {{detailOrder?.paylater_payment_type}}.</strong></p>
                       <div *ngIf="detailOrder?.paylater_va">
                         <p *ngFor="let bank of detailOrder?.paylater_va">{{bank.bankName}} : {{ bank.vaNumber }} (PT.
@@ -495,18 +497,18 @@
                       </div>
                       <p>
                         <strong>
-                          JUMLAH YANG HARUS DIBAYAR:  {{ detailOrder?.total_payment | rupiahFormaterWithoutRp }}
+                          {{ ls.locale.global.nota.text3?.toUpperCase() }} {{ detailOrder?.total_payment | rupiahFormaterWithoutRp }}
                         </strong>
                       </p>
-                      <p><strong>ESTIMASI JATUH TEMPO* : 
+                      <p><strong>{{ ls.locale.global.nota.text4?.toUpperCase() }}
                           {{ detailOrder?.paylater_due_date | date: 'dd/MM/yyyy HH:mm' }}</strong></p>
                       <p style="font-size: 14px;">
-                        *Jatuh tempo akan dihitung 7 hari kerja setelah pesanan berubah status menjadi pesanan diterima
+                        {{ ls.locale.global.nota.text5?.toUpperCase() }}
                       </p>
                     </div>
                     <br>
                     <div *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'" class="pt-8"
-                      style="border-bottom: 1px solid black;"><b>CUSTOMER SERVICE POJOK MODAL (Powered by 
+                      style="border-bottom: 1px solid black;"><b>{{ ls.locale.global.nota.text6?.toUpperCase() }}
                         {{detailOrder?.paylater_group_name}})</b></div>
                     <div class="pt-8" *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'">
                       <p *ngFor="let contact of detailOrder?.customer_contact" class="text-center">{{ contact.title }}:
@@ -516,19 +518,19 @@
                       }}"</p>
                     
                       <!-- FOOTER -->
-                      <div class="text-center">
-                      <!-- <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.footer; else customFooter"> -->
-                        <div class="mat-caption">ORDER DISIAPKAN OLEH: </div>
+                      <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.footer; else customFooter">
+                        <div class="mat-caption">{{ ls.locale.global.nota.text7?.toUpperCase() }}</div>
                         <div class="mat-caption">{{detailOrder?.order_prepared_by?.toUpperCase()}}</div>
                         <div class="mat-caption">{{detailOrder?.created_at | date: 'dd/MM/yyyy HH:mm'}}</div>
                         <br>
-                        <div class="mat-caption" *ngIf="ls.selectedLanguages === 'id'">CUSTOMER SERVICE AYO SRC 0804 1000 234</div>
+                        <div class="mat-caption" *ngIf="ls.selectedLanguages === 'id'">{{
+                          ls.locale.global.nota.text8?.toUpperCase() }}</div>
                       </div>
-                      <!-- <ng-template #customFooter>
+                      <ng-template #customFooter>
                         <div class="text-center">
                           <div class="mat-caption" *ngFor="let item of ls.locale.global.nota.custom.footer" [innerHTML]="item | translateInterpolate | async"></div>
                         </div>
-                      </ng-template> -->
+                      </ng-template>
                       <!--/ FOOTER -->
 
                   </div>
@@ -723,15 +725,15 @@
     <div class="pt-8 border-bottom-custom"></div>
     <div class="">
       <div *ngFor="let item of detailOrder?.summary"
-        [ngStyle]="{'border-top': item.title === 'Total Pembayaran' ? '1px dashed rgba(0,0,0,0.54)' : ''}"
-        [ngClass]="{'py-8' : item.title === 'Total Pembayaran', 'py-4' : item.title !== 'Total Pembayaran'}"
+        [ngStyle]="{'border-top': item.title === ls.locale.pesan_produk.text69 ? '1px dashed rgba(0,0,0,0.54)' : ''}"
+        [ngClass]="{'py-8' : item.title === ls.locale.pesan_produk.text69, 'py-4' : item.title !== ls.locale.pesan_produk.text69}"
         fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
         <span fxFlex="50"
-          [ngClass]="{'text-bold' : item.title === 'Total Pembayaran', 'ml-15': item.title === 'Total Rokok' || item.title === 'Total Non Rokok'}"
+          [ngClass]="{'text-bold' : item.title === ls.locale.pesan_produk.text69, 'ml-15': item.title === 'Total Rokok' || item.title === 'Total Non Rokok'}"
           [ngStyle]="{'display': item.title === 'Total Rokok' || item.title === 'Total Non Rokok' ? 'list-item' : 'inline'}">{{item.title.toUpperCase()
           ===
-          'TOTAL PEMBAYARAN' ? 'TOTAL PEMESANAN' : item.title.toUpperCase()}}</span>
-        <span fxFlex="50" [ngClass]="{'text-bold' : item.title === 'Total Pembayaran'}" class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
+          ls.locale.global.label.total_payment?.toUpperCase() ? ls.locale.global.label.total_order.toUpperCase() : item.title.toUpperCase()}}</span>
+        <span fxFlex="50" [ngClass]="{'text-bold' : item.title === ls.locale.pesan_produk.text69}" class="text-right">{{ item.title === 'Diskon Non Rokok' ? '-' : '' }}
           {{checkOngkirWithProductExisting(item)}}</span>
 
         <!-- <ng-container *ngIf="item.child">
@@ -755,7 +757,7 @@
           {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
         </span> -->
         <span *ngIf="detailOrder?.status !== 'selesai'" fxFlex="50">
-          ESTIMASI POIN
+          {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
         </span>
         <span *ngIf="detailOrder?.status === 'selesai'" fxFlex="50">
           {{ ls.locale.global.label.additional_points?.toUpperCase() }}
@@ -764,13 +766,13 @@
       </div>
     </div>
     <div class="text-center" *ngIf="detailOrder?.point_curs > 0">
-      <div>DAPATKAN POIN DENGAN SETIAP PEMESANAN</div>
+      <div>{{ ls.locale.global.nota.text1?.toUpperCase() }}</div>
       <div class="mat-caption">
         {{detailOrder?.point_curs | rupiahFormaterWithoutRp}}
       </div>
     </div>
     <div *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'">
-      <p><strong>PEMBAYARAN DILAKUKAN KE {{detailOrder?.paylater_payment_type}}.</strong></p>
+      <p><strong>{{ ls.locale.global.nota.text2 }} {{detailOrder?.paylater_payment_type}}.</strong></p>
       <div *ngIf="detailOrder?.paylater_va">
         <p *ngFor="let bank of detailOrder?.paylater_va">{{bank.bankName}} : {{ bank.vaNumber }} (PT.
           ESTA KAPITAL)
@@ -778,40 +780,39 @@
       </div>
       <p>
         <strong>
-          JUMLAH YANG HARUS DIBAYAR:  {{ detailOrder?.total_payment | rupiahFormaterWithoutRp }}
+          {{ ls.locale.global.nota.text3 }} {{ detailOrder?.total_payment | rupiahFormaterWithoutRp }}
         </strong>
       </p>
       <p>
         <strong>
-          ESTIMASI JATUH TEMPO* : 
+          {{ ls.locale.global.nota.text4 }}
           {{ detailOrder?.paylater_due_date | date: 'dd/MM/yyyy HH:mm' }}
         </strong>
       </p>
       <p style="font-size: 14px;">
-        *Jatuh tempo akan dihitung 7 hari kerja setelah pesanan berubah status menjadi pesanan diterima
+        {{ ls.locale.global.nota.text5 }}
       </p>
     </div>
     <br>
     <div *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'" class="pt-8"
       style="border-bottom: 1px solid black;"><b>
-        CUSTOMER SERVICE POJOK MODAL (Powered by  {{detailOrder?.paylater_group_name}})</b></div>
+        {{ ls.locale.global.nota.text6 }} {{detailOrder?.paylater_group_name}})</b></div>
     <div class="pt-8" *ngIf="detailOrder?.payment_type && detailOrder?.payment_type === 'pay-later'">
       <p *ngFor="let contact of detailOrder?.customer_contact" class="text-center">{{ contact.title }}:
         {{ contact.value }}</p>
     </div>
     <p style="text-align: center;font-style: italic;" *ngFor="let adv of detailOrder?.advocacy">"{{ adv
       }}"</p>
-    <div class="text-center">
-    <!-- <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.footer; else customFooter"> -->
-      <div class="mat-caption">ORDER DISIAPKAN OLEH: </div>
+    <div class="text-center" *ngIf="!ls.locale.global.nota.custom?.footer; else customFooter">
+      <div class="mat-caption">{{ ls.locale.global.nota.text7 }}</div>
       <div class="mat-caption">{{detailOrder?.order_prepared_by.toUpperCase()}}</div>
       <div class="mat-caption">{{detailOrder?.created_at | date: 'dd/MM/yyyy HH:mm'}}</div>
       <br>
-      <div class="mat-caption" *ngIf="ls.selectedLanguages === 'id'">CUSTOMER SERVICE AYO SRC 0804 1000 234</div>
+      <div class="mat-caption" *ngIf="ls.selectedLanguages === 'id'">{{ ls.locale.global.nota.text8 }}</div>
     </div>
-    <!-- <ng-template class="text-center" #customFooter>
+    <ng-template class="text-center" #customFooter>
       <div class="mat-caption" *ngFor="let item of ls.locale.global.nota.custom.footer">item</div>
-    </ng-template> -->
+    </ng-template>
     <!-- </div> -->
   </div>
 </div>

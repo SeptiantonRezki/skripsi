@@ -3,13 +3,27 @@ import { RupiahFormaterWithoutRpPipe } from '@fuse/pipes/rupiah-formater';
 import { TranslateInterpolatePipe } from '@fuse/pipes/translateInterpolate.pipe';
 import { DataService } from 'app/services/data.service';
 import { LanguagesService } from "app/services/languages/languages.service";
+import id from '../../assets/languages/id.json';
+import km from '../../assets/languages/km.json';
+import en_ph from '../../assets/languages/en-ph.json';
 
 export class GenerateReceipt {
+    // user_country: any;
+    // lang_translate: any;
+    
     constructor(
         public ls: LanguagesService,
         public pipe: TranslateInterpolatePipe,
         public dataService: DataService
     ) {
+        // this.user_country = localStorage.getItem('user_country');
+        // if (this.user_country === 'km') {
+        //     this.lang_translate = km;
+        // } else if (this.user_country === 'en') {
+        //     this.lang_translate = en_ph;
+        // } else {
+        //     this.lang_translate = id;
+        // }
     };
 
     html(detailOrder) {
@@ -31,10 +45,10 @@ export class GenerateReceipt {
                 html += `
                     <center>
                     <div><strong>${this.ls.locale.global.label.delivery_detail.toUpperCase()}</strong></div>
-                    <div><strong>${detailOrder.wholesaler_name.toUpperCase()}</strong></div>
+                    <div><strong>${detailOrder.wholesaler_name ? detailOrder.wholesaler_name.toUpperCase() : '-' }</strong></div>
                     <div>${detailOrder.wholesaler_phone}</div>
                     <div>${this.ls.locale.global.label.order_number}: ${detailOrder.invoice_number}</div><br/>${this.ls.locale.global.label.order_detail}<br/>
-                    <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 5px;"><div>${detailOrder.name.toUpperCase()}</div>
+                    <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 5px;"><div>${detailOrder.name ? detailOrder.name.toUpperCase() : '-'}</div>
                     <div>${detailOrder.address ? detailOrder.address : '-'}</div>
                     <div>${detailOrder.retailer_address_detail ? 'Detail alamat: ' + detailOrder.retailer_address_detail : '-'}</div>
                     <div>${detailOrder.phone ? detailOrder.phone : '-'}</div>${detailOrder.payment_type === 'pay-later' ?
@@ -207,10 +221,10 @@ export class GenerateReceipt {
                     html += `
                 <center>
                 <div><strong>${this.ls.locale.global.label.delivery_detail.toUpperCase()}</strong></div>
-                <div><strong>${detailOrder.wholesaler_name.toUpperCase()}</strong></div>
+                <div><strong>${detailOrder.wholesaler_name ? detailOrder.wholesaler_name.toUpperCase() : '-' }</strong></div>
                 <div>${detailOrder.wholesaler_phone}</div>
                 <div>${this.ls.locale.global.label.order_number}: ${detailOrder.invoice_number}</div><br/>${this.ls.locale.global.label.order_detail}<br/>
-                <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 5px;"><div>${detailOrder.name.toUpperCase()}</div>
+                <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 5px;"><div>${detailOrder.name ? detailOrder.name.toUpperCase() : '-'}</div>
                 <div>${detailOrder.address ? detailOrder.address : '-'}</div>
                 <div>${detailOrder.retailer_address_detail ? 'Detail alamat: ' + detailOrder.retailer_address_detail : '-'}</div>
                 <div>${detailOrder.phone ? detailOrder.phone : '-'}</div>${detailOrder.payment_type === 'pay-later' ?

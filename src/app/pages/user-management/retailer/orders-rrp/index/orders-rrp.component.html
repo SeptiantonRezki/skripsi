@@ -1,8 +1,6 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <!-- <page-content-header [contentTitle]="ls.locale.lihat_pesanan.text1">
-  </page-content-header> -->
-  <page-content-header [contentTitle]="ls.locale.katalog_src.lihat_pesanan.text1">
+  <page-content-header [contentTitle]="ls.locale.lihat_pesanan.text1">
   </page-content-header>
   <!-- / HEADER -->
 
@@ -77,7 +75,7 @@
         <!-- FROM -->
             <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
               <input matInput #from [matDatepicker]="dari" (focus)="dari.open()"
-                placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text5 }}" formControlName="from"
+                placeholder="{{ ls.locale.global.label.start_date }}" formControlName="from"
                 (dateChange)="setMinDate(formFilter.get('from').value)" readonly>
               <button mat-button *ngIf="formFilter.get('from').value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="setMinDate('')">
@@ -93,7 +91,7 @@
         <!-- TO -->
             <mat-form-field fxFlex="15" floatLabel="never" class="orders datepicker is-light">
               <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" [min]="minDate"
-              (dateChange)="setMaxDate(formFilter.get('to').value)" placeholder="{{ ls.locale.dte.pengatur_jadwal_program.text6 }}" formControlName="to" readonly>
+              (dateChange)="setMaxDate(formFilter.get('to').value)" placeholder="{{ ls.locale.global.label.end_date }}" formControlName="to" readonly>
               <button mat-button *ngIf="formFilter.get('to').value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="setMaxDate('')">
                 <mat-icon>close</mat-icon>
@@ -111,9 +109,8 @@
               <mat-select [formControl]="formColumn" multiple>
                 <mat-option *ngFor="let column of columns" [value]="column">{{column}}</mat-option>
                 <div class="mat-option mat-option-multiple">
-                  <!-- <button mat-raised-button width="100%" color="primary" (click)="resetColum()">{{
-                    ls.locale.lihat_pesanan.text6 }}</button> -->
-                  <button mat-raised-button width="100%" color="primary" (click)="resetColum()">Reset Kolom</button>
+                  <button mat-raised-button width="100%" color="primary" (click)="resetColum()">{{
+                    ls.locale.lihat_pesanan.text6 }}</button>
                 </div>
               </mat-select>
             </mat-form-field>
@@ -167,8 +164,8 @@
       <!-- END Tanggal -->
       
       <!-- Kode Pesanan -->
-          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.katalog_src.lihat_pesanan.text8 }}" prop="invoice_number"
-            *ngIf="formColumn.value.includes(ls.locale.katalog_src.lihat_pesanan.text8)" [frozenLeft]="true">
+          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.order_code }}" prop="invoice_number"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.order_code)" [frozenLeft]="true">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               <span class="row-name" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
                 (click)="getDetailTransaction(row)">{{row.invoice_number}}</span>
@@ -192,8 +189,8 @@
       <!-- END Name -->
       
       <!-- Pesan Melalui -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="Pesan Melalui" prop="order_from"
-            *ngIf="formColumn.value.includes('Pesan Melalui')">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.order_via }}" prop="order_from"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.order_via)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="status text-truncate h6 p-4 pesan-melalui"
                 [ngClass]="row.order_from == 'app' ? 'mat-app-color' : 'mat-otc-color'">
@@ -204,8 +201,8 @@
       <!-- END Pesan Melalui -->
 
       <!-- Metode Pengiriman -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="Metode Pengiriman" prop="shipping_method"
-            *ngIf="formColumn.value.includes('Metode Pengiriman')">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.delivery_method }}" prop="shipping_method"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.delivery_method)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="status text-truncate h6 p-4 pesan-melalui mat-otc-color" style="text-transform: capitalize;">
                 {{row.order_from? row.shipping_method : ''}}</p>
@@ -261,8 +258,8 @@
       <!-- END Status -->
 
       <!-- Metode Pembayaran -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.produk_prinsipal.text28 }}" prop="payment_type_indo"
-          *ngIf="formColumn.value.includes(ls.locale.produk_prinsipal.text28)">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.payment_method }}" prop="payment_type_indo"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.payment_method)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <div fxLayout="row">
                 <div class="status-container" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
@@ -289,8 +286,8 @@
           <!-- EXTENDED -->
 
       <!-- Diskon Voucher -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="Diskon Voucher" prop="voucher_nominal"
-            *ngIf="formColumn.value.includes('Diskon Voucher')">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.voucher_discount }}" prop="voucher_nominal"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.voucher_discount)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.voucher_nominal? row.voucher_nominal : 0 | rupiahFormater}}</p>
@@ -299,8 +296,8 @@
       <!-- END Diskon Voucher -->
 
       <!-- Tipe Pelanggan -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.katalog_src.lihat_pesanan.text12 }}" prop="classification"
-            *ngIf="formColumn.value.includes(ls.locale.katalog_src.lihat_pesanan.text12)">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.customer_type }}" prop="classification"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.customer_type)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.classification? row.classification : ''}}</p>
@@ -309,8 +306,8 @@
       <!-- END Tipe Pelanggan -->
 
       <!-- Tier Pelanggan -->
-          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="Tier Pelanggan" prop="tier"
-            *ngIf="formColumn.value.includes('Tier Pelanggan')">
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.customer_tier }}" prop="tier"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.customer_tier)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.tier? row.tier : ''}}</p>
@@ -319,8 +316,8 @@
       <!-- END Tier Pelanggan -->
 
       <!-- Nomor Ponsel -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.phone }}" prop="phone"
-            *ngIf="formColumn.value.includes(ls.locale.global.label.phone)">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.phone_number }}" prop="phone"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.phone_number)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.phone? row.phone : ''}}</p>
@@ -329,8 +326,8 @@
       <!-- END Nomor Ponsel -->
 
       <!-- Kode Promo -->
-          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="Kode Promo" prop="promo_code"
-            *ngIf="formColumn.value.includes('Kode Promo')">
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.menu.promo_code }}" prop="promo_code"
+            *ngIf="formColumn.value.includes(ls.locale.global.menu.promo_code)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.promo_code? row.promo_code : ''}}</p>
@@ -339,8 +336,8 @@
       <!-- END Kode Promo -->
       
       <!-- Diskon Promo -->
-          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="Diskon Promo" prop="promo_nominal"
-            *ngIf="formColumn.value.includes('Diskon Promo')">
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.discount_promo }}" prop="promo_nominal"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.discount_promo)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.promo_nominal? row.promo_nominal : ''}}</p>
@@ -349,8 +346,8 @@
       <!-- END Diskon Promo -->
 
       <!-- Tanggal Status Diterima -->
-          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="Tanggal Status Diterima" prop="date_order_status_diterima"
-            *ngIf="formColumn.value.includes('Tanggal Status Diterima')">
+          <ngx-datatable-column [sortable]="false" [cellClass]="getCellClass" name="{{ ls.locale.global.label.received_status_date }}" prop="date_order_status_diterima"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.received_status_date)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.date_order_status_diterima? row.date_order_status_diterima : '' | date: 'dd/MM/yyyy HH:mm'}}</p>
@@ -359,8 +356,8 @@
       <!-- END Tanggal Status Diterima -->
 
       <!-- Tanggal Terakhir diperbarui -->
-          <ngx-datatable-column [cellClass]="getCellClass" name="Tanggal Terakhir Diperbarui" prop="updated_at"
-            *ngIf="formColumn.value.includes('Tanggal Terakhir Diperbarui')">
+          <ngx-datatable-column [cellClass]="getCellClass" name="{{ ls.locale.global.label.last_updated_date }}" prop="updated_at"
+            *ngIf="formColumn.value.includes(ls.locale.global.label.last_updated_date)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <p class="text-truncate" style="text-align: right !important;">
                 {{row.updated_at? row.updated_at : '' | date: 'dd/MM/yyyy HH:mm'}}</p>

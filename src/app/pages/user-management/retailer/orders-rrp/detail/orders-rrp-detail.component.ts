@@ -34,182 +34,15 @@ import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe"
   styleUrls: ['./orders-rrp-detail.component.scss']
 })
 export class OrdersRrpDetailComponent implements OnInit {
-  orderId: any = 1;
+  orderId: any;
   retailerId: any;
-  blockOrder: any = 0;
+  orderRrp: any;
+  blockOrder: any;
   body: any;
   bodyBlockOrder: any;
   permission: any;
   roles: PagesName = new PagesName();
-  // detailOrder: any;
-
-  // // Dummy Data // //
-  detailOrder: any = {
-    "id": 8409,
-    "uuid": "b25bf5ce-644c-46c7-913b-46f752b24ecc",
-    "transaction_id": null,
-    "wholesaler_id": 130330,
-    "retailer_id": 130047,
-    "retailer_discount_amount": null,
-    "user_id": 270845,
-    "invoice_number": "AYO.220127092815.130330",
-    "unik": 1,
-    "type": "guest",
-    "name": "Dummy Test",
-    "phone": "081234567890",
-    "shipping_type": "pick-up",
-    "shipping_price": 0,
-    "shipping_date": null,
-    "payment_type": null,
-    "paylater_group_id": null,
-    "paylater_payment_status": "Menunggu Konfirmasi",
-    "paylater_payment_status_date": null,
-    "paylater_due_date": null,
-    "paylater_service_price": null,
-    "paylater_service_price_special": null,
-    "paylater_service_price_normal": null,
-    "paylater_va": null,
-    "delivery_courier_id": null,
-    "delivery_courier_name": null,
-    "delivery_courier_service_id": null,
-    "delivery_courier_service_name": null,
-    "address": "Jalan Kampung Tenggilis No.269, RT.001/RW.012, Mustika Jaya, Kec. Mustika Jaya, Kota Bks, Jawa Barat 17158, Indonesia",
-    "note": "",
-    "order_from": "otc",
-    "device_id": null,
-    "status": "pesanan-dilihat",
-    "promo_type": null,
-    "promo_price": null,
-    "promo_max_discount": null,
-    "promo_min_purchase": null,
-    "promo_limit_products": null,
-    "voucher_redeem_id": null,
-    "voucher_code": null,
-    "voucher_nominal": null,
-    "qiscus_room_id": "94477118",
-    "qiscus_participant": "270845wshms130330",
-    "order_status_update": "2022-04-08 10:20:00",
-    "is_resend_point": null,
-    "level_id": null,
-    "created_at": "2022-01-27 09:28:15",
-    "created_by": "Elis",
-    "updated_at": "2022-10-11 14:37:48",
-    "virtual_account_company_id": null,
-    "bank_name": null,
-    "virtual_account_number": null,
-    "virtual_account_status": "belum-tersedia",
-    "virtual_account_payment_date": null,
-    "virtual_account_status_date": null,
-    "virtual_account_expired_date": null,
-    "country": "ID",
-    "is_spin_eligible": 1,
-    "tier": -99,
-    "wholesaler_name": "Elis",
-    "wholesaler_phone": "+6287861462074",
-    "retailer_name": null,
-    "point_curs": 0,
-    "customer_contact": null,
-    "retailer_address_detail": null,
-    "advocacy": [],
-    "available_status": {
-        "diproses": "Pesanan Diproses",
-        "pesanan-dibatalkan": "Pesanan Dibatalkan"
-    },
-    "status_indo": "Pesanan Dilihat",
-    "amount_product": 1,
-    "discount_product": 0,
-    "point_received": 0,
-    "total": 20000,
-    "voucher_discount": 0,
-    "retailer_discount": 0,
-    "otc_discount": 0,
-    "is_redeem_coins_discount": false,
-    "redeem_coins_discount": 0,
-    "discount": 0,
-    "grand_total": 20000,
-    "shipping_discount": 0,
-    "shipping": 0,
-    "total_payment": 20000,
-    "total_payment_paylater": 20000,
-    "total_payment_format_currency": "RP 20.000",
-    "total_payment_paylater_format_currency": "RP 20.000",
-    "summary": [
-        {
-            "title": "Subtotal",
-            "value": "RP 20.000",
-            "type": "normal",
-            "child": [
-                {
-                    "title": "Total Rokok",
-                    "value": "RP 20.000",
-                    "type": "normal"
-                },
-                {
-                    "title": "Total Non Rokok",
-                    "value": "RP 0",
-                    "type": "normal"
-                }
-            ]
-        },
-        {
-          "title": "Total Rokok",
-          "value": "RP 20.000",
-          "type": "normal"
-        },
-        {
-          "title": "Total Non Rokok",
-          "value": "RP 0",
-          "type": "normal"
-        },
-        {
-            "title": "Total",
-            "value": "RP 20.000",
-            "type": "normal"
-        },
-        {
-            "title": "Total Pembayaran",
-            "value": "RP 20.000",
-            "type": "normal"
-        }
-    ],
-    "total_discount": 5000,
-    "order_prepared_by": "Elis",
-    "tracking": null,
-    "discounts": [],
-    "status_logs": [
-        {
-            "id": "D6jzICOQXrHPR359cMI8",
-            "order_id": 8409,
-            "user_id": 270845,
-            "name": "Elis",
-            "status": "pesanan-baru",
-            "created_at": "2022-04-08 10:20:00",
-            "updated_at": "2022-04-08 10:20:00",
-            "status_indo": "Pesanan Baru"
-        },
-        {
-            "id": "olsgrkbkKEN7mIlovT18",
-            "order_id": 8409,
-            "user_id": 270845,
-            "name": "Elis",
-            "status": "pesanan-dilihat",
-            "created_at": "2022-01-27 09:30:54",
-            "updated_at": "2022-01-27 09:30:54",
-            "status_indo": "Pesanan Dilihat"
-        },
-        {
-            "id": "deecl4yV3JHofndeABDh",
-            "order_id": 8409,
-            "user_id": 270845,
-            "name": "Elis",
-            "status": "selesai",
-            "created_at": "2022-01-27 09:28:15",
-            "updated_at": "2022-01-27 09:28:15",
-            "status_indo": "Pesanan Selesai"
-        }
-    ]
-  };
-  // // End Dummy Data // //
+  detailOrder: any;
 
   loadingIndicator = false;
   onLoad: Boolean;
@@ -319,78 +152,8 @@ export class OrdersRrpDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.onLoad = true;
-    // this.getDetailOrder();
-    
-    // // Dummy Data // //
-    this.detailOrder;
-
-    this.orderStatuses = Object.entries(this.detailOrder.available_status).map(
-      ([value, name]) => ({ value, name })
-    );
-    this.statusForm = this.formBuilder.group({
-      newStatus: ""
-    });
-
-    this.productsForm = this.formBuilder.group({
-      listProducts: this.formBuilder.array([])
-    });
-    let listProducts = this.productsForm.get("listProducts") as FormArray;
-      while (listProducts.length > 0) {
-        listProducts.removeAt(listProducts.length - 1);
-      }
-    listProducts.push(
-      this.formBuilder.group({
-        id: 1,
-        name: "Marlboro Lights 20",
-        other_name: "Marlboro Lights 20",
-        image_url: "https://assets.dev.src.id/2019%2F04%2F12%2Fx7ogZCmjnloxITnxusa0q8ChbRRYNrIDkwXlN1tk.jpeg",
-        brand: "PT.HM Sampoerna",
-        category: "ROKOK",
-        packaging: "pack",
-        price: 20000,
-        price_currency: "RP 20.000",
-        price_discount: 0,
-        // price: tierPriceFound ? tierPriceFound.price : (item.levels ? item.levels[0]['price'] : item.price),
-        // price_discount: tierPriceFound ? tierPriceFound.price_discount : (item.levels ? item.levels[0]['price_discount'] : item.price_discount),
-        amount: [
-          1,
-          [Validators.min(0), Validators.max(1)]
-        ],
-        // levels: tierPriceFound ? tierPriceFound : resProduct[idx].levels,
-        editable: false,
-        edited: false,
-        tierShowed: false,
-        tierHasDisc: false,
-        priceUpdated: false,
-        price_update_status: false
-      })
-    );
-    this.productsNota = [
-      {
-        id: 1,
-        name: "Marlboro Lights 20",
-        other_name: "Marlboro Lights 20",
-        image_url: "https://assets.dev.src.id/2019%2F04%2F12%2Fx7ogZCmjnloxITnxusa0q8ChbRRYNrIDkwXlN1tk.jpeg",
-        brand: "PT.HM Sampoerna",
-        category: "ROKOK",
-        packaging: "pack",
-        price: 20000,
-        price_currency: "RP 20.000",
-        price_discount: 5000,
-        // price: tierPriceFound ? tierPriceFound.price : (item.levels ? item.levels[0]['price'] : item.price),
-        // price_discount: tierPriceFound ? tierPriceFound.price_discount : (item.levels ? item.levels[0]['price_discount'] : item.price_discount),
-        amount: 1,
-        // levels: tierPriceFound ? tierPriceFound : resProduct[idx].levels,
-        editable: false,
-        edited: false,
-        tierShowed: false,
-        tierHasDisc: false,
-        priceUpdated: false,
-        price_update_status: false
-      }
-    ]
-    // // End Dummy Data // //
+    this.onLoad = true;
+    this.getDetailOrder();
   }
 
   ngOnDestroy() {
@@ -511,7 +274,8 @@ export class OrdersRrpDetailComponent implements OnInit {
         }
         this.detailOrder = res;
         this.retailerId = this.detailOrder.retailer_id;
-        this.blockOrder = this.detailOrder.block_order;
+        this.orderRrp = (this.detailOrder.order_rrp !== null) ? this.detailOrder.order_rrp : 1;
+        this.blockOrder = this.detailOrder.block_order ? this.detailOrder.block_order : 0;
         if (res.payment_type === 'virtual-account' && res.status === 'pesanan-diterima') {
           this.vaValidated = false;
         }
@@ -538,23 +302,23 @@ export class OrdersRrpDetailComponent implements OnInit {
 
         // console.log('alltiers', allTiers, this.tierHasDisc);
 
-        this.qs.getMessageTemplates({ user: 'wholesaler' }).subscribe((res_2: any) => {
-          // this.emitter.emitDataChat({ templates: res_2.data });
-          res.templates = res_2.data;
-          // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
-          if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
-            const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
-            if (dayLimit < 30) {
-              // this.initDataQiscus(res);
-              this.qiscusCheck(res); // check login qiscus
-            } else {
-              this.emitter.emitChatIsOpen(false); // for open chat
-            }
-          } else {
-            // this.initDataQiscus(res);
-            this.qiscusCheck(res); // check login qiscus
-          }
-        })
+        // this.qs.getMessageTemplates({ user: 'wholesaler' }).subscribe((res_2: any) => {
+        //   // this.emitter.emitDataChat({ templates: res_2.data });
+        //   res.templates = res_2.data;
+        //   // res.templates = [{title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'}, {title: 'apakah barang ready?'},{title: 'apakah barang ready?'}]
+        //   if (res.status === "selesai" || res.status === "pesanan-dibatalkan") {
+        //     const dayLimit = moment(new Date()).diff(moment(new Date(res.updated_at)), 'days'); // day limit is 30 days chat hidden or deleted
+        //     if (dayLimit < 30) {
+        //       // this.initDataQiscus(res);
+        //       this.qiscusCheck(res); // check login qiscus
+        //     } else {
+        //       this.emitter.emitChatIsOpen(false); // for open chat
+        //     }
+        //   } else {
+        //     // this.initDataQiscus(res);
+        //     this.qiscusCheck(res); // check login qiscus
+        //   }
+        // })
         // this.emitter.emitChatIsOpen(true); // for open chat
         // this.emitter.emitDataChat(res);
 
@@ -1050,7 +814,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     setTimeout(() => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
-        message: 'Semua harga berhasil diperbarui, tekan tombol simpan untuk menyimpan semua perubahan.'
+        message: this.ls.locale.lihat_pesanan.text18
       });
     }, 2000);
     // let fd = new FormData();
@@ -1159,7 +923,7 @@ export class OrdersRrpDetailComponent implements OnInit {
     const splited = _value.split(`${_symbol}`);
     let value = (splited[1]) ? splited[1] : _value.split(`${_symbol} `)[1];
 
-    if (item.title === 'Ongkos Pengiriman' || item.title === 'Total Pembayaran') {
+    if (item.title === 'Ongkos Pengiriman' || item.title === this.ls.locale.pesan_produk.text69) {
       return this.productsNota.length === 0 ? 0 : value;
     } else {
       return value;
