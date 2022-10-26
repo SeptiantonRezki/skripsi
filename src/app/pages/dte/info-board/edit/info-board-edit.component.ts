@@ -818,9 +818,9 @@ export class InfoBoardEditComponent implements OnInit {
       };
     } else {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'fixed-panel',
-        retailers: this.data_imported.map(item => item.id),
+        wholesalers: this.data_imported.map(item => item.id),
         panel_count: this.panelBlast
       };
     }
