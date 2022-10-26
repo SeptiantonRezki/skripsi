@@ -46,7 +46,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   loadingZone = true;
   loadingRegion = true;
   loadingArea = true;
-  
+
   formDetilVoucher: FormGroup;
 
   formSpin: FormGroup;
@@ -210,7 +210,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
 
     this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
-    
+
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
@@ -222,7 +222,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
-  
+
   filteringTradeProgram() {
     if (!this.listTradePrograms) {
       return;
@@ -261,7 +261,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_date').disable();
       this.formSpin.get('end_time').disable();
     }
-    
+
 
     this.formPM = this.formBuilder.group({
       limit_only: [''],
@@ -370,7 +370,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     // *MEKANISME
     this.getCategories();
     this.getCategoriesSRCC();
-    
+
     this.formPM.get('category').disable();
     this.formPM.get('category_srcc').disable();
 
@@ -386,20 +386,20 @@ export class SpinTheWheelEditComponent implements OnInit {
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
-    
+
     this.setValueDetail();
   }
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => {
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
         if (res.data.settings) {
           this.editableCoin = false;
           this.formPM.get('limit_spin').disable();
           this.formPM.get('coin_variation').disable();
-          
+
           this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
           this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
           this.averageCoin = res.data.settings.average_coin_spin;
@@ -986,7 +986,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   submit() {
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (
-      this.formSpin.valid 
+      this.formSpin.valid
       // && this.formGeo.valid
       ) {
       let body = {
@@ -1008,12 +1008,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       console.log(body);
 
       this.dataService.showLoading(true);
-      this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.dataService.showLoading(false);
-        this.setStorageDetail();
-        // this.router.navigate(['dte', 'spin-the-wheel'])
-      })
+      this.spinTheWheelService.put_spin({ id: id }, body).subscribe(
+        (res) => {
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          this.dataService.showLoading(false);
+          this.setStorageDetail();
+          // this.router.navigate(['dte', 'spin-the-wheel'])
+        },
+        () => {
+          this.dataService.showLoading(false);
+        }
+      )
     } else {
       commonFormValidator.validateAllFields(this.formSpin);
       // commonFormValidator.validateAllFields(this.formGeo);
@@ -1044,12 +1049,12 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     const dialogConfig = new MatDialogConfig();
-  
+
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       dialogConfig.panelClass = "scrumboard-card-dialog";
       dialogConfig.data = { password: "P@ssw0rd" };
-  
+
       this.dialogRef = this.dialog.open(
         DialogProcessComponentSPW,
         {...dialogConfig, width: '400px'}
@@ -1097,7 +1102,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     const dialogConfig = new MatDialogConfig();
-  
+
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
@@ -1148,7 +1153,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       // };
       // if (this.files) body.append('image', this.files)
       if (this.files) body.append('icon', this.files)
-      
+
       this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
@@ -1172,7 +1177,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
     }
     this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
-      
+
     this.dataService.showLoading(false);
     this.router.navigate(['dte', 'spin-the-wheel'])
     }, err => {
@@ -1324,7 +1329,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       }, 500);
     }
   }
-  
+
   getListProduct(param?): void {
     if (param) {
       const list = param.split(';').join(',').split(',');
@@ -1776,11 +1781,11 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formPM.get('category').setValue([]);
     }
   }
-  
+
   setValueDetail() {
-    
+
     this.panelBlast = this.detailFormSpin.panel_count;
-    
+
     const filter = this.detailFormSpin.audience_filter;
     this.handleAudienceFilter(filter);
 
@@ -1816,5 +1821,5 @@ export class SpinTheWheelEditComponent implements OnInit {
       // this.formGeo.get('audiencePopulation').setValue('');
     }
   }
-  
+
 }
