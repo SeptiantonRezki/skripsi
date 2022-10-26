@@ -42,12 +42,15 @@
               >harus diisi</mat-error
             >
           </mat-form-field>
-          <div class="mb-24">
-            <div class="mb-8"><strong>Deskripsi Push Notifikasi</strong></div>
+          <mat-form-field fxFlex="50" class="is-light form-primary">
             <textarea
-              [froalaEditor]="froalaConfig"
+              matInput
               formControlName="content"
-              fxFlex="100"
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="15"
+              placeholder="Deskripsi Push Notifikasi"
             ></textarea>
             <mat-error
               class="mt-8"
@@ -58,7 +61,7 @@
             >
               Deskripsi wajib diisi
             </mat-error>
-          </div>
+          </mat-form-field>
           <div fxLayout="row" fxLayoutGap="16px">
             <mat-form-field fxFlex="50%" class="is-light form-primary">
               <input

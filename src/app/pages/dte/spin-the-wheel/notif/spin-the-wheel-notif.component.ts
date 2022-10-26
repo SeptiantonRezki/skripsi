@@ -80,6 +80,10 @@ export class SpinTheWheelNotifComponent implements OnInit {
     this.onLoad = false;
   }
 
+  isChecked(option: any, value: any) {
+    return option && value && option.toString() === value.toString();
+  }
+
   submit() {
     if (!this.formNotif.valid) {
       this.dialogService.openSnackBar({
