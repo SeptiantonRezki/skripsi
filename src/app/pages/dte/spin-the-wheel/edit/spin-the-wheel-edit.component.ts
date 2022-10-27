@@ -265,6 +265,9 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_time').disable();
     }
 
+    if (this.detailFormSpin.status === "publish") {
+      this.formSpin.get('trade_creator_id').disable();
+    }
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
