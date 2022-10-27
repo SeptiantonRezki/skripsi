@@ -758,18 +758,17 @@ export class InfoBoardEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('detail_info_board').id;
     if (this.isPopulation === true) {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'population-blast',
-        class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
         regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all']
       };
     } else {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'fixed-panel',
-        retailers: this.data_imported.map(item => item.id)
+        wholesalers: this.data_imported.map(item => item.id)
       };
     }
 
