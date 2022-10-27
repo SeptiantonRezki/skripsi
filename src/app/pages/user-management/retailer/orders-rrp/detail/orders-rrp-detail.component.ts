@@ -719,7 +719,11 @@ export class OrdersRrpDetailComponent implements OnInit {
             }
             this.loadingIndicator = false;
             this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: this.ls.locale.lihat_pesanan.text14 });
+            this.dialogService.openSnackBar({
+              message: !res.status ?
+                (res.message ? res.message : this.ls.locale.global.messages.failed_message)
+                : this.ls.locale.lihat_pesanan.text14
+            });
 
             this.ngOnInit();
             this.selectedTab = 0;
@@ -757,7 +761,11 @@ export class OrdersRrpDetailComponent implements OnInit {
         this.loadingIndicator = false;
         this.dataService.showLoading(false);
         this.dialogService.brodcastCloseConfirmation();
-        this.dialogService.openSnackBar({ message: this.ls.locale.lihat_pesanan.text14 });
+        this.dialogService.openSnackBar({
+          message: !res.status ?
+            (res.message ? res.message : this.ls.locale.global.messages.failed_message)
+            : this.ls.locale.lihat_pesanan.text14
+        });
 
         this.ngOnInit();
         this.selectedTab = 0;

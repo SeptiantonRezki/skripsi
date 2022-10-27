@@ -1055,7 +1055,7 @@ export class OrdersRrpComponent implements OnInit {
       this.loadingIndicator = false;
 
       this.updateFilter(null, null);
-      this.getCourierList();
+      // this.getCourierList();
 
     }, error => {
 
