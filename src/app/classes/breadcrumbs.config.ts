@@ -1500,6 +1500,18 @@ export const brConfig = {
           name: "Detail Spin The Wheel"
         }
       ],
+      notif: [
+        {
+          type: "parent",
+          url: "/dte/spin-the-wheel",
+          name: "Daftar Spin The Wheel"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Spin The Wheel Notifikasi"
+        }
+      ],
     },
     pengaturanAttributeMisi: {
       index: [

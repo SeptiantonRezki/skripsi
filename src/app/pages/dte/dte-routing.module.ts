@@ -68,6 +68,7 @@ import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
 import { XpComponent } from "./xp/xp.component";
 import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
 import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
+import { SpinTheWheelNotifComponent } from "./spin-the-wheel/notif/spin-the-wheel-notif.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
@@ -928,6 +929,14 @@ const routes: Routes = [
     component: SpinTheWheelEditComponent,
     data: {
       breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
+  {
+    path: "spin-the-wheel/notif",
+    component: SpinTheWheelNotifComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.notif
     },
     //canActivate: [PageGuard]
   },
