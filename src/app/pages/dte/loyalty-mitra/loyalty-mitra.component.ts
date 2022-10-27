@@ -30,7 +30,7 @@ export class LoyaltyMitraComponent implements OnInit {
     if (data.type === "form") this.formIsDirty = data.isDirty;
     if (data.type === "redirect") this.router.navigate(data.path.split("/"));
     if (data.type === "newtab")
-      this.router.navigate([]).then((result) => {
+      this.router.navigate([]).then(() => {
         window.open(data.path, "_blank");
       });
   }
@@ -40,26 +40,26 @@ export class LoyaltyMitraComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router
   ) {
-    this.permission = this.roles.getArrayRoles("principal.dteprogramloyaltymitra");
+    this.permission = this.roles.getArrayRoles(
+      "principal.dteprogramloyaltymitra"
+    );
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl("");
   }
 
   ngOnInit() {
+    const lang = localStorage.getItem("user_country");
+    const dceauth = this.authService.getDceAuth();
     const targetPath = this.router.url;
-    this.authService.getEncryptedToken().subscribe((res) => {
-      const baseurl = environment.REACT_BASE_URL;
-
-      const encodedToken = encodeURI(res.data);
-      const httpParams = new HttpParams()
-        .set("dceauth", encodedToken)
-        .set("destination", targetPath)
-        .set("platform", "principal")
-        .set("allowBack", "1")
-        .set("_prmdxtrn", JSON.stringify(this.permission));
-      const fullUrl = `${baseurl}?${httpParams.toString()}`;
-
-      this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
-      this.loading = false;
-    });
+    const baseurl = environment.REACT_BASE_URL;
+    const httpParams = new HttpParams()
+      .set("dceauth", dceauth)
+      .set("destination", targetPath)
+      .set("platform", "principal")
+      .set("allowBack", "1")
+      .set("_prmdxtrn", JSON.stringify(this.permission))
+      .set("locale", lang);
+    const fullUrl = `${baseurl}?${httpParams.toString()}`;
+    this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(fullUrl);
+    this.loading = false;
   }
 }

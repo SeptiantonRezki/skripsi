@@ -27,7 +27,7 @@ export class AuthenticationService extends BaseService {
   checkIsms(context): Observable<any> {
     let contextParams = {
       business_code: context.business_code,
-      phone: context.phone
+      phone: context.phone,
     };
     const url = this.getUrl(this.namespace, "verify_isms", contextParams);
     return this.getApi(url);
@@ -42,7 +42,7 @@ export class AuthenticationService extends BaseService {
     const url = this.getUrl(this.namespace, "login");
     let authorization = {
       ...Config.AYO_AUTHORIZATION,
-      ...body
+      ...body,
     };
     return this.postApi(url, authorization);
   }
@@ -105,6 +105,18 @@ export class AuthenticationService extends BaseService {
   getEncryptedToken(): Observable<any> {
     const url = this.getUrl(this.namespace, "encrypted_token");
     return this.getApi(url);
+  }
+
+  getDceAuth() {
+    const url = this.getUrl(this.namespace, "encrypted_token");
+    let token = localStorage.getItem("dceauth");
+    if (!token)
+      this.getApi(url).subscribe((res: any) => {
+        localStorage.setItem("dceauth", res.data);
+        token = encodeURI(res.data);
+        return token;
+      });
+    return token;
   }
 
   getDynamicPricingEncryptedToken(): Observable<any> {

@@ -201,6 +201,7 @@ export class PagesName {
       "/dte/xp/edit/": "principal.dtexp.ubah",
       "/dte/xp/detail/": "principal.dtexp.lihat",
       "/dte/program-loyalty-mitra": "principal.dteprogramloyaltymitra.lihat",
+      "/dte/program-loyalty-mitra/create": "principal.dteprogramloyaltymitra.buat",
       "/dte/program-loyalty-mitra/create/": "principal.dteprogramloyaltymitra.buat",
       "/dte/program-loyalty-mitra/edit/": "principal.dteprogramloyaltymitra.ubah",
       "/dte/program-loyalty-mitra/detail/": "principal.dteprogramloyaltymitra.lihat",
