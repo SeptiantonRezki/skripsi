@@ -135,6 +135,7 @@ import { VoucherPrivateLabelService } from "./services/voucher-private-label.ser
 import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
 import { Observable } from 'rxjs';
 import { GeneralBackendService } from './services/general-backend.service';
+import { KeywordService } from './services/content-management/keyword.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -252,6 +253,7 @@ class CustomLoader implements TranslateLoader {
     AudienceService,
     NotificationService,
     TncService,
+    KeywordService,
     PrivacyService,
     HelpService,
     CategoryService,
