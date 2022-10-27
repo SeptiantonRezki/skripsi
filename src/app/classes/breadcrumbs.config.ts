@@ -2318,6 +2318,15 @@ export const brConfig = {
           name: "Detail Promo"
         }
       ]
+    },
+    keywordManagement: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Keyword Management"
+        }
+      ],
     }
   },
   newsfeedManagement: {

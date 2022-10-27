@@ -1184,6 +1184,14 @@ export class Endpoint {
       
         proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
       },
+
+      keyword: {
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited`,
+        put: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited/${context.id}`,
+        exportKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/request-export`,
+        importKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/pre-import`,
+        previewImportKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/show-import`,
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

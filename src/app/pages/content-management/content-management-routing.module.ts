@@ -12,6 +12,8 @@ import { HelpCreateComponent } from "./help/create/help-create.component";
 import { HelpEditComponent } from "./help/edit/help-edit.component";
 import { ReportListComponent } from "./report-list/report-list.component";
 import { ReportDetailComponent } from "./report-list/report-detail/report-detail-wrapper.component";
+import { KeywordManagementComponent } from "./keyword-management/keyword-management-component";
+import { PageGuard } from "app/classes/auth.guard";
 
 const routes: Routes = [
   {
@@ -102,7 +104,15 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.contentManagement.report_list.detail_history
     }
-  }
+  },
+  {
+    path: "keyword-management",
+    component: KeywordManagementComponent,
+    data: {
+      breadcrumbs: brConfig.contentManagement.keywordManagement.index
+    },
+    canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
