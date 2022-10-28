@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="ls.locale.retailer.list.page_title">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/user-management','retailer','create']">
+        [routerLink]="['/user-management','retailer','create']" [disabled]="ls.selectedLanguages == 'km'? true: null">
         <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
