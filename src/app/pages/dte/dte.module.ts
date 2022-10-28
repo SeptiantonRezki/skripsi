@@ -192,6 +192,9 @@ import { SpinTheWheelMechanismComponent } from './spin-the-wheel/tab/mechanism/s
 import { DialogProcessComponentSPW } from "./spin-the-wheel/dialog/dialog-process/dialog-process.component";
 import { DialogProcessSaveComponentSPW } from "./spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component";
 import { ImportAudiencePersonalizeComponentSPW } from "./spin-the-wheel/import/personalize/import-audience-personalize.component";
+import { InfoBoardComponent } from './info-board/index/info-board.component';
+import { InfoBoardCreateComponent } from './info-board/create/info-board-create.component';
+import { InfoBoardEditComponent } from './info-board/edit/info-board-edit.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -400,6 +403,9 @@ export const MY_FORMATS = {
     SpinTheWheelNotifComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
+    InfoBoardComponent,
+    InfoBoardCreateComponent,
+    InfoBoardEditComponent
   ],
   exports: [
     TemplateIndexComponent,

@@ -1,0 +1,429 @@
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Buat Info Board">
+    <!-- <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','lottery']" mat-raised-button type="button">
+      <mat-icon>save</mat-icon> {{'global.button.save' | translate}}
+    </button> -->
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group>
+        <mat-tab label="Info Board">
+          <div class="ayo-middle py-24" fxLayout="column">
+            <form
+              autocomplete="off"
+              [formGroup]="formBoard"
+              fxLayout="row"
+              fxLayoutGap="16px"
+            >
+              <div fxFlex="70%">
+
+                <div
+                  fxLayout="row"
+                  fxLayout.lt-md="column"
+                  fxLayoutGap="60px"
+                  fxLayoutGap.lt-md="0px"
+                  class="px-24"
+                >
+                <mat-form-field fxFlex="50" class="is-light form-primary">
+                  <mat-select formControlName="jenis_info_board" placeholder="Jenis Info Board">
+                      <mat-option *ngFor="let item of infoBoard" [value]="item.value">{{item.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxFlex="100" class="px-24">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input
+                      matInput
+                      formControlName="start_date"
+                      [min]="minDateStart"
+                      (focus)="startDate.open()"
+                      [matDatepicker]="startDate"
+                      placeholder="Tanggal Mulai"
+                      (dateChange)="onDateStart($event)"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                        formBoard.controls['start_date'].hasError(
+                          'required'
+                        ) && formBoard.controls['start_date'].touched
+                      "
+                    >
+                      {{ ls.locale.manajemen_barang_sku.manajemen_koin.text15 }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="10"></div>
+                  <mat-form-field
+                    fxFlex="30"
+                    class="is-light form-primary"
+                    id="start_time"
+                  >
+                    <input
+                      matInput
+                      formControlName="start_time"
+                      placeholder="{{
+                        'notification.popup_notifikasi.text8' | translate
+                      }}"
+                      [ngxTimepicker]="fullTime1"
+                      [format]="24"
+                      readonly
+                      style="width: 50px"
+                    />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker
+                      #fullTime1
+                    ></ngx-material-timepicker>
+                    <mat-error
+                      *ngIf="
+                        formBoard.controls['start_time'].hasError(
+                          'required'
+                        ) && formBoard.controls['start_time'].touched
+                      "
+                    >
+                      {{ ls.locale.manajemen_barang_sku.manajemen_koin.text15 }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxFlex="100" class="px-24">
+                  <mat-form-field fxFlex="50%" class="is-light form-primary">
+                    <input
+                      matInput
+                      formControlName="end_date"
+                      [min]="formBoard.get('start_date').value"
+                      (focus)="endDate.open()"
+                      [matDatepicker]="endDate"
+                      placeholder="Tanggal Berakhir"
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                      <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #endDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                      formBoard.controls['start_date'].hasError(
+                          'required'
+                        ) && formBoard.controls['start_date'].touched
+                      "
+                    >
+                      {{ ls.locale.manajemen_barang_sku.manajemen_koin.text16 }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                  <div fxFlex="10"></div>
+                  <mat-form-field
+                    fxFlex="30"
+                    class="is-light form-primary"
+                    id="end_time"
+                  >
+                    <input
+                      matInput
+                      formControlName="end_time"
+                      placeholder="{{
+                        'notification.popup_notifikasi.text10' | translate
+                      }}"
+                      [ngxTimepicker]="fullTime2"
+                      [format]="24"
+                      readonly
+                    />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker
+                      #fullTime2
+                    ></ngx-material-timepicker>
+                    <mat-error
+                      *ngIf="
+                      formBoard.controls['end_time'].hasError('required') &&
+                      formBoard.controls['end_time'].touched
+                      "
+                    >
+                      {{ ls.locale.manajemen_barang_sku.manajemen_koin.text15 }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Nama Info Board"
+                      formControlName="name_board"
+                      name="name_board"
+                    />
+                    <mat-error
+                      *ngIf="
+                      formBoard.controls['name_board'].hasError('required') &&
+                      formBoard.controls['name_board'].touched
+                      "
+                    >
+                      Nama Info Board
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" class="px-24">
+                  <mat-form-field fxFlex class="is-light form-primary">
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Deskripsi Info Board"
+                      formControlName="description_board"
+                      name="description_board"
+                    />
+                    <mat-error
+                      *ngIf="
+                      formBoard.controls['description_board'].hasError('required') &&
+                      formBoard.controls['description_board'].touched
+                      "
+                    >
+                      Deskripsi Info Board {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
+                  <button
+                    id="btn-simpan-trade"
+                    mat-raised-button
+                    type="button"
+                    class="confirmation-button"
+                    fxFlex="20"
+                    (click)="submit()"
+                  >
+                    {{ ls.locale.global.button.save }}
+                  </button>
+                </div>
+
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary"> -->
+                <!-- <mat-select formControlName="group_trade_program" placeholder="Group Trade Program">
+                      <mat-option *ngFor="let item of listGroupTradeProgram" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select> -->
+                <!-- <mat-select formControlName="group_trade_program" placeholder="{{'dte.group_trade_program.text1' | translate}}" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterGTP" placeholderLabel="{{'global.label.search' | translate}} {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                <!-- <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                <!-- </div> -->
+                <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" class="px-24">
+                  <mat-form-field fxFlex="100" class="is-light form-primary">
+                    <mat-select formControlName="sub_group_trade_program" placeholder="Sub Group Trade Program" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterSGTP" placeholderLabel="{{'global.label.search' | translate}} Sub {{'dte.group_trade_program.text1' | translate}}..."
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}"></ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredSGTP | async" [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                 -->
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+        <mat-tab label="Audience" [disabled]="!isFreeText">
+          <div class="ayo-middle py-24" fxLayout="row" fxFlex="100">
+              <!-- <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                <mat-radio-button
+                  class="radio-button pr-48"
+                  [value]="population-blast"
+                >
+                Population Blast
+                </mat-radio-button>
+              </mat-radio-group> -->
+              
+              <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
+                <div fxFlex="100">
+                  <div fxLayout="row" class="px-16">
+                      <!-- <mat-radio-button
+                        class="radio-button pr-48"
+                        [checked]="isPopulation"
+                        (change)="changeBlastType('population-blast')"
+                      >
+                        Population Blast
+                      </mat-radio-button> -->
+                      <mat-radio-group class="mb-16" [formControl]="audiencePopulation" (change)="handleAudienceFilter('population-blast')">
+                        <mat-radio-button class="radio-button pr-48" value="population-blast">
+                          Population Blast
+                        </mat-radio-button>
+                      </mat-radio-group>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.zone' | translate}}"
+                        formControlName="division"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.division" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingZone">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.regional' | translate}}"
+                        formControlName="region"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.region" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingRegion">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="{{'global.area.area' | translate}}"
+                        formControlName="area"
+                        multiple
+                      >
+                        <mat-option *ngFor="let item of geoList.area" [value]="item.id">{{
+                          item.code
+                        }}</mat-option>
+                      </mat-select>
+
+                      <mat-placeholder *ngIf="loadingArea">
+                        <div class="deferred-select-placeholder-container">
+                          <span>Loading...</span>
+                          <mat-spinner class="spinner" diameter="20"></mat-spinner>
+                        </div>
+                      </mat-placeholder>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex fxLayout="row" class="px-36">
+                    <mat-form-field fxFlex="100%">
+                      <mat-select
+                        placeholder="Retail Classification"
+                        formControlName="classification"
+                        multiple
+                        >
+                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div fxLayout="row" fxFlex="45">
+                <div class="box-red" fxFlex="100">
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="!panelBlast">---</p>
+                  <p style="color: white;font-weight: bold;font-size: 21px;text-align: center;" *ngIf="panelBlast">{{panelBlast}}</p>
+                  <p style="color: white;font-size: 14;text-align: center;">Panel Blast</p>
+                </div>
+            </div>
+          </div>
+          <div
+          fxLayout="column"
+          class="px-16"
+          >
+            <!-- <mat-radio-button
+              class="radio-button pr-48"
+              [checked]="!isPopulation"
+              (change)="changeBlastType('fixed-panel')"
+            >
+              Fixed Panel
+            </mat-radio-button> -->
+            <mat-radio-group class="mb-16" [formControl]="audienceFixed" (change)="handleAudienceFilter('fixed-panel')">
+              <mat-radio-button class="radio-button pr-48" value="fixed-panel">
+                Fixed Panel
+              </mat-radio-button>
+            </mat-radio-group>
+          <div fxLayout="column" class="px-20 py-16">
+            <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
+              <div fxLayout="column">
+                <button
+                  mat-raised-button
+                  type="button"
+                  class="is-danger"
+                  (click)="exportAudience()"
+                >
+                  <mat-icon>arrow_upward</mat-icon> {{'manajemen_barang_sku.manajemen_koin.text8' | translate}}
+                </button>
+                <label *ngIf="exportTemplate" style="color: white;">{{'dte.audience.downloading_template' | translate}}</label>
+              </div>
+              <button
+                mat-raised-button
+                type="button"
+                class="is-danger"
+                (click)="importAudience()"
+              >
+                <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+              </button>
+            </div>
+          </div>
+          </div>
+          <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="!isDetail">
+            <button mat-raised-button type="button" class="confirmation-button" (click)="submitAudience()" fxFlex="20">
+              Check
+            </button>
+            <button
+              id="btn-simpan"
+              mat-raised-button
+              type="button"
+              class="confirmation-button"
+              (click)="saveAudience()"
+              fxFlex="20"
+              [disabled]="!isChecked"
+            >
+              {{ ls.locale.global.button.save }}
+            </button>
+          </div>
+        </mat-tab>
+        <!-- <mat-tab label="Audience" [disabled]="true">
+          <div class="ayo-middle py-24" fxLayout="column">
+           
+          </div>
+        </mat-tab>
+        <mat-tab label="Preview" [disabled]="true">
+          <div class="ayo-middle py-24" fxLayout="column">
+            
+          </div>
+        </mat-tab> -->
+      </mat-tab-group>
+    </div>
+  </div>
+  <a #downloadLink></a>
+</div>

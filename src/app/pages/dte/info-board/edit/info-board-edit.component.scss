@@ -1,0 +1,47 @@
+.grey-box {
+    border: 2px solid rgba(161, 161, 161, .5);
+    padding: 35px 25px;
+    margin: 20px;
+    width: 100%;
+  }
+  
+  .red-big-chunk-panel {
+    background-color: red;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  :host {
+    .export {
+        background-color: #3a3a3a !important;
+    }
+  }
+  
+  /* used for both internal and external spinner versions */
+  .deferred-select-placeholder-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* used for both internal and external spinner versions */
+  .deferred-select-placeholder-container > span {
+    flex: 1;
+  }
+  
+  /* only needed if using internal loading spinner */
+  ::ng-deep .hide-deferred-select-dummy-option {
+    display: none !important;
+  }
+  
+  .box-red { 
+    padding: 15px;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 16px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    background-color: #f65b5b;
+    background-image: linear-gradient(315deg, #f65b5b 0%, #ff0000 74%);
+    height: 50%;
+  }
