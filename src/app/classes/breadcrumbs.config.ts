@@ -1548,7 +1548,7 @@ export const brConfig = {
       detail: [
         {
           type: "parent",
-          url: "/dte/info-boar",
+          url: "/dte/info-board",
           name: "Daftar Info Board"
         },
         {

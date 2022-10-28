@@ -13,7 +13,7 @@
 
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
-      <mat-tab-group>
+      <mat-tab-group [selectedIndex]="selectedTab">
         <mat-tab label="Info Board">
           <div class="ayo-middle py-24" fxLayout="column">
             <form
@@ -32,8 +32,8 @@
                   class="px-24"
                 >
                 <mat-form-field fxFlex="50" class="is-light form-primary">
-                  <mat-select formControlName="jenis_info_board" placeholder="Jenis Info Board">
-                      <mat-option *ngFor="let item of infoBoard" [value]="item.value">{{item.name}}</mat-option>
+                  <mat-select formControlName="type" placeholder="Jenis Info Board">
+                    <mat-option *ngFor="let item of infoBoard" [value]="item.id">{{item.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 </div>
@@ -194,6 +194,19 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div
+                  fxLayout="row"
+                  fxLayout.lt-md="column"
+                  fxLayoutGap="60px"
+                  fxLayoutGap.lt-md="0px"
+                  class="px-24"
+                >
+                  <mat-form-field fxFlex="50" class="is-light form-primary">
+                    <mat-select formControlName="status" placeholder="Status">
+                      <mat-option *ngFor="let item of status" [value]="item.value">{{item.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
 
                 <div class="confirm pt-24 pb-24 px-24" fxLayout="row">
                   <button
@@ -277,7 +290,7 @@
                   <div fxFlex fxLayout="row" class="px-36">
                     <mat-form-field fxFlex="100%">
                       <mat-select
-                        placeholder="{{'global.area.zone' | translate}}"
+                        [placeholder]="'global.area.zone' | translate"
                         formControlName="division"
                         multiple
                       >
@@ -332,17 +345,6 @@
                           <mat-spinner class="spinner" diameter="20"></mat-spinner>
                         </div>
                       </mat-placeholder>
-                    </mat-form-field>
-                  </div>
-                  <div fxFlex fxLayout="row" class="px-36">
-                    <mat-form-field fxFlex="100%">
-                      <mat-select
-                        placeholder="Retail Classification"
-                        formControlName="classification"
-                        multiple
-                        >
-                        <mat-option *ngFor="let gtp of retailClassification" [value]="gtp.value" (onSelectionChange)="handleClassification($event)">{{ gtp.name }}</mat-option>
-                      </mat-select>
                     </mat-form-field>
                   </div>
                 </div>

@@ -4,20 +4,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from 'app/classes/config';
 import { LanguagesService } from 'app/services/languages/languages.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
 import { InfoBoardService } from "app/services/dte/info-board.service";
 import { DialogService } from 'app/services/dialog.service';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
-import { ImportAudiencePersonalizeComponent } from '../../audience/import/personalize/import-audience-personalize.component';
-import { AudienceService } from 'app/services/dte/audience.service';
+import { ImportAudiencePersonalizeInfoBoardComponent } from '../import/personalize/import-audience-personalize.component';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -96,6 +93,10 @@ export class InfoBoardEditComponent implements OnInit {
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" }
   ];
+  status: any[] = [
+    { name: 'Publish', value: 'publish' },
+    { name: 'Unpublish', value: 'unpublish' }
+  ];
 
   geoLevel: string[] = ["national", "division", "region", "area"];
   geoList: any = {
@@ -122,7 +123,6 @@ export class InfoBoardEditComponent implements OnInit {
     private geoService: GeotreeService,
     private geotreeService: GeotreeService,
     private dataService: DataService,
-    private audienceService: AudienceService,
     private activatedRoute: ActivatedRoute,
   ) {
     this.onLoad = true;
@@ -148,15 +148,29 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    const status = this.dataService.getFromStorage('free_text');
+    if (status ===  true) {
+      this.selectedTab = 1;
+      this.dataService.setToStorage('free_text', false);
+    }
     this.formBoard = this.formBuilder.group({
       name_board: ["", Validators.required],
       description_board: ["", Validators.required],
-      jenis_info_board: [""],
+      type: [""],
       start_date: [new Date()],
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-    })
+      status: [""]
+    });
+    this.infoBoardService.type().subscribe(
+      res => {
+        this.infoBoard = res.data ? res.data.data : [];
+      },
+      err => {
+        console.error(err);
+      }
+    );
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -182,8 +196,8 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.setStorageDetail();
 
-    this.formBoard.get('jenis_info_board').valueChanges.subscribe(res => {
-      if (res === 'task-free-text') {
+    this.formBoard.get('type').valueChanges.subscribe(res => {
+      if (res === 1) {
         this.isFreeText = true;
       } else {
         this.isFreeText = false;
@@ -192,65 +206,54 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
+      console.log('berhasil');
       this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
       this.loadingArea = true;
       this.getLevel('region');
     });
-    // this.formBoard.setValue({
-    //   name_board: this.detailFormBoard.name,
-    //   description_board: this.detailFormBoard.description,
-    //   jenis_info_board: this.detailFormBoard.jenis,
-    //   start_date: this.convertDate(this.detailFormBoard.start_date),
-    //   start_time: this.convertTime(this.detailFormBoard.start_date ? this.detailFormBoard.start_date : ''),
-    //   end_date: this.convertDate(this.detailFormBoard.end_date),
-    //   end_time: this.convertTime(this.detailFormBoard.end_date ? this.detailFormBoard.end_date : ''),
-    // });
 
 
     if (this.isDetail) {
-      this.formBoard.get('jenis_info_board').disable();
+      this.formBoard.get('type').disable();
       this.formBoard.get('name_board').disable();
       this.formBoard.get('description_board').disable();
       this.formBoard.get('start_date').disable();
       this.formBoard.get('start_time').disable();
       this.formBoard.get('end_date').disable();
       this.formBoard.get('end_time').disable();
+      this.formBoard.get('status').disable();
     }
   }
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.infoBoardService.showAudience(this.detailFormBoard.id).subscribe(res => { 
+    this.showDetail = this.infoBoardService.detail(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
 
-        // this.changeBlastType(res.data.audience_filter);
-        if(res.data.audience_filter === 'population-blast'){
-          this.formGeo.get('classification').setValue(res.data.class_groups);
-        }
+        this.formBoard.setValue({
+          name_board: res.data.name,
+          description_board: res.data.description,
+          type: res.data.business_infoboard_type_id,
+          start_date: this.convertDate(res.data.start_date),
+          start_time: this.convertTime(res.data.start_date ? res.data.start_date : ''),
+          end_date: this.convertDate(res.data.end_date),
+          end_time: this.convertTime(res.data.end_date ? res.data.end_date : ''),
+          status: res.data.status
+        });
 
         let zone = [];
-        if (res.data.areas) {
-          for (let i = 0; i < res.data.areas.length; i++) {
-            if (res.data.areas[i].level_desc === 'zone') {
-              if (!( res.data.areas[i].area_id in zone )) {
-                zone.push(res.data.areas[i].area_id);
-              }
-            }
-          }
+        if (res.data.areas['zone']) {
+          zone = res.data.areas['zone'];
         }
         this.selectedZone = zone;
 
         this.panelBlast = res.data.panel_count;
-        
+
         const filter = res.data.audience_filter;
         this.handleAudienceFilter(filter);
-
-        if (filter !== 'fixed-panel') {
-          this.formGeo.get('classification').setValue(res.data.class_groups);
-        }
 
         if (res.data.panel_count > 0) {
           this.isChecked = true;
@@ -265,31 +268,20 @@ export class InfoBoardEditComponent implements OnInit {
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
-    let arr_zone = [];
-    if (arr) {
-      arr.map((area, index) => {
-        if (area.level_desc === 'area') {
-          if (arr_area.indexOf(area.area_id) == -1) {
-            arr_area.push(area.area_id);
-          }
-        } else if (area.level_desc === 'region') {
-          if (arr_region.indexOf(area.area_id) == -1) {
-            arr_region.push(area.area_id);
-          }
-        } else {
-          if (arr_zone.indexOf(area.area_id) == -1) {
-            arr_zone.push(area.area_id);
-          }
-        }
-      });
+
+    if (arr['area']) {
+      arr_area = arr['area'];
     }
+    if (arr['region']) {
+      arr_region = arr['region'];
+    }
+
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
     if (arr_area.length === 0 || parseInt(arr_area[0], 10) === 0) {
       this.loadingArea = false;
     }
-    this.selectedZone = arr_zone;
     this.selectedRegion = arr_region;
     this.selectedArea = arr_area;
   }
@@ -317,6 +309,7 @@ export class InfoBoardEditComponent implements OnInit {
         this.geoList[subLevel] = res.data;
 
         if (value === 'national' && this.selectedZone.length > 0) {
+          console.log('berhasil2', this.selectedZone);
           this.formGeo.get('division').setValue(this.selectedZone);
           this.selectedZone = [];
         } else if (value === 'division' && this.selectedRegion.length > 0) {
@@ -712,29 +705,18 @@ export class InfoBoardEditComponent implements OnInit {
     if (this.formBoard.valid) {
       let fd = new FormData();
 
-      const body = {
-        _method: 'PUT',
-        name: this.formBoard.get('name').value,
-        coin: this.formBoard.get('coin').value,
-        start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
-        end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
-        announcement_date: `${moment(this.formBoard.get('announcement_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('announcement_time').value}:00`,
-      }
+      fd.append('_method', 'PUT');
+      fd.append('name', this.formBoard.get('name_board').value);
+      fd.append('type_id', this.formBoard.get('type').value);
+      fd.append('description', this.formBoard.get('description_board').value);
+      fd.append('start_date', `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`);
+      fd.append('end_date', `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`);
+      fd.append('status', this.formBoard.get('status').value);
 
-      fd.append('_method', body._method);
-      fd.append('name', body.name);
-      fd.append('coin', body.coin);
-      fd.append('start_date', body.start_date);
-      fd.append('end_date', body.end_date);
-      fd.append('announcement_date', body.announcement_date);
-      // fd.append('trade_creator_group_id[]', this.formBoard.get('group_trade_program_id').value);
-      fd.append('trade_creator_group_id[]', '0');
-      fd.append('trade_creator_sub_group_id[]', this.formBoard.get('sub_group_trade_program_id').value);
-
-      this.infoBoardService.put(fd, { lottery_id: this.detailFormBoard.id }).subscribe(
+      this.infoBoardService.put(fd, { id: this.detailFormBoard.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          this.router.navigate(['dte', 'lottery']);
+          this.router.navigate(['dte', 'info-board']);
         },
         err => {
           console.log(err.error.message);
@@ -747,23 +729,21 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   submitAudience() {
-    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('detail_info_board').id;
     if (this.isPopulation === true) {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'population-blast',
-        class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
         regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
-        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
+        areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all']
       };
     } else {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'fixed-panel',
-        retailers: this.data_imported.map(item => item.id)
+        wholesalers: this.data_imported.map(item => item.id)
       };
     }
 
@@ -803,9 +783,8 @@ export class InfoBoardEditComponent implements OnInit {
     const id = this.dataService.getFromStorage('detail_info_board').id;
     if (this.isPopulation === true) {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'population-blast',
-        class_groups: this.formGeo.get('classification').value,
         zones: this.formGeo.get('division').value.length > 0 && parseInt(this.formGeo.get('division').value[0], 10) !== 0 ? this.formGeo.get('division').value : ['all'],
         regions: this.formGeo.get('region').value.length > 0 && parseInt(this.formGeo.get('region').value[0], 10) !== 0 ? this.formGeo.get('region').value : ['all'],
         areas: this.formGeo.get('area').value && this.formGeo.get('area').value.length > 0 && parseInt(this.formGeo.get('area').value[0], 10) !== 0 ? this.formGeo.get('area').value : ['all'],
@@ -813,9 +792,9 @@ export class InfoBoardEditComponent implements OnInit {
       };
     } else {
       body = {
-        lottery_id: id,
+        infoboard_id: id,
         audience_filter: 'fixed-panel',
-        retailers: this.data_imported.map(item => item.id),
+        wholesalers: this.data_imported.map(item => item.id),
         panel_count: this.panelBlast
       };
     }
@@ -861,7 +840,7 @@ export class InfoBoardEditComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.infoBoardService.exportExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       setTimeout(() => {
@@ -884,7 +863,7 @@ export class InfoBoardEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      ImportAudiencePersonalizeComponent,
+      ImportAudiencePersonalizeInfoBoardComponent,
       dialogConfig
     );
 
@@ -932,16 +911,31 @@ export class InfoBoardEditComponent implements OnInit {
 
   handleAudienceFilter(value) {
     console.log('nilainya', value);
-    if (value !== 'fixed-panel') {
+    if (value === 'population-blast') {
       this.isPopulation = true;
       // this.formGeo.get('audiencePopulation').setValue(value);
       this.audienceFixed.setValue('');
       this.audiencePopulation.setValue(value);
-    } else {
+    } else if (value === 'fixed-panel') {
       this.isPopulation = false;
       this.audienceFixed.setValue(value);
       this.audiencePopulation.setValue('');
       // this.formGeo.get('audiencePopulation').setValue('');
     }
+  }
+
+  submitPublishUnpublish() {
+    const id = this.detailFormBoard.id;
+    this.dataService.showLoading(true);
+    const body = {
+      status: (this.detailFormBoard.status === 'unpublish') ? 'publish' : 'unpublish'
+    };
+    this.infoBoardService.publishUnpublish({id: id}, body).subscribe(({data}) => {
+
+    this.dataService.showLoading(false);
+    this.router.navigate(['dte', 'info-board']);
+    }, err => {
+      this.dataService.showLoading(false);
+    })
   }
 }
