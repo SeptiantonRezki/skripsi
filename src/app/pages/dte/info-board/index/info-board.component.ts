@@ -74,10 +74,10 @@ export class InfoBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLottery();
+    this.getInfoBoard();
   }
 
-  getLottery() {
+  getInfoBoard() {
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -92,6 +92,7 @@ export class InfoBoardComponent implements OnInit {
       res => {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data ? res.data.data : [];
+        console.log('datanya', this.rows);
 
         this.onLoad = false;
         this.loadingIndicator = false;
@@ -178,7 +179,7 @@ export class InfoBoardComponent implements OnInit {
     this.infoBoardService.delete({ id: this.id }).subscribe(res => {
       if (res.status) {
         this.dialogService.brodcastCloseConfirmation();
-        this.getLottery();
+        this.getInfoBoard();
 
         this.dialogService.openSnackBar({ message: 'Berhasil' });
       }
@@ -190,10 +191,10 @@ export class InfoBoardComponent implements OnInit {
     this.router.navigate(['dte', 'info-board', 'detail']);
   }
 
-  async exportDetailCoupon(param?: any) {
+  async exportDetail(param?: any) {
     this.dataService.showLoading(true);
     try {
-      const response = await this.infoBoardService.exportDetailCoupon(param.id).toPromise();
+      const response = await this.infoBoardService.exportDetail(param.id).toPromise();
       this.downloadLinkDetailCoupon.nativeElement.href = response.data;
       this.downloadLinkDetailCoupon.nativeElement.click();
       setTimeout(() => {
@@ -205,10 +206,10 @@ export class InfoBoardComponent implements OnInit {
     }
   }
 
-  async exportCoupon(param?: any) {
+  async export(param?: any) {
     this.dataService.showLoading(true);
     try {
-      const response = await this.infoBoardService.exportCoupon(param.id).toPromise();
+      const response = await this.infoBoardService.export(param.id).toPromise();
       this.downloadLinkCoupon.nativeElement.href = response.data;
       this.downloadLinkCoupon.nativeElement.click();
       setTimeout(() => {
