@@ -98,6 +98,8 @@ import { GeotreeService } from './services/geotree.service';
 import { PengajuanSrcService } from './services/user-management/pengajuan-src.service';
 import { OTPSettingService } from './services/otpsetting.service';
 
+import { InfoBoardService } from './services/dte/info-board.service';
+
 // ==== QISCUS ====
 import { QiscusService } from './services/qiscus.service';
 import { Emitter } from './helper/emitter.helper';
@@ -273,6 +275,7 @@ class CustomLoader implements TranslateLoader {
     TemplateMessageService,
     PengajuanSrcService,
     OTPSettingService,
+    InfoBoardService,
     GroupTradeProgramService,
     IdbService,
     SupplierCompanyService,

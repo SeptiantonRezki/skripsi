@@ -72,6 +72,9 @@ import { SpinTheWheelNotifComponent } from "./spin-the-wheel/notif/spin-the-whee
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
+import { InfoBoardComponent } from "./info-board/index/info-board.component";
+import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
+import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 
 const routes: Routes = [
   {
@@ -969,6 +972,37 @@ const routes: Routes = [
     component: LotteryEditComponent,
     data: {
       breadcrumbs: brConfig.dte.lottery.detail
+    },
+  },
+  {
+    path: 'info-board',
+    component: InfoBoardComponent,
+    data: {
+      breadcrumbs: brConfig.dte.infoBoard.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/create',
+    component: InfoBoardCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.infoBoard.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/edit',
+    component: InfoBoardEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.infoBoard.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "info-board/detail",
+    component: InfoBoardEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.infoBoard.detail
     },
     //canActivate: [PageGuard]
   },
