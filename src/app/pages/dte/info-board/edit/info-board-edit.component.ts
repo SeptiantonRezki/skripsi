@@ -206,6 +206,7 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
+      console.log('berhasil');
       this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
@@ -243,31 +244,16 @@ export class InfoBoardEditComponent implements OnInit {
           status: res.data.status
         });
 
-        // this.changeBlastType(res.data.audience_filter);
-        if(res.data.audience_filter === 'population-blast'){
-          this.formGeo.get('classification').setValue(res.data.class_groups);
-        }
-
         let zone = [];
-        if (res.data.areas) {
-          for (let i = 0; i < res.data.areas.length; i++) {
-            if (res.data.areas[i].level_desc === 'zone') {
-              if (!( res.data.areas[i].area_id in zone )) {
-                zone.push(res.data.areas[i].area_id);
-              }
-            }
-          }
+        if (res.data.areas['zone']) {
+          zone = res.data.areas['zone'];
         }
         this.selectedZone = zone;
 
         this.panelBlast = res.data.panel_count;
-        
+
         const filter = res.data.audience_filter;
         this.handleAudienceFilter(filter);
-
-        if (filter !== 'fixed-panel') {
-          this.formGeo.get('classification').setValue(res.data.class_groups);
-        }
 
         if (res.data.panel_count > 0) {
           this.isChecked = true;
@@ -282,31 +268,20 @@ export class InfoBoardEditComponent implements OnInit {
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
-    let arr_zone = [];
-    if (arr) {
-      arr.map((area, index) => {
-        if (area.level_desc === 'area') {
-          if (arr_area.indexOf(area.area_id) == -1) {
-            arr_area.push(area.area_id);
-          }
-        } else if (area.level_desc === 'region') {
-          if (arr_region.indexOf(area.area_id) == -1) {
-            arr_region.push(area.area_id);
-          }
-        } else {
-          if (arr_zone.indexOf(area.area_id) == -1) {
-            arr_zone.push(area.area_id);
-          }
-        }
-      });
+
+    if (arr['area']) {
+      arr_area = arr['area'];
     }
+    if (arr['region']) {
+      arr_region = arr['region'];
+    }
+
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
     if (arr_area.length === 0 || parseInt(arr_area[0], 10) === 0) {
       this.loadingArea = false;
     }
-    this.selectedZone = arr_zone;
     this.selectedRegion = arr_region;
     this.selectedArea = arr_area;
   }
@@ -334,6 +309,7 @@ export class InfoBoardEditComponent implements OnInit {
         this.geoList[subLevel] = res.data;
 
         if (value === 'national' && this.selectedZone.length > 0) {
+          console.log('berhasil2', this.selectedZone);
           this.formGeo.get('division').setValue(this.selectedZone);
           this.selectedZone = [];
         } else if (value === 'division' && this.selectedRegion.length > 0) {
@@ -753,7 +729,6 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   submitAudience() {
-    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('detail_info_board').id;
     if (this.isPopulation === true) {
@@ -936,12 +911,12 @@ export class InfoBoardEditComponent implements OnInit {
 
   handleAudienceFilter(value) {
     console.log('nilainya', value);
-    if (value !== 'fixed-panel') {
+    if (value === 'population-blast') {
       this.isPopulation = true;
       // this.formGeo.get('audiencePopulation').setValue(value);
       this.audienceFixed.setValue('');
       this.audiencePopulation.setValue(value);
-    } else {
+    } else if (value === 'fixed-panel') {
       this.isPopulation = false;
       this.audienceFixed.setValue(value);
       this.audiencePopulation.setValue('');
