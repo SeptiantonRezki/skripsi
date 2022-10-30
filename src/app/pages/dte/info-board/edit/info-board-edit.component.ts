@@ -817,9 +817,9 @@ export class InfoBoardEditComponent implements OnInit {
           this.isChecked = true;
           this.panelBlast = res.data.panel_count;
         }
+        this.router.navigate(['dte', 'info-board']);
         this.dialogRef.close();
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.setStorageDetail();
         // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
       },
       (err) => {
