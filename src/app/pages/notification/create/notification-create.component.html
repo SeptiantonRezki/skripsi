@@ -179,7 +179,9 @@
           <div class="" *ngIf="formNotification.get('content_type').value === 'landing_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="landing_page_value"
+                <mat-select 
+                  (selectionChange)="landingPageChange(formNotification.get('landing_page_value').value)"
+                  formControlName="landing_page_value"
                   placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
@@ -187,6 +189,20 @@
                   *ngIf="formNotification.controls['landing_page_value'].hasError('required') && formNotification.controls['landing_page_value'].touched">
                   {{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}
                   {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- App Link -->
+          <div *ngIf="formNotification.get('content_type').value === 'landing_page' && formNotification.get('landing_page_value').value === 'app_link' && formNotification.controls['user_group'].value === 'retailer'">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="45" class="is-light form-primary">
+                <input matInput type="text" formControlName="app_link"
+                  placeholder="Masukan App Link">
+                  <mat-error
+                  *ngIf="formNotification.controls['app_link'].hasError('required') && formNotification.controls['app_link'].touched">
+                  App Link {{'global.messages.mandatory_text' | translate}}
                 </mat-error>
               </mat-form-field>
             </div>

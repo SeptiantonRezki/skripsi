@@ -157,6 +157,7 @@ export class PopupNotificationEditComponent {
   endArea: String;
   area_id_list: any = [];
   lastLevel: any;
+  Country: any = '';
 
   listContentWallet: any[] = [];
 
@@ -296,7 +297,17 @@ export class PopupNotificationEditComponent {
       salespoint: [""],
       district: [""],
       territory: [""]
-    })
+    });
+
+    if (this.ls.selectedLanguages == 'id') {
+      this.Country = 'ID';
+    }
+    else if (this.ls.selectedLanguages == 'km') {
+      this.Country = 'KH';
+    }
+    else if (this.ls.selectedLanguages == 'en-ph') {
+      this.Country = 'PH';
+    }
 
     this.bannerService.getListWallet().subscribe(res => {
       this.listContentWallet = res.data;
@@ -1441,6 +1452,7 @@ export class PopupNotificationEditComponent {
         negative_text: this.formPopupGroup.get('negative_button').value,
         is_mission_builder: (missionVal === false)? 0 : 1,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
+        country: this.Country,
       }
 
       if (this.imageConverted) {
