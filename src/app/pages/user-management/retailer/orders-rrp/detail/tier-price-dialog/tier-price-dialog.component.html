@@ -1,3 +1,55 @@
-<p>
-  tier-price-dialog works!
-</p>
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <span>{{ ls.locale.global.label.tier_price }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+  <div class="table-wrapper" fusePerfectScrollbar [formGroup]="formTier">
+    <mat-list style="background-color: #eee" *ngIf="formTier.get('tiers').value">
+      <mat-list-item>
+        <div class="pl-8" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+          <span fxFlex="50" class="h6 text-semibold">{{ ls.locale.global.menu.tier }}</span>
+          <span fxFlex="50" class="h6 text-semibold">{{ ls.locale.global.label.tier_price }}</span>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item class="custom-height" formArrayName="tiers"
+        *ngFor="let val of formTier.get('tiers')['controls']; let j=index">
+        <div class="pl-8" fxFlex="1 0 auto" fxLayoutAlign="start center" fxLayout="row" [formGroupName]="j">
+          <div fxFlex="50">
+            <mat-form-field class="is-light ">
+              <input matInput type="text" formControlName="name">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50">
+            <mat-form-field class="is-light ">
+              <input matInput type="tel" currencyMask min="0" formControlName="price">
+              <mat-error style="font-size: .8em"
+                *ngIf="val.controls['price'].hasError('required') && val.controls['price'].touched">
+                {{ ls.locale.global.label.tier_price }} {{ ls.locale.global.messages.mandatory_text }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+    <div fxLayout="row" fxLayoutAlign="space-between" class="p-24 m-0">
+      <button mat-raised-button type="button" style="height: 50px !important;" class="confirmation-button" fxFlex="40"
+        (click)="submit()">
+        {{ ls.locale.global.button.save }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -280,6 +280,9 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.order_rrp.detail
     },
+    // resolve: {
+    //   listLevel: ListLevelResolver
+    // },
     // canActivate: [PageGuard]
   },
   {
