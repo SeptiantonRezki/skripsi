@@ -136,6 +136,11 @@ import { LanguageSetupCreateComponent } from './language-setup/language-setup-cr
 import { LanguageSetupEditComponent } from './language-setup/language-setup-edit/language-setup-edit.component';
 import { DialogUploadLanguageComponent } from './language-setup/dialog-upload-language/dialog-upload-language.component';
 import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
+import { ImportAudiencePersonalizeInfoBoardComponent } from "./info-board/import/personalize/import-audience-personalize.component";
+import { InfoBoardComponent } from "./info-board/index/info-board.component";
+import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
+import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
+import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 
 export const MY_FORMATS = {
   parse: {
@@ -180,7 +185,8 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     FieldForceIndexComponent,
@@ -308,6 +314,10 @@ export const MY_FORMATS = {
 
     DialogUploadLanguageComponent,
     CTAExternalWebComponent,
+    ImportAudiencePersonalizeInfoBoardComponent,
+    InfoBoardComponent,
+    InfoBoardCreateComponent,
+    InfoBoardEditComponent
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -324,6 +334,7 @@ export const MY_FORMATS = {
     ImportListWholesalerComponent,
     PopUpImageBlobComponent,
     DialogUploadLanguageComponent,
+    ImportAudiencePersonalizeInfoBoardComponent,
   ],
   providers: [
     // PendingChangesGuard,

@@ -10,6 +10,8 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Router } from '@angular/router';
 import { DataService } from 'app/services/data.service';
+import { ProductService } from 'app/services/sku-management/product.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-info-board-create',
@@ -41,6 +43,12 @@ export class InfoBoardCreateComponent implements OnInit {
   list: any;
   areaFromLogin;
   isFreeText = false;
+  listBrands = [];
+  public filterBrand: FormControl = new FormControl();
+  public filteredBrand: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
+  isFour = false;
 
   // 2 geotree property
   endArea: String;
@@ -106,6 +114,7 @@ export class InfoBoardCreateComponent implements OnInit {
     private infoBoardService: InfoBoardService,
     private dialogService: DialogService,
     private dataService: DataService,
+    private productService: ProductService,
   ) {
     this.onLoad = true;
 
@@ -131,6 +140,7 @@ export class InfoBoardCreateComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
+      brand_id: [[]]
     });
 
     this.infoBoardService.type().subscribe(
@@ -151,37 +161,72 @@ export class InfoBoardCreateComponent implements OnInit {
         this.isFreeText = false;
       }
     });
+    this.getBrands();
+    this.filterBrand.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringKeyword();
+      });
+
+    this.formBoard.get('type').valueChanges.subscribe(res => {
+      if (res === 4) {
+        this.isFour = true;
+      } else {
+        this.isFour = false;
+      }
+    });
+  }
+
+  getBrands() {
+    this.productService.getListBrand().subscribe(res => {
+      this.listBrands = res.data ? res.data.data : [];
+      this.filteredBrand.next(res.data ? res.data.data : []);
+    });
+  }
+
+  filteringKeyword() {
+    if (!this.listBrands) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBrand.value;
+    if (!search) {
+      this.filteredBrand.next(this.listBrands.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the brand
+    this.filteredBrand.next(
+      this.listBrands.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
   }
 
   submit(): void {
 
     if (this.formBoard.valid) {
-      let fd = new FormData();
 
-      let body = {
+      const body = {
         name: this.formBoard.get('name_board').value,
-        type: this.formBoard.get('type').value,
+        type_id: this.formBoard.get('type').value,
         description: this.formBoard.get('description_board').value,
         start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
         end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
-      }
+        brand_id: this.formBoard.get('brand_id').value,
+        status: 'unpublish'
+      };
 
-      fd.append('name', body.name);
-      fd.append('type_id', body.type);
-      fd.append('description', body.description);
-      fd.append('start_date', body.start_date);
-      fd.append('end_date', body.end_date);
-      fd.append('status', 'unpublish');
-
-      this.infoBoardService.create(fd).subscribe(
+      this.infoBoardService.create(body).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
           if (this.isFreeText) {
             this.dataService.setToStorage('free_text', true);
             this.dataService.setToStorage('detail_info_board', res.data);
-            this.router.navigate(['dte', 'info-board', 'edit']);
+            this.router.navigate(['user-management', 'info-board', 'edit']);
           } else {
-            this.router.navigate(['dte', 'info-board']);
+            this.router.navigate(['user-management', 'info-board']);
           }
         },
         err => {

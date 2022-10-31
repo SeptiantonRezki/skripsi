@@ -161,7 +161,7 @@ export class InfoBoardComponent implements OnInit {
 
   directEdit(param?: any): void {
     this.dataService.setToStorage('detail_info_board', param);
-    this.router.navigate(['dte', 'info-board', 'edit']);
+    this.router.navigate(['user-management', 'info-board', 'edit']);
   }
   
   deleteTp(id) {
@@ -188,7 +188,7 @@ export class InfoBoardComponent implements OnInit {
 
   directDetail(param?: any): void {
     this.dataService.setToStorage('detail_info_board', param);
-    this.router.navigate(['dte', 'info-board', 'detail']);
+    this.router.navigate(['user-management', 'info-board', 'detail']);
   }
 
   async exportDetail(param?: any) {

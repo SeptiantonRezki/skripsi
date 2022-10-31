@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header contentTitle="Info Board">
-    <button id="btn-create-trade" style="width: 170px" [routerLink]="['/dte','info-board', 'create']" mat-raised-button type="button">
+    <button id="btn-create-trade" style="width: 170px" [routerLink]="['/user-management','info-board', 'create']" mat-raised-button type="button">
       <mat-icon>add</mat-icon> {{'global.button.create' | translate}}
     </button>
   </page-content-header>
@@ -80,12 +80,12 @@
         <ngx-datatable-column [width]="120" name="{{'global.label.action' | translate}}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="button-row" style="margin-left: -10px">
-              <button matTooltip="Download Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="export(row)">
+              <!-- <button matTooltip="Download Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="export(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
               </button>
               <button matTooltip="Download Detail Transaksi Kupon" id="btn-detail" mat-icon-button *ngIf="!permission?.ubah" color="" (click)="exportDetail(row)">
                 <mat-icon class="secondary-text">download</mat-icon>
-              </button>
+              </button> -->
               <button matTooltip="Edit" id="btn-edit" mat-icon-button color="" (click)="directEdit(row)">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
