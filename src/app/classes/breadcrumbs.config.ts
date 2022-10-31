@@ -1501,51 +1501,6 @@ export const brConfig = {
         }
       ],
     },
-    infoBoard: {
-      index: [
-        {
-          type: "current",
-          url: "",
-          name: "Info Board"
-        }
-      ],
-      create: [
-        {
-          type: "parent",
-          url: "/dte/info-board",
-          name: "Daftar Info Board"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Buat Info Board"
-        }
-      ],
-      edit: [
-        {
-          type: "parent",
-          url: "/dte/info-board",
-          name: "Daftar Info Board"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Ubah Info Board"
-        }
-      ],
-      detail: [
-        {
-          type: "parent",
-          url: "/dte/info-board",
-          name: "Daftar Info Board"
-        },
-        {
-          type: "current",
-          url: "",
-          name: "Detail Info Board"
-        }
-      ],
-    },
     pengaturanAttributeMisi: {
       index: [
         {
@@ -3548,5 +3503,50 @@ export const brConfig = {
         name: "Language Setup"
       }
     ]
+  },
+  infoBoard: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Info Board"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Info Board"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Info Board"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Info Board"
+      }
+    ],
   },
 };

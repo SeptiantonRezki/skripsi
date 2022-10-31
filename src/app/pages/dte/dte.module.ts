@@ -187,13 +187,9 @@ import { VerificationApprovalComponent } from './task-verification-2/verificatio
 import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
 import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
 import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
-import { InfoBoardComponent } from './info-board/index/info-board.component';
-import { InfoBoardCreateComponent } from './info-board/create/info-board-create.component';
-import { InfoBoardEditComponent } from './info-board/edit/info-board-edit.component';
 import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
-import { ImportAudiencePersonalizeInfoBoardComponent } from "./info-board/import/personalize/import-audience-personalize.component";
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -373,7 +369,6 @@ export const MY_FORMATS = {
     AudienceEditPersonalizeComponent,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
-    ImportAudiencePersonalizeInfoBoardComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
     ImportAudiencePersonalizeComponentSPW,
@@ -400,9 +395,6 @@ export const MY_FORMATS = {
     SpinTheWheelComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
-    InfoBoardComponent,
-    InfoBoardCreateComponent,
-    InfoBoardEditComponent
   ],
   exports: [
     TemplateIndexComponent,
@@ -513,7 +505,6 @@ export const MY_FORMATS = {
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
-    ImportAudiencePersonalizeInfoBoardComponent,
     ImportAudiencePersonalizeComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
