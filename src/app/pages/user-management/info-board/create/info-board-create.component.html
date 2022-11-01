@@ -155,6 +155,21 @@
                   </mat-form-field>
                 </div>
 
+                <div *ngIf="isFour" fxLayout="row" class="px-24">
+                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
+                    <mat-select style="min-width: 160px" [placeholder]="'dte.task_verification.brand' | translate" formControlName="brand_id" multiple="true">
+                      <ngx-mat-select-search
+                        [formControl]="filterBrand"
+                        placeholderLabel="{{ 'global.label.search' | translate }}"
+                        noEntriesFoundLabel="{{
+                          'global.messages.data_not_found' | translate
+                        }}"
+                      ></ngx-mat-select-search>
+                      <mat-option *ngFor="let cat of filteredBrand | async" [value]="cat.id">{{ cat.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <div fxLayout="row" class="px-24">
                   <mat-form-field fxFlex class="is-light form-primary">
                     <input
