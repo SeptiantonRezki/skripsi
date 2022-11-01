@@ -1441,20 +1441,19 @@ export class PopupNotificationEditComponent {
 
       // Negative details
       if (response.negative_action === 'static-page') {
-        this.formPopupGroup.get('body_2').setValue(response.negative_action);
+        this.formPopupGroup.get('body_2').setValue(response.negative_action_data);
       } else {
         this.formPopupGroup.get('body_2').disable();
       }
 
       if (response.negative_action === 'iframe') {
-        this.formPopupGroup.get('url_iframe_2').setValue(response.negative_action);
-        this.formPopupGroup.get('transfer_token_2').setValue(response.negative_action);
+        this.formPopupGroup.get('url_iframe_2').setValue(response.negative_action_data);
+        this.formPopupGroup.get('transfer_token_2').setValue(response.transfer_token);
       }
 
       if (response.negative_action === 'image') {
         this.convertedContentImage_2 = response.negative_action_data;
       }
-      console.log('IMAGE ', this.convertedContentImage_2);
       if(response.negative_action === "spesific_product_b2b"){
         this.formPopupGroup.controls['barcode_2'].setValue(JSON.parse(response.negative_action_data).product_info);
       }
