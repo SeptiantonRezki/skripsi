@@ -7,6 +7,7 @@ import { DataService } from 'app/services/data.service';
 import { TncService } from 'app/services/content-management/tnc.service';
 import { Router } from '@angular/router';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import { PagesName } from 'app/classes/pages-name';
 
 @Component({
   selector: 'app-tnc-index',
@@ -23,13 +24,14 @@ export class TncIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
-
+  roles: PagesName = new PagesName();
   keyUp = new Subject<string>();
 
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
+  permission: {}
 
   constructor(
     private dialogService: DialogService,
@@ -40,7 +42,8 @@ export class TncIndexComponent {
   ) {
     this.onLoad = true;
     this.selected = [];
-
+    this.permission = this.roles.getRoles('principal.syaratketentuan');
+    console.log(this.permission);
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
