@@ -463,9 +463,9 @@ export class PopupNotificationEditComponent {
           { name: this.translate.instant('global.label.static_page'), value: "static-page" },
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          { name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"},
-          { name: "Image", value: "image" },
-          { name: "Unlinked", value: "unlinked" }
+          {name: this.translate.instant('global.label.spesific_product_b2b'), value:"spesific_product_b2b"},
+          { name: this.translate.instant('global.label.image'),value:"image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, 
@@ -486,8 +486,8 @@ export class PopupNotificationEditComponent {
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
           { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" },
-          { name: "Image", value: "image" },
-          { name: "Unlinked", value: "unlinked" },
+          { name: this.translate.instant('global.label.image'),value:"image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
           { name: "Close Popup", value: "close" }
         ];
 
