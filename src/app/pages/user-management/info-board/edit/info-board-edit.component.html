@@ -165,7 +165,6 @@
                           'global.messages.data_not_found' | translate
                         }}"
                       ></ngx-mat-select-search>
-                      <mat-option [value]="" selected>{{ls.locale.global.label.all}} {{ "dte.task_verification.brand" | translate }}</mat-option>
                       <mat-option *ngFor="let cat of filteredBrand | async" [value]="cat.id">{{ cat.name }}</mat-option>
                     </mat-select>
                   </mat-form-field>
