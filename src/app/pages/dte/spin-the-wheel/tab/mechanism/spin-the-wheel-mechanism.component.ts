@@ -433,7 +433,7 @@ export class SpinTheWheelMechanismComponent implements OnInit {
         );
       }
       if (tiers.controls.length === 1) {
-        const pt = tiers.at(tierId - 1);
+        const pt = tiers.at(0);
         pt.controls.maximum_transaction.setValue(0);
       }
     }
@@ -463,6 +463,8 @@ export class SpinTheWheelMechanismComponent implements OnInit {
           Validators.min(ptmin.value + 1),
           this.validateEqual(ptmax.value - ctmin.value === -1),
         ]);
+      } else {
+        ctmin.clearValidators();
       }
       ctmin.updateValueAndValidity();
       ctmax.updateValueAndValidity();
