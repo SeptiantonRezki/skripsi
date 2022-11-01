@@ -441,7 +441,11 @@
                 type="tel"
                 formControlName="limit_spin"
                 currencyMask
-                (keyup)="updateTierData(i, true, 'rewards_coin')"
+                (keyup)="
+                  updateTierData(i, true, 'rewards_coin');
+                  updateTierData(i, true, 'rewards_non_coin');
+                  updateTierData(i, true, 'rewards_xp')
+                "
               />
               <mat-error
                 *ngIf="
