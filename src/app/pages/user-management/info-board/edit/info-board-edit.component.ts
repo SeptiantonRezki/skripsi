@@ -10,11 +10,13 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DialogProcessComponent } from '../../audience/dialog/dialog-process/dialog-process.component';
-import { DialogProcessSaveComponent } from '../../audience/dialog/dialog-process-save/dialog-process-save.component';
+import { DialogProcessComponent } from '../../../dte/audience/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponent } from '../../../dte/audience/dialog/dialog-process-save/dialog-process-save.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
 import { ImportAudiencePersonalizeInfoBoardComponent } from '../import/personalize/import-audience-personalize.component';
+import { takeUntil } from 'rxjs/operators';
+import { ProductService } from 'app/services/sku-management/product.service';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -45,6 +47,12 @@ export class InfoBoardEditComponent implements OnInit {
   list: any;
   areaFromLogin;
   isFreeText = false;
+  listBrands = [];
+  public filterBrand: FormControl = new FormControl();
+  public filteredBrand: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
+  isFour = false;
 
   // 2 geotree property
   endArea: String;
@@ -124,6 +132,7 @@ export class InfoBoardEditComponent implements OnInit {
     private geotreeService: GeotreeService,
     private dataService: DataService,
     private activatedRoute: ActivatedRoute,
+    private productService: ProductService,
   ) {
     this.onLoad = true;
 
@@ -161,7 +170,8 @@ export class InfoBoardEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
-      status: [""]
+      status: [""],
+      brand_id: [[]]
     });
     this.infoBoardService.type().subscribe(
       res => {
@@ -202,6 +212,11 @@ export class InfoBoardEditComponent implements OnInit {
       } else {
         this.isFreeText = false;
       }
+      if (res === 4) {
+        this.isFour = true;
+      } else {
+        this.isFour = false;
+      }
     });
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
@@ -225,6 +240,40 @@ export class InfoBoardEditComponent implements OnInit {
       this.formBoard.get('end_time').disable();
       this.formBoard.get('status').disable();
     }
+
+    this.getBrands();
+    this.filterBrand.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteringKeyword();
+      });
+  }
+
+  getBrands() {
+    this.productService.getListBrand().subscribe(res => {
+      this.listBrands = res.data ? res.data.data : [];
+      this.filteredBrand.next(res.data ? res.data.data : []);
+    });
+  }
+
+  filteringKeyword() {
+    if (!this.listBrands) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterBrand.value;
+    if (!search) {
+      this.filteredBrand.next(this.listBrands.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the brand
+    this.filteredBrand.next(
+      this.listBrands.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
   }
 
   setStorageDetail() {
@@ -241,7 +290,8 @@ export class InfoBoardEditComponent implements OnInit {
           start_time: this.convertTime(res.data.start_date ? res.data.start_date : ''),
           end_date: this.convertDate(res.data.end_date),
           end_time: this.convertTime(res.data.end_date ? res.data.end_date : ''),
-          status: res.data.status
+          status: res.data.status,
+          brand_id: res.data.brand_id
         });
 
         let zone = [];
@@ -249,6 +299,12 @@ export class InfoBoardEditComponent implements OnInit {
           zone = res.data.areas['zone'];
         }
         this.selectedZone = zone;
+
+        if (res.data.business_infoboard_type_id === 4) {
+          this.isFour = true;
+        } else {
+          this.isFour = false;
+        }
 
         this.panelBlast = res.data.panel_count;
 
@@ -703,20 +759,22 @@ export class InfoBoardEditComponent implements OnInit {
 
   submit() {
     if (this.formBoard.valid) {
-      let fd = new FormData();
 
-      fd.append('_method', 'PUT');
-      fd.append('name', this.formBoard.get('name_board').value);
-      fd.append('type_id', this.formBoard.get('type').value);
-      fd.append('description', this.formBoard.get('description_board').value);
-      fd.append('start_date', `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`);
-      fd.append('end_date', `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`);
-      fd.append('status', this.formBoard.get('status').value);
+      const body = {
+        _method: 'PUT',
+        name: this.formBoard.get('name_board').value,
+        type_id: this.formBoard.get('type').value,
+        description: this.formBoard.get('description_board').value,
+        start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
+        end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
+        status: this.formBoard.get('status').value,
+        brand_id: this.formBoard.get('brand_id').value
+      };
 
-      this.infoBoardService.put(fd, { id: this.detailFormBoard.id }).subscribe(
+      this.infoBoardService.put(body, { id: this.detailFormBoard.id }).subscribe(
         res => {
           this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          this.router.navigate(['dte', 'info-board']);
+          this.router.navigate(['user-management', 'info-board']);
         },
         err => {
           console.log(err.error.message);
@@ -817,9 +875,9 @@ export class InfoBoardEditComponent implements OnInit {
           this.isChecked = true;
           this.panelBlast = res.data.panel_count;
         }
+        this.router.navigate(['user-management', 'info-board']);
         this.dialogRef.close();
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.setStorageDetail();
         // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
       },
       (err) => {
@@ -933,7 +991,7 @@ export class InfoBoardEditComponent implements OnInit {
     this.infoBoardService.publishUnpublish({id: id}, body).subscribe(({data}) => {
 
     this.dataService.showLoading(false);
-    this.router.navigate(['dte', 'info-board']);
+    this.router.navigate(['user-management', 'info-board']);
     }, err => {
       this.dataService.showLoading(false);
     })
