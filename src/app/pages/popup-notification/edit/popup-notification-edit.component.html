@@ -216,7 +216,7 @@
                   <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                     role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
                       class="preview-image-content"
-                      (click)="previewImage(imageConverted)">{{'iklan_dalam_aplikasi.spanduk_online.view_image' |
+                      (click)="previewImage(imageConverted)">{{'notification.popup_notifikasi.text17' |
                       translate}} popup
                       notifikasi</span>
                     <mat-icon (click)="removeImage()" matTooltip="{{'global.label.delete_image' | translate}}"
@@ -228,7 +228,7 @@
                   <div class="mat-chip mat-primary mat-standard-chip mat-chip-with-trailing-icon ng-star-inserted"
                     role="option" tabindex="-1" aria-disabled="false" aria-selected="false"><span
                       class="preview-image-content"
-                      (click)="previewImage(detailPopup?.image_url)">{{'iklan_dalam_aplikasi.spanduk_online.view_image'
+                      (click)="previewImage(detailPopup?.image_url)">{{'notification.popup_notifikasi.text17'
                       | translate}} popup
                       notifikasi</span></div>
                 </div>
@@ -355,7 +355,7 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field fxFlex="45" class="is-light form-primary" *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'landing-page'">
+              <mat-form-field fxFlex="45" class="is-light form-primary" *ngIf="formPopupGroup.get('user_group').value === 'retailer'">
                 <mat-select formControlName="content_type_2"
                   placeholder="{{'notification.popup_notifikasi.text15' | translate}}"
                   (selectionChange)="contentType_2(formPopupGroup.get('content_type_2').value)">
@@ -477,8 +477,10 @@
               </div>
 
               <!-- Image -->
+              <!-- <div class="pb-16"
+                *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'image'"> -->
               <div class="pb-16"
-                *ngIf="formPopupGroup.get('user_group').value === 'customer' && formPopupGroup.get('content_type').value === 'image'">
+                *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type').value === 'image'">
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
                   <div ngfDrop selectable="1" [(validDrag)]="validDragContentImage" [(file)]="fileContentImage"
                     accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validDragContentImage === false"
@@ -488,13 +490,13 @@
                   <mat-chip-list *ngIf="fileContentImage">
                     <mat-chip style="position:unset;margin:0;" (click)="previewImage(convertedContentImage)"
                       [removable]="true" (removed)="fileContentImage=undefined">
-                      <span>{{'global.label.view_image' | translate}}</span>
+                      <span>{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
                       <mat-icon style="padding:0;" matChipRemove>cancel</mat-icon>
                     </mat-chip>
                   </mat-chip-list>
                   <mat-chip-list *ngIf="!fileContentImage && convertedContentImage">
                     <mat-chip style="position:unset;margin:0;" (click)="previewImage(convertedContentImage)">
-                      <span>{{'global.label.view_image' | translate}}</span>
+                      <span>{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
                     </mat-chip>
                   </mat-chip-list>
                 </div>
@@ -502,6 +504,55 @@
             </div>
 
             <div fxFlex="45" class="right_content"> <!-- RIGHT ############################################################################# -->
+              <div *ngIf="formPopupGroup.get('content_type').value === 'new-product'">
+                <div fxLayout="row">
+                  <mat-form-field fxFlex="45" class="is-light form-primary">
+                    <mat-select formControlName="product_2" placeholder="{{'manajemen_barang_sku.produk.text4' | translate}}"
+                      id="product_name" #singleSelect>
+                      <ngx-mat-select-search [formControl]="filterProduct_2"
+                        placeholderLabel="{{'global.label.search' | translate}}"
+                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false">
+                      </ngx-mat-select-search>
+                      <mat-option *ngFor="let item of filteredProduct_2 | async" [value]="item.sku_id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="formPopupGroup.controls['product_2'].hasError('required') && formPopupGroup.controls['product_2'].touched">
+                      {{'manajemen_barang_sku.produk.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Static Page -->
+              <div class="pb-24" *ngIf="formPopupGroup.get('content_type_2').value === 'static-page'">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <h3 class="">{{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}}</h3>
+                </div>
+                <textarea [froalaEditor]="options" formControlName="body_2" class="pb-4" fxFlex="100"></textarea>
+                <mat-error style="padding-top: 6px !important; font-size: .86em;"
+                  *ngIf="formPopupGroup.controls['body_2'].hasError('required') && formPopupGroup.controls['body_2'].touched">
+                  {{'iklan_dalam_aplikasi.spanduk_online.text24' | translate}} {{'global.messages.mandatory_text' |
+                  translate}}
+                </mat-error>
+              </div>
+
+              <!-- spesifik produk b2b -->
+              <div class="pb-10"
+                *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type_2').value === 'spesific_product_b2b'">
+                <div fxLayout="row">
+                  <search-product-barcode [errorMessage]="'search_product_component.error_message' | translate"
+                    [inputPlaceHolder]="'search_product_component.placeholder' | translate" fxFlex="45"
+                    [value]="formPopupGroup.controls['barcode_2'].value" (onChange)="handleSearchProduct_2($event)">
+                    <mat-error
+                      *ngIf="formPopupGroup.controls['barcode_2'].hasError('required') && formPopupGroup.controls['barcode_2'].touched">
+                      {{'search_product_component.error_form' | translate}}
+                    </mat-error>
+                  </search-product-barcode>
+                </div>
+              </div>
+
               <!-- Landing Page -->
               <div *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type_2').value === 'landing-page'">
                 <div fxLayout="row">
@@ -531,6 +582,59 @@
                       App Link {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
+                </div>
+              </div>
+
+              <!-- iframe -->
+              <div *ngIf="formPopupGroup.get('content_type_2').value === 'iframe' && formPopupGroup.get('user_group').value === 'retailer'">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-form-field fxFlex="45" class="is-light form-primary">
+                    <input matInput type="url" formControlName="url_iframe_2"
+                      placeholder="{{'notification.popup_notifikasi.text16' | translate}}">
+                    <mat-error
+                      *ngIf="formPopupGroup.controls['url_iframe'].hasError('required') && formPopupGroup.controls['url_iframe'].touched">
+                      {{'notification.popup_notifikasi.text16' | translate}} {{'global.messages.mandatory_text' |
+                      translate}}
+                    </mat-error>
+                    <mat-error
+                      *ngIf="formPopupGroup.controls['url_iframe'].hasError('pattern') && formPopupGroup.get('url_iframe').value !== ''">
+                      {{'iklan_dalam_aplikasi.spanduk_online.invalid_url' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="pb-16" *ngIf="formPopupGroup.get('content_type_2').value === 'iframe' && formPopupGroup.get('user_group').value === 'retailer'">
+                <div class="" fxLayout="row" fxLayoutAlign="start center">
+                  <strong class="font-size-16">{{'notification.popup_notifikasi.text18' | translate}}</strong>
+                </div>
+                <mat-radio-group formControlName="transfer_token_2" class="radio-group">
+                  <mat-radio-button class="radio-button" value="yes">{{'global.label.yes' | translate}}</mat-radio-button>
+                  <mat-radio-button class="radio-button" value="no">{{'global.label.no' | translate}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <!-- Image -->
+              <div class="pb-16"
+                *ngIf="formPopupGroup.get('user_group').value === 'retailer' && formPopupGroup.get('content_type_2').value === 'image'">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+                  <div ngfDrop selectable="1" [(validDrag)]="validDragContentImage_2" [(file)]="fileContentImage_2"
+                    accept="image/*" class="well my-drop-zone" [class.invalid-drag]="validDragContentImage_2 === false"
+                    [class.valid-drag]="validDragContentImage_2" (fileChange)="fileChangeContentImage_2($event)"
+                    [innerHTML]="'iklan_dalam_aplikasi.spanduk_online.drag_image' | translate">
+                  </div>
+                  <mat-chip-list *ngIf="fileContentImage_2">
+                    <mat-chip style="position:unset;margin:0;" (click)="previewImage_2(convertedContentImage_2)"
+                      [removable]="true" (removed)="fileContentImage_2=undefined">
+                      <span>{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                      <mat-icon style="padding:0;" matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-chip-list *ngIf="!fileContentImage_2 && convertedContentImage_2">
+                    <mat-chip style="position:unset;margin:0;" (click)="previewImage(convertedContentImage_2)">
+                      <span>{{'iklan_dalam_aplikasi.spanduk_online.view_image' | translate}}</span>
+                    </mat-chip>
+                  </mat-chip-list>
                 </div>
               </div>
               
