@@ -141,6 +141,8 @@ import { InfoBoardComponent } from "./info-board/index/info-board.component";
 import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { DialogProcessComponentIB } from "./info-board/dialog/dialog-process/dialog-process.component";
+import { DialogProcessSaveIBComponent } from "./info-board/dialog/dialog-process-save-ib/dialog-process-save-ib.component";
 
 export const MY_FORMATS = {
   parse: {
@@ -317,7 +319,9 @@ export const MY_FORMATS = {
     ImportAudiencePersonalizeInfoBoardComponent,
     InfoBoardComponent,
     InfoBoardCreateComponent,
-    InfoBoardEditComponent
+    InfoBoardEditComponent,
+    DialogProcessComponentIB,
+    DialogProcessSaveIBComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -335,6 +339,8 @@ export const MY_FORMATS = {
     PopUpImageBlobComponent,
     DialogUploadLanguageComponent,
     ImportAudiencePersonalizeInfoBoardComponent,
+    DialogProcessComponentIB,
+    DialogProcessSaveIBComponent,
   ],
   providers: [
     // PendingChangesGuard,
