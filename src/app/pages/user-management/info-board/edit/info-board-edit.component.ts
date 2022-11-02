@@ -10,13 +10,13 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DialogProcessComponent } from '../../../dte/audience/dialog/dialog-process/dialog-process.component';
-import { DialogProcessSaveComponent } from '../../../dte/audience/dialog/dialog-process-save/dialog-process-save.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
 import { ImportAudiencePersonalizeInfoBoardComponent } from '../import/personalize/import-audience-personalize.component';
 import { takeUntil } from 'rxjs/operators';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { DialogProcessComponentIB } from '../dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveIBComponent } from '../dialog/dialog-process-save-ib/dialog-process-save-ib.component';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -813,7 +813,7 @@ export class InfoBoardEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
   
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessComponentIB,
         {...dialogConfig, width: '400px'}
       );
 
@@ -865,7 +865,7 @@ export class InfoBoardEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessSaveComponent,
+      DialogProcessSaveIBComponent,
       {...dialogConfig, width: '400px'}
     );
 

@@ -10,11 +10,11 @@ import { PagesName } from 'app/classes/pages-name';
 import { IdbService } from 'app/services/idb.service';
 
 @Component({
-  selector: 'app-dialog-process',
-  templateUrl: './dialog-process.component.html',
-  styleUrls: ['./dialog-process.component.scss']
+  selector: 'app-dialog-process-save-ib',
+  templateUrl: './dialog-process-save-ib.component.html',
+  styleUrls: ['./dialog-process-save-ib.component.scss']
 })
-export class DialogProcessComponentIB implements OnInit {
+export class DialogProcessSaveIBComponent implements OnInit {
   uploading: Boolean;
   rows: any[];
   id: any;
@@ -29,7 +29,7 @@ export class DialogProcessComponentIB implements OnInit {
   detailData: any;
 
   constructor(
-    public dialogRef: MatDialogRef<DialogProcessComponentIB>,
+    public dialogRef: MatDialogRef<DialogProcessSaveIBComponent>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,
