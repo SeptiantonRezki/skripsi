@@ -246,7 +246,6 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
-      console.log('berhasil');
       this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
@@ -306,6 +305,8 @@ export class InfoBoardEditComponent implements OnInit {
     this.showDetail = this.infoBoardService.detail(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
+        
+        this.minDateStart = new Date(this.convertDate(res.data.start_date));
 
         this.formBoard.setValue({
           name_board: res.data.name,
@@ -318,7 +319,13 @@ export class InfoBoardEditComponent implements OnInit {
           status: res.data.status,
           product: res.data['limit_only'] ? res.data.limit_only : '',
         });
-        this.productList = res.data['limit_only'] ? res.data.limit_only : [];
+
+
+        if (res.data['limit_only']) {
+          for (let i = 0; i < res.data.limit_only.length; i++) {
+            this.productList.push({ sku_id: res.data.limit_only[i], name: res.data.limit_only_data[i] });
+          }
+        }
 
         let zone = [];
         if (res.data.areas['zone']) {
@@ -391,7 +398,6 @@ export class InfoBoardEditComponent implements OnInit {
         this.geoList[subLevel] = res.data;
 
         if (value === 'national' && this.selectedZone.length > 0) {
-          console.log('berhasil2', this.selectedZone);
           this.formGeo.get('division').setValue(this.selectedZone);
           this.selectedZone = [];
         } else if (value === 'division' && this.selectedRegion.length > 0) {
