@@ -36,9 +36,9 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Info Board Type" prop="name">
+        <ngx-datatable-column name="Info Board Type" prop="type.name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span id="nama" class="row-name" (click)="directDetail(row)">{{row.name}}</span>
+            <span id="nama" class="row-name">{{row.type.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
