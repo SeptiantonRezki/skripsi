@@ -154,19 +154,26 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-
+                
                 <div *ngIf="isFour" fxLayout="row" class="px-24">
-                  <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                    <mat-select style="min-width: 160px" [placeholder]="'dte.task_verification.brand' | translate" formControlName="brand_id" multiple="true">
-                      <ngx-mat-select-search
-                        [formControl]="filterBrand"
-                        placeholderLabel="{{ 'global.label.search' | translate }}"
-                        noEntriesFoundLabel="{{
-                          'global.messages.data_not_found' | translate
-                        }}"
-                      ></ngx-mat-select-search>
-                      <mat-option *ngFor="let cat of filteredBrand | async" [value]="cat.id">{{ cat.name }}</mat-option>
-                    </mat-select>
+                  <mat-form-field fxFlex="100" class="mt-12">
+                    <mat-chip-list #chipList aria-label="Product List">
+                      <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
+                        (removed)="remove(product)">
+                        {{product.name}}
+                        <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
+                      </mat-chip>
+                      <input matInput type="text" #productInput placeholder="{{ls.locale.cn_reward.b2b_voucher.text29}}"
+                        (input)="keyUpProduct.next($event.target.value)" [formControl]="product" [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName" multiple>
+                      <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
+                        (onSelectionChange)="getProductObj($event, item)">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-autocomplete>
                   </mat-form-field>
                 </div>
 
