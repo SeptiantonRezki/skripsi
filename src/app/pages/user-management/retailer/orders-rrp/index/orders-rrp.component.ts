@@ -127,18 +127,6 @@ export class OrdersRrpComponent implements OnInit {
   jsonLocale: any;
   // resultColumns = [];
 
-  // Nama -> name
-  // Tipe Pelanggan -> classification
-  // Tier Pelanggan -> tier
-  // Pesan Melalui -> order_from
-  // Nomor Ponsel -> phone
-  // Kode Promo -> promo_code
-  // Diskon Promo -> promo_nominal
-  // Diskon Voucher -> voucher_nominal
-  // Tanggal Status Diterima -> date_order_status_diterima
-  // Tanggal Terakhir diperbarui -> updated_at
-  // Catatan -> note
-
   constructor(
     private dialogService: DialogService,
     private ordersService: OrdersService,
@@ -156,14 +144,6 @@ export class OrdersRrpComponent implements OnInit {
     private convertRp: RupiahFormaterWithoutRpPipe,
     private translateInterpolatePipe: TranslateInterpolatePipe,
   ) {
-
-    // this.gaService.eventTracking({
-    //   'event_category': 'MainMenuDetail',
-    //   'event_action': 'Click',
-    //   'event_label': 'LihatPesanan',
-    //   'event_value': 1,
-    //   'event_noninteraction': 0
-    // });
 
     this.adapter.setLocale('en');
     this.rows = [];
@@ -411,11 +391,6 @@ export class OrdersRrpComponent implements OnInit {
     this.ordersService.get(this.pagination).subscribe(
       async res => {
         console.log('X 1111111111')
-        // console.log({res});
-        // if (res.data && res.data.length) {
-        //   const columns = Object.keys(res.data[0]);
-        //   this.generateColumns(columns);
-        // }
         if (res.data && res.data.length) {
            if (Object.keys(res.data[0]).includes('customer_code')) {
               // this.formColumn.(this.ls.locale.global.label.customer_code);
@@ -648,16 +623,6 @@ export class OrdersRrpComponent implements OnInit {
 
     return "";
   }
-
-  // trackingEvent(value, action) {
-  //   this.gaService.eventTracking({
-  //     'event_category': 'LihatPesananDetail',
-  //     'event_action': action,
-  //     'event_label': value,
-  //     'event_value': 1,
-  //     'event_noninteraction': 0
-  //   });
-  // }
 
   checkValidate(item: any) {
     if ((item.status === 'pesanan-baru') || (item.orderStatuses && item.orderStatuses.length === 0) || (item.payment_type === 'virtual-account' && item.status === 'pesanan-diterima')) {
@@ -1153,17 +1118,6 @@ export class OrdersRrpComponent implements OnInit {
         this.updateableStatus = response['data'];
       })
     }
-  }
-
-  generateColumns(columns) {
-    // let generated = [];
-    // columns.map(col => {
-    //   const name = String(col.replace('_', ' ')).toLocaleUpperCase();
-    //   const prop = col;
-    //   generated.push({name, prop});
-    // })
-    // console.log({generated});
-    // this.resultColumns = generated;
   }
 
   resetColum() {

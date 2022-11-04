@@ -26,6 +26,7 @@ import { LanguagesService } from "app/services/languages/languages.service";
 import { RupiahFormaterPipe } from "@fuse/pipes/rupiah-formater";
 import { PagesName } from 'app/classes/pages-name';
 import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe";
+import { PreviewImagePaymentComponent } from "../detail/preview-image-payment/preview-image-payment.component";
 
 
 @Component({
@@ -60,9 +61,7 @@ export class OrdersRrpDetailComponent implements OnInit {
 
   navigationSubscription;
   imageConverted: any;
-  imageUrl1: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
-  imageUrl2: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
-  imageUrl3: any = "https://assets.dev.src.id/2022/08/30/dniIDovkE9NKfq6EzfEqpQaPSJ7B2VLv2AFp49KA.jpeg";
+  imageUrl: any[] = [];
 
   onEdit: boolean = false;
   dialogRef: any;
@@ -276,31 +275,13 @@ export class OrdersRrpDetailComponent implements OnInit {
         this.retailerId = this.detailOrder.retailer_id;
         this.orderRrp = (this.detailOrder.order_rrp !== null) ? this.detailOrder.order_rrp : 1;
         this.blockOrder = this.detailOrder.block_order ? this.detailOrder.block_order : 0;
+        this.imageUrl = this.detailOrder.payment_prove;
         if (res.payment_type === 'virtual-account' && res.status === 'pesanan-diterima') {
           this.vaValidated = false;
         }
         console.log('detail Order....', this.detailOrder)
         let products = this.detailOrder && this.detailOrder.products ? [...this.detailOrder.products].filter(obj => obj.amount > 0) : [];
         this.productsNota = products;
-
-        // let allTiers = [];
-        // products.map(prd => {
-        //   if (Array.isArray(prd.levels)) {
-        //     allTiers = [
-        //       ...allTiers,
-        //       ...prd.levels
-        //     ]
-        //   } else {
-        //     allTiers = [
-        //       ...allTiers,
-        //       ...[...prd.levels]
-        //     ]
-        //   }
-        // });
-
-        // this.tierHasDisc = allTiers.find(tier => tier.price_discount && tier.price_discount > 0) ? true : false;
-
-        // console.log('alltiers', allTiers, this.tierHasDisc);
 
         // this.qs.getMessageTemplates({ user: 'wholesaler' }).subscribe((res_2: any) => {
         //   // this.emitter.emitDataChat({ templates: res_2.data });
@@ -319,8 +300,8 @@ export class OrdersRrpDetailComponent implements OnInit {
         //     this.qiscusCheck(res); // check login qiscus
         //   }
         // })
-        // this.emitter.emitChatIsOpen(true); // for open chat
-        // this.emitter.emitDataChat(res);
+        // // this.emitter.emitChatIsOpen(true); // for open chat
+        // // this.emitter.emitDataChat(res);
 
         if (res.type === "retailer") {
           this.editable =
@@ -387,7 +368,6 @@ export class OrdersRrpDetailComponent implements OnInit {
           let tierPrice = this.detailOrder.tier;
           // let tierPrice = 188;
           resProduct.map((item, idx) => {
-            // console.log('item pulangkan saja aku pada ibumu', resProduct[idx].levels);
             this.allProductLevels.push(item.levels);
             let tierHasDisc = false;
 
@@ -556,7 +536,6 @@ export class OrdersRrpDetailComponent implements OnInit {
       });
     }
     if (this.productsForm.valid) {
-      // console.log('asdkjasdjlzLkosijuhdb', this.productsForm.get("listProducts").value);
       this.loadingIndicator = true;
       let body: Object = {
         _method: "PUT",
@@ -825,18 +804,6 @@ export class OrdersRrpDetailComponent implements OnInit {
         message: this.ls.locale.lihat_pesanan.text18
       });
     }, 2000);
-    // let fd = new FormData();
-    // fd.append('order_id', this.detailOrder.id);
-    // this.ordersService.updatePrice(fd).subscribe(res => {
-    //   console.log('res', res);
-    //   this.dataService.showLoading(false);
-    //   this.dialogService.openSnackBar({ message: 'Semua Harga Product berhasil diperbarui!' });
-    //   this.getDetailOrder();
-    // }, err => {
-    //   console.log('err', err);
-    //   this.dataService.showLoading(false);
-    //   this.dialogService.openSnackBar({ message: 'Semua Harga Product gagal diperbarui!' });
-    // })
   }
 
   // showTier(index, event) {
@@ -868,6 +835,26 @@ export class OrdersRrpDetailComponent implements OnInit {
   //   });
 
   // }
+
+  previewImage(image) {
+    if (!this.imageUrl) return;
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = "scrumboard-card-dialog";
+    dialogConfig.data = {
+      imageUrl: image,
+    };
+
+    this.dialogRef = this.dialog.open(PreviewImagePaymentComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe((res: any) => {
+      if (res) {
+        console.log(res);
+      }
+    });
+  }
 
   async print() {
     const mode = this.dataService.getFromStorage('mode');

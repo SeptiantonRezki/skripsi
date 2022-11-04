@@ -102,17 +102,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- <tr>
-                    <td class="w-200">
-                      Menunggu
-                    </td>
-                    <td class="w-200">
-                      <span class="email text-truncate">3 April 2018 12.32PM</span>
-                    </td>
-                    <td>
-                      <span class="email text-truncate">Matthew Gray</span>
-                    </td>
-                  </tr> -->
                   <tr *ngFor="let item of statusLogs">
                     <td class="w-200">
                       <div [class]="'status text-truncate h6 p-4 status-order mat-' + item.status + '-color'">
@@ -128,7 +117,9 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="vaValidated">
+
+        <!-- Change Order Status -->
+            <!-- <div *ngIf="vaValidated">
               <form class="update-status p-24" *ngIf="orderStatuses.length > 0" [formGroup]="statusForm" fxLayout="row"
                 fxLayoutAlign="start center">
                 <mat-form-field class="mr-16 is-light" fxFlex>
@@ -141,7 +132,9 @@
                 <button mat-raised-button class="mat-accent" (click)="updateStatus()" [disabled]="statusForm.invalid">{{
                   ls.locale.global.button.update_status }}</button>
               </form>
-            </div>
+            </div> -->
+        <!-- END Change Order Status -->
+        
             <div class="py-16" fxLayout="row" fxLayoutAlign="start center">
               <mat-icon class="m-0 mr-16 secondary-text">credit_card</mat-icon>
               <div class="h2 secondary-text">{{ ls.locale.global.label.payment_status }}</div>
@@ -258,7 +251,7 @@
                     <th>{{ ls.locale.global.label.price }}</th>
                     <!-- <th *ngIf="onEdit && editable">{{ ls.locale.global.label.tier_price }}</th> -->
                     <th style="text-align: center;">{{ ls.locale.global.label.amount }}</th>
-                    <th style="text-align: center;" *ngIf="editable">{{ ls.locale.global.label.action }}</th>
+                    <!-- <th style="text-align: center;" *ngIf="editable">{{ ls.locale.global.label.action }}</th> -->
                   </tr>
                 </thead>
                 <tbody [formGroup]="productsForm">
@@ -287,7 +280,12 @@
                     <td>{{product.get("category").value}}</td>
                     <td>
                       <div class="w-100" [formGroupName]="i">
-                        <span *ngIf="!product.get('editable').value">
+                        <span>
+                          {{ product.get("price_currency").value }}
+                        </span>
+
+                  <!-- Edit Product Price -->
+                        <!-- <span *ngIf="!product.get('editable').value">
                           {{product.get("price_currency").value}}
                         </span>
                         <span
@@ -303,25 +301,37 @@
                         <button mat-raised-button style="height: 30px;margin-top: 3px;margin-right: 4px;"
                           *ngIf="product.get('price_discount').value == 0 && product.get('price_update_status').value === true && showRedBG(detailOrder?.status)"
                           (click)="updatePrice(i)">PERBARUI
-                          HARGA</button>
+                          HARGA</button> -->
+                  <!-- END Edit Product Price -->
+
                       </div>
-                      <!-- <strong>{{product.get("price").value | rupiahFormater}}</strong> -->
                     </td>
+
+                  <!-- Product Tier -->
                     <!-- <td *ngIf="onEdit">
                       <mat-icon
                         *ngIf="(!product.get('tierHasDisc').value && product.get('price_discount').value == 0) && product.get('editable').value"
                         class="secondary-text price-per-tier-check" fxFlex="5" (click)="showTier(i, $event)">{{
                         product.get('tierShowed').value ? 'check_box' :'check_box_outline_blank'}}</mat-icon>
                     </td> -->
+                  <!-- END Product Tier -->
+                  
                     <td align="center">
                       <div class="w-80" [formGroupName]="i">
-                        <span *ngIf="!product.get('editable').value">{{product.get("amount").value}}</span>
-                        <mat-form-field class="w-80 quantity" *ngIf="product.get('editable').value">
+                        <span>{{product.get("amount").value}}</span>
+
+                  <!-- Edit Product Amount -->
+                        <!-- <span *ngIf="!product.get('editable').value">{{product.get("amount").value}}</span> -->
+                        <!-- <mat-form-field class="w-80 quantity" *ngIf="product.get('editable').value">
                           <input matInput type="number" min="0" formControlName="amount">
-                        </mat-form-field>
+                        </mat-form-field> -->
+                  <!-- END Edit Product Amount -->
+
                       </div>
                     </td>
-                    <td *ngIf="editable">
+
+                  <!-- Edit and Save button -->
+                    <!-- <td *ngIf="editable">
                       <div class="button-row" align="center">
                         <button mat-icon-button *ngIf="!product.get('editable').value" (click)="updateQty(i)">
                           <mat-icon>edit</mat-icon>
@@ -332,11 +342,15 @@
                           <span class="pl-8" style="font-size: .8em">{{ ls.locale.global.button.save }}</span>
                         </button>
                       </div>
-                    </td>
+                    </td> -->
+                  <!-- END Edit and Save button -->
+
                   </tr>
                 </tbody>
               </table>
-              <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
+
+            <!-- Save All Products -->
+              <!-- <div class="button-row pt-64" fxLayout="row" *ngIf="editable">
                 <button mat-raised-button [disabled]="!edited || loadingIndicator" color="primary" fxFlex="20"
                   (click)="saveUpdateQty()">
                   {{ ls.locale.global.button.save?.toUpperCase() }}
@@ -345,7 +359,9 @@
                   (click)="updateAllPrice()" style="margin-left: 10px;">
                   {{ ls.locale.global.label.update_all_price?.toUpperCase() }}
                 </button>
-              </div>
+              </div> -->
+            <!-- END Save All Products -->
+
             </div>
           </div>
         </mat-tab>
@@ -465,11 +481,8 @@
                         <span class="text-right" fxFlex="50">{{detailOrder?.total_discount | rupiahFormaterWithoutRp}}</span>
                       </div>
                       <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
-                        <!-- <span *ngIf="detailOrder?.status !== 'selesai'" fxFlex="50">
-                          {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
-                        </span> -->
                         <span *ngIf="detailOrder?.status !== 'selesai'" fxFlex="50">
-                          ESTIMASI POIN
+                          {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
                         </span>
                         <span *ngIf="detailOrder?.status === 'selesai'" fxFlex="50">
                           {{ ls.locale.global.label.additional_points?.toUpperCase() }}
@@ -538,80 +551,11 @@
               </div>
             </div>
           </div>
-          <!-- <div id="invoice" class="modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
-            <div class="invoice-container" fxFlex="100" fxLayout="column">
-              <div class="card">
-                <div class="header" fxLayout="row" fxLayoutAlign="space-between start">
-
-                  <div class="ids" fxLayout="column">
-                    <div fxLayout="row" class="seller" fxLayoutAlign="start center">
-
-                      <div class="detail">
-                        <div class="title">
-                          <strong>{{detailOrder?.name}}</strong>
-                        </div>
-                        <div class="address">
-                          {{detailOrder?.address}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <table class="summary">
-                    <tr class="code">
-                      <td class="label">INVOICE</td>
-                      <td class="value">{{detailOrder?.invoice_number}}</td>
-                    </tr>
-
-                    <tr>
-                      <td class="label">Tanggal Invoice</td>
-                      <td class="value">{{detailOrder?.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
-                    </tr>
-                  </table>
-                </div>
-
-                <div class="content">
-                  <table class="simple invoice-table">
-                    <thead>
-                      <tr>
-                        <th>Nama Produk</th>
-                        <th>Perusahaan</th>
-                        <th class="text-right">Jumlah</th>
-                        <th class="text-right">Harga</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let product of detailOrder?.products">
-                        <td>
-                          <div class="title">{{product.name}}</div>
-                        </td>
-                        <td>{{product.brand}}</td>
-                        <td>
-                          <div class="text-right">{{product.amount}}</div>
-                        </td>
-                        <td>
-                          <div class="text-right">{{product.subtotal | rupiahFormater}}</div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table class="simple invoice-table-footer">
-                    <tbody>
-                      <tr *ngFor="let item of detailOrder?.summary" [ngClass]="{'total': item.title === 'Total Pembayaran'}">
-                        <td>{{item.title}}</td>
-                        <td [ngClass]="{'green-500-fg': item.type === 'discount'}">{{item.type === 'discount' ? '- '+
-                          item.value : item.value}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </mat-tab>
         <mat-tab label="Bukti Pembayaran">
           <div class="ayo-middle p-24" fxLayout="column">
+
+        <!-- Payment Total and Method -->
             <!-- <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="start center">
               <div fxFlex="50" fxLayout.xs="column" fxLayout="row" fxLayoutAlign="space-between center">
                 <div>
@@ -633,39 +577,17 @@
               </div>
             </div>
             <div class="mb-8" style="border-bottom: 1px dashed rgba(0, 0, 0, 0.54);"></div> -->
+        <!-- END Payment Total and Method -->
+
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="100">
-              <div>
+              <div *ngFor="let img of imageUrl; let i = index;">
                 <div fxLayout="column">
-                  <h4>Bukti Pembayaran 1</h4>
+                  <h4>Bukti Pembayaran {{i+1}}</h4>
                 </div>
                 <div fxLayout="column">
                   <div class="mr-24">
-                    <div class="mr-24">
-                      <img id="image" [src]="imageUrl1" width="410px" height="410px" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div fxLayout="column">
-                  <h4>Bukti Pembayaran 2</h4>
-                </div>
-                <div fxLayout="column">
-                  <div class="mr-24">
-                    <div class="mr-24">
-                      <img id="image" [src]="imageUrl2" width="410px" height="410px" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div fxLayout="column">
-                  <h4>Bukti Pembayaran 3</h4>
-                </div>
-                <div fxLayout="column">
-                  <div class="mr-24">
-                    <div class="mr-24">
-                      <img id="image" [src]="imageUrl3" width="410px" height="410px" />
+                    <div class="mr-24" (click)="previewImage(img)">
+                      <img id="image" [src]="img" width="410px" height="410px" />
                     </div>
                   </div>
                 </div>
@@ -753,9 +675,6 @@
         </span>
       </div>
       <div class="" fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
-        <!-- <span *ngIf="detailOrder?.status !== 'selesai'" fxFlex="50">
-          {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
-        </span> -->
         <span *ngIf="detailOrder?.status !== 'selesai'" fxFlex="50">
           {{ ls.locale.global.label.point_estimate?.toUpperCase() }}
         </span>
@@ -813,6 +732,5 @@
     <ng-template class="text-center" #customFooter>
       <div class="mat-caption" *ngFor="let item of ls.locale.global.nota.custom.footer">item</div>
     </ng-template>
-    <!-- </div> -->
   </div>
 </div>

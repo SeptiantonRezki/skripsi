@@ -19,6 +19,8 @@ export class PagesName {
       "/user-management/retailer/create": "principal.retailer.buat",
       "/user-management/retailer/edit": "principal.retailer.ubah",
       "/user-management/retailer/detail": "principal.retailer.lihat",
+      "/user-management/rrp-retailer": "principal.pesanan_rrp_retailer.lihat",
+      "/user-management/rrp-retailer/detail/": "principal.pesanan_rrp_retailer.lihat",
       "/user-management/paguyuban": "principal.paguyuban.lihat",
       "/user-management/paguyuban/create": "principal.paguyuban.buat",
       "/user-management/paguyuban/edit": "principal.paguyuban.ubah",

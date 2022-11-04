@@ -272,7 +272,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.order_rrp.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "rrp-retailer/detail/:id",
@@ -283,7 +283,7 @@ const routes: Routes = [
     // resolve: {
     //   listLevel: ListLevelResolver
     // },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "customer",

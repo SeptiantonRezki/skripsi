@@ -7,12 +7,15 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
       <mat-progress-bar [color]="'primary'" [mode]="'indeterminate'" *ngIf="loadingIndicator"></mat-progress-bar>
-      <div class="header-bar" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px"
+
+  <!-- Update Multiple Status -->
+      <!-- <div class="header-bar" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px"
         *ngIf="selected?.length && updateableStatus">
         <div *ngFor="let item of updateableStatus">
           <button mat-raised-button (click)="bulkUpdateStatus(item.value)">{{item.label}}</button>
         </div>
-      </div>
+      </div> -->
+  <!-- END Update Multiple Status -->
 
 <!-- START CONTENT (Start on TAB Status Pesanan) -->
       <div class="content" *ngIf="!onLoad">
@@ -55,11 +58,6 @@
                 </div>
                 <!-- </mat-form-field> -->
             </div>
-            <!-- <mat-form-field fxFlex="15" class="orders dropdown">
-              <mat-select formControlName="status" multiple>
-                <mat-option [value]="item.value" *ngFor="let item of statusFilter">{{item.name}}</mat-option>
-              </mat-select>
-            </mat-form-field> -->
 
     <!-- Semua Metode Pengiriman Dropdown List -->
             <mat-form-field fxFlex="15" class="orders dropdown">
@@ -141,7 +139,7 @@
           [selected]="selected" [rowIdentity]="getRowId" [virtualization]="false" [scrollbarV]="statusScroll" [scrollbarH]="true">
 
       <!-- Checkbox Column -->
-          <ngx-datatable-column [cellClass]="getCellClass" [width]="68" [canAutoResize]="false" [sortable]="false" [frozenLeft]="true">
+          <!-- <ngx-datatable-column [cellClass]="getCellClass" [width]="68" [canAutoResize]="false" [sortable]="false" [frozenLeft]="true">
             <ng-template ngx-datatable-header-template let-value="value">
               <mat-checkbox [checked]="selectAllOnPage[offsetPagination]" (change)="onAllRowsChange($event, rows)">
               </mat-checkbox>
@@ -151,7 +149,7 @@
               <mat-checkbox [checked]="isSelected" (change)="onSelect($event, row)"
                 *ngIf="enableCheckboxStatus.includes(row.status)"></mat-checkbox>
             </ng-template>
-          </ngx-datatable-column>
+          </ngx-datatable-column> -->
       <!-- END Checkbox Column -->
       
       <!-- Tanggal -->
@@ -210,9 +208,6 @@
           </ngx-datatable-column>
       <!-- END Metode Pengiriman -->
       
-          <!-- <ngx-datatable-column name="{{ ls.locale.global.label.address }}" prop="address2"
-            *ngIf="formColumn.value.includes(ls.locale.global.label.address)"></ngx-datatable-column> -->
-      
       <!-- Alamat -->
           <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.address }}" prop="address2"
             *ngIf="formColumn.value.includes(ls.locale.global.label.address)" [sortable]="false">
@@ -227,7 +222,8 @@
             *ngIf="formColumn.value.includes(ls.locale.global.label.status)">
             <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
               <div fxLayout="row">
-                <div class="status-container" *ngIf="!checkValidate(row)">
+                <div class="status-container">
+                <!-- <div class="status-container" *ngIf="!checkValidate(row)"> -->
                   <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'"
                     [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]" (click)="getDetailTransaction(row)">
                     {{row.status_indo? row.status_indo.replace('-', ' ')?.toUpperCase() : '-'}}
@@ -236,7 +232,9 @@
                     *ngIf="row.dataQiscus && row.dataQiscus.count_notif > 0">{{row.dataQiscus.count_notif > 9 ? '9+' :
                     row.dataQiscus.count_notif }}</span>
                 </div>
-                <div fxLayout="row" [matMenuTriggerFor]="appMenu" matTooltip="{{ls.locale.global.label.change_status_tooltip}}"
+
+          <!-- Update Status -->
+                <!-- <div fxLayout="row" [matMenuTriggerFor]="appMenu" matTooltip="{{ls.locale.global.label.change_status_tooltip}}"
                   *ngIf="checkValidate(row)">
                   <div class="status-container">
                     <p [class]="'status text-truncate h6 p-4 status-order mat-' + row.status + '-color'">
@@ -251,7 +249,9 @@
                 <mat-menu #appMenu="matMenu">
                   <button mat-menu-item *ngFor="let status of row.orderStatuses"
                     (click)="updateStatus(row, status)">{{status.name}}</button>
-                </mat-menu>
+                </mat-menu> -->
+          <!-- END Update Status -->
+
               </div>
             </ng-template>
           </ngx-datatable-column>
