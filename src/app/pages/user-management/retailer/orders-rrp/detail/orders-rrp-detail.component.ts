@@ -581,7 +581,7 @@ export class OrdersRrpDetailComponent implements OnInit {
             }
             this.loadingIndicator = false;
             this.dialogService.openSnackBar({
-              message: this.ls.locale.global.messages.text6
+              message: this.ls.locale.produk_prinsipal.text44
             });
             this.updatingPrice = false;
             this.getDetailOrder();
