@@ -19,6 +19,11 @@ export class AudienceService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getLastUpdate(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_last_update');
+    return this.getApi(url, queryParams);
+  }
+
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'create');
     return this.postApi(url, body);
