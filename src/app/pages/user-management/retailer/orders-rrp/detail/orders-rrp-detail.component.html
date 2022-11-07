@@ -578,8 +578,10 @@
             </div>
             <div class="mb-8" style="border-bottom: 1px dashed rgba(0, 0, 0, 0.54);"></div> -->
         <!-- END Payment Total and Method -->
-
-            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="100">
+            <div *ngIf="!imageUrl || imageUrl.length === 0">
+              No data to display
+            </div>
+            <div *ngIf="imageUrl && imageUrl.length > 0" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="100">
               <div *ngFor="let img of imageUrl; let i = index;">
                 <div fxLayout="column">
                   <h4>Bukti Pembayaran {{i+1}}</h4>
