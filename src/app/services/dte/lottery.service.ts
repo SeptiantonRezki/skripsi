@@ -77,12 +77,12 @@ export class LotteryService extends BaseService {
 
   exportDetailCoupon(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_detail_coupon");
-    return this.postApi(url, body);
+    return this.postBlobAsJsonApi(url, body);
   }
 
   exportCoupon(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_coupon");
-    return this.postApi(url, body);
+    return this.postBlobAsJsonApi(url, body);
   }
   exportExcel(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export_lottery");
