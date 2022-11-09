@@ -158,8 +158,7 @@
                 <div *ngIf="isFour" fxLayout="row" class="px-24">
                   <mat-form-field fxFlex="100" class="mt-12">
                     <mat-chip-list #chipList aria-label="Product List">
-                      <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable"
-                        (removed)="remove(product)">
+                      <mat-chip *ngFor="let product of productList" [selectable]="selectable" [removable]="removable">
                         {{product.name}}
                         <mat-icon matChipRemove *ngIf="removable" (click)="remove(product.sku_id)">cancel</mat-icon>
                       </mat-chip>
