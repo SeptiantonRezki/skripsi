@@ -1371,15 +1371,11 @@ export class RetailerIndexComponent {
 
   directEdit(param?: any): void {
     console.log('paramsss', param);
-    // this.dataService.setToStorage("detail_retailer", param);
-    this.dataService.setToStorage('id_retailer', param.id);
-    this.router.navigate(['user-management', 'retailer', 'edit']);
+    this.router.navigate(['user-management', 'retailer', 'edit', param.id]);
   }
 
   directDetail(param?: any): void {
-    // this.dataService.setToStorage("detail_retailer", param);
-    this.dataService.setToStorage('id_retailer', param.id);
-    this.router.navigate(['user-management', 'retailer', 'detail']);
+    this.router.navigate(['user-management', 'retailer', 'detail', param.id]);
   }
 
   async export() {

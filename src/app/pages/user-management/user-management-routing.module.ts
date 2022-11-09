@@ -252,7 +252,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/edit",
+    path: "retailer/edit/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.edit
@@ -260,7 +260,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/detail",
+    path: "retailer/detail/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.detail
