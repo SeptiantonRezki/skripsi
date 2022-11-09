@@ -11,32 +11,15 @@
           <h3>{{'retailer.detail.page_title' | translate}}</h3>
           <!-- STATUS BUSINESS -->
           <div fxFlex="40" fxLayout="row" fxLayoutAlign="flex-end center" *ngIf="seeStatus">
-
             <div fxFlex="50" class="px-8">
-
-              <mat-form-field
-                [class]="formRetailer.get('status_user').value === 'active' ? 'radius-select green' : 'radius-select red'">
-                <mat-select formControlName="status_user">
-                  <mat-option [value]="statusUser.value" *ngFor="let statusUser of listStatusUser">{{statusUser.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-            </div>
-
-            <div fxFlex="50" class="px-8">
-
               <mat-form-field
                 [class]="formRetailer.get('status').value === 'active' ? 'radius-select green' : 'radius-select red'">
                 <mat-select formControlName="status">
                   <mat-option [value]="status.value" *ngFor="let status of listStatus">{{status.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-
             </div>
-
           </div>
-
         </div>
 
         <div class="ayo-middle pt-24" fxLayout="column" *ngIf="seeProfile">
