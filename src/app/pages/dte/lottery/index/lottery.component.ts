@@ -204,12 +204,9 @@ export class LotteryComponent implements OnInit {
 
   async exportDetailCoupon(param?: any) {
     this.dataService.showLoading(true);
-    let fd = new FormData();
-        fd.append('lottery_id', param.id);
-
     try {
-      const response = await this.lotteryService.exportDetailCoupon(fd).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Coupon_${new Date().toLocaleString()}.xls`);
+      const response = await this.lotteryService.exportDetailCoupon({ lottery_id: param.id }).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Detail_Coupon_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
@@ -224,11 +221,8 @@ export class LotteryComponent implements OnInit {
 
   async exportCoupon(param?: any) {
     this.dataService.showLoading(true);
-    let fd = new FormData();
-        fd.append('lottery_id', param.id);
-
     try {
-      const response = await this.lotteryService.exportCoupon(fd).toPromise();
+      const response = await this.lotteryService.exportCoupon({ lottery_id: param.id }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Coupon_${new Date().toLocaleString()}.xls`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
