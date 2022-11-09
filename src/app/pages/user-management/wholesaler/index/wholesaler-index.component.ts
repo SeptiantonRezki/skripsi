@@ -924,15 +924,11 @@ export class WholesalerIndexComponent {
   }
 
   directEdit(param?: any): void {
-    // this.dataService.setToStorage("detail_wholesaler", param);
-    this.dataService.setToStorage("id_wholesaler", param.id);
-    this.router.navigate(["user-management", "wholesaler", "edit"]);
+    this.router.navigate(["user-management", "wholesaler", "edit", param.id]);
   }
 
   directDetail(param?: any): void {
-    // this.dataService.setToStorage("detail_wholesaler", param);
-    this.dataService.setToStorage("id_wholesaler", param.id);
-    this.router.navigate(["user-management", "wholesaler", "detail"]);
+    this.router.navigate(["user-management", "wholesaler", "detail", param.id]);
   }
 
   async export() {

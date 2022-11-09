@@ -220,7 +220,7 @@ const routes: Routes = [
     // }
   },
   {
-    path: "wholesaler/edit",
+    path: "wholesaler/edit/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.edit
@@ -228,7 +228,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "wholesaler/detail",
+    path: "wholesaler/detail/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.detail
