@@ -7,12 +7,13 @@
       <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
         <form [formGroup]="formKPI">
           <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
-            <h3 class="font-weight-700">Edit KPI Group</h3>
+            <!-- <h3 class="font-weight-700">Edit KPI Group</h3> -->
+            <h3 class="font-weight-700">{{paramEdit ? 'Edit KPI Group' : 'Create KPI Group'}}</h3>
             <!-- <button *ngIf="enableEdit" -->
-            <button 
+            <!-- <button 
               mat-raised-button type="button" color="primary" (click)="addKPI()">
               <mat-icon>add</mat-icon>
-            </button>
+            </button> -->
           </div>
           <div class="ayo-middle pt-24" fxLayout="column">
             <div class="mb-36" fxLayout="column" style="width:100%;max-width:400px;">
@@ -91,7 +92,9 @@
                       mat-raised-button type="button" (click)="addKPI()">
                       <mat-icon>add</mat-icon>
                     </button>
-                    <button mat-raised-button color="primary" type="button"
+                    <button 
+                    *ngIf="(0 !== (formKPI.get('kpis').value.length - 1))"
+                    mat-raised-button color="primary" type="button"
                       (click)="deleteKPI(i)">
                       <mat-icon>delete</mat-icon>
                     </button>

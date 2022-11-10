@@ -83,7 +83,9 @@ export class Endpoint {
       },
       kpiSetting: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        get_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/kpi-setting`,
         get_kps: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/kps`,
+        get_kps_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/kpi-setting/kps`,
         get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`,
         post: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,

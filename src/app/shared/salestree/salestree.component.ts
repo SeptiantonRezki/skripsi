@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { debounce } from "lodash";
 import { GeotreeService } from "app/services/geotree.service";
@@ -18,6 +18,7 @@ export class SalestreeComponent implements OnInit {
   @Input() multiple: boolean = true;
   @Input() limitLevel: string;
   @Input() disabled: boolean = false;
+  // @Input() isResetting: boolean = false;
 
   initArea: boolean = false;
   loadingArea = new FormControl({});
@@ -77,6 +78,13 @@ export class SalestreeComponent implements OnInit {
       this.getLevel(level);
     }
     this.setDefaultValue();
+  }
+
+  resetAllLevel(){
+    this.geoLevel.forEach(level => this.resetLevel(level))
+    for (let level in this.limitArea) {
+      this.getLevel(level);
+    }
   }
 
   setLimitArea(data: any) {
