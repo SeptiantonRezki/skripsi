@@ -504,27 +504,6 @@
             </div>
 
             <div fxFlex="45" class="right_content"> <!-- RIGHT ############################################################################# -->
-              <div *ngIf="formPopupGroup.get('content_type').value === 'new-product'">
-                <div fxLayout="row">
-                  <mat-form-field fxFlex="45" class="is-light form-primary">
-                    <mat-select formControlName="product_2" placeholder="{{'manajemen_barang_sku.produk.text4' | translate}}"
-                      id="product_name" #singleSelect>
-                      <ngx-mat-select-search [formControl]="filterProduct_2"
-                        placeholderLabel="{{'global.label.search' | translate}}"
-                        noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false">
-                      </ngx-mat-select-search>
-                      <mat-option *ngFor="let item of filteredProduct_2 | async" [value]="item.sku_id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error
-                      *ngIf="formPopupGroup.controls['product_2'].hasError('required') && formPopupGroup.controls['product_2'].touched">
-                      {{'manajemen_barang_sku.produk.text4' | translate}} {{'global.messages.mandatory_text' | translate}}
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-
               <!-- Static Page -->
               <div class="pb-24" *ngIf="formPopupGroup.get('content_type_2').value === 'static-page'">
                 <div class="" fxLayout="row" fxLayoutAlign="start center">
