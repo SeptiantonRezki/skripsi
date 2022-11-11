@@ -1455,9 +1455,12 @@ export class PopupNotificationEditComponent {
         this.convertedContentImage_2 = response.negative_action_data;
       }
       if(response.negative_action === "spesific_product_b2b"){
-        this.formPopupGroup.controls['barcode_2'].setValue(JSON.parse(response.negative_action_data).product_info);
+        let prd_barcode_negative = {
+          name: response.negative_name_value,
+          barcode: response.negative_name_value.split(' - ')[1]
+        }
+        this.formPopupGroup.controls['barcode_2'].setValue(prd_barcode_negative);
       }
-
       if (response.action === 'e_wallet') {
         const e_wallet = JSON.parse(response.action_data) || {};
         this.formPopupGroup.get('content_wallet').setValue(parseInt(e_wallet.wallet_id));
@@ -1817,6 +1820,8 @@ export class PopupNotificationEditComponent {
       if (body.type === 'retailer' && body.action === 'spesific_product_b2b') {
         body['barcode_value'] = this.formPopupGroup.get('barcode').value.id;
         body['name_value'] = this.formPopupGroup.get('barcode').value.name;
+        body['action_data'] = this.formPopupGroup.get('landing_page').value;
+        body['action_data'] = this.formPopupGroup.get('barcode').value;
 
         body['positive_barcode_value'] = this.formPopupGroup.get('barcode').value.id;
         body['positive_name_value'] = this.formPopupGroup.get('barcode').value.name;
@@ -1852,6 +1857,9 @@ export class PopupNotificationEditComponent {
       }
 
       if (body.type === 'retailer' && body.action_2 === 'spesific_product_b2b') {
+        body['action'] = this.formPopupGroup.get('content_type').value;
+        body['positive_action_data'] = null; 
+        body['negative_action_data'] = null;
         body['negative_barcode_value'] = this.formPopupGroup.get('barcode_2').value.id;
         body['negative_name_value'] = this.formPopupGroup.get('barcode_2').value.name;
       }
