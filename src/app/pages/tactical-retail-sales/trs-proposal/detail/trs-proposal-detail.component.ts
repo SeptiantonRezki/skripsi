@@ -58,7 +58,7 @@ export class TrsProposalDetailComponent implements OnInit {
 
   opsiGeotagging = [
     { name: 'Wajib', value: 'wajib' },
-    { name: 'Optional', value: 'optional' },
+    { name: 'Tidak Wajib', value: 'tidak wajib' },
   ];
 
   keyUpCust1 = new Subject<string>();
