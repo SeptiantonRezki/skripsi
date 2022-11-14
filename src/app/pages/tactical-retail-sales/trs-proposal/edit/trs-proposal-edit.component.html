@@ -316,7 +316,10 @@
         </div>
       </form>
       <div class="confirm pt-24 pb-24" style="padding-left: 22px;" fxLayout="row" fxLayoutGap="20px">
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)" *ngIf="proposalData?.status!='ongoing'">
+          {{ls.locale.tactical_retail_sales.save}}
+        </button>
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submitnew(1)" *ngIf="proposalData?.status=='ongoing'">
           {{ls.locale.tactical_retail_sales.save}}
         </button>
         <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
