@@ -49,4 +49,10 @@ export class KPISettingService extends BaseService {
     const url = this.getUrl(this.namespace, 'delete', context);
     return this.deleteApi(url);
   }
+  export(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_export');
+    return this.getApi(url, queryParams);
+  }
 }
+
+

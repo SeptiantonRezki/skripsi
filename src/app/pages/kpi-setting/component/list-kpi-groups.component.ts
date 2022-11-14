@@ -1,30 +1,37 @@
 import {
   Component,
   OnInit,
-  HostListener,
+  // HostListener,
   ViewChild,
-  ElementRef,
-  SimpleChanges,
+  // ElementRef,
+  // SimpleChanges,
 } from "@angular/core";
-import { formatCurrency } from "@angular/common";
-import { Router, ActivatedRoute } from "@angular/router";
+// import { formatCurrency } from "@angular/common";
+import { 
+  Router, 
+  // ActivatedRoute 
+} from "@angular/router";
 import { DataService } from "../../../services/data.service";
 import { DialogService } from "../../../services/dialog.service";
 import { MasterKPIService } from "../../../services/kpi-setting/master-kpi.service";
-import { Subject, Observable, ReplaySubject } from "rxjs";
-import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
-import { takeUntil } from "rxjs/operators";
+import { 
+  Subject, 
+  // Observable,
+  //  ReplaySubject 
+  } from "rxjs";
+// import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
+// import { takeUntil } from "rxjs/operators";
 import { Page } from "../../../classes/laravel-pagination";
 import * as _ from "underscore";
-import { environment } from "environments/environment";
-import { IdbService } from "app/services/idb.service";
+// import { environment } from "environments/environment";
+// import { IdbService } from "app/services/idb.service";
 import { KPISettingService } from "../../../services/kpi-setting/kpi-setting.service";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import moment from "moment";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { debounce } from "lodash";
 import { SalestreeComponent } from "app/shared/salestree/salestree.component";
-import { DatatableComponent } from "@swimlane/ngx-datatable"
+import { DatatableComponent } from "@swimlane/ngx-datatable";
 
 type LeveledArea = {
   area_level: string;
@@ -149,6 +156,16 @@ export class KPIGroupsList implements OnInit {
     return newAreaIDs;
   }
 
+  getFileExport() {
+    const param = this.getParamList();
+    this.kpiSettingService.export(param).subscribe((res) => {
+      let link = document.createElement("a");
+      link.href = res.data;
+      link.download = "kpi-setting.xlsx";
+      link.click();
+    });
+  }
+
   getKpis(pos?: number) {
     const kpis = this.formKPI.controls.kpis as FormArray;
     return pos >= 0 ? kpis.at(pos) : kpis.controls;
@@ -190,9 +207,9 @@ export class KPIGroupsList implements OnInit {
   getAreaIds(lastSelected: any) {
     const [id, key, onClick] = lastSelected;
     this.lastLevel = { id, key };
-    console.log(id);
     if (id != 1) this.handleChange();
-    if (id ==1 ) this.getListInit()
+    if (id == 1) this.getListInit();
+    // console.log(id, this.lastLevel);
     // if (onClick) {
     //   this.getTradeProgramList();
     // }
@@ -203,13 +220,19 @@ export class KPIGroupsList implements OnInit {
   }
 
   handleReset() {
-    // this.isResetting = true
+    // reset form
     this.formKPI.get("search").setValue(null);
     this.formKPI.get("kategori").setValue(null);
     this.formKPI.get("start_kps").setValue(null);
     this.formKPI.get("end_kps").setValue(null);
     this.formKPI.get("status").setValue(null);
     this.child.resetAllLevel();
+    this.table.sorts = [];
+    this.areas = [];
+    this.lastLevel = { id: [1], key: "national" };
+    // let newAreaIDs = this.getCombineAreas();
+    // console.log(newAreaIDs);
+    // console.log(this.areas, this.limitArea, this.lastLevel, this.existingAreas)
 
     this.getListInit();
   }
@@ -245,6 +268,10 @@ export class KPIGroupsList implements OnInit {
   }
 
   getListInit() {
+    // set list to desc
+    this.dataService.setToStorage("sort", "");
+    this.dataService.setToStorage("sort_type", "");
+
     const page = this.dataService.getFromStorage("page");
     const sort_type = this.dataService.getFromStorage("sort_type");
     const sort = this.dataService.getFromStorage("sort");
@@ -256,7 +283,7 @@ export class KPIGroupsList implements OnInit {
     this.offsetPagination = page ? page - 1 : 0;
     this.kpiSettingService.getListV2(this.pagination).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
-      this.table.offset = 0
+      this.table.offset = 0;
       this.rows = res.data.map((data) => {
         const { territories, districts, regions, areasZone, zones } =
           this.handleArea(data.leveled_areas);
@@ -305,9 +332,9 @@ export class KPIGroupsList implements OnInit {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log("here", changes);
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log("here", changes);
+  // }
 
   // handleChange(e) {
   //   let newAreaIDs = this.getCombineAreas();
@@ -322,10 +349,9 @@ export class KPIGroupsList implements OnInit {
 
   getParamList() {
     let newAreaIDs = this.getCombineAreas();
-    console.log(this.formKPI.get("status").value);
     const param = {
       ...this.pagination,
-      area: newAreaIDs[0] == 1 ? "" :JSON.stringify([...newAreaIDs]),
+      area: newAreaIDs[0] == 1 ? "" : JSON.stringify([...newAreaIDs]),
       search_field: this.formKPI.get("search").value,
       category: this.formKPI.get("kategori").value,
       // status: this.formKPI.get("status").value ? "active" : "inactive",
@@ -334,6 +360,7 @@ export class KPIGroupsList implements OnInit {
       start_kps: this.formKPI.get("start_kps").value,
     };
     return param;
+    // console.log(newAreaIDs);
   }
 
   setPage(pageInfo) {
@@ -341,11 +368,10 @@ export class KPIGroupsList implements OnInit {
     this.pagination.page = pageInfo.offset + 1;
     let param = this.getParamList();
     this.kpiSettingService.getListV2(param).subscribe((res) => {
-      // console.log(res)
       Page.renderPagination(this.pagination, res);
       this.rows = res.data.map((data) => {
         const { territories, districts, regions, areasZone, zones } =
-          this.handleArea(data.leveled_areas);
+        this.handleArea(data.leveled_areas);
         // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
         return {
           ...data,
@@ -360,15 +386,42 @@ export class KPIGroupsList implements OnInit {
       });
       this.loadingIndicator = false;
     });
+    // console.log(res)
   }
 
   handleChange(e?) {
-    console.log(e);
+    // console.log(e);
     // let newAreaIDs = this.getCombineAreas();
+    // console.log(param);
     this.pagination.page = 1;
-    this.offsetPagination =  1;
+    this.offsetPagination = 1;
     this.loadingIndicator = true;
     this.dataService.setToStorage("page", this.pagination.page);
+    const param = this.getParamList();
+    this.kpiSettingService.getListV2(param).subscribe((res) => {
+      Page.renderPagination(this.pagination, {
+        ...res,
+        page: res.current_page,
+      });
+      this.table.offset = 0;
+      this.rows = res.data.map((data) => {
+        const { territories, districts, regions, areasZone, zones } =
+        this.handleArea(data.leveled_areas);
+        // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
+        return {
+          ...data,
+          territories,
+          districts,
+          regions,
+          zones,
+          // nationals,
+          areasZone,
+          isEditable: this.checkKPIDate(data.start_date, data.end_date),
+        };
+      });
+      
+      this.loadingIndicator = false;
+    });
     // const param = {
     //   ...this.pagination,
     //   area:newAreaIDs,
@@ -378,31 +431,8 @@ export class KPIGroupsList implements OnInit {
     //   end_date:this.formKPI.get("end_kps").value,
     //   start_date:this.formKPI.get("start_kps").value,
     // }
-    const param = this.getParamList();
-    console.log(param)
-    this.kpiSettingService.getListV2(param).subscribe((res) => {
-      Page.renderPagination(this.pagination, {...res, page:res.current_page});
-      this.table.offset = 0
-      this.rows = res.data.map((data) => {
-        const { territories, districts, regions, areasZone, zones } =
-          this.handleArea(data.leveled_areas);
-        // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
-        return {
-          ...data,
-          territories,
-          districts,
-          regions,
-          zones,
-          // nationals,
-          areasZone,
-          isEditable: this.checkKPIDate(data.start_date, data.end_date),
-        };
-      });
-
-      this.loadingIndicator = false;
-    });
   }
-
+  
   onSort(event) {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
@@ -468,3 +498,5 @@ export class KPIGroupsList implements OnInit {
     });
   }
 }
+
+

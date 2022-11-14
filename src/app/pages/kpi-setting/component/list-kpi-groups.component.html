@@ -3,7 +3,7 @@
   <page-content-header [contentTitle]="'KPI Setting'">
     <div class="button-row" fxLayout="row">
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/kpisetting', 'kpi-setting-create']">
+        (click)="getFileExport()">
         <mat-icon>arrow_upward</mat-icon>Export
       </button>
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
@@ -198,3 +198,6 @@
     </div>
   </div>
 </div>
+
+
+
