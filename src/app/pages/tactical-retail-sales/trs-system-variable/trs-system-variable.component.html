@@ -1,13 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <page-content-header contentTitle="TRS System Variable">
-    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdate()" type="button" *ngIf="permission.ubah">
+    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdate()" type="button" disabled="true" *ngIf="permission.ubah">
       <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>{{ls.locale.tactical_retail_sales.save}}
     </button>
-	
-    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdateNA()" type="button" disabled="true" *ngIf="permission.ubah === false" >
-      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>{{ls.locale.tactical_retail_sales.save}}
-    </button>
-	
+		
 	</page-content-header>
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg">
@@ -26,7 +22,7 @@
         <div fxLayout="row" class="mt-8">
           <mat-form-field fxFlex="30" class="is-light form-primary">
             <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
-            formControlName="max_period" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxperiod}}" numericOnly [disabled]="permission.ubah === false">
+            formControlName="max_period" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxperiod}}" numericOnly [disabled]="permission.ubah == false">
           </mat-form-field>
         </div>
       </form>

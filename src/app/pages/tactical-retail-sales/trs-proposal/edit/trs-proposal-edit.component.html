@@ -319,7 +319,7 @@
         <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)" *ngIf="proposalData?.status!='ongoing'">
           {{ls.locale.tactical_retail_sales.save}}
         </button>
-        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submitnew(1)" *ngIf="proposalData?.status=='ongoing'">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="21" (click)="submitnew(1)" *ngIf="proposalData?.status=='ongoing'">
           {{ls.locale.tactical_retail_sales.save}}
         </button>
         <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
