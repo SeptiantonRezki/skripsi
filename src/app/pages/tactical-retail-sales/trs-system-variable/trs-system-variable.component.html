@@ -22,8 +22,8 @@
             <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
             formControlName="max_pack" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxpack}}" numericOnly *ngIf="permission.ubah">
 
-            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
-            formControlName="max_pack" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxpack}}" numericOnly disabled="true" *ngIf="!permission.ubah">
+            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value)>0 ? Math.abs(this.value) : 1"
+            formControlName="max_pack" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxpack}}" numericOnly *ngIf="!permission.ubah" readonly>
 
           </mat-form-field>
         </div>
@@ -32,8 +32,8 @@
             <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
             formControlName="max_period" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxperiod}}" numericOnly *ngIf="permission.ubah">
 
-            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
-            formControlName="max_period" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxperiod}}" numericOnly disabled="true" *ngIf="!permission.ubah">
+            <input matInput type="number" min="1" oninput="this.value = Math.abs(this.value)>0 ? Math.abs(this.value) : 1"
+            formControlName="max_period" placeholder="{{ls.locale.tactical_retail_sales.sysvar_maxperiod}}" numericOnly *ngIf="!permission.ubah" readonly>
 
           </mat-form-field>
         </div>
