@@ -1,6 +1,10 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <page-content-header contentTitle="TRS System Variable">
-    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdate()" type="button" disabled="true" *ngIf="permission.ubah">
+    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdate()" type="button" *ngIf="permission.ubah">
+      <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>{{ls.locale.tactical_retail_sales.save}}
+    </button>
+
+    <button mat-raised-button aria-label="Simpan" (click)="confirmUpdateNA()" type="button" disabled="true" *ngIf="!permission.ubah" >
       <mat-icon style="font-size: 20px; margin-right: 6px">save</mat-icon>{{ls.locale.tactical_retail_sales.save}}
     </button>
 		
