@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.retailer.list.page_title">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      <button *ngIf="this.ls.selectedLanguages != 'km'" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/user-management','retailer','create']" [disabled]="ls.selectedLanguages == 'km'? true: null">
         <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
       </button>
