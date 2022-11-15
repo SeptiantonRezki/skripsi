@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import moment from 'moment';
 import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 import { GeneratePO } from "app/classes/generate-po";
@@ -15,6 +15,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Endpoint } from '../../../classes/endpoint';
 import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { OrdertoSupplierService } from 'app/services/user-management/private-label/orderto-supplier.service';
+import { TacticalRetailSalesService } from "app/services/tactical-retail-sales.service";
 import { WholesalerService } from 'app/services/user-management/wholesaler.service';
 import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
@@ -22,6 +23,13 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 declare global {
   interface Navigator { msSaveOrOpenBlob: any; }
 }
+
+interface DataTableData {
+  loadingIndicator: Boolean,
+  reorderable: Boolean,
+  pagination: Page,
+  offsetPagination: Number,
+};
 
 @Component({
   selector: 'app-trs-report',
@@ -69,12 +77,27 @@ export class TrsReportComponent implements OnInit {
   HIDE_FOR = ['supplier'];
 
   dialogRef: any;
+  
+  stockMovFilter: FormGroup;
+  visitSummaryFilter: FormGroup;
+  visitSummarySelect: any[] = [
+    { name: this.ls.locale.tactical_retail_sales.report.daily, value: 'daily' },
+    { name: this.ls.locale.tactical_retail_sales.report.weekly, value: 'weekly' },
+    { name: this.ls.locale.tactical_retail_sales.report.program, value: 'program' },
+  ];
+  visitSummaryTableData: DataTableData = {
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
 
   constructor(
     private dataService: DataService,
     private adapter: DateAdapter<any>,
     private formBuilder: FormBuilder,
     private ordertoSupplierService: OrdertoSupplierService,
+    private TRSService: TacticalRetailSalesService,
     private dialogService: DialogService,
     private router: Router,
     private convertRp: RupiahFormaterWithoutRpPipe,
@@ -84,7 +107,7 @@ export class TrsReportComponent implements OnInit {
   ) {
     this.onLoad = false;
     this.adapter.setLocale("id");
-    this.permission = this.roles.getRoles('principal.supplierorder');
+    this.permission = this.roles.getRoles('principal.trsreport.lihat');
   }
 
   ngOnInit() {
@@ -101,9 +124,22 @@ export class TrsReportComponent implements OnInit {
       });
     const profile = this.dataService.getDecryptedProfile() || {};
     this.profileType = profile.type || '';
+    
+    this.TRSService.getReports().subscribe(async res => {
+      console.log(res)
+    });
   }
 
   initFilter() {
+    this.stockMovFilter = this.formBuilder.group({
+      status: "",
+      from: "",
+      to: ""
+    })
+    this.visitSummaryFilter = this.formBuilder.group({
+      type: "",
+    })
+
     this.formFilter = this.formBuilder.group({
       status: "",
       from: "",
@@ -212,6 +248,42 @@ export class TrsReportComponent implements OnInit {
       this.loadingIndicator = false;
       // console.log('rows', this.rows);
     });
+  }
+
+  setVisitSummaryPage(pageInfo) {
+    this.visitSummaryTableData.offsetPagination = pageInfo.offset;
+    this.visitSummaryTableData.loadingIndicator = true;
+
+    if (this.visitSummaryTableData.pagination['search']) {
+      this.visitSummaryTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.visitSummaryTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    // this.TRSService.getList(this.pagination).subscribe(async res => {
+    //   Page.renderPagination(this.pagination, res.data);
+    //   this.rows = res.data.data;
+    //   this.loadingIndicator = false;
+    //   // console.log('rows', this.rows);
+    // });
+  }
+
+  onVisitSummarySort(event) {
+    this.visitSummaryTableData.pagination.sort = event.column.prop;
+    this.visitSummaryTableData.pagination.sort_type = event.newValue;
+    this.visitSummaryTableData.pagination.page = 1;
+    this.visitSummaryTableData.loadingIndicator = true;
+
+    this.dataService.setToStorage("page", this.visitSummaryTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    // this.TRSService.getList(this.pagination).subscribe(res => {
+    //   Page.renderPagination(this.pagination, res.data);
+    //   this.rows = res.data.data;
+    //   this.loadingIndicator = false;
+    // });
   }
 
   setPage(pageInfo) {

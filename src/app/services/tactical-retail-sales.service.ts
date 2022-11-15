@@ -94,6 +94,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url);
   }
 
+  getReports(): Observable<any> {
+    const url = this.getUrl(this.namespace, "reports");
+    return this.getApi(url);
+  }
+
 
 
 
