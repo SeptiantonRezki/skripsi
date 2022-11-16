@@ -192,9 +192,9 @@ export class KeywordManagementComponent implements OnInit {
   }
 
   getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
-      this.listCategories = res.data ? res.data.data : [];
-      this.filteredCategory.next(res.data ? res.data.data : []);
+    this.productService.getListAllCategory(null).subscribe(res => {
+      this.listCategories = res.data ? res.data : [];
+      this.filteredCategory.next(res.data ? res.data : []);
     });
   }
 
