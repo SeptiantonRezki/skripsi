@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <!-- <page-content-header contentTitle="{{ls.locale.global.menu.medal_badge}}"> -->
-  <page-content-header [contentTitle]="'global.label.keyword_management' | translate">
+  <page-content-header [contentTitle]="ls.locale.global.label.keyword_management">
     <button
       *ngIf="permission['ubah'] && importID !== ''"
       id="btn-simpan-trade"
@@ -11,7 +11,7 @@
       type="button"
       class="vibrate"
     >
-      <mat-icon>save</mat-icon> {{ "global.button.save" | translate }}
+      <mat-icon>save</mat-icon> {{ ls.locale.global.button.save }}
     </button>
 
     <button
@@ -24,7 +24,7 @@
       matTooltip="Silahkan import data terlebih dahulu"
       type="button"
     >
-      <mat-icon>save</mat-icon> {{ "global.button.save" | translate }}
+      <mat-icon>save</mat-icon> {{ ls.locale.global.button.save }}
     </button>
   </page-content-header>
 
@@ -37,12 +37,12 @@
         <div class="ayo-middle" fxLayout="column" fusePerfectScrollbar>
           <div class="content">
             <h2 class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-              {{ "global.label.add_blacklist_keyword" | translate }}
+              {{ ls.locale.global.label.add_blacklist_keyword }}
             </h2>
             <form [formGroup]="formKeyword" autoComplete="off">
               <div class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                  <mat-select [placeholder]="'notification.popup_notifikasi.text4' | translate" formControlName="userGroup" multiple>
+                  <mat-select [placeholder]="ls.locale.notification.popup_notifikasi.text4" formControlName="userGroup" multiple>
                     <mat-option *ngFor="let userGroup of listUserGroup" [value]="userGroup.value">{{ userGroup.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -57,15 +57,15 @@
 
               <div class="pl-16 pr-16 mt-8" fxLayout="row wrap" fxLayoutAlign="space-between center" fxLayoutGap="20px">
                 <mat-form-field fxLayout="row" fxLayoutAlign="center center">
-                  <mat-select style="min-width: 160px" [placeholder]="'global.label.category' | translate" formControlName="category" #singleSelect>
+                  <mat-select style="min-width: 160px" [placeholder]="ls.locale.global.label.category" formControlName="category" #singleSelect>
                     <ngx-mat-select-search
                       [formControl]="filterCategory"
-                      placeholderLabel="{{ 'global.label.search' | translate }}"
+                      placeholderLabel="{{ ls.locale.global.label.search }}"
                       noEntriesFoundLabel="{{
-                        'global.messages.data_not_found' | translate
+                        ls.locale.global.messages.data_not_found
                       }}"
                     ></ngx-mat-select-search>
-                    <mat-option [value]="" selected>{{ls.locale.global.label.all}} {{ "global.label.category" | translate }}</mat-option>
+                    <mat-option [value]="" selected>{{ls.locale.global.label.all}} {{ ls.locale.global.label.category }}</mat-option>
                     <mat-option *ngFor="let cat of filteredCategory | async" [value]="cat.id">{{ cat.name }}</mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -87,27 +87,27 @@
                   [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
           
                   <!-- <ngx-datatable-column name="{{ls.locale.global.label.name}}" prop="name" [sortable]="true"> -->
-                  <ngx-datatable-column [name]="'global.label.name' | translate" prop="name" [sortable]="true"> 
+                  <ngx-datatable-column [name]="ls.locale.global.label.name" prop="name" [sortable]="true"> 
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.name}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.label.category' | translate" prop="category_name" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.label.category" prop="category_name" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.category_name}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.label.block_in_product' | translate" prop="block_product" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.label.block_in_product" prop="block_product" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.block_product}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.label.maping_product' | translate" prop="product_mapping" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.label.maping_product" prop="product_mapping" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.product_mapping}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.label.block_in_mandiri_promo' | translate" prop="block_promo_mandiri" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.label.block_in_mandiri_promo" prop="block_promo_mandiri" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.block_promo_mandiri}}</span>
                     </ng-template>
@@ -117,7 +117,7 @@
                       <span class="row-address">{{row.add_or_remove}}</span>
                     </ng-template>
                   </ngx-datatable-column> -->
-                  <ngx-datatable-column [name]="'global.label.country' | translate" prop="country" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.label.country" prop="country" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.country}}</span>
                     </ng-template>
@@ -127,17 +127,17 @@
                       <span class="row-address">{{row.sku_id}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.menu.wholesaler' | translate" prop="wholesaler" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.menu.wholesaler" prop="wholesaler" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.wholesaler}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.menu.retailer' | translate" prop="retailer" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.menu.retailer" prop="retailer" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.retailer}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="'global.menu.customer' | translate" prop="customer" [sortable]="true">
+                  <ngx-datatable-column [name]="ls.locale.global.menu.customer" prop="customer" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.customer}}</span>
                     </ng-template>
