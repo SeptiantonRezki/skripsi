@@ -1216,7 +1216,7 @@ export class LotteryEditComponent implements OnInit {
     this.dataService.showLoading(true);
     try {
       const response = await this.lotteryService.downloadWinner(this.detailFormUndian.id).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Coupon_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Winner_${new Date().toLocaleString()}.xls`);
       this.dataService.showLoading(false);
     } catch (error) {
       console.log(error);
