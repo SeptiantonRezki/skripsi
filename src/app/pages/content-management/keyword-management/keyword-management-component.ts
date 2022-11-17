@@ -135,7 +135,8 @@ export class KeywordManagementComponent implements OnInit {
   ngOnInit() {
     this.formKeyword = this.formBuilder.group({
       userGroup: [['wholesaler', 'retailer', 'customer']],
-      category: ''
+      category: '',
+      search: ''
     });
     this.getCategories();
     this.getKeywordList();
@@ -232,6 +233,7 @@ export class KeywordManagementComponent implements OnInit {
 
       const userGroup = this.formKeyword.get('userGroup').value;
       const category = this.formKeyword.get('category').value;
+      const search = this.formKeyword.get('search').value;
       if (userGroup.length > 0) {
         this.pagination['group_pengguna'] = userGroup;
       } else {
@@ -241,6 +243,11 @@ export class KeywordManagementComponent implements OnInit {
         this.pagination['category'] = category;
       } else {
         delete this.pagination['category'];
+      }
+      if (search) {
+        this.pagination['search'] = search;
+      } else {
+        delete this.pagination['search'];
       }
 
       const page = this.dataService.getFromStorage("page");
