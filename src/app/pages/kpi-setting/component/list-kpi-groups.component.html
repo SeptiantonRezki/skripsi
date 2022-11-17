@@ -121,49 +121,49 @@
             <!-- <span *ngIf="row.nationals.length <= 0" class="row-areas">-</span> -->
           <!-- </ng-template> -->
         <!-- </ngx-datatable-column> -->
-        <ngx-datatable-column name="Zone" prop="zone">
+        <ngx-datatable-column name="Zone" prop="zone" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas">{{row.zones.join(",")}}</span>
+            <span class="row-areas">{{row.zone.join(",")}}</span>
             <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Region" prop="region">
+        <ngx-datatable-column name="Region" prop="region" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas">{{row.regions.join(",")}}</span>
+            <span class="row-areas">{{row.region.join(",")}}</span>
             <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area">
+        <ngx-datatable-column name="Area" prop="area" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas">{{row.areasZone.join(",")}}</span>
+            <span class="row-areas">{{row.area.join(",")}}</span>
             <!-- <span *ngIf="row.areas.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="District" prop="district">
+        <ngx-datatable-column name="District" prop="district" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas">{{row.districts.join(",")}}</span>
+            <span class="row-areas">{{row.district.join(",")}}</span>
             <!-- <span *ngIf="row.districts.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Territory" prop="territory">
+        <ngx-datatable-column name="Territory" prop="territory" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas">{{row.territories.join(",")}}</span>
+            <span class="row-areas">{{row.territory.join(",")}}</span>
             <!-- <span *ngIf="row.territories.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Brand" prop="brand">
+        <ngx-datatable-column name="Brand" prop="brands" >
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.brands.join(",")}}</span>
             <!-- <span *ngIf="row.brands.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Ecosystem" prop="ecosystem">
+        <ngx-datatable-column name="Ecosystem" prop="ecosystems">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.ecosystems.join(",")}}</span>
             <!-- <span *ngIf="row.ecosystems.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Trade Program" prop="trade_program">
+        <ngx-datatable-column name="Trade Program" prop="trade_programs">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.trade_programs.join(",")}}</span>
             <!-- <span *ngIf="row.trade_programs.length <= 0" class="row-areas">-</span> -->

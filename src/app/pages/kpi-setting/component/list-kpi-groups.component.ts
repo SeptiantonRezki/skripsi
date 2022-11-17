@@ -237,35 +237,35 @@ export class KPIGroupsList implements OnInit {
     this.getListInit();
   }
 
-  handleArea(data: LeveledArea[]) {
-    let districts,
-      territories,
-      areasZone,
-      regions,
-      zones,
-      nationals = [];
+  // handleArea(data: LeveledArea[]) {
+  //   let districts,
+  //     territories,
+  //     areasZone,
+  //     regions,
+  //     zones,
+  //     nationals = [];
 
-    territories = data
-      .filter((data) => data.area_level.toLowerCase() === "teritory")
-      .map((data) => data.area_code);
-    districts = data
-      .filter((data) => data.area_level.toLowerCase() === "district")
-      .map((data) => data.area_code);
-    areasZone = data
-      .filter((data) => data.area_level.toLowerCase() === "area")
-      .map((data) => data.area_code);
-    regions = data
-      .filter((data) => data.area_level.toLowerCase() === "region")
-      .map((data) => data.area_code);
-    zones = data
-      .filter((data) => data.area_level.toLowerCase() === "division")
-      .map((data) => data.area_code);
-    // nationals = data
-    //   .filter((data) => data.area_level.toLowerCase() === "national")
-    //   .map((data) => data.area_code);
+  //   territories = data
+  //     .filter((data) => data.area_level.toLowerCase() === "teritory")
+  //     .map((data) => data.area_code);
+  //   districts = data
+  //     .filter((data) => data.area_level.toLowerCase() === "district")
+  //     .map((data) => data.area_code);
+  //   areasZone = data
+  //     .filter((data) => data.area_level.toLowerCase() === "area")
+  //     .map((data) => data.area_code);
+  //   regions = data
+  //     .filter((data) => data.area_level.toLowerCase() === "region")
+  //     .map((data) => data.area_code);
+  //   zones = data
+  //     .filter((data) => data.area_level.toLowerCase() === "division")
+  //     .map((data) => data.area_code);
+  //   // nationals = data
+  //   //   .filter((data) => data.area_level.toLowerCase() === "national")
+  //   //   .map((data) => data.area_code);
 
-    return { territories, areasZone, regions, zones, districts, nationals };
-  }
+  //   return { territories, areasZone, regions, zones, districts, nationals };
+  // }
 
   getListInit() {
     // set list to desc
@@ -285,17 +285,17 @@ export class KPIGroupsList implements OnInit {
       Page.renderPagination(this.pagination, res);
       this.table.offset = 0;
       this.rows = res.data.map((data) => {
-        const { territories, districts, regions, areasZone, zones } =
-          this.handleArea(data.leveled_areas);
+        // const { territories, districts, regions, areasZone, zones } =
+        //   this.handleArea(data.leveled_areas);
         // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
         return {
           ...data,
-          territories,
-          districts,
-          regions,
-          zones,
-          // nationals,
-          areasZone,
+          // territories,
+          // districts,
+          // regions,
+          // zones,
+          // // nationals,
+          // areasZone,
           isEditable: this.checkKPIDate(data.start_date, data.end_date),
         };
       });
@@ -370,17 +370,17 @@ export class KPIGroupsList implements OnInit {
     this.kpiSettingService.getListV2(param).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data.map((data) => {
-        const { territories, districts, regions, areasZone, zones } =
-        this.handleArea(data.leveled_areas);
+        // const { territories, districts, regions, areasZone, zones } =
+        // this.handleArea(data.leveled_areas);
         // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
         return {
           ...data,
-          territories,
-          districts,
-          regions,
-          zones,
-          // nationals,
-          areasZone,
+          // territories,
+          // districts,
+          // regions,
+          // zones,
+          // // nationals,
+          // areasZone,
           isEditable: this.checkKPIDate(data.start_date, data.end_date),
         };
       });
@@ -405,17 +405,17 @@ export class KPIGroupsList implements OnInit {
       });
       this.table.offset = 0;
       this.rows = res.data.map((data) => {
-        const { territories, districts, regions, areasZone, zones } =
-        this.handleArea(data.leveled_areas);
+        // const { territories, districts, regions, areasZone, zones } =
+        // this.handleArea(data.leveled_areas);
         // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
         return {
           ...data,
-          territories,
-          districts,
-          regions,
-          zones,
-          // nationals,
-          areasZone,
+          // territories,
+          // districts,
+          // regions,
+          // zones,
+          // // nationals,
+          // areasZone,
           isEditable: this.checkKPIDate(data.start_date, data.end_date),
         };
       });
@@ -448,17 +448,17 @@ export class KPIGroupsList implements OnInit {
     this.kpiSettingService.getListV2(param).subscribe((res) => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data.map((data) => {
-        const { territories, districts, regions, areasZone, zones } =
-          this.handleArea(data.leveled_areas);
+        // const { territories, districts, regions, areasZone, zones } =
+        //   this.handleArea(data.leveled_areas);
         // territories:data.leveled_areas.filter(data => data.area_level.toLowerCase() === 'teritory'),
         return {
           ...data,
-          territories,
-          districts,
-          regions,
-          zones,
-          // nationals,
-          areasZone,
+          // territories,
+          // districts,
+          // regions,
+          // zones,
+          // // nationals,
+          // areasZone,
           isEditable: this.checkKPIDate(data.start_date, data.end_date),
         };
       });
