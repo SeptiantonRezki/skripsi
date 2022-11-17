@@ -726,10 +726,76 @@ export class RedeemListComponent implements OnInit {
     }
     this.dataService.showLoading(true);
     const fileName = `B2B_CN_Reward_Penukaran_Pembayaran_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== "" && item.value.length !== 0);
+    let area_id = areaSelected[areaSelected.length - 1].value;
+    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
+    let area = area_id
+    let after_level;
+    let self_area;
+    let last_self_area;
+    
+    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && area !== 1) {
+      after_level = true;
+    } else {
+      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
+      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
+      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
+      let is_area_2 = false;
+      self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
+      last_self_area = [];
+      if (self_area.length > 0) {
+        last_self_area.push(self_area[self_area.length - 1]);
+      }
+      if (this.areaFromLogin[1]) {
+        let second_areas = this.areaFromLogin[1];
+        last_self_area = [
+          ...last_self_area,
+          second_areas[second_areas.length - 1].id
+        ];
+        self_area = [
+          ...self_area,
+          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
+        ];
+      }
+
+      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
+      let levelCovered = [];
+      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
+      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
+        let oneAreaSelected = lastSelectedArea.value[0];
+        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
+        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
+        if (findOnFirstArea) is_area_2 = false;
+        else is_area_2 = true;
+
+        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
+        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
+          // console.log('its hitted [levelCovered > -1]');
+          if (is_area_2) last_self_area = [last_self_area[1]];
+          else last_self_area = [last_self_area[0]];
+        } else {
+          // console.log('its hitted [other level]');
+          after_level = true;
+          last_self_area = newLastSelfArea;
+        }
+      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
+        // console.log('its hitted [other level other]');
+        after_level = true;
+        if (newLastSelfArea.length > 0) {
+          last_self_area = newLastSelfArea;
+        }
+      }
+
+    }
     let body = {
       voucher_id: this.detailVoucher.id,
-      order_id: this.selected.map(item => item.order_id)
+      order_id: this.selected.map(item => item.order_id),
+      area: Array.isArray(this.pagination.area)? this.pagination.area : [this.pagination.area],
+      self_area : this.pagination['self_area'],
+      last_self_area:this.pagination['last_self_area'],
+      after_level: this.pagination['after_level']
     }
+
     if(this.allRowsSelected){
       body.order_id = this.rows.map(item => item.order_id)
     }
