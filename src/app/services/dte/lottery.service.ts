@@ -62,7 +62,7 @@ export class LotteryService extends BaseService {
 
   downloadWinner(context: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'download_winner', {id: context});
-    return this.getApi(url);
+    return this.getBlobAsJsonApi(url);
   }
 
   put_winner(context: any, body: any): Observable<any> {

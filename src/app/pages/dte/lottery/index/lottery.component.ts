@@ -207,15 +207,11 @@ export class LotteryComponent implements OnInit {
     try {
       const response = await this.lotteryService.exportDetailCoupon({ lottery_id: param.id }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Detail_Coupon_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
-      console.log('X', response);
     } catch (error) {
       console.log(error);
       this.handleError(error);
       this.dataService.showLoading(false);
-      // throw error;
     }
   }
 
@@ -224,15 +220,11 @@ export class LotteryComponent implements OnInit {
     try {
       const response = await this.lotteryService.exportCoupon({ lottery_id: param.id }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Lottery_Coupon_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);
-      console.log('X', response);
     } catch (error) {
       console.log(error);
       this.handleError(error);
       this.dataService.showLoading(false);
-      // throw error;
     }
   }
 
@@ -266,13 +258,9 @@ export class LotteryComponent implements OnInit {
   }
 
   handleError(error) {
-    console.log('Here')
-    console.log(error)
-
     if (!(error instanceof HttpErrorResponse)) {
       error = error.rejection;
     }
     console.log(error);
-    // alert('Open console to see the error')
   }
 }
