@@ -1,3 +1,39 @@
-<p>
-  trs-report works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <page-content-header contentTitle="Report">
+  </page-content-header>
+
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
+        <mat-tab label="Total Pack Per Brand">
+          <ngx-datatable class="material" [rows]="totalPerBrandTableData.rows"
+            [loadingIndicator]="totalPerBrandTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="totalPerBrandTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="totalPerBrandTableData.reorderable"
+            [count]="totalPerBrandTableData.pagination.total" [limit]="totalPerBrandTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setVisitSummaryPage($event)"
+            (sort)="onVisitSummarySort($event)">
+
+            <ngx-datatable-column name="Brand" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.brand}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Qty" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.totalqty}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+        </mat-tab>
+        <mat-tab label="Visit">
+        </mat-tab>
+        <mat-tab label="Stock Movement">
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+
+  <a #downloadLink></a>
+</div>
