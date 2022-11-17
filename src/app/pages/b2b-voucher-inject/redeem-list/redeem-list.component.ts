@@ -798,12 +798,18 @@ export class RedeemListComponent implements OnInit {
     //   }
     //   params['area'] = this.pagination['area'];
     // }
-    let body = {
-      voucher_id: this.detailVoucher.id,
-      order_id: this.selected.map(item => item.order_id),
+    let params = {
       area: Array.isArray(this.pagination.area)? this.pagination.area : [this.pagination.area],
       self_area : this.pagination['self_area'],
       last_self_area:this.pagination['last_self_area'],
+      after_level: this.pagination['after_level']
+    }
+    let body = {
+      voucher_id: this.detailVoucher.id,
+      order_id: this.selected.map(item => item.order_id),
+      area:params['area'].join(),
+      self_area: params['self_area'].join(),
+      last_self_area : params['last_self_area'].join(),
       after_level: this.pagination['after_level']
     }
     if(this.allRowsSelected){
