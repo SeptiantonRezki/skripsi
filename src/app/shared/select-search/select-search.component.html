@@ -16,6 +16,7 @@
       [disableScrollToActiveOnOptionsChanged]="true"
       [hidden]="disableSearch"
     ></ngx-mat-select-search>
+    <mat-option *ngIf="isResetable">-- None --</mat-option>
     <mat-option *ngFor="let item of filteredOptions | async" [value]="item.id">
       {{ item.name | titlecase }}
     </mat-option>

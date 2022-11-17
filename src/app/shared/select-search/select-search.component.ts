@@ -19,6 +19,7 @@ export class SelectSearchComponent implements OnInit {
   @Input() sortByName: boolean = false;
   @Input() scrollApi: boolean = false;
   @Input() searchApi: boolean = false;
+  @Input() isResetable: boolean = false;
 
   @Input()
   set options(value: any[]) {

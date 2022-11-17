@@ -36,7 +36,7 @@
         <div fxLayout="column" fxFlex="80%">
           <div fxLayout="row">
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [options]="KPSListStart" placeholder="Start KPS" searchLabel="Cari Start KPS..."
+              <select-search [isResetable]="true" [options]="KPSListStart" placeholder="Start KPS" searchLabel="Cari Start KPS..."
                 [value]="formKPI.get('start_kps').value"
                 (onChange)="formKPI.get('start_kps').setValue($event);handleChange($event)">
                 <!-- <mat-error>
@@ -45,7 +45,7 @@
               </select-search>
             </div>
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [options]="KPSListEnd" placeholder="End KPS" searchLabel="Cari End KPS..."
+              <select-search [isResetable]="true" [options]="KPSListEnd" placeholder="End KPS" searchLabel="Cari End KPS..."
                 [value]="formKPI.get('end_kps').value"
                 (onChange)="formKPI.get('end_kps').setValue($event);handleChange($event)">
                 <!-- <mat-error>
@@ -54,7 +54,7 @@
               </select-search>
             </div>
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [options]="categories" placeholder="Kategori KPS" searchLabel="Cari Kategori KPS..."
+              <select-search [isResetable]="true" [options]="categories" placeholder="Kategori KPS" searchLabel="Cari Kategori KPS..."
                 [value]="formKPI.get('kategori').value"
                 (onChange)="formKPI.get('kategori').setValue($event);handleChange($event)">
                 <!-- <mat-error>
@@ -66,6 +66,7 @@
               <mat-form-field fxFlex="100%" class="is-light form-primary">
                 <mat-select formControlName="status" placeholder="Status" searchLabel="Cari Status KPS..."
                   (selectionChange)="handleChange($event)">
+                  <mat-option>-- None --</mat-option>
                   <!-- <mat-option [value]="active">active</mat-option> -->
                   <mat-option *ngFor="let status of statusOptions" [value]="status">{{status}}</mat-option>
                   <!-- *ngFor="let item of listStatus;" [value]="item.value" -->
@@ -79,7 +80,8 @@
         </div>
         <div fxLayout="column" fxFlex="20%">
           <div class="filter-search" fxLayout="row" fxLayoutAlign="start center">
-            <button style="width: 170px;margin:11px auto 0" mat-raised-button aria-label="Reset" type="button" (click)="handleReset()">
+            <button style="width: 170px;margin:11px auto 0" mat-raised-button aria-label="Reset" type="button"
+              (click)="handleReset()">
               Reset
             </button>
           </div>
@@ -116,42 +118,42 @@
           </ng-template>
         </ngx-datatable-column>
         <!-- <ngx-datatable-column name="National" prop="national"> -->
-          <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value"> -->
-            <!-- <span class="row-areas">{{row.nationals.join(",")}}</span> -->
-            <!-- <span *ngIf="row.nationals.length <= 0" class="row-areas">-</span> -->
-          <!-- </ng-template> -->
+        <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value"> -->
+        <!-- <span class="row-areas">{{row.nationals.join(",")}}</span> -->
+        <!-- <span *ngIf="row.nationals.length <= 0" class="row-areas">-</span> -->
+        <!-- </ng-template> -->
         <!-- </ngx-datatable-column> -->
-        <ngx-datatable-column name="Zone" prop="zone" >
+        <ngx-datatable-column name="Zone" prop="zone">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.zone.join(",")}}</span>
             <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Region" prop="region" >
+        <ngx-datatable-column name="Region" prop="region">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.region.join(",")}}</span>
             <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Area" prop="area" >
+        <ngx-datatable-column name="Area" prop="area">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.area.join(",")}}</span>
             <!-- <span *ngIf="row.areas.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="District" prop="district" >
+        <ngx-datatable-column name="District" prop="district">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.district.join(",")}}</span>
             <!-- <span *ngIf="row.districts.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Territory" prop="territory" >
+        <ngx-datatable-column name="Territory" prop="territory">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.territory.join(",")}}</span>
             <!-- <span *ngIf="row.territories.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Brand" prop="brands" >
+        <ngx-datatable-column name="Brand" prop="brands">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-areas">{{row.brands.join(",")}}</span>
             <!-- <span *ngIf="row.brands.length <= 0" class="row-areas">-</span> -->
@@ -171,7 +173,7 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Area Audience" prop="areas">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas" >{{row.areas.join(',')}}</span>
+            <span class="row-areas">{{row.areas.join(',')}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="status">
@@ -198,6 +200,3 @@
     </div>
   </div>
 </div>
-
-
-

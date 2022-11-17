@@ -7,17 +7,17 @@ import {
   // SimpleChanges,
 } from "@angular/core";
 // import { formatCurrency } from "@angular/common";
-import { 
-  Router, 
-  // ActivatedRoute 
+import {
+  Router,
+  // ActivatedRoute
 } from "@angular/router";
 import { DataService } from "../../../services/data.service";
 import { DialogService } from "../../../services/dialog.service";
 import { MasterKPIService } from "../../../services/kpi-setting/master-kpi.service";
-import { 
-  Subject, 
+import {
+  Subject,
   // Observable,
-  //  ReplaySubject 
+  //  ReplaySubject
   } from "rxjs";
 // import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 // import { takeUntil } from "rxjs/operators";
@@ -419,7 +419,7 @@ export class KPIGroupsList implements OnInit {
           isEditable: this.checkKPIDate(data.start_date, data.end_date),
         };
       });
-      
+
       this.loadingIndicator = false;
     });
     // const param = {
@@ -432,7 +432,7 @@ export class KPIGroupsList implements OnInit {
     //   start_date:this.formKPI.get("start_kps").value,
     // }
   }
-  
+
   onSort(event) {
     this.pagination.sort = event.column.prop;
     this.pagination.sort_type = event.newValue;
