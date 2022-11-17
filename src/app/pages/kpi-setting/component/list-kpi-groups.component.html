@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'KPI Setting'">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+      <button *ngIf="rows&&rows.length!==0" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         (click)="getFileExport()">
         <mat-icon>arrow_upward</mat-icon>Export
       </button>
