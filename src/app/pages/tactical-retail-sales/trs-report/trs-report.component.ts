@@ -34,6 +34,27 @@ export class TrsReportComponent implements OnInit {
     pagination: new Page(),
     offsetPagination: 0,
   };
+  summaryVisitTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
+  detailVisitTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
+  stockMovementTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
 
   constructor(
     private dataService: DataService,
@@ -44,27 +65,22 @@ export class TrsReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.TRSService.getReports().subscribe(async res => {
-    //   console.log("Ale", res)
-    // });
-    this.refreshVisitSummary();
+    this.refreshTotalPerBrand();
+    this.refreshSummaryVisit();
+    this.refreshDetailVisit();
+    this.refreshStockMovement();
   }
 
   onChangeTab(event){
     console.log("onChangeTab", event)
   }
 
-  refreshVisitSummary(){
-    // this.totalPerBrandTableData.rows = [
-    //   { brand: "Ale 1" },
-    //   { brand: "Ale 2" },
-    // ]
-    this.TRSService.getReports(this.totalPerBrandTableData.pagination).subscribe(
+  refreshTotalPerBrand(){
+    this.TRSService.totalPerBrand(this.totalPerBrandTableData.pagination).subscribe(
       async res => {
-        console.log('refreshVisitSummary res', res);
+        console.log('aleapi refreshTotalPerBrand res', res);
         Page.renderPagination(this.totalPerBrandTableData.pagination, res.data);
         this.totalPerBrandTableData.rows = res.data.data;
-        console.log('refreshVisitSummary rows', this.totalPerBrandTableData.rows);
       },
       err => {},
       () => {
@@ -73,7 +89,7 @@ export class TrsReportComponent implements OnInit {
     );
   }
 
-  setVisitSummaryPage(pageInfo) {
+  setTotalPerBrandPage(pageInfo) {
     this.totalPerBrandTableData.loadingIndicator = true;
 
     this.totalPerBrandTableData.offsetPagination = pageInfo.offset;
@@ -85,10 +101,10 @@ export class TrsReportComponent implements OnInit {
       this.totalPerBrandTableData.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.refreshVisitSummary();
+    this.refreshTotalPerBrand();
   }
 
-  onVisitSummarySort(event) {
+  onTotalPerBrandSort(event) {
     this.totalPerBrandTableData.loadingIndicator = true;
 
     this.totalPerBrandTableData.pagination.sort = event.column.prop;
@@ -99,7 +115,136 @@ export class TrsReportComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.refreshVisitSummary();
+    this.refreshTotalPerBrand();
+  }
+
+  refreshSummaryVisit(){
+    this.TRSService.summaryVisit(this.summaryVisitTableData.pagination).subscribe(
+      async res => {
+        console.log('aleapi refreshSummaryVisit res', res);
+        Page.renderPagination(this.summaryVisitTableData.pagination, res.data);
+        this.summaryVisitTableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.summaryVisitTableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setSummaryVisitPage(pageInfo) {
+    this.summaryVisitTableData.loadingIndicator = true;
+
+    this.summaryVisitTableData.offsetPagination = pageInfo.offset;
+
+    if (this.summaryVisitTableData.pagination['search']) {
+      this.summaryVisitTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.summaryVisitTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshSummaryVisit();
+  }
+
+  onSummaryVisitSort(event) {
+    this.summaryVisitTableData.loadingIndicator = true;
+
+    this.summaryVisitTableData.pagination.sort = event.column.prop;
+    this.summaryVisitTableData.pagination.sort_type = event.newValue;
+    this.summaryVisitTableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.summaryVisitTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshSummaryVisit();
+  }
+
+  refreshDetailVisit(){
+    this.TRSService.detailVisit(this.detailVisitTableData.pagination).subscribe(
+      async res => {
+        console.log('aleapi refreshDetailVisit res', res);
+        Page.renderPagination(this.detailVisitTableData.pagination, res.data);
+        this.detailVisitTableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.detailVisitTableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setDetailVisitPage(pageInfo) {
+    this.detailVisitTableData.loadingIndicator = true;
+
+    this.detailVisitTableData.offsetPagination = pageInfo.offset;
+
+    if (this.detailVisitTableData.pagination['search']) {
+      this.detailVisitTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.detailVisitTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshDetailVisit();
+  }
+
+  onDetailVisitSort(event) {
+    this.detailVisitTableData.loadingIndicator = true;
+
+    this.detailVisitTableData.pagination.sort = event.column.prop;
+    this.detailVisitTableData.pagination.sort_type = event.newValue;
+    this.detailVisitTableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.detailVisitTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshDetailVisit();
+  }
+
+  refreshStockMovement(){
+    this.TRSService.stockMovement(this.stockMovementTableData.pagination).subscribe(
+      async res => {
+        console.log('aleapi refreshStockMovement res', res);
+        Page.renderPagination(this.stockMovementTableData.pagination, res.data);
+        this.stockMovementTableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.stockMovementTableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setStockMovementPage(pageInfo) {
+    this.stockMovementTableData.loadingIndicator = true;
+
+    this.stockMovementTableData.offsetPagination = pageInfo.offset;
+
+    if (this.stockMovementTableData.pagination['search']) {
+      this.stockMovementTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.stockMovementTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshStockMovement();
+  }
+
+  onStockMovementSort(event) {
+    this.stockMovementTableData.loadingIndicator = true;
+
+    this.stockMovementTableData.pagination.sort = event.column.prop;
+    this.stockMovementTableData.pagination.sort_type = event.newValue;
+    this.stockMovementTableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.stockMovementTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshStockMovement();
   }
 
 }

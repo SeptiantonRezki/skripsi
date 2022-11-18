@@ -11,8 +11,8 @@
             [offset]="totalPerBrandTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="totalPerBrandTableData.reorderable"
             [count]="totalPerBrandTableData.pagination.total" [limit]="totalPerBrandTableData.pagination.per_page"
-            [externalPaging]="true" [externalSorting]="true" (page)="setVisitSummaryPage($event)"
-            (sort)="onVisitSummarySort($event)">
+            [externalPaging]="true" [externalSorting]="true" (page)="setTotalPerBrandPage($event)"
+            (sort)="onTotalPerBrandSort($event)">
 
             <ngx-datatable-column name="Brand" [sortable]="true" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -27,9 +27,131 @@
 
           </ngx-datatable>
         </mat-tab>
+
         <mat-tab label="Visit">
+          <h2 class="pl-16">Summary Visit</h2>
+          <ngx-datatable class="material" [rows]="summaryVisitTableData.rows"
+            [loadingIndicator]="summaryVisitTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="summaryVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="summaryVisitTableData.reorderable"
+            [count]="summaryVisitTableData.pagination.total" [limit]="summaryVisitTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
+            (sort)="onSummaryVisitSort($event)">
+
+            <ngx-datatable-column name="Executor" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.created_at}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Customer Name" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.field_force}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+          <hr />
+
+          <h2 class="pl-16">Detail Visit</h2>
+          <h2 class="pl-16">TSUB0002 - Saiful Rahman - 27/06/2022</h2>
+          <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
+            [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="detailVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="detailVisitTableData.reorderable"
+            [count]="detailVisitTableData.pagination.total" [limit]="detailVisitTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setDetailVisitPage($event)"
+            (sort)="onDetailVisitSort($event)">
+
+            <ngx-datatable-column name="Date Visit" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.created_at}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Customer Name" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.name}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Image" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.photo}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Koordinat Alamat" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.lat}}, {{row.lng}}<br />{{row.address}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Issued" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.issued}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Cancel" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.cancel}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Start Visit" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.start_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="End Visit" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.end_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Timespent" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.timespent}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Revenue" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.revenue}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
         </mat-tab>
+
         <mat-tab label="Stock Movement">
+          <ngx-datatable class="material" [rows]="stockMovementTableData.rows"
+            [loadingIndicator]="stockMovementTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="stockMovementTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovementTableData.reorderable"
+            [count]="stockMovementTableData.pagination.total" [limit]="stockMovementTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setStockMovementPage($event)"
+            (sort)="onStockMovementSort($event)">
+
+            <ngx-datatable-column name="Executor" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.partner_from}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Territory Code" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.partner_from_territory}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Brand" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.product_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Quantity" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.qty}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total Transaksi" [sortable]="true" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span class="row-name">{{row.total}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
         </mat-tab>
       </mat-tab-group>
     </div>

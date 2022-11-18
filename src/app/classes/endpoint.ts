@@ -1184,7 +1184,10 @@ export class Endpoint {
       
         proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
 
-        reports: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/reports`,
+        total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/total-per-brand`,
+        summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/summary-visit`,
+        detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/detail-visit`,
+        stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
       },
 
       keyword: {
