@@ -58,7 +58,7 @@
                     [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                   <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                   <mat-datepicker #startPicker></mat-datepicker>
-                  <mat-error *ngIf="formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
                     {{ls.locale.tactical_retail_sales.proposal_program_start_date}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}.
                   </mat-error>
                 </mat-form-field>
@@ -70,10 +70,10 @@
                     [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
                   <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker #endDate></mat-datepicker>
-                  <mat-error *ngIf="formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
                     {{ls.locale.tactical_retail_sales.proposal_program_end_date}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}.
                   </mat-error>
-                  <mat-error *ngIf="formCreateProposal.controls['endDate'].invalid">
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['endDate'].invalid">
                     {{ls.locale.tactical_retail_sales.proposal_program_end_date}} Tidak Valid
                   </mat-error>
                 </mat-form-field>
