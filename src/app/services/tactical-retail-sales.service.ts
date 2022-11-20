@@ -114,6 +114,26 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  exportTotalPerBrand(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_total_per_brand");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportSummaryVisit(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_summary_visit");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportDetailVisit(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_detail_visit");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportStockMovement(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_stock_movement");
+    return this.getBlobApi(url, queryParams);
+  }
+
 
 
 

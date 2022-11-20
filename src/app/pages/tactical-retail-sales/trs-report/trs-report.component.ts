@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from "@angular/common/http";
 
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 
 import { DataService } from "app/services/data.service";
 import { TacticalRetailSalesService } from "app/services/tactical-retail-sales.service";
+
+declare global {
+  interface Navigator { msSaveOrOpenBlob: any; }
+}
 
 interface DataTableData {
   rows: any[],
@@ -66,13 +71,32 @@ export class TrsReportComponent implements OnInit {
 
   ngOnInit() {
     this.refreshTotalPerBrand();
-    this.refreshSummaryVisit();
-    this.refreshDetailVisit();
-    this.refreshStockMovement();
   }
 
   onChangeTab(event){
     console.log("onChangeTab", event)
+    switch(event.index){
+      case 0: this.refreshTotalPerBrand(); break;
+      case 1: 
+        this.refreshSummaryVisit();
+        this.refreshDetailVisit();
+        break;
+      case 2: this.refreshStockMovement(); break;
+    }
+  }
+
+  async exportTotalPerBrand() {
+    this.dataService.showLoading(true);
+    const filename = `Export_TRS_TotalPerBrand_${new Date().toLocaleString()}.xlsx`;
+    try {
+      const response = await this.TRSService.exportTotalPerBrand(this.totalPerBrandTableData.pagination).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+    }
   }
 
   refreshTotalPerBrand(){
@@ -118,6 +142,20 @@ export class TrsReportComponent implements OnInit {
     this.refreshTotalPerBrand();
   }
 
+  async exportSummaryVisit() {
+    this.dataService.showLoading(true);
+    const filename = `Export_TRS_SummaryVisit_${new Date().toLocaleString()}.xlsx`;
+    try {
+      const response = await this.TRSService.exportSummaryVisit(this.summaryVisitTableData.pagination).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+    }
+  }
+
   refreshSummaryVisit(){
     this.TRSService.summaryVisit(this.summaryVisitTableData.pagination).subscribe(
       async res => {
@@ -161,11 +199,29 @@ export class TrsReportComponent implements OnInit {
     this.refreshSummaryVisit();
   }
 
+  async exportDetailVisit() {
+    this.dataService.showLoading(true);
+    const filename = `Export_TRS_DetailVisit_${new Date().toLocaleString()}.xlsx`;
+    try {
+      const response = await this.TRSService.exportDetailVisit(this.detailVisitTableData.pagination).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+    }
+  }
+
   refreshDetailVisit(){
     this.TRSService.detailVisit(this.detailVisitTableData.pagination).subscribe(
       async res => {
         console.log('aleapi refreshDetailVisit res', res);
         Page.renderPagination(this.detailVisitTableData.pagination, res.data);
+        res.data.data.map(i => {
+          i.gmap = i.lat && i.lng ? `https://www.google.com/maps/search/?api=1&query=${i.lat},${i.lng}` : null;
+          return i
+        })
         this.detailVisitTableData.rows = res.data.data;
       },
       err => {},
@@ -202,6 +258,20 @@ export class TrsReportComponent implements OnInit {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.refreshDetailVisit();
+  }
+
+  async exportStockMovement() {
+    this.dataService.showLoading(true);
+    const filename = `Export_TRS_StockMovement_${new Date().toLocaleString()}.xlsx`;
+    try {
+      const response = await this.TRSService.exportStockMovement(this.stockMovementTableData.pagination).toPromise();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+    }
   }
 
   refreshStockMovement(){
@@ -245,6 +315,43 @@ export class TrsReportComponent implements OnInit {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.refreshStockMovement();
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    console.log(error);
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
   }
 
 }
