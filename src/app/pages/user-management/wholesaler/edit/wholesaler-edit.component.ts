@@ -267,6 +267,17 @@ export class WholesalerEditComponent {
       this.setFormAbility();
 
     }
+
+    this.formWs.get('npwp')
+      .valueChanges
+      .debounceTime(200)
+      .subscribe(res => {
+        if (res) {
+          let str = res.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/, '$1.$2.$3.$4-$5.$6');
+          this.formWs.get('npwp').setValue(str, { emitEvent: false });
+        }
+      })
+    
   }
 
   handleCountryPhone(event){
