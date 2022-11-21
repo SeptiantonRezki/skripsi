@@ -104,8 +104,10 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  detailVisit(queryParams?): Observable<any> {
+  detailVisit(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
     return this.getApi(url, queryParams);
   }
 
@@ -119,13 +121,8 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getBlobApi(url, queryParams);
   }
 
-  exportSummaryVisit(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_summary_visit");
-    return this.getBlobApi(url, queryParams);
-  }
-
-  exportDetailVisit(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_detail_visit");
+  exportVisit(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_visit");
     return this.getBlobApi(url, queryParams);
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
 import { HttpErrorResponse } from "@angular/common/http";
 
 import { Page } from 'app/classes/laravel-pagination';
@@ -26,7 +27,6 @@ interface DataTableData {
 })
 export class TrsReportComponent implements OnInit {
 
-  onLoad: boolean;
   permission: any;
   roles: PagesName = new PagesName();
 
@@ -39,6 +39,11 @@ export class TrsReportComponent implements OnInit {
     pagination: new Page(),
     offsetPagination: 0,
   };
+
+  visitSelected = null;
+  summaryVisitFilterGroupData = [ "Daily", "Weekly" ];
+  summaryVisitFilterProgramCodeData = [ "Code 1", "Code 2" ];
+  summaryVisitFilter: FormGroup;
   summaryVisitTableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
@@ -53,6 +58,7 @@ export class TrsReportComponent implements OnInit {
     pagination: new Page(),
     offsetPagination: 0,
   };
+
   stockMovementTableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
@@ -64,13 +70,24 @@ export class TrsReportComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private TRSService: TacticalRetailSalesService,
+    private formBuilder: FormBuilder,
   ) {
-    this.onLoad = false;
     this.permission = this.roles.getRoles('principal.trsreport.lihat');
   }
 
   ngOnInit() {
     this.refreshTotalPerBrand();
+    
+    this.summaryVisitFilter = this.formBuilder.group({
+      group: new FormControl("Daily"),
+      program_code: new FormControl("Code 1"),
+      from: "",
+      to: "",
+    })
+    this.summaryVisitFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
+      console.log('form value changed')
+      console.log(selectedValue)
+    })
   }
 
   onChangeTab(event){
@@ -79,7 +96,7 @@ export class TrsReportComponent implements OnInit {
       case 0: this.refreshTotalPerBrand(); break;
       case 1: 
         this.refreshSummaryVisit();
-        this.refreshDetailVisit();
+        this.visitSelected = null;
         break;
       case 2: this.refreshStockMovement(); break;
     }
@@ -142,11 +159,14 @@ export class TrsReportComponent implements OnInit {
     this.refreshTotalPerBrand();
   }
 
-  async exportSummaryVisit() {
+  async exportVisit() {
     this.dataService.showLoading(true);
-    const filename = `Export_TRS_SummaryVisit_${new Date().toLocaleString()}.xlsx`;
+    const filename = `Export_TRS_Visit_${new Date().toLocaleString()}.xlsx`;
     try {
-      const response = await this.TRSService.exportSummaryVisit(this.summaryVisitTableData.pagination).toPromise();
+      const response = await this.TRSService.exportVisit({
+        field_force: this.visitSelected.field_force,
+        program_code: this.visitSelected.program_code,
+      }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 
@@ -154,6 +174,11 @@ export class TrsReportComponent implements OnInit {
       this.handleError(error);
       this.dataService.showLoading(false);
     }
+  }
+
+  summaryVisitNameClick(data){
+    this.visitSelected = data;
+    this.refreshDetailVisit();
   }
 
   refreshSummaryVisit(){
@@ -199,22 +224,11 @@ export class TrsReportComponent implements OnInit {
     this.refreshSummaryVisit();
   }
 
-  async exportDetailVisit() {
-    this.dataService.showLoading(true);
-    const filename = `Export_TRS_DetailVisit_${new Date().toLocaleString()}.xlsx`;
-    try {
-      const response = await this.TRSService.exportDetailVisit(this.detailVisitTableData.pagination).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
-      this.dataService.showLoading(false);
-
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-    }
-  }
-
   refreshDetailVisit(){
-    this.TRSService.detailVisit(this.detailVisitTableData.pagination).subscribe(
+    this.TRSService.detailVisit(this.detailVisitTableData.pagination, {
+      field_force: this.visitSelected.field_force,
+      program_code: this.visitSelected.program_code,
+    }).subscribe(
       async res => {
         console.log('aleapi refreshDetailVisit res', res);
         Page.renderPagination(this.detailVisitTableData.pagination, res.data);

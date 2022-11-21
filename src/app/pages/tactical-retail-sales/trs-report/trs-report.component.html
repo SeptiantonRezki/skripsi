@@ -19,17 +19,17 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setTotalPerBrandPage($event)"
             (sort)="onTotalPerBrandSort($event)">
 
-            <ngx-datatable-column name="Program Code" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Brand" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Qty" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Qty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.totalqty}}</span>
               </ng-template>
@@ -40,8 +40,50 @@
 
         <mat-tab label="Visit">
           <h2 class="pl-16">Summary Visit</h2>
+          <form [formGroup]="summaryVisitFilter" autoComplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8"
+              fxLayoutAlign="center center">
+
+              <mat-form-field class="is-light">
+                <mat-select formControlName="group">
+                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item">{{item}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+                <mat-select formControlName="program_code">
+                  <mat-option *ngFor="let item of summaryVisitFilterProgramCodeData" [value]="item">{{item}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
+                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                  formControlName="from" readonly>
+                <button mat-button *ngIf="summaryVisitFilter.get('from').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="summaryVisitFilter.get('from').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="from">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #from></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                  formControlName="to" readonly>
+                <button mat-button *ngIf="summaryVisitFilter.get('to').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="summaryVisitFilter.get('to').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="to">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #to></mat-datepicker>
+              </mat-form-field>
+
+            </div>
+          </form>
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportSummaryVisit()" mat-raised-button type="button" class="">
+            <button (click)="exportVisit()" mat-raised-button type="button" class="">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
@@ -53,131 +95,146 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
             (sort)="onSummaryVisitSort($event)">
 
-            <ngx-datatable-column name="Executor" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Program Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date Visit" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.created_at}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Customer Name" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Customer Name" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.outlet_name}}</span>
+                <span (click)="summaryVisitNameClick(row)">{{row.name}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Visits" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Territory Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.territory_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Visits" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.visits}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="# Invoice Issued" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.issued}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="# Invoice Cancel" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.cancel}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Early Visit" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Early Visit" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.start_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Last Visit" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Last Visit" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.end_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Modus Timespent" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_modus}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Min Timespent" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_min}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Max Timespent" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_max}}</span>
               </ng-template>
             </ngx-datatable-column>
 
           </ngx-datatable>
-          <hr />
 
-          <h2 class="pl-16">Detail Visit</h2>
-          <h2 class="pl-16">TSUB0002 - Saiful Rahman - 27/06/2022</h2>
-          <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportDetailVisit()" mat-raised-button type="button" class="">
-              <mat-icon>arrow_upward</mat-icon> Export XLSX
-            </button>
+          <div *ngIf="visitSelected">
+            <hr />
+
+            <h2 class="pl-16">Detail Visit</h2>
+            <h2 class="pl-16">
+              {{visitSelected.territory_code}} - {{visitSelected.name}} - {{visitSelected.created_at}}
+            </h2>
+            <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
+              [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
+              [offset]="detailVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+              [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="detailVisitTableData.reorderable"
+              [count]="detailVisitTableData.pagination.total" [limit]="detailVisitTableData.pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setDetailVisitPage($event)"
+              (sort)="onDetailVisitSort($event)">
+
+              <ngx-datatable-column name="Program Code" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.program_code}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Date Visit" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.created_at}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Customer Name" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.outlet_name}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Image" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <a *ngIf="row.photo" href="{{row.photo}}" target="_blank">
+                    <img class="row-photo" src="{{row.photo}}" />
+                  </a>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Koordinat Alamat" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.lat}}, {{row.lng}}<br />{{row.address}}<br /><a target="_blank" *ngIf="row.gmap"
+                      href="{{row.gmap}}">Open
+                      Maps</a></span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="# Invoice Issued" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.issued}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="# Invoice Cancel" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.cancel}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Start Visit" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.start_visit}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="End Visit" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.end_visit}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Timespent" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.timespent}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Revenue" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.revenue}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+
+            </ngx-datatable>
           </div>
-          <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
-            [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
-            [offset]="detailVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
-            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="detailVisitTableData.reorderable"
-            [count]="detailVisitTableData.pagination.total" [limit]="detailVisitTableData.pagination.per_page"
-            [externalPaging]="true" [externalSorting]="true" (page)="setDetailVisitPage($event)"
-            (sort)="onDetailVisitSort($event)">
-
-            <ngx-datatable-column name="Date Visit" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.created_at}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Customer Name" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.outlet_name}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Image" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <a *ngIf="row.photo" href="{{row.photo}}" target="_blank">
-                  <img class="row-photo" src="{{row.photo}}" />
-                </a>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Koordinat Alamat" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.lat}}, {{row.lng}}<br />{{row.address}}<br /><a target="_blank" *ngIf="row.gmap"
-                    href="{{row.gmap}}">Open
-                    Maps</a></span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.issued}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.cancel}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Start Visit" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.start_visit}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="End Visit" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.end_visit}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Timespent" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Revenue" [sortable]="true" [width]="200">
-              <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.revenue}}</span>
-              </ng-template>
-            </ngx-datatable-column>
-
-          </ngx-datatable>
         </mat-tab>
 
         <mat-tab label="Stock Movement">
@@ -194,27 +251,27 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setStockMovementPage($event)"
             (sort)="onStockMovementSort($event)">
 
-            <ngx-datatable-column name="Executor" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Executor" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.partner_from}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Territory Code" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Territory Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.partner_from_territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Brand" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.product_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Quantity" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Quantity" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.qty}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total Transaksi" [sortable]="true" [width]="200">
+            <ngx-datatable-column name="Total Transaksi" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.total}}</span>
               </ng-template>
