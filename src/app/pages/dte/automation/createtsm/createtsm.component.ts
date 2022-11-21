@@ -28,6 +28,11 @@ export class CreatetsmComponent implements OnInit {
     { name: 'Referral Code', value: 'referral_code' }
   ];
 
+  // listDSRCanParticipate: any[] = [
+  //   { name: 'No', value: 0 },
+  //   { name: 'Yes', value: 1 },
+  // ];
+
   filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   tradePrograms: any[];
   public filterTradeProgram: FormControl = new FormControl();
@@ -92,7 +97,8 @@ export class CreatetsmComponent implements OnInit {
       extra_coin: [0],
       brand_combination: ["or"],
       notif: [""],
-      skus: this.formBuilder.array([this.createFormSkusd()])
+      skus: this.formBuilder.array([this.createFormSkusd()]),
+      // dsr_can_participate: [0, Validators.required]
     });
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
@@ -334,6 +340,8 @@ export class CreatetsmComponent implements OnInit {
           if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
             body['coin_extra'] = this.formAutomation.get('extra_coin').value;
           }
+
+          // body['dsr_can_participate'] = this.formAutomation.get('dsr_can_participate').value
           break;
         case 'coupon':
           body['coupon_total'] = this.formAutomation.get('coupon_total').value

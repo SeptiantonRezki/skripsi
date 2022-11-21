@@ -202,6 +202,15 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <!-- enhancement challenge 17/11/22 -->
+          <!-- <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" *ngIf="ls.selectedLanguages.includes('ph')===true && formAutomation.get('automation').value === 'e-order'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="DSR Can Participate?" formControlName="dsr_can_participate">
+                <mat-option *ngFor="let item of listDSRCanParticipate" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+          <!-- end enhancement challenge 17/11/22 -->
           <div class="px-24" fxLayout="column">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">
