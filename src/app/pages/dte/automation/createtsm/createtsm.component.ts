@@ -76,7 +76,7 @@ export class CreatetsmComponent implements OnInit {
    }
 
   ngOnInit() {
-    
+
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
       jenis_tantangan: ['default'],
@@ -159,7 +159,9 @@ export class CreatetsmComponent implements OnInit {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [new ReplaySubject<any[]>(1)],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      ex_coin_per_sku: [null, Validators.required],
+      max_qty_per_order: [null]
     });
     let value = new ReplaySubject<any[]>(1);
 
@@ -194,7 +196,9 @@ export class CreatetsmComponent implements OnInit {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [""],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      ex_coin_per_sku: [null, Validators.required],
+      max_qty_per_order: [null]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -205,7 +209,7 @@ export class CreatetsmComponent implements OnInit {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
+
       alert(error);
     })
     formItem
@@ -302,7 +306,19 @@ export class CreatetsmComponent implements OnInit {
           if (barcodes && barcodes.length > 0) {
             const bcsFiltered = barcodes.filter(val => {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
-            }).map(val => val.formSku);
+            }).map(val => {
+                //enhancement challenge 17/11/22
+                if(this.ls.selectedLanguages.includes('ph')===true){
+                  return {
+                    sku: val.formSku,
+                    ex_coin_per_sku: val.ex_coin_per_sku,
+                    max_qty_per_order: val.max_qty_per_order
+                  }
+                }else{
+                  return val.formSku
+                }
+                //end
+            });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;
