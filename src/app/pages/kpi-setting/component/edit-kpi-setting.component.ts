@@ -29,6 +29,7 @@ import { MasterKPIService } from "../../../services/kpi-setting/master-kpi.servi
 import { KPISettingService } from "app/services/kpi-setting/kpi-setting.service";
 import { GeotreeService } from "app/services/geotree.service";
 import { LanguagesService } from "app/services/languages/languages.service";
+import { toInteger } from "lodash"
 
 @Component({
   selector: "app-edit-kpi-setting.component",
@@ -109,6 +110,7 @@ export class EditKPISettingComponent implements OnInit {
   scrollTradeProgram: boolean = true;
 
   init: boolean = true;
+  isEditable: boolean = false;
 
   // enableEdit: Boolean = true;
 
@@ -146,12 +148,29 @@ export class EditKPISettingComponent implements OnInit {
     this.setLimitArea(this.areaFromLogin);
   }
 
+  kpsToIntegerYear(date:number){
+    return toInteger(String(date).slice(0,4))
+  }
+
+  checkKPIDate(dateStart: number, dateEnd: number) {
+    const dateNow = new Date().getFullYear();
+    const dateStartYear = this.kpsToIntegerYear(dateStart)
+    const dateEndYear = this.kpsToIntegerYear(dateEnd)
+    if (dateStartYear !== dateNow || dateEndYear !== dateNow) {
+      return false;
+    }
+    return true;
+  }
+
   async ngOnInit() {
     this.subscription = this.route.params.subscribe((params) => {
       if (params["id"]) {
         this.paramEdit = params["id"];
       }
     });
+
+    let ongoing = true;
+    if (this.paramEdit) ongoing = false;
 
     this.masterKPIService.getBrands().subscribe((res) => {
       this.brands = res.map(({ code }) => ({ id: code, name: code }));
@@ -175,16 +194,18 @@ export class EditKPISettingComponent implements OnInit {
       commonFormValidator.parseFormChanged(this.formKPI, this.formdataErrors);
     });
 
-    this.kpiSettingService.getKPSV2({ongoing:true,edit:this.paramEdit}).subscribe((res) => {
-      this.KPSListStart = res.map((item: any) => ({
-        id: item.id,
-        name: this.getKPSLabel(item, "start_date"),
-      }));
-      this.KPSListEnd = res.map((item: any) => ({
-        id: item.id,
-        name: this.getKPSLabel(item, "end_date"),
-      }));
-    });
+    this.kpiSettingService
+      .getKPSV2({ ongoing, edit: this.paramEdit })
+      .subscribe((res) => {
+        this.KPSListStart = res.map((item: any) => ({
+          id: item.id,
+          name: this.getKPSLabel(item, "start_date"),
+        }));
+        this.KPSListEnd = res.map((item: any) => ({
+          id: item.id,
+          name: this.getKPSLabel(item, "end_date"),
+        }));
+      });
 
     this.masterKPIService.getEcosystemParams().subscribe((res) => {
       this.ecosystemParams = res.map(({ parameter }) => ({
@@ -310,6 +331,10 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI.controls["start_kps"].setValue(this.KPIGroup.start_kps);
     this.formKPI.controls["end_kps"].setValue(this.KPIGroup.end_kps);
     this.existingAreas = this.KPIGroup.areas;
+    this.isEditable = this.checkKPIDate(
+      this.KPIGroup.start_kps,
+      this.KPIGroup.end_kps
+    );
 
     let kpis = this.formKPI.controls["kpis"] as FormArray;
     for (let kpi_setting of this.KPIGroup.kpi_settings) {
@@ -369,7 +394,7 @@ export class EditKPISettingComponent implements OnInit {
   }
 
   deleteKPI(pos: number) {
-    if((this.formKPI.controls.kpis as FormArray).length !== 1){
+    if ((this.formKPI.controls.kpis as FormArray).length !== 1) {
       let dialogData = {
         titleDialog: "Hapus KPI",
         captionDialog: `Apa Anda yakin menghapus KPI ${pos + 1}?`,

@@ -36,8 +36,8 @@
         <div fxLayout="column" fxFlex="80%">
           <div fxLayout="row">
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [isResetable]="true" [options]="KPSListStart" placeholder="Start KPS" searchLabel="Cari Start KPS..."
-                [value]="formKPI.get('start_kps').value"
+              <select-search [isResetable]="true" [options]="KPSListStart" placeholder="Start KPS"
+                searchLabel="Cari Start KPS..." [value]="formKPI.get('start_kps').value"
                 (onChange)="formKPI.get('start_kps').setValue($event);handleChange($event)">
                 <!-- <mat-error>
               Start KPS harus diisi
@@ -45,8 +45,8 @@
               </select-search>
             </div>
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [isResetable]="true" [options]="KPSListEnd" placeholder="End KPS" searchLabel="Cari End KPS..."
-                [value]="formKPI.get('end_kps').value"
+              <select-search [isResetable]="true" [options]="KPSListEnd" placeholder="End KPS"
+                searchLabel="Cari End KPS..." [value]="formKPI.get('end_kps').value"
                 (onChange)="formKPI.get('end_kps').setValue($event);handleChange($event)">
                 <!-- <mat-error>
               End KPS harus diisi
@@ -54,13 +54,24 @@
               </select-search>
             </div>
             <div class="kpi-filter-item" fxLayout="column">
-              <select-search [isResetable]="true" [options]="categories" placeholder="Kategori KPS" searchLabel="Cari Kategori KPS..."
+              <!-- <select-search [isResetable]="true" [options]="categories" placeholder="Kategori KPS" searchLabel="Cari Kategori KPS..."
                 [value]="formKPI.get('kategori').value"
-                (onChange)="formKPI.get('kategori').setValue($event);handleChange($event)">
-                <!-- <mat-error>
+                (onChange)="formKPI.get('kategori').setValue($event);handleChange($event)"> -->
+              <!-- <mat-error>
               Kategori KPS harus diisi
             </mat-error> -->
-              </select-search>
+              <!-- </select-search> -->
+              <mat-form-field fxFlex="100%" class="is-light form-primary">
+                <mat-select multiple formControlName="kategori" placeholder="Category" searchLabel="Cari Kategori KPS..."
+                  (selectionChange)="handleChange($event)" >
+                  <!-- <mat-option>-- None --</mat-option> -->
+                  <!-- <mat-option [value]="active">active</mat-option> -->
+                  <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+                  <!-- *ngFor="let item of listStatus;" [value]="item.value" -->
+                </mat-select>
+                <mat-error>
+                </mat-error>
+              </mat-form-field>
             </div>
             <div class="kpi-filter-item" fxLayout="column">
               <mat-form-field fxFlex="100%" class="is-light form-primary">
@@ -186,7 +197,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button *ngIf="row.is_editable" mat-icon-button color="" (click)="edit(row)"
+              <button mat-icon-button color="" (click)="edit(row)"
                 [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>

@@ -8,6 +8,7 @@
     (onScrolledBottom)="handleScroll($event)"
     disableOptionCentering
     selectSearch
+    [disabled]="!isEditable"
   >
     <ngx-mat-select-search
       [formControl]="search"

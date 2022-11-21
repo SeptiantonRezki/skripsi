@@ -18,7 +18,7 @@ import {
   Subject,
   // Observable,
   //  ReplaySubject
-  } from "rxjs";
+} from "rxjs";
 // import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 // import { takeUntil } from "rxjs/operators";
 import { Page } from "../../../classes/laravel-pagination";
@@ -127,6 +127,7 @@ export class KPIGroupsList implements OnInit {
     }
     return true;
   }
+
   isArrayDiffer(arr1: any, arr2: any) {
     let differ = [];
     if (arr1.length > arr2.length) {
@@ -222,7 +223,7 @@ export class KPIGroupsList implements OnInit {
   handleReset() {
     // reset form
     this.formKPI.get("search").setValue(null);
-    this.formKPI.get("kategori").setValue(null);
+    this.formKPI.get("kategori").setValue([]);
     this.formKPI.get("start_kps").setValue(null);
     this.formKPI.get("end_kps").setValue(null);
     this.formKPI.get("status").setValue(null);
@@ -311,7 +312,7 @@ export class KPIGroupsList implements OnInit {
       start_kps: [null],
       end_kps: [null],
       status: [""],
-      kategori: [null],
+      kategori: [[]],
       search: [null],
       // kpis: this.formBuilder.array([]),
     });
@@ -353,8 +354,7 @@ export class KPIGroupsList implements OnInit {
       ...this.pagination,
       area: newAreaIDs[0] == 1 ? "" : JSON.stringify([...newAreaIDs]),
       search_field: this.formKPI.get("search").value,
-      category: this.formKPI.get("kategori").value,
-      // status: this.formKPI.get("status").value ? "active" : "inactive",
+      category: JSON.stringify(this.formKPI.get("kategori").value),
       status: this.formKPI.get("status").value,
       end_kps: this.formKPI.get("end_kps").value,
       start_kps: this.formKPI.get("start_kps").value,
@@ -498,5 +498,3 @@ export class KPIGroupsList implements OnInit {
     });
   }
 }
-
-
