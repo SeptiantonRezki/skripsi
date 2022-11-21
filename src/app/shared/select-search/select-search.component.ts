@@ -20,7 +20,7 @@ export class SelectSearchComponent implements OnInit {
   @Input() scrollApi: boolean = false;
   @Input() searchApi: boolean = false;
   @Input() isResetable: boolean = false;
-  @Input() isEditable: boolean = false;
+  @Input() isEditable: boolean = true;
 
   @Input()
   set options(value: any[]) {

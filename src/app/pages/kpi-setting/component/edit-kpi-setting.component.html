@@ -17,18 +17,18 @@
           </div>
           <div class="ayo-middle pt-24" fxLayout="column">
             <div class="mb-36" fxLayout="column" style="width:100%;max-width:400px;">
-              <select-search placeholder="Start KPS" searchLabel="Cari Start KPS..." [isEditable]="isEditable" [options]="KPSListStart" [value]="formKPI.get('start_kps').value" (onChange)="formKPI.get('start_kps').setValue($event)">
+              <select-search placeholder="Start KPS" searchLabel="Cari Start KPS..." [isEditable]="(paramEdit && isEditable) || !paramEdit" [options]="KPSListStart" [value]="formKPI.get('start_kps').value" (onChange)="formKPI.get('start_kps').setValue($event)">
                 <mat-error *ngIf="formKPI.controls['start_kps'].hasError('required') && formKPI.controls['start_kps'].touched">
                   Start KPS harus diisi
                 </mat-error>
               </select-search>
-              <select-search placeholder="End KPS" searchLabel="Cari End KPS..." [isEditable]="isEditable" [options]="KPSListEnd" [value]="formKPI.get('end_kps').value" (onChange)="formKPI.get('end_kps').setValue($event)">
+              <select-search placeholder="End KPS" searchLabel="Cari End KPS..." [isEditable]="(paramEdit && isEditable) || !paramEdit" [options]="KPSListEnd" [value]="formKPI.get('end_kps').value" (onChange)="formKPI.get('end_kps').setValue($event)">
                 <mat-error *ngIf="formKPI.controls['end_kps'].hasError('required') && formKPI.controls['end_kps'].touched">
                   End KPS harus diisi
                 </mat-error>
               </select-search>
               <div fxLayout="row">
-                <mat-slide-toggle [disabled]="!isEditable" formControlName="status">
+                <mat-slide-toggle [disabled]="(paramEdit && !isEditable)" formControlName="status">
                   Status
                 </mat-slide-toggle>
               </div>
@@ -57,7 +57,7 @@
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
                     style="justify-content: center !important">
                     <div class="button-row" style="margin-left: -10px">
-                      <button *ngIf="isEditable" mat-icon-button color="" (click)="deleteArea(row.id)">
+                      <button *ngIf="(paramEdit && isEditable) || !paramEdit" mat-icon-button color="" (click)="deleteArea(row.id)">
                         <mat-icon class="secondary-text">delete</mat-icon>
                       </button>
                     </div>
@@ -67,7 +67,7 @@
             </div>
             <h3 *ngIf="existingAreas && existingAreas.length > 0">Add Areas:</h3>
             <div class="pb-16">
-              <salestree [disabled]="!isEditable" [limit]="areaFromLogin" (areas)="getAreas($event)" (areaWithKey)="getAreaIds($event)"></salestree>
+              <salestree [disabled]="paramEdit && !isEditable" [limit]="areaFromLogin" (areas)="getAreas($event)" (areaWithKey)="getAreaIds($event)"></salestree>
             </div>
             <div class="" formArrayName="kpis" *ngFor="let kpi of formKPI.get('kpis')['controls']; let i = index;">
               <div class="table-wrapper" [formGroupName]="i">
@@ -77,23 +77,23 @@
                   </div>
                   <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                     fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                    <button *ngIf="i !== 0"
+                    <button *ngIf="i !== 0 &&((paramEdit&& isEditable) || !paramEdit)"
                       mat-raised-button color="primary" type="button"
                       (click)="moveUp(i)">
                       <mat-icon>arrow_upward</mat-icon>
                     </button>
-                    <button *ngIf="i !== (formKPI.get('kpis').value.length - 1)"
+                    <button *ngIf="i !== (formKPI.get('kpis').value.length - 1) &&((paramEdit&& isEditable) || !paramEdit)"
                       mat-raised-button color="primary" type="button"
                       (click)="moveDown(i)">
                       <mat-icon>arrow_downward</mat-icon>
                     </button>
                     <button
-                      *ngIf="(formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1)) && isEditable"
+                      *ngIf="(formKPI.get('kpis').value.length === 1 || i === (formKPI.get('kpis').value.length - 1)) &&((paramEdit&& isEditable) || !paramEdit)"
                       mat-raised-button type="button" (click)="addKPI()">
                       <mat-icon>add</mat-icon>
                     </button>
                     <button
-                    *ngIf="(0 !== (formKPI.get('kpis').value.length - 1)) && isEditable"
+                    *ngIf="(0 !== (formKPI.get('kpis').value.length - 1)) && ((paramEdit && isEditable) || !paramEdit)"
                     mat-raised-button color="primary" type="button"
                       (click)="deleteKPI(i)">
                       <mat-icon>delete</mat-icon>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="p-24" fxLayout="column" style="width:100%;max-width:400px;">
                   <!-- select category -->
-                  <select-search placeholder="Kategori KPI" searchLabel="Cari Kategori KPI..." [options]="categories" [value]="kpi.get('category').value" (onChange)="resetKPIDetail(i, $event)">
+                  <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" placeholder="Kategori KPI" searchLabel="Cari Kategori KPI..." [options]="categories" [value]="kpi.get('category').value" (onChange)="resetKPIDetail(i, $event)">
                     <mat-error *ngIf="kpi.controls['category'].hasError('required') && kpi.controls['category'].touched">
                       Kategori KPI harus dipilih
                     </mat-error>
@@ -110,12 +110,12 @@
 
                   <!-- if category = brand -->
                   <ng-container *ngIf="kpi.get('category').value == 'brand'">
-                    <select-search placeholder="Brand" searchLabel="Cari Brand..." [options]="brands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
+                    <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" placeholder="Brand" searchLabel="Cari Brand..." [options]="brands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
                       <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
                         Brand harus dipilih
                       </mat-error>
                     </select-search>
-                    <select-search placeholder="Parameter" searchLabel="Cari Parameter..." [options]="brand_parameters" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)">
+                    <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" placeholder="Parameter" searchLabel="Cari Parameter..." [options]="brand_parameters" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)">
                       <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
                         Parameter harus dipilih
                       </mat-error>
@@ -124,7 +124,7 @@
 
                   <!-- if category = trade program -->
                   <ng-container *ngIf="kpi.get('category').value == 'trade program'">
-                    <select-search placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="tradeProgramList" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)" [scrollApi]="scrollTradeProgram" (onScrollApi)="getScrollTradeProgram($event, i, 'scroll')">
+                    <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" placeholder="Nama Trade Program" searchLabel="Cari Trade Program..." [options]="tradeProgramList" [value]="kpi.get('parameter').value" (onChange)="kpi.get('parameter').setValue($event)" [scrollApi]="scrollTradeProgram" (onScrollApi)="getScrollTradeProgram($event, i, 'scroll')">
                       <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched && tradeProgramList.length">
                         Trade Program harus dipilih
                       </mat-error>
@@ -136,12 +136,12 @@
 
                   <!-- if category = ecosystem -->
                   <ng-container *ngIf="kpi.get('category').value == 'ecosystem'">
-                    <select-search placeholder="Parameter" searchLabel="Cari Parameter..." [options]="ecosystemParams" [value]="kpi.get('parameter').value" (onChange)="ecosystemParamsChange(i, $event)">
+                    <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" placeholder="Parameter" searchLabel="Cari Parameter..." [options]="ecosystemParams" [value]="kpi.get('parameter').value" (onChange)="ecosystemParamsChange(i, $event)">
                       <mat-error *ngIf="kpi.controls['parameter'].hasError('required') && kpi.controls['parameter'].touched">
                         Parameter harus dipilih
                       </mat-error>
                     </select-search>
-                    <select-search *ngIf="kpi.get('parameter').value === 'Private Label'" placeholder="Brand" searchLabel="Cari Brand..." [options]="ecosystemBrands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
+                    <select-search [isEditable]="(paramEdit && isEditable) || !paramEdit" *ngIf="kpi.get('parameter').value === 'Private Label'" placeholder="Brand" searchLabel="Cari Brand..." [options]="ecosystemBrands" [value]="kpi.get('brand').value" (onChange)="kpi.get('brand').setValue($event)">
                       <mat-error *ngIf="kpi.controls['brand'].hasError('required') && kpi.controls['brand'].touched">
                         Brand harus dipilih
                       </mat-error>
@@ -152,7 +152,7 @@
               </div>
             </div>
             <div class="confirm btn-confirm pt-36 pb-24" fxLayout="row" fxLayoutGap="25px">
-              <button [disabled]="!isEditable" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+              <button [disabled]="paramEdit &&!isEditable" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
                 {{ls.locale.global.button.save}}
               </button>
             </div>
