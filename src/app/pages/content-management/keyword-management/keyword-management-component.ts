@@ -326,7 +326,7 @@ export class KeywordManagementComponent implements OnInit {
         category: this.formKeyword.get('category').value,
       };
       const response = await this.keywordService.exportKeyword(body).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Keyword_Management_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Keyword_Management_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     } catch (error) {
       console.log(error);

@@ -30,9 +30,6 @@
       </div>
     </div>
     <br>
-    <div class="">
-      <div style="font-size: 14px; color: #5a5959">Total Data Valid : {{pagination['is_valid'] ? pagination.is_valid : '-'}}</div><br/>
-    </div>
     
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
       <div fxFlex>
@@ -42,7 +39,10 @@
     </div>
 
     <div class="responsive" *ngIf="!requestingPreview">
-      <ngx-datatable [rowClass]="getRowClass" class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="onPageChange($event)">
+      <ngx-datatable *ngIf="!requestingPreview" #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+      [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
+      [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
         <ngx-datatable-column [name]="'global.label.name' | translate" prop="name"> 
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.name}}</span>
@@ -98,6 +98,32 @@
             {{ row.customer ? row.customer : '-' }}
           </ng-template>
         </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="rowCount"
+            let-pageSize="pageSize"
+            let-selectedCount="selectedCount"
+            let-curPage="curPage"
+            let-offset="offset"
+          >
+            <div class="search-field" fxLayout="row" fxLayoutAlign="flex-start center">
+              <label style="margin-right: 14px">Total Valid {{ validData.length }} / {{ totalData }}</label>
+            </div>
+            <datatable-pager
+                [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'"
+                [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'"
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="table.onFooterPage($event)">
+            </datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
       </ngx-datatable>
     </div>
   </div>
