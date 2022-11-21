@@ -73,10 +73,10 @@
             </form>
             <div class='import-export-bar p-16 ml-16 mr-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center" >
               <div *ngIf="permission['ubah']" class="button-row">
-                <button mat-flat-button style="min-width: 160px" color="white" (click)="importKeyword()"><mat-icon>vertical_align_bottom</mat-icon>Import XLS</button>
+                <button mat-flat-button style="min-width: 160px" color="white" (click)="importKeyword()"><mat-icon>vertical_align_bottom</mat-icon>Import XLSX</button>
               </div>
               <div class="button-row">
-                <button mat-flat-button style="min-width: 160px" color="white" (click)="exportKeyword()"><mat-icon>vertical_align_top</mat-icon>Export XLS</button>
+                <button mat-flat-button style="min-width: 160px" color="white" (click)="exportKeyword()"><mat-icon>vertical_align_top</mat-icon>Export XLSX</button>
               </div>
             </div>
             <div>
@@ -92,7 +92,7 @@
                       <span class="row-address">{{row.name}}</span>
                     </ng-template>
                   </ngx-datatable-column>
-                  <ngx-datatable-column [name]="ls.locale.global.label.category" prop="category_name" [sortable]="true">
+                  <ngx-datatable-column name="{{ ls.locale.global.label.category_level_2 }}" prop="category_name" [sortable]="true">
                     <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                       <span class="row-address">{{row.category_name}}</span>
                     </ng-template>

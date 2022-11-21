@@ -24,8 +24,8 @@
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
-        <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
-           
+        <span style="text-align: center" matPrefix>
+          {{ls.locale.global.messages.file_browse_label}} <br/> {{ls.locale.global.messages.file_browse_label_with_category_level_2}}
         </span>
       </div>
     </div>
@@ -48,7 +48,7 @@
             <span class="row-address">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [name]="'global.label.category' | translate" prop="category">
+        <ngx-datatable-column name="{{ 'global.label.category_level_2' | translate }}" prop="category">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-address">{{row.category}}</span>
           </ng-template>
