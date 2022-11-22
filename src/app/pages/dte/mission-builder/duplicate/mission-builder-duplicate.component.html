@@ -149,8 +149,8 @@
           </ng-template>
 
           <ng-template #nodeTemplate let-node>
-            <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="100">
-              <svg:foreignObject width="150" height="100">
+            <svg:g class="node" xmlns="http://www.w3.org/2000/xhtml" width="150" height="120">
+              <svg:foreignObject width="150" height="120" style="overflow: visible;">
                 <xhtml:div class="cardContainer" xmlns="http://www.w3.org/1999/xhtml" [ngStyle]="getStyles(node)" (click)="cardClick(node)" (dblclick)="cardDoubleClick(node)">
                   <button class="closeNode" (click)="delNode(node, $event);" *ngIf="task.is_editable === 1"><mat-icon style="font-size: 16px;">delete</mat-icon></button>
                   <label class="activeNode" *ngIf="currentNode === node.data.component_id"><mat-icon style="font-size: 16px;">check</mat-icon></label>
