@@ -340,8 +340,8 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI.controls["end_kps"].setValue(this.KPIGroup.end_kps.id);
     this.existingAreas = this.KPIGroup.areas;
     this.isEditable = this.checkKPIDate(
-      this.KPIGroup.start_kps,
-      this.KPIGroup.end_kps
+      this.KPIGroup.start_kps.id,
+      this.KPIGroup.end_kps.id
     );
 
     // >>> handle undefined date on kps
