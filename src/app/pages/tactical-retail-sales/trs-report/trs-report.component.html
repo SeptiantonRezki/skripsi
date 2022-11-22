@@ -6,18 +6,19 @@
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Total Pack Per Brand">
+          <h2 class="pl-16">Single Journey</h2>
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportTotalPerBrand()" mat-raised-button type="button" class="">
+            <button (click)="exportTotal()" mat-raised-button type="button" class="">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
-          <ngx-datatable class="material" [rows]="totalPerBrandTableData.rows"
-            [loadingIndicator]="totalPerBrandTableData.loadingIndicator" [columnMode]="'force'"
-            [offset]="totalPerBrandTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
-            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="totalPerBrandTableData.reorderable"
-            [count]="totalPerBrandTableData.pagination.total" [limit]="totalPerBrandTableData.pagination.per_page"
-            [externalPaging]="true" [externalSorting]="true" (page)="setTotalPerBrandPage($event)"
-            (sort)="onTotalPerBrandSort($event)">
+          <ngx-datatable class="material" [rows]="totalSingleTableData.rows"
+            [loadingIndicator]="totalSingleTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="totalSingleTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="totalSingleTableData.reorderable"
+            [count]="totalSingleTableData.pagination.total" [limit]="totalSingleTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setTotalSinglePage($event)"
+            (sort)="onTotalSingleSort($event)">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -29,9 +30,48 @@
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Qty" [width]="200">
+            <ngx-datatable-column name="Quantity" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.totalqty}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.totalprice}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+          <hr />
+
+          <h2 class="pl-16">Multiple Journey</h2>
+          <ngx-datatable class="material" [rows]="totalMultipleTableData.rows"
+            [loadingIndicator]="totalMultipleTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="totalMultipleTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="totalMultipleTableData.reorderable"
+            [count]="totalMultipleTableData.pagination.total" [limit]="totalMultipleTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setTotalMultiplePage($event)"
+            (sort)="onTotalMultipleSort($event)">
+
+            <ngx-datatable-column name="Program Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Brand" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.brand}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Quantity" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.totalqty}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.totalprice}}</span>
               </ng-template>
             </ngx-datatable-column>
 
@@ -41,8 +81,7 @@
         <mat-tab label="Visit">
           <h2 class="pl-16">Summary Visit</h2>
           <form [formGroup]="summaryVisitFilter" autoComplete="off">
-            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8"
-              fxLayoutAlign="center center">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
 
               <mat-form-field class="is-light">
                 <mat-select formControlName="group">
@@ -105,7 +144,7 @@
                 <span>{{row.created_at}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Customer Name" [width]="200">
+            <ngx-datatable-column name="Full Name" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span (click)="summaryVisitNameClick(row)">{{row.name}}</span>
               </ng-template>

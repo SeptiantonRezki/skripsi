@@ -94,8 +94,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url);
   }
 
-  totalPerBrand(queryParams?): Observable<any> {
+  totalPerBrand(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "total_per_brand");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
     return this.getApi(url, queryParams);
   }
 

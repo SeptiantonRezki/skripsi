@@ -32,7 +32,14 @@ export class TrsReportComponent implements OnInit {
 
   selectedTab = 0;
 
-  totalPerBrandTableData: DataTableData = {
+  totalSingleTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
+  totalMultipleTableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
     reorderable: true,
@@ -76,7 +83,8 @@ export class TrsReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.refreshTotalPerBrand();
+    this.refreshTotalSingle();
+    this.refreshTotalMultiple();
     
     this.summaryVisitFilter = this.formBuilder.group({
       group: new FormControl("Daily"),
@@ -93,7 +101,10 @@ export class TrsReportComponent implements OnInit {
   onChangeTab(event){
     console.log("onChangeTab", event)
     switch(event.index){
-      case 0: this.refreshTotalPerBrand(); break;
+      case 0: 
+        this.refreshTotalSingle();
+        this.refreshTotalMultiple();
+        break;
       case 1: 
         this.refreshSummaryVisit();
         this.visitSelected = null;
@@ -101,12 +112,12 @@ export class TrsReportComponent implements OnInit {
       case 2: this.refreshStockMovement(); break;
     }
   }
-
-  async exportTotalPerBrand() {
+  
+  async exportTotal() {
     this.dataService.showLoading(true);
-    const filename = `Export_TRS_TotalPerBrand_${new Date().toLocaleString()}.xlsx`;
+    const filename = `Export_TRS_TotalSingle_${new Date().toLocaleString()}.xlsx`;
     try {
-      const response = await this.TRSService.exportTotalPerBrand(this.totalPerBrandTableData.pagination).toPromise();
+      const response = await this.TRSService.exportTotalPerBrand(this.totalSingleTableData.pagination).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 
@@ -116,47 +127,94 @@ export class TrsReportComponent implements OnInit {
     }
   }
 
-  refreshTotalPerBrand(){
-    this.TRSService.totalPerBrand(this.totalPerBrandTableData.pagination).subscribe(
+  refreshTotalSingle(){
+    this.TRSService.totalPerBrand(this.totalSingleTableData.pagination, {
+      is_single: true
+    }).subscribe(
       async res => {
-        console.log('aleapi refreshTotalPerBrand res', res);
-        Page.renderPagination(this.totalPerBrandTableData.pagination, res.data);
-        this.totalPerBrandTableData.rows = res.data.data;
+        console.log('aleapi refreshTotalSingle res', res);
+        Page.renderPagination(this.totalSingleTableData.pagination, res.data);
+        this.totalSingleTableData.rows = res.data.data;
       },
       err => {},
       () => {
-        this.totalPerBrandTableData.loadingIndicator = false;
+        this.totalSingleTableData.loadingIndicator = false;
       }
     );
   }
 
-  setTotalPerBrandPage(pageInfo) {
-    this.totalPerBrandTableData.loadingIndicator = true;
+  setTotalSinglePage(pageInfo) {
+    this.totalSingleTableData.loadingIndicator = true;
 
-    this.totalPerBrandTableData.offsetPagination = pageInfo.offset;
+    this.totalSingleTableData.offsetPagination = pageInfo.offset;
 
-    if (this.totalPerBrandTableData.pagination['search']) {
-      this.totalPerBrandTableData.pagination.page = pageInfo.offset + 1;
+    if (this.totalSingleTableData.pagination['search']) {
+      this.totalSingleTableData.pagination.page = pageInfo.offset + 1;
     } else {
       this.dataService.setToStorage("page", pageInfo.offset + 1);
-      this.totalPerBrandTableData.pagination.page = this.dataService.getFromStorage("page");
+      this.totalSingleTableData.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.refreshTotalPerBrand();
+    this.refreshTotalSingle();
   }
 
-  onTotalPerBrandSort(event) {
-    this.totalPerBrandTableData.loadingIndicator = true;
+  onTotalSingleSort(event) {
+    this.totalSingleTableData.loadingIndicator = true;
 
-    this.totalPerBrandTableData.pagination.sort = event.column.prop;
-    this.totalPerBrandTableData.pagination.sort_type = event.newValue;
-    this.totalPerBrandTableData.pagination.page = 1;
+    this.totalSingleTableData.pagination.sort = event.column.prop;
+    this.totalSingleTableData.pagination.sort_type = event.newValue;
+    this.totalSingleTableData.pagination.page = 1;
 
-    this.dataService.setToStorage("page", this.totalPerBrandTableData.pagination.page);
+    this.dataService.setToStorage("page", this.totalSingleTableData.pagination.page);
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.refreshTotalPerBrand();
+    this.refreshTotalSingle();
+  }
+
+  refreshTotalMultiple(){
+    this.TRSService.totalPerBrand(this.totalMultipleTableData.pagination, {
+      is_single: false
+    }).subscribe(
+      async res => {
+        console.log('aleapi refreshTotalMultiple res', res);
+        Page.renderPagination(this.totalMultipleTableData.pagination, res.data);
+        this.totalMultipleTableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.totalMultipleTableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setTotalMultiplePage(pageInfo) {
+    this.totalMultipleTableData.loadingIndicator = true;
+
+    this.totalMultipleTableData.offsetPagination = pageInfo.offset;
+
+    if (this.totalMultipleTableData.pagination['search']) {
+      this.totalMultipleTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.totalMultipleTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshTotalMultiple();
+  }
+
+  onTotalMultipleSort(event) {
+    this.totalMultipleTableData.loadingIndicator = true;
+
+    this.totalMultipleTableData.pagination.sort = event.column.prop;
+    this.totalMultipleTableData.pagination.sort_type = event.newValue;
+    this.totalMultipleTableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.totalMultipleTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshTotalMultiple();
   }
 
   async exportVisit() {
