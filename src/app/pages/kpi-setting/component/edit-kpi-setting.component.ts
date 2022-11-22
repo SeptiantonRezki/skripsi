@@ -152,14 +152,10 @@ export class EditKPISettingComponent implements OnInit {
     return toInteger(String(date).slice(0, 4));
   }
 
-  checkKPIDate(dateStart: number, dateEnd: number) {
-    const dateNow = new Date().getFullYear();
-    const dateStartYear = this.kpsToIntegerYear(dateStart);
-    const dateEndYear = this.kpsToIntegerYear(dateEnd);
-    if (dateStartYear !== dateNow || dateEndYear !== dateNow) {
-      return false;
-    }
-    return true;
+  checkKPIDate( dateEnd: string) {
+    const dateNow = new Date()
+    const endDate = new Date(dateEnd)
+    return endDate >= dateNow
   }
 
   async ngOnInit() {
@@ -340,8 +336,8 @@ export class EditKPISettingComponent implements OnInit {
     this.formKPI.controls["end_kps"].setValue(this.KPIGroup.end_kps.id);
     this.existingAreas = this.KPIGroup.areas;
     this.isEditable = this.checkKPIDate(
-      this.KPIGroup.start_kps.id,
-      this.KPIGroup.end_kps.id
+      // this.KPIGroup.start_kps.id,
+      this.KPIGroup.end_kps.end_date
     );
 
     // >>> handle undefined date on kps
