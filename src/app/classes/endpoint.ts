@@ -226,6 +226,7 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/product/${context.product_id}`,
         list_brand: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/brand?page=all`,
         list_category: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/category?parent_id=${context.parent_id}`,
+        list_all_category: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/category/list/all`,
         list_category_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/categories`,
         list_packaging: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/packaging?page=all`,
         // parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,

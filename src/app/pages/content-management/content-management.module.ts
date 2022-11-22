@@ -50,6 +50,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { PageGuard } from "app/classes/auth.guard";
 import { ImportKeyword } from "./keyword-management/import/personalize/import-keyword.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 
 export const MY_FORMATS = {
   parse: {
@@ -136,6 +137,7 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    RupiahFormaterWithoutRpPipe,
   ]
 })
 export class ContentManagementModule { }

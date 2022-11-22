@@ -128,7 +128,7 @@ export class ImportKeyword implements OnInit {
       res => {
         if (res && res.data) {
           this.importID = res.data;
-          this.dataService.showLoading(false);
+          // this.dataService.showLoading(false);
           this.pagination['per_page'] = 1000;
           this.keywordService.showImport(this.pagination).subscribe(response => {
             // console.log('satu', this.pagination);
