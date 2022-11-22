@@ -192,6 +192,7 @@ export class PagesName {
       "/dte/sub-group-trade-program/edit/": "principal.dtesubgrouptradeprogram.ubah",
       "/dte/sub-group-trade-program/detail/": "principal.dtesubgrouptradeprogram.lihat",
       "/dte/coin-redemption-approval": "principal.dtecoinredemptionapproval.lihat",
+      "/dte/flush-coin": "principal.dtetaskflushcoinlottery.lihat",
       "/dte/employee-mapping": "principal.dteemployeemapping.lihat",
       "/dte/employee-mapping/create": "principal.dteemployeemapping.buat",
       "/dte/employee-mapping/edit/": "principal.dteemployeemapping.ubah",
