@@ -34,6 +34,10 @@ export class KPISettingService extends BaseService {
     const url = this.getUrl(this.namespace, 'get_by_id', context);
     return this.getApi(url);
   }
+  getByIdV2(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_by_id_v2', context);
+    return this.getApi(url);
+  }
 
   create(body): Observable<any> {
     const url = this.getUrl(this.namespace, 'post');

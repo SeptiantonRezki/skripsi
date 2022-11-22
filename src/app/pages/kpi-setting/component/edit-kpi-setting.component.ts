@@ -29,7 +29,7 @@ import { MasterKPIService } from "../../../services/kpi-setting/master-kpi.servi
 import { KPISettingService } from "app/services/kpi-setting/kpi-setting.service";
 import { GeotreeService } from "app/services/geotree.service";
 import { LanguagesService } from "app/services/languages/languages.service";
-import { toInteger } from "lodash"
+import { toInteger } from "lodash";
 
 @Component({
   selector: "app-edit-kpi-setting.component",
@@ -148,14 +148,14 @@ export class EditKPISettingComponent implements OnInit {
     this.setLimitArea(this.areaFromLogin);
   }
 
-  kpsToIntegerYear(date:number){
-    return toInteger(String(date).slice(0,4))
+  kpsToIntegerYear(date: number) {
+    return toInteger(String(date).slice(0, 4));
   }
 
   checkKPIDate(dateStart: number, dateEnd: number) {
     const dateNow = new Date().getFullYear();
-    const dateStartYear = this.kpsToIntegerYear(dateStart)
-    const dateEndYear = this.kpsToIntegerYear(dateEnd)
+    const dateStartYear = this.kpsToIntegerYear(dateStart);
+    const dateEndYear = this.kpsToIntegerYear(dateEnd);
     if (dateStartYear !== dateNow || dateEndYear !== dateNow) {
       return false;
     }
@@ -223,7 +223,7 @@ export class EditKPISettingComponent implements OnInit {
 
     if (this.paramEdit) {
       this.KPIGroup = await this.kpiSettingService
-        .getById(this.paramEdit)
+        .getByIdV2(this.paramEdit)
         .toPromise();
       this.setDetail();
     }
@@ -327,14 +327,50 @@ export class EditKPISettingComponent implements OnInit {
     }
   }
 
+  handleKPSDetailUnavailable(kps, kpsPosition) {
+    const kpsNumber = toInteger(String(kps.id).slice(-2));
+    return {
+      id: kps.id,
+      name: this.getKPSLabel({ ...kps, kps_number: kpsNumber }, kpsPosition),
+    };
+  }
+
   setDetail() {
-    this.formKPI.controls["start_kps"].setValue(this.KPIGroup.start_kps);
-    this.formKPI.controls["end_kps"].setValue(this.KPIGroup.end_kps);
+    this.formKPI.controls["start_kps"].setValue(this.KPIGroup.start_kps.id);
+    this.formKPI.controls["end_kps"].setValue(this.KPIGroup.end_kps.id);
     this.existingAreas = this.KPIGroup.areas;
     this.isEditable = this.checkKPIDate(
       this.KPIGroup.start_kps,
       this.KPIGroup.end_kps
     );
+
+    // >>> handle undefined date on kps
+    const startFind = this.KPSListStart.findIndex((kps) => {
+      return kps.id === this.formKPI.controls["start_kps"].value;
+    });
+    const endFind = this.KPSListStart.findIndex((kps) => {
+      return kps.id === this.formKPI.controls["end_kps"].value;
+    });
+    // console.log(startFind, endFind, this.KPIGroup.start_kps);
+    if (startFind === -1) {
+      this.KPSListStart = [
+        this.handleKPSDetailUnavailable(this.KPIGroup.start_kps, "start_date"),
+        ...this.KPSListStart,
+      ];
+    }
+    if (endFind === -1) {
+      {
+        this.KPSListEnd = [
+          this.handleKPSDetailUnavailable(this.KPIGroup.end_kps, "end_date"),
+          ...this.KPSListEnd,
+        ];
+      }
+    }
+    // >>> end
+    // console.log(this.KPSListStart, this.KPSListEnd);
+    // console.log(
+    //   this.handleKPSDetailUnavailable(this.KPIGroup.end_kps, "end_date")
+    // );
 
     let kpis = this.formKPI.controls["kpis"] as FormArray;
     for (let kpi_setting of this.KPIGroup.kpi_settings) {
