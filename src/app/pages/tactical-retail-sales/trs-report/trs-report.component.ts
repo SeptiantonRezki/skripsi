@@ -163,10 +163,11 @@ export class TrsReportComponent implements OnInit {
     this.dataService.showLoading(true);
     const filename = `Export_TRS_Visit_${new Date().toLocaleString()}.xlsx`;
     try {
-      const response = await this.TRSService.exportVisit({
+      const param = this.visitSelected ? {
         field_force: this.visitSelected.field_force,
         program_code: this.visitSelected.program_code,
-      }).toPromise();
+      } : null;
+      const response = await this.TRSService.exportVisit(param).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 
