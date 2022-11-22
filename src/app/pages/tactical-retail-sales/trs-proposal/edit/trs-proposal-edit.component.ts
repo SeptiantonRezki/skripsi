@@ -70,7 +70,8 @@ export class TrsProposalEditComponent implements OnInit {
     import_audience_status_type: null
   }
 
-  minDateProposal: any = new Date();
+  todayDate: any = new Date();
+  minDateProposal: any;
   minMaxDateProposal: any = new Date();
   maxDateProposal: any = new Date();
   maxPeriodProposal: any = 60;
@@ -117,9 +118,8 @@ export class TrsProposalEditComponent implements OnInit {
       salespoint: [],
     }
 
-    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
     this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
-    this.maxDateProposal.setDate(this.minDateProposal.getDate()+1 + this.maxPeriodProposal);
+    this.maxDateProposal.setDate(this.todayDate.getDate()+1 + this.maxPeriodProposal);
   }
 
   ngOnInit() {
@@ -172,6 +172,13 @@ export class TrsProposalEditComponent implements OnInit {
           message: "Program tidak dapat diedit"
         });
         this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+      }
+
+      if (this.proposalData.status == 'ongoing'){
+        //this.minDateProposal.setDate(this.minDateProposal.getDate());
+      } else {
+        this.minDateProposal = new Date();
+        this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
       }
 
       this.formCreateProposal.patchValue({
