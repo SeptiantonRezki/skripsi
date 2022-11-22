@@ -308,6 +308,7 @@ export class Endpoint {
       },
       audience: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience`,
+        get_last_update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/general/get-last-sync-date-of-business-code`,
         detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/${context.audience_id}`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/${context.audience_id}`,

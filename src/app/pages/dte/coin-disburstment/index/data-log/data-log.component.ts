@@ -157,7 +157,13 @@ export class DataLogComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     const payload = { type: "data_log" };
-    if (row) payload["data_log_id"] = row.id;
+    if (row) {
+      if (row.id_cron) {
+        payload["cd_approval_id"] = row.id_cron;
+      } else {
+        payload["group_cron_id"] = row.group_cron_code;
+      }
+    }
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -171,15 +177,19 @@ export class DataLogComponent implements OnInit {
 
   async download(row) {
     const formData = new FormData();
-    formData.append("cd_approval_id", row.id);
+    if (row.id_cron) {
+      formData.append("cd_approval_id", row.id_cron);
+    } else {
+      formData.append("group_cron_id", row.group_cron_code);
+    }
 
     if (row.status_user === "pic") formData.append("access_type", row.status_user);
-    
+
     try {
       this.dataService.showLoading(true);
-      
+
       const response = await this.coinDisburstmentService.dataLogExport(formData).toPromise();
-      
+
       const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url= window.URL.createObjectURL(newBlob);
       const link = document.createElement('a');
@@ -189,7 +199,7 @@ export class DataLogComponent implements OnInit {
       const getTime = moment(timestamp).format("HHmmss");
       const encrypTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
       link.download = `Export_DataLog-${encrypTime}.xlsx`;
-      
+
       // this is necessary as link.click() does not work on the latest firefox
       link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 
@@ -198,7 +208,7 @@ export class DataLogComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         link.remove();
       }, 100);
-      
+
       this.dataService.showLoading(false);
     } catch (error) {
       console.log("err", error);
