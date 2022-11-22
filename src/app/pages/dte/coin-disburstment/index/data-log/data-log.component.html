@@ -18,7 +18,8 @@
   [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
   (page)="setPage($event)" (sort)="onSort($event)">
 
-  <ngx-datatable-column [width]="100" name="ID Cron" prop="id"></ngx-datatable-column>
+  <ngx-datatable-column [width]="100" name="ID" prop="id"></ngx-datatable-column>
+  <ngx-datatable-column [width]="100" name="ID Cron" prop="id_cron"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="Group Cron Code" prop="group_cron_code"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="Tanggal Cron" prop="date"></ngx-datatable-column>
   <ngx-datatable-column [width]="200" name="WBS" prop="sub_group_trade_program_wbs"></ngx-datatable-column>

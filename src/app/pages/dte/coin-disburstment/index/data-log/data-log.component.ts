@@ -157,7 +157,13 @@ export class DataLogComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     const payload = { type: "data_log" };
-    if (row) payload["data_log_id"] = row.id;
+    if (row) {
+      if (row.id_cron) {
+        payload["cd_approval_id"] = row.id_cron;
+      } else {
+        payload["group_cron_id"] = row.group_cron_code;
+      }
+    }
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -171,8 +177,8 @@ export class DataLogComponent implements OnInit {
 
   async download(row) {
     const formData = new FormData();
-    if (row.id) {
-      formData.append("cd_approval_id", row.id);
+    if (row.id_cron) {
+      formData.append("cd_approval_id", row.id_cron);
     } else {
       formData.append("group_cron_id", row.group_cron_code);
     }
