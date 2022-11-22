@@ -1,0 +1,47 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>{{ ls.locale.global.button.edit }} {{ data.row.process_name }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="redirecting">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <form [formGroup]="formStep" fxFlexLayout="row">
+      <mat-form-field class="is-light form-primary" style="width: 100%;" fxFlex="100">
+        <input matInput placeholder="Hours" type="text" formControlName="hours">
+        <mat-error *ngIf="formStep.controls['hours'].hasError('required') && formStep.controls['hours'].touched">
+          Hours is required
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button
+          id="btn-simpan"
+          mat-raised-button
+          type="button"
+          class="confirmation-button"
+          (click)="submit()"
+          fxFlex="20"
+        >
+          {{ ls.locale.global.button.save }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

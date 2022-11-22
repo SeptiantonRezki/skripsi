@@ -1207,6 +1207,12 @@ export class Endpoint {
         show_import_info_board: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/infoboard/audience/show-import`,
         export_info_board: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/infoboard/audience/request-export`,
       },
+      notification_configuration: {
+        update_sound: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-sound`,
+        get_sound: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-sound`,
+        get_step: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-status-orders`,
+        update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
+      },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
