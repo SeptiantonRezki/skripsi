@@ -68,6 +68,8 @@ export class NotificationConfigurationComponent implements OnInit {
           this.pathSound = res.data;
           const arr = res.data.split("/");
           this.fileName = arr[arr.length - 1];
+          let audio = this.audioPlayerRef.nativeElement;
+          audio.load();
         }
       }
     );
