@@ -3515,6 +3515,13 @@ export const brConfig = {
         name: "TRS System Variable"
       }
     ],
+    trs_report: [
+      {
+        type: "current",
+        url: "",
+        name: "TRS Report"
+      }
+    ],
     trs_proposal: {
       index: [
         {

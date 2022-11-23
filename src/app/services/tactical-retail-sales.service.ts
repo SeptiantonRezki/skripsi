@@ -94,6 +94,46 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url);
   }
 
+  totalPerBrand(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "total_per_brand");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
+    return this.getApi(url, queryParams);
+  }
+
+  summaryVisit(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "summary_visit");
+    return this.getApi(url, queryParams);
+  }
+
+  detailVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
+  stockMovement(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement");
+    return this.getApi(url, queryParams);
+  }
+
+  exportTotalPerBrand(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_total_per_brand");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportVisit(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_visit");
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportStockMovement(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_stock_movement");
+    return this.getBlobApi(url, queryParams);
+  }
+
 
 
 
