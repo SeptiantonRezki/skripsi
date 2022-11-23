@@ -5,7 +5,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ls.locale.global.label.upload_file}} XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLSX</span>
       </div>
 
     </div>
@@ -19,7 +19,7 @@
 
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
     <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
-      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      accept=".xlsx" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
       (fileChange)="preview($event)">
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
