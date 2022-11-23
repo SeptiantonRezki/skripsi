@@ -2254,7 +2254,11 @@
     "proposal_regency":"Kabupaten",
     "proposal_district":"Kecamatan",
     "proposal_code":"Kode",
-    "proposal_name":"Nama"
-    
+    "proposal_name":"Nama",
+
+    "report_title": "Report",
+    "report_tab_1": "Total Pack Per Brand",
+    "report_tab_2": "Stock Movement",
+    "report_tab_3": "Visit"
   }
 }
