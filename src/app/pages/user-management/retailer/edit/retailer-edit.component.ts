@@ -33,6 +33,7 @@ export class RetailerEditComponent {
   editPhoneNumberStatus: Boolean;
   editBankStatus: Boolean;
   viewPhoneNumberPBStatus: Boolean;
+  showQuery: any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -318,7 +319,12 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
     this.dataService.showLoading(true);
-    this.retailerService.show({ retailer_id: this.dataService.getFromStorage('id_retailer') }).subscribe(async res => {
+    if (this.dataService.getFromStorage('country_retailer') === 'ID') {
+      this.showQuery = this.retailerService.show_v2({ retailer_id: this.dataService.getFromStorage('id_retailer') });
+    } else {
+      this.showQuery = this.retailerService.show({ retailer_id: this.dataService.getFromStorage('id_retailer') });
+    } 
+    this.showQuery.subscribe(async res => {
       this.dataService.showLoading(false);
       // console.log('show', res);
       this.detailRetailer = res.data;
@@ -927,16 +933,29 @@ export class RetailerEditComponent {
         body['npwp'] = '';
       }
 
-      this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({
-            message: 'Data berhasil diubah'
-          });
-          this.router.navigate(['user-management', 'retailer']);
-          window.localStorage.removeItem('detail_retailer');
-        },
-        err => { }
-      );
+      if(this.formRetailer.get('country').value === 'ID'){
+        this.retailerService.put_v2(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      } else {
+        this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      }
     } else {
       this.dialogService.openSnackBar({
         message: this.translate.instant('global.label.please_complete_data')
