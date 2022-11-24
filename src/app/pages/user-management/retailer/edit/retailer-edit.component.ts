@@ -119,6 +119,7 @@ export class RetailerEditComponent {
   ]
   countryList: any[] = [];
   country_phone: string;
+  idRetailer: any;
 
   formRefferalCode: FormGroup;
   
@@ -187,6 +188,7 @@ export class RetailerEditComponent {
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+      this.idRetailer = params[2].path;
     })
 
     this.listLevelArea = [
@@ -320,9 +322,9 @@ export class RetailerEditComponent {
     });
     this.dataService.showLoading(true);
     if (this.dataService.getFromStorage('country_retailer') === 'ID') {
-      this.showQuery = this.retailerService.show_v2({ retailer_id: this.dataService.getFromStorage('id_retailer') });
+      this.showQuery = this.retailerService.show_v2({ retailer_id: this.idRetailer });
     } else {
-      this.showQuery = this.retailerService.show({ retailer_id: this.dataService.getFromStorage('id_retailer') });
+      this.showQuery = this.retailerService.show({ retailer_id: this.idRetailer });
     } 
     this.showQuery.subscribe(async res => {
       this.dataService.showLoading(false);
