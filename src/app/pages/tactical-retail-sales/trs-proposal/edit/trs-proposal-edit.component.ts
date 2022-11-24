@@ -72,8 +72,8 @@ export class TrsProposalEditComponent implements OnInit {
 
   todayDate: any = new Date();
   minDateProposal: any;
-  minMaxDateProposal: any = new Date();
-  maxDateProposal: any = new Date();
+  minMaxDateProposal: any;
+  maxDateProposal: any;
   maxPeriodProposal: any = 60;
 
   selectedArea: any = [""];
@@ -117,9 +117,6 @@ export class TrsProposalEditComponent implements OnInit {
     this.list = {
       salespoint: [],
     }
-
-    this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
-    this.maxDateProposal.setDate(this.todayDate.getDate()+1 + this.maxPeriodProposal);
   }
 
   ngOnInit() {
@@ -178,7 +175,12 @@ export class TrsProposalEditComponent implements OnInit {
         //this.minDateProposal.setDate(this.minDateProposal.getDate());
       } else {
         this.minDateProposal = new Date();
+        this.minMaxDateProposal = new Date();
+        this.maxDateProposal = new Date();
+
         this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+        this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
+        this.maxDateProposal.setDate(this.todayDate.getDate()+1 + this.maxPeriodProposal);
       }
 
       this.formCreateProposal.patchValue({
@@ -227,10 +229,12 @@ export class TrsProposalEditComponent implements OnInit {
         //this.disableForm = true;
       };
       
-      this.minMaxDateProposal = this.formCreateProposal.get('startDate').value;
-      this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
-
-
+      if (this.proposalData.status == 'ongoing'){
+        //this.minDateProposal.setDate(this.minDateProposal.getDate());
+      } else {
+        this.minMaxDateProposal = this.formCreateProposal.get('startDate').value;
+        this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');  
+      }
 
       this.dataService.showLoading(false);
       this.TRSService.getAreaByUser(request).subscribe(res => {
@@ -250,6 +254,8 @@ export class TrsProposalEditComponent implements OnInit {
     this.TRSService.getSysVar().subscribe((res) => {
       res.data.forEach((item) => {
         if (item.param === 'max_period') {
+          this.maxDateProposal = new Date();
+
           this.maxPeriodProposal = parseInt(item.value);
           this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
         }
