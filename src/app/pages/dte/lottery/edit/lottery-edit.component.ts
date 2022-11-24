@@ -982,14 +982,11 @@ export class LotteryEditComponent implements OnInit {
   previewPemenang(event) {
     this.files4 = undefined;
     this.files4 = event;
-
-    console.log('files info', this.files4);
     
-    if (this.files4.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
-      return;
-    }
-    console.log(this.files4.name);
+    // if (this.files4.name.indexOf(".xlsx") > -1) {
+    //   this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    //   return;
+    // }
     this.fileNameListExcel = this.files4.name;
 
     //let fd = new FormData();
