@@ -1,3 +1,4 @@
+
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { debounce } from "lodash";
@@ -77,6 +78,13 @@ export class SalestreeComponent implements OnInit {
       this.getLevel(level);
     }
     this.setDefaultValue();
+  }
+
+  resetAllLevel(){
+    this.geoLevel.forEach(level => this.resetLevel(level))
+    for (let level in this.limitArea) {
+      this.getLevel(level);
+    }
   }
 
   setLimitArea(data: any) {
