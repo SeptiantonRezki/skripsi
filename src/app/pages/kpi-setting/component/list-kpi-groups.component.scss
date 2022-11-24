@@ -1,0 +1,20 @@
+.kpi-filter{
+    padding-bottom: 0 !important;
+}
+
+.kpi-filter-item{
+    margin-right: 24px;
+    flex: 1 1 25%;
+
+    &:last-child{
+        margin-right: 0;
+    }
+}
+
+.filter-search{
+    margin: 0 24px;
+
+    mat-icon{
+        margin-right: 12px;
+    }
+}
