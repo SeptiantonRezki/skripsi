@@ -746,7 +746,8 @@ export class Endpoint {
       },
       PLPayMethod: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran`,
-        update: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/agent-hub/metode-pembayaran/${context.payMethodId}`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/agent-hub/metode-pembayaran`,
       },
       PLStock: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock`,
