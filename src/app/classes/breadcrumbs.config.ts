@@ -2536,6 +2536,15 @@ export const brConfig = {
           name: "Detail Tingkat Fitur"
         }
       ]
+    },
+    notification: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Mitra Notification Configuration"
+        }
+      ]
     }
   },
   admin: {

@@ -1,0 +1,50 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Mitra Notification Configuration'">
+
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-bg-white">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <h3 class="title">Mitra Notification Sound</h3>
+        <div class="file-sound">{{ fileName }}</div>
+        <div class="play-sound" (click)="clickNotifSound()">
+          <mat-icon>play_arrow</mat-icon>
+          <div class="child-play-sound">Play Sound</div>
+        </div>
+        <button *ngIf="!loadingUpload" mat-raised-button (click)="openInput()" class="confirmation-button file-upload">Upload New File</button>
+        <input #fileSound hidden type="file" (change)="fileChange($event.target.files)" name="file" accept=".mp3,.wav">
+        <mat-progress-spinner *ngIf="loadingUpload" class="loading-spinner" mode="indeterminate" diameter="28"></mat-progress-spinner>
+      </div>
+      <div class="ayo-content-middle pb-16">
+        <h3 class="title">Notification Configuration</h3>
+        <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+          [offset]="offsetPagination" [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
+          [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
+          [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+          <ngx-datatable-column name="Step" prop="process_name" [sortable]="false"></ngx-datatable-column>
+          <ngx-datatable-column name="Detail Step" prop="process_key_values" [sortable]="false"></ngx-datatable-column>
+          <ngx-datatable-column name="Hours" prop="process_values" [sortable]="false"></ngx-datatable-column>
+
+          <ngx-datatable-column [width]="48" name="{{ ls.locale.global.label.action }}" headerClass="textright"
+            [sortable]="false">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+              <div class="button-row" style="margin-left: -10px">
+                <button [matTooltip]="ls.locale.global.button.edit" mat-icon-button color=""
+                  (click)="edit(row, rowIndex)">
+                  <mat-icon class="secondary-text">edit</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-footer></ngx-datatable-footer>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+  <audio *ngIf="pathSound" #audioOption>
+    <source [src]="pathSound" type="audio/mpeg">
+  </audio>
+</div>
