@@ -12,6 +12,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from "@ngx-translate/core";
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-spin-the-wheel',
@@ -199,11 +200,12 @@ export class SpinTheWheelComponent implements OnInit {
   async export(row) {
     try {
       const response = await this.spinService.exportSpin({ id: row.id }).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportSpinTheWheel_${new Date().toLocaleString()}.xls`);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encryptTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportSpinTheWheel_${encryptTime}.xlsx`);
+      
       this.dataService.showLoading(false);
-      console.log('X', response);
     } catch (error) {
       console.log(error);
       this.handleError(error);
@@ -215,20 +217,9 @@ export class SpinTheWheelComponent implements OnInit {
   downLoadFile(data: any, type: string, fileName: string) {
     // It is necessary to create a new blob object with mime-type explicitly set
     // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
-
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
-    }
-
-    // For other browsers:
-    // Create a link pointing to the ObjectURL containing the blob.
-    const url = window.URL.createObjectURL(newBlob);
-
-    var link = document.createElement('a');
+    const newBlob = new Blob([data], { type: type });
+    const url= window.URL.createObjectURL(newBlob);
+    const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
     // this is necessary as link.click() does not work on the latest firefox
