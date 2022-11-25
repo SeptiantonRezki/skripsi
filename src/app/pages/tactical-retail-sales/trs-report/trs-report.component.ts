@@ -66,7 +66,24 @@ export class TrsReportComponent implements OnInit {
     offsetPagination: 0,
   };
 
+  stockMovementBrands = [];
+  stockMovementSelected = null;
+  stockMovement2Selected = null;
   stockMovementTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
+  stockMovement2TableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
+  stockMovement3TableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
     reorderable: true,
@@ -109,7 +126,11 @@ export class TrsReportComponent implements OnInit {
         this.refreshSummaryVisit();
         this.visitSelected = null;
         break;
-      case 2: this.refreshStockMovement(); break;
+      case 2: 
+        this.refreshStockMovement(); 
+        this.stockMovementSelected = null;
+        this.stockMovement2Selected = null;
+        break;
     }
   }
   
@@ -346,6 +367,11 @@ export class TrsReportComponent implements OnInit {
       this.dataService.showLoading(false);
     }
   }
+  
+  stockMovementClick(data){
+    this.stockMovementSelected = data;
+    this.refreshStockMovement2();
+  }
 
   refreshStockMovement(){
     this.TRSService.stockMovement(this.stockMovementTableData.pagination).subscribe(
@@ -353,6 +379,7 @@ export class TrsReportComponent implements OnInit {
         console.log('aleapi refreshStockMovement res', res);
         Page.renderPagination(this.stockMovementTableData.pagination, res.data);
         this.stockMovementTableData.rows = res.data.data;
+        this.stockMovementBrands = res.data.data.length == 0 ? [] : Object.keys(res.data.data[0].brands)
       },
       err => {},
       () => {
@@ -388,6 +415,102 @@ export class TrsReportComponent implements OnInit {
     this.dataService.setToStorage("sort_type", event.newValue);
 
     this.refreshStockMovement();
+  }
+  
+  stockMovement2Click(data){
+    this.stockMovement2Selected = data;
+    this.refreshStockMovement3();
+  }
+
+  refreshStockMovement2(){
+    this.TRSService.stockMovement2(this.stockMovement2TableData.pagination, {
+      movement_code: this.stockMovementSelected.movement_code,
+      name: this.stockMovementSelected.partner_from,
+    }).subscribe(
+      async res => {
+        console.log('aleapi refreshStockMovement2 res', res);
+        Page.renderPagination(this.stockMovement2TableData.pagination, res.data);
+        this.stockMovement2TableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.stockMovement2TableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setStockMovement2Page(pageInfo) {
+    this.stockMovement2TableData.loadingIndicator = true;
+
+    this.stockMovement2TableData.offsetPagination = pageInfo.offset;
+
+    if (this.stockMovement2TableData.pagination['search']) {
+      this.stockMovement2TableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.stockMovement2TableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshStockMovement2();
+  }
+
+  onStockMovement2Sort(event) {
+    this.stockMovement2TableData.loadingIndicator = true;
+
+    this.stockMovement2TableData.pagination.sort = event.column.prop;
+    this.stockMovement2TableData.pagination.sort_type = event.newValue;
+    this.stockMovement2TableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.stockMovement2TableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshStockMovement2();
+  }
+
+  refreshStockMovement3(){
+    this.TRSService.stockMovement3(this.stockMovement3TableData.pagination, {
+      movement_code: this.stockMovement2Selected.movement_code,
+    }).subscribe(
+      async res => {
+        console.log('aleapi refreshStockMovement3 res', res);
+        Page.renderPagination(this.stockMovement3TableData.pagination, res.data);
+        this.stockMovement3TableData.rows = res.data.data;
+      },
+      err => {},
+      () => {
+        this.stockMovement3TableData.loadingIndicator = false;
+      }
+    );
+  }
+
+  setStockMovement3Page(pageInfo) {
+    this.stockMovement3TableData.loadingIndicator = true;
+
+    this.stockMovement3TableData.offsetPagination = pageInfo.offset;
+
+    if (this.stockMovement3TableData.pagination['search']) {
+      this.stockMovement3TableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.stockMovement3TableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshStockMovement3();
+  }
+
+  onStockMovement3Sort(event) {
+    this.stockMovement3TableData.loadingIndicator = true;
+
+    this.stockMovement3TableData.pagination.sort = event.column.prop;
+    this.stockMovement3TableData.pagination.sort_type = event.newValue;
+    this.stockMovement3TableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.stockMovement3TableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshStockMovement3();
   }
 
   downLoadFile(data: any, type: string, fileName: string) {
