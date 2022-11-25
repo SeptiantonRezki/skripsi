@@ -254,10 +254,12 @@ export class TrsProposalEditComponent implements OnInit {
     this.TRSService.getSysVar().subscribe((res) => {
       res.data.forEach((item) => {
         if (item.param === 'max_period') {
-          this.maxDateProposal = new Date();
+          if (this.proposalData.status == 'ongoing'){
+          } else {
+            this.maxDateProposal = new Date();
 
-          this.maxPeriodProposal = parseInt(item.value);
-          this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
+            this.maxPeriodProposal = parseInt(item.value);
+            this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          }
         }
       });
     }, err => {
