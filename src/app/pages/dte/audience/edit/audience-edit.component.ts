@@ -125,7 +125,7 @@ export class AudienceEditComponent {
     return true;
   }
 
-  paramImportTranslate = {entity: 'XLS'};
+  paramImportTranslate = {entity: 'CSV'};
 
   constructor(
     private router: Router,
@@ -1700,6 +1700,7 @@ export class AudienceEditComponent {
         
         this.importAudienceResult = {...response};
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+        this.router.navigate(["dte", "audience"]);
         // this.selected = response;
         // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
