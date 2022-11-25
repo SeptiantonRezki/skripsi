@@ -1675,8 +1675,8 @@ export class AudienceEditComponent {
     dialogConfig.data = {
       password: 'P@ssw0rd',
       trade_audience_group_id,
-      import_audience_status,
-      import_audience_status_type,
+      // import_audience_status,
+      // import_audience_status_type,
       IMPORT_TYPE: 'AUDIENCE',
       min: this.formAudience.get('min').value,
       max: this.formAudience.get('max').value,
