@@ -62,11 +62,11 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="140" name="Transfer Tunai (P0)" prop="status" [sortable]="false">
+        <ngx-datatable-column [width]="140" name="Transfer Tunai" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div *ngFor="let payment of row.payments">
-              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Transfer Tunai (P0)' && payment.value"></mat-checkbox>
-              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Transfer Tunai (P0)' && !payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Transfer Tunai' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Transfer Tunai' && !payment.value"></mat-checkbox>
             </div>
           </ng-template>
         </ngx-datatable-column>
@@ -78,11 +78,19 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [width]="140" name="BRI Purchase Card (P0)" prop="status" [sortable]="false">
+        <ngx-datatable-column [width]="140" name="BRI Purchase Card" prop="status" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div *ngFor="let payment of row.payments">
-              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'BRI Purchase Card (P0)' && payment.value"></mat-checkbox>
-              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'BRI Purchase Card (P0)' && !payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'BRI Purchase Card' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'BRI Purchase Card' && !payment.value"></mat-checkbox>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [width]="140" name="Cash on Delivery" prop="status" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <div *ngFor="let payment of row.payments">
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment active" *ngIf="payment.name == 'Cash on Delivery' && payment.value"></mat-checkbox>
+              <mat-checkbox [checked]="payment.value" [disabled]="true" class="mat-checkbox-payment inactive" *ngIf="payment.name == 'Cash on Delivery' && !payment.value"></mat-checkbox>
             </div>
           </ng-template>
         </ngx-datatable-column>
