@@ -358,7 +358,15 @@ export class TrsReportComponent implements OnInit {
     this.dataService.showLoading(true);
     const filename = `Export_TRS_StockMovement_${new Date().toLocaleString()}.xlsx`;
     try {
-      const response = await this.TRSService.exportStockMovement(this.stockMovementTableData.pagination).toPromise();
+      var params: any = {};
+      if(this.stockMovementSelected){
+        params.table_2_movement_code = this.stockMovementSelected.movement_code
+        params.table_2_name = this.stockMovementSelected.partner_from
+        if(this.stockMovement2Selected){
+          params.table_3_movement_code = this.stockMovement2Selected.movement_code
+        }
+      }
+      const response = await this.TRSService.exportStockMovement(this.stockMovementTableData.pagination, params).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 

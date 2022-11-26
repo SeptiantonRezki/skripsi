@@ -143,8 +143,10 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getBlobApi(url, queryParams);
   }
 
-  exportStockMovement(queryParams?): Observable<any> {
+  exportStockMovement(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "export_stock_movement");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
     return this.getBlobApi(url, queryParams);
   }
 
