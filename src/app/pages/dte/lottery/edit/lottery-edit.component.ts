@@ -27,6 +27,7 @@ import { SupplierCompanyService } from 'app/services/user-management/private-lab
 import { ProductService } from 'app/services/sku-management/product.service';
 import { LotteryService } from "app/services/dte/lottery.service";
 import * as CryptoJS from 'crypto-js';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-lottery-edit',
@@ -1180,14 +1181,16 @@ export class LotteryEditComponent implements OnInit {
       if (this.files2) body.append('header_list_img', this.files2);
       // Replacing tag div with p
       let lottery_desc = this.formPreview.get('desc').value;
-      lottery_desc = lottery_desc.split('<div').join('<p');
-      lottery_desc = lottery_desc.split('<div>').join('<p>');
-      lottery_desc = lottery_desc.split('</div>').join('</p>');
+      // lottery_desc = lottery_desc.split('<div').join('<p');
+      // lottery_desc = lottery_desc.split('<div>').join('<p>');
+      // lottery_desc = lottery_desc.split('</div>').join('</p>');
+      lottery_desc = (lottery_desc) ? lottery_desc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
 
       let lottery_desc_tnc = this.formPreview.get('desc_tc').value;
-      lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
-      lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
-      lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      lottery_desc_tnc = (lottery_desc_tnc) ? lottery_desc_tnc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
       body.append('desc', lottery_desc);
       body.append('desc_tc', lottery_desc_tnc);
       body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value === true ? 'active' : 'inactive');
@@ -1236,8 +1239,43 @@ export class LotteryEditComponent implements OnInit {
     } catch (error) {
       console.log("err", error);
       this.dataService.showLoading(false);
-      throw error;
     }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
   }
 
   submitPemenang() {

@@ -381,7 +381,7 @@ export class Endpoint {
         save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-audience`,
         update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-preview`,
         download_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-winner/${context.id}`,
-        update_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-winner`,
+        update_winner: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/winner/update`,
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-status`,
         export_detail_coupon: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/detail-export`,
         export_coupon: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/export`,
