@@ -120,6 +120,20 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  stockMovement2(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement_2");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
+  stockMovement3(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement_3");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
   exportTotalPerBrand(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "export_total_per_brand");
     return this.getBlobApi(url, queryParams);
@@ -130,8 +144,10 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getBlobApi(url, queryParams);
   }
 
-  exportStockMovement(queryParams?): Observable<any> {
+  exportStockMovement(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "export_stock_movement");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
     return this.getBlobApi(url, queryParams);
   }
 

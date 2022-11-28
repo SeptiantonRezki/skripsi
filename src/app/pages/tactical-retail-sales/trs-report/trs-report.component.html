@@ -335,22 +335,22 @@
 
             <ngx-datatable-column name="Executor" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.partner_from}}</span>
+                <span (click)="stockMovementClick(row)">{{row.partner_from}}</span>
               </ng-template>
-            </ngx-datatable-column>
+            </ngx-datatable-column>trs_stock_movement.movement_mode = trs_proposal_executor.territory_code trs_proposal
             <ngx-datatable-column name="Territory Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.partner_from_territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" [width]="200">
+            <ngx-datatable-column name="Journey Type" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.product_code}}</span>
+                <span>{{row.journey_type}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Quantity" [width]="200">
+            <ngx-datatable-column name="Journey Date" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.qty}}</span>
+                <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Total Transaksi" [width]="200">
@@ -359,7 +359,83 @@
               </ng-template>
             </ngx-datatable-column>
 
+            <ngx-datatable-column *ngFor="let item of stockMovementBrands" [name]="item" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.brands[item]}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
           </ngx-datatable>
+
+          <div *ngIf="stockMovementSelected">
+            <hr />
+
+            <ngx-datatable class="material" [rows]="stockMovement2TableData.rows"
+              [loadingIndicator]="stockMovement2TableData.loadingIndicator" [columnMode]="'force'"
+              [offset]="stockMovement2TableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+              [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovement2TableData.reorderable"
+              [count]="stockMovement2TableData.pagination.total" [limit]="stockMovement2TableData.pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement2Page($event)"
+              (sort)="onStockMovement2Sort($event)">
+
+              <ngx-datatable-column name="Date" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.created_at}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Type" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.movement_type}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Movement Code" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span (click)="stockMovement2Click(row)">{{row.movement_code}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Need To Review" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.need_to_review}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+
+            </ngx-datatable>
+
+            <div *ngIf="stockMovement2Selected">
+              <hr />
+
+              <ngx-datatable class="material" [rows]="stockMovement3TableData.rows"
+                [loadingIndicator]="stockMovement3TableData.loadingIndicator" [columnMode]="'force'"
+                [offset]="stockMovement3TableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+                [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovement3TableData.reorderable"
+                [count]="stockMovement3TableData.pagination.total" [limit]="stockMovement3TableData.pagination.per_page"
+                [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement3Page($event)"
+                (sort)="onStockMovement3Sort($event)">
+
+                <ngx-datatable-column name="Product" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.product_code}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Qty" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.qty}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="From" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.partner_from}} - {{row.partner_from_territory}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="To" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.partner_to}} - {{row.partner_to_territory}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+              </ngx-datatable>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>
