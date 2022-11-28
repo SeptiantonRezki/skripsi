@@ -152,6 +152,7 @@
                 mat-icon-button
                 type="button"
                 (click)="deleteVerifNotes(verif_index)"
+                [disabled]="checkReasonClose(verif_index)"
                 *ngIf="!isDetail"
               >
                 <mat-icon>close</mat-icon>
