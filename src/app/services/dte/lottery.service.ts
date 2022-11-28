@@ -77,7 +77,7 @@ export class LotteryService extends BaseService {
 
   exportDetailCoupon(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_detail_coupon");
-    return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
 
   exportCoupon(body?: any): Observable<any> {
