@@ -71,6 +71,7 @@ export class WholesalerEditComponent {
   branchType: any[];
   wsRoles: any[] = [];
   country_phone: string;
+  idWs: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -125,6 +126,7 @@ export class WholesalerEditComponent {
 
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+      this.idWs = params[2].path;
     })
 
     this.detailWholesaler = this.dataService.getFromStorage("detail_wholesaler");
@@ -209,7 +211,7 @@ export class WholesalerEditComponent {
     this.formWs.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
-    this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
+    this.wholesalerService.show({ wholesaler_id: this.idWs }).subscribe(resWS => {
 
       this.detailWholesaler = resWS.data;
       // console.log('wsss', this.detailWholesaler);
@@ -243,6 +245,10 @@ export class WholesalerEditComponent {
           }
         })
 
+      }
+      
+      if(this.detailWholesaler.status === 'inactive') {
+        this.formWs.get('status').disable();
       }
     });
 
@@ -409,7 +415,7 @@ export class WholesalerEditComponent {
     }
     let phone = '';
     if (this.viewPhoneNumberStatus) {
-      phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+      phone = (this.isDetail ? this.detailWholesaler.phone : (this.detailWholesaler.phone)? parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]) : '' );
     } else {
       phone = Utils.reMaskInput(this.detailWholesaler.phone, 4);
     }
@@ -823,7 +829,7 @@ export class WholesalerEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length) {
+    if (value !== '' && array.length > 0) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
