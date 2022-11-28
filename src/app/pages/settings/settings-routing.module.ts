@@ -13,6 +13,7 @@ import { OTPSettingsComponent } from "./otpsettings/otpsettings.component";
 import { NewSignComponent } from "./new-sign/new-sign.component";
 import { TingkatFiturIndexComponent } from "./tingkat-fitur/index/tingkat-fitur-index.component";
 import { TingkatFiturFormComponent } from "./tingkat-fitur/form/tingkat-fitur-form.component";
+import { NotificationConfigurationComponent } from "./notification-configuration/index/notification-configuration.component";
 
 const routes: Routes = [
   {
@@ -118,6 +119,13 @@ const routes: Routes = [
     component: TingkatFiturFormComponent,
     data: {
       breadcrumbs: brConfig.settings.tingkat_fitur.detail
+    }
+  },
+  {
+    path: "mitra-notification-configuration",
+    component: NotificationConfigurationComponent,
+    data: {
+      breadcrumbs: brConfig.settings.notification.index
     }
   },
 ];
