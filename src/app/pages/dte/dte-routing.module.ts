@@ -948,19 +948,19 @@ const routes: Routes = [
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'flush-coin/create',
+    path: 'flush-coin/create/:tab',
     component: FlushCoinComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: 'flush-coin/edit',
+    path: 'flush-coin/edit/:id/:tab',
     component: FlushCoinComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
   {
-    path: "flush-coin/detail",
+    path: "flush-coin/detail/:id/:tab",
     component: FlushCoinComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
