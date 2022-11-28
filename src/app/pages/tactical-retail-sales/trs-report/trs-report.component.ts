@@ -51,8 +51,8 @@ export class TrsReportComponent implements OnInit {
 
   visitSelected = null;
   summaryVisitFilterGroupData = [ "Daily", "Weekly" ];
-  summaryVisitFilterProgramCodeData = [ "Code 1", "Code 2" ];
   summaryVisitFilter: FormGroup;
+  
   summaryVisitTableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
@@ -67,6 +67,8 @@ export class TrsReportComponent implements OnInit {
     pagination: new Page(),
     offsetPagination: 0,
   };
+
+  stockMovementFilter: FormGroup;
 
   stockMovementBrands = [];
   stockMovementSelected = null;
@@ -96,6 +98,7 @@ export class TrsReportComponent implements OnInit {
 
   formFilter: FormGroup;
   filter1List: any[];
+  filter2List: any[];
 
   constructor(
     private dataService: DataService,
@@ -118,19 +121,28 @@ export class TrsReportComponent implements OnInit {
     };
     this.TRSService.getReportFilter1(request).subscribe(res => {
       this.filter1List = res.data;
-      this.dataService.showLoading(false);
     }, err => {
       console.log('err occured', err);
       this.dataService.showLoading(false);
     })
 
+    /*
+    this.TRSService.getReportFilter2(request).subscribe(res => {
+      this.filter2List = res.data;
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    })
+    */
+
     //ale
     this.refreshTotalSingle();
     this.refreshTotalMultiple();
-    
+
     this.summaryVisitFilter = this.formBuilder.group({
       group: new FormControl("Daily"),
-      program_code: new FormControl("Code 1"),
+      program_code: new FormControl(),
+      kps: new FormControl(),
       from: "",
       to: "",
     });
@@ -138,6 +150,19 @@ export class TrsReportComponent implements OnInit {
       console.log('form value changed')
       console.log(selectedValue)
     });
+
+    this.stockMovementFilter = this.formBuilder.group({
+      program_code: new FormControl(),
+      from: "",
+      to: "",
+    });
+    this.stockMovementFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
+      console.log('form value changed')
+      console.log(selectedValue)
+    });
+
+    
+    this.dataService.showLoading(false);
   }
 
   filterReport1(){
@@ -149,6 +174,17 @@ export class TrsReportComponent implements OnInit {
 
     this.refreshTotalSingle();
     this.refreshTotalMultiple();
+  }
+
+  filterReport2(){
+    this.refreshSummaryVisit();
+    this.visitSelected = null;
+  }
+
+  filterReport3(){
+    this.refreshStockMovement(); 
+    this.stockMovementSelected = null;
+    this.stockMovement2Selected = null;
   }
 
   onChangeTab(event){
@@ -290,7 +326,13 @@ export class TrsReportComponent implements OnInit {
         field_force: this.visitSelected.field_force,
         program_code: this.visitSelected.program_code,
       } : null;
-      const response = await this.TRSService.exportVisit(param).toPromise();
+      const response = await this.TRSService.exportVisit(param, {
+        group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
+        program_code: this.summaryVisitFilter.get('program_code').value == null? '': this.summaryVisitFilter.get('program_code').value,
+        kps: this.summaryVisitFilter.get('kps').value == null? '': this.summaryVisitFilter.get('kps').value,
+        from: this.summaryVisitFilter.get('from').value == ''?'':moment(this.summaryVisitFilter.get('from').value).format("YYYY-MM-DD"),
+        to: this.summaryVisitFilter.get('to').value == ''?'':moment(this.summaryVisitFilter.get('to').value).format("YYYY-MM-DD"),
+      }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 
@@ -306,7 +348,13 @@ export class TrsReportComponent implements OnInit {
   }
 
   refreshSummaryVisit(){
-    this.TRSService.summaryVisit(this.summaryVisitTableData.pagination).subscribe(
+    this.TRSService.summaryVisit(this.summaryVisitTableData.pagination, {
+      group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
+      program_code: this.summaryVisitFilter.get('program_code').value == null? '': this.summaryVisitFilter.get('program_code').value,
+      kps: this.summaryVisitFilter.get('kps').value == null? '': this.summaryVisitFilter.get('kps').value,
+      from: this.summaryVisitFilter.get('from').value == ''?'':moment(this.summaryVisitFilter.get('from').value).format("YYYY-MM-DD"),
+      to: this.summaryVisitFilter.get('to').value == ''?'':moment(this.summaryVisitFilter.get('to').value).format("YYYY-MM-DD"),
+    }).subscribe(
       async res => {
         console.log('aleapi refreshSummaryVisit res', res);
         Page.renderPagination(this.summaryVisitTableData.pagination, res.data);
@@ -402,7 +450,11 @@ export class TrsReportComponent implements OnInit {
     this.dataService.showLoading(true);
     const filename = `Export_TRS_StockMovement_${new Date().toLocaleString()}.xlsx`;
     try {
-      var params: any = {};
+      var params: any = {
+        program_code: this.stockMovementFilter.get('program_code').value == null? '': this.stockMovementFilter.get('program_code').value,
+        from: this.stockMovementFilter.get('from').value == ''?'':moment(this.stockMovementFilter.get('from').value).format("YYYY-MM-DD"),
+        to: this.stockMovementFilter.get('to').value == ''?'':moment(this.stockMovementFilter.get('to').value).format("YYYY-MM-DD"),
+      };
       if(this.stockMovementSelected){
         params.table_2_movement_code = this.stockMovementSelected.movement_code
         params.table_2_name = this.stockMovementSelected.partner_from
@@ -426,7 +478,11 @@ export class TrsReportComponent implements OnInit {
   }
 
   refreshStockMovement(){
-    this.TRSService.stockMovement(this.stockMovementTableData.pagination).subscribe(
+    this.TRSService.stockMovement(this.stockMovementTableData.pagination, {
+      program_code: this.stockMovementFilter.get('program_code').value == null? '': this.stockMovementFilter.get('program_code').value,
+      from: this.stockMovementFilter.get('from').value == ''?'':moment(this.stockMovementFilter.get('from').value).format("YYYY-MM-DD"),
+      to: this.stockMovementFilter.get('to').value == ''?'':moment(this.stockMovementFilter.get('to').value).format("YYYY-MM-DD"),
+    }).subscribe(
       async res => {
         console.log('aleapi refreshStockMovement res', res);
         Page.renderPagination(this.stockMovementTableData.pagination, res.data);

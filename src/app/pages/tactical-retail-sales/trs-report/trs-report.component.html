@@ -121,18 +121,24 @@
 
         <mat-tab label="Visit">
           <h2 class="pl-16">Summary Visit</h2>
+
           <form [formGroup]="summaryVisitFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
-
               <mat-form-field class="is-light">
                 <mat-select formControlName="group">
                   <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
-                <mat-select formControlName="program_code">
-                  <mat-option *ngFor="let item of summaryVisitFilterProgramCodeData" [value]="item">{{item}}
-                  </mat-option>
+                <mat-select placeholder="Program Code" formControlName="program_code">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+                <mat-select placeholder="KPS" formControlName="kps">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
@@ -159,9 +165,12 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #to></mat-datepicker>
               </mat-form-field>
-
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;" (click)="filterReport2()">
+                Filter
+              </button>
             </div>
           </form>
+
           <div class="button-row" fxLayout="row-reverse">
             <button (click)="exportVisit()" mat-raised-button type="button" class="">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
@@ -320,6 +329,45 @@
         </mat-tab>
 
         <mat-tab label="Stock Movement">
+
+          <form [formGroup]="stockMovementFilter" autoComplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
+              <mat-form-field class="is-light">
+                <mat-select placeholder="Program Code" formControlName="program_code">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light">
+                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                  formControlName="from" readonly>
+                <button mat-button *ngIf="stockMovementFilter.get('from').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="stockMovementFilter.get('from').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="from">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #from></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light">
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                  formControlName="to" readonly>
+                <button mat-button *ngIf="stockMovementFilter.get('to').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="stockMovementFilter.get('to').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="to">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #to></mat-datepicker>
+              </mat-form-field>
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;" (click)="filterReport3()">
+                Filter
+              </button>
+            </div>
+          </form>
+          
           <div class="button-row" fxLayout="row-reverse">
             <button (click)="exportStockMovement()" mat-raised-button type="button" class="">
               <mat-icon>arrow_upward</mat-icon> Export XLSX

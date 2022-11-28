@@ -103,8 +103,11 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  summaryVisit(queryParams?): Observable<any> {
+  summaryVisit(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "summary_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
     return this.getApi(url, queryParams);
   }
 
@@ -114,10 +117,12 @@ export class TacticalRetailSalesService extends BaseService {
       queryParams[key] = additionalParams[key]
     return this.getApi(url, queryParams);
   }
-
-  stockMovement(queryParams?): Observable<any> {
+  
+  stockMovement(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "stock_movement");
-    return this.getApi(url, queryParams);
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getBlobApi(url, queryParams);
   }
 
   stockMovement2(queryParams?, additionalParams?): Observable<any> {
@@ -142,8 +147,10 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getBlobApi(url, queryParams);
   }
 
-  exportVisit(queryParams?): Observable<any> {
+  exportVisit(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "export_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
     return this.getBlobApi(url, queryParams);
   }
 
