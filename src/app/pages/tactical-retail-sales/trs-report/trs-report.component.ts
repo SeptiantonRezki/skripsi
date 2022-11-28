@@ -174,7 +174,11 @@ export class TrsReportComponent implements OnInit {
     this.dataService.showLoading(true);
     const filename = `Export_TRS_TotalSingle_${new Date().toLocaleString()}.xlsx`;
     try {
-      const response = await this.TRSService.exportTotalPerBrand(this.totalSingleTableData.pagination).toPromise();
+      const response = await this.TRSService.exportTotalPerBrand(this.totalSingleTableData.pagination,
+        {
+          program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
+          date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
+        }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
 
