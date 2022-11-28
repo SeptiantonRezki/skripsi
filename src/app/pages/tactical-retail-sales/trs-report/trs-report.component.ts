@@ -8,6 +8,8 @@ import { PagesName } from 'app/classes/pages-name';
 import { DataService } from "app/services/data.service";
 import { TacticalRetailSalesService } from "app/services/tactical-retail-sales.service";
 
+import moment from 'moment';
+
 declare global {
   interface Navigator { msSaveOrOpenBlob: any; }
 }
@@ -104,22 +106,8 @@ export class TrsReportComponent implements OnInit {
   }
 
   ngOnInit() {
+    //chanif
     this.dataService.showLoading(true);
-
-    this.refreshTotalSingle();
-    this.refreshTotalMultiple();
-    
-    this.summaryVisitFilter = this.formBuilder.group({
-      group: new FormControl("Daily"),
-      program_code: new FormControl("Code 1"),
-      from: "",
-      to: "",
-    });
-    this.summaryVisitFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
-      console.log('form value changed')
-      console.log(selectedValue)
-    });
-
     this.formFilter = this.formBuilder.group({
       programCode: new FormControl(),
       date_filter: ""
@@ -135,14 +123,32 @@ export class TrsReportComponent implements OnInit {
       console.log('err occured', err);
       this.dataService.showLoading(false);
     })
+
+    //ale
+    this.refreshTotalSingle();
+    this.refreshTotalMultiple();
+    
+    this.summaryVisitFilter = this.formBuilder.group({
+      group: new FormControl("Daily"),
+      program_code: new FormControl("Code 1"),
+      from: "",
+      to: "",
+    });
+    this.summaryVisitFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
+      console.log('form value changed')
+      console.log(selectedValue)
+    });
   }
 
   filterReport1(){
     let param = {
       program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
-      date_filter: this.formFilter.get('date_filter').value,
+      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
     };
     console.log(param);
+
+    this.refreshTotalSingle();
+    this.refreshTotalMultiple();
   }
 
   onChangeTab(event){
@@ -180,7 +186,9 @@ export class TrsReportComponent implements OnInit {
 
   refreshTotalSingle(){
     this.TRSService.totalPerBrand(this.totalSingleTableData.pagination, {
-      is_single: true
+      is_single: true,
+      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
+      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalSingle res', res);
@@ -225,7 +233,9 @@ export class TrsReportComponent implements OnInit {
 
   refreshTotalMultiple(){
     this.TRSService.totalPerBrand(this.totalMultipleTableData.pagination, {
-      is_single: false
+      is_single: false,
+      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
+      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalMultiple res', res);
