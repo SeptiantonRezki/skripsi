@@ -1181,14 +1181,16 @@ export class LotteryEditComponent implements OnInit {
       if (this.files2) body.append('header_list_img', this.files2);
       // Replacing tag div with p
       let lottery_desc = this.formPreview.get('desc').value;
-      lottery_desc = lottery_desc.split('<div').join('<p');
-      lottery_desc = lottery_desc.split('<div>').join('<p>');
-      lottery_desc = lottery_desc.split('</div>').join('</p>');
+      // lottery_desc = lottery_desc.split('<div').join('<p');
+      // lottery_desc = lottery_desc.split('<div>').join('<p>');
+      // lottery_desc = lottery_desc.split('</div>').join('</p>');
+      lottery_desc = (lottery_desc) ? lottery_desc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
 
       let lottery_desc_tnc = this.formPreview.get('desc_tc').value;
-      lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
-      lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
-      lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      lottery_desc_tnc = (lottery_desc_tnc) ? lottery_desc_tnc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
       body.append('desc', lottery_desc);
       body.append('desc_tc', lottery_desc_tnc);
       body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value === true ? 'active' : 'inactive');
