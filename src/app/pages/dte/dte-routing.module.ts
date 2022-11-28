@@ -946,7 +946,6 @@ const routes: Routes = [
     component: FlushCoinComponent,
     canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
-    // canActivate: [PageGuard]
   },
   {
     path: 'flush-coin/create',
