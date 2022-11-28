@@ -94,6 +94,7 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url);
   }
 
+  //tab pertama
   totalPerBrand(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "total_per_brand");
     for (var key of Object.keys(additionalParams))
@@ -205,7 +206,21 @@ export class TacticalRetailSalesService extends BaseService {
     return this.postBlobAsJsonApi(url, body);
   }
 
+  //proposal yg available utk user ini
+  getReportFilter1(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_1");
+    return this.getApi(url, queryParams);
+  }
 
+  getReportFilter2(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_2");
+    return this.getApi(url, queryParams);
+  }
+
+  getReportFilter3(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_3");
+    return this.getApi(url, queryParams);
+  }
 
 
 }

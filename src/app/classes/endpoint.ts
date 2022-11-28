@@ -1192,6 +1192,10 @@ export class Endpoint {
         export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-total-per-brand`,
         export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-visit`,
         export_stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-stock-movement`,
+      
+        report_filter_1: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_1`,
+        report_filter_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_2`,
+        report_filter_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_3`,
       },
 
       keyword: {

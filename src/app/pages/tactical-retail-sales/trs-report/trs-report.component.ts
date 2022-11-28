@@ -74,6 +74,10 @@ export class TrsReportComponent implements OnInit {
     offsetPagination: 0,
   };
 
+
+  formFilter: FormGroup;
+  filter1List: any[];
+
   constructor(
     private dataService: DataService,
     private TRSService: TacticalRetailSalesService,
@@ -83,6 +87,8 @@ export class TrsReportComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dataService.showLoading(true);
+
     this.refreshTotalSingle();
     this.refreshTotalMultiple();
     
@@ -91,11 +97,35 @@ export class TrsReportComponent implements OnInit {
       program_code: new FormControl("Code 1"),
       from: "",
       to: "",
+    });
+    this.summaryVisitFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
+      console.log('form value changed')
+      console.log(selectedValue)
+    });
+
+    this.formFilter = this.formBuilder.group({
+      programCode: new FormControl(),
+      date_filter: ""
     })
-    this.summaryVisitFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
-      console.log('form value changed')
-      console.log(selectedValue)
-    })
+
+    let request = {
+      level: 6,
+    };
+    this.TRSService.getReportFilter1(request).subscribe(res => {
+      this.filter1List = res.data;
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    })
+  }
+
+  filterReport1(){
+    let param = {
+      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
+      date_filter: this.formFilter.get('date_filter').value,
+    };
+    console.log(param);
   }
 
   onChangeTab(event){
