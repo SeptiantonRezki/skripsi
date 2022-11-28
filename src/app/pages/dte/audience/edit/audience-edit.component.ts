@@ -125,7 +125,7 @@ export class AudienceEditComponent {
     return true;
   }
 
-  paramImportTranslate = {entity: 'XLS'};
+  paramImportTranslate = {entity: 'CSV'};
 
   constructor(
     private router: Router,
@@ -1675,8 +1675,8 @@ export class AudienceEditComponent {
     dialogConfig.data = {
       password: 'P@ssw0rd',
       trade_audience_group_id,
-      import_audience_status,
-      import_audience_status_type,
+      // import_audience_status,
+      // import_audience_status_type,
       IMPORT_TYPE: 'AUDIENCE',
       min: this.formAudience.get('min').value,
       max: this.formAudience.get('max').value,
@@ -1700,6 +1700,7 @@ export class AudienceEditComponent {
         
         this.importAudienceResult = {...response};
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+        this.router.navigate(["dte", "audience"]);
         // this.selected = response;
         // this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
       }
