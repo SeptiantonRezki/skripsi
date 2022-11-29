@@ -183,7 +183,7 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="summaryVisitTableData.reorderable"
             [count]="summaryVisitTableData.pagination.total" [limit]="summaryVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
-            (sort)="onSummaryVisitSort($event)">
+            (sort)="onSummaryVisitSort($event)"  *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -255,21 +255,21 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="weeklyVisitTableData.reorderable"
             [count]="weeklyVisitTableData.pagination.total" [limit]="weeklyVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setWeeklySummaryVisitPage($event)"
-            (sort)="onWeeklySummaryVisitSort($event)">
+            (sort)="onWeeklySummaryVisitSort($event)"  *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="KPS" [width]="200">
+            <ngx-datatable-column name="Date Visit" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.tgl_journey}}</span>
+                <span>{{row.VisitDate}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Full Name" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="summaryVisitNameClick(row)">{{row.name}}</span>
+                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" [width]="200">
@@ -279,17 +279,17 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="# Visits" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.visits}}</span>
+                <span>{{row.Visits}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="# Invoice Issued" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.issued}}</span>
+                <span>{{row.Trx}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="# Invoice Cancel" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.cancel}}</span>
+                <span>{{row.Canceled}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" [width]="200">
@@ -326,7 +326,7 @@
 
             <h2 class="pl-16">Detail Visit</h2>
             <h2 class="pl-16">
-              {{visitSelected.territory_code}} - {{visitSelected.name}} - {{visitSelected.tgl_journey}}
+              {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
             </h2>
             <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
               [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
