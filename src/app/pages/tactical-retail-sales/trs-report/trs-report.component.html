@@ -7,7 +7,7 @@
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Total Pack Per Brand">
 
-          <form [formGroup]="formFilter" autoComplete="off">
+          <form [formGroup]="formFilterReport" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               
               <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
@@ -20,8 +20,8 @@
               <mat-form-field fxFlex="20%" class="datepicker is-light">
                 <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()" placeholder="Tanggal"
                   formControlName="date_filter">
-                <button mat-button *ngIf="formFilter.get('date_filter').value" matSuffix mat-icon-button aria-label="Clear"
-                  (click)="formFilter.get('date_filter').setValue('')">
+                <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button aria-label="Clear"
+                  (click)="formFilterReport.get('date_filter').setValue('')">
                   <mat-icon>close</mat-icon>
                 </button>
                 <mat-datepicker-toggle matSuffix [for]="date_filter">
@@ -39,7 +39,7 @@
 
           <h2 class="pl-16">Single Journey</h2>
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportTotal()" mat-raised-button type="button" class="">
+            <button (click)="exportTotal()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
@@ -172,7 +172,7 @@
           </form>
 
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportVisit()" mat-raised-button type="button" class="">
+            <button (click)="exportVisit()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
@@ -443,7 +443,7 @@
           </form>
           
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportStockMovement()" mat-raised-button type="button" class="">
+            <button (click)="exportStockMovement()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>

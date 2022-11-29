@@ -103,7 +103,7 @@ export class TrsReportComponent implements OnInit {
   };
 
 
-  formFilter: FormGroup;
+  formFilterReport: FormGroup;
   filter1List: any[];
   filter2List: any[];
 
@@ -112,13 +112,15 @@ export class TrsReportComponent implements OnInit {
     private TRSService: TacticalRetailSalesService,
     private formBuilder: FormBuilder,
   ) {
-    this.permission = this.roles.getRoles('principal.trsreport.lihat');
+    this.permission = this.roles.getRoles('principal.trsreport');
+    console.log("this.permission");
+    console.log(this.permission);
   }
 
   ngOnInit() {
     //chanif
     this.dataService.showLoading(true);
-    this.formFilter = this.formBuilder.group({
+    this.formFilterReport = this.formBuilder.group({
       programCode: new FormControl(),
       date_filter: ""
     })
@@ -174,8 +176,8 @@ export class TrsReportComponent implements OnInit {
 
   filterReport1(){
     let param = {
-      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
-      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
+      program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
+      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     };
     console.log(param);
 
@@ -224,8 +226,8 @@ export class TrsReportComponent implements OnInit {
     try {
       const response = await this.TRSService.exportTotalPerBrand(this.totalSingleTableData.pagination,
         {
-          program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
-          date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
+          program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
+          date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
         }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
@@ -239,8 +241,8 @@ export class TrsReportComponent implements OnInit {
   refreshTotalSingle(){
     this.TRSService.totalPerBrand(this.totalSingleTableData.pagination, {
       is_single: true,
-      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
-      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
+      program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
+      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalSingle res', res);
@@ -286,8 +288,8 @@ export class TrsReportComponent implements OnInit {
   refreshTotalMultiple(){
     this.TRSService.totalPerBrand(this.totalMultipleTableData.pagination, {
       is_single: false,
-      program_code: this.formFilter.get('programCode').value == null? '': this.formFilter.get('programCode').value,
-      date_filter: this.formFilter.get('date_filter').value == ''?'':moment(this.formFilter.get('date_filter').value).format("YYYYMMDD"),
+      program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
+      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalMultiple res', res);
@@ -337,6 +339,7 @@ export class TrsReportComponent implements OnInit {
       const param = this.visitSelected ? {
         field_force: this.visitSelected.field_force,
         program_code: this.visitSelected.program_code,
+        VisitDate: this.visitSelected.VisitDate,
       } : null;
       const response = await this.TRSService.exportVisit(param, {
         group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
@@ -456,6 +459,7 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.detailVisit(this.detailVisitTableData.pagination, {
       field_force: this.visitSelected.field_force,
       program_code: this.visitSelected.program_code,
+      VisitDate: this.visitSelected.VisitDate,
     }).subscribe(
       async res => {
         console.log('aleapi refreshDetailVisit res', res);
