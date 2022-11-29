@@ -825,16 +825,29 @@ export class RetailerEditComponent {
         body['npwp'] = '';
       }
 
-      this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({
-            message: 'Data berhasil diubah'
-          });
-          this.router.navigate(['user-management', 'retailer']);
-          window.localStorage.removeItem('detail_retailer');
-        },
-        err => { }
-      );
+      if(this.formRetailer.get('country').value === 'ID'){
+        this.retailerService.put_v2(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      } else {
+        this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      }
     } else {
       this.dialogService.openSnackBar({
         message: this.translate.instant('global.label.please_complete_data')
