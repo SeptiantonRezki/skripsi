@@ -166,8 +166,8 @@ export class CreatetsmComponent implements OnInit {
       formSku: [""],
       formFilterSku: [new ReplaySubject<any[]>(1)],
       filteredSku: [new ReplaySubject<any[]>(1)],
-      ex_coin_per_sku: [null, Validators.required],
-      max_qty_per_order: [null]
+      ex_coin_per_sku: [null, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [null, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
 
@@ -203,8 +203,8 @@ export class CreatetsmComponent implements OnInit {
       formSku: [""],
       formFilterSku: [""],
       filteredSku: [new ReplaySubject<any[]>(1)],
-      ex_coin_per_sku: [null, Validators.required],
-      max_qty_per_order: [null]
+      ex_coin_per_sku: [null, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [null, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -314,15 +314,15 @@ export class CreatetsmComponent implements OnInit {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
             }).map(val => {
                 //enhancement challenge 17/11/22
-                if(this.ls.selectedLanguages.includes('ph')===true){
-                  return {
-                    sku: val.formSku,
-                    ex_coin_per_sku: val.ex_coin_per_sku,
-                    max_qty_per_order: val.max_qty_per_order
-                  }
-                }else{
+                // if(this.ls.selectedLanguages.includes('ph')===true){
+                //   return {
+                //     sku: val.formSku,
+                //     ex_coin_per_sku: val.ex_coin_per_sku,
+                //     max_qty_per_order: val.max_qty_per_order
+                //   }
+                // }else{
                   return val.formSku
-                }
+                // }
                 //end
             });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
@@ -332,6 +332,40 @@ export class CreatetsmComponent implements OnInit {
 
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
+            }
+
+            if(this.ls.selectedLanguages.includes('ph')===true){
+              const exCoinPerSku = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.ex_coin_per_sku
+                //end
+              });
+
+              if (exCoinPerSku.length > 0) {
+                body['extra_coin_sku'] = exCoinPerSku;
+              }
+
+              if (exCoinPerSku.length === 0) {
+                delete body['extra_coin_sku'];
+              }
+
+              const maxQtyPerOrder = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.max_qty_per_order ? val.max_qty_per_order : 10000
+                //end
+              });
+
+              if (maxQtyPerOrder.length > 0) {
+                body['max_qty_order'] = maxQtyPerOrder;
+              }
+
+              if (maxQtyPerOrder.length === 0) {
+                delete body['max_qty_order'];
+              }
             }
           } else {
             if (body['barcode']) delete body['barcode'];

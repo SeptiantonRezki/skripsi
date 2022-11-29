@@ -147,31 +147,31 @@ export class EdittsmComponent implements OnInit {
           formItem.controls['formFilterSku'].value.next(bc);
           formItem.controls['filteredSku'].value.next([{ barcode: bc }].slice());
 
-          formItem
-            .valueChanges
-            .pipe(
-              debounceTime(300),
-              tap(() => this.searching = true),
-              switchMap(value => {
-                console.log('val', value);
-                if (value.formFilterSku == null || value.formFilterSku == "") {
-                  this.searching = false;
-                  return [];
-                }
-                console.log('after', value);
-                return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
-                  .pipe(
-                    finalize(() => this.searching = false)
-                  )
-              })
-            ).subscribe(res => {
-              console.log('res', res, formItem.controls['filteredSku'].value);
-              // this.filteredSku.next(res.data);
-              formItem.controls['filteredSku'].value.next(res.data);
-              // value.next(res.data);
-              // this.litSkus.push(value);
-              // this.filteredSku.next(this.litSkus);
-            });
+          // formItem
+          //   .valueChanges
+          //   .pipe(
+          //     debounceTime(300),
+          //     tap(() => this.searching = true),
+          //     switchMap(value => {
+          //       console.log('val', value);
+          //       if (value.formFilterSku == null || value.formFilterSku == "") {
+          //         this.searching = false;
+          //         return [];
+          //       }
+          //       console.log('after', value);
+          //       return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+          //         .pipe(
+          //           finalize(() => this.searching = false)
+          //         )
+          //     })
+          //   ).subscribe(res => {
+          //     console.log('res', res, formItem.controls['filteredSku'].value);
+          //     // this.filteredSku.next(res.data);
+          //     formItem.controls['filteredSku'].value.next(res.data);
+          //     // value.next(res.data);
+          //     // this.litSkus.push(value);
+          //     // this.filteredSku.next(this.litSkus);
+          //   });
 
           skus.push(formItem);
           console.log('skus', skus);
@@ -252,8 +252,8 @@ export class EdittsmComponent implements OnInit {
       formSku: [""],
       formFilterSku: [new ReplaySubject<any[]>(1)],
       filteredSku: [new ReplaySubject<any[]>(1)],
-      ex_coin_per_sku: [null, Validators.required],
-      max_qty_per_order: [null]
+      ex_coin_per_sku: [null, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [null, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
 
@@ -353,15 +353,15 @@ export class EdittsmComponent implements OnInit {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
             }).map(val => {
                 //enhancement challenge 17/11/22
-                if(this.ls.selectedLanguages.includes('ph')===true){
-                  return {
-                    sku: val.formSku,
-                    ex_coin_per_sku: val.ex_coin_per_sku,
-                    max_qty_per_order: val.max_qty_per_order
-                  }
-                }else{
+                // if(this.ls.selectedLanguages.includes('ph')===true){
+                //   return {
+                //     sku: val.formSku,
+                //     ex_coin_per_sku: val.ex_coin_per_sku,
+                //     max_qty_per_order: val.max_qty_per_order
+                //   }
+                // }else{
                   return val.formSku
-                }
+                // }
                 //end
             });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
@@ -372,6 +372,42 @@ export class EdittsmComponent implements OnInit {
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
             }
+
+            //enhancement challenge 17/11/22
+            if(this.ls.selectedLanguages.includes('ph')===true){
+              const exCoinPerSku = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.ex_coin_per_sku
+                //end
+              });
+
+              if (exCoinPerSku.length > 0) {
+                body['extra_coin_sku'] = exCoinPerSku;
+              }
+
+              if (exCoinPerSku.length === 0) {
+                delete body['extra_coin_sku'];
+              }
+
+              const maxQtyPerOrder = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.max_qty_per_order ? val.max_qty_per_order : 10000
+                //end
+              });
+
+              if (maxQtyPerOrder.length > 0) {
+                body['max_qty_order'] = maxQtyPerOrder;
+              }
+
+              if (maxQtyPerOrder.length === 0) {
+                delete body['max_qty_order'];
+              }
+            }
+            //end
           } else {
             if (body['barcode']) delete body['barcode'];
           }

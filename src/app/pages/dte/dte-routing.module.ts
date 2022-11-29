@@ -340,7 +340,7 @@ const routes: Routes = [
   },
   {
     path: "automation/detail",
-    component: AudienceTradeProgramEditComponent,
+    component: EdittsmComponent,
     data: {
       breadcrumbs: brConfig.dte.automation.detail
     },
@@ -777,7 +777,7 @@ const routes: Routes = [
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
-  
+
   // {
   //   path: "audience",
   //   component: AudienceIndexComponent,
