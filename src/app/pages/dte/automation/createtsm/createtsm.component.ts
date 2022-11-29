@@ -166,8 +166,8 @@ export class CreatetsmComponent implements OnInit {
       formSku: [""],
       formFilterSku: [new ReplaySubject<any[]>(1)],
       filteredSku: [new ReplaySubject<any[]>(1)],
-      ex_coin_per_sku: [null, [Validators.required, Validators.max(10000), Validators.min(0)]],
-      max_qty_per_order: [null, [Validators.max(10000), Validators.min(1)]]
+      ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
 
@@ -203,8 +203,8 @@ export class CreatetsmComponent implements OnInit {
       formSku: [""],
       formFilterSku: [""],
       filteredSku: [new ReplaySubject<any[]>(1)],
-      ex_coin_per_sku: [null, [Validators.required, Validators.max(10000), Validators.min(0)]],
-      max_qty_per_order: [null, [Validators.max(10000), Validators.min(1)]]
+      ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
