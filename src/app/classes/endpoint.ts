@@ -1170,22 +1170,23 @@ export class Endpoint {
         proposal_detail: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
         cancel_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/cancel_proposal/${context.id}`,
         customer_name: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/getcustname/${context.id}`,
-        
+
         list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_executor`,
         list_kecamatan: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_kecamatan`,
         list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_product`,
         master_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/master_reason`,
-        
+
         list_area: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area`,
         list_area_by_user: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area_by_user`,
 
         export_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/data?area=${context.area_id}`,
         export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/list`,
-      
-        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
 
+        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
+        
         total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/total-per-brand`,
         summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/summary-visit`,
+        weekly_summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/weekly-summary-visit`,
         detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/detail-visit`,
         stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
         stock_movement_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement-2`,
@@ -1199,7 +1200,6 @@ export class Endpoint {
         report_filter_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_2`,
         report_filter_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_3`,
       },
-
       keyword: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited`,
         put: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited/${context.id}`,

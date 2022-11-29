@@ -111,6 +111,14 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  weeklySummaryVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "summary_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
+    return this.getApi(url, queryParams);
+  }
+
   detailVisit(queryParams?, additionalParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "detail_visit");
     for (var key of Object.keys(additionalParams))

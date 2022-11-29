@@ -60,6 +60,13 @@ export class TrsReportComponent implements OnInit {
     pagination: new Page(),
     offsetPagination: 0,
   };
+  weeklyVisitTableData: DataTableData = {
+    rows: [],
+    loadingIndicator: true,
+    reorderable: true,
+    pagination: new Page(),
+    offsetPagination: 0,
+  };
   detailVisitTableData: DataTableData = {
     rows: [],
     loadingIndicator: true,
@@ -177,6 +184,11 @@ export class TrsReportComponent implements OnInit {
   }
 
   filterReport2(){
+    this.refreshSummaryVisit();
+    this.visitSelected = null;
+  }
+
+  updateVisitTable(){
     this.refreshSummaryVisit();
     this.visitSelected = null;
   }
@@ -348,23 +360,40 @@ export class TrsReportComponent implements OnInit {
   }
 
   refreshSummaryVisit(){
-    this.TRSService.summaryVisit(this.summaryVisitTableData.pagination, {
+    let request = {
       group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
       program_code: this.summaryVisitFilter.get('program_code').value == null? '': this.summaryVisitFilter.get('program_code').value,
       kps: this.summaryVisitFilter.get('kps').value == null? '': this.summaryVisitFilter.get('kps').value,
       from: this.summaryVisitFilter.get('from').value == ''?'':moment(this.summaryVisitFilter.get('from').value).format("YYYY-MM-DD"),
       to: this.summaryVisitFilter.get('to').value == ''?'':moment(this.summaryVisitFilter.get('to').value).format("YYYY-MM-DD"),
-    }).subscribe(
-      async res => {
-        console.log('aleapi refreshSummaryVisit res', res);
-        Page.renderPagination(this.summaryVisitTableData.pagination, res.data);
-        this.summaryVisitTableData.rows = res.data.data;
-      },
-      err => {},
-      () => {
-        this.summaryVisitTableData.loadingIndicator = false;
-      }
-    );
+    };
+
+    if(request.group == 'Daily'){
+      this.TRSService.summaryVisit(this.summaryVisitTableData.pagination, request).subscribe(
+        async res => {
+          console.log('aleapi refreshSummaryVisit res', res);
+          Page.renderPagination(this.summaryVisitTableData.pagination, res.data);
+          this.summaryVisitTableData.rows = res.data.data;
+        },
+        err => {},
+        () => {
+          this.summaryVisitTableData.loadingIndicator = false;
+        }
+      );
+    } else {
+      //=================WEEKLY
+      this.TRSService.weeklySummaryVisit(this.weeklyVisitTableData.pagination, request).subscribe(
+        async res => {
+          console.log('aleapi refreshWeeklySummaryVisit res', res);
+          Page.renderPagination(this.weeklyVisitTableData.pagination, res.data);
+          this.weeklyVisitTableData.rows = res.data.data;
+        },
+        err => {},
+        () => {
+          this.weeklyVisitTableData.loadingIndicator = false;
+        }
+      );
+    }
   }
 
   setSummaryVisitPage(pageInfo) {
@@ -381,6 +410,20 @@ export class TrsReportComponent implements OnInit {
 
     this.refreshSummaryVisit();
   }
+  setWeeklySummaryVisitPage(pageInfo) {
+    this.weeklyVisitTableData.loadingIndicator = true;
+
+    this.weeklyVisitTableData.offsetPagination = pageInfo.offset;
+
+    if (this.weeklyVisitTableData.pagination['search']) {
+      this.weeklyVisitTableData.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage("page", pageInfo.offset + 1);
+      this.weeklyVisitTableData.pagination.page = this.dataService.getFromStorage("page");
+    }
+
+    this.refreshSummaryVisit();
+  }
 
   onSummaryVisitSort(event) {
     this.summaryVisitTableData.loadingIndicator = true;
@@ -390,6 +433,19 @@ export class TrsReportComponent implements OnInit {
     this.summaryVisitTableData.pagination.page = 1;
 
     this.dataService.setToStorage("page", this.summaryVisitTableData.pagination.page);
+    this.dataService.setToStorage("sort", event.column.prop);
+    this.dataService.setToStorage("sort_type", event.newValue);
+
+    this.refreshSummaryVisit();
+  }
+  onWeeklySummaryVisitSort(event) {
+    this.weeklyVisitTableData.loadingIndicator = true;
+
+    this.weeklyVisitTableData.pagination.sort = event.column.prop;
+    this.weeklyVisitTableData.pagination.sort_type = event.newValue;
+    this.weeklyVisitTableData.pagination.page = 1;
+
+    this.dataService.setToStorage("page", this.weeklyVisitTableData.pagination.page);
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 

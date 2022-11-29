@@ -126,7 +126,7 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
               <mat-form-field class="is-light">
                 <mat-select formControlName="group">
-                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item">{{item}}</mat-option>
+                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item" (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
@@ -176,6 +176,7 @@
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
+
           <ngx-datatable class="material" [rows]="summaryVisitTableData.rows"
             [loadingIndicator]="summaryVisitTableData.loadingIndicator" [columnMode]="'force'"
             [offset]="summaryVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
@@ -190,6 +191,78 @@
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Date Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.VisitDate}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Full Name" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Territory Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.territory_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Visits" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Visits}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Issued" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Trx}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Cancel" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Canceled}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Early Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.start_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Last Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.end_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Modus Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_modus}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Min Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_min}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Max Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_max}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+
+          <ngx-datatable class="material" [rows]="weeklyVisitTableData.rows"
+            [loadingIndicator]="weeklyVisitTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="weeklyVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="weeklyVisitTableData.reorderable"
+            [count]="weeklyVisitTableData.pagination.total" [limit]="weeklyVisitTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setWeeklySummaryVisitPage($event)"
+            (sort)="onWeeklySummaryVisitSort($event)">
+
+            <ngx-datatable-column name="Program Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="KPS" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
@@ -246,6 +319,7 @@
             </ngx-datatable-column>
 
           </ngx-datatable>
+
 
           <div *ngIf="visitSelected">
             <hr />
