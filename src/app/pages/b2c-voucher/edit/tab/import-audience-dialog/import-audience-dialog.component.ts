@@ -42,8 +42,8 @@ export class ImportAudienceDialogComponent implements OnInit {
     this.files = event;
 
     console.warn('files info', this.files);
-    if (this.files.name.indexOf('.xlsx') > -1) {
-      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLS!' }); // TODO
+    if (this.files.name.indexOf('.xlsx') === -1) {
+      this.dialogService.openSnackBar({ message: 'Ekstensi File wajib XLSX!' }); // TODO
       return;
     }
 
