@@ -8,20 +8,21 @@
         <mat-tab label="Total Pack Per Brand">
 
           <form [formGroup]="formFilterReport" autoComplete="off">
-            <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-              
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px">
+
               <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
                 <mat-select placeholder="Program Code" formControlName="programCode">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
-  
+
               <mat-form-field fxFlex="20%" class="datepicker is-light">
-                <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()" placeholder="Tanggal"
-                  formControlName="date_filter">
-                <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button aria-label="Clear"
-                  (click)="formFilterReport.get('date_filter').setValue('')">
+                <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()"
+                  placeholder="Tanggal" formControlName="date_filter">
+                <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="formFilterReport.get('date_filter').setValue('')">
                   <mat-icon>close</mat-icon>
                 </button>
                 <mat-datepicker-toggle matSuffix [for]="date_filter">
@@ -30,7 +31,8 @@
                 <mat-datepicker #date_filter></mat-datepicker>
               </mat-form-field>
 
-              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;" (click)="filterReport1()">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport1()">
                 Filter
               </button>
             </div>
@@ -126,7 +128,8 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
               <mat-form-field class="is-light">
                 <mat-select formControlName="group">
-                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item" (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
+                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item"
+                    (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
@@ -165,7 +168,8 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #to></mat-datepicker>
               </mat-form-field>
-              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;" (click)="filterReport2()">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport2()">
                 Filter
               </button>
             </div>
@@ -183,7 +187,7 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="summaryVisitTableData.reorderable"
             [count]="summaryVisitTableData.pagination.total" [limit]="summaryVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
-            (sort)="onSummaryVisitSort($event)"  *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
+            (sort)="onSummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -255,7 +259,7 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="weeklyVisitTableData.reorderable"
             [count]="weeklyVisitTableData.pagination.total" [limit]="weeklyVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setWeeklySummaryVisitPage($event)"
-            (sort)="onWeeklySummaryVisitSort($event)"  *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+            (sort)="onWeeklySummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -436,12 +440,13 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #to></mat-datepicker>
               </mat-form-field>
-              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;" (click)="filterReport3()">
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport3()">
                 Filter
               </button>
             </div>
           </form>
-          
+
           <div class="button-row" fxLayout="row-reverse">
             <button (click)="exportStockMovement()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
@@ -459,7 +464,7 @@
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span (click)="stockMovementClick(row)">{{row.partner_from}}</span>
               </ng-template>
-            </ngx-datatable-column>trs_stock_movement.movement_mode = trs_proposal_executor.territory_code trs_proposal
+            </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.partner_from_territory}}</span>

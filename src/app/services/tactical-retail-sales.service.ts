@@ -130,7 +130,7 @@ export class TacticalRetailSalesService extends BaseService {
     const url = this.getUrl(this.namespace, "stock_movement");
     for (var key of Object.keys(additionalParams))
       queryParams[key] = additionalParams[key]
-    return this.getBlobApi(url, queryParams);
+    return this.getApi(url, queryParams);
   }
 
   stockMovement2(queryParams?, additionalParams?): Observable<any> {
