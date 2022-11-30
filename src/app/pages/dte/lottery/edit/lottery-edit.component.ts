@@ -1278,22 +1278,49 @@ export class LotteryEditComponent implements OnInit {
     console.log(error);
   }
 
-  submitPemenang() {
+  async submitPemenang() {
     const id = this.dataService.getFromStorage('detail_lottery').id;
     this.dataService.showLoading(true);
     
     let body = new FormData();
     body.append('lottery_id', this.dataService.getFromStorage('detail_lottery').id);
     if (this.files3) body.append('winner_img', this.files3);
+    let upload_image = 0;
+    let upload_file = 0;
+    if (this.files3) {
+      try {
+        const response = await this.lotteryService.put_winner_image({ id: id }, body).toPromise();
+        this.dataService.showLoading(false);
+        upload_image = 1;
+      } catch (error) {
+        upload_image = 2;
+        this.dataService.showLoading(false);
+        throw error;
+      }
+    }
     if (this.files4) body.append('file', this.files4);
-  
-    this.lotteryService.put_winner({ id: id }, body).subscribe(res => {
-      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.dataService.showLoading(false);
-      this.setStorageDetail();
-    }, err => {
-      this.dataService.showLoading(false);
-    });
+    if (this.files4) {
+      if (this.files3) body.delete('winner_img');
+      try {
+        const response = await this.lotteryService.put_winner({ id: id }, body).toPromise();
+        this.dataService.showLoading(false);
+        upload_file = 1;
+      } catch (error) {
+        upload_file = 2;
+        this.dataService.showLoading(false);
+        throw error;
+      }
+    }
+    console.log('DATA IMAGE ', upload_image);
+    console.log('DATA FILE ', upload_file);
+    if (upload_image === 1 || upload_file === 1) { 
+      console.log('RUN THIS');
+      this.dialogService.openSnackBar({
+        message: this.ls.locale.notification.popup_notifikasi.text22
+      });
+      this.setStorageDetail(); 
+    }
+    this.dataService.showLoading(false);
   }
 
   submitPublishUnpublish() {
