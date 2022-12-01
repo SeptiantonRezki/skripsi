@@ -72,6 +72,7 @@ import { CTAExternalWebComponent } from "./cta/external-web/external-web.compone
 import { InfoBoardComponent } from "./info-board/index/info-board.component";
 import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
+import { StorePhotoVerificationComponent } from "./retailer/store-photo-verification/store-photo-verification.component";
 
 const routes: Routes = [
   {
@@ -287,6 +288,14 @@ const routes: Routes = [
     //   listLevel: ListLevelResolver
     // },
     canActivate: [PageGuard]
+  },
+  {
+    path: "retailer/store-photo-verifications",
+    component: StorePhotoVerificationComponent,
+    data: {
+
+    },
+    canActivate: []
   },
   {
     path: "customer",

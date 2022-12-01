@@ -151,6 +151,7 @@ import { TierPriceDialogComponent } from './retailer/orders-rrp/detail/tier-pric
 import { CancelConfirmationDialogComponent } from './retailer/orders-rrp/detail/cancel-confirmation-dialog/cancel-confirmation-dialog.component';
 import { NgxMaterialTimepicker24HoursFaceComponent } from "ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component";
 import { PreviewImagePaymentComponent } from './retailer/orders-rrp/detail/preview-image-payment/preview-image-payment.component';
+import { StorePhotoVerificationComponent } from './retailer/store-photo-verification/store-photo-verification.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -335,6 +336,7 @@ export const MY_FORMATS = {
     TierPriceDialogComponent,
     CancelConfirmationDialogComponent,
     PreviewImagePaymentComponent,
+    StorePhotoVerificationComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,

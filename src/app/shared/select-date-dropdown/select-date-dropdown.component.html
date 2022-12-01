@@ -1,0 +1,41 @@
+<mat-form-field class="orders dropdown select-date-dropdown">
+  
+  <mat-select [(ngModel)]="selectedDate" (selectionChange)="onSelectionChange($event)" [(value)]="selectedDate"
+    [compareWith]="compareById">
+
+    <mat-select-trigger>
+      {{ selectedDate?.title }}
+    </mat-select-trigger>
+    
+    <mat-option *ngFor="let date of dates" [value]="date" class="custom-option" [disabled]="date.readonly" (mouseenter)="hoverOnId = date.id">
+      <span>{{date.title}}</span> <br />
+      <small *ngIf="date.range > 0" class="text-secondary">({{date.range | dateRange : 'DD MMM YYYY' :
+        date.title}})</small>
+    </mat-option>
+
+    <div fxLayout="row wrap" style="padding: 0 14px;" *ngIf="hoverOnId === CUSTOM_RANGE_ID || selectedDate.id === CUSTOM_RANGE_ID">
+      
+      <mat-form-field fxFlex="45" floatLabel="never" class="datepicker is-light">
+        <input matInput #startDateModel="ngModel" [matDatepicker]="startDate" (click)="startDate.open()" placeholder="Start Date"
+          [(ngModel)]="start_date" (dateChange)="onDatePickerChange(startDateModel, endDateModel)" readonly
+          [max]="end_date || _maxDate">
+          <mat-error *ngIf="startDateModel?.errors?.matDatepickerMax">
+            Max Date: {{startDateModel.errors.matDatepickerMax.max.format('DD MMM YYYY')}}
+          </mat-error>
+        <mat-datepicker #startDate></mat-datepicker>
+      </mat-form-field>
+
+      <div fxFlex="10" style="align-self: center; text-align: center;">-</div>
+
+      <mat-form-field fxFlex="45" floatLabel="never" class="datepicker is-light">
+        <input matInput #endDateModel="ngModel" [matDatepicker]="endDate" (click)="endDate.open()"
+          (dateChange)="onDatePickerChange(startDateModel, endDateModel)" placeholder="End Date" [(ngModel)]="end_date"
+          readonly [min]="_minDate || start_date" [max]="_maxDate">
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
+  </mat-select>
+  
+</mat-form-field>
