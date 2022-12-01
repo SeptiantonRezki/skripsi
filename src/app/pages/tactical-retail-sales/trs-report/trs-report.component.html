@@ -6,9 +6,42 @@
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Total Pack Per Brand">
+
+          <form [formGroup]="formFilterReport" autoComplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
+              fxLayoutGap.lt-md="0px">
+
+              <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
+                <mat-select placeholder="Program Code" formControlName="programCode">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="20%" class="datepicker is-light">
+                <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()"
+                  placeholder="Tanggal" formControlName="date_filter">
+                <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="formFilterReport.get('date_filter').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="date_filter">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #date_filter></mat-datepicker>
+              </mat-form-field>
+
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport1()">
+                Filter
+              </button>
+            </div>
+          </form>
+
+
           <h2 class="pl-16">Single Journey</h2>
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportTotal()" mat-raised-button type="button" class="">
+            <button (click)="exportTotal()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
@@ -90,18 +123,25 @@
 
         <mat-tab label="Visit">
           <h2 class="pl-16">Summary Visit</h2>
+
           <form [formGroup]="summaryVisitFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
-
               <mat-form-field class="is-light">
                 <mat-select formControlName="group">
-                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item">{{item}}</mat-option>
+                  <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item"
+                    (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
-                <mat-select formControlName="program_code">
-                  <mat-option *ngFor="let item of summaryVisitFilterProgramCodeData" [value]="item">{{item}}
-                  </mat-option>
+                <mat-select placeholder="Program Code" formControlName="program_code">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+                <mat-select placeholder="KPS" formControlName="kps">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
@@ -128,21 +168,26 @@
                 </mat-datepicker-toggle>
                 <mat-datepicker #to></mat-datepicker>
               </mat-form-field>
-
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport2()">
+                Filter
+              </button>
             </div>
           </form>
+
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportVisit()" mat-raised-button type="button" class="">
+            <button (click)="exportVisit()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
+
           <ngx-datatable class="material" [rows]="summaryVisitTableData.rows"
             [loadingIndicator]="summaryVisitTableData.loadingIndicator" [columnMode]="'force'"
             [offset]="summaryVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="summaryVisitTableData.reorderable"
             [count]="summaryVisitTableData.pagination.total" [limit]="summaryVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
-            (sort)="onSummaryVisitSort($event)">
+            (sort)="onSummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
 
             <ngx-datatable-column name="Program Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -151,12 +196,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Date Visit" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.tgl_journey}}</span>
+                <span>{{row.VisitDate}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Full Name" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="summaryVisitNameClick(row)">{{row.name}}</span>
+                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" [width]="200">
@@ -166,17 +211,17 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="# Visits" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.visits}}</span>
+                <span>{{row.Visits}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="# Invoice Issued" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.issued}}</span>
+                <span>{{row.Trx}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="# Invoice Cancel" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.cancel}}</span>
+                <span>{{row.Canceled}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" [width]="200">
@@ -207,12 +252,85 @@
 
           </ngx-datatable>
 
+
+          <ngx-datatable class="material" [rows]="weeklyVisitTableData.rows"
+            [loadingIndicator]="weeklyVisitTableData.loadingIndicator" [columnMode]="'force'"
+            [offset]="weeklyVisitTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+            [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="weeklyVisitTableData.reorderable"
+            [count]="weeklyVisitTableData.pagination.total" [limit]="weeklyVisitTableData.pagination.per_page"
+            [externalPaging]="true" [externalSorting]="true" (page)="setWeeklySummaryVisitPage($event)"
+            (sort)="onWeeklySummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+
+            <ngx-datatable-column name="Program Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.VisitDate}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Full Name" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Territory Code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.territory_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Visits" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Visits}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Issued" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Trx}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="# Invoice Cancel" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.Canceled}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Early Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.start_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Last Visit" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.end_visit}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Modus Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_modus}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Min Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_min}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Max Timespent" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.timespent_max}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+
           <div *ngIf="visitSelected">
             <hr />
 
             <h2 class="pl-16">Detail Visit</h2>
             <h2 class="pl-16">
-              {{visitSelected.territory_code}} - {{visitSelected.name}} - {{visitSelected.tgl_journey}}
+              {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
             </h2>
             <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
               [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
@@ -289,8 +407,48 @@
         </mat-tab>
 
         <mat-tab label="Stock Movement">
+
+          <form [formGroup]="stockMovementFilter" autoComplete="off">
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
+              <mat-form-field class="is-light">
+                <mat-select placeholder="Program Code" formControlName="program_code">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light">
+                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                  formControlName="from" readonly>
+                <button mat-button *ngIf="stockMovementFilter.get('from').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="stockMovementFilter.get('from').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="from">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #from></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="datepicker is-light">
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                  formControlName="to" readonly>
+                <button mat-button *ngIf="stockMovementFilter.get('to').value" matSuffix mat-icon-button
+                  aria-label="Clear" (click)="stockMovementFilter.get('to').setValue('')">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-datepicker-toggle matSuffix [for]="to">
+                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #to></mat-datepicker>
+              </mat-form-field>
+              <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                (click)="filterReport3()">
+                Filter
+              </button>
+            </div>
+          </form>
+
           <div class="button-row" fxLayout="row-reverse">
-            <button (click)="exportStockMovement()" mat-raised-button type="button" class="">
+            <button (click)="exportStockMovement()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
             </button>
           </div>
@@ -304,7 +462,7 @@
 
             <ngx-datatable-column name="Executor" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.partner_from}}</span>
+                <span (click)="stockMovementClick(row)">{{row.partner_from}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" [width]="200">
@@ -312,14 +470,14 @@
                 <span>{{row.partner_from_territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" [width]="200">
+            <ngx-datatable-column name="Journey Type" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.product_code}}</span>
+                <span>{{row.journey_type}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Quantity" [width]="200">
+            <ngx-datatable-column name="Journey Date" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.qty}}</span>
+                <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Total Transaksi" [width]="200">
@@ -328,7 +486,83 @@
               </ng-template>
             </ngx-datatable-column>
 
+            <ngx-datatable-column *ngFor="let item of stockMovementBrands" [name]="item" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.brands[item]}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
           </ngx-datatable>
+
+          <div *ngIf="stockMovementSelected">
+            <hr />
+
+            <ngx-datatable class="material" [rows]="stockMovement2TableData.rows"
+              [loadingIndicator]="stockMovement2TableData.loadingIndicator" [columnMode]="'force'"
+              [offset]="stockMovement2TableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+              [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovement2TableData.reorderable"
+              [count]="stockMovement2TableData.pagination.total" [limit]="stockMovement2TableData.pagination.per_page"
+              [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement2Page($event)"
+              (sort)="onStockMovement2Sort($event)">
+
+              <ngx-datatable-column name="Date" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.created_at}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Type" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.movement_type}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Movement Code" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span (click)="stockMovement2Click(row)">{{row.movement_code}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Need To Review" [width]="200">
+                <ng-template ngx-datatable-cell-template let-row="row">
+                  <span>{{row.need_to_review}}</span>
+                </ng-template>
+              </ngx-datatable-column>
+
+            </ngx-datatable>
+
+            <div *ngIf="stockMovement2Selected">
+              <hr />
+
+              <ngx-datatable class="material" [rows]="stockMovement3TableData.rows"
+                [loadingIndicator]="stockMovement3TableData.loadingIndicator" [columnMode]="'force'"
+                [offset]="stockMovement3TableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
+                [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovement3TableData.reorderable"
+                [count]="stockMovement3TableData.pagination.total" [limit]="stockMovement3TableData.pagination.per_page"
+                [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement3Page($event)"
+                (sort)="onStockMovement3Sort($event)">
+
+                <ngx-datatable-column name="Product" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.product_code}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Qty" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.qty}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="From" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.partner_from}} - {{row.partner_from_territory}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="To" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.partner_to}} - {{row.partner_to_territory}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+              </ngx-datatable>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>
