@@ -515,9 +515,10 @@ export class TrsReportComponent implements OnInit {
         from: this.stockMovementFilter.get('from').value == ''?'':moment(this.stockMovementFilter.get('from').value).format("YYYY-MM-DD"),
         to: this.stockMovementFilter.get('to').value == ''?'':moment(this.stockMovementFilter.get('to').value).format("YYYY-MM-DD"),
       };
+
       if(this.stockMovementSelected){
-        params.table_2_movement_code = this.stockMovementSelected.movement_code
-        params.table_2_name = this.stockMovementSelected.partner_from
+        params.table_2_territory = this.stockMovementSelected.Territory
+        params.table_2_journey = this.stockMovementSelected.tgl_journey
         if(this.stockMovement2Selected){
           params.table_3_movement_code = this.stockMovement2Selected.movement_code
         }
@@ -592,8 +593,8 @@ export class TrsReportComponent implements OnInit {
 
   refreshStockMovement2(){
     this.TRSService.stockMovement2(this.stockMovement2TableData.pagination, {
-      movement_code: this.stockMovementSelected.movement_code,
-      name: this.stockMovementSelected.partner_from,
+      territory: this.stockMovementSelected.Territory,
+      journey: this.stockMovementSelected.tgl_journey,
     }).subscribe(
       async res => {
         console.log('aleapi refreshStockMovement2 res', res);
@@ -638,6 +639,7 @@ export class TrsReportComponent implements OnInit {
 
   refreshStockMovement3(){
     this.TRSService.stockMovement3(this.stockMovement3TableData.pagination, {
+      journey: this.stockMovementSelected.tgl_journey,
       movement_code: this.stockMovement2Selected.movement_code,
     }).subscribe(
       async res => {
