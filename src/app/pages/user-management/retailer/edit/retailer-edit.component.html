@@ -357,8 +357,8 @@
             </div> -->
             <div fxFlex fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="10px" *ngIf="permission?.ktp">
               <div fxLayout="column">
-                <mat-label>{{'retailer.detail.data_ktp' | translate}}</mat-label>
-                <small>{{'retailer.detail.data_ktp' | translate}} {{ formRetailer.get('owner_verified').value ? ('retailer.detail.unlocked' | translate) : ('retailer.detail.locked' | translate) }}</small>
+                <mat-label>{{ls.locale?.retailer?.detail?.data_ktp}}</mat-label>
+                <small>{{ls.locale?.retailer?.detail?.data_ktp}} {{ formRetailer.get('owner_verified').value ? ls.locale?.retailer?.detail?.unlocked : ls.locale?.retailer?.detail?.locked }}</small>
               </div>
               <mat-slide-toggle formControlName="owner_verified" (change)="onKtpToggle($event)"></mat-slide-toggle>
             </div>
