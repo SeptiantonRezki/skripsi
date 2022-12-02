@@ -337,8 +337,8 @@ export class TrsReportComponent implements OnInit {
     const filename = `Export_TRS_Visit_${new Date().toLocaleString()}.xlsx`;
     try {
       const param = this.visitSelected ? {
-        field_force: this.visitSelected.field_force,
-        program_code: this.visitSelected.program_code,
+        selected_field_force: this.visitSelected.field_force,
+        selected_program_code: this.visitSelected.program_code,
         VisitDate: this.visitSelected.VisitDate,
       } : null;
       const response = await this.TRSService.exportVisit(param, {
