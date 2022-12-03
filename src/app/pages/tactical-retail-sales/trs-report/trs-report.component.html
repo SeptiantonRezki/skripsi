@@ -462,12 +462,13 @@
 
             <ngx-datatable-column name="Executor" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="stockMovementClick(row)">{{row.partner_from}}</span>
+                <span (click)="stockMovementClick(row)">{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red;">!</b>
+                </span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.partner_from_territory}}</span>
+                <span>{{row.Territory}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Journey Type" [width]="200">
