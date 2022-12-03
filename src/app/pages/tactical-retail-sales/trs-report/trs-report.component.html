@@ -73,9 +73,9 @@
                 <span>{{row.totalqty}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total" [width]="200">
+            <ngx-datatable-column name="Total (Rp)" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.totalprice}}</span>
+                <div style="width: 150px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -112,9 +112,9 @@
                 <span>{{row.totalqty}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total" [width]="200">
+            <ngx-datatable-column name="Total (Rp)" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.totalprice}}</span>
+                <div style="width: 150px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -396,9 +396,9 @@
                   <span>{{row.timespent}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Revenue" [width]="200">
+              <ngx-datatable-column name="Revenue (Rp)" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.revenue}}</span>
+                  <div style="width: 150px; text-align:right; ">{{row.revenue}}</div>
                 </ng-template>
               </ngx-datatable-column>
 
