@@ -129,7 +129,7 @@
               <mat-form-field class="is-light" fxFlex="15%">
                 <mat-select formControlName="group">
                   <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item"
-                    (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
+                    (onSelectionChange)="updateVisitTable($event, item)">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" fxFlex="15%" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
@@ -268,7 +268,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Date Visit" prop="VisitDate" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.VisitDate}}</span>
+                <span>{{row.kps_week}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Full Name" prop="field_force" [width]="200">

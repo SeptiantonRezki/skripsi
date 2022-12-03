@@ -202,8 +202,8 @@ export class TrsReportComponent implements OnInit {
     this.visitSelected = null;
   }
 
-  updateVisitTable(){
-    this.refreshSummaryVisit();
+  updateVisitTable(event, obj){
+    this.refreshSummaryVisit(obj);
     this.visitSelected = null;
   }
 
@@ -379,7 +379,7 @@ export class TrsReportComponent implements OnInit {
     this.refreshDetailVisit();
   }
 
-  refreshSummaryVisit(){
+  refreshSummaryVisit(group?){
     let request = {
       group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
       program_code: this.summaryVisitFilter.get('program_code').value == null? '': this.summaryVisitFilter.get('program_code').value,
@@ -388,7 +388,11 @@ export class TrsReportComponent implements OnInit {
       to: this.summaryVisitFilter.get('to').value == ''?'':moment(this.summaryVisitFilter.get('to').value).format("YYYY-MM-DD"),
     };
 
-    if(request.group == 'Daily'){
+    if (group === undefined) {
+      group = request.group;
+    }
+
+    if(group == 'Daily'){
       this.TRSService.summaryVisit(this.summaryVisitTableData.pagination, request).subscribe(
         async res => {
           console.log('aleapi refreshSummaryVisit res', res);
@@ -476,7 +480,9 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.detailVisit(this.detailVisitTableData.pagination, {
       field_force: this.visitSelected.field_force,
       program_code: this.visitSelected.program_code,
+      group: this.summaryVisitFilter.get('group').value,
       VisitDate: this.visitSelected.VisitDate,
+      kps: this.visitSelected.kps_week,
     }).subscribe(
       async res => {
         console.log('aleapi refreshDetailVisit res', res);
