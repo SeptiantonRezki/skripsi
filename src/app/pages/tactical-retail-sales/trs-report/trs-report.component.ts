@@ -76,6 +76,7 @@ export class TrsReportComponent implements OnInit {
   };
 
   stockMovementFilter: FormGroup;
+  stockMovementSelectedFilter: FormGroup;
 
   stockMovementBrands = [];
   stockMovementSelected = null;
@@ -170,6 +171,17 @@ export class TrsReportComponent implements OnInit {
       console.log(selectedValue)
     });
 
+    this.stockMovementSelectedFilter = this.formBuilder.group({
+      type: new FormControl(),
+      need_to_review: new FormControl(),
+      from: "",
+      to: "",
+    });
+    this.stockMovementSelectedFilter.valueChanges.debounceTime(1000).subscribe(selectedValue => {
+      console.log('form value changed')
+      console.log(selectedValue)
+    });
+
     
     this.dataService.showLoading(false);
   }
@@ -198,6 +210,11 @@ export class TrsReportComponent implements OnInit {
   filterReport3(){
     this.refreshStockMovement(); 
     this.stockMovementSelected = null;
+    this.stockMovement2Selected = null;
+  }
+
+  filterReport31(){
+    this.refreshStockMovement2(); 
     this.stockMovement2Selected = null;
   }
 
@@ -517,10 +534,16 @@ export class TrsReportComponent implements OnInit {
       };
 
       if(this.stockMovementSelected){
-        params.table_2_territory = this.stockMovementSelected.Territory
-        params.table_2_journey = this.stockMovementSelected.tgl_journey
+        params.table_2_territory = this.stockMovementSelected.Territory;
+        params.table_2_journey = this.stockMovementSelected.tgl_journey;
+
+        params.table_2_type = this.stockMovementSelectedFilter.get('type').value == null? '': this.stockMovementSelectedFilter.get('type').value;
+        params.table_2_need_to_review = this.stockMovementSelectedFilter.get('need_to_review').value == null? '': this.stockMovementSelectedFilter.get('need_to_review').value;
+        params.table_2_from = this.stockMovementSelectedFilter.get('from').value == ''?'':moment(this.stockMovementSelectedFilter.get('from').value).format("YYYY-MM-DD");
+        params.table_2_to = this.stockMovementSelectedFilter.get('to').value == ''?'':moment(this.stockMovementSelectedFilter.get('to').value).format("YYYY-MM-DD");  
+
         if(this.stockMovement2Selected){
-          params.table_3_movement_code = this.stockMovement2Selected.movement_code
+          params.table_3_movement_code = this.stockMovement2Selected.movement_code;
         }
       }
       const response = await this.TRSService.exportStockMovement(this.stockMovementTableData.pagination, params).toPromise();
@@ -536,6 +559,7 @@ export class TrsReportComponent implements OnInit {
   stockMovementClick(data){
     this.stockMovementSelected = data;
     this.refreshStockMovement2();
+    this.stockMovement2Selected = null;
   }
 
   refreshStockMovement(){
@@ -595,6 +619,12 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.stockMovement2(this.stockMovement2TableData.pagination, {
       territory: this.stockMovementSelected.Territory,
       journey: this.stockMovementSelected.tgl_journey,
+
+      type: this.stockMovementSelectedFilter.get('type').value == null? '': this.stockMovementSelectedFilter.get('type').value,
+      need_to_review: this.stockMovementSelectedFilter.get('need_to_review').value == null? '': this.stockMovementSelectedFilter.get('need_to_review').value,
+      from: this.stockMovementSelectedFilter.get('from').value == ''?'':moment(this.stockMovementSelectedFilter.get('from').value).format("YYYY-MM-DD"),
+      to: this.stockMovementSelectedFilter.get('to').value == ''?'':moment(this.stockMovementSelectedFilter.get('to').value).format("YYYY-MM-DD"),
+
     }).subscribe(
       async res => {
         console.log('aleapi refreshStockMovement2 res', res);

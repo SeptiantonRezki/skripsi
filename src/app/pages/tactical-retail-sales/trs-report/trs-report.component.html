@@ -412,7 +412,7 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
               <mat-form-field class="is-light">
                 <mat-select placeholder="Program Code" formControlName="program_code">
-                  <mat-option value="" selected>All</mat-option>
+                  <mat-option value="" selected>All Program Code</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -460,34 +460,34 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setStockMovementPage($event)"
             (sort)="onStockMovementSort($event)">
 
-            <ngx-datatable-column name="Executor" prop="field_force" [width]="200">
+            <ngx-datatable-column name="Executor" prop="field_force">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="stockMovementClick(row)">{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red;">!</b>
+                <span (click)="stockMovementClick(row)">{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red; font-size: 18px;">!</b>
                 </span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Territory Code" prop="movement_code" [width]="200">
+            <ngx-datatable-column name="Territory Code" prop="movement_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.Territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Type" prop="journey_type" [width]="200">
+            <ngx-datatable-column name="Journey Type" prop="journey_type">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.journey_type}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Date" prop="tgl_journey" [width]="200">
+            <ngx-datatable-column name="Journey Date" prop="tgl_journey">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total Transaksi" prop="total" [width]="200">
+            <ngx-datatable-column name="Total Transaksi (Rp)" prop="total">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.total}}</span>
+                <div style="width: 100px; text-align:right; ">{{row.total}}</div>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column *ngFor="let item of stockMovementBrands" [name]="item" [width]="200" [sortable]="false">
+            <ngx-datatable-column *ngFor="let item of stockMovementBrands" [name]="item" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.brands[item]}}</span>
               </ng-template>
@@ -497,6 +497,62 @@
 
           <div *ngIf="stockMovementSelected">
             <hr />
+            <h2 class="pl-16">Perubahan Stok</h2>
+            <h2 class="pl-16">
+              {{stockMovementSelected.field_force}} - {{stockMovementSelected.Territory}} - {{stockMovementSelected.tgl_journey}}
+            </h2>
+
+
+            <form [formGroup]="stockMovementSelectedFilter" autoComplete="off">
+              <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
+                <mat-form-field class="is-light">
+                  <mat-select placeholder="Type" formControlName="type">
+                    <mat-option value="" selected>All Type</mat-option>
+                    <mat-option value="Initial" selected>Initial</mat-option>
+                    <mat-option value="Sales" selected>Sales</mat-option>
+                    <mat-option value="Load" selected>Load</mat-option>
+                    <mat-option value="Unload" selected>Unload</mat-option>
+                    <mat-option value="VanIn" selected>VanIn</mat-option>
+                    <mat-option value="VanOut" selected>VanOut</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="is-light">
+                  <mat-select placeholder="Need to Review" formControlName="need_to_review">
+                    <mat-option value="" selected>All</mat-option>
+                    <mat-option value="1" selected>Yes</mat-option>
+                    <mat-option value="0" selected>No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="datepicker is-light">
+                  <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                    formControlName="from" readonly>
+                  <button mat-button *ngIf="stockMovementSelectedFilter.get('from').value" matSuffix mat-icon-button
+                    aria-label="Clear" (click)="stockMovementSelectedFilter.get('from').setValue('')">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-datepicker-toggle matSuffix [for]="from">
+                    <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #from></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="datepicker is-light">
+                  <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                    formControlName="to" readonly>
+                  <button mat-button *ngIf="stockMovementSelectedFilter.get('to').value" matSuffix mat-icon-button
+                    aria-label="Clear" (click)="stockMovementSelectedFilter.get('to').setValue('')">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-datepicker-toggle matSuffix [for]="to">
+                    <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #to></mat-datepicker>
+                </mat-form-field>
+                <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
+                  (click)="filterReport31()">
+                  Filter
+                </button>
+              </div>
+            </form>
 
             <ngx-datatable class="material" [rows]="stockMovement2TableData.rows"
               [loadingIndicator]="stockMovement2TableData.loadingIndicator" [columnMode]="'force'"
@@ -531,7 +587,10 @@
 
             <div *ngIf="stockMovement2Selected">
               <hr />
-
+              <h2 class="pl-16">Detail Movement</h2>
+              <h2 class="pl-16">
+                {{stockMovement2Selected.movement_code}}
+              </h2>
               <ngx-datatable class="material" [rows]="stockMovement3TableData.rows"
                 [loadingIndicator]="stockMovement3TableData.loadingIndicator" [columnMode]="'force'"
                 [offset]="stockMovement3TableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"
