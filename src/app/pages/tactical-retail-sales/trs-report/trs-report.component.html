@@ -126,19 +126,19 @@
 
           <form [formGroup]="summaryVisitFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
-              <mat-form-field class="is-light">
+              <mat-form-field class="is-light" fxFlex="15%">
                 <mat-select formControlName="group">
                   <mat-option *ngFor="let item of summaryVisitFilterGroupData" [value]="item"
                     (onSelectionChange)="updateVisitTable()">{{item}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+              <mat-form-field class="is-light" fxFlex="15%" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
                 <mat-select placeholder="Program Code" formControlName="program_code">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="is-light" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+              <mat-form-field class="is-light" fxFlex="15%" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
                 <mat-select placeholder="KPS" formControlName="kps">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
@@ -410,7 +410,7 @@
 
           <form [formGroup]="stockMovementFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
-              <mat-form-field class="is-light">
+              <mat-form-field class="is-light" fxFlex="15%">
                 <mat-select placeholder="Program Code" formControlName="program_code">
                   <mat-option value="" selected>All Program Code</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
@@ -505,8 +505,8 @@
 
             <form [formGroup]="stockMovementSelectedFilter" autoComplete="off">
               <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
-                <mat-form-field class="is-light">
-                  <mat-select placeholder="Type" formControlName="type">
+                <mat-form-field class="is-light" fxFlex="15%">
+                  <mat-select placeholder="Movement Type" formControlName="type">
                     <mat-option value="" selected>All Type</mat-option>
                     <mat-option value="Initial" selected>Initial</mat-option>
                     <mat-option value="Sales" selected>Sales</mat-option>
@@ -516,7 +516,7 @@
                     <mat-option value="VanOut" selected>VanOut</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="is-light">
+                <mat-form-field class="is-light" fxFlex="15%">
                   <mat-select placeholder="Need to Review" formControlName="need_to_review">
                     <mat-option value="" selected>All</mat-option>
                     <mat-option value="1" selected>Yes</mat-option>
