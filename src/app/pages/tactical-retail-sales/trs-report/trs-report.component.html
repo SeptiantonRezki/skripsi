@@ -504,7 +504,7 @@
 
             <ngx-datatable-column *ngFor="let item of stockMovementBrands" [name]="item" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.brands[item]}}</span>
+                <div style="width: 50px; text-align:right; ">{{row.brands[item]}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -621,7 +621,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Qty" prop="qty" [width]="200">
                   <ng-template ngx-datatable-cell-template let-row="row">
-                    <span>{{row.qty}}</span>
+                    <div style="width: 150px; text-align:right; ">{{row.qty}}</div>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="From" prop="partner_from" [width]="200">
