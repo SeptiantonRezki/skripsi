@@ -385,8 +385,10 @@ export class TrsReportComponent implements OnInit {
   }
 
   summaryVisitNameClick(data){
-    this.visitSelected = data;
-    this.refreshDetailVisit();
+    if(data.type == 'click') {
+      this.visitSelected = data.row;
+      this.refreshDetailVisit();
+    }
   }
 
   refreshSummaryVisit(group?){
@@ -573,9 +575,11 @@ export class TrsReportComponent implements OnInit {
   }
   
   stockMovementClick(data){
-    this.stockMovementSelected = data;
-    this.refreshStockMovement2();
-    this.stockMovement2Selected = null;
+    if(data.type == 'click') {
+      this.stockMovementSelected = data.row;
+      this.refreshStockMovement2();
+      this.stockMovement2Selected = null;
+    }
   }
 
   refreshStockMovement(){
@@ -627,8 +631,10 @@ export class TrsReportComponent implements OnInit {
   }
   
   stockMovement2Click(data){
-    this.stockMovement2Selected = data;
-    this.refreshStockMovement3();
+    if(data.type == 'click') {
+      this.stockMovement2Selected = data.row;
+      this.refreshStockMovement3();
+    }
   }
 
   refreshStockMovement2(){

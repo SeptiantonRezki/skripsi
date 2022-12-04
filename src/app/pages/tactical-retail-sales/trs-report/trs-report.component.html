@@ -187,7 +187,8 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="summaryVisitTableData.reorderable"
             [count]="summaryVisitTableData.pagination.total" [limit]="summaryVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setSummaryVisitPage($event)"
-            (sort)="onSummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
+            (sort)="onSummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'"
+            (activate)="summaryVisitNameClick($event)">
 
             <ngx-datatable-column name="Program Code" prop="program_code">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -201,7 +202,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Full Name" prop="field_force" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
+                <span>{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" prop="territory_code">
@@ -259,7 +260,8 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="weeklyVisitTableData.reorderable"
             [count]="weeklyVisitTableData.pagination.total" [limit]="weeklyVisitTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setWeeklySummaryVisitPage($event)"
-            (sort)="onWeeklySummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+            (sort)="onWeeklySummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'"
+            (activate)="summaryVisitNameClick($event)">
 
             <ngx-datatable-column name="Program Code" prop="program_code">
               <ng-template ngx-datatable-cell-template let-row="row">
@@ -273,7 +275,7 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Full Name" prop="field_force" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="summaryVisitNameClick(row)">{{row.field_force}}</span>
+                <span>{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Territory Code" prop="territory_code">
@@ -471,11 +473,11 @@
             [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovementTableData.reorderable"
             [count]="stockMovementTableData.pagination.total" [limit]="stockMovementTableData.pagination.per_page"
             [externalPaging]="true" [externalSorting]="true" (page)="setStockMovementPage($event)"
-            (sort)="onStockMovementSort($event)">
+            (sort)="onStockMovementSort($event)" (activate)="stockMovementClick($event)">
 
             <ngx-datatable-column name="Executor" prop="field_force">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span (click)="stockMovementClick(row)">{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red; font-size: 18px;">!</b>
+                <span>{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red; font-size: 18px;">!</b>
                 </span>
               </ng-template>
             </ngx-datatable-column>
@@ -573,7 +575,7 @@
               [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="stockMovement2TableData.reorderable"
               [count]="stockMovement2TableData.pagination.total" [limit]="stockMovement2TableData.pagination.per_page"
               [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement2Page($event)"
-              (sort)="onStockMovement2Sort($event)">
+              (sort)="onStockMovement2Sort($event)" (activate)="stockMovement2Click($event)">
 
               <ngx-datatable-column name="Date" prop="created_at" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
@@ -587,7 +589,7 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Movement Code" prop="movement_code" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span (click)="stockMovement2Click(row)">{{row.movement_code}}</span>
+                  <span>{{row.movement_code}}</span>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Need To Review" prop="need_to_review" [width]="200">
