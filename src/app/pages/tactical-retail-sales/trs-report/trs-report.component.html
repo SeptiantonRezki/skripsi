@@ -350,7 +350,7 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Date Visit" prop="created_at" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.created_at}}</span>
+                  <span>{{row.created_at_date}}</span>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Customer Name" prop="outlet_name" [width]="200">
@@ -474,7 +474,7 @@
                 <span>{{row.Territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Type" prop="journey_type">
+            <ngx-datatable-column name="Journey Type" prop="tgl_journey">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.journey_type}}</span>
               </ng-template>
@@ -484,7 +484,7 @@
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total Transaksi (Rp)" prop="total">
+            <ngx-datatable-column name="Total Transaksi (Rp)" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 100px; text-align:right; ">{{row.total}}</div>
               </ng-template>

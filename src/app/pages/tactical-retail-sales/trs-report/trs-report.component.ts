@@ -364,9 +364,11 @@ export class TrsReportComponent implements OnInit {
         selected_field_force: this.visitSelected.field_force,
         selected_program_code: this.visitSelected.program_code,
         VisitDate: this.visitSelected.VisitDate,
-      } : null;
-      const response = await this.TRSService.exportVisit(param, {
         group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
+      } : {
+        group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
+      };
+      const response = await this.TRSService.exportVisit(param, {
         program_code: this.summaryVisitFilter.get('program_code').value == null? '': this.summaryVisitFilter.get('program_code').value,
         kps: this.summaryVisitFilter.get('kps').value == null? '': this.summaryVisitFilter.get('kps').value,
         from: this.summaryVisitFilter.get('from').value == ''?'':moment(this.summaryVisitFilter.get('from').value).format("YYYY-MM-DD"),
