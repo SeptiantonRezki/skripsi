@@ -363,6 +363,7 @@ export class TrsReportComponent implements OnInit {
       const param = this.visitSelected ? {
         selected_field_force: this.visitSelected.field_force,
         selected_program_code: this.visitSelected.program_code,
+        selected_kps: this.visitSelected.kps_week,
         VisitDate: this.visitSelected.VisitDate,
         group: this.summaryVisitFilter.get('group').value == null? '': this.summaryVisitFilter.get('group').value,
       } : {
