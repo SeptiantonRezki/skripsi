@@ -141,7 +141,7 @@
               <mat-form-field class="is-light" fxFlex="15%" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
                 <mat-select placeholder="KPS" formControlName="kps">
                   <mat-option value="" selected>All</mat-option>
-                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                  <mat-option *ngFor="let sp of filter2List" [value]="sp.id">{{sp.id}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
@@ -266,7 +266,7 @@
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Date Visit" prop="VisitDate" [width]="200">
+            <ngx-datatable-column name="KPS" prop="kps_week" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.kps_week}}</span>
               </ng-template>
@@ -329,8 +329,11 @@
             <hr />
 
             <h2 class="pl-16">Detail Visit</h2>
-            <h2 class="pl-16">
+            <h2 class="pl-16" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
               {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
+            </h2>
+            <h2 class="pl-16" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
+              {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.kps_week}}
             </h2>
             <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
               [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"

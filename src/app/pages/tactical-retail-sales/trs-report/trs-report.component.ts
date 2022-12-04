@@ -134,7 +134,13 @@ export class TrsReportComponent implements OnInit {
     }, err => {
       console.log('err occured', err);
       this.dataService.showLoading(false);
-    })
+    });
+    this.TRSService.getReportFilter2(request).subscribe(res => {
+      this.filter2List = res.data;
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    });
 
     /*
     this.TRSService.getReportFilter2(request).subscribe(res => {
@@ -350,6 +356,7 @@ export class TrsReportComponent implements OnInit {
   }
 
   async exportVisit() {
+    console.log("ch export visit");
     this.dataService.showLoading(true);
     const filename = `Export_TRS_Visit_${new Date().toLocaleString()}.xlsx`;
     try {
