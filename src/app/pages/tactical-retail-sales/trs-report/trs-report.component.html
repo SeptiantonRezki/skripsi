@@ -411,7 +411,7 @@
                   <span>{{row.timespent}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Revenue (Rp)" prop="revenue">
+              <ngx-datatable-column name="Revenue (Rp)" prop="revenue" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 150px; text-align:right; ">{{row.revenue}}</div>
                 </ng-template>
