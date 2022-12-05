@@ -641,6 +641,8 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.stockMovement2(this.stockMovement2TableData.pagination, {
       territory: this.stockMovementSelected.Territory,
       journey: this.stockMovementSelected.tgl_journey,
+      field_force: this.stockMovementSelected.field_force,
+      program_code: this.stockMovementSelected.program_code,
 
       type: this.stockMovementSelectedFilter.get('type').value == null? '': this.stockMovementSelectedFilter.get('type').value,
       need_to_review: this.stockMovementSelectedFilter.get('need_to_review').value == null? '': this.stockMovementSelectedFilter.get('need_to_review').value,
@@ -693,6 +695,8 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.stockMovement3(this.stockMovement3TableData.pagination, {
       journey: this.stockMovementSelected.tgl_journey,
       movement_code: this.stockMovement2Selected.movement_code,
+      field_force: this.stockMovement2Selected.field_force,
+      program_code: this.stockMovement2Selected.program_code,
     }).subscribe(
       async res => {
         console.log('aleapi refreshStockMovement3 res', res);
