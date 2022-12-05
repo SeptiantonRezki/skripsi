@@ -555,6 +555,9 @@ export class TrsReportComponent implements OnInit {
         params.table_2_territory = this.stockMovementSelected.Territory;
         params.table_2_journey = this.stockMovementSelected.tgl_journey;
 
+        params.table_2_field_force = this.stockMovementSelected.field_force;
+        params.table_2_program_code = this.stockMovementSelected.program_code;
+
         params.table_2_type = this.stockMovementSelectedFilter.get('type').value == null? '': this.stockMovementSelectedFilter.get('type').value;
         params.table_2_need_to_review = this.stockMovementSelectedFilter.get('need_to_review').value == null? '': this.stockMovementSelectedFilter.get('need_to_review').value;
         params.table_2_from = this.stockMovementSelectedFilter.get('from').value == ''?'':moment(this.stockMovementSelectedFilter.get('from').value).format("YYYY-MM-DD");
@@ -695,8 +698,8 @@ export class TrsReportComponent implements OnInit {
     this.TRSService.stockMovement3(this.stockMovement3TableData.pagination, {
       journey: this.stockMovementSelected.tgl_journey,
       movement_code: this.stockMovement2Selected.movement_code,
-      field_force: this.stockMovement2Selected.field_force,
-      program_code: this.stockMovement2Selected.program_code,
+      field_force: this.stockMovementSelected.field_force,
+      program_code: this.stockMovementSelected.program_code,
     }).subscribe(
       async res => {
         console.log('aleapi refreshStockMovement3 res', res);
