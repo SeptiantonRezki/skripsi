@@ -225,27 +225,27 @@
                 <span>{{row.Canceled}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Early Visit" prop="start_visit">
+            <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.start_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Last Visit" prop="end_visit">
+            <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.end_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus">
+            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_modus}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent" prop="timespent_min">
+            <ngx-datatable-column name="Min Timespent" prop="timespent_min" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_min}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent" prop="timespent_max">
+            <ngx-datatable-column name="Max Timespent" prop="timespent_max" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_max}}</span>
               </ng-template>
@@ -298,27 +298,27 @@
                 <span>{{row.Canceled}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Early Visit" prop="start_visit">
+            <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.start_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Last Visit" prop="end_visit">
+            <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.end_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus">
+            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_modus}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent" prop="timespent_min">
+            <ngx-datatable-column name="Min Timespent" prop="timespent_min" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_min}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent" prop="timespent_max">
+            <ngx-datatable-column name="Max Timespent" prop="timespent_max" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_max}}</span>
               </ng-template>
@@ -386,12 +386,12 @@
                   <span>{{row.geotag_reason}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="# Invoice Issued" prop="issued">
+              <ngx-datatable-column name="# Invoice Issued" prop="issued" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.issued}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="# Invoice Cancel" prop="cancel">
+              <ngx-datatable-column name="# Invoice Cancel" prop="cancel" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.cancel}}</span>
                 </ng-template>
@@ -411,7 +411,7 @@
                   <span>{{row.timespent}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Revenue (Rp)" prop="revenue" [width]="200">
+              <ngx-datatable-column name="Revenue (Rp)" prop="revenue" [width]="200" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 150px; text-align:right; ">{{row.revenue}}</div>
                 </ng-template>
