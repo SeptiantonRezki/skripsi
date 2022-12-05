@@ -162,7 +162,7 @@
       <!-- END Tanggal -->
       
       <!-- Kode Pesanan -->
-          <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.order_code }}" prop="invoice_number"
+          <ngx-datatable-column [cellClass]="getCellClass" width="250" name="{{ ls.locale.global.label.order_code }}" prop="invoice_number"
             *ngIf="formColumn.value.includes(ls.locale.global.label.order_code)" [frozenLeft]="true">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
               <span class="row-name" [routerLink]="['/user-management','rrp-retailer', 'detail', row.id]"
@@ -212,7 +212,7 @@
           <ngx-datatable-column [cellClass]="getCellClass" width="200" name="{{ ls.locale.global.label.address }}" prop="address2"
             *ngIf="formColumn.value.includes(ls.locale.global.label.address)" [sortable]="false">
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-              <div matTooltip="{{row.address2}}">{{row.address2 || row.address}}</div>
+              <div matTooltip="{{row.address2 || row.address}}">{{row.address2 || row.address}}</div>
             </ng-template>
           </ngx-datatable-column>
       <!-- END Alamat -->

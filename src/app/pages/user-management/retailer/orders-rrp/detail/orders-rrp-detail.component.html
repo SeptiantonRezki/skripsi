@@ -164,7 +164,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="w-200">{{detailOrder?.invoice_number}}</td>
+                    <td style="width: 210px; min-width: 210px">{{detailOrder?.invoice_number}}</td>
                     <td class="w-200">
                       <span class="email text-truncate">{{ (detailOrder?.payment_type === 'pay-later') ?
                         detailOrder?.total_payment_paylater_format_currency : detailOrder?.total_payment_format_currency
@@ -215,7 +215,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="w-200" *ngIf="detailOrder?.payment_type === 'virtual-account'">
+                    <td style="width: 210px; min-width: 210px" *ngIf="detailOrder?.payment_type === 'virtual-account'">
                       {{detailOrder?.invoice_number}}</td>
                     <td class="w-200" style="text-transform: uppercase;">
                       {{detailOrder?.delivery_courier_name ? (detailOrder?.delivery_courier_name + '-' +
