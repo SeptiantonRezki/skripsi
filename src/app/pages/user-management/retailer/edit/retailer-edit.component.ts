@@ -14,7 +14,7 @@ import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Utils } from 'app/classes/utils';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'environments/environment';
+// import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -993,8 +993,8 @@ export class RetailerEditComponent {
 
   onKtpToggle(e) {
     
-    /** ONLY ROLE CS / BUDE CAN TOGGLE KTP / ID */
-    if(this.dataService.getDecryptedProfile().role_id !== environment.BUDE_ROLE_ID) {
+    /** ONLY HAS PERMISSION KTP */
+    if(this.permission && !this.permission.ktp) {
 
       const oldVal = this.detailRetailer.owner_verified === 1 ? 0 : 1;
       e.source.checked = oldVal;

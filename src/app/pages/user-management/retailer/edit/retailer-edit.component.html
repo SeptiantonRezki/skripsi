@@ -355,10 +355,12 @@
                 <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
               </mat-radio-group>
             </div> -->
-            <div fxFlex fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="10px" *ngIf="permission?.ktp">
+            <div fxFlex fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="10px">
               <div fxLayout="column">
-                <mat-label>{{ls.locale?.retailer?.detail?.data_ktp}}</mat-label>
-                <small>{{ls.locale?.retailer?.detail?.data_ktp}} {{ formRetailer.get('owner_verified').value ? ls.locale?.retailer?.detail?.unlocked : ls.locale?.retailer?.detail?.locked }}</small>
+                <!-- <mat-label>{{ls.locale?.retailer?.detail?.data_ktp}}</mat-label> -->
+                <mat-label>Data KTP</mat-label>
+                <!-- <small>{{ls.locale?.retailer?.detail?.data_ktp}} {{ formRetailer.get('owner_verified').value ? ls.locale?.retailer?.detail?.unlocked : ls.locale?.retailer?.detail?.locked }}</small> -->
+                <small>Data KTP {{ formRetailer.get('owner_verified').value ? 'Terbuka' : 'Terkunci' }}</small>
               </div>
               <mat-slide-toggle formControlName="owner_verified" (change)="onKtpToggle($event)"></mat-slide-toggle>
             </div>

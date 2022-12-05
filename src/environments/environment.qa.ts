@@ -16,7 +16,7 @@ export const environment = {
   REACT_BASE_URL: 'https://hms-react.qa.src.id',
   cambodia_image: "assets/images/louk/louk_new.png",
   cambodia_image_2x: "assets/images/louk/louk_new.png 2x",
-  BUDE_ROLE_ID: 25, // CS: Agent / BUDE
+  // BUDE_ROLE_ID: 25, // CS: Agent / BUDE
 };
 
 export const getDynamicBranding = (): any => {
