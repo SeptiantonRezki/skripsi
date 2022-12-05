@@ -213,8 +213,8 @@
                   </div>
                 </div>
               </div>
-              <div fxLayout="column">
-                <h2>DSR Account </h2>
+              <div fxLayout="column" *ngIf="formCountry.get('code').value=='PH'">
+                <h2>DSR Account</h2>
                 <div *ngFor="let item of formCountry.get('dsr_setting').controls; let i=index;">
                   <div fxFlex="100" [formGroup]="item" fxLayout="column">
                     <div fxFlex="100" fxLayoutAlign="space-between">

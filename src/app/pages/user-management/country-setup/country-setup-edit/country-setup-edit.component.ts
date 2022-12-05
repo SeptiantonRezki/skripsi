@@ -28,6 +28,7 @@ export class CountrySetupEditComponent implements OnInit {
   horizontal = true;
   listApps: any[] = [{ name: 'Retailer', value: 'retailer' }];
   forceLogoutinfo: any;
+  dsrData: any[];
   constructor(
     private router: Router,
     private ls: LanguagesService,
@@ -216,6 +217,26 @@ export class CountrySetupEditComponent implements OnInit {
 
       }
 
+    })
+
+    //get dsr registration setup
+    this.countrySetupService.getDsrSSR({ country: this.country.country_code }).subscribe(({data}) => {
+        if(data){
+            this.dsrData = data;
+            this.dsrData = this.dsrData.filter(v=>v.name=="dsr_ssr");
+            if(this.dsrData.length>0){
+              const dsrSetting = this.formCountry.get('dsr_setting') as FormArray;
+              if(this.dsrData[0].values=='active'){
+                const dsr_ssr_value = true;
+                dsrSetting.at(0).get('dsr_ssr').setValue(dsr_ssr_value);
+                dsrSetting.at(0).get('dsr_ssr').updateValueAndValidity();
+                return true;
+              }else{
+                dsrSetting.at(0).get('dsr_ssr').setValue(false);
+              }
+            }
+
+        }
     })
   }
 
@@ -606,12 +627,21 @@ export class CountrySetupEditComponent implements OnInit {
       ]
     }
 
-    console.log(body.force_logout_service);
+    body.master_config=[
+      {
+        name:"dsr_ssr",
+        values:body.dsr_setting[0].dsr_ssr,
+        country:body.code,
+      }
+    ]
+
+    // console.log(body.force_logout_service);
+    console.log(body);
+
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.router.navigate(["user-management", "countries"]);
-
     }, err => {
 
       this.dataService.showLoading(false);

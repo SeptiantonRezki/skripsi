@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class CountrySetupService extends BaseService {
   public namespace = "country_setup";
 
-  constructor(http: HttpClient) { 
+  constructor(http: HttpClient) {
     super(http);
   }
 
@@ -43,6 +43,10 @@ export class CountrySetupService extends BaseService {
   }
   getForceLogoutData(context?): Observable<any> {
     const url = this.getUrl(this.namespace, "get_force_logout_data",context);
+    return this.getApi(url);
+  }
+  getDsrSSR(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_dsr_ssr",context);
     return this.getApi(url);
   }
 //   getDetail(context?): Observable<any> {
