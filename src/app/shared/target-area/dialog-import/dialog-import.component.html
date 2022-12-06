@@ -2,7 +2,7 @@
   <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>{{ls.locale.global.label.upload_file}} XLS</span>
+        <span>{{ls.locale.global.label.upload_file}} XLSX</span>
       </div>
     </div>
     <button
@@ -22,7 +22,7 @@
       class="rectangle-16"
       [(validDrag)]="validComboDrag"
       [(file)]="files"
-      accept=".xlsx, .xls"
+      accept=".xlsx"
       [class.invalid-drag]="validComboDrag === false"
       [class.valid-drag]="validComboDrag"
       (fileChange)="preview($event)"
