@@ -593,7 +593,7 @@
               <ngx-datatable-column name="Need To Review" prop="need_to_review" [width]="400">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.need_to_review}}
-                    <label *ngIf="row.need_to_review == 1">(Please check : {{stockMovementSelected.program_code}} , Territory : {{stockMovementSelected.Territory}}, Date Visit : {{stockMovementSelected.VisitDate}})</label>
+                    <label *ngIf="row.need_to_review == 1" style="margin-left: 5px; font-weight: bold;">(Please check : {{row.program_code}} , Territory : {{row.Territory}}, Date Visit : {{row.VisitDate}})</label>
                   </span>
                 </ng-template>
               </ngx-datatable-column>
