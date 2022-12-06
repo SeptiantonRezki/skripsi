@@ -157,7 +157,7 @@ export class AudienceTradeProgramEditComponent implements OnInit, OnDestroy {
                   return [];
                 }
                 console.log('after', value);
-                return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+                return this.audienceTradeProgramService.getListSku({ search: value.formSku })
                   .pipe(
                     finalize(() => this.searching = false)
                   )
