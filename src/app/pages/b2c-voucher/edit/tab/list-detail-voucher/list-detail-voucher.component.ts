@@ -592,7 +592,7 @@ export class ListDetailVoucherComponent implements OnInit {
         redeem: this.formFilter.get('status').value === 'all' ? null : this.formFilter.get('status').value
       }).toPromise();
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      `List_Detail_Voucher_${new Date().toLocaleString()}.xls`);
+      `List_Detail_Voucher_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);
