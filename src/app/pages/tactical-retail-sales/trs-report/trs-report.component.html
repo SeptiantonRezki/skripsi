@@ -210,19 +210,19 @@
                 <span>{{row.territory_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Visits" prop="Visits">
+            <ngx-datatable-column name="# Visits" prop="Visits" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Visits}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.Visits}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" prop="Trx">
+            <ngx-datatable-column name="# Invoice Issued" prop="Trx" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Trx}}</span>
+                <div style="width: 80px; text-align:right; ">{{row.Trx}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled">
+            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Canceled}}</span>
+                <div style="width: 80px; text-align:right; ">{{row.Canceled}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
@@ -235,17 +235,17 @@
                 <span>{{row.end_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus" [sortable]="false">
+            <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_modus}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent" prop="timespent_min" [sortable]="false">
+            <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_min}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent" prop="timespent_max" [sortable]="false">
+            <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_max}}</span>
               </ng-template>
@@ -283,19 +283,19 @@
                 <span>{{row.territory_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Visits" prop="Visits">
+            <ngx-datatable-column name="# Visits" prop="Visits" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Visits}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.Visits}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" prop="Trx">
+            <ngx-datatable-column name="# Invoice Issued" prop="Trx" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Trx}}</span>
+                <div style="width: 80px; text-align:right; ">{{row.Trx}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled">
+            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.Canceled}}</span>
+                <div style="width: 80px; text-align:right; ">{{row.Canceled}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
@@ -308,17 +308,17 @@
                 <span>{{row.end_visit}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent" prop="timespent_modus" [sortable]="false">
+            <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_modus}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent" prop="timespent_min" [sortable]="false">
+            <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_min}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent" prop="timespent_max" [sortable]="false">
+            <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.timespent_max}}</span>
               </ng-template>
@@ -332,10 +332,10 @@
 
             <h2 class="pl-16">Detail Visit</h2>
             <h2 class="pl-16" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
-              {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
+              {{visitSelected.program_code}} - {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
             </h2>
             <h2 class="pl-16" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
-              {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.kps_week}}
+              {{visitSelected.program_code}} - {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.kps_week}}
             </h2>
             <ngx-datatable class="material" [rows]="detailVisitTableData.rows"
               [loadingIndicator]="detailVisitTableData.loadingIndicator" [columnMode]="'force'"
@@ -406,7 +406,7 @@
                   <span>{{row.end_visit}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Timespent" prop="timespent">
+              <ngx-datatable-column name="Timespent (minutes)" prop="timespent">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.timespent}}</span>
                 </ng-template>
@@ -516,8 +516,6 @@
             <h2 class="pl-16">
               {{stockMovementSelected.field_force}} - {{stockMovementSelected.Territory}} - {{stockMovementSelected.tgl_journey}}
             </h2>
-
-
             <form [formGroup]="stockMovementSelectedFilter" autoComplete="off">
               <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
                 <mat-form-field class="is-light" fxFlex="15%">
@@ -577,7 +575,7 @@
               [externalPaging]="true" [externalSorting]="true" (page)="setStockMovement2Page($event)"
               (sort)="onStockMovement2Sort($event)" (activate)="stockMovement2Click($event)">
 
-              <ngx-datatable-column name="Date" prop="created_at" [width]="200">
+              <ngx-datatable-column name="DateTime" prop="created_at" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.created_at}}</span>
                 </ng-template>
@@ -592,9 +590,11 @@
                   <span>{{row.movement_code}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Need To Review" prop="need_to_review" [width]="200">
+              <ngx-datatable-column name="Need To Review" prop="need_to_review" [width]="400">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.need_to_review}}</span>
+                  <span>{{row.need_to_review}}
+                    <label *ngIf="row.need_to_review == 1">(Please check : {{stockMovementSelected.program_code}} , Territory : {{stockMovementSelected.Territory}}, Date Visit : {{stockMovementSelected.VisitDate}})</label>
+                  </span>
                 </ng-template>
               </ngx-datatable-column>
 
