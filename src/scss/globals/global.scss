@@ -575,6 +575,25 @@ mat-form-field.quantity {
   }
 }
 
+mat-form-field.price-change {
+  .mat-form-field-infix {
+    margin-top: 15px !important;
+    text-align: center !important;
+    border: 1px solid #ececec;
+    border-radius: 3px !important;
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  input {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    font-size: 0.9em;
+  }
+}
+
 mat-form-field.search-customer {
   .mat-form-field-wrapper {
     padding: 0;
@@ -1085,6 +1104,12 @@ a {
   padding: 6px !important;
 }
 
+.mat-pesanan-dilihat-color {
+  background-color: #FF3399 !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
 .mat-tunda-color {
   background-color: #9e56de !important;
   color: white !important;
@@ -1173,6 +1198,26 @@ a {
 .mat-diserahkan-color {
   background-color: #388e3c !important;
   color: white !important;
+  padding: 6px !important;
+}
+
+.mat-paylater-color {
+  background-color: #dc1e2d !important;
+  color: white !important;
+  padding: 6px !important;
+}
+
+.mat-bayar-ditempat-color {
+  background-color: white !important;
+  color: #a0a0a0 !important;
+  border: 1px solid #ccc;
+  padding: 6px !important;
+}
+
+.mat-cod-color {
+  background-color: white !important;
+  color: #a0a0a0 !important;
+  border: 1px solid #ccc;
   padding: 6px !important;
 }
 

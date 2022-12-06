@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 
 /**
@@ -11,7 +12,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 })
 export class RupiahFormaterPipe implements PipeTransform {
 
-    constructor(private ls: LanguagesService) {
+    constructor(private ls: LanguagesService, private dataService: DataService) {
 
     }
 

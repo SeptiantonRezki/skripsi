@@ -1,0 +1,40 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <span>{{ ls.locale.pesan_produk.text66 }}</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <form [formGroup]="formInput">
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <div class="card-name pt-16">
+          <mat-form-field class="w-100-p price" appearance="standard">
+            <input matInput type="text" formControlName="code" placeholder="{{ ls.locale.pesan_produk.text66 }}">
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- / NAME -->
+
+      <div class="confirm pt-64 pb-24" fxLayout="row" fxLayoutAlign="center center">
+        <button mat-raised-button type="button" style="height: 50px !important;" class="confirmation-button"
+          fxFlex="100" (click)="submit()">
+          {{ ls.locale.global.label.send }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -17,6 +17,8 @@ import { WholesalerEditComponent } from "./wholesaler/edit/wholesaler-edit.compo
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerIndexComponent } from "./retailer/index/retailer-index.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
+import { OrdersRrpComponent } from './retailer/orders-rrp/index/orders-rrp.component';
+import { OrdersRrpDetailComponent } from './retailer/orders-rrp/detail/orders-rrp-detail.component';
 import { PageGuard } from "app/classes/auth.guard";
 import {
   ListRoleAdminResolver,
@@ -265,6 +267,25 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.retailer.detail
     },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "rrp-retailer",
+    component: OrdersRrpComponent,
+    data: {
+      breadcrumbs: brConfig.order_rrp.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "rrp-retailer/detail/:id",
+    component: OrdersRrpDetailComponent,
+    data: {
+      breadcrumbs: brConfig.order_rrp.detail
+    },
+    // resolve: {
+    //   listLevel: ListLevelResolver
+    // },
     canActivate: [PageGuard]
   },
   {

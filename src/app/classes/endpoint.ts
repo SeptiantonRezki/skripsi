@@ -152,7 +152,8 @@ export class Endpoint {
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
-        show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/${context.retailer_id}`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
+        show_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/${context.retailer_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
         put_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/${context.retailer_id}`,

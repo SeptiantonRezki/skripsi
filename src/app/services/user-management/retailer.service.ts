@@ -21,6 +21,11 @@ export class RetailerService extends BaseService {
     return this.getApi(url);
   }
 
+  show_v2(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_v2", context);
+    return this.getApi(url);
+  }
+
   create(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "create");
     return this.postApi(url, body);

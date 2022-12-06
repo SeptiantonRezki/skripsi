@@ -338,7 +338,7 @@
               <input matInput placeholder="{{'retailer.list.apps_version_ayo_cashier' | translate}}" formControlName="version_cashier">
             </mat-form-field>
           </div>
-          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="10px">
             <mat-form-field fxFlex="20" class="is-light form-primary">
               <mat-select formControlName="is_chat_bot" placeholder="{{'global.label.chat_bot' | translate}}">
                 <mat-option [value]="statusChatBot.value" *ngFor="let statusChatBot of listStatusChatBot">
@@ -355,6 +355,15 @@
                 <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
               </mat-radio-group>
             </div> -->
+            <div fxFlex fxLayout="row wrap" fxLayoutAlign="left center" fxLayoutGap="10px">
+              <div fxLayout="column">
+                <!-- <mat-label>{{ls.locale?.retailer?.detail?.data_ktp}}</mat-label> -->
+                <mat-label>Data KTP</mat-label>
+                <!-- <small>{{ls.locale?.retailer?.detail?.data_ktp}} {{ formRetailer.get('owner_verified').value ? ls.locale?.retailer?.detail?.unlocked : ls.locale?.retailer?.detail?.locked }}</small> -->
+                <small>Data KTP {{ formRetailer.get('owner_verified').value ? 'Terbuka' : 'Terkunci' }}</small>
+              </div>
+              <mat-slide-toggle formControlName="owner_verified" (change)="onKtpToggle($event)"></mat-slide-toggle>
+            </div>
 
           </div>
 
@@ -458,6 +467,174 @@
               </mat-form-field>
             </div>
           </div>
+
+        <!-- Detail RRP -->
+          <div>
+            <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="permission?.detail_rrp || permission?.jadwal_pengiriman">
+              <h3>Detail RRP</h3>
+            </div>
+            <div fxLayout="row wrap" fxFlex="55" class="mb-12">
+              <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp">
+                <div>
+                  <mat-label [ngStyle]="{'color': permission?.detail_rrp ? '#000000' : '#a0a0a0'}">
+                    Order RRP
+                  </mat-label>
+                  <mat-radio-group formControlName="order_rrp" class="radio-group pb-16" fxLayout="row wrap">
+                    <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
+                    <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div fxLayout="row" fxFlex="50" *ngIf="permission?.detail_rrp && (formRetailer.get('order_rrp').value === 1)">
+                <div>
+                  <mat-label [ngStyle]="{'color': (permission?.detail_rrp && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                    Blok Pemesanan
+                  </mat-label>
+                  <mat-radio-group formControlName="block_order" class="radio-group pb-16" fxLayout="row wrap">
+                    <mat-radio-button class="radio-button" [value]="1">{{'global.label.yes' | translate}}</mat-radio-button>
+                    <mat-radio-button class="radio-button" [value]="0">{{'global.label.no' | translate}}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)">
+              <div id="jadwal_pengiriman" class="mb-24">
+                <div class="mb-8" [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                  Jadwal Pengiriman
+                </div>
+                <table>
+                  <tr>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Senin
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Selasa
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Rabu
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Kamis
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Jumat
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Sabtu
+                      </span>
+                    </th>
+                    <th>
+                      <span [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                        Minggu
+                      </span>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="checkbox-center">
+                        <!-- <mat-checkbox [checked]="selectedDay.includes('Senin')" (change)="onSelectedDay($event, 'Senin')"> -->
+                        <mat-checkbox [checked]="is_monday_deliv === 1" (change)="onSelectedDay($event, 'is_monday_deliv')" formControlName="is_monday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_tuesday_deliv === 1" (change)="onSelectedDay($event, 'is_tuesday_deliv')" formControlName="is_tuesday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_wednesday_deliv === 1" (change)="onSelectedDay($event, 'is_wednesday_deliv')" formControlName="is_wednesday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_thursday_deliv === 1" (change)="onSelectedDay($event, 'is_thursday_deliv')" formControlName="is_thursday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_friday_deliv === 1" (change)="onSelectedDay($event, 'is_friday_deliv')" formControlName="is_friday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_saturday_deliv === 1" (change)="onSelectedDay($event, 'is_saturday_deliv')" formControlName="is_saturday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="checkbox-center">
+                        <mat-checkbox [checked]="is_sunday_deliv === 1" (change)="onSelectedDay($event, 'is_sunday_deliv')" formControlName="is_sunday_deliv">
+                        </mat-checkbox>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div>
+                <div [ngStyle]="{'color': (permission?.jadwal_pengiriman && (formRetailer.get('order_rrp').value === 1)) ? '#000000' : '#a0a0a0'}">
+                  Cut Off Hours
+                </div>
+                <div>
+                <!-- <div *ngIf="permission?.jadwal_pengiriman && formRetailer.get('order_rrp').value === 1"> -->
+                  <mat-form-field
+                  fxFlex="30"
+                  class="is-light form-primary"
+                  id="cut_off_hours"
+                >
+                  <input
+                    matInput
+                    formControlName="cut_off_hours"
+                    [ngxTimepicker]="fullTime1"
+                    [format]="24"
+                    readonly
+                    style="width: 50px"
+                  />
+                  <span>WIB</span>
+                  <mat-icon matSuffix>access_time</mat-icon>
+                  <ngx-material-timepicker
+                    #fullTime1
+                  ></ngx-material-timepicker>
+                </mat-form-field>
+                </div>
+                <!-- <div *ngIf="!permission?.jadwal_pengiriman || (formRetailer.get('order_rrp').value === 0)">
+                  <mat-form-field
+                  fxFlex="30"
+                  class="is-light form-primary"
+                  id="cut_off_hours"
+                >
+                  <input
+                    matInput
+                    formControlName="cut_off_hours"
+                    [value]="formRetailer.get('cut_off_hours').value.length === 8 ? formRetailer.get('cut_off_hours').value.slice(0, 5) : formRetailer.get('cut_off_hours').value"
+                    readonly
+                    style="width: 50px"
+                  />
+                  <span>WIB</span>
+                  <mat-icon matSuffix>access_time</mat-icon>
+                </mat-form-field>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        <!-- END Detail RRP -->
+
           <div class="confirm btn-confirm py-24" fxLayout="row" fxLayoutGap="25px">
             <button *ngIf="!isDetail && !disableSubmit" mat-raised-button type="button" class="confirmation-button"
               fxFlex="20" (click)="submit()">
