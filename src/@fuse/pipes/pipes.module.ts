@@ -12,6 +12,7 @@ import {
 import { CapitalizePipe } from "./capitalize";
 import { TimeRemainingPipe } from "./time-remaining.pipe";
 import { UnderscoreToCapitalizePipe } from "./underscore-to-capitalize.pipe";
+import { TranslateInterpolatePipe } from "./translateInterpolate.pipe";
 import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
     ExcludeArrayPipe,
     TimeRemainingPipe,
     UnderscoreToCapitalizePipe,
+    TranslateInterpolatePipe,
     BreadCrumbTranslatePipe
   ],
   imports: [],
@@ -43,6 +45,7 @@ import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
     ExcludeArrayPipe,
     TimeRemainingPipe,
     UnderscoreToCapitalizePipe,
+    TranslateInterpolatePipe,
     BreadCrumbTranslatePipe
   ]
 })

@@ -13,6 +13,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GeneralService } from "app/services/general.service";
 import { TranslateService } from '@ngx-translate/core';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import id from '../../assets/languages/id.json';
+import km from '../../assets/languages/km.json';
+import en_ph from '../../assets/languages/en-ph.json';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'fuse-main',
@@ -91,9 +95,15 @@ export class FuseMainComponent implements OnDestroy {
         });
 
         this.listenOnLangChange = this.translate.onLangChange.subscribe((res: any) => {
+            let user_country = localStorage.getItem('user_country');
             if (res && res.translations) {
                 this.ls.locale = res.translations;
+                if (res && res.lang) {
+                    user_country = res.lang;
+                }
             }
+            let extendLang: any = user_country === 'km' ? km : user_country === 'en' ? en_ph : id;
+            this.ls.locale = _.extend(this.ls.locale, extendLang);
         });
     }
 
