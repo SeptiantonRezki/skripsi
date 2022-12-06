@@ -78,6 +78,46 @@
             </mat-select>
           </mat-form-field>
         </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <div fxFlex="100%">
+            <div fxLayout="row" fxLayoutAlign="flex-start center">
+              SRCIS Distribution Hub
+              <mat-slide-toggle (change)="isDistribution($event)" style="top: -1px; padding-left: 15px; margin-bottom: 0px; align-self: end" formControlName="is_distribution_hub"></mat-slide-toggle>
+            </div>
+            <div fxLayout="row" fxFlex="100" *ngIf="formWs.get('is_distribution_hub').value" style="margin-top: 20px">
+              <mat-form-field fxFlex="48" class="is-light">
+                <input matInput placeholder="No. NPWP" type="text" formControlName="npwp">
+                <mat-error *ngIf="formWs.controls['npwp'].hasError('required') && formWs.controls['npwp'].touched ">
+                  No. NPWP {{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
+              <span fxFlex="4"></span>
+              <mat-form-field fxFlex="48" class="is-light">
+                <input matInput placeholder="Kode DB" type="text" formControlName="db_code">
+                <mat-error *ngIf="formWs.controls['db_code'].hasError('required') && formWs.controls['db_code'].touched ">
+                  Kode DB {{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxFlex="100" *ngIf="formWs.get('is_distribution_hub').value">
+              <mat-form-field fxFlex="48" class="is-light">
+                <input matInput placeholder="VAT/PPN (%)" type="text" formControlName="vat" maxlength="3" (keypress)="numberOnly($event)" (input)="changeVat($event.target.value)" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false" autocomplete=off>
+                <mat-error *ngIf="formWs.controls['vat'].hasError('required') && formWs.controls['vat'].touched ">
+                  VAT/PPN (%) {{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
+              <span fxFlex="4"></span>
+              <mat-form-field fxFlex="48" class="is-light">
+                <input matInput placeholder="Plant Code" type="text" formControlName="plant_code">
+                <mat-error *ngIf="formWs.controls['plant_code'].hasError('required') && formWs.controls['plant_code'].touched ">
+                  Plant Code {{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
         <div class="ayo-middle pt-24" fxLayout="column">
 
           <mat-form-field *ngIf="isDetail && seePhone" fxFlex="100" class="is-light">

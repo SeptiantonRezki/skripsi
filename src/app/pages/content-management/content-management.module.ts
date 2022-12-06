@@ -30,7 +30,8 @@ import {
   MatChipsModule,
   DateAdapter,
   MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS
+  MAT_DATE_FORMATS,
+  MatToolbarModule
 } from "@angular/material";
 import { ngfModule } from "angular-file";
 import { FroalaEditorModule, FroalaViewModule } from "angular-froala-wysiwyg";
@@ -44,6 +45,12 @@ import { MomentDateAdapter } from "@angular/material-moment-adapter";
 import { PipesModule } from "app/pipe/pipes.module";
 import { YtVideoPreviewComponent } from './help/yt-video-preview/yt-video-preview.component';
 import { InfoPreviewComponent } from './help/info-preview/info-preview.component';
+import { KeywordManagementComponent } from "./keyword-management/keyword-management-component";
+import { TranslateModule } from "@ngx-translate/core";
+import { PageGuard } from "app/classes/auth.guard";
+import { ImportKeyword } from "./keyword-management/import/personalize/import-keyword.component";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { RupiahFormaterWithoutRpPipe } from "@fuse/pipes/rupiah-formater";
 
 export const MY_FORMATS = {
   parse: {
@@ -80,8 +87,11 @@ export const MY_FORMATS = {
     MatTabsModule,
     MatChipsModule,
     MatDatepickerModule,
+    TranslateModule.forChild(),
     FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    FroalaViewModule.forRoot(),
+    MatToolbarModule,
+    NgxMatSelectSearchModule,
   ],
   declarations: [
     TncIndexComponent,
@@ -101,6 +111,11 @@ export const MY_FORMATS = {
     DetailReportComponent,
     YtVideoPreviewComponent,
     InfoPreviewComponent,
+    KeywordManagementComponent,
+    ImportKeyword,
+  ],
+  entryComponents: [
+    ImportKeyword,
   ],
   exports: [
     TncIndexComponent,
@@ -112,14 +127,17 @@ export const MY_FORMATS = {
     HelpIndexComponent,
     HelpCreateComponent,
     HelpEditComponent,
+    KeywordManagementComponent
   ],
   providers: [
+    PageGuard,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    RupiahFormaterWithoutRpPipe,
   ]
 })
 export class ContentManagementModule { }

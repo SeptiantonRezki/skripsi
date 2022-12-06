@@ -19,6 +19,7 @@ export class Page {
   type: string;
   type_banner: string;
   notification_id: any;
+  is_valid: number;
   
   constructor() {
     this.per_page = 15;
@@ -37,12 +38,16 @@ export class Page {
     this.product_id = "";
     this.type = '';
     this.type_banner = '';
+    this.is_valid = 0;
   }
 
   public static renderPagination(pagination, response) {
     pagination.page = response.page;
     pagination.per_page = response.per_page;
     pagination.total = response.total;
+    if (typeof response['is_valid'] !== 'undefined') {
+      pagination.is_valid = response['is_valid'];
+    }
   }
   public setType(type) {
     this.type = type;

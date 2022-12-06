@@ -321,7 +321,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
         url_iframe: '',
         imageDetailBanner: '',
       })]),
-      rejected_reason_choices: this.formBuilder.array([this.createRejectedReson()], Validators.required),
+      rejected_reason_choices: this.formBuilder.array([], Validators.required),
       ir_type: ["", Validators.required],
       copywritingList: this.formBuilder.array([], Validators.required),
       children: this.formBuilder.array([]),
@@ -667,6 +667,7 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
       (res) => {
         this.listReason = res.data;
         this.filteredReason.next(this.listReason.slice());
+        this.initRejectedReason();
       },
       (err) => {
         console.log("err List Alasan", err);
@@ -1211,8 +1212,10 @@ export class TemplateCreatePersonalizeComponent implements OnInit {
     return this.formBuilder.group({ option: this.translate.instant('global.label.opsi_index', {index: 1}), next_question: '' })
   }
 
-  createRejectedReson(): FormGroup {
-    return this.formBuilder.group({ reason: ['', Validators.required] });
+  initRejectedReason(){
+    let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
+    const reason = this.listReason.find(list => list.name.toLowerCase() === "others");
+    rejected.push(this.formBuilder.group({ reason: [reason ? reason.name : "", Validators.required] }));
   }
   
   addRejectedReason() {

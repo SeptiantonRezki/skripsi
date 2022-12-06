@@ -118,6 +118,7 @@ export class RetailerEditComponent {
   ]
   countryList: any[] = [];
   country_phone: string;
+  idRetailer: any;
 
   formRefferalCode: FormGroup;
   
@@ -186,6 +187,7 @@ export class RetailerEditComponent {
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+      this.idRetailer = params[2].path;
     })
 
     this.listLevelArea = [
@@ -261,7 +263,7 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
     this.dataService.showLoading(true);
-    this.retailerService.show({ retailer_id: this.dataService.getFromStorage('id_retailer') }).subscribe(async res => {
+    this.retailerService.show({ retailer_id: this.idRetailer }).subscribe(async res => {
       this.dataService.showLoading(false);
       // console.log('show', res);
       this.detailRetailer = res.data;
@@ -286,6 +288,8 @@ export class RetailerEditComponent {
       } else if (this.detailRetailer.status === 'active') {
         this.formRetailer.controls['phone'].setValidators(Validators.required);
         this.formRetailer.updateValueAndValidity();
+      } else if(this.detailRetailer.status === 'inactive') {
+        this.formRetailer.get('status').disable();
       }
       this.onLoad = true;
       if (this.detailRetailer.area_code) {
@@ -485,7 +489,6 @@ export class RetailerEditComponent {
       });
 
     }
-    console.log(this.detailRetailer.phone);
     
     if (this.detailRetailer.country) {
       this.country_phone = Utils.getPhoneCode(this.detailRetailer.country);
@@ -496,7 +499,7 @@ export class RetailerEditComponent {
     }
     let phone = '';
     if (this.viewPhoneNumberStatus) {
-      phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+      phone = (this.isDetail ? this.detailRetailer.phone : (this.detailRetailer.phone)? parseInt(this.detailRetailer.phone.split(this.country_phone)[1]) : '' );
     } else {
       phone = Utils.reMaskInput(this.detailRetailer.phone, 4);
     }
@@ -822,16 +825,29 @@ export class RetailerEditComponent {
         body['npwp'] = '';
       }
 
-      this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({
-            message: 'Data berhasil diubah'
-          });
-          this.router.navigate(['user-management', 'retailer']);
-          window.localStorage.removeItem('detail_retailer');
-        },
-        err => { }
-      );
+      if(this.formRetailer.get('country').value === 'ID'){
+        this.retailerService.put_v2(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      } else {
+        this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      }
     } else {
       this.dialogService.openSnackBar({
         message: this.translate.instant('global.label.please_complete_data')
@@ -841,7 +857,7 @@ export class RetailerEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length) {
+    if (value !== '' && array.length > 0) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {

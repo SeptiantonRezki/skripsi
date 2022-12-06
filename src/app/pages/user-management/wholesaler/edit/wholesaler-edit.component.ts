@@ -71,6 +71,7 @@ export class WholesalerEditComponent {
   branchType: any[];
   wsRoles: any[] = [];
   country_phone: string;
+  idWs: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -109,6 +110,11 @@ export class WholesalerEditComponent {
       district: {},
       territory: {},
       country: {},
+      is_distribution_hub: {},
+      npwp: {},
+      db_code: {},
+      vat: {},
+      plant_code: {}
     };
 
     this.formBankAccountError = {
@@ -120,6 +126,7 @@ export class WholesalerEditComponent {
 
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+      this.idWs = params[2].path;
     })
 
     this.detailWholesaler = this.dataService.getFromStorage("detail_wholesaler");
@@ -182,6 +189,11 @@ export class WholesalerEditComponent {
       formBranchStore: this.formBuilder.array([]),
       role_id: ["", [Validators.required]],
       country: [""],
+      is_distribution_hub: [""],
+      npwp: [""],
+      db_code: [""],
+      vat: [""],
+      plant_code: [""],
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -199,7 +211,7 @@ export class WholesalerEditComponent {
     this.formWs.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formWs, this.formdataErrors);
     });
-    this.wholesalerService.show({ wholesaler_id: this.dataService.getFromStorage("id_wholesaler") }).subscribe(resWS => {
+    this.wholesalerService.show({ wholesaler_id: this.idWs }).subscribe(resWS => {
 
       this.detailWholesaler = resWS.data;
       // console.log('wsss', this.detailWholesaler);
@@ -234,6 +246,10 @@ export class WholesalerEditComponent {
         })
 
       }
+      
+      if(this.detailWholesaler.status === 'inactive') {
+        this.formWs.get('status').disable();
+      }
     });
 
     this.formBankAccount
@@ -257,6 +273,17 @@ export class WholesalerEditComponent {
       this.setFormAbility();
 
     }
+
+    this.formWs.get('npwp')
+      .valueChanges
+      .debounceTime(200)
+      .subscribe(res => {
+        if (res) {
+          let str = res.replace(/(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/, '$1.$2.$3.$4-$5.$6');
+          this.formWs.get('npwp').setValue(str, { emitEvent: false });
+        }
+      })
+    
   }
 
   handleCountryPhone(event){
@@ -321,6 +348,28 @@ export class WholesalerEditComponent {
       commonFormValidator.validateAllFields(this.formBankAccount);
     }
   }
+  
+  isDistribution(value){
+    if(value.checked === true) {
+      this.formWs.get("npwp").setValidators(Validators.required);
+      this.formWs.get("npwp").updateValueAndValidity();
+      this.formWs.get("db_code").setValidators(Validators.required);
+      this.formWs.get("db_code").updateValueAndValidity();
+      this.formWs.get("vat").setValidators(Validators.required);
+      this.formWs.get("vat").updateValueAndValidity();
+      this.formWs.get("plant_code").setValidators(Validators.required);
+      this.formWs.get("plant_code").updateValueAndValidity();
+    }else{
+      this.formWs.get("npwp").setValidators([]);
+      this.formWs.get("npwp").updateValueAndValidity();
+      this.formWs.get("db_code").setValidators([]);
+      this.formWs.get("db_code").updateValueAndValidity();
+      this.formWs.get("vat").setValidators([]);
+      this.formWs.get("vat").updateValueAndValidity();
+      this.formWs.get("plant_code").setValidators([]);
+      this.formWs.get("plant_code").updateValueAndValidity();
+    }
+  }
 
   clearBankName() {
     this.formBankAccount.get('bank_name').setValue(null);
@@ -366,7 +415,7 @@ export class WholesalerEditComponent {
     }
     let phone = '';
     if (this.viewPhoneNumberStatus) {
-      phone = (this.isDetail ? this.detailWholesaler.phone : parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]));
+      phone = (this.isDetail ? this.detailWholesaler.phone : (this.detailWholesaler.phone)? parseInt(this.detailWholesaler.phone.split(this.country_phone)[1]) : '' );
     } else {
       phone = Utils.reMaskInput(this.detailWholesaler.phone, 4);
     }
@@ -390,6 +439,11 @@ export class WholesalerEditComponent {
       formBranchStore: [],
       role_id: this.detailWholesaler.role_id,
       country: this.detailWholesaler.country,
+      is_distribution_hub: this.detailWholesaler.distribution_hub !== null ? true : false,
+      npwp: this.detailWholesaler.distribution_hub !== null ? this.detailWholesaler.distribution_hub.npwp : '',
+      db_code: this.detailWholesaler.distribution_hub !== null ? this.detailWholesaler.distribution_hub.db_code  : '',
+      vat: this.detailWholesaler.distribution_hub !== null ? this.detailWholesaler.distribution_hub.vat  : '',
+      plant_code: this.detailWholesaler.distribution_hub !== null ? this.detailWholesaler.distribution_hub.plant_code  : '',
     });
     let roleIdValidator = [Validators.required];
     if (this.detailWholesaler.is_branch) roleIdValidator = [];
@@ -668,6 +722,25 @@ export class WholesalerEditComponent {
     return invalid;
   }
 
+  numberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+  }
+
+  changeVat(value) {
+    console.log(value);
+    if (Number(value) > 100)
+    {
+      value = 100
+    } else if(Number(value) < 1){
+      value = '';
+    }
+    this.formWs.get('vat').setValue(value);
+  }
+
   submit() {
     // console.log(this.formWs);
     // console.log('invalid form field', this.findInvalidControls());
@@ -707,6 +780,20 @@ export class WholesalerEditComponent {
         body['has_branch'] = this.formWs.get("branchShop").value === true ? 1 : 0;
       }
 
+      if (this.formWs.get("is_distribution_hub").value === true) {
+        body['is_distribution_hub'] = (this.formWs.get("is_distribution_hub").value === true ? 1 : 0);
+        body['npwp'] = this.formWs.get("npwp").value;
+        body['db_code'] = this.formWs.get("db_code").value;
+        body['vat'] = this.formWs.get("vat").value;
+        body['plant_code'] = this.formWs.get("plant_code").value;
+      } else {
+        body['is_distribution_hub'] = 0;
+        body['npwp'] = '';
+        body['db_code'] = '';
+        body['vat'] = '';
+        body['plant_code'] = '';
+      }
+
       // console.log(this.formWs.get("branchShop").value);
       // return;
 
@@ -742,7 +829,7 @@ export class WholesalerEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length) {
+    if (value !== '' && array.length > 0) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {

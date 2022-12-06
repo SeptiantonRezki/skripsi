@@ -25,6 +25,7 @@ export class AudienceIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
+  last_updated: string = "";
 
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
@@ -67,6 +68,7 @@ export class AudienceIndexComponent {
 
   ngOnInit() {
     this.getAudience();
+    this.getLastUpdate();
   }
 
   getAudience() {
@@ -93,6 +95,14 @@ export class AudienceIndexComponent {
       },
       err => {
         this.onLoad = false;
+      }
+    );
+  }
+
+  getLastUpdate(){
+    this.audienceService.getLastUpdate(this.pagination).subscribe(
+      res => {
+        this.last_updated = res.data.formatted || "";
       }
     );
   }

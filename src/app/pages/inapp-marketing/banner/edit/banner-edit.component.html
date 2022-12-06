@@ -36,7 +36,7 @@
           </div>
           <div fxLayout="row" fxLayout.lt-md="column" class="pb-24 px-24" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="20%" class="is-light form-primary">
-              <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="from" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.available_from' | translate}}"
+              <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="from" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text17' | translate}}"
                 (dateChange)="setMinDate()">
               <mat-error
                 *ngIf="formBannerGroup.controls['from'].hasError('required') && formBannerGroup.controls['from'].touched">
@@ -48,7 +48,7 @@
               <mat-datepicker #dari></mat-datepicker>
             </mat-form-field>
             <mat-form-field fxFlex="20%" class="is-light form-primary">
-              <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="to" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.available_to' | translate}}"
+              <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="to" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text18' | translate}}"
                 [min]="minDate">
               <mat-error
                 *ngIf="formBannerGroup.controls['to'].hasError('required') && formBannerGroup.controls['to'].touched">
@@ -412,9 +412,25 @@
           <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page'">
             <div fxLayout="row">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="landing_page" placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
+                <mat-select formControlName="landing_page" 
+                  (selectionChange)="landingPageChange(formBannerGroup.get('landing_page').value)"
+                  placeholder="{{'iklan_dalam_aplikasi.spanduk_online.landing_page_type' | translate}}">
                   <mat-option *ngFor="let item of listLandingPage" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- App Link -->
+          <div class="px-24" *ngIf="formBannerGroup.get('content_type').value === 'landing_page' && formBannerGroup.get('landing_page').value === 'app_link' && formBannerGroup.get('user_group').value === 'retailer'">
+            <div fxLayout="row">
+              <mat-form-field fxFlex="45%" class="is-light form-primary">
+                <input matInput type="text" formControlName="app_link"
+                  placeholder="Masukan App Link">
+                <mat-error
+                  *ngIf="formBannerGroup.controls['app_link'].hasError('required') && formBannerGroup.controls['app_link'].touched">
+                  App Link {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
               </mat-form-field>
             </div>
           </div>

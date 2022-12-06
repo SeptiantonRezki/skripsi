@@ -11,7 +11,7 @@
   </page-content-header>
   <!-- / HEADER -->
 
-  <div class="content" *ngIf="!onLoad">
+  <div class="content p-24" *ngIf="!onLoad">
     <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
       style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
       <a #downloadLink></a>
@@ -187,7 +187,7 @@
             </div>
           </ng-template>
         </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="60" [name]="ls.locale.global.label.action" headerClass="textright"
+        <ngx-datatable-column [width]="100" [name]="ls.locale.global.label.action" headerClass="textright"
           [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">

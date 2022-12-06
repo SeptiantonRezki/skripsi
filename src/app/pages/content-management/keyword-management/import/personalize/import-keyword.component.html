@@ -1,0 +1,142 @@
+<div class="dialog-content-wrapper">
+
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>{{ls.locale.global.label.upload_file}} XLSX</span>
+      </div>
+
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+      accept=".xlsx, .xls" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+      (fileChange)="preview($event)">
+      <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+        <mat-icon class="secondary-text s-48">attach_file</mat-icon>
+        <br>
+        <span style="text-align: center" matPrefix>
+          {{ls.locale.global.messages.file_browse_label}} <br/> {{ls.locale.global.messages.file_browse_label_with_category_level_2}}
+        </span>
+      </div>
+    </div>
+    <br>
+    
+    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="requestingPreview">
+      <div fxFlex>
+        <span for="" style="font-weight: bolder;">{{'dte.task_sequencing.requesting_preview' | translate}}</span>
+        <mat-progress-spinner mode="indeterminate" diameter="32" style="margin:0 auto;"></mat-progress-spinner>
+      </div>
+    </div>
+
+    <div class="responsive" *ngIf="!requestingPreview">
+      <ngx-datatable *ngIf="!requestingPreview" #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+      [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+      [selectionType]="'checkbox'" [count]="pagination.total" [limit]="pagination.per_page"
+      [offset]="offsetPagination" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)">
+        <ngx-datatable-column [name]="'global.label.name' | translate" prop="name"> 
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="{{ 'global.label.category_level_2' | translate }}" prop="category">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.category}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.label.block_in_product' | translate" prop="block_product">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.block_product}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.label.maping_product' | translate" prop="product_mapping">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.product_mapping}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.label.block_in_mandiri_promo' | translate" prop="block_promo_mandiri">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.block_promo_mandiri}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Edit (2) / Add (1) / Remove (0)" prop="add_or_remove">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.add_or_remove}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="SKU ID" prop="sku_id">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-address">{{row.sku_id}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="{{ls.locale.global.messages.invalid_reason}}" prop="reason">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.reason ? row.reason : '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.menu.wholesaler' | translate" prop="wholesaler">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.wholesaler ? row.wholesaler : '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.menu.retailer' | translate"  prop="retailer">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.retailer ? row.retailer : '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [name]="'global.menu.customer' | translate" prop="customer">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{ row.customer ? row.customer : '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+          <ng-template
+            ngx-datatable-footer-template
+            let-rowCount="rowCount"
+            let-pageSize="pageSize"
+            let-selectedCount="selectedCount"
+            let-curPage="curPage"
+            let-offset="offset"
+          >
+            <div class="search-field" fxLayout="row" fxLayoutAlign="flex-start center">
+              <label style="margin-right: 14px"><b>Total Data Valid {{ validData.length | rupiahFormaterWithoutRp }}</b> / {{ totalData | rupiahFormaterWithoutRp }}</label>
+            </div>
+            <datatable-pager
+                [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'"
+                [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'"
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="table.onFooterPage($event)">
+            </datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="rows.length === 0 || requestingPreview || importing || requestingImport">{{ls.locale.global.button.send}}</button>
+        <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
+          [disabled]="uploading">{{'global.button.cancel' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>

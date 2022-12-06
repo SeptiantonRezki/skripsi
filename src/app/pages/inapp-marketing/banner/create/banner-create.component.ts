@@ -276,6 +276,7 @@ export class BannerCreateComponent {
       kategori: ['red'],
       ticker_body: [""],
       content_type_customer: ['all'],
+      app_link: [""],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -301,6 +302,7 @@ export class BannerCreateComponent {
           { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
           { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
           { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+          { name: 'App Link', value: "app_link" }
         ];
         this.listContentType = this.listContentType.filter(list => !['e_wallet', 'link_web'].includes(list.value));
         this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
@@ -1068,7 +1070,7 @@ export class BannerCreateComponent {
     } else {
       this.formBannerGroup.controls['url_iframe'].disable();
     }
-    this.formBannerGroup.get("barcode").setValue("");
+
     if (value === "spesific_product_b2b") {
       this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()
@@ -1084,6 +1086,29 @@ export class BannerCreateComponent {
 
     if (value === 'landing_page') {
       this.formBannerGroup.controls['landing_page'].setValue('');
+    }
+
+    if(
+      value === 'landing_page' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+      this.formBannerGroup.controls['app_link'].setValue('');
     }
   }
 
@@ -1147,7 +1172,7 @@ export class BannerCreateComponent {
         }
         let body = {
           user_group: this.formBannerGroup.get('user_group').value,
-          content_type: this.formBannerGroup.get('content_type').value
+          content_type: this.formBannerGroup.get('content_type').value,
         }
 
         let fd = new FormData();
@@ -1185,7 +1210,7 @@ export class BannerCreateComponent {
         } else if (body.content_type === 'landing_page') {
           fd.append('landing_page', this.formBannerGroup.get('landing_page').value);
           body['landing_page'] = this.formBannerGroup.get('landing_page').value;
-        } else if (body.content_type === 'iframe') {
+          } else if (body.content_type === 'iframe') {
           fd.append('iframe', this.formBannerGroup.get('url_iframe').value);
           body['iframe'] = this.formBannerGroup.get('url_iframe').value;
           fd.append('transfer_token', this.formBannerGroup.get('transfer_token').value);
@@ -1213,7 +1238,6 @@ export class BannerCreateComponent {
         else if (body.content_type === "spesific_product_b2b") {
           fd.append("barcode", this.formBannerGroup.get("barcode").value.id)
           body['barcode'] = this.formBannerGroup.get("barcode").value.id;
-          this.formBannerGroup.controls['barcode'].enable();
           fd.append("name_product", this.formBannerGroup.get("barcode").value.name)
           body['name_product'] = this.formBannerGroup.get("barcode").value.name;
         } else { }
@@ -1226,6 +1250,14 @@ export class BannerCreateComponent {
           if (this.formBannerGroup.get('type_banner').value === 'ticker') {
             fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
             body['type_ticker'] = this.formBannerGroup.get('kategori').value;
+          }
+          if (this.formBannerGroup.get('landing_page').value === 'app_link' && body.content_type === 'landing_page') {
+            let urlAPP = this.formBannerGroup.get('app_link').value;
+            fd.append('url_app', urlAPP);
+            body['url_app'] = urlAPP;
+          }else{
+            fd.append('url_app', null);
+            body['url_app'] = null;
           }
         }
 
@@ -1330,6 +1362,7 @@ export class BannerCreateComponent {
           body['target_audiences'] = this.audienceSelected.map(aud => aud.id);
           this.bannerService.create(body).subscribe(
             res => {
+              this.dataService.showLoading(false);
               this.loadingIndicator = false;
               this.dataService.showLoading(false);
               this.onLoad = true;
@@ -1347,6 +1380,7 @@ export class BannerCreateComponent {
           body['target_audience'] = "0";
           this.bannerService.create(fd).subscribe(
             res => {
+              this.dataService.showLoading(false);
               this.loadingIndicator = false;
               this.dataService.showLoading(false);
               this.onLoad = true;

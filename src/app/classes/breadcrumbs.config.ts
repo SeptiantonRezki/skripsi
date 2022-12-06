@@ -1500,6 +1500,18 @@ export const brConfig = {
           name: "Detail Spin The Wheel"
         }
       ],
+      notif: [
+        {
+          type: "parent",
+          url: "/dte/spin-the-wheel",
+          name: "Daftar Spin The Wheel"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Spin The Wheel Notifikasi"
+        }
+      ],
     },
     pengaturanAttributeMisi: {
       index: [
@@ -2306,6 +2318,15 @@ export const brConfig = {
           name: "Detail Promo"
         }
       ]
+    },
+    keywordManagement: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Keyword Management"
+        }
+      ],
     }
   },
   newsfeedManagement: {
@@ -2513,6 +2534,15 @@ export const brConfig = {
           type: "current",
           url: "",
           name: "Detail Tingkat Fitur"
+        }
+      ]
+    },
+    notification: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Mitra Notification Configuration"
         }
       ]
     }
@@ -3494,6 +3524,13 @@ export const brConfig = {
         name: "TRS System Variable"
       }
     ],
+    trs_report: [
+      {
+        type: "current",
+        url: "",
+        name: "TRS Report"
+      }
+    ],
     trs_proposal: {
       index: [
         {
@@ -3511,7 +3548,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Create"
+          name: "Buat TRS Proposal"
         }
       ],
       edit: [
@@ -3523,7 +3560,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Edit"
+          name: "Edit TRS Proposal"
         }
       ],
       detail: [
@@ -3535,7 +3572,7 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: "Detail"
+          name: "Detail TRS Proposal"
         }
       ]
     },
@@ -3557,5 +3594,50 @@ export const brConfig = {
         name: "Language Setup"
       }
     ]
+  },
+  infoBoard: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Info Board"
+      }
+    ],
+    create: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Buat Info Board"
+      }
+    ],
+    edit: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Info Board"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/info-board",
+        name: "Daftar Info Board"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Detail Info Board"
+      }
+    ],
   },
 };

@@ -9,15 +9,16 @@
  * AYO Sampoerna Staging
  *
  */
-import { environment, serviceServer, server } from '../../environments/environment';
-import { Config } from './config';
+import { environment, serviceServer, server } from '../../environments/environment'
+import { Config } from './config'
+
 
 // const SERVER = Config.server;
-const SERVER = server;
-const AYO_API = environment.server;
+const SERVER = server
+const AYO_API = environment.server
 // const AYO_API_SERVICE = environment.server_service;
-const AYO_API_SERVICE = serviceServer;
-const type_api = "principal";
+const AYO_API_SERVICE = serviceServer
+const type_api = "principal"
 // dummy comment
 
 export class Endpoint {
@@ -83,11 +84,15 @@ export class Endpoint {
       },
       kpiSetting: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
+        get_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/kpi-setting`,
         get_kps: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/kps`,
+        get_kps_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/kpi-setting/kps`,
         get_by_id: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`,
+        get_by_id_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/kpi-setting/${context}`,
         post: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting`,
-        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/kpi-setting/${context}`,
+        get_export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/kpi-setting/export`
       },
       masterKPI: {
         brands: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/master/brands`,
@@ -147,9 +152,10 @@ export class Endpoint {
       },
       retailer: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
-        show: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/${context.retailer_id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer`,
         put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/retailer/${context.retailer_id}`,
+        put_v2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/${context.retailer_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/user/${type_api}/user/retailer/${context.retailer_id}`,
         consumer_list: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/by-referral-code/${context.referral_code}`,
         parent: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/area/parent-by-code/${context.parent}`,
@@ -226,6 +232,7 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/product/${context.product_id}`,
         list_brand: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/brand?page=all`,
         list_category: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/category?parent_id=${context.parent_id}`,
+        list_all_category: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/category/list/all`,
         list_category_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/vendor/product/categories`,
         list_packaging: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/${type_api}/packaging?page=all`,
         // parent: `${AYO_API}/api/general/area/get_parent_id/${context.parent}`,
@@ -269,6 +276,28 @@ export class Endpoint {
         get_db_approvers: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/approvers`,
         get_db_brands: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/products/submissions/brands`,
       },
+      order_rrp: {
+        get: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp`,
+        detail: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/${context.order_id}`,
+        put: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/${context.order_id}`,
+        put_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/${context.order_id}/status`,
+        block_next_order: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/retailer/block-order/${context.retailer_id}`,
+        html: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/generate-html`,
+        update_price: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/update-price`,
+        update_price_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/check-price-update-status/${context.order_id}`,
+        courier_list: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/delivery/courier-list`,
+        detail_product_list: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/detail/product/${context.order_id}`,
+        export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/list/export`,
+        request_export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/order/mitra-hub/request-export`,
+        updateable_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/available-status`,
+        update_multiple_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/update-multiple`,
+        get_coin_discount_history: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount-coins`,
+        get_coin_discount_detail: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/discount-coins/${context.coin_discount_id}`,
+        get_sign_order_menu: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/status-time-passes`,
+        get_tab_retailer: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/list-status-order`,
+        get_tab_mitra: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order/list-status-order-mitra-hub`,
+        multipleinvoice: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/order_rrp/multipleinvoice`
+      },
       template_task: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template`,
@@ -307,6 +336,7 @@ export class Endpoint {
       },
       audience: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience`,
+        get_last_update: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/general/get-last-sync-date-of-business-code`,
         detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/${context.audience_id}`,
         create: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience`,
         put: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/audience/${context.audience_id}`,
@@ -352,10 +382,11 @@ export class Endpoint {
         save_audience: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-audience`,
         update_preview: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-preview`,
         download_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-winner/${context.id}`,
-        update_winner: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-winner`,
+        update_winner: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/winner/update`,
+        update_winner_image: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-winner`,
         update_publish: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/update-status`,
-        export_detail_coupon:`${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/detail-export`,
-        export_coupon:`${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/export`,
+        export_detail_coupon: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/detail-export`,
+        export_coupon: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/coupon/export`,
         import_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/audience/pre-import`,
         show_import_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/lottery/audience/show-import`,
         export_lottery: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/lottery/audience/request-export`,
@@ -717,7 +748,8 @@ export class Endpoint {
       },
       PLPayMethod: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran`,
-        update: `${AYO_API_SERVICE(SERVER.product)}/api/v2/product/principal/private-label/metode-pembayaran/${context.payMethodId}`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/agent-hub/metode-pembayaran/${context.payMethodId}`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/agent-hub/metode-pembayaran`,
       },
       PLStock: {
         getList: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/private-label/stock`,
@@ -934,7 +966,7 @@ export class Endpoint {
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
         redeem_export: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/export`,
-        redeem_PaymentExport:`${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/redeem-export`,
+        redeem_PaymentExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/redeem-export`,
         redeem_import_preview: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/import`,
         redeem_import_submit: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/voucher/${context.voucher_id}/redeem/submit-import`,
         listVoucherB2C: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/b2c/voucher/list/data`,
@@ -1000,7 +1032,9 @@ export class Endpoint {
         //Panel
         getSelectedRetailerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/retailer`,
         getSelectedCustomerPanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}/customer`,
+        getPanelPreview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel-preview/${context.voucher_id}/retailer`,
         updatePanel: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel/${context.voucher_id}`,
+        updatePanelPreview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/panel-preview/${context.voucher_id}`,
 
         //Pertukaran Voucher
         getNominal: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/b2c/voucher/reimburse/nominal`,
@@ -1049,7 +1083,7 @@ export class Endpoint {
         redeemImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/import`,
         redeemSubmitImport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/submit-import`,
         redeemExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/redeem/export`,
-        redeemPaymentExport:`${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/redeem-export`,
+        redeemPaymentExport: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/redeem-export`,
         product_list: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku`,
         product_list_vendor: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/general/product/list-sku-vendor`,
         change_status: `${AYO_API_SERVICE(SERVER.order)}/api/v1/order/principal/inject-voucher/${context.voucher_id}/status`
@@ -1161,17 +1195,73 @@ export class Endpoint {
         import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/pre-import`,
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/spin/audience/show-import`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
+        save_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
+        get_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
       },
       tactical_retail_sales: {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
         proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal`,
-        proposal_detail: `${AYO_API_SERVICE(SERVER.task)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
+        proposal_detail: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal/${context.id}`,
+        cancel_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/cancel_proposal/${context.id}`,
+        customer_name: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/getcustname/${context.id}`,
+
+        list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_executor`,
+        list_kecamatan: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_kecamatan`,
+        list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_product`,
+        master_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/master_reason`,
+
+        list_area: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area`,
+        list_area_by_user: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/list_area_by_user`,
+
+        export_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/data?area=${context.area_id}`,
+        export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/list`,
+
+        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
+
+        total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/total-per-brand`,
+        summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/summary-visit`,
+        detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/detail-visit`,
+        stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
+        
+        export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-total-per-brand`,
+        export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-visit`,
+        export_stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-stock-movement`,
+      },
+      keyword: {
+        get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited`,
+        put: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited/${context.id}`,
+        exportKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/request-export`,
+        importKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/pre-import`,
+        previewImportKeyword: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/product/prohibited/show-import`,
+      },
+      info_board: {
+        type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/types`,
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board`,
+        detail: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/${context.id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board`,
+        put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/${context.id}`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/${context.id}`,
+        check_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/check-audience`,
+        save_audience: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/info-board/update-audience`,
+        export_detail: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-coupon-detail/${context.id}`,
+        export: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/task-lottery/lottery/export-coupon/${context.id}`,
+        import_info_board: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/infoboard/audience/pre-import`,
+        show_import_info_board: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/infoboard/audience/show-import`,
+        export_info_board: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/infoboard/audience/request-export`,
+      },
+      notification_configuration: {
+        update_sound: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-sound`,
+        get_sound: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-sound`,
+        get_step: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-status-orders`,
+        update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
       },
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }
 
   getEndPoint() {
-    return AYO_API;
+    return AYO_API
   }
 }
+
+

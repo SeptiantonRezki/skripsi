@@ -7,7 +7,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { DataService } from 'app/services/data.service';
 import { Router } from '@angular/router';
 import { LanguagesService } from 'app/services/languages/languages.service';
-
+import { PagesName } from 'app/classes/pages-name';
 @Component({
   selector: 'app-privacy-index',
   templateUrl: './privacy-index.component.html',
@@ -23,14 +23,14 @@ export class PrivacyIndexComponent {
   reorderable = true;
   pagination: Page = new Page();
   onLoad: boolean;
-
+  roles: PagesName = new PagesName();
   keyUp = new Subject<string>();
 
   @ViewChild("activeCell")
   @ViewChild(DatatableComponent)
   table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
-
+  permission: {}
   constructor(
     private dialogService: DialogService,
     private dataService: DataService,
@@ -49,6 +49,8 @@ export class PrivacyIndexComponent {
       .subscribe(data => {
         this.updateFilter(data);
       });
+      this.permission = this.roles.getRoles('principal.kebijakanprivasi');
+      console.log(this.permission);
   }
 
   ngOnInit() {

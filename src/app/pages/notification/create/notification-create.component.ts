@@ -217,7 +217,6 @@ export class NotificationCreateComponent {
   titleParam = { entity: this.pageName };
 
   ALLOW_FOR_TYPE = ['customer', 'retailer', 'wholesaler'];
-  // ALLOW_FOR_TYPE = ['customer'];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -312,6 +311,7 @@ export class NotificationCreateComponent {
       time: ["00:00", Validators.required],
       barcode: [""],
       content_type_new: ['all'],
+      app_link: [""],
     });
 
     this.formFilter = this.formBuilder.group({
@@ -396,9 +396,10 @@ export class NotificationCreateComponent {
     this.typeOfRecurrence = 'OneTime';
 
     this.formNotification.controls['user_group'].valueChanges.debounceTime(50).subscribe(res => {
-      if (res === 'retailer' || res === 'tsm') {
-        this.listLandingPage = [{ name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, { name: this.translate.instant('global.label.mission'), value: "misi" }, { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }];
-        // this.formNotification.controls['landing_page_value'].disable();
+      if (res === 'retailer') {
+        this.listLandingPage = [{ name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, { name: this.translate.instant('global.label.mission'), value: "misi" }, { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }, { name: 'App Link', value: "app_link" }];
+      } else if (res === 'tsm') {
+          this.listLandingPage = [{ name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" }, { name: this.translate.instant('global.label.mission'), value: "misi" }, { name: this.translate.instant('global.label.customer'), value: "pelanggan" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }];
       } else if (res === 'customer') {
         this.listLandingPage = [{ name: this.translate.instant('global.label.coupon'), value: "kupon" }, { name: this.translate.instant('global.label.nearby'), value: "terdekat" }, { name: this.translate.instant('global.label.my_profile'), value: "profil_saya" }, { name: this.translate.instant('bantuan.text1'), value: "bantuan" }, { name: this.translate.instant('cn_reward.b2c_voucher.text26'), value: "pesan_antar" }, { name: this.translate.instant('global.label.challenge'), value: "tantangan" }, { name: this.translate.instant('global.label.opportunity'), value: "peluang" }, { name: this.translate.instant('global.label.play_together'), value: "main_bareng" }];
       } else {
@@ -406,14 +407,14 @@ export class NotificationCreateComponent {
         // this.formNotification.controls['landing_page_value'].enable();
       }
       if (res === 'wholesaler') {
-        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }];
+        //this.listContentType = [{ name: "Static Page", value: "static_page" }, { name: "Iframe", value: "iframe" }, { name: "Image", value: "image" }, { name: "Unlinked", value: "unlinked" }, { name: "Video", value: "video" }];
+        this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('manajemen_konten.manajemen_bantuan.text4'), value: "video" }]; // hide Unlinked and Iframe
       } else if (res === 'customer') {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.ewallet'), value: "e_wallet" }, { name: this.translate.instant('global.label.link_to_browser'), value: "link_web" }];
-      } else if (res === 'tsm') {
+      } else if (res === "tsm") {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }];
       } else {
         this.listContentType = [{ name: this.translate.instant('global.label.static_page'), value: "static_page" }, { name: this.translate.instant('global.label.landing_page'), value: "landing_page" }, { name: this.translate.instant('global.label.iframe'), value: "iframe" }, { name: this.translate.instant('global.label.image'), value: "image" }, { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }, { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" }];
-
       }
 
       if (!this.ALLOW_FOR_TYPE.includes(res)) {
@@ -495,7 +496,7 @@ export class NotificationCreateComponent {
     }
 
     if (!this.ALLOW_FOR_TYPE.includes(this.formNotification.controls.user_group.value)) {
-      // this.formNotification.controls.type_of_recurrence.disable();
+      this.formNotification.controls.type_of_recurrence.disable();
       this.formNotification.controls.send_ayo.setValue(true);
       this.formNotification.controls.send_ayo.disable();
     }
@@ -1526,6 +1527,14 @@ export class NotificationCreateComponent {
       body['static_page_body'] = this.formNotification.get("static_page_body").value
     } else if (body.content_type === 'landing_page') {
       body['landing_page_value'] = this.formNotification.get('landing_page_value').value;
+
+
+      if (this.formNotification.get('landing_page_value').value === 'app_link') {
+        let urlAPP = this.formNotification.get('app_link').value;
+        body['url_app'] = urlAPP;
+      }else{
+        body['url_app'] = null;
+      }
     } else if (body.content_type === 'iframe' || body.content_type === 'link_web') {
       let url = this.formNotification.get('url_link').value;
       if (!url.match(/^[a-zA-Z]+:\/\//)) { url = 'http://' + url; }
@@ -1787,6 +1796,28 @@ export class NotificationCreateComponent {
     } else {
       this.formNotification.controls['barcode'].setValue("");
       this.formNotification.controls['barcode'].disable();
+    }
+
+    if( value === 'landing_page' && 
+      this.formNotification.get('user_group').value === 'retailer'
+    ){
+      this.formNotification.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formNotification.get('app_link').clearValidators();
+      this.formNotification.get('app_link').updateValueAndValidity();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formNotification.get('user_group').value === 'retailer'
+    ){
+      this.formNotification.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formNotification.get('app_link').clearValidators();
+      this.formNotification.get('app_link').updateValueAndValidity();
+      this.formNotification.controls['app_link'].setValue('');
     }
   }
 

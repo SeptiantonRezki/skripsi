@@ -2,6 +2,10 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="'KPI Setting'">
     <div class="button-row" fxLayout="row">
+      <button *ngIf="rows&&rows.length!==0" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        (click)="getFileExport()">
+        <mat-icon>arrow_upward</mat-icon>Export
+      </button>
       <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
         [routerLink]="['/kpisetting', 'kpi-setting-create']">
         <mat-icon>add</mat-icon>BUAT
@@ -9,33 +13,178 @@
     </div>
   </page-content-header>
   <!-- / HEADER -->
+
+  <div class="content p-24 kpi-filter">
+    <form autocomplete="off" [formGroup]="formKPI">
+      <div fxLayout="row">
+        <div fxLayout="column" fxFlex="80%">
+          <salestree [limit]="areaFromLogin" (areas)="getAreas($event)" (areaWithKey)="getAreaIds($event)"></salestree>
+        </div>
+        <div fxLayout="column" fxFlex="20%">
+          <div class="filter-search" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>search</mat-icon>
+            <mat-form-field fxFlex="100%" class="is-light form-primary">
+              <input matInput formControlName="search" (keydown)="handleChange($event)" type="text" placeholder="Cari">
+              <mat-error>
+                test
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlex="100%">
+        <div fxLayout="column" fxFlex="80%">
+          <div fxLayout="row">
+            <div class="kpi-filter-item" fxLayout="column">
+              <select-search [isResetable]="true" [options]="KPSListStart" placeholder="Start KPS"
+                searchLabel="Cari Start KPS..." [value]="formKPI.get('start_kps').value"
+                (onChange)="formKPI.get('start_kps').setValue($event);handleChange($event)">
+                <!-- <mat-error>
+              Start KPS harus diisi
+            </mat-error> -->
+              </select-search>
+            </div>
+            <div class="kpi-filter-item" fxLayout="column">
+              <select-search [isResetable]="true" [options]="KPSListEnd" placeholder="End KPS"
+                searchLabel="Cari End KPS..." [value]="formKPI.get('end_kps').value"
+                (onChange)="formKPI.get('end_kps').setValue($event);handleChange($event)">
+                <!-- <mat-error>
+              End KPS harus diisi
+            </mat-error> -->
+              </select-search>
+            </div>
+            <div class="kpi-filter-item" fxLayout="column">
+              <!-- <select-search [isResetable]="true" [options]="categories" placeholder="Kategori KPS" searchLabel="Cari Kategori KPS..."
+                [value]="formKPI.get('kategori').value"
+                (onChange)="formKPI.get('kategori').setValue($event);handleChange($event)"> -->
+              <!-- <mat-error>
+              Kategori KPS harus diisi
+            </mat-error> -->
+              <!-- </select-search> -->
+              <mat-form-field fxFlex="100%" class="is-light form-primary">
+                <mat-select multiple formControlName="kategori" placeholder="Category" searchLabel="Cari Kategori KPS..."
+                  (selectionChange)="handleChange($event)" >
+                  <!-- <mat-option>-- None --</mat-option> -->
+                  <!-- <mat-option [value]="active">active</mat-option> -->
+                  <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+                  <!-- *ngFor="let item of listStatus;" [value]="item.value" -->
+                </mat-select>
+                <mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="kpi-filter-item" fxLayout="column">
+              <mat-form-field fxFlex="100%" class="is-light form-primary">
+                <mat-select formControlName="status" placeholder="Status" searchLabel="Cari Status KPS..."
+                  (selectionChange)="handleChange($event)">
+                  <mat-option>-- None --</mat-option>
+                  <!-- <mat-option [value]="active">active</mat-option> -->
+                  <mat-option *ngFor="let status of statusOptions" [value]="status">{{status}}</mat-option>
+                  <!-- *ngFor="let item of listStatus;" [value]="item.value" -->
+                </mat-select>
+                <mat-error>
+
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="20%">
+          <div class="filter-search" fxLayout="row" fxLayoutAlign="start center">
+            <button style="width: 170px;margin:11px auto 0" mat-raised-button aria-label="Reset" type="button"
+              (click)="handleReset()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- tabel data -->
   <div class="content p-24">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
         <h2 class="pl-8">Daftar KPI Group</h2>
       </div>
       <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
-         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true"
-         [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [count]="pagination.total"
+        [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)"
+        (sort)="onSort($event)">
 
-        <ngx-datatable-column name="Group ID" prop="id" [width]="24">
+        <ngx-datatable-column name="Group ID" prop="id">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span class="row-id">{{row.id}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="KPS Start" prop="start_kps">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-start-kps" >{{row.start_kps}} ({{row.start_date  | date:'dd/MM/yyyy'}})</span>
+            <span class="row-start-kps">{{row.start_kps}} ({{row.start_date | date:'dd/MM/yyyy'}})</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="KPS End" prop="end_kps">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-end-kps" >{{row.end_kps}} ({{row.end_date  | date:'dd/MM/yyyy'}})</span>
+            <span class="row-end-kps">{{row.end_kps}} ({{row.end_date | date:'dd/MM/yyyy'}})</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column name="National" prop="national"> -->
+        <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value"> -->
+        <!-- <span class="row-areas">{{row.nationals.join(",")}}</span> -->
+        <!-- <span *ngIf="row.nationals.length <= 0" class="row-areas">-</span> -->
+        <!-- </ng-template> -->
+        <!-- </ngx-datatable-column> -->
+        <ngx-datatable-column name="Zone" prop="zone">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.zone.join(",")}}</span>
+            <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Region" prop="region">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.region.join(",")}}</span>
+            <!-- <span *ngIf="row.regions.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Area" prop="area">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.area.join(",")}}</span>
+            <!-- <span *ngIf="row.areas.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="District" prop="district">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.district.join(",")}}</span>
+            <!-- <span *ngIf="row.districts.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Territory" prop="territory">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.territory.join(",")}}</span>
+            <!-- <span *ngIf="row.territories.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Brand" prop="brands">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.brands.join(",")}}</span>
+            <!-- <span *ngIf="row.brands.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Ecosystem" prop="ecosystems">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.ecosystems.join(",")}}</span>
+            <!-- <span *ngIf="row.ecosystems.length <= 0" class="row-areas">-</span> -->
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Trade Program" prop="trade_programs">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span class="row-areas">{{row.trade_programs.join(",")}}</span>
+            <!-- <span *ngIf="row.trade_programs.length <= 0" class="row-areas">-</span> -->
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Area Audience" prop="areas">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-areas" >{{row.areas.join(',')}}</span>
+            <span class="row-areas">{{row.areas.join(',')}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column name="Status" prop="status">
@@ -48,7 +197,8 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="edit(row)" [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
+              <button mat-icon-button color="" (click)="edit(row)"
+                [routerLink]="['/kpisetting/kpi-setting-edit/'+ row.id +'']">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
               <!-- <button mat-icon-button color="" (click)="delete(row.id)">

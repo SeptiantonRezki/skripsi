@@ -46,7 +46,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   loadingZone = true;
   loadingRegion = true;
   loadingArea = true;
-  
+
   formDetilVoucher: FormGroup;
 
   formSpin: FormGroup;
@@ -156,6 +156,9 @@ export class SpinTheWheelEditComponent implements OnInit {
   showDetail: any;
   isDetail: Boolean;
 
+  settingsData: any = null;
+  taskSpinId: number;
+
   constructor(
     private b2bVoucherInjectService: B2BVoucherInjectService,
     private supplierCompanyService: SupplierCompanyService,
@@ -210,7 +213,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
 
     this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
-    
+
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
@@ -222,7 +225,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
   }
-  
+
   filteringTradeProgram() {
     if (!this.listTradePrograms) {
       return;
@@ -261,65 +264,10 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_date').disable();
       this.formSpin.get('end_time').disable();
     }
-    
 
-    this.formPM = this.formBuilder.group({
-      limit_only: [''],
-      limit_by_product: [false],
-      limit_by_category: [false],
-      limit_by_product_srcc: [false],
-      limit_by_category_srcc: [false],
-      product: [''],
-      category: [''],
-      product_srcc: [''],
-      category_srcc: [''],
-      coin_variation: ['', Validators.required],
-      coins: [],
-      limit_spin: [0, [Validators.required, Validators.min(1)]],
-      minimum_transaction: [0],
-      frekuensi_belanja: ['', Validators.required],
-      frekuensi_reward: ['', Validators.required]
-    });
-
-    if(this.isDetail){
-      this.formPM.get('limit_only').disable();
-      this.formPM.get('limit_by_product').disable();
-      this.formPM.get('limit_by_category').disable();
-      this.formPM.get('limit_by_product_srcc').disable();
-      this.formPM.get('limit_by_category_srcc').disable();
-      this.formPM.get('product').disable();
-      this.formPM.get('category').disable();
-      this.formPM.get('product_srcc').disable();
-      this.formPM.get('category_srcc').disable();
-      this.formPM.get('coin_variation').disable();
-      this.formPM.get('coins').disable();
-      this.formPM.get('limit_spin').disable();
-      this.formPM.get('minimum_transaction').disable();
-      this.formPM.get('frekuensi_belanja').disable();
-      this.formPM.get('frekuensi_reward').disable();
+    if (this.detailFormSpin.status === "publish") {
+      this.formSpin.get('trade_creator_id').disable();
     }
-
-    // if(this.isDetail){
-    // }
-
-    this.keyUpProduct.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        // console.log('reas ngetik cuk', res);
-        this.getListProduct(res);
-        this.resetField(res);
-      });
-
-    this.keyUpProductSRCC.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        this.getListProductSRCC(res);
-        this.resetField(res);
-      });
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -367,13 +315,6 @@ export class SpinTheWheelEditComponent implements OnInit {
 
     this.setStorageDetail();
 
-    // *MEKANISME
-    this.getCategories();
-    this.getCategoriesSRCC();
-    
-    this.formPM.get('category').disable();
-    this.formPM.get('category_srcc').disable();
-
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
       this.getLevel('division');
@@ -386,69 +327,17 @@ export class SpinTheWheelEditComponent implements OnInit {
     if(!this.detailFormSpin){
       this.formGeo.get('classification').setValue(['all']);
     }
-    
+
     this.setValueDetail();
   }
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => { 
+    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => {
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
-        if (res.data.settings) {
-          this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
-          
-          this.formPM.get('limit_spin').setValue(res.data.settings.limit_spin);
-          this.formPM.get('coin_variation').setValue(res.data.settings.coin_variation);
-          this.averageCoin = res.data.settings.average_coin_spin;
-          for (let i = 0; i < res.data.settings.details.length; i++) {
-            if (res.data.settings.details[i].category_type === 'belanja') {
-              this.formPM.get('frekuensi_belanja').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'reward') {
-              this.formPM.get('frekuensi_reward').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'minimum_transaction') {
-              this.formPM.get('minimum_transaction').setValue(res.data.settings.details[i].amount);
-            } else if (res.data.settings.details[i].category_type === 'limit') {
-              this.changeType('ppk');
-              if (res.data.settings.details[i].limit_by === 'product') {
-                this.formPM.get('limit_by_category').setValue(false);
-                this.formPM.get('limit_by_product').setValue(true);
-                // this.productList = res.data.settings.details[i].limit_only;
-                this.productList = res.data.settings.details[i].limit_only_data;
-              } else {
-                this.formPM.get('limit_by_category').setValue(true);
-                this.formPM.get('limit_by_product').setValue(false);
-                this.selectedCategory = res.data.settings.details[i].limit_only;
-                this.formPM.get('category').enable();
-                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x, 10);
-                });
-                this.formPM.get('category').setValue(resultCat);
-              }
-            } else if (res.data.settings.details[i].category_type === 'exclude') {
-              this.changeType('exclude');
-              if (res.data.settings.details[i].limit_by === 'product') {
-                this.formPM.get('limit_by_category_srcc').setValue(false);
-                this.formPM.get('limit_by_product_srcc').setValue(true);
-                // this.productList = res.data.settings.details[i].limit_only;
-                this.productListSRCC = res.data.settings.details[i].limit_only_data;
-              } else {
-                this.formPM.get('limit_by_category_srcc').setValue(true);
-                this.formPM.get('limit_by_product_srcc').setValue(false);
-                const resultCat = res.data.settings.details[i].limit_only.map(function (x) {
-                  return parseInt(x, 10);
-                });
-                this.formPM.get('category_srcc').setValue(resultCat);
-              }
-            }
-          }
-
-          this.formPM.get('coins').setValue(res.data.settings.coins);
-        } else {
-          this.editableCoin = true;
-        }
+        this.taskSpinId = res.data.id;
+        this.settingsData = res.data.settings;
         // this.changeBlastType(res.data.audience_filter);
         if(res.data.audience_filter === 'population-blast'){
           this.formGeo.get('classification').setValue(res.data.class_groups);
@@ -986,7 +875,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   submit() {
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (
-      this.formSpin.valid 
+      this.formSpin.valid
       // && this.formGeo.valid
       ) {
       let body = {
@@ -1008,12 +897,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       console.log(body);
 
       this.dataService.showLoading(true);
-      this.spinTheWheelService.put_spin({ id: id },body).subscribe(res => {
-        this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-        this.dataService.showLoading(false);
-        this.setStorageDetail();
-        // this.router.navigate(['dte', 'spin-the-wheel'])
-      })
+      this.spinTheWheelService.put_spin({ id: id }, body).subscribe(
+        (res) => {
+          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+          this.dataService.showLoading(false);
+          this.setStorageDetail();
+          // this.router.navigate(['dte', 'spin-the-wheel'])
+        },
+        () => {
+          this.dataService.showLoading(false);
+        }
+      )
     } else {
       commonFormValidator.validateAllFields(this.formSpin);
       // commonFormValidator.validateAllFields(this.formGeo);
@@ -1044,12 +938,12 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     const dialogConfig = new MatDialogConfig();
-  
+
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       dialogConfig.panelClass = "scrumboard-card-dialog";
       dialogConfig.data = { password: "P@ssw0rd" };
-  
+
       this.dialogRef = this.dialog.open(
         DialogProcessComponentSPW,
         {...dialogConfig, width: '400px'}
@@ -1097,7 +991,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
 
     const dialogConfig = new MatDialogConfig();
-  
+
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
@@ -1148,7 +1042,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       // };
       // if (this.files) body.append('image', this.files)
       if (this.files) body.append('icon', this.files)
-      
+
       this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
         this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
         this.dataService.showLoading(false);
@@ -1172,7 +1066,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
     }
     this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
-      
+
     this.dataService.showLoading(false);
     this.router.navigate(['dte', 'spin-the-wheel'])
     }, err => {
@@ -1267,520 +1161,10 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  getCategories() {
-    this.productService.getListCategory(null).subscribe(res => {
-      console.log(res.data);
-      this.listCategories = res.data ? res.data.data : [];
-    });
-  }
-
-  getCategoriesSRCC() {
-    this.productService.getListCategory(null).subscribe(res => {
-      console.log(res.data);
-      this.listCategoriesSRCC = res.data ? res.data.data : [];
-    });
-  }
-
-  getProductObj(event, obj) {
-    const index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
-    if (index === -1) {
-      this.productList.push(obj);
-    }
-    if (this.productInput) {
-      this.productInput.nativeElement.value = null;
-    }
-
-    if (this.inputChipList && this.inputChipList.length > 0) {
-      const itemClick = this.inputChipList.filter((item) => {
-        return item.toLowerCase().search(obj.name.toLowerCase());
-      });
-
-      if (itemClick && itemClick.length > 0) {
-        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
-          /**
-           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
-           */
-          this.listProductSkuBank = [];
-        } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank);
-          this.product.setValue(itemClick.toString());
-          if (this.productInput) {
-            this.productInput.nativeElement.value = itemClick.toString();
-          }
-          this.getListProduct(itemClick.toString());
-        }
-      } else {
-        this.product.setValue(null);
-        if (this.productInput) {
-          this.productInput.nativeElement.value = null;
-        }
-        this.listProductSkuBank = [];
-      }
-      setTimeout(() => {
-        if (this.productInput) {
-          this.productInput.nativeElement.blur();
-          this.productInput.nativeElement.focus();
-        }
-      }, 500);
-    }
-  }
-  
-  getListProduct(param?): void {
-    if (param) {
-      const list = param.split(';').join(',').split(',');
-      this.inputChipList = list.map((item: any) => {
-        if (item.substr(0, 1) === ' ') { // remove space from first char
-          item = item.substr(1, item.length);
-        }
-        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
-          item = item.substr(0, item.length - 1);
-        }
-        return item;
-      });
-    }
-    if (param.length >= 3) {
-      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBank = res.data ? res.data : [];
-        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-      });
-
-    } else {
-      this.listProductSkuBank = [];
-      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
-    }
-  }
-
-  _filterSku(value): any[] {
-    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
-    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
-
-  isCheckedPM(type, event) {
-    console.log('X -', type);
-    console.log('Y -', event);
-    if (type === 'product') {
-      // this.formPM.get('category').setValue('');
-      this.formPM.get('limit_by_category').setValue(false);
-      this.formPM.get('limit_by_product').setValue(true);
-      if (!event.checked) {
-        this.productList = [];
-        this.product.setValue(null);
-        // this.product.disable();
-        this.listProductSkuBank = [];
-        this.inputChipList = [];
-        if (this.productInput) {
-          this.productInput.nativeElement.value = null;
-        }
-      } else {
-        this.formPM.get('category').disable();
-        this.product.enable();
-      }
-    } else {
-      this.formPM.get('limit_by_category').setValue(true);
-      this.formPM.get('limit_by_product').setValue(false);
-      this.productList = [];
-      this.product.setValue(null);
-      this.listProductSkuBank = [];
-      this.inputChipList = [];
-      if (event.checked) {
-        // this.formPM.get('category').setValue('');
-        this.formPM.get('category').enable();
-      } else {
-        // this.formPM.get('category').setValue('');
-        this.formPM.get('category').disable();
-      }
-      if (this.productInput) {
-        this.productInput.nativeElement.value = null;
-      }
-    }
-  }
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (value) {
-      this.productList.push(value);
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.product.setValue(null);
-  }
-
-  remove(id: string): void {
-    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
-
-    if (index >= 0) {
-      this.productList.splice(index, 1);
-    }
-  }
-
-  getProductObjSRCC(event, obj) {
-    const index = this.productListSRCC.findIndex(prd => prd.sku_id === obj.sku_id);
-    if (index === -1) {
-      this.productListSRCC.push(obj);
-    }
-    if (this.productInputSRCC) {
-      this.productInputSRCC.nativeElement.value = null;
-    }
-
-    if (this.inputChipListSRCC && this.inputChipListSRCC.length > 0) {
-      const itemClick = this.inputChipListSRCC.filter((item) => {
-        return item.toLowerCase().search(obj.name.toLowerCase());
-      });
-
-      if (itemClick && itemClick.length > 0) {
-        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
-          /**
-           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
-           */
-          this.listProductSkuBankSRCC = [];
-        } else {
-          // console.log('this.listProductSkuBank', this.listProductSkuBank)
-          this.productSRCC.setValue(itemClick.toString());
-          if (this.productInputSRCC) {
-            this.productInputSRCC.nativeElement.value = itemClick.toString();
-          }
-          this.getListProductSRCC(itemClick.toString());
-        }
-      } else {
-        this.productSRCC.setValue(null);
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.value = null;
-        }
-        this.listProductSkuBankSRCC = [];
-      }
-      setTimeout(() => {
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.blur();
-          this.productInputSRCC.nativeElement.focus();
-        }
-      }, 500);
-    }
-  }
-
-  getListProductSRCC(param?): void {
-    if (param) {
-      const list = param.split(';').join(',').split(',');
-      this.inputChipListSRCC = list.map((item: any) => {
-        if (item.substr(0, 1) === ' ') { // remove space from first char
-          item = item.substr(1, item.length);
-        }
-        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
-          item = item.substr(0, item.length - 1);
-        }
-        return item;
-      });
-    }
-    if (param.length >= 3) {
-      this.b2bVoucherInjectService.getProductList({ page: 'all', search: param }).subscribe(res => {
-        this.listProductSkuBankSRCC = res.data ? res.data : [];
-        this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
-      });
-
-    } else {
-      this.listProductSkuBankSRCC = [];
-      this.filteredSkuOptionsSRCC = this.productSRCC.valueChanges.pipe(startWith(null), map(value => this._filterSkuSRCC(value)));
-    }
-  }
-
-  _filterSkuSRCC(value): any[] {
-    const filterValue = value && typeof value === 'object' ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
-    return this.listProductSkuBankSRCC.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
-
-  isCheckedSRCC(type, event) {
-    console.log('X SRCC', type);
-    console.log('Y SRCC', event);
-    if (type === 'product') {
-      this.formPM.get('category_srcc').setValue('');
-      this.formPM.get('limit_by_category_srcc').setValue(false);
-      this.formPM.get('limit_by_product_srcc').setValue(true);
-      if (!event.checked) {
-        this.productListSRCC = [];
-        this.productSRCC.setValue(null);
-        // this.product.disable();
-        this.listProductSkuBankSRCC = [];
-        this.inputChipListSRCC = [];
-        if (this.productInputSRCC) {
-          this.productInputSRCC.nativeElement.value = null;
-        }
-      } else {
-        this.formPM.get('category_srcc').disable();
-        this.productSRCC.enable();
-      }
-    } else {
-      this.formPM.get('limit_by_category_srcc').setValue(true);
-      this.formPM.get('limit_by_product_srcc').setValue(false);
-      this.productListSRCC = [];
-      this.productSRCC.setValue(null);
-      // this.product.disable();
-      this.listProductSkuBankSRCC = [];
-      this.inputChipListSRCC = [];
-      if (event.checked) {
-        this.formPM.get('category_srcc').setValue('');
-        this.formPM.get('category_srcc').enable();
-      } else {
-        this.formPM.get('category_srcc').setValue('');
-        this.formPM.get('category_srcc').disable();
-      }
-      if (this.productInputSRCC) {
-        this.productInputSRCC.nativeElement.value = null;
-      }
-    }
-  }
-
-  addSRCC(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (value) {
-      this.productListSRCC.push(value);
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.productSRCC.setValue(null);
-  }
-
-  removeSRCC(id: string): void {
-    const index = this.productListSRCC.findIndex((prd: any) => prd.sku_id === id);
-
-    if (index >= 0) {
-      this.productListSRCC.splice(index, 1);
-    }
-  }
-
-  async changeCoinVariation(event) {
-    let arr = [];
-    let coins = await this.formPM.get('coins').value;
-    if (coins === null) {
-      coins = [];
-    }
-    if (event.target.value <= 100) {
-      for (let i = 0; i < event.target.value; i++) {
-        if (i > coins.length - 1 || i === 0 && coins.length === 0) {
-          arr.push(
-            {
-              coin: '',
-              slice: '',
-              probability: '',
-              limit_atempt: '',
-              total_budget: '',
-              actual_spin: 0,
-              actual_budget: 0,
-              spin_left: 0,
-              budget_left: 0
-            }
-          );
-        } else {
-          arr.push(coins[i]);
-        }
-      }
-    }
-    await this.formPM.get('coins').setValue(arr);
-    this.averageCoin = Math.floor(this.sumCoins());
-  }
-
-  async changeCoin(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].coin = event.target.value;
-    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * (newArr[index].probability / 100);
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
-    newArr[index].budget_left = newArr[index].total_budget;
-    await this.formPM.get('coins').setValue(newArr);
-    this.averageCoin = Math.floor(this.sumCoins());
-  }
-
-  async changeSlice(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].slice = event.target.value;
-    await this.formPM.get('coins').setValue(newArr);
-  }
-
-  async changeProbability(event, index) {
-    let newArr = this.formPM.get('coins').value;
-    newArr[index].probability = event.target.value;
-    newArr[index].limit_atempt = this.formPM.get('limit_spin').value * newArr[index].probability / 100;
-    newArr[index].total_budget = newArr[index].coin * newArr[index].limit_atempt * 100;
-    newArr[index].budget_left = newArr[index].total_budget;
-    this.averageCoin = Math.floor(this.sumCoins());
-    await this.formPM.get('coins').setValue(newArr);
-  }
-
-  async calculatePM(event) {
-    let newArr = this.formPM.get('coins').value;
-    if (newArr !== null && newArr.length > 0) {
-      for (let i = 0; i < newArr.length; i++) {
-        newArr[i].limit_atempt = this.formPM.get('limit_spin').value * (newArr[i].probability / 100);
-        newArr[i].total_budget = newArr[i].coin * newArr[i].limit_atempt * 100;
-        newArr[i].budget_left = newArr[i].total_budget;
-      }
-      await this.formPM.get('coins').setValue(newArr);
-    }
-  }
-
-  sumPM(field) {
-    const coins = this.formPM.get('coins').value;
-    let sum = 0;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        sum += coins[i][field] * 1;
-      }
-    }
-    return sum;
-  }
-
-  sumCoins() {
-    const coins = this.formPM.get('coins').value;
-    let sum = 0;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        sum += coins[i]['coin'] * coins[i]['probability'] / 100;
-      }
-    }
-    return sum;
-  }
-
-  checkCoins() {
-    let coin = '';
-    let slice = '';
-    let probability = '';
-
-    const coins = this.formPM.get('coins').value;
-    if (coins !== null) {
-      for (let i = 0; i < coins.length; i++) {
-        if (coins[i]['coin'] === '') {
-          coin = 'Coin';
-        }
-        if (coins[i]['slice'] === '') {
-          slice = coin !== '' ? ', Slice' : 'Slice';
-        }
-        if (coins[i]['probability'] === '') {
-          probability = slice !== '' ? ', Probability' : 'Probability';
-        }
-      }
-    }
-    return coin + slice + probability;
-  }
-
-  async submitPM() {
-    const sumProbability = this.sumPM('probability');
-
-    if (this.formPM.valid) {
-      const checkCoins = this.checkCoins();
-      if ( checkCoins !== '') {
-        this.dialogService.openSnackBar({ message: `${checkCoins} wajib diisi` });
-        return false;
-      }
-      if (sumProbability !== 100) {
-        this.dialogService.openSnackBar({ message: 'Total Probability harus 100%' });
-        return false;
-      }
-      let body = {
-        task_spin_id: this.dataService.getFromStorage('spin_the_wheel').id,
-        limit_spin: this.formPM.get('limit_spin').value,
-        coin_variation: this.formPM.get('coin_variation').value,
-        average_coin_spin: this.averageCoin,
-        frekuensi_belanja: this.formPM.get('frekuensi_belanja').value,
-        frekuensi_reward: this.formPM.get('frekuensi_reward').value,
-        minimum_transaction: this.formPM.get('minimum_transaction').value,
-        coins: this.formPM.get('coins').value
-      };
-      const limitByProduct = this.formPM.get('limit_by_product').value;
-      const excludeByProduct = this.formPM.get('limit_by_product_srcc').value;
-      let product = [];
-      let newArr = {};
-      if (limitByProduct === true || this.formPM.get('limit_by_category').value === true) {
-        product = this.productList.map(r => r.sku_id);
-        if (product.length > 0 || this.formPM.get('category').value.length > 0) {
-          const limitBy = limitByProduct ? 'product' : 'category';
-          newArr = {
-            limit_by: limitBy,
-            limit_only: limitByProduct ? product : this.formPM.get('category').value
-          };
-          body = {...body, ...newArr};
-        }
-      }
-      if (excludeByProduct === true || this.formPM.get('limit_by_category_srcc').value === true) {
-        product = this.productListSRCC.map(r => r.sku_id);
-        if (product.length > 0 || this.formPM.get('category_srcc').value.length > 0) {
-          const excludeBy = excludeByProduct ? 'product' : 'category';
-          newArr = {
-            exclude_by: excludeBy,
-            exclude_only: excludeByProduct ? product : this.formPM.get('category_srcc').value
-          };
-          body = {...body, ...newArr};
-        }
-      }
-      const dialogConfig = new MatDialogConfig();
-
-      dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.panelClass = "scrumboard-card-dialog";
-      dialogConfig.data = { password: "P@ssw0rd" };
-
-      this.dialogRef = this.dialog.open(
-        DialogProcessSaveComponentSPW,
-        {...dialogConfig, width: '400px'}
-      );
-
-      const processCheck = this.spinTheWheelService.saveSettings(body).subscribe(
-        (res) => {
-          if (res.data) {
-            this.isChecked = true;
-            this.panelBlast = res.data.panel_count;
-          }
-          this.editableCoin = false;
-          this.formPM.get('limit_spin').disable();
-          this.formPM.get('coin_variation').disable();
-          this.dialogRef.close();
-          this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-          // this.dialogService.openSnackBar({message : this.translate.instant('global.label.checking_success')});
-        },
-        (err) => {
-          this.dialogRef.close();
-        }
-      );
-
-      this.dialogRef.afterClosed().subscribe(() => {
-        processCheck.unsubscribe();
-      });
-    } else {
-      commonFormValidator.validateAllFields(this.formPM);
-      this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-    }
-  }
-
-  changeType(value) {
-    if (value === 'ppk') {
-      this.productListSRCC = [];
-      this.isPPK = true;
-      this.isExclude = false;
-      this.formPM.get('limit_by_category_srcc').setValue(false);
-      this.formPM.get('limit_by_product_srcc').setValue(false);
-      this.formPM.get('category_srcc').setValue([]);
-    } else {
-      this.productList = [];
-      this.isPPK = false;
-      this.isExclude = true;
-      this.formPM.get('limit_by_category').setValue(false);
-      this.formPM.get('limit_by_product').setValue(false);
-      this.formPM.get('category').setValue([]);
-    }
-  }
-  
   setValueDetail() {
-    
+
     this.panelBlast = this.detailFormSpin.panel_count;
-    
+
     const filter = this.detailFormSpin.audience_filter;
     this.handleAudienceFilter(filter);
 
@@ -1816,5 +1200,5 @@ export class SpinTheWheelEditComponent implements OnInit {
       // this.formGeo.get('audiencePopulation').setValue('');
     }
   }
-  
+
 }

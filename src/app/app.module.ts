@@ -98,6 +98,8 @@ import { GeotreeService } from './services/geotree.service';
 import { PengajuanSrcService } from './services/user-management/pengajuan-src.service';
 import { OTPSettingService } from './services/otpsetting.service';
 
+import { InfoBoardService } from './services/dte/info-board.service';
+
 // ==== QISCUS ====
 import { QiscusService } from './services/qiscus.service';
 import { Emitter } from './helper/emitter.helper';
@@ -135,6 +137,8 @@ import { VoucherPrivateLabelService } from "./services/voucher-private-label.ser
 import { OrderToMitraHubService } from './services/user-management/private-label/order-to-mitra-hub.service';
 import { Observable } from 'rxjs';
 import { GeneralBackendService } from './services/general-backend.service';
+import { KeywordService } from './services/content-management/keyword.service';
+import { NotificationConfigurationService } from './services/settings/notification-configuration.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -168,6 +172,7 @@ class CustomLoader implements TranslateLoader {
 
   getTranslation(lang: string): Observable<any> {
     return this.service.getTranslation({type: 'principal'}).map(({data}) => {
+      localStorage.setItem('point_valuation', data.point_valuation);
       return data.json_format;
     })
 
@@ -251,6 +256,7 @@ class CustomLoader implements TranslateLoader {
     AudienceService,
     NotificationService,
     TncService,
+    KeywordService,
     PrivacyService,
     HelpService,
     CategoryService,
@@ -270,6 +276,8 @@ class CustomLoader implements TranslateLoader {
     TemplateMessageService,
     PengajuanSrcService,
     OTPSettingService,
+    InfoBoardService,
+    NotificationConfigurationService,
     GroupTradeProgramService,
     IdbService,
     SupplierCompanyService,

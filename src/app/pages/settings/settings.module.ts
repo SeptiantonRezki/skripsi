@@ -55,6 +55,8 @@ import { TingkatFitureRolesComponent } from "./tingkat-fitur/tree/tingkat-fitur-
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { TingkatFiturTreeData } from './tingkat-fitur/tree/tingkat-fitur-tree-data.service';
 import { TranslateModule } from "@ngx-translate/core";
+import { NotificationConfigurationComponent } from "./notification-configuration/index/notification-configuration.component";
+import { EditStepDialogComponent } from "./notification-configuration/edit-step-dialog/edit-step-dialog.component";
 export const MY_FORMATS = {
   parse: {
     dateInput: "LL"
@@ -117,6 +119,8 @@ export const MY_FORMATS = {
     TingkatFiturIndexComponent,
     TingkatFiturFormComponent,
     TingkatFitureRolesComponent,
+    NotificationConfigurationComponent,
+    EditStepDialogComponent
   ],
   exports: [
     RoleIndexComponent,
@@ -125,7 +129,8 @@ export const MY_FORMATS = {
     ChangePasswordIndexComponent,
     ForceUpdateAppsComponent,
     SupportComponent,
-    PesanBantuan
+    PesanBantuan,
+    NotificationConfigurationComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -133,6 +138,6 @@ export const MY_FORMATS = {
     ListMenuResolver, PageGuard,
     TingkatFiturTreeData,
   ],
-  entryComponents: [DialogOtherHelp, UploadImageComponent]
+  entryComponents: [DialogOtherHelp, UploadImageComponent, EditStepDialogComponent]
 })
 export class SettingsModule { }

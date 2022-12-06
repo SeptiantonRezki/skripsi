@@ -763,8 +763,8 @@ export class TradeIndexComponent {
 
       let cells = rows[index].querySelectorAll("datatable-body-cell");
       for (let indexCell = 0; indexCell < cells.length; indexCell++) {
-        cells[indexCell].id = 'data-cell';          
-        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);          
+        cells[indexCell].id = 'data-cell';
+        // cells[indexCell].id = 'data-cell-'+String(numberRow)+'-'+String(indexCell+1);
       }
     }
   }
@@ -886,7 +886,9 @@ export class TradeIndexComponent {
         this.dialogService.brodcastCloseConfirmation();
         this.getTp();
 
-        this.dialogService.openSnackBar({ message: this.translate.instant('global.message.text1') });
+        this.dialogService.openSnackBar({
+          message: this.ls.locale.global.messages.text1,
+        });
       }
     });
   }

@@ -40,4 +40,10 @@ export class PayMethodService extends BaseService {
     const url = this.getUrl(this.namespace, "delete", context);
     return this.deleteApi(url);
   }
+  
+  plGet(queryParams?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "get");
+    return this.getApi(url, queryParams);
+  }
+
 }

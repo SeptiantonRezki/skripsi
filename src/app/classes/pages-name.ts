@@ -13,12 +13,12 @@ export class PagesName {
       "/user-management/field-force/detail/": "principal.fieldforce.lihat",
       "/user-management/wholesaler": "principal.wholesaler.lihat",
       "/user-management/wholesaler/create": "principal.wholesaler.buat",
-      "/user-management/wholesaler/edit": "principal.wholesaler.ubah",
-      "/user-management/wholesaler/detail": "principal.wholesaler.lihat",
+      "/user-management/wholesaler/edit/": "principal.wholesaler.ubah",
+      "/user-management/wholesaler/detail/": "principal.wholesaler.lihat",
       "/user-management/retailer": "principal.retailer.lihat",
       "/user-management/retailer/create": "principal.retailer.buat",
-      "/user-management/retailer/edit": "principal.retailer.ubah",
-      "/user-management/retailer/detail": "principal.retailer.lihat",
+      "/user-management/retailer/edit/": "principal.retailer.ubah",
+      "/user-management/retailer/detail/": "principal.retailer.lihat",
       "/user-management/paguyuban": "principal.paguyuban.lihat",
       "/user-management/paguyuban/create": "principal.paguyuban.buat",
       "/user-management/paguyuban/edit": "principal.paguyuban.ubah",
@@ -192,6 +192,10 @@ export class PagesName {
       "/dte/sub-group-trade-program/edit/": "principal.dtesubgrouptradeprogram.ubah",
       "/dte/sub-group-trade-program/detail/": "principal.dtesubgrouptradeprogram.lihat",
       "/dte/coin-redemption-approval": "principal.dtecoinredemptionapproval.lihat",
+      "/dte/flush-coin": "principal.dtetaskflushcoinlottery.lihat",
+      "/dte/flush-coin/create/setup-flush-coin": "principal.dtetaskflushcoinlottery.buat",
+      "/dte/flush-coin/edit/": "principal.dtetaskflushcoinlottery.ubah",
+      "/dte/flush-coin/detail/": "principal.dtetaskflushcoinlottery.lihat",
       "/dte/employee-mapping": "principal.dteemployeemapping.lihat",
       "/dte/employee-mapping/create": "principal.dteemployeemapping.buat",
       "/dte/employee-mapping/edit/": "principal.dteemployeemapping.ubah",
@@ -214,8 +218,18 @@ export class PagesName {
       "/tactical-retail-sales/trs-proposal/create": "principal.trsproposal.buat",
       "/tactical-retail-sales/trs-proposal/edit": "principal.trsproposal.ubah",
       "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
-      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.lihat",
-    }
+      "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
+      "/tactical-retail-sales/trs-report": "principal.trsreport.lihat",
+      
+      "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
+      "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
+      "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
+      "/content-management/privacy": "principal.kebijakanprivasi.lihat",
+      "/content-management/privacy/create": "principal.kebijakanprivasi.buat",
+      "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
+      "/content-management/keyword-management": "principal.keywordmanagement.lihat",
+      "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
+    };
     return PAGES[name];
   }
 
@@ -251,7 +265,6 @@ export class PagesName {
     if (name.indexOf("b2b_voucher") > -1) {
       roles['b2b_approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }
-
     if (name.indexOf("popupnotification") > -1) {
       roles['new_product'] = filterPermission.filter(item => item.indexOf('popupnotification.new_product') >= 0)[0]
     }
@@ -283,7 +296,6 @@ export class PagesName {
         roles[submenuKey] = value.replace('.export.', '.');
       });
     }
-
     return roles
   }
 

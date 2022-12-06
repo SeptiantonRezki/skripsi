@@ -127,7 +127,7 @@ export class CourierEditManagementComponent implements OnInit {
     maxReceivedTime.setHours(14, 0, 0, 0);
 
     return this.formBuilder.group({
-      name: [this.translate.instant('delivery_managemet.daftar_kurir.new_service'), Validators.required], // TODO
+      name: [this.translate.instant(this.ls.locale.delivery_management.daftar_kurir.new_service), Validators.required], // TODO
       est_fastest_duration: [1, Validators.required],
       est_fastest_duration_time: ["days"],
       est_longest_duration: [1, Validators.required],

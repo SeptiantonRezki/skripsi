@@ -55,7 +55,10 @@ export class PopupNotificationCreateComponent {
   listUserGroup: any[] = [];
   listUserGroupType: any[] = [{ name: this.translate.instant('global.label.src'), value: "src" }, { name: this.translate.instant('global.label.ws_downline'), value: "downline" }];
   listContentType: any[] = [];
+  listContentType_2: any[] =[];
   listLandingPage: any[] = [];
+  listLandingPage_2: any[] = [];
+  appLinkValue: any[] =[];
   listGender: any[] = [{ name: this.translate.instant('global.label.all'), value: "both" }, { name: this.translate.instant('global.label.male'), value: "male" }, { name: this.translate.instant('global.label.female'), value: "female" }];
   listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
   listTypeOfRecurrence: Object[] = [
@@ -101,7 +104,10 @@ export class PopupNotificationCreateComponent {
   // Attribute for Content New Product
   public filterProduct: FormControl = new FormControl();
   filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public filterProduct_2: FormControl = new FormControl();
+  filteredProduct_2: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   listProducts: any[] = [];
+  listProducts_2: any[] = [];
 
   imageConverted: any;
 
@@ -112,8 +118,11 @@ export class PopupNotificationCreateComponent {
   validComboDrag: boolean;
 
   validDragContentImage: boolean;
+  validDragContentImage_2: boolean;
   fileContentImage: File;
+  fileContentImage_2: File;
   convertedContentImage: any;
+  convertedContentImage_2: any;
 
   customAge: Boolean;
 
@@ -144,6 +153,7 @@ export class PopupNotificationCreateComponent {
   reorderable = true;
   pagination: Page = new Page();
   paginationProduct: Page = new Page();
+  paginationProduct_2: Page = new Page();
 
   keyUp = new Subject<string>();
   areaType: any[] = [];
@@ -241,12 +251,16 @@ export class PopupNotificationCreateComponent {
       negative_button: ["", Validators.required],
       title: ["", Validators.required],
       body: ["", Validators.required],
+      body_2: [""],
       user_group: ["", Validators.required],
       areas: this.formBuilder.array([]),
       content_type: ["iframe", Validators.required],
+      content_type_2: ["close"],
       group_type: ["src"],
       landing_page: ["belanja", Validators.required],
+      landing_page_2: ["belanja"],
       url_iframe: ["", [Validators.required, Validators.pattern(urlvalidation)]],
+      url_iframe_2: [""],
       url_web: ["", [Validators.required, Validators.pattern(urlvalidation)]],
       button_text: ["", [Validators.required, Validators.maxLength(30)]],
       content_wallet: ["", Validators.required],
@@ -258,6 +272,7 @@ export class PopupNotificationCreateComponent {
       age_consumer_to: ["", Validators.required],
       type: ["limit"],
       transfer_token: ["yes", Validators.required],
+      transfer_token_2: ["yes"],
       is_target_audience: [false],
       is_target_area: [false],
       is_mission_builder: this.is_mission_builder,
@@ -266,7 +281,10 @@ export class PopupNotificationCreateComponent {
       type_of_recurrence: ["once", Validators.required],
       recurrence_type: ["daily", Validators.required],
       barcode: [""],
+      barcode_2: [""],
       content_type_new: ['all'],
+      app_link: [""],
+      app_link_2: [""],
     })
 
     this.formWeeklyRecurrence = this.formBuilder.group({});
@@ -364,11 +382,9 @@ export class PopupNotificationCreateComponent {
       }
 
       if (res === 'wholesaler') {
-        this.listContentType = [
-          { name: this.translate.instant('global.label.iframe'), value: "iframe" },
-          { name: this.translate.instant('global.label.image'), value: "image" },
-          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
-          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
+        this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "Image", value: "image" },
+        { name: "Unlinked", value: "unlinked" },
+        { name: "Static Page", value: "static-page" },
         ];
         if (this.permission.new_product) {
           this.listContentType = [{ name: "Iframe", value: "iframe" }, { name: "New Product", value: "new-product" }, { name: "Image", value: "image" },
@@ -451,8 +467,8 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
           { name: this.translate.instant('global.label.iframe'), value: "iframe" },
           { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" },
-          { name: this.translate.instant('global.label.image'), value: "image" },
-          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+          { name: this.translate.instant('global.label.image'),value:"image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" }
         ];
         this.listLandingPage = [
           { name: this.translate.instant('iklan_dalam_aplikasi.spanduk_online.shopping'), value: "belanja" },
@@ -460,11 +476,26 @@ export class PopupNotificationCreateComponent {
           { name: this.translate.instant('global.label.customer'), value: "pelanggan" },
           { name: this.translate.instant('bantuan.text1'), value: "bantuan" },
           { name: this.translate.instant('global.label.update_profile'), value: "profil_saya" },
-          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" }
+          { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
+          { name: 'App Link', value: "app_link" }
+        ];
+
+        this.listLandingPage_2 = [
+          { name: 'App Link', value: "app_link" }
+        ];
+
+        this.listContentType_2 = [
+          { name: this.translate.instant('global.label.static_page'), value: "static-page" },
+          { name: this.translate.instant('global.label.landing_page'), value: "landing-page" },
+          { name: this.translate.instant('global.label.iframe'), value: "iframe" },
+          { name: this.translate.instant('global.label.spesific_product_b2b'), value: "spesific_product_b2b" },
+          { name: this.translate.instant('global.label.image'),value:"image" },
+          { name: this.translate.instant('global.label.unlinked'), value: "unlinked" },
+          { name: "Close Popup", value: "close" }
         ];
         this.formPopupGroup.controls['age_consumer_from'].disable();
         this.formPopupGroup.controls['age_consumer_to'].disable();
-
+        // Content Type Positive
         if (this.formPopupGroup.controls['content_type'].value === 'static-page') {
           this.formPopupGroup.controls['body'].enable();
         }
@@ -481,12 +512,32 @@ export class PopupNotificationCreateComponent {
         if (this.formPopupGroup.controls['content_type'].value === 'iframe') {
           this.formPopupGroup.controls['url_iframe'].enable();
         }
+        
+        // Content Type Negative
+        if (this.formPopupGroup.controls['content_type_2'].value === 'static-page') {
+          this.formPopupGroup.controls['body_2'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type_2'].value === 'spesific_product_b2b') {
+          this.formPopupGroup.controls['barcode_2'].setValidators([Validators.required])
+          this.formPopupGroup.controls['barcode_2'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type_2'].value === 'iframe') {
+          this.formPopupGroup.controls['url_iframe_2'].enable();
+        }
+
+        if (this.formPopupGroup.controls['content_type_2'].value === 'landing-page') {
+          this.formPopupGroup.controls['landing_page_2'].enable();
+        }
+
       }
       if (this.formPopupGroup.get("is_target_audience").value === true) {
         this.getAudience();
       };
 
       this.formPopupGroup.controls['landing_page'].setValue('');
+      this.formPopupGroup.controls['landing_page_2'].setValue('');
 
       this.formPopupGroup.updateValueAndValidity();
     });
@@ -504,6 +555,7 @@ export class PopupNotificationCreateComponent {
     })
 
     this.formPopupGroup.controls['url_iframe'].disable();
+    this.formPopupGroup.controls['url_iframe_2'].disable();
     this.formPopupGroup.valueChanges.subscribe(() => {
       commonFormValidator.parseFormChanged(this.formPopupGroup, this.formPopupErrors);
     })
@@ -596,8 +648,72 @@ export class PopupNotificationCreateComponent {
         this.formPopupGroup.get("button_text").enable();
       }
 
+      if(
+        value === 'landing-page' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('app_link').setValidators(Validators.required);
+        this.formPopupGroup.get('content_type_2').setValidators(Validators.required);
+      }
+
       this.formPopupGroup.updateValueAndValidity();
     });
+    this.formPopupGroup.get('content_type_2').valueChanges.subscribe(value => {
+      this.formPopupGroup.get("barcode_2").disable();
+      this.formPopupGroup.get("barcode_2").setValue("");
+
+      if (value === "spesific_product_b2b") {
+        this.formPopupGroup.get("barcode_2").setValidators([Validators.required]);
+        this.formPopupGroup.controls['barcode_2'].enable();
+      }
+
+      if(
+        value === 'landing-page' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('landing_page_2').setValidators(Validators.required);
+        this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
+      }
+
+      if(
+        value === 'static-page' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('body_2').setValidators(Validators.required);
+      }
+
+      if(
+        value === 'iframe' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        const urlValidation = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i
+        this.formPopupGroup.get('url_iframe_2').setValidators([Validators.required, Validators.pattern(urlValidation)]);
+        this.formPopupGroup.get('transfer_token_2').setValidators(Validators.required);
+      }
+      
+      if(
+        value === 'close' && 
+        this.formPopupGroup.get('user_group').value === 'retailer'
+      ){
+        this.formPopupGroup.get('landing_page_2').clearValidators();
+        this.formPopupGroup.get('landing_page_2').updateValueAndValidity();
+        this.formPopupGroup.controls['landing_page_2'].setValue('');
+        this.formPopupGroup.get('app_link_2').clearValidators();
+        this.formPopupGroup.get('app_link_2').updateValueAndValidity();
+        this.formPopupGroup.controls['app_link_2'].setValue('');
+        this.formPopupGroup.get('barcode_2').updateValueAndValidity();
+        this.formPopupGroup.controls['barcode_2'].setValue('');
+        this.formPopupGroup.get('body_2').updateValueAndValidity();
+        this.formPopupGroup.controls['body_2'].setValue('');
+        this.formPopupGroup.get('url_iframe_2').updateValueAndValidity();
+        this.formPopupGroup.controls['url_iframe_2'].setValue('');
+        this.formPopupGroup.get('transfer_token_2').updateValueAndValidity();
+        this.formPopupGroup.controls['transfer_token_2'].setValue('');
+      }
+
+      this.formPopupGroup.updateValueAndValidity();
+    });
+    
 
     this.filterProduct
       .valueChanges
@@ -612,6 +728,20 @@ export class PopupNotificationCreateComponent {
       });
 
     this.getProducts();
+
+    this.filterProduct_2
+      .valueChanges
+      .debounceTime(500)
+      .pipe(
+        takeUntil(this._onDestroy)
+      )
+      .subscribe((val) => {
+        if (val.length > 2) {
+          this._filterProducts_2()
+        }
+      });
+
+    this.getProducts_2();
   }
 
   getProducts() {
@@ -619,6 +749,18 @@ export class PopupNotificationCreateComponent {
       (res) => {
         this.listProducts = res.data;
         this.filteredProduct.next(this.listProducts.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+  }
+
+  getProducts_2() {
+    this.b2bVoucherInjectService.getProductList({ per_page: 15, search: "" }).subscribe(
+      (res) => {
+        this.listProducts_2 = res.data;
+        this.filteredProduct_2.next(this.listProducts_2.slice());
       },
       (err) => {
         console.log("err ", err);
@@ -649,6 +791,32 @@ export class PopupNotificationCreateComponent {
     // filter the products
     this.filteredProduct.next(
       this.listProducts.filter(product => product.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  _filterProducts_2() {
+    if (this.listProducts_2.length === 0) {
+      return;
+    }
+    // get the search keyword
+    let search = this.filterProduct_2.value;
+    this.paginationProduct_2.per_page = 30;
+    this.paginationProduct_2.search = search;
+    if (this.paginationProduct_2['id']) {
+      delete this.paginationProduct_2['id'];
+    }
+    this.b2bVoucherInjectService.getProductList(this.paginationProduct_2).subscribe(
+      (res) => {
+        this.listProducts_2 = res.data;
+        this.filteredProduct_2.next(this.listProducts.slice());
+      },
+      (err) => {
+        console.log("err ", err);
+      }
+    );
+    // filter the products
+    this.filteredProduct_2.next(
+      this.listProducts_2.filter(product => product.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -1220,6 +1388,13 @@ export class PopupNotificationCreateComponent {
     // console.log( this.formPopupGroup.get("barcode").value)
   }
 
+  handleSearchProduct_2(event) {
+    if (event.id)
+      this.formPopupGroup.get("barcode_2").setValue(event)
+    else
+      this.formPopupGroup.get("barcode_2").setValue("")
+  }
+
   async generataList(selection, id, index, type) {
     let item: any;
     let wilayah = this.formPopupGroup.controls['areas'] as FormArray;
@@ -1428,6 +1603,15 @@ export class PopupNotificationCreateComponent {
     file.readAsDataURL(image);
   }
 
+  fileChangeContentImage_2(value: any): void {
+    var image: File = value;
+    var file: FileReader = new FileReader();
+    file.onloadend = () => {
+      this.convertedContentImage_2 = file.result;
+    }
+    file.readAsDataURL(image);
+  }
+
   contentType(value) {
     if (value === 'static-page') {
       this.formPopupGroup.controls['body'].enable();
@@ -1448,6 +1632,54 @@ export class PopupNotificationCreateComponent {
     } else {
       this.formPopupGroup.controls['landing_page'].setValue('');
       this.formPopupGroup.controls['landing_page'].disable();
+    }
+  }
+
+  contentType_2(value) {
+    if (value === 'static-page') {
+      this.formPopupGroup.controls['body_2'].enable();
+    } else {
+      this.formPopupGroup.controls['body_2'].setValue('');
+      this.formPopupGroup.controls['body_2'].disable();
+    }
+
+    if (value === 'iframe') {
+      this.formPopupGroup.controls['url_iframe_2'].enable();
+    } else {
+      this.formPopupGroup.controls['url_iframe_2'].setValue('');
+      this.formPopupGroup.controls['url_iframe_2'].disable();
+    }
+    if (value === 'landing-page') {
+      this.formPopupGroup.controls['landing_page_2'].enable();
+    } else {
+      this.formPopupGroup.controls['landing_page_2'].setValue('');
+      this.formPopupGroup.controls['landing_page_2'].disable();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formPopupGroup.get('user_group').value === 'retailer'
+    ){
+      this.formPopupGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formPopupGroup.get('app_link').clearValidators();
+      this.formPopupGroup.get('app_link').updateValueAndValidity();
+      this.formPopupGroup.controls['app_link'].setValue('');
+    }
+  }
+
+  landingPageChange_2(value) {
+    if(
+      value === 'app_link' && 
+      this.formPopupGroup.get('user_group').value === 'retailer'
+    ){
+      this.formPopupGroup.get('app_link_2').setValidators(Validators.required);
+    } else {
+      this.formPopupGroup.get('app_link_2').clearValidators();
+      this.formPopupGroup.get('app_link_2').updateValueAndValidity();
+      this.formPopupGroup.controls['app_link_2'].setValue('');
     }
   }
 
@@ -1475,33 +1707,40 @@ export class PopupNotificationCreateComponent {
   }
 
   submit() {
-    // console.log(this.formPopupGroup.valid, this.formPopupGroup.get("barcode").value, this.formPopupGroup.controls['barcode'], this.formPopupGroup.get("title").value, this.formPopupGroup.controls['title'].hasError('required'))
+    let missionVal = this.formPopupGroup.value.is_mission_builder;
     if (this.formPopupGroup.valid) {
       if (this.formPopupGroup.get('content_type').value !== 'new-product' && !this.files) {
         this.dialogService.openSnackBar({ message: "Gambar popup notifikasi belum dipilih!" });
         return;
       }
-
       this.dataService.showLoading(true);
-
-      this.formPopupGroup.get('is_mission_builder').patchValue(
-        this.formPopupGroup.value.is_mission_builder === false ? 0 : 1
-      );
-
       let body = {
         title: this.formPopupGroup.get('title').value,
         type: this.formPopupGroup.get('user_group').value,
         action: this.formPopupGroup.get('content_type').value,
+        action_2: this.formPopupGroup.get('content_type_2').value,
         image: this.imageConverted,
         positive_text: this.formPopupGroup.get('positive_button').value,
         negative_text: this.formPopupGroup.get('negative_button').value,
         country: this.Country,
-        is_mission_builder: this.formPopupGroup.get('is_mission_builder').value,
+        is_mission_builder: (missionVal === false)? 0 : 1,
         recurring_type: this.formPopupGroup.get('type_of_recurrence').value,
       }
 
       if (body.type === 'retailer') {
         body['retailer_type'] = this.formPopupGroup.get('group_type').value;
+        body['positive_action_data'] = null;
+        body['negative_action_data'] = null
+        body['positive_action'] = null;
+        body['negative_action'] = null;
+        body['positive_url_app'] = null;
+        body['negative_url_app'] = null;
+        body['positive_transfer_token'] = null;
+        body['negative_transfer_token'] = null;
+        body['positive_barcode_value'] = null;
+        body['negative_barcode_value'] = null;
+        body['positive_name_value'] = null;
+        body['negative_name_value'] = null;
       }
 
       body['date'] = `${moment(this.formPopupGroup.get('date').value).format('YYYY-MM-DD')} ${this.formPopupGroup.get('time').value}:00`;
@@ -1645,7 +1884,82 @@ export class PopupNotificationCreateComponent {
         if (body['target_audience']) delete body['target_audience'];
       }
 
-      // console.log(body)
+      body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
+      body['positive_action'] = this.formPopupGroup.get('content_type').value;
+      body['negative_action'] = this.formPopupGroup.get('content_type_2').value;
+      body['negative_action_data'] = this.formPopupGroup.get('landing_page_2').value;
+
+      // POSITIVE
+      if (body.type === 'retailer' && body.action === 'new-product') {
+        body['action_data'] = this.formPopupGroup.get('product').value;
+
+        body['positive_action_data'] = this.formPopupGroup.get('product').value;
+      }
+
+      if (body.type === 'retailer' && body.action === 'static-page') {
+        body['action_data'] = this.formPopupGroup.get('body').value;
+
+        body['positive_action_data'] = this.formPopupGroup.get('body').value;
+      }
+
+      if (body.type === 'retailer' && body.action === 'spesific_product_b2b') {
+        body['barcode_value'] = this.formPopupGroup.get('barcode').value.id;
+        body['name_value'] = this.formPopupGroup.get('barcode').value.name;
+
+        body['positive_barcode_value'] = this.formPopupGroup.get('barcode').value.id;
+        body['positive_name_value'] = this.formPopupGroup.get('barcode').value.name;
+      }
+
+      if (body.type === 'retailer' && body.action === 'iframe') {
+        body['action_data'] = this.formPopupGroup.get('url_iframe').value;
+        body['transfer_token'] = this.formPopupGroup.get('transfer_token').value;
+        
+        body['positive_action_data'] = this.formPopupGroup.get('url_iframe').value;
+        body['positive_transfer_token'] = this.formPopupGroup.get('transfer_token').value;
+      }
+      
+      if (body.type === 'retailer' && body.action === 'landing-page') {
+        body['action'] = this.formPopupGroup.get('content_type').value;
+        body['action_data'] = this.formPopupGroup.get('landing_page').value;
+        body['url_app'] = (this.formPopupGroup.get('app_link').value !== '')? this.formPopupGroup.get('app_link').value : null;
+
+        body['positive_action_data'] = this.formPopupGroup.get('landing_page').value;      
+        body['positive_action'] = this.formPopupGroup.get('content_type').value;
+        body['positive_url_app'] = this.formPopupGroup.get('app_link').value;
+      }
+
+      if (body.type === 'retailer' && body.action === 'image') {
+        body['action_data'] = this.convertedContentImage;
+
+        body['positive_action_data'] = this.convertedContentImage;
+      }
+
+      // NEGATIVE
+      if (body.type === 'retailer' && body.action_2 === 'static-page') {
+        body['negative_action_data'] = this.formPopupGroup.get('body_2').value;
+      }
+
+      if (body.type === 'retailer' && body.action_2 === 'spesific_product_b2b') {
+        body['negative_barcode_value'] = this.formPopupGroup.get('barcode_2').value.id;
+        body['negative_name_value'] = this.formPopupGroup.get('barcode_2').value.name;
+      }
+
+      if (body.type === 'retailer' && body.action_2 === 'iframe') {
+        body['negative_action_data'] = this.formPopupGroup.get('url_iframe_2').value;
+        body['negative_transfer_token'] = this.formPopupGroup.get('transfer_token_2').value;
+      }
+      
+      if (body.type === 'retailer' && body.action_2 === 'landing-page') {
+        body['negative_action'] = this.formPopupGroup.get('content_type_2').value;
+        body['negative_action_data'] = this.formPopupGroup.get('landing_page_2').value;
+        body['negative_url_app'] = this.formPopupGroup.get('app_link_2').value;
+      }
+
+      if (body.type === 'retailer' && body.action_2 === 'image') {
+        body['negative_action_data'] = this.convertedContentImage_2;
+      }
+      
+      // console.log('# DATA BODY ',body)
       this.notificationService.createPopup(body).subscribe(
         res => {
           this.dataService.showLoading(false);
@@ -1656,7 +1970,7 @@ export class PopupNotificationCreateComponent {
           this.dataService.showLoading(false);
         }
       );
-
+      
     } else {
       let msg;
       if (this.formPopupGroup.invalid) {
@@ -1709,6 +2023,16 @@ export class PopupNotificationCreateComponent {
   }
 
   previewImage(image) {
+    let album = {
+      src: image,
+      caption: '',
+      thumb: image
+    };
+
+    this._lightbox.open([album], 0);
+  }
+
+  previewImage_2(image) {
     let album = {
       src: image,
       caption: '',
@@ -1832,7 +2156,8 @@ export class PopupNotificationCreateComponent {
       this.pagination['customer_age_from'] = this.formPopupGroup.get("age_consumer_from").value;
       this.pagination['customer_age_to'] = this.formPopupGroup.get("age_consumer_to").value;
     }
-    if (this.formPopupGroup.get("user_group").value === 'retailer' && this.formPopupGroup.get("landing_page").value === 'pojok-modal') {
+    if (this.formPopupGroup.get("user_group").value === 'retailer' && 
+    (this.formPopupGroup.get("landing_page").value === 'pojok-modal' || this.formPopupGroup.get("landing_page_2").value === 'pojok-modal') ) {
       this.pagination['type'] = 'pojok-modal'
     } else {
       delete this.pagination['type'];

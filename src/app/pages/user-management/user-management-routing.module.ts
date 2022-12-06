@@ -67,6 +67,9 @@ import { LanguageSetupComponent } from "./language-setup/language-setup.componen
 import { LanguageSetupCreateComponent } from "./language-setup/language-setup-create/language-setup-create.component";
 import { LanguageSetupEditComponent } from "./language-setup/language-setup-edit/language-setup-edit.component";
 import { CTAExternalWebComponent } from "./cta/external-web/external-web.component";
+import { InfoBoardComponent } from "./info-board/index/info-board.component";
+import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
+import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 
 const routes: Routes = [
   {
@@ -217,7 +220,7 @@ const routes: Routes = [
     // }
   },
   {
-    path: "wholesaler/edit",
+    path: "wholesaler/edit/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.edit
@@ -225,7 +228,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "wholesaler/detail",
+    path: "wholesaler/detail/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.detail
@@ -249,7 +252,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/edit",
+    path: "retailer/edit/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.edit
@@ -257,7 +260,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/detail",
+    path: "retailer/detail/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.detail
@@ -660,7 +663,39 @@ const routes: Routes = [
     path: "call-to-action",
     component: CTAExternalWebComponent,
     canActivate: [PageGuard]
-  }
+  },
+  {
+    path: 'info-board',
+    component: InfoBoardComponent,
+    data: {
+      breadcrumbs: brConfig.infoBoard.index
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/create',
+    component: InfoBoardCreateComponent,
+    data: {
+      breadcrumbs: brConfig.infoBoard.create
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: 'info-board/edit',
+    component: InfoBoardEditComponent,
+    data: {
+      breadcrumbs: brConfig.infoBoard.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "info-board/detail",
+    component: InfoBoardEditComponent,
+    data: {
+      breadcrumbs: brConfig.infoBoard.detail
+    },
+    //canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({

@@ -1,7 +1,9 @@
 import {
   Component,
+  Directive,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Input,
   OnInit,
   Output,

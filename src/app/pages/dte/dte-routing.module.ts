@@ -60,17 +60,19 @@ import { TaskVerificationAssignmentComponent } from "./task-verification-2/task-
 import { SubGroupTradeComponent } from "./sub-group-trade/sub-group-trade.component";
 import { CoinRedemptionApprovalComponent } from "./coin-redemption-approval/coin-redemption-approval.component";
 import { EmployeeMappingComponent } from "./employee-mapping/employee-mapping.component";
+import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
 import { CheckImageComponent } from "./image-recognition/check-image/check-image.component";
-import { XpComponent } from "./xp/xp.component";
-import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
-import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
-import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
-import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
-import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 import { LotteryComponent } from "./lottery/index/lottery.component";
 import { LotteryCreateComponent } from "./lottery/create/lottery-create.component";
 import { LotteryEditComponent } from "./lottery/edit/lottery-edit.component";
-import { JobsRequestComponent } from "./jobs-request/jobs-request.component";
+import { XpComponent } from "./xp/xp.component";
+import { VerificationApprovalComponent } from "./task-verification-2/verification-approval/verification-approval.component";
+import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.component";
+import { SpinTheWheelNotifComponent } from "./spin-the-wheel/notif/spin-the-wheel-notif.component";
+import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
+import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
+import { FlushCoinComponent } from "./flush-coin/flush-coin.component";
+import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
 
 const routes: Routes = [
   {
@@ -776,7 +778,7 @@ const routes: Routes = [
     component: EmployeeMappingComponent,
     canActivate: [PageGuard]
   },
-  
+
   // {
   //   path: "audience",
   //   component: AudienceIndexComponent,
@@ -812,62 +814,6 @@ const routes: Routes = [
   //   canActivate: [PageGuard]
   // },
 
-  {
-    path: 'spin-the-wheel',
-    component: SpinTheWheelComponent,
-    data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.index
-    },
-    // canActivate: [PageGuard]
-  },
-  {
-    path: 'spin-the-wheel/create',
-    component: SpinTheWheelCreateComponent,
-    data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.create
-    },
-    // canActivate: [PageGuard]
-  },
-  {
-    path: 'spin-the-wheel/edit/:id',
-    component: SpinTheWheelEditComponent,
-    data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.edit
-    },
-    // canActivate: [PageGuard]
-  },
-  {
-    path: 'spin-the-wheel/detail',
-    component: SpinTheWheelEditComponent,
-    data: {
-      breadcrumbs: brConfig.dte.spinTheWheel.detail
-    },
-    //canActivate: [PageGuard]
-  },
-  {
-    path: 'lottery',
-    component: LotteryComponent,
-    data: {
-      breadcrumbs: brConfig.dte.lottery.index
-    },
-    // canActivate: [PageGuard]
-  },
-  {
-    path: 'lottery/create',
-    component: LotteryCreateComponent,
-    data: {
-      breadcrumbs: brConfig.dte.lottery.create
-    },
-    // canActivate: [PageGuard]
-  },
-  {
-    path: 'lottery/edit',
-    component: LotteryEditComponent,
-    data: {
-      breadcrumbs: brConfig.dte.lottery.edit
-    },
-    // canActivate: [PageGuard]
-  },
   {
     path: 'xp',
     component: XpComponent,
@@ -958,26 +904,65 @@ const routes: Routes = [
   {
     path: 'spin-the-wheel',
     component: SpinTheWheelComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.index
+    },
     // canActivate: [PageGuard]
   },
   {
-    path: 'jobs-request',
-    component: JobsRequestComponent,
-    canDeactivate: [PendingChangesGuard]
+    path: 'spin-the-wheel/create',
+    component: SpinTheWheelCreateComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.create
+    },
+    // canActivate: [PageGuard]
   },
   {
     path: 'spin-the-wheel/edit/:id',
     component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
+    },
     // canActivate: [PageGuard]
   },
   {
     path: "spin-the-wheel/detail",
     component: SpinTheWheelEditComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
     //canActivate: [PageGuard]
   },
   {
-    path: 'jobs-request/:tab',
-    component: JobsRequestComponent,
+    path: "spin-the-wheel/notif",
+    component: SpinTheWheelNotifComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.notif
+    },
+    //canActivate: [PageGuard]
+  },
+  {
+    path: 'flush-coin',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'flush-coin/create/:tab',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'flush-coin/edit/:id/:tab',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: "flush-coin/detail/:id/:tab",
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
     canDeactivate: [PendingChangesGuard]
   },
   {

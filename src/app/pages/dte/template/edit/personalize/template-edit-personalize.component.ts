@@ -1785,6 +1785,14 @@ export class TemplateEditPersonalizeComponent implements OnInit {
     return text.replace(/<strong>|<\/strong>/gi, "")
   }
 
+  checkRejectedOption(reason){
+    let rejected = this.templateTaskForm.get("rejected_reason_choices").value;
+
+    if (reason.toLowerCase() === "others"){
+      return rejected.some(list => list.reason.toLowerCase() === "others");
+    } else return false;
+  }
+
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);

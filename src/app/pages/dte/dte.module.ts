@@ -171,27 +171,29 @@ import { TaskVerificationComponent } from './task-verification-2/task-verificati
 import { AssignmentCartComponent } from './task-verification-2/assignment-cart/assignment-cart.component';
 import { TaskVerificationAssignmentComponent } from './task-verification-2/task-verification-assignment/task-verification-assignment.component';
 import { TranslateModule } from "@ngx-translate/core";
-import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
-import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
 import { SubGroupTradeComponent } from './sub-group-trade/sub-group-trade.component';
 import { DataLogComponent } from './coin-disburstment/index/data-log/data-log.component';
 import { CoinRedemptionApprovalComponent } from './coin-redemption-approval/coin-redemption-approval.component';
 import { EmployeeMappingComponent } from './employee-mapping/employee-mapping.component';
-
+import { TemplatePlanogramComponent } from './image-recognition/template-planogram/template-planogram.component';
+import { JobsRequestComponent } from './jobs-request/jobs-request.component';
 import { CheckImageComponent } from './image-recognition/check-image/check-image.component';
-import { XpComponent } from './xp/xp.component';
-import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
-import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
-import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
-import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
 import { LotteryComponent } from './lottery/index/lottery.component';
 import { LotteryCreateComponent } from './lottery/create/lottery-create.component';
 import { LotteryEditComponent } from './lottery/edit/lottery-edit.component';
-import { JobsRequestComponent } from './jobs-request/jobs-request.component';
-import { DialogProcessComponentSPW } from "./spin-the-wheel/dialog/dialog-process/dialog-process.component";
-import { DialogProcessSaveComponentSPW } from "./spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component";
-import { ImportAudiencePersonalizeComponentSPW } from "./spin-the-wheel/import/personalize/import-audience-personalize.component";
+import { XpComponent } from './xp/xp.component';
+import { LoyaltyMitraComponent } from './loyalty-mitra/loyalty-mitra.component';
+import { VerificationApprovalComponent } from './task-verification-2/verification-approval/verification-approval.component';
+import { SpinTheWheelComponent } from './spin-the-wheel/index/spin-the-wheel.component';
+import { SpinTheWheelNotifComponent } from './spin-the-wheel/notif/spin-the-wheel-notif.component';
+import { SpinTheWheelCreateComponent } from './spin-the-wheel/create/spin-the-wheel-create.component';
+import { SpinTheWheelEditComponent } from './spin-the-wheel/edit/spin-the-wheel-edit.component';
 
+import { SpinTheWheelMechanismComponent } from './spin-the-wheel/tab/mechanism/spin-the-wheel-mechanism.component';
+import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
+import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
+import { FlushCoinComponent } from './flush-coin/flush-coin.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -381,22 +383,25 @@ export const MY_FORMATS = {
     TaskVerificationComponent,
     AssignmentCartComponent,
     TaskVerificationAssignmentComponent,
-    TemplatePlanogramComponent,
-    VerificationApprovalComponent,
     SubGroupTradeComponent,
     DataLogComponent,
     CoinRedemptionApprovalComponent,
     EmployeeMappingComponent,
+    TemplatePlanogramComponent,
+    JobsRequestComponent,
     CheckImageComponent,
     LotteryComponent,
     LotteryCreateComponent,
     LotteryEditComponent,
     XpComponent,
     LoyaltyMitraComponent,
+    VerificationApprovalComponent,
     SpinTheWheelComponent,
+    SpinTheWheelMechanismComponent,
+    SpinTheWheelNotifComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
-    JobsRequestComponent,
+    FlushCoinComponent,
   ],
   exports: [
     TemplateIndexComponent,

@@ -233,7 +233,7 @@ export class DialogMisiEditComponent implements OnInit {
         this.form.get('pushFF').patchValue(false);
         this.form.get('verifikasi').patchValue(true);
       } else {
-        this.form.get('verifikasi').patchValue(false);
+        // this.form.get('verifikasi').patchValue(false);
         if (this.missions[theIndex] && this.missions[theIndex].is_quiz && this.missions[theIndex].is_quiz === 1) {
           this.form.get('verifikasiFF').disable();
           this.form.get('verifikasi').patchValue(true);
@@ -270,7 +270,7 @@ export class DialogMisiEditComponent implements OnInit {
       this.form.get('pushFF').patchValue(false);
       this.form.get('verifikasi').patchValue(true);
     } else {
-      this.form.get('verifikasi').patchValue(false);
+      // this.form.get('verifikasi').patchValue(false);
       if (this.missions[theIndex].is_quiz === 1) {
         this.form.get('verifikasiFF').disable();
         this.form.get('verifikasi').patchValue(true);
@@ -300,7 +300,7 @@ export class DialogMisiEditComponent implements OnInit {
       this.form.get('pushFF').patchValue(false);
       this.form.get('verifikasi').patchValue(true);
     } else {
-      this.form.get('verifikasi').patchValue(false);
+      // this.form.get('verifikasi').patchValue(false);
       if (this.missions[theIndex].is_quiz === 1) {
         this.form.get('verifikasiFF').disable();
         this.form.get('verifikasi').patchValue(true);
@@ -510,6 +510,11 @@ export class DialogMisiEditComponent implements OnInit {
   checkReason(item){
     const verif_notes = this.form.get("verification_notes").value;
     return verif_notes.some(verif => verif.reason === item);
+  }
+
+  checkReasonClose(index){
+    const verif_notes = this.form.get("verification_notes").value;
+    return verif_notes[index].reason.toLowerCase() === "others";
   }
 
   submit(form: any) {

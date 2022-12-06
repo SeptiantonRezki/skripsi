@@ -2,8 +2,8 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.manajemen_konten.tnc.text1">
     <button style="width: 150px" [routerLink]="['/content-management','terms-and-condition', 'create']"
-      mat-raised-button type="button">
-      <mat-icon>add</mat-icon> {{ ls.locale.global.button.add }}
+      mat-raised-button type="button" *ngIf="permission?.buat" >
+      <mat-icon >add</mat-icon> {{ ls.locale.global.button.add }}
     </button>
   </page-content-header>
   <!-- / HEADER -->
@@ -43,10 +43,11 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)">
+              <button mat-icon-button color="" matTooltip="Ubah" (click)="directEdit(row)" 
+              *ngIf="permission?.ubah">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" (click)="deletePage(row.id)">
+              <button mat-icon-button color="primary" (click)="deletePage(row.id)" *ngIf="permission?.hapus">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

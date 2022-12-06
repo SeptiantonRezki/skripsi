@@ -208,6 +208,7 @@ export class BannerEditComponent {
         { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
         { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
         { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+        { name: 'App Link', value: "app_link" }
       ];
     } else {
       this.listLandingPage = [
@@ -305,6 +306,7 @@ export class BannerEditComponent {
       ticker_body: [""],
       ticker_title: [""],
       content_type_customer: ['all'],
+      app_link: [""],
     })
 
     this.formFilter = this.formBuilder.group({
@@ -337,6 +339,7 @@ export class BannerEditComponent {
           { name: this.translate.instant('global.label.capital_corner'), value: "pojok_modal" },
           { name: this.translate.instant('global.label.src_catalog'), value: "src_katalog" },
           { name: this.translate.instant('global.label.pay_corner'), value: "pojok_bayar" },
+          { name: 'App Link', value: "app_link" }
         ];
         this.listContentType = this.listContentType.filter(list => list.value !== 'e_wallet');
         // this.formBannerGroup.controls['type_banner'].setValue('in-app-banner');
@@ -822,6 +825,7 @@ export class BannerEditComponent {
           this.formBannerGroup.get('ticker_title').setValue(this.detailBanner.ticker_title);
           this.formBannerGroup.get('ticker_body').setValue(this.detailBanner.ticker_contents);
         }
+
       }, 50);
     }
 
@@ -855,6 +859,10 @@ export class BannerEditComponent {
 
     if (this.detailBanner.target_page.type === 'landing_page') {
       this.formBannerGroup.get('landing_page').setValue(this.detailBanner.target_page.page);
+
+      if(this.detailBanner.target_page.url_app){
+        this.formBannerGroup.get('app_link').setValue(this.detailBanner.target_page.url_app);
+      }
     }
 
     if (this.detailBanner.target_page.type === 'spesific_product_b2b') {
@@ -1374,7 +1382,6 @@ export class BannerEditComponent {
       } else if (body.content_type === 'spesific_product_b2b') {
         fd.append('barcode', this.formBannerGroup.get('barcode').value.id);
         body['barcode'] = this.formBannerGroup.get('barcode').value.id;
-        this.formBannerGroup.controls['barcode'].enable();
         fd.append('name_product', this.formBannerGroup.get('barcode').value.name);
         body['name_product'] = this.formBannerGroup.get('barcode').value.name;
       }
@@ -1390,6 +1397,14 @@ export class BannerEditComponent {
         if (this.formBannerGroup.get('type_banner').value === 'ticker') {
           fd.append('type_ticker', this.formBannerGroup.get('kategori').value);
           body['type_ticker'] = this.formBannerGroup.get('kategori').value;
+        }
+        if (this.formBannerGroup.get('landing_page').value === 'app_link' && body.content_type === 'landing_page') {
+          let urlAPP = this.formBannerGroup.get('app_link').value;
+          fd.append('url_app', urlAPP);
+          body['url_app'] = urlAPP;
+        }else{
+          fd.append('url_app', null);
+          body['url_app'] = null;
         }
       }
 
@@ -1581,7 +1596,7 @@ export class BannerEditComponent {
       this.formBannerGroup.controls['content_wallet'].disable();
       this.formBannerGroup.controls['button_text'].disable();
     }
-    this.formBannerGroup.get("barcode").setValue("");
+
     if (value === "spesific_product_b2b") {
       this.formBannerGroup.controls['barcode'].setValidators([Validators.required])
       this.formBannerGroup.controls['barcode'].enable()
@@ -1592,6 +1607,29 @@ export class BannerEditComponent {
 
     if (value === 'landing_page') {
       this.formBannerGroup.controls['landing_page'].setValue('');
+    }
+    
+    if(
+      value === 'landing_page' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+    }
+  }
+
+  landingPageChange(value) {
+    if(
+      value === 'app_link' && 
+      this.formBannerGroup.get('user_group').value === 'retailer'
+    ){
+      this.formBannerGroup.get('app_link').setValidators(Validators.required);
+    } else {
+      this.formBannerGroup.get('app_link').clearValidators();
+      this.formBannerGroup.get('app_link').updateValueAndValidity();
+      this.formBannerGroup.controls['app_link'].setValue('');
     }
   }
 

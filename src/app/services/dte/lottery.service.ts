@@ -62,11 +62,15 @@ export class LotteryService extends BaseService {
 
   downloadWinner(context: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'download_winner', {id: context});
-    return this.getApi(url);
+    return this.getBlobApi(url);
   }
 
   put_winner(context: any, body: any): Observable<any> {
     const url = this.getUrl(this.namespace, "update_winner", context);
+    return this.postApi(url, body);
+  }
+  put_winner_image(context: any, body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "update_winner_image", context);
     return this.postApi(url, body);
   }
 
@@ -77,12 +81,13 @@ export class LotteryService extends BaseService {
 
   exportDetailCoupon(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_detail_coupon");
-    return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
 
   exportCoupon(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_coupon");
-    return this.postApi(url, body);
+    // return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
   exportExcel(body): Observable<any> {
     const url = this.getUrl(this.namespace, "export_lottery");

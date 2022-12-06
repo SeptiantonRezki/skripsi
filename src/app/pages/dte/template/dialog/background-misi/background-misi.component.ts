@@ -28,8 +28,8 @@ export class BackgroundMisiComponent implements OnInit {
   
   constructor(
     private dialogService: DialogService,
-    private formBuilder: FormBuilder,
     private translate: TranslateService,
+    private formBuilder: FormBuilder,
   ) {}
 
   ngOnInit() {
