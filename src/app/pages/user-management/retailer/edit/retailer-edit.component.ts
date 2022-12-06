@@ -14,6 +14,7 @@ import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Utils } from 'app/classes/utils';
 import { TranslateService } from '@ngx-translate/core';
+// import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -252,6 +253,7 @@ export class RetailerEditComponent {
       version_retailer: [''],
       version_cashier: [''],
       country: [""],
+      owner_verified: [0]
     });
 
     if (!this.permission.detail_rrp) {
@@ -616,6 +618,7 @@ export class RetailerEditComponent {
       // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
+      owner_verified: this.detailRetailer.owner_verified === 1 ? 0 : 1,
     });
 
     this.formBankAccount.setValue({
@@ -907,6 +910,7 @@ export class RetailerEditComponent {
         is_sunday_deliv: this.formRetailer.get('is_sunday_deliv').value,
         // cut_off_hours: `${this.formRetailer.get('cut_off_hours').value}:00`,
         cut_off_hours: this.formRetailer.get('cut_off_hours').value,
+        owner_verified: this.formRetailer.get('owner_verified').value ? 0 : 1,
       };
 
       if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
@@ -1095,6 +1099,18 @@ export class RetailerEditComponent {
     // jika tidak memiliki submenu samasekali maka disable simpan
     if (!this.isCan(ALL_ROLES, 'OR')) {
       this.disableSubmit = true;
+    }
+  }
+
+  onKtpToggle(e) {
+    
+    /** ONLY HAS PERMISSION KTP */
+    if(this.permission && !this.permission.ktp) {
+
+      const oldVal = this.detailRetailer.owner_verified === 1 ? 0 : 1;
+      e.source.checked = oldVal;
+      this.formRetailer.get('owner_verified').setValue(oldVal);
+      
     }
   }
 }
