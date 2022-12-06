@@ -16,4 +16,11 @@ export class GoogleAnalyticsService {
       }
     })
   }
+
+  gtmDataLayer(item: any) {
+    console.log('item_DATALAYER', item);
+    (<any>window).datalayer = (<any>window).dataLayer || [];
+    (<any>window).dataLayer.push({ ...item });
+    console.log('DATALAYER',  (<any>window).dataLayer);
+  }
 }

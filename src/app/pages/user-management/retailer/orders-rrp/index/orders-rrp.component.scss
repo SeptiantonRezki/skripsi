@@ -1,0 +1,88 @@
+:host {
+    .status-order:hover {
+      transform: scale(1.03);
+      opacity: 0.8;
+    }
+    .status-container {
+      position: relative;
+      cursor: pointer;
+  
+      .chat-badge {
+        border-radius: 50%;
+        padding: 3px;
+        font-size: 11px;
+        background-color: #dc1d2d;
+        color: #fff;
+        position: absolute;
+        right: -5px;
+        top: 5px;
+        width: 20px;
+        height: 20px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+    }
+    .status-order-icon-arrow-down {
+      margin: auto;
+    }
+    .status-order-icon-arrow-down:hover {
+      cursor: pointer;
+    }
+    .header-bar {
+      background-color: #3a3a3a !important;
+      padding: 16px;
+    }
+  }
+  .search-field {
+    margin-bottom: 12px !important;
+    margin-right: 10px;
+  }
+  .textbox-search {
+    border: 1px solid #ececec;
+    padding: 8px 12px;
+  }
+  .icon-search {
+    background-color: #eeeeee;
+    height: 37.7px;
+    width: 42px;
+    top: -0.5px;
+    position: relative;
+    text-align: center;
+  }
+  .mat-icon-search {
+    position: relative;
+    top: 8px;
+  }
+  ::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label {
+    opacity: 1 !important;
+  }
+  .warning-badge {
+    position: absolute;
+    color: #e53935;
+    font-size: 18px;
+    margin-left: 2px;
+  }
+  .tab-child {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #cccccc;
+    border-radius: 30px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  .tab-child-active {
+    border: 1px solid #e53935;
+  }
+  .child-area-tab {
+    display: inline-block;
+    margin: 12px 15px 5px;
+  }
+  .tab-child:last-child {
+    margin-right: 0px;
+  }
+  
+  :host ::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell.red-strip {
+    background-color: #fae2e3;
+  }
+  

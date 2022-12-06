@@ -4,3 +4,19 @@
 mat-form-field.mat-form-field.paguyuban {
   font-size: 16px;
 }
+
+#jadwal_pengiriman {
+  table, th, td {
+    border: 1px solid;
+  }
+}
+
+#jadwal_pengiriman table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.checkbox-center {
+  display: flex;
+  justify-content: center;
+}

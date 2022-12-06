@@ -498,6 +498,27 @@ export const brConfig = {
       }
     ],
   },
+  order_rrp: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "lihat_pesanan.text1"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/rrp-retailer",
+        name: "lihat_pesanan.text1"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "global.label.order_detail"
+      }
+    ],
+  },
   customer: {
     index: [
       {
