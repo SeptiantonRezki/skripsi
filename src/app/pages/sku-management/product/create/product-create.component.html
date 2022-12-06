@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header contentTitle="{{'manajemen_barang_sku.produk.text3' | translate}}">
-    <button style="min-width: 170px;" mat-raised-button aria-label="save" (click)="submit()"
+    <button *ngIf="this.ls.selectedLanguages != 'km'" style="min-width: 170px;" mat-raised-button aria-label="save" (click)="submit()"
       type="button">{{ls.locale.global.button.save}}</button>
   </page-content-header>
   <!-- / HEADER -->

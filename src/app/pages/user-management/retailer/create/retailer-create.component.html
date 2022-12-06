@@ -240,7 +240,7 @@
             <button class="mr-8" mat-stroked-button matStepperPrevious type="button" color="accent">
               {{ls.locale.global.button.back}}
             </button>
-            <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
+            <button *ngIf="this.ls.selectedLanguages != 'km'" mat-raised-button type="button" class="confirmation-button" (click)="submit()">
               <ng-container *ngIf="submitting == false">
                 {{ls.locale.global.button.finish}}
               </ng-container>
