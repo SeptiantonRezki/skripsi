@@ -1897,7 +1897,7 @@ export class BannerCreateComponent {
     try {
       const response = await this.bannerService[keyAudience]({ selected: body, audience: this.formBannerGroup.get("user_group").value }).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Banner_${this.formBannerGroup.get("user_group").value}_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Banner_${this.formBannerGroup.get("user_group").value}_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       // this.exportAccessCashier = false;
@@ -1960,7 +1960,7 @@ export class BannerCreateComponent {
       type: this.formBannerGroup.get("group_type").value,
       audience: this.formBannerGroup.get("user_group").value,
       api: fd => this.bannerService[this.formBannerGroup.get("user_group").value === 'retailer' ? 'importAudience' : 'importCustomerAudience'](fd),
-      fileType: 'xls'
+      fileType: 'xlsx'
     };
 
     this.dialogRef = this.dialog.open(ImportAudienceComponent, dialogConfig);
