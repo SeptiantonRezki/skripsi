@@ -651,12 +651,12 @@ console.log(areaSelected);
     }
 
     const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    //const sort_type = this.dataService.getFromStorage("sort_type");
+    //const sort = this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    //this.pagination.sort_type = sort_type;
+    //this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
     //this.pagination['gsw'] = this.gsw.value;
