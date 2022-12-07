@@ -5,7 +5,7 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
-        <mat-tab label="Total Pack Per Brand">
+        <mat-tab label="Rekonsiliasi">
 
           <form [formGroup]="formFilterReport" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
@@ -70,12 +70,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Quantity" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.totalqty}}</span>
+                <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total (Rp)" prop="totalprice" [width]="200">
+            <ngx-datatable-column name="Revenue (Rp)" prop="totalprice" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <div style="width: 150px; text-align:right; ">{{row.totalprice}}</div>
+                <div style="width: 100px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -109,12 +109,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Quantity" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.totalqty}}</span>
+                <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total (Rp)" prop="totalprice" [width]="200">
+            <ngx-datatable-column name="Revenue (Rp)" prop="totalprice" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <div style="width: 150px; text-align:right; ">{{row.totalprice}}</div>
+                <div style="width: 100px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -237,17 +237,17 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_modus}}</span>
+                <div style="width: 150px; text-align:right; ">{{row.timespent_modus}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_min}}</span>
+                <div style="width: 130px; text-align:right; ">{{row.timespent_min}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_max}}</span>
+                <div style="width: 130px; text-align:right; ">{{row.timespent_max}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -310,17 +310,17 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_modus}}</span>
+                <div style="width: 150px; text-align:right; ">{{row.timespent_modus}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_min}}</span>
+                <div style="width: 130px; text-align:right; ">{{row.timespent_min}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.timespent_max}}</span>
+                <div style="width: 130px; text-align:right; ">{{row.timespent_max}}</div>
               </ng-template>
             </ngx-datatable-column>
 
@@ -388,12 +388,12 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="# Invoice Issued" prop="issued" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.issued}}</span>
+                  <div style="width: 100px; text-align:right; ">{{row.issued}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="# Invoice Cancel" prop="cancel" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.cancel}}</span>
+                  <div style="width: 100px; text-align:right; ">{{row.cancel}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Start Visit" prop="start_visit">
@@ -408,12 +408,12 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Timespent (minutes)" prop="timespent">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.timespent}}</span>
+                  <div style="width: 100px; text-align:right; ">{{row.timespent}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Revenue (Rp)" prop="revenue" [width]="200" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <div style="width: 150px; text-align:right; ">{{row.revenue}}</div>
+                  <div style="width: 100px; text-align:right; ">{{row.revenue}}</div>
                 </ng-template>
               </ngx-datatable-column>
 
@@ -592,8 +592,7 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Need To Review" prop="need_to_review" [width]="400">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.need_to_review}}
-                    <label *ngIf="row.need_to_review == 1" style="margin-left: 5px; font-weight: bold;">(Please check : {{row.program_code}} , Territory : {{row.Territory}}, Date Visit : {{row.VisitDate}})</label>
+                  <span><label *ngIf="row.need_to_review == 1" style="font-weight: bold;">Please check : {{row.program_code}} , Territory : {{row.Territory}}, Date Visit : {{row.VisitDate}}</label>
                   </span>
                 </ng-template>
               </ngx-datatable-column>
@@ -621,7 +620,7 @@
                 </ngx-datatable-column>
                 <ngx-datatable-column name="Qty" prop="qty" [width]="200">
                   <ng-template ngx-datatable-cell-template let-row="row">
-                    <div style="width: 150px; text-align:right; ">{{row.qty}}</div>
+                    <div style="width: 80px; text-align:right; ">{{row.qty}}</div>
                   </ng-template>
                 </ngx-datatable-column>
                 <ngx-datatable-column name="From" prop="partner_from" [width]="200">
@@ -634,7 +633,11 @@
                     <span>{{row.partner_to}} - {{row.partner_to_territory}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-
+                <ngx-datatable-column name="Status" prop="status" [width]="200">
+                  <ng-template ngx-datatable-cell-template let-row="row">
+                    <span>{{row.status}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
               </ngx-datatable>
             </div>
           </div>

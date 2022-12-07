@@ -107,6 +107,8 @@ export class TrsReportComponent implements OnInit {
   formFilterReport: FormGroup;
   filter1List: any[];
   filter2List: any[];
+  maxPeriod: any;
+  minDateFilter: any = new Date();
 
   constructor(
     private dataService: DataService,
@@ -121,40 +123,14 @@ export class TrsReportComponent implements OnInit {
   ngOnInit() {
     //chanif
     this.dataService.showLoading(true);
-    this.formFilterReport = this.formBuilder.group({
-      programCode: new FormControl(),
-      date_filter: ""
-    })
-
+    
     let request = {
       level: 6,
     };
-    this.TRSService.getReportFilter1(request).subscribe(res => {
-      this.filter1List = res.data;
-    }, err => {
-      console.log('err occured', err);
-      this.dataService.showLoading(false);
+    this.formFilterReport = this.formBuilder.group({
+      programCode: new FormControl(),
+      date_filter: ""
     });
-    this.TRSService.getReportFilter2(request).subscribe(res => {
-      this.filter2List = res.data;
-    }, err => {
-      console.log('err occured', err);
-      this.dataService.showLoading(false);
-    });
-
-    /*
-    this.TRSService.getReportFilter2(request).subscribe(res => {
-      this.filter2List = res.data;
-    }, err => {
-      console.log('err occured', err);
-      this.dataService.showLoading(false);
-    })
-    */
-
-    //ale
-    this.refreshTotalSingle();
-    this.refreshTotalMultiple();
-
     this.summaryVisitFilter = this.formBuilder.group({
       group: new FormControl("Daily"),
       program_code: new FormControl(),
@@ -188,8 +164,48 @@ export class TrsReportComponent implements OnInit {
       console.log(selectedValue)
     });
 
+    this.TRSService.getReportFilter1(request).subscribe(res => {
+      this.filter1List = res.data;
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    });
+    this.TRSService.getReportFilter2(request).subscribe(res => {
+      this.filter2List = res.data;
+      this.summaryVisitFilter.get("kps").setValue(res.data[0].id);
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    });
+
+    //ale
+    this.refreshTotalSingle();
+    this.refreshTotalMultiple();
+
+    this.TRSService.getSysVar().subscribe((res) => {
+      res.data.forEach((item) => {
+        if (item.param === 'max_period') {
+          this.maxPeriod = parseInt(item.value);
+
+          this.minDateFilter.setDate(this.minDateFilter.getDate() - this.maxPeriod);
+
+          this.summaryVisitFilter.get("to").setValue(new Date());
+          this.stockMovementFilter.get("to").setValue(new Date());
+          this.summaryVisitFilter.get("from").setValue(this.minDateFilter);
+          this.stockMovementFilter.get("from").setValue(this.minDateFilter);
+      
+          console.log("chahahaha");
+          console.log(this.minDateFilter);
+          console.log(this.maxPeriod);
+        }
+      });
+      this.dataService.showLoading(false);
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    });
+
     
-    this.dataService.showLoading(false);
   }
 
   filterReport1(){
@@ -580,8 +596,18 @@ export class TrsReportComponent implements OnInit {
   stockMovementClick(data){
     if(data.type == 'click') {
       this.stockMovementSelected = data.row;
-      this.refreshStockMovement2();
       this.stockMovement2Selected = null;
+
+      console.log(data.row.FromFilter);
+      console.log(data.row.ToFilter);
+
+      //set filter      
+      this.stockMovementSelectedFilter.get("type").setValue("");
+      this.stockMovementSelectedFilter.get("need_to_review").setValue("");
+      this.stockMovementSelectedFilter.get("from").setValue(data.row.FromFilter);
+      this.stockMovementSelectedFilter.get("to").setValue(data.row.ToFilter);
+
+      this.refreshStockMovement2();
     }
   }
 
