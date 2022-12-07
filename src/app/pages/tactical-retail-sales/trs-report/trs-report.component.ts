@@ -109,6 +109,7 @@ export class TrsReportComponent implements OnInit {
   filter2List: any[];
   maxPeriod: any;
   minDateFilter: any = new Date();
+  dateFilter: any = new Date();
 
   constructor(
     private dataService: DataService,
@@ -131,6 +132,8 @@ export class TrsReportComponent implements OnInit {
       programCode: new FormControl(),
       date_filter: ""
     });
+    this.formFilterReport.get("date_filter").setValue(new Date());
+
     this.summaryVisitFilter = this.formBuilder.group({
       group: new FormControl("Daily"),
       program_code: new FormControl(),

@@ -68,7 +68,7 @@
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Quantity" prop="totalqty" [width]="200">
+            <ngx-datatable-column name="Volume (pack)" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
@@ -107,7 +107,7 @@
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Quantity" prop="totalqty" [width]="200">
+            <ngx-datatable-column name="Volume (pack)" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
@@ -227,12 +227,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.start_visit}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.start_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.end_visit}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.end_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
@@ -300,12 +300,12 @@
             </ngx-datatable-column>
             <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.start_visit}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.start_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
-                <span>{{row.end_visit}}</span>
+                <div style="width: 60px; text-align:right; ">{{row.end_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
@@ -398,12 +398,12 @@
               </ngx-datatable-column>
               <ngx-datatable-column name="Start Visit" prop="start_visit">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.start_visit}}</span>
+                  <div style="width: 70px; text-align:right; ">{{row.start_visit}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="End Visit" prop="end_visit">
                 <ng-template ngx-datatable-cell-template let-row="row">
-                  <span>{{row.end_visit}}</span>
+                  <div style="width: 70px; text-align:right; ">{{row.end_visit}}</div>
                 </ng-template>
               </ngx-datatable-column>
               <ngx-datatable-column name="Timespent (minutes)" prop="timespent">
@@ -618,7 +618,7 @@
                     <span>{{row.product_code}}</span>
                   </ng-template>
                 </ngx-datatable-column>
-                <ngx-datatable-column name="Qty" prop="qty" [width]="200">
+                <ngx-datatable-column name="Quantity (pack)" prop="qty" [width]="200">
                   <ng-template ngx-datatable-cell-template let-row="row">
                     <div style="width: 80px; text-align:right; ">{{row.qty}}</div>
                   </ng-template>
