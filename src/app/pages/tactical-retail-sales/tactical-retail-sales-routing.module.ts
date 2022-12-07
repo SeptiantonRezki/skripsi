@@ -53,8 +53,10 @@ const routes: Routes = [
   {
     path: "trs-report",
     component: TrsReportComponent,
-    data: {}
-  }
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_report
+    },
+  },
 ]
 
 @NgModule({
