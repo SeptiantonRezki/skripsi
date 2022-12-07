@@ -126,7 +126,6 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "export_perso");
     return this.postApi(url, body);
   }
-
   getListTradePrograms(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "list_trade_program");
     return this.getApi(url, queryParams);

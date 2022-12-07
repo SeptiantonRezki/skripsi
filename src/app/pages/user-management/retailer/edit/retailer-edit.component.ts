@@ -649,7 +649,7 @@ export class RetailerEditComponent {
     this.formRetailer.controls['version_retailer'].disable();
     this.formRetailer.controls['version_cashier'].disable();
 
-    if (this.isDetail) {
+    if (this.isDetail || this.ls.selectedLanguages == 'km') {
       this.formRetailer.disable();
       this.formBankAccount.disable();
       this.npwp.disable();

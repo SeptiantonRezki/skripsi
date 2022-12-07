@@ -512,7 +512,6 @@ export const MY_FORMATS = {
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
-    ImportAudiencePersonalizeComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
     ImportAudiencePersonalizeComponentSPW,
