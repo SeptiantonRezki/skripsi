@@ -118,24 +118,16 @@
         fxLayoutAlign="end center"
         class="p-16 export"
         >
-          <button
-            mat-raised-button
-            type="button"
-            class="is-danger"
-            (click)="importRetailer()"
-            [disabled]="disableForm"
-          >
-            <mat-icon>vertical_align_bottom</mat-icon> Import XLS
-          </button>
-          <button
-            mat-raised-button
-            type="button"
-            class="is-danger"
-            (click)="exportRetailer()"
-          >
-            <mat-icon>vertical_align_top</mat-icon> Export XLS
-          </button>
-        </div>
+          <mat-icon>vertical_align_bottom</mat-icon> Import XLSX
+        </button>
+        <button
+          mat-raised-button
+          type="button"
+          class="is-danger"
+          (click)="exportRetailer()"
+        >
+          <mat-icon>vertical_align_top</mat-icon> Export XLSX
+        </button>
       </div>
 
       <ngx-datatable
