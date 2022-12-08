@@ -324,7 +324,10 @@ export class TrsProposalCreateComponent implements OnInit {
             })
           }
         }
+      } else {
+        this.formCreateProposal.get(component_name).setValue("");
       }
+      
     }
   }
 

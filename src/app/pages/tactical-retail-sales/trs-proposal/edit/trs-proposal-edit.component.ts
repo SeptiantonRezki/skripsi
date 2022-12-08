@@ -74,7 +74,7 @@ export class TrsProposalEditComponent implements OnInit {
   minDateProposal: any;
   minMaxDateProposal: any;
   maxDateProposal: any;
-  maxPeriodProposal: any = 60;
+  maxPeriodProposal: any;
 
   selectedArea: any = [""];
   selectedSalesPoint: any = "";
@@ -171,18 +171,6 @@ export class TrsProposalEditComponent implements OnInit {
         this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
       }
 
-      if (this.proposalData.status == 'ongoing'){
-        //this.minDateProposal.setDate(this.minDateProposal.getDate());
-      } else {
-        this.minDateProposal = new Date();
-        this.minMaxDateProposal = new Date();
-        this.maxDateProposal = new Date();
-
-        this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
-        this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
-        this.maxDateProposal.setDate(this.todayDate.getDate()+1 + this.maxPeriodProposal);
-      }
-
       this.formCreateProposal.patchValue({
         startDate: this.proposalData.start_date,
         endDate: this.proposalData.end_date,
@@ -229,12 +217,28 @@ export class TrsProposalEditComponent implements OnInit {
         //this.disableForm = true;
       };
       
-      if (this.proposalData.status == 'ongoing'){
-        //this.minDateProposal.setDate(this.minDateProposal.getDate());
-      } else {
-        this.minMaxDateProposal = this.formCreateProposal.get('startDate').value;
-        this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');  
-      }
+      // ============== SET END DATE ================
+      this.TRSService.getSysVar().subscribe((res) => {
+        res.data.forEach((item) => {
+          if (item.param === 'max_period') {
+            if (this.proposalData.status == 'ongoing'){
+            } else {
+              this.minDateProposal = new Date();
+              this.minMaxDateProposal = new Date();
+              this.maxDateProposal = new Date();
+
+              this.maxPeriodProposal = parseInt(item.value);
+
+              this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+              this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
+              this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
+            }
+          }
+        });
+      }, err => {
+        console.log('err occured', err);
+        this.dataService.showLoading(false);
+      });
 
       this.dataService.showLoading(false);
       this.TRSService.getAreaByUser(request).subscribe(res => {
@@ -248,23 +252,6 @@ export class TrsProposalEditComponent implements OnInit {
     }, err => {
       this.dataService.showLoading(false);
       console.log('err occured', err);
-    })
-
-    // ============== SET END DATE ================
-    this.TRSService.getSysVar().subscribe((res) => {
-      res.data.forEach((item) => {
-        if (item.param === 'max_period') {
-          if (this.proposalData.status == 'ongoing'){
-          } else {
-            this.maxDateProposal = new Date();
-
-            this.maxPeriodProposal = parseInt(item.value);
-            this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          }
-        }
-      });
-    }, err => {
-      console.log('err occured', err);
-      this.dataService.showLoading(false);
     })
     
     this.keyUpCust1.debounceTime(300)
@@ -555,6 +542,8 @@ export class TrsProposalEditComponent implements OnInit {
             })
           }
         }
+      } else {
+        this.formCreateProposal.get(component_name).setValue("");
       }
     }
   }
