@@ -229,7 +229,7 @@ export class TrsProposalComponent {
       area.map((level, i) => {
         let level_desc = level.level_desc;
         let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
+        if (lastDiffLevelIndex > levelIndex - 26) {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
