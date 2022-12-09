@@ -953,7 +953,7 @@ export class WholesalerIndexComponent {
 
   async exportwholesaler(context?, exportFileName?) {
     this.dataService.showLoading(true);
-    const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xls`;
+    const filename = (exportFileName) ? exportFileName : `Export_list_Wholesaler_${new Date().toLocaleString()}.xlsx`;
     try {
       const response = await this.wholesalerService.exportWholesalerNew(this.pagination,context).toPromise();
       console.log('he', response.headers);

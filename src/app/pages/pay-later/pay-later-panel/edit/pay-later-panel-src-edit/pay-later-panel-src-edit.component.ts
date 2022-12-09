@@ -522,7 +522,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterPanelSrc_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterPanelSrc_${new Date().toLocaleString()}.xlsx`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
