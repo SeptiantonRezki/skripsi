@@ -97,69 +97,69 @@ export class GenerateReceipt {
             html += `<table width="100%"><tr><td><strong>VAT</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_vat}</strong></td></tr></table>`;
             html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>TOTAL PEMESANAN</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_with_vat}</strong></td></tr></table>`; 
             
-            html += `
-            <table width="100%">
-            <tr>
-            <td>${this.ls.locale.global.label.total_save_spend.toUpperCase()}</td>
-            <td style="text-align: right;">${detailOrder.total_discount}</td>
-            </tr>
-            <tr>
-            <td>${detailOrder.status === 'selesai' ? this.ls.locale.global.label.additional_points.toUpperCase() : this.ls.locale.global.label.point_estimate.toUpperCase()}</td>
-            <td style="text-align: right;">${detailOrder.point_received}</td>
-            </tr>
-            </table>`;
+            // html += `
+            // <table width="100%">
+            // <tr>
+            // <td>${this.ls.locale.global.label.total_save_spend.toUpperCase()}</td>
+            // <td style="text-align: right;">${detailOrder.total_discount}</td>
+            // </tr>
+            // <tr>
+            // <td>${detailOrder.status === 'selesai' ? this.ls.locale.global.label.additional_points.toUpperCase() : this.ls.locale.global.label.point_estimate.toUpperCase()}</td>
+            // <td style="text-align: right;">${detailOrder.point_received}</td>
+            // </tr>
+            // </table>`;
 
-            if (detailOrder.point_curs !== "0" && !this.ls.locale.global.nota.custom) {
-                html += `<br/><center><div class="p-bottom">
-                ${this.ls.locale.global.nota.text1} <div> ${detailOrder.point_curs}</div></div></center>`;
-            }
-            if(detailOrder.note && (detailOrder.country =="KH")){
-                html += `<p style="text-align: left;"><b>${this.ls.locale.global.label.notetoseller_text}:</b>${detailOrder.note}</p>`
-            }
-            if (detailOrder.payment_type && detailOrder.payment_type === 'pay-later') {
-                html += `
-                    </br>
-                    <div style="margin-top:15px;">
-                    <p><strong>${this.ls.locale.global.nota.text2} VIRTUAL ACCOUNT.</strong></p>
-                    </div>
-                `
-                if (detailOrder.paylater_va) {
-                    detailOrder.paylater_va.map(bank => {
-                        html += `
-                            </br>
-                            <p>${bank.bankName} : ${bank.vaNumber} (${detailOrder.paylater_group_name})</P>
-                        `
-                    })
-                }
+            // if (detailOrder.point_curs !== "0" && !this.ls.locale.global.nota.custom) {
+            //     html += `<br/><center><div class="p-bottom">
+            //     ${this.ls.locale.global.nota.text1} <div> ${detailOrder.point_curs}</div></div></center>`;
+            // }
+            // if(detailOrder.note && (detailOrder.country =="KH")){
+            //     html += `<p style="text-align: left;"><b>${this.ls.locale.global.label.notetoseller_text}:</b>${detailOrder.note}</p>`
+            // }
+            // if (detailOrder.payment_type && detailOrder.payment_type === 'pay-later') {
+            //     html += `
+            //         </br>
+            //         <div style="margin-top:15px;">
+            //         <p><strong>${this.ls.locale.global.nota.text2} VIRTUAL ACCOUNT.</strong></p>
+            //         </div>
+            //     `
+            //     if (detailOrder.paylater_va) {
+            //         detailOrder.paylater_va.map(bank => {
+            //             html += `
+            //                 </br>
+            //                 <p>${bank.bankName} : ${bank.vaNumber} (${detailOrder.paylater_group_name})</P>
+            //             `
+            //         })
+            //     }
 
-                html += `
-                <p>
-                <strong>${this.ls.locale.global.nota.text3}
-                ${(detailOrder.total_payment_format_currency).replace(`${this.ls.locale.global.currency}`, '')}
-                </strong>
-                </p>
-                <p><strong>${this.ls.locale.global.nota.text4}
-                    ${detailOrder.paylater_due_date}</strong></p>
-                <p style="font-size: 14px;">
-                ${this.ls.locale.global.nota.text5}
-                </p>
+            //     html += `
+            //     <p>
+            //     <strong>${this.ls.locale.global.nota.text3}
+            //     ${(detailOrder.total_payment_format_currency).replace(`${this.ls.locale.global.currency}`, '')}
+            //     </strong>
+            //     </p>
+            //     <p><strong>${this.ls.locale.global.nota.text4}
+            //         ${detailOrder.paylater_due_date}</strong></p>
+            //     <p style="font-size: 14px;">
+            //     ${this.ls.locale.global.nota.text5}
+            //     </p>
 
-                <br/><br/><div style="border-bottom: 1px solid black;margin-top:15px;margin-bottom:15px;"><b>
-                ${this.ls.locale.global.nota.text6} ${detailOrder.paylater_group_name})</b>
-                </div>
-                `
-                detailOrder.customer_contact.map(contact => {
-                    html += `
-                        <center><p>${contact.title} ${contact.value}</p></center>
-                    `
-                })
-            }
+            //     <br/><br/><div style="border-bottom: 1px solid black;margin-top:15px;margin-bottom:15px;"><b>
+            //     ${this.ls.locale.global.nota.text6} ${detailOrder.paylater_group_name})</b>
+            //     </div>
+            //     `
+            //     detailOrder.customer_contact.map(contact => {
+            //         html += `
+            //             <center><p>${contact.title} ${contact.value}</p></center>
+            //         `
+            //     })
+            // }
 
-            if (detailOrder && detailOrder.advocacy && Array.isArray(detailOrder.advocacy)) {
-                detailOrder.advocacy.map(adv => {
-                    html += `<p style="text-align: center;font-style: italic;">"${adv}"</p>`
-                });
-            }
+            // if (detailOrder && detailOrder.advocacy && Array.isArray(detailOrder.advocacy)) {
+            //     detailOrder.advocacy.map(adv => {
+            //         html += `<p style="text-align: center;font-style: italic;">"${adv}"</p>`
+            //     });
+            // }
 
             if (!this.ls.locale.global.nota.custom) {
                 html += `<center><div class="p-bottom">${this.ls.locale.global.nota.text7}<div>${detailOrder.order_prepared_by.toUpperCase()}</div>${detailOrder.created_at}</div>`
@@ -277,69 +277,69 @@ export class GenerateReceipt {
                 html += `<table width="100%"><tr><td><strong>VAT</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_vat}</strong></td></tr></table>`;
                 html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>TOTAL PEMESANAN</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_with_vat}</strong></td></tr></table>`; 
     
-                html += `
-        <table width="100%">
-        <tr>
-        <td>${this.ls.locale.global.label.total_save_spend.toUpperCase()}</td>
-        <td style="text-align: right;">${detailOrder.total_discount}</td>
-        </tr>
-        <tr>
-        <td>${detailOrder.status === 'selesai' ? this.ls.locale.global.label.additional_points.toUpperCase() : this.ls.locale.global.label.point_estimate.toUpperCase()}</td>
-        <td style="text-align: right;">${detailOrder.point_received}</td>
-        </tr>
-        </table>`;
+        //         html += `
+        // <table width="100%">
+        // <tr>
+        // <td>${this.ls.locale.global.label.total_save_spend.toUpperCase()}</td>
+        // <td style="text-align: right;">${detailOrder.total_discount}</td>
+        // </tr>
+        // <tr>
+        // <td>${detailOrder.status === 'selesai' ? this.ls.locale.global.label.additional_points.toUpperCase() : this.ls.locale.global.label.point_estimate.toUpperCase()}</td>
+        // <td style="text-align: right;">${detailOrder.point_received}</td>
+        // </tr>
+        // </table>`;
     
-                if (detailOrder.point_curs !== "0" && !this.ls.locale.global.nota.custom) {
-                    html += `<br/><center><div class="p-bottom">
-            ${this.ls.locale.global.nota.text1} <div> ${detailOrder.point_curs}</div></div></center>`;
-                }
-                if (detailOrder.note && (detailOrder.country == "KH")) {
-                    html += `<p style="text-align: left;">${this.ls.locale.global.label.notetoseller_text}:${detailOrder.note}</p>`
-                }
-                if (detailOrder.payment_type && detailOrder.payment_type === 'pay-later') {
-                    html += `
-                </br>
-                <div style="margin-top:15px;">
-                <p><strong>${this.ls.locale.global.nota.text2} VIRTUAL ACCOUNT.</strong></p>
-                </div>
-            `
-                    if (detailOrder.paylater_va) {
-                        detailOrder.paylater_va.map(bank => {
-                            html += `
-                        </br>
-                        <p>${bank.bankName} : ${bank.vaNumber} (${detailOrder.paylater_group_name})</P>
-                    `
-                        })
-                    }
+            //     if (detailOrder.point_curs !== "0" && !this.ls.locale.global.nota.custom) {
+            //         html += `<br/><center><div class="p-bottom">
+            // ${this.ls.locale.global.nota.text1} <div> ${detailOrder.point_curs}</div></div></center>`;
+            //     }
+            //     if (detailOrder.note && (detailOrder.country == "KH")) {
+            //         html += `<p style="text-align: left;">${this.ls.locale.global.label.notetoseller_text}:${detailOrder.note}</p>`
+            //     }
+            //     if (detailOrder.payment_type && detailOrder.payment_type === 'pay-later') {
+            //         html += `
+            //     </br>
+            //     <div style="margin-top:15px;">
+            //     <p><strong>${this.ls.locale.global.nota.text2} VIRTUAL ACCOUNT.</strong></p>
+            //     </div>
+            // `
+            //         if (detailOrder.paylater_va) {
+            //             detailOrder.paylater_va.map(bank => {
+            //                 html += `
+            //             </br>
+            //             <p>${bank.bankName} : ${bank.vaNumber} (${detailOrder.paylater_group_name})</P>
+            //         `
+            //             })
+            //         }
     
-                    html += `
-            <p>
-            <strong>${this.ls.locale.global.nota.text3}
-            ${(detailOrder.total_payment_format_currency).replace(`${this.ls.locale.global.currency}`, '')}
-            </strong>
-            </p>
-            <p><strong>${this.ls.locale.global.nota.text4}
-                ${detailOrder.paylater_due_date}</strong></p>
-            <p style="font-size: 14px;">
-            ${this.ls.locale.global.nota.text5}
-            </p>
+            //         html += `
+            // <p>
+            // <strong>${this.ls.locale.global.nota.text3}
+            // ${(detailOrder.total_payment_format_currency).replace(`${this.ls.locale.global.currency}`, '')}
+            // </strong>
+            // </p>
+            // <p><strong>${this.ls.locale.global.nota.text4}
+            //     ${detailOrder.paylater_due_date}</strong></p>
+            // <p style="font-size: 14px;">
+            // ${this.ls.locale.global.nota.text5}
+            // </p>
     
-            <br/><br/><div style="border-bottom: 1px solid black;margin-top:15px;margin-bottom:15px;"><b>
-            ${this.ls.locale.global.nota.text6} ${detailOrder.paylater_group_name})</b>
-            </div>
-            `
-                    detailOrder.customer_contact.map(contact => {
-                        html += `
-                    <center><p>${contact.title} ${contact.value}</p></center>
-                `
-                    })
-                }
+            // <br/><br/><div style="border-bottom: 1px solid black;margin-top:15px;margin-bottom:15px;"><b>
+            // ${this.ls.locale.global.nota.text6} ${detailOrder.paylater_group_name})</b>
+            // </div>
+            // `
+            //         detailOrder.customer_contact.map(contact => {
+            //             html += `
+            //         <center><p>${contact.title} ${contact.value}</p></center>
+            //     `
+            //         })
+            //     }
     
-                if (detailOrder && detailOrder.advocacy && Array.isArray(detailOrder.advocacy)) {
-                    detailOrder.advocacy.map(adv => {
-                        html += `<p style="text-align: center;font-style: italic;">"${adv}"</p>`
-                    });
-                }
+            //     if (detailOrder && detailOrder.advocacy && Array.isArray(detailOrder.advocacy)) {
+            //         detailOrder.advocacy.map(adv => {
+            //             html += `<p style="text-align: center;font-style: italic;">"${adv}"</p>`
+            //         });
+                // }
     
                 if (!this.ls.locale.global.nota.custom) {
                     html += `<center><div class="p-bottom">${this.ls.locale.global.nota.text7}<div>${detailOrder.order_prepared_by.toUpperCase()}</div>${detailOrder.created_at}</div>`
