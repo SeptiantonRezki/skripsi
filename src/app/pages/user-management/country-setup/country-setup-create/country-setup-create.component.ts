@@ -26,7 +26,7 @@ export class CountrySetupCreateComponent implements OnInit {
   step9: FormGroup;
 
   languages = [];
-
+  timezones: any[];
   submiting = false;
 
   ACCESS_MENU_MAX_DEPTH = 1;
@@ -48,7 +48,8 @@ export class CountrySetupCreateComponent implements OnInit {
 
       name: ['', Validators.required],
       country_id: ['', Validators.required],
-      locale: ['', Validators.required]
+      locale: ['', Validators.required],
+      time_zone_id: ['', Validators.required]
 
     });
 
@@ -187,7 +188,19 @@ export class CountrySetupCreateComponent implements OnInit {
       this.languages = data
     }, err => {
 
-    })
+    });
+    this.getTimezones();
+  }
+
+  getTimezones() {
+    this.countrySetupService.getTimezones("per_page=150").subscribe(
+      res => {
+        this.timezones = res.data; 
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   onFullAccessChange({checked, value}) {
@@ -403,6 +416,7 @@ export class CountrySetupCreateComponent implements OnInit {
     let _body = {
       code: body.country_id,
       locale: body.locale,
+      time_zone_id: body.time_zone_id,
       name: body.name,
       language_id: body.language_id,
       phone_code: body.phone_code,
