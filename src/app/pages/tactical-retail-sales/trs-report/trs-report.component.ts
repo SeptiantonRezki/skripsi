@@ -10,6 +10,8 @@ import { TacticalRetailSalesService } from "app/services/tactical-retail-sales.s
 
 import moment from 'moment';
 
+import { LanguagesService } from "app/services/languages/languages.service";
+
 declare global {
   interface Navigator { msSaveOrOpenBlob: any; }
 }
@@ -115,6 +117,7 @@ export class TrsReportComponent implements OnInit {
     private dataService: DataService,
     private TRSService: TacticalRetailSalesService,
     private formBuilder: FormBuilder,
+    private ls: LanguagesService
   ) {
     this.permission = this.roles.getRoles('principal.trsreport');
     console.log("this.permission");
