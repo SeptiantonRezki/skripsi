@@ -46,7 +46,7 @@ export class GenerateReceipt {
                     <center>
                     <div><strong>${this.ls.locale.global.label.delivery_detail.toUpperCase()}</strong></div>
                     <div><strong>${detailOrder.wholesaler_name ? detailOrder.wholesaler_name.toUpperCase() : '-' }</strong></div>
-                    <div>${detailOrder.wholesaler_phone}</div>
+                    <div>${detailOrder.wholesaler_phone ? detailOrder.wholesaler_phone : '-'}</div>
                     <div>${this.ls.locale.global.label.order_number}: ${detailOrder.invoice_number}</div><br/>${this.ls.locale.global.label.order_detail}<br/>
                     <div style="border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 5px;"><div>${detailOrder.name ? detailOrder.name.toUpperCase() : '-'}</div>
                     <div>${detailOrder.address ? detailOrder.address : '-'}</div>
@@ -93,23 +93,10 @@ export class GenerateReceipt {
 
             html += `<hr style="border-top: dashed 1px;" />`;
 
-            for (const obj of detailOrder.summary) {
-                if (obj.title.toLowerCase() !== this.ls.locale.pesan_produk.text69) {
-                    html += `<table width="100%">
-                        <tr>
-                        <td ${obj.title.toLowerCase() === 'total rokok' || obj.title.toLowerCase() === 'total non rokok' ? 'style="display: list-item;list-type-style: circle;margin-left: 15px;"' : null}>
-                        ${obj.title}
-                        </td>
-                        <td style="text-align: right;">${obj.title.toLowerCase() === 'diskon non rokok' ? '-' : ''} ${obj.value}</td>
-                        </tr>
-                    </table>`;
-                }
-
-                if (obj.title.toLowerCase() === this.ls.locale.pesan_produk.text69) {
-                    html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>${obj.title}</strong></td><td style="text-align: right;"><strong>${obj.value}</strong></td></tr></table>`;
-                }
-            }
-
+            html += `<table width="100%"><tr><td><strong>TOTAL</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment}</strong></td></tr></table>`;
+            html += `<table width="100%"><tr><td><strong>VAT</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_vat}</strong></td></tr></table>`;
+            html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>TOTAL PEMESANAN</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_with_vat}</strong></td></tr></table>`; 
+            
             html += `
             <table width="100%">
             <tr>
@@ -269,22 +256,26 @@ export class GenerateReceipt {
     
                 html += `<hr style="border-top: dashed 1px;" />`;
     
-                for (const obj of detailOrder.summary) {
-                    if (obj.title.toLowerCase() !== this.ls.locale.pesan_produk.text69) {
-                        html += `<table width="100%">
-                    <tr>
-                    <td ${obj.title.toLowerCase() === 'total rokok' || obj.title.toLowerCase() === 'total non rokok' ? 'style="display: list-item;list-type-style: circle;margin-left: 15px;"' : null}>
-                    ${obj.title}
-                    </td>
-                    <td style="text-align: right;">${obj.title.toLowerCase() === 'diskon non rokok' ? '-' : ''} ${obj.value}</td>
-                    </tr>
-                </table>`;
-                    }
+                // for (const obj of detailOrder.summary) {
+                //     if (obj.title.toLowerCase() !== this.ls.locale.pesan_produk.text69) {
+                //         html += `<table width="100%">
+                //     <tr>
+                //     <td ${obj.title.toLowerCase() === 'total rokok' || obj.title.toLowerCase() === 'total non rokok' ? 'style="display: list-item;list-type-style: circle;margin-left: 15px;"' : null}>
+                //     ${obj.title}
+                //     </td>
+                //     <td style="text-align: right;">${obj.title.toLowerCase() === 'diskon non rokok' ? '-' : ''} ${obj.value}</td>
+                //     </tr>
+                // </table>`;
+                //     }
     
-                    if (obj.title.toLowerCase() === this.ls.locale.pesan_produk.text69) {
-                        html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>${obj.title}</strong></td><td style="text-align: right;"><strong>${obj.value}</strong></td></tr></table>`;
-                    }
-                }
+                //     if (obj.title.toLowerCase() === this.ls.locale.pesan_produk.text69) {
+                //         html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>${obj.title}</strong></td><td style="text-align: right;"><strong>${obj.value}</strong></td></tr></table>`;
+                //     }
+                // }
+
+                html += `<table width="100%"><tr><td><strong>TOTAL</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment}</strong></td></tr></table>`;
+                html += `<table width="100%"><tr><td><strong>VAT</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_vat}</strong></td></tr></table>`;
+                html += `<hr style="border-top: dashed 1px;" /><table width="100%"><tr><td><strong>TOTAL PEMESANAN</strong></td><td style="text-align: right;"><strong>${detailOrder.total_payment_with_vat}</strong></td></tr></table>`; 
     
                 html += `
         <table width="100%">
