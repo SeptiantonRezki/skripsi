@@ -2321,6 +2321,7 @@
     "language": "Language",
     "country_id": "Country ID",
     "locale": "Locale Code",
+    "time_zone": "Timezone",
     "min_length": "Min Length",
     "max_length": "Max Length",
     "symbol": "Symbol",
