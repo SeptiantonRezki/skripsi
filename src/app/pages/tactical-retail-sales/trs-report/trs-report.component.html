@@ -5,14 +5,14 @@
   <div class="content p-24" *ngIf="!onLoad">
     <div class="table-wrapper">
       <mat-tab-group [selectedIndex]="selectedTab" (selectedTabChange)="onChangeTab($event)">
-        <mat-tab label="Rekonsiliasi">
+        <mat-tab label="{{ls.locale.tactical_retail_sales.report_tab_1}}">
 
           <form [formGroup]="formFilterReport" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
               fxLayoutGap.lt-md="0px">
 
               <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
-                <mat-select placeholder="Program Code" formControlName="programCode">
+                <mat-select placeholder="{{ls.locale.tactical_retail_sales.report_program_code}}" formControlName="programCode">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
@@ -20,7 +20,7 @@
 
               <mat-form-field fxFlex="20%" class="datepicker is-light">
                 <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()"
-                  placeholder="Tanggal" formControlName="date_filter">
+                  placeholder="{{ls.locale.tactical_retail_sales.report_date}}" formControlName="date_filter">
                 <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="formFilterReport.get('date_filter').setValue('')">
                   <mat-icon>close</mat-icon>
@@ -53,27 +53,27 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setTotalSinglePage($event)"
             (sort)="onTotalSingleSort($event)">
 
-            <ngx-datatable-column name="Program Code" prop="program_code" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Date" prop="tgl_journey" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_date}}" prop="tgl_journey" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" prop="brand" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_brand}}" prop="brand" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Volume (pack)" prop="totalqty" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_volume}}" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Revenue (Rp)" prop="totalprice" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_revenue}}" prop="totalprice" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 100px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
@@ -92,27 +92,27 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setTotalMultiplePage($event)"
             (sort)="onTotalMultipleSort($event)">
 
-            <ngx-datatable-column name="Program Code" prop="program_code" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Date" prop="tgl_journey" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_date}}" prop="tgl_journey" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Brand" prop="brand" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_brand}}" prop="brand" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.brand}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Volume (pack)" prop="totalqty" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_volume}}" prop="totalqty" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 70px; text-align:right; ">{{row.totalqty}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Revenue (Rp)" prop="totalprice" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_revenue}}" prop="totalprice" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 100px; text-align:right; ">{{row.totalprice}}</div>
               </ng-template>
@@ -121,8 +121,8 @@
           </ngx-datatable>
         </mat-tab>
 
-        <mat-tab label="Visit">
-          <h2 class="pl-16">Summary Visit</h2>
+        <mat-tab label="{{ls.locale.tactical_retail_sales.report_tab_2}}">
+          <h2 class="pl-16">{{ls.locale.tactical_retail_sales.report_summary_visit}}</h2>
 
           <form [formGroup]="summaryVisitFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
@@ -133,7 +133,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="is-light" fxFlex="15%" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'">
-                <mat-select placeholder="Program Code" formControlName="program_code">
+                <mat-select placeholder="{{ls.locale.tactical_retail_sales.report_program_code}}" formControlName="program_code">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
@@ -145,7 +145,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
-                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="{{ls.locale.tactical_retail_sales.report_start_date}}"
                   formControlName="from" readonly>
                 <button mat-button *ngIf="summaryVisitFilter.get('from').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="summaryVisitFilter.get('from').setValue('')">
@@ -157,7 +157,7 @@
                 <mat-datepicker #from></mat-datepicker>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
-                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="ls.locale.tactical_retail_sales.report_end_date}}"
                   formControlName="to" readonly>
                 <button mat-button *ngIf="summaryVisitFilter.get('to').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="summaryVisitFilter.get('to').setValue('')">
@@ -190,62 +190,62 @@
             (sort)="onSummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'"
             (activate)="summaryVisitNameClick($event)">
 
-            <ngx-datatable-column name="Program Code" prop="program_code">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Date Visit" prop="VisitDate">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_date_visit}}" prop="VisitDate">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.VisitDate}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Full Name" prop="field_force" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_full_name}}" prop="field_force" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Territory Code" prop="territory_code">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_territory_code}}" prop="territory_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.territory_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Visits" prop="Visits" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_visit}}" prop="Visits" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.Visits}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" prop="Trx" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_issued}}" prop="Trx" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 80px; text-align:right; ">{{row.Trx}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_cancel}}" prop="Canceled" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 80px; text-align:right; ">{{row.Canceled}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_early_visit}}" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.start_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_last_visit}}" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.end_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_modus_timespent}}" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 150px; text-align:right; ">{{row.timespent_modus}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_min_timespent}}" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 130px; text-align:right; ">{{row.timespent_min}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_max_timespent}}" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 130px; text-align:right; ">{{row.timespent_max}}</div>
               </ng-template>
@@ -263,7 +263,7 @@
             (sort)="onWeeklySummaryVisitSort($event)" *ngIf="summaryVisitFilter.get('group').value == 'Weekly'"
             (activate)="summaryVisitNameClick($event)">
 
-            <ngx-datatable-column name="Program Code" prop="program_code">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
@@ -273,52 +273,52 @@
                 <span>{{row.kps_week}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Full Name" prop="field_force" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_full_name}}" prop="field_force" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.field_force}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Territory Code" prop="territory_code">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_territory_code}}" prop="territory_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.territory_code}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Visits" prop="Visits" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_visit}}" prop="Visits" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.Visits}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Issued" prop="Trx" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_issued}}" prop="Trx" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 80px; text-align:right; ">{{row.Trx}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="# Invoice Cancel" prop="Canceled" [width]="130">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_cancel}}" prop="Canceled" [width]="130">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 80px; text-align:right; ">{{row.Canceled}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Early Visit" prop="start_visit" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_early_visit}}" prop="start_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.start_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Last Visit" prop="end_visit" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_last_visit}}" prop="end_visit" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 60px; text-align:right; ">{{row.end_visit}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Modus Timespent (minutes)" prop="timespent_modus" [sortable]="false" [width]="200">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_modus_timespent}}" prop="timespent_modus" [sortable]="false" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 150px; text-align:right; ">{{row.timespent_modus}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Min Timespent (minutes)" prop="timespent_min" [sortable]="false" [width]="180">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_min_timespent}}" prop="timespent_min" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 130px; text-align:right; ">{{row.timespent_min}}</div>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Max Timespent (minutes)" prop="timespent_max" [sortable]="false" [width]="180">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_max_timespent}}" prop="timespent_max" [sortable]="false" [width]="180">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 130px; text-align:right; ">{{row.timespent_max}}</div>
               </ng-template>
@@ -330,7 +330,7 @@
           <div *ngIf="visitSelected">
             <hr />
 
-            <h2 class="pl-16">Detail Visit</h2>
+            <h2 class="pl-16">{{ls.locale.tactical_retail_sales.report_detail_visit}}</h2>
             <h2 class="pl-16" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
               {{visitSelected.program_code}} - {{visitSelected.territory_code}} - {{visitSelected.field_force}} - {{visitSelected.VisitDate}}
             </h2>
@@ -345,22 +345,22 @@
               [externalPaging]="true" [externalSorting]="true" (page)="setDetailVisitPage($event)"
               (sort)="onDetailVisitSort($event)">
 
-              <ngx-datatable-column name="Program Code" prop="program_code">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.program_code}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Date Visit" prop="created_at">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_date_visit}}" prop="created_at">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.created_at_date}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Customer Name" prop="outlet_name">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_customer_name}}" prop="outlet_name">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.outlet_name}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Image" [sortable]="false" [width]="200">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_image}}" [sortable]="false" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <a href="{{row.photo}}" target="_blank">
                     <img *ngIf="row.photo" class="row-photo" src="{{row.photo}}" />
@@ -369,49 +369,49 @@
                   </a>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Koordinat Alamat" prop="lat" [width]="200">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_coordinate}}" prop="lat" [width]="200">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.lat}}, {{row.lng}}<br />{{row.address}}<br /><a target="_blank" *ngIf="row.gmap"
                       href="{{row.gmap}}">Open
                       Maps</a></span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Geotag Flag" prop="geotag_flag">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_geotag_flag}}" prop="geotag_flag">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.geotag_flag}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Geotag Reason" prop="geotag_reason">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_geotag_reason}}" prop="geotag_reason">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <span>{{row.geotag_reason}}</span>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="# Invoice Issued" prop="issued" [sortable]="false">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_issued}}" prop="issued" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 100px; text-align:right; ">{{row.issued}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="# Invoice Cancel" prop="cancel" [sortable]="false">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_sum_invoice_cancel}}" prop="cancel" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 100px; text-align:right; ">{{row.cancel}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Start Visit" prop="start_visit">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_start_visit}}" prop="start_visit">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 70px; text-align:right; ">{{row.start_visit}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="End Visit" prop="end_visit">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_end_visit}}" prop="end_visit">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 70px; text-align:right; ">{{row.end_visit}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Timespent (minutes)" prop="timespent">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_timespent}}" prop="timespent">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 100px; text-align:right; ">{{row.timespent}}</div>
                 </ng-template>
               </ngx-datatable-column>
-              <ngx-datatable-column name="Revenue (Rp)" prop="revenue" [width]="200" [sortable]="false">
+              <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_revenue}}" prop="revenue" [width]="200" [sortable]="false">
                 <ng-template ngx-datatable-cell-template let-row="row">
                   <div style="width: 80px; text-align:right; ">{{row.revenue}}</div>
                 </ng-template>
@@ -421,18 +421,18 @@
           </div>
         </mat-tab>
 
-        <mat-tab label="Stock Movement">
+        <mat-tab label="{{ls.locale.tactical_retail_sales.report_tab_3}}">
 
           <form [formGroup]="stockMovementFilter" autoComplete="off">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" class="top-table p-8">
               <mat-form-field class="is-light" fxFlex="15%">
-                <mat-select placeholder="Program Code" formControlName="program_code">
-                  <mat-option value="" selected>All Program Code</mat-option>
+                <mat-select placeholder="{{ls.locale.tactical_retail_sales.report_program_code}}" formControlName="program_code">
+                  <mat-option value="" selected>{{ls.locale.tactical_retail_sales.all}} {{ls.locale.tactical_retail_sales.report_program_code}}</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field class="datepicker is-light">
-                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="Start Date"
+                <input matInput #from [matDatepicker]="from" (focus)="from.open()" placeholder="{{ls.locale.tactical_retail_sales.report_start_date}}"
                   formControlName="from" readonly>
                 <button mat-button *ngIf="stockMovementFilter.get('from').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="stockMovementFilter.get('from').setValue('')">
@@ -444,7 +444,7 @@
                 <mat-datepicker #from></mat-datepicker>
               </mat-form-field>
               <mat-form-field class="datepicker is-light">
-                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="End Date"
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="{{ls.locale.tactical_retail_sales.report_end_date}}"
                   formControlName="to" readonly>
                 <button mat-button *ngIf="stockMovementFilter.get('to').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="stockMovementFilter.get('to').setValue('')">
@@ -475,28 +475,28 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setStockMovementPage($event)"
             (sort)="onStockMovementSort($event)" (activate)="stockMovementClick($event)">
 
-            <ngx-datatable-column name="Executor" prop="field_force">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_executor}}" prop="field_force">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.field_force}} <b *ngIf="row.needreview == 1" style="color: red; font-size: 18px;">!</b>
                 </span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Territory Code" prop="movement_code">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_territory_code}}" prop="movement_code">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.Territory}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Type" prop="tgl_journey">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_type}}" prop="tgl_journey">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.journey_type}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Journey Date" prop="tgl_journey">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_date}}" prop="tgl_journey">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Total Transaksi (Rp)" [sortable]="false">
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_total_transaction}}" [sortable]="false">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <div style="width: 100px; text-align:right; ">{{row.total}}</div>
               </ng-template>
@@ -512,7 +512,7 @@
 
           <div *ngIf="stockMovementSelected">
             <hr />
-            <h2 class="pl-16">Perubahan Stok</h2>
+            <h2 class="pl-16">{{ls.locale.tactical_retail_sales.report_stock_movement}}</h2>
             <h2 class="pl-16">
               {{stockMovementSelected.field_force}} - {{stockMovementSelected.Territory}} - {{stockMovementSelected.tgl_journey}}
             </h2>
@@ -601,7 +601,7 @@
 
             <div *ngIf="stockMovement2Selected">
               <hr />
-              <h2 class="pl-16">Detail Movement</h2>
+              <h2 class="pl-16">{{ls.locale.tactical_retail_sales.report_detail_movement}}</h2>
               <h2 class="pl-16">
                 {{stockMovement2Selected.movement_code}}
               </h2>
