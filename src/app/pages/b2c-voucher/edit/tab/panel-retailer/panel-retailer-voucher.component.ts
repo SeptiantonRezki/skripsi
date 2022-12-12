@@ -59,7 +59,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   disableForm: boolean = false;
 
   isTargetAudience: FormControl = new FormControl(false);
-  filterChecklist: FormControl = new FormControl('');
 
   retailClassification: any[] = [
     { name: 'Semua Tipe', value: 'all' },
@@ -76,7 +75,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
   srcType: any[] = [
     { name: 'Semua Tipe', value: 'all' }
   ];
-  listFilter: any[] = [{ name: 'Semua', value: 'all' }, { name: 'SRC', value: 'src' }, { name: 'RRP', value: 'rrp' }];
   formFilterRetailer: FormGroup;
 
   _data: any = null;
@@ -668,7 +666,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
           Page.renderPagination(this.pagination, res);
           this.totalData = res.total;
           this.rows = res.data;
-          if (this.filterChecklist.value) this.selected = this.rows;
           this.loadingIndicator = false;
           this.isSort = false;
           this.dataService.showLoading(false);
@@ -1139,15 +1136,6 @@ export class PanelRetailerVoucherComponent implements OnInit {
       return null;
       // return this.getAudienceAreaV2(level_desc, item.id);
     });
-  }
-  
-  resetFilter() {
-    this.filterChecklist.setValue('');
-    this.selected = [];
-  }
-
-  onChangeFilter(event) {
-    if (event && this.rows.length > 0) this.selected = [...this.rows];
   }
 
 }
