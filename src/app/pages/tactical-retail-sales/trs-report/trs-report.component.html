@@ -157,7 +157,7 @@
                 <mat-datepicker #from></mat-datepicker>
               </mat-form-field>
               <mat-form-field class="datepicker is-light" *ngIf="summaryVisitFilter.get('group').value != 'Weekly'">
-                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="ls.locale.tactical_retail_sales.report_end_date}}"
+                <input matInput #to [matDatepicker]="to" (focus)="to.open()" [min]="minDate" placeholder="{{ls.locale.tactical_retail_sales.report_end_date}}"
                   formControlName="to" readonly>
                 <button mat-button *ngIf="summaryVisitFilter.get('to').value" matSuffix mat-icon-button
                   aria-label="Clear" (click)="summaryVisitFilter.get('to').setValue('')">
