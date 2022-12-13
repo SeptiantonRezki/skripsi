@@ -868,6 +868,9 @@ export class OrdersRrpDetailComponent implements OnInit {
     }
 
     let bodyCurrency = {
+      total_payment_with_vat: this.convertRp.transform(this.detailOrder.total_payment_with_vat),
+      total_payment_vat: this.convertRp.transform(this.detailOrder.total_payment_vat),
+      total_payment: this.convertRp.transform(this.detailOrder.total_payment_with_vat - this.detailOrder.total_payment_vat),
       total_discount: this.convertRp.transform(this.detailOrder.total_discount),
       point_curs: this.convertRp.transform(this.detailOrder.point_curs),
       products: this.productsNota.map(obj => {
