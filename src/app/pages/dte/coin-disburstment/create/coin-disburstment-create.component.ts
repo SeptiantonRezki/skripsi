@@ -161,9 +161,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       name: ["", Validators.required],
       coin_valuation: [0, [Validators.required, Validators.min(0)]],
       start_date: [null, Validators.required],
-      start_time: ["", Validators.required],
+      start_time: ["00:00", Validators.required],
       end_date: [null, Validators.required],
-      end_time: ["", Validators.required],
+      end_time: ["00:00", Validators.required],
       group_trade_id: ["", Validators.required],
       status: ["draft"],
       priorities: this.formBuilder.array([])
