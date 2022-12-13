@@ -161,7 +161,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       name: ["", Validators.required],
       coin_valuation: [0, [Validators.required, Validators.min(0)]],
       start_date: [null, Validators.required],
+      start_time: ["", Validators.required],
       end_date: [null, Validators.required],
+      end_time: ["", Validators.required],
       group_trade_id: ["", Validators.required],
       status: ["draft"],
       priorities: this.formBuilder.array([])
@@ -259,6 +261,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       this.formCoin.get('coin_valuation').setValue(this.detailCoin.coin_valuation);
       this.formCoin.get('start_date').setValue(this.detailCoin.start_date);
       this.formCoin.get('end_date').setValue(this.detailCoin.end_date);
+      this.formCoin.get('start_time').setValue(this.convertTime(this.detailCoin.start_date));
+      this.formCoin.get('end_time').setValue(this.convertTime(this.detailCoin.end_date));
       this.formCoin.get('status').setValue(this.detailCoin.status);
       this.formCoin.get('group_trade_id').setValue(this.detailCoin.group.map(group => {
         this.priority_list.push({id: group.trade_creator_group_id, name: group.name});
@@ -286,6 +290,14 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     }, err => {
       this.dataService.showLoading(false);
     });
+  }
+
+  convertTime(param: Date) {
+    if (param) {
+      return moment(param).format('HH:mm');
+    }
+
+    return "";
   }
 
   getListAudience() {
@@ -1182,8 +1194,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       let body = {
         name: this.formCoin.get("name").value,
         coin_valuation: this.formCoin.get("coin_valuation").value,
-        start_date: moment(this.formCoin.get("start_date").value).format("YYYY-MM-DD"),
-        end_date: moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD"),
+        start_date: `${moment(this.formCoin.get("start_date").value).format("YYYY-MM-DD")} ${this.formCoin.get("start_time").value}:00`,
+        end_date: `${moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD")} ${this.formCoin.get("end_time").value}:00`,
         opsi_penukaran: opsiPenukaran,
         status: args && args === 'publish' ? 'publish' : (args && args === 'unpublish' ? 'unpublish' : 'draft'),
         targeted_audience: this.isTargetedRetailer.value ? "1" : "0",

@@ -36,7 +36,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div fxLayout="row" class="px-24" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                <div fxLayout="row" class="px-24 mb-16" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="50%" class="is-light form-primary">
                     <input matInput formControlName="start_date" (focus)="startDate.open()" [matDatepicker]="startDate"
                       placeholder="{{'dte.coin_disbursement.text9' | translate}}">
@@ -49,7 +49,21 @@
                       {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} {{'global.messages.mandatory_text' | translate}}
                     </mat-error>
                   </mat-form-field>
-  
+                  
+                  <mat-form-field fxFlex class="is-light form-primary" id="start_time">
+                    <input matInput formControlName="start_time" placeholder="{{
+                        'notification.popup_notifikasi.text8' | translate
+                      }}" [ngxTimepicker]="start_time" [format]="24" readonly />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker #start_time></ngx-material-timepicker>
+                    <mat-error>
+                      {{ ls.locale.notification.popup_notifikasi.text8 }}
+                      {{ "global.messages.mandatory_text" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxLayout="row" class="px-24 mb-16" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                   <mat-form-field fxFlex="50%" class="is-light form-primary">
                     <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
                       placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
@@ -60,6 +74,18 @@
                     <mat-error
                       *ngIf="formCoin.controls['start_date'].hasError('required') && formCoin.controls['start_date'].touched">
                       {{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} {{'global.messages.mandatory_text' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field fxFlex class="is-light form-primary" id="end_time">
+                    <input matInput formControlName="end_time" placeholder="{{
+                        'notification.popup_notifikasi.text10' | translate
+                      }}" [ngxTimepicker]="end_time" [format]="24" readonly />
+                    <mat-icon matSuffix>access_time</mat-icon>
+                    <ngx-material-timepicker #end_time></ngx-material-timepicker>
+                    <mat-error>
+                      {{ ls.locale.notification.popup_notifikasi.text10 }}
+                      {{ "global.messages.mandatory_text" | translate }}
                     </mat-error>
                   </mat-form-field>
                 </div>
