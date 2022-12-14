@@ -51,7 +51,13 @@
                   </mat-form-field>
   
                   <mat-form-field fxFlex="50%" class="is-light form-primary">
-                    <input matInput formControlName="end_date" (focus)="endDate.open()" [matDatepicker]="endDate"
+                    <input
+                      matInput
+                      formControlName="end_date"
+                      (focus)="endDate.open()"
+                      [matDatepicker]="endDate"
+                      [min]="formCoin.get('start_date').value"
+                      [disabled]="!formCoin.get('start_date').value"
                       placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
                     <mat-datepicker-toggle matSuffix [for]="endDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -72,7 +78,7 @@
                       multiple
                       (selectionChange)="groupChosen($event)"
                     >
-                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id">{{ gtp.name }}</mat-option>
+                      <mat-option *ngFor="let gtp of groupTradePrograms" [value]="gtp.id" [disabled]="handleGTP(gtp.id)">{{ gtp.name }}</mat-option>
                     </mat-select>
                     <mat-error
                       *ngIf="formCoin.controls['group_trade_id'].hasError('required') && formCoin.controls['group_trade_id'].touched">
@@ -318,7 +324,9 @@
           </div>
           <div class="confirm pt-24 pb-24 pl-24" fxLayout="row" fxLayoutGap="20px" *ngIf="isEdit">
             <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" fxFlex="20">
-              {{ isEdit && detailCoin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('global.button.save' | translate) }}
+              {{ detailCoin.status === "publish" ? ("dte.pengatur_jadwal_program.text9" | translate) :
+              (detailCoin.status === "draft" ? ("dte.pengatur_jadwal_program.text8" | translate) :
+              ("dte.pengatur_jadwal_program.text10" | translate)) }}
             </button>
           </div>
           <a #downloadLink></a>

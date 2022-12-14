@@ -237,6 +237,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         delete this.pagination['classification'];
       }
     });
+
+    this.formCoin.get("start_date").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
+      if(!res) this.formCoin.get("end_date").setValue(null);
+    });
   }
 
   ngOnDestroy() {
@@ -253,7 +257,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     let priorities = this.formCoin.get('priorities') as FormArray;
 
     this.coinDisburstmentService.getDetail({ coin_id: this.detailCoin.id }).subscribe(res => {
-      this.detailCoin = res.data;
+      this.detailCoin = {...this.detailCoin, ...res.data};
 
       this.formCoin.get('name').setValue(this.detailCoin.name);
       this.formCoin.get('coin_valuation').setValue(this.detailCoin.coin_valuation);
@@ -1384,5 +1388,12 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     });
 
     return value;
+  }
+
+  handleGTP(id){
+    if (this.isEdit && this.detailCoin.retailer_menukarkan_koin)
+      return this.detailCoin.group && this.detailCoin.group.some(group => group.trade_creator_group_id === id);
+    else
+      return false;
   }
 }
