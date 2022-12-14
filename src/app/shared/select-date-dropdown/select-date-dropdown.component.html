@@ -1,7 +1,8 @@
 <mat-form-field class="orders dropdown select-date-dropdown">
   
-  <mat-select [(ngModel)]="selectedDate" (selectionChange)="onSelectionChange($event)" [(value)]="selectedDate"
-    [compareWith]="compareById">
+  <mat-select class="custom-select" [(ngModel)]="selectedDate" (selectionChange)="onSelectionChange($event)" [(value)]="selectedDate"
+    [compareWith]="compareById"
+    [placeholder]="placeholder">
 
     <mat-select-trigger>
       {{ selectedDate?.title }}

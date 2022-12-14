@@ -1,17 +1,24 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Page } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
+import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
+import { PopupImageComponent } from 'app/components/popup-image/popup-image.component';
+import { DataService } from 'app/services/data.service';
+import { StorePhotoVerificationService } from 'app/services/store-photo-verification.service';
 import { OnSelectDateDropdownChange } from 'app/shared/select-date-dropdown/select-date-dropdown.component';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { DialogRejectReasonComponent } from './components/dialog-reject-reason/dialog-reject-reason.component';
 import { HasTable } from './has-table.interface';
 
 @Component({
   selector: 'app-store-photo-verification',
   templateUrl: './store-photo-verification.component.html',
-  styleUrls: ['./store-photo-verification.component.scss']
+  styleUrls: ['./store-photo-verification.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class StorePhotoVerificationComponent implements OnInit {
 
@@ -42,12 +49,18 @@ export class StorePhotoVerificationComponent implements OnInit {
   searchKeywordJenisPhoto: FormControl = new FormControl('');
   loadingJenisPhoto: boolean;
 
+  dialogRefPreviewImage: MatDialogRef<PopupImageComponent>;
+  dialogRefRejectReason: MatDialogRef<DialogRejectReasonComponent>;
+
   // endArea: String;
   // lastLevel: any;
 
   constructor(
     private translate: TranslateService,
+    private storePhotoVerificationService: StorePhotoVerificationService,
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private dataService: DataService,
   ) {
     this.filters = this.formBuilder.group({
       query: '',
@@ -83,19 +96,25 @@ export class StorePhotoVerificationComponent implements OnInit {
 
   fetchRows() {
     this.loadingIndicator = true;
-    this.pagination.total = 10;
-    this.rows = [
-      {
-        store_code: 111222,
-        photo_type: 'Tampak Depan Photo',
-        image_url: '',
-        status: 'Dalam Verifikasi',
-        status_id: 'verification',
-        verification_date: '2022-12-01 10:00:00',
-        admin: 'Mirza'
-      },
-    ]
-    setTimeout(() => { this.loadingIndicator = false; }, 1000)
+
+    // this.pagination.total = 10;
+    const page = 1
+
+    this.pagination.page = page;
+    // this.pagination.per_page = 1;
+    this.offsetPagination = page ? (page - 1) : 0;
+
+    this.storePhotoVerificationService.getListStoreVerification(this.pagination).subscribe(res => {
+      const { data } = res;
+      this.rows = data || [];
+      Page.renderPagination(this.pagination, res);
+
+
+    }, err => {
+
+    }, () => {
+      this.loadingIndicator = false
+    })
   }
 
   fetchJenisPhoto(keyword: string = '') {
@@ -103,10 +122,6 @@ export class StorePhotoVerificationComponent implements OnInit {
 
     setTimeout(() => {
       this.jenisPhotoOptions.next([
-        {
-          id: '',
-          name: 'Tampak Depan Toko'
-        },
         {
           id: 2,
           name: 'Tampak Dalam Toko'
@@ -123,8 +138,33 @@ export class StorePhotoVerificationComponent implements OnInit {
   changePerPage(event: any) {
     throw new Error('Method not implemented.');
   }
-  setPage(event: any) {
-    throw new Error('Method not implemented.');
+  setPage(pageInfo) {
+    // this.dataService.showLoading(true);
+    this.offsetPagination = pageInfo.offset;
+    // this.loadingIndicator = true;
+
+    if (this.pagination['search']) {
+      this.pagination.page = pageInfo.offset + 1;
+    } else {
+      this.dataService.setToStorage('page', pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage('page');
+    }
+    // this.isSetPage = true;
+    // if (this.isSetPage === true) {
+      this.storePhotoVerificationService.getListStoreVerification(this.pagination).subscribe( res => {
+        Page.renderPagination(this.pagination, res);
+        this.rows = res.data;
+        // await this.getAndCreateRoomById(res);
+        // this.loadingIndicator = false;
+        // this.dataService.showLoading(false);
+      }, err => {
+        // this.dataService.showLoading(false);
+      });
+    // } else {
+    //   this.isSetPage = false;
+    //   this.dataService.showLoading(false);
+    //   this.loadingIndicator = false;
+    // }
   }
   onSort(event: any) {
     throw new Error('Method not implemented.');
@@ -139,6 +179,54 @@ export class StorePhotoVerificationComponent implements OnInit {
   }
   onJenisFotoFilterChange(event) {
     console.log({ event });
+  }
+
+  onClickVerify(status: string) {
+    console.log({ status });
+  }
+
+  previewImage(url: string) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    // dialogConfig.panelClass = 'popup-notif';
+    dialogConfig.data = { url }
+    this.dialogRefPreviewImage = this.dialog.open(PopupImageComponent, dialogConfig);
+  }
+
+  onClickRejectReason() {
+    const config = new MatDialogConfig();
+
+    const reasons = [
+      {
+        id: 1,
+        name: 'Foto Tidak Sesuai Ketentuan Yang Berlaku'
+      },
+      {
+        id: 2,
+        name: 'Foto Buram'
+      },
+      {
+        id: 3,
+        name: 'Foto Terlalu Gelap'
+      },
+    ]
+
+    config.disableClose = false;
+    config.autoFocus = false;
+    config.data = { reasons };
+
+    this.dialogRefRejectReason = this.dialog.open(DialogRejectReasonComponent, config);
+    this.dialogRefRejectReason.afterClosed().subscribe(result => {
+      console.log({ result });
+    })
+  }
+  onDropOne(e) {
+    console.log('drop', { e });
+  }
+  onDragOne(e) {
+    console.log('drag', { e });
   }
 
 }

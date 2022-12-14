@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { DateAdapter, MatDatepicker, MatInput, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -53,8 +53,8 @@ export interface OnSelectDateDropdownChange {
 export class SelectDateDropdownComponent implements OnInit {
 
   selectedDate: SelectDateItem = {
-    id: 'all',
-    title: 'Semua Tanggal',
+    id: null,
+    title: '',
     range: 0 // All days
   };
 
@@ -71,6 +71,7 @@ export class SelectDateDropdownComponent implements OnInit {
   _maxDate = moment();
 
   @Output() onChange: EventEmitter<OnSelectDateDropdownChange> = new EventEmitter();
+  @Input() placeholder: string;
 
   @ViewChild('startInput') startInput: MatDatepicker<Date>;
 

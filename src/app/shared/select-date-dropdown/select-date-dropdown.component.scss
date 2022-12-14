@@ -2,7 +2,7 @@
     padding-bottom: 0px !important;
     &.select-date-dropdown .mat-form-field-infix {
         // color: transparent !important;
-        border-radius: 4px !important;
+        border-radius: 8px !important;
     }
 
 }
@@ -20,4 +20,11 @@
 }
 ::ng-deep .mat-select-content{
     min-width: 300px;
+}
+::ng-deep .custom-select .mat-select-placeholder {
+    color: rgba(black, 0.87) !important;
+    font-size: .8em;
+}
+::ng-deep .select-date-dropdown .mat-form-field-label {
+    visibility: hidden;
 }

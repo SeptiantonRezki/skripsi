@@ -1,0 +1,30 @@
+<div fxLayout="row wrap" fxLayoutGap="8px" class="mb-16">
+  <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
+    <span>Total Retailer Upload</span>
+    <br />
+    <div class="shimmerBG title-line" *ngIf="loading;else _uploading"></div>
+    <ng-template #_uploading>
+      <span class="count">{{uploading | rupiahFormaterWithoutRp}}</span>
+    </ng-template>
+  </mat-card>
+
+  <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
+
+    <span>Total Foto Terupload</span>
+    <br />
+    <div class="shimmerBG title-line" *ngIf="loading;else _uploaded"></div>
+    <ng-template #_uploaded>
+      <span class="count">{{uploaded | rupiahFormaterWithoutRp}}</span>
+    </ng-template>
+
+  </mat-card>
+
+  <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
+    <span>Total Foto Terverifikasi</span>
+    <br />
+    <div class="shimmerBG title-line" *ngIf="loading;else _verified"></div>
+    <ng-template #_verified>
+      <span class="count">{{verified | rupiahFormaterWithoutRp}}</span>
+    </ng-template>
+  </mat-card>
+</div>

@@ -35,6 +35,8 @@ import {
   MatSlideToggleModule,
   MatRadioModule,
   MatMenuModule,
+  MatCardModule,
+  MatTableModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -152,7 +154,12 @@ import { CancelConfirmationDialogComponent } from './retailer/orders-rrp/detail/
 import { NgxMaterialTimepicker24HoursFaceComponent } from "ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component";
 import { PreviewImagePaymentComponent } from './retailer/orders-rrp/detail/preview-image-payment/preview-image-payment.component';
 import { StorePhotoVerificationComponent } from './retailer/store-photo-verification/store-photo-verification.component';
-
+import { PopupImageComponent } from "app/components/popup-image/popup-image.component";
+import { DialogRejectReasonComponent } from './retailer/store-photo-verification/components/dialog-reject-reason/dialog-reject-reason.component';
+import { WidgetStorePhotoCounterComponent } from './retailer/store-photo-verification/components/widget-store-photo-counter/widget-store-photo-counter.component';
+import { StorePhotoTypesComponent } from './retailer/store-photo-types/store-photo-types.component';
+import { DndModule } from "ngx-drag-drop";
+import { NgxDnDModule } from '@swimlane/ngx-dnd'
 export const MY_FORMATS = {
   parse: {
     dateInput: "LL"
@@ -198,6 +205,10 @@ export const MY_FORMATS = {
     MatRadioModule,
     MatMenuModule,
     NgxMaterialTimepickerModule,
+    MatCardModule,
+    DndModule,
+    MatTableModule,
+    NgxDnDModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -337,6 +348,10 @@ export const MY_FORMATS = {
     CancelConfirmationDialogComponent,
     PreviewImagePaymentComponent,
     StorePhotoVerificationComponent,
+    PopupImageComponent,
+    DialogRejectReasonComponent,
+    WidgetStorePhotoCounterComponent,
+    StorePhotoTypesComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -357,6 +372,8 @@ export const MY_FORMATS = {
     DialogProcessComponentIB,
     DialogProcessSaveIBComponent,
     PreviewImagePaymentComponent
+    PopupImageComponent,
+    DialogRejectReasonComponent,
   ],
   providers: [
     // PendingChangesGuard,

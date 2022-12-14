@@ -141,6 +141,7 @@ import { Observable } from 'rxjs';
 import { GeneralBackendService } from './services/general-backend.service';
 import { KeywordService } from './services/content-management/keyword.service';
 import { NotificationConfigurationService } from './services/settings/notification-configuration.service';
+import { StorePhotoVerificationService } from './services/store-photo-verification.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -333,6 +334,7 @@ class CustomLoader implements TranslateLoader {
       multi: true,
       deps: [LanguagesService]
     },
+    StorePhotoVerificationService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [

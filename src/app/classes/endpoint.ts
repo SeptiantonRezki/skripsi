@@ -1264,6 +1264,10 @@ export class Endpoint {
         get_step: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-status-orders`,
         update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
       },
+      store_photo_verification: {
+        calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/calculation-result`,
+        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-retailer-uploaded`
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

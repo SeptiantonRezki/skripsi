@@ -5,6 +5,8 @@
 .textbox-search {
     border: 1px solid #ececec;
     padding: 8px 12px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
 .icon-search {
@@ -14,6 +16,8 @@
     top: -0.5px;
     position: relative;
     text-align: center;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 .mat-icon-search {
@@ -21,8 +25,69 @@
     top: 8px;
 }
 
-::ng-deep mat-form-field.orders.dropdown {
+mat-form-field.orders.dropdown {
     &.mat-form-field-infix {
-        border-radius: 4px !important;
+        border-radius: 8px !important;
     }
 }
+
+.custom-select .mat-select-placeholder {
+    color: rgba(black, 0.70) !important;
+    font-size: .8em;
+}
+
+.custom-field .mat-form-field-label {
+    visibility: hidden;
+}
+mat-form-field.custom-field {
+    min-width: 150px !important;
+    max-width: 150px !important;
+    .mat-form-field-infix {
+        border-radius: 8px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+}
+.spv-icon {
+    
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+
+    &.approve {
+        background-color: #2ecc71;
+    }
+    &.reject {
+        background-color: #e74c3c;
+    }
+    > .mat-button-wrapper {
+        > .mat-icon {
+            width: 18px !important;
+            height: 18px !important;
+            font-size: 18px !important;
+            color: #ecf0f1;
+        }
+    }
+}
+.clickable {
+    cursor: pointer;
+}
+.verified {
+    color: #2ecc71;
+}
+.rejected {
+    color: #e74c3c;
+}
+
+ngx-datatable.material.rounded {
+    box-shadow: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+// ::ng-deep mat-form-field.custom-field {
+//     min-width: 80px !important;
+//     &.mat-form-field-infinix {
+//         min-width: 80px !important;
+//     }
+// }

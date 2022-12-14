@@ -2,26 +2,33 @@
   <!-- HEADER -->
   <page-content-header contentTitle="{{ 'store_photo_verification.index' | translate}}">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/user-management','retailer','create']">
-        <mat-icon>add</mat-icon>{{ 'global.button.add' | translate}}
+      <button id="edit-jenis-foto" mat-raised-button type="button" color="primary"
+        [routerLink]="['/user-management','retailer','store-photo-types']">
+        Edit Jenis Foto
+      </button>
+      <button id="edit-jenis-foto" mat-raised-button type="button" color="primary"
+        (click)="onClickRejectReason()">
+        Edit Alasan Penolakan
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
   </page-content-header>
   <!-- / HEADER -->
 
-  <div class="content p-24" *ngIf="!onLoad">
-    <div class="p-24 rounded mat-elevation-z4">
+  <div class="content p-24">
+    
+    <widget-store-photo-counter></widget-store-photo-counter>
+    
+    <div class="rounded mat-elevation-z4" style="background-color: white;">
 
       <!-- FILTERS -->
-      <form [formGroup]="filters" autoComplete="off">
+      <form [formGroup]="filters" autoComplete="off" class="p-24">
 
-        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px"
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="8px" fxLayoutGap.lt-md="0px"
           class="top-table pb-24">
 
-          <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-            <input class="textbox-search" matInput placeholder="{{ 'global.label.search' | translate }}"
+          <div fxFlex="30" class="search-field rounded" fxLayout="row" fxLayoutAlign="center center">
+            <input class="textbox-search" matInput placeholder="Cari Kode Toko/Jenis Foto/Status/Admin"
               (keyup)="keyUp.next($event.target.value)">
             <div class="icon-search">
               <mat-icon class="mat-icon-search">search</mat-icon>
@@ -32,13 +39,35 @@
             <input matInput placeholder="Cari Kode Toko/Jenis Foto/Status/Admin">
             <mat-icon matSuffix class="my-icon">sentiment_very_satisfied</mat-icon>
           </mat-form-field> -->
+          <select-date-dropdown placeholder="Filter Tanggal Verifikasi" fxLayoutAlign="center center"
+            (onChange)="onDateFilterChange($event)">
+          </select-date-dropdown>
+          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-          <select-date-dropdown fxLayoutAlign="center center" (onChange)="onDateFilterChange($event)"></select-date-dropdown>
-          <mat-form-field fxLayoutAlign="center center" class="orders dropdown">
+            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Jenis Foto">
+              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
+                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+              </ngx-mat-select-search>
+              <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select formControlName="photo_type" [multiple]="false">
-              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto"
-                placeholderLabel="Cari Jenis Foto"
+            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Status">
+              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
+                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+              </ngx-mat-select-search>
+              <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
+
+            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Admin">
+              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
                 noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
               <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
@@ -52,10 +81,11 @@
       </form>
       <!--/ FILTERS -->
 
-      <ngx-datatable [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48"
-        [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination"
+      <ngx-datatable class="material rounded" [rows]="rows" #table [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48"
+        [footerHeight]="56" [rowHeight]="'auto'" [footerHeight]="56" [scrollbarH]="true" [offset]="offsetPagination"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
-        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)"
+        >
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)">
@@ -63,43 +93,60 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Kode Toko" prop="store_code">
+        <ngx-datatable-column name="Kode Toko" prop="business_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.store_code}}
+            {{row.business_code}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jenis Foto" prop="photo_type">
+        <ngx-datatable-column name="Jenis Foto" prop="jenis_foto">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.photo_type}}
+            {{row.jenis_foto}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Foto Terupload" prop="image_url">
+        <ngx-datatable-column [width]="100" name="Foto Terupload" prop="url_path_photo">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.image_url}}
+            <div class="w-100 h-80 clickable product-image">
+              <img (click)="previewImage(row.url_path_photo)" [src]="row.url_path_photo">
+              <!-- <span class="name text-truncate">{{detailOrder.name}}</span> -->
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status">
+        <ngx-datatable-column name="Status" prop="status_verifikasi">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.status}}
+            <span
+              [ngClass]="{
+                'verified': row.status_verifikasi === 'Sukses Verifikasi',
+                'rejected': row.status_verifikasi === 'Gagal Verifikasi',
+                'on-verif': row.status_verifikasi === 'Dalam Verifikasi'
+              }">
+              {{row.status_verifikasi}}
+            </span>
+            <br />
+            <span *ngIf="row.status_verifikasi === 'Gagal Verifikasi'">
+              {{row.reject_reason || '-'}}
+            </span>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Action" prop="action">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div fxFlex="row wrap">
-              <button mat-mini-fab aria-label="Example icon button with a home icon">
-                <mat-icon>home</mat-icon>
+            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="row.status_verifikasi === 'Dalam Verifikasi'">
+              <button (click)="onClickVerify('approve')" class="spv-icon approve" mat-icon-button>
+                <mat-icon>check</mat-icon>
+              </button>
+              <button (click)="onClickVerify('reject')" class="spv-icon reject" mat-icon-button>
+                <mat-icon>close</mat-icon>
               </button>
             </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Waktu Verifikasi" prop="verification_date">
+        <ngx-datatable-column name="Waktu Verifikasi" prop="waktu_verifikasi">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.verification_date}}
+            {{row.waktu_verifikasi}}
           </ng-template>
         </ngx-datatable-column>
 
@@ -122,10 +169,16 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'"
-              [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
-              [size]="pageSize" [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
-              (change)="table.onFooterPage($event)">
+            <datatable-pager
+                [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'"
+                [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'"
+                [page]="curPage"
+                [size]="pageSize"
+                [count]="rowCount"
+                [hidden]="!((rowCount / pageSize) > 1)"
+                (change)="table.onFooterPage($event)">
             </datatable-pager>
           </ng-template>
         </ngx-datatable-footer>
