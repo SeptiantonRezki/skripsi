@@ -73,6 +73,7 @@ import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wh
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
 import { FlushCoinComponent } from "./flush-coin/flush-coin.component";
 import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
+import { IconStwMitraComponent } from "./spin-the-wheel/icon-stw-mitra/icon-stw-mitra.component";
 
 const routes: Routes = [
   {
@@ -930,6 +931,14 @@ const routes: Routes = [
     component: SpinTheWheelEditComponent,
     data: {
       breadcrumbs: brConfig.dte.spinTheWheel.detail
+    },
+    //canActivate: [PageGuard]
+  },
+  {
+    path: "spin-the-wheel/icon-stw-mitra",
+    component: IconStwMitraComponent,
+    data: {
+      breadcrumbs: brConfig.dte.spinTheWheel.edit
     },
     //canActivate: [PageGuard]
   },
