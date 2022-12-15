@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
@@ -8,12 +8,11 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-icon-stw-mitra',
-  templateUrl: './icon-stw-mitra.component.html',
-  styleUrls: ['./icon-stw-mitra.component.scss']
+  selector: "app-icon-stw-mitra",
+  templateUrl: "./icon-stw-mitra.component.html",
+  styleUrls: ["./icon-stw-mitra.component.scss"],
 })
 export class IconStwMitraComponent implements OnInit {
-
   isDetail: boolean;
   onLoad: boolean;
   formIcon: FormGroup;
@@ -33,6 +32,8 @@ export class IconStwMitraComponent implements OnInit {
     "minggu",
   ];
 
+  validationMsg: { [key: string]: Array<{ type: string; message: string }> };
+
   constructor(
     private ls: LanguagesService,
     private fb: FormBuilder,
@@ -46,18 +47,27 @@ export class IconStwMitraComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.validationMsg = {
+      started_at: [{ type: "required", message: "Tanggal Mulai Wajib Diisi!" }],
+      ended_at: [
+        { type: "required", message: "Tanggal Berakhir Wajib Diisi!" },
+      ],
+      at: [{ type: "required", message: "Set Waktu Wajib Diisi!" }],
+      day: [{ type: "required", message: "Interval Program Wajib Diisi!" }],
+    };
+
     this.formIcon = this.fb.group({
-      title: [''],
-      content: [''],
-      started_at: [''],
-      ended_at: [''],
-      at: [''],
-      day: ['']
+      title: [""],
+      content: [""],
+      started_at: ["", Validators.required],
+      ended_at: ["", Validators.required],
+      at: ["", Validators.required],
+      day: ["", Validators.required],
     });
 
     this.minDate = moment();
 
-    this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
+    this.detailFormSpin = this.dataService.getFromStorage("spin_the_wheel");
     this.getConfig();
   }
 
@@ -69,17 +79,27 @@ export class IconStwMitraComponent implements OnInit {
         const { data, status } = res;
         if (status === "success") {
           // this.imageConverted = data.icon;
-          this.formIcon.get('title').setValue(data.title);
-          this.formIcon.get('content').setValue(data.content);
-          this.formIcon.get('started_at').setValue(data.started_at);
-          this.formIcon.get('ended_at').setValue(data.ended_at);
-          this.formIcon.get('at').setValue(data.at);
-          this.formIcon.get('day').setValue(data.day);
+          this.formIcon.get("title").setValue(data.title);
+          this.formIcon.get("content").setValue(data.content);
+          this.formIcon.get("started_at").setValue(data.started_at);
+          this.formIcon.get("ended_at").setValue(data.ended_at);
+          this.formIcon.get("at").setValue(data.at);
+          this.formIcon.get("day").setValue(data.day);
         }
       },
       (err) => {
         this.dataService.showLoading(false);
       }
+    );
+  }
+
+  checkValidation(
+    namespace: string,
+    validation: { type: string; message: string }
+  ): boolean {
+    return (
+      this.formIcon.get(namespace).hasError(validation.type) &&
+      this.formIcon.get(namespace).touched
     );
   }
 
@@ -94,7 +114,7 @@ export class IconStwMitraComponent implements OnInit {
 
     reader.onloadend = (e) => {
       this.imageConverted = reader.result;
-    }
+    };
   }
 
   isChecked(option: any, value: any) {
@@ -102,11 +122,14 @@ export class IconStwMitraComponent implements OnInit {
   }
 
   submitPublishUnpublish() {
-    const id = this.dataService.getFromStorage('spin_the_wheel').id;
+    const id = this.dataService.getFromStorage("spin_the_wheel").id;
     // this.dataService.showLoading(true);
     let body = {
-      status: (this.dataService.getFromStorage('spin_the_wheel').status === 'unpublish')? 'publish' : 'unpublish'
-    }
+      status:
+        this.dataService.getFromStorage("spin_the_wheel").status === "unpublish"
+          ? "publish"
+          : "unpublish",
+    };
     // this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
 
     // this.dataService.showLoading(false);
@@ -121,37 +144,41 @@ export class IconStwMitraComponent implements OnInit {
     const payload = {
       icon: this.imageConverted,
       ...this.formIcon.getRawValue(),
-      started_at: moment(this.formIcon.get('started_at').value).format('YYYY-MM-DD HH:mm:ss'),
-      ended_at: moment(this.formIcon.get('ended_at').value).format('YYYY-MM-DD HH:mm:ss'),
-    }
+      started_at: moment(this.formIcon.get("started_at").value).format(
+        "YYYY-MM-DD HH:mm:ss"
+      ),
+      ended_at: moment(this.formIcon.get("ended_at").value).format(
+        "YYYY-MM-DD HH:mm:ss"
+      ),
+    };
 
     console.log("saved", payload);
     this.dataService.showLoading(false);
     // if (
     //   this.formPreview.valid
     //   ) {
-      // let body = new FormData();
-      // body.append('image', null);
-      // body.append('header', this.formIcon.get('preview_header').value);
-      // body.append('image', '-');
-      // let body;
+    // let body = new FormData();
+    // body.append('image', null);
+    // body.append('header', this.formIcon.get('preview_header').value);
+    // body.append('image', '-');
+    // let body;
 
-      // body = {
-      //   // icon: '-',
-      //   header: this.formPreview.get('preview_header').value,
-      //   image: '-'
-      // };
-      // if (this.files) body.append('image', this.files)
-      // if (this.files) body.append('icon', this.files)
+    // body = {
+    //   // icon: '-',
+    //   header: this.formPreview.get('preview_header').value,
+    //   image: '-'
+    // };
+    // if (this.files) body.append('image', this.files)
+    // if (this.files) body.append('icon', this.files)
 
-      // this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
-      //   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      //   this.dataService.showLoading(false);
-      //   this.setStorageDetail();
-      //   this.router.navigate(['dte', 'spin-the-wheel'])
-      // }, err => {
-      //   this.dataService.showLoading(false);
-      // });
+    // this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
+    //   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
+    //   this.dataService.showLoading(false);
+    //   this.setStorageDetail();
+    //   this.router.navigate(['dte', 'spin-the-wheel'])
+    // }, err => {
+    //   this.dataService.showLoading(false);
+    // });
     // } else {
     //   commonFormValidator.validateAllFields(this.formSpin);
     //   // commonFormValidator.validateAllFields(this.formGeo);

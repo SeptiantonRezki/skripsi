@@ -129,9 +129,10 @@
               <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="started_at"
                   [min]="minDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" readonly>
-                <mat-error
-                  *ngIf="formIcon.controls['started_at'].hasError('required') && formIcon.controls['started_at'].touched">
-                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
+                <mat-error *ngFor="let validation of validationMsg.started_at">
+                  <mat-error *ngIf="checkValidation('started_at', validation)">
+                    {{validation.message}}
+                  </mat-error>
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="dari">
                   <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
@@ -140,10 +141,11 @@
               </mat-form-field>
               <mat-form-field fxFlex="50" class="is-light form-primary">
                 <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="ended_at"
-                  [min]="minDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" readonly>
-                <mat-error
-                  *ngIf="formIcon.controls['ended_at'].hasError('required') && formIcon.controls['ended_at'].touched">
-                  {{ls.locale.manajemen_barang_sku.manajemen_koin.text15}} harus diisi
+                  [min]="formIcon.get('started_at').value || minDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" readonly>
+                <mat-error *ngFor="let validation of validationMsg.ended_at">
+                  <mat-error *ngIf="checkValidation('ended_at', validation)">
+                    {{validation.message}}
+                  </mat-error>
                 </mat-error>
                 <mat-datepicker-toggle matSuffix [for]="sampai">
                   <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
@@ -155,18 +157,26 @@
               <mat-form-field fxFlex="50" class="is-light form-primary" id="start_time">
                 <input matInput formControlName="at" placeholder="Set Waktu"
                   [ngxTimepicker]="fullTime1" [format]="24" readonly/>
+                <mat-error *ngFor="let validation of validationMsg.at">
+                  <mat-error *ngIf="checkValidation('at', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
               </mat-form-field>
               <mat-form-field fxFlex="50" class="is-light form-primary">
-                <mat-select placeholder="Interval pengiriman" formControlName="day"
+                <mat-select placeholder="Interval Program" formControlName="day"
                   [compareWith]="isChecked" [multiple]="true" >
                   <mat-option *ngFor="let i of dayList" [value]="i">{{
                     i[0].toUpperCase() + i.substring(1)
                   }}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="formIcon.controls.day.hasError('required') && formIcon.controls.day.touched">
-                  Interval pengiriman wajib dipilih</mat-error>
+                <mat-error *ngFor="let validation of validationMsg.day">
+                  <mat-error *ngIf="checkValidation('day', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
               </mat-form-field>
             </div>
           </div>
