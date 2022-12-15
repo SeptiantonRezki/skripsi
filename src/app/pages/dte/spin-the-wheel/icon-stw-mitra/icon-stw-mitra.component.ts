@@ -19,7 +19,7 @@ export class IconStwMitraComponent implements OnInit {
   validComboDrag: boolean;
   files: File;
   imageConverted: any;
-  detailFormSpin: any;
+  imageRaw: any;
   minDate: any;
 
   dayList: string[] = [
@@ -67,7 +67,6 @@ export class IconStwMitraComponent implements OnInit {
 
     this.minDate = moment();
 
-    this.detailFormSpin = this.dataService.getFromStorage("spin_the_wheel");
     this.getConfig();
   }
 
@@ -104,6 +103,7 @@ export class IconStwMitraComponent implements OnInit {
   }
 
   changeImage(event) {
+    this.imageRaw = event;
     this.readThis(event);
   }
 
@@ -141,8 +141,9 @@ export class IconStwMitraComponent implements OnInit {
 
   submitPreview() {
     this.dataService.showLoading(true);
-    const payload = {
-      icon: this.imageConverted,
+    const fd = new FormData();
+    const data = {
+      icon: this.imageRaw,
       ...this.formIcon.getRawValue(),
       started_at: moment(this.formIcon.get("started_at").value).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -152,39 +153,29 @@ export class IconStwMitraComponent implements OnInit {
       ),
     };
 
-    console.log("saved", payload);
-    this.dataService.showLoading(false);
-    // if (
-    //   this.formPreview.valid
-    //   ) {
-    // let body = new FormData();
-    // body.append('image', null);
-    // body.append('header', this.formIcon.get('preview_header').value);
-    // body.append('image', '-');
-    // let body;
+    const { day, ...payload } = data;
 
-    // body = {
-    //   // icon: '-',
-    //   header: this.formPreview.get('preview_header').value,
-    //   image: '-'
-    // };
-    // if (this.files) body.append('image', this.files)
-    // if (this.files) body.append('icon', this.files)
+    Object.keys(payload).forEach(key => {
+      fd.append(key, payload[key]);
+    });
 
-    // this.spinTheWheelService.put_preview({ id: id },body).subscribe(res => {
-    //   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-    //   this.dataService.showLoading(false);
-    //   this.setStorageDetail();
-    //   this.router.navigate(['dte', 'spin-the-wheel'])
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // });
-    // } else {
-    //   commonFormValidator.validateAllFields(this.formSpin);
-    //   // commonFormValidator.validateAllFields(this.formGeo);
+    day.forEach(i => {
+      fd.append('day[]', i);
+    });
 
-    //   this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
-    // }
+    this.stwService.manageSpinMitra(fd).subscribe(
+      (res) => {
+        this.dataService.showLoading(false);
+        const{ status } = res;
+        if(status === 'success') {
+          this.dialogService.openSnackBar({message: "Data Berhasil Disimpan"});
+          this.router.navigate([ "dte", "spin-the-wheel" ]);
+        }
+      },
+      (err) => {
+        this.dataService.showLoading(false);
+      }
+    );
   }
 }
 

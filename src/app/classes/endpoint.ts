@@ -1197,6 +1197,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
         save_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
         get_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
+        get_config_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/config-spin-mitra`,
+        manage_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/manage-config-spin-mitra`,
       },
       tactical_retail_sales: {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
@@ -1222,7 +1224,7 @@ export class Endpoint {
         summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/summary-visit`,
         detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/detail-visit`,
         stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
-        
+
         export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-total-per-brand`,
         export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-visit`,
         export_stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-stock-movement`,
