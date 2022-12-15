@@ -95,8 +95,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   detailCoin: any;
   pageName = this.translate.instant('dte.coin_disbursement.text1');
   titleParam = {entity: this.pageName}
-
   priority_list: any[] = [];
+  importType = "XLSX";
   
   constructor(
     private dataService: DataService,
@@ -1293,7 +1293,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.panelClass = "scrumboard-card-dialog";
-    dialogConfig.data = { password: "P@ssw0rd" };
+    dialogConfig.data = {
+      typeFile: this.importType,
+      extentionFile: ".xlsx"
+    };
 
     this.dialogRef = this.dialog.open(
       ImportAudienceDialogComponent,
@@ -1324,7 +1327,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.audienceService.exportRequestExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       this.exportTemplate = false;
