@@ -77,7 +77,7 @@ export class IconStwMitraComponent implements OnInit {
         this.dataService.showLoading(false);
         const { data, status } = res;
         if (status === "success") {
-          // this.imageConverted = data.icon;
+          this.imageConverted = data.icon;
           this.formIcon.get("title").setValue(data.title);
           this.formIcon.get("content").setValue(data.content);
           this.formIcon.get("started_at").setValue(data.started_at);
