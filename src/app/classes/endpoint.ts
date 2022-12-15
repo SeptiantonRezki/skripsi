@@ -358,6 +358,7 @@ export class Endpoint {
         show_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/show-import`,
         // export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/dte/export-audience`,
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audiences/export`,
+        request_export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audience/request-export`,
         export_perso: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audiences/personalizes/export`,
         request_preview_import: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audiences/import`,
         request_preview_import_perso: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/dte/audiences/personalizes/import`,
