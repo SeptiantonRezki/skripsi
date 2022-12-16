@@ -122,6 +122,14 @@
                   </mat-form-field> -->
                 </div>
 
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="text" placeholder="{{'katalog_src.produk.text16' | translate}}" formControlName="product_desc">
+                  <mat-error
+                    *ngIf="formProductGroup.controls['product_desc'].hasError('required') && formProductGroup.controls['product_desc'].touched">
+                    {{'katalog_src.produk.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
+                  </mat-error>
+                </mat-form-field>
+
                 <div fxLayout="row wrap" class="pt-16" style="gap: 24px 40px;">
                   <div fxLayout="column">
                     <strong>{{'manajemen_barang_sku.produk.text16' | translate}}</strong>
