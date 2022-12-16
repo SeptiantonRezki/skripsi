@@ -911,7 +911,7 @@ export class RetailertsmComponent implements OnInit {
     try {
       const response = await this.coinService.export({ area, from : parameter }).toPromise();
       // console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `TemplateManajemenCoin_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `TemplateManajemenCoin_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);

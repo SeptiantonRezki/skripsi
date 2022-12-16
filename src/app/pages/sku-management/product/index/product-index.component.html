@@ -16,7 +16,8 @@
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
         fxLayoutAlign="end center" class="p-16 export">
         <button (click)="import()" mat-raised-button type="button" class="is-danger">
-          <mat-icon>arrow_downward</mat-icon> {{'global.label.import_entity' | translate:fileTypeParam }}
+          <mat-icon>arrow_downward</mat-icon>
+          {{ ls.locale.global.button.importXLSX }}
         </button>
         <!-- <a #downloadLink></a>
         <button (click)="export()" mat-raised-button type="button" class="is-danger">
@@ -24,7 +25,8 @@
         </button> -->
         <a #downloadLink></a>
         <button (click)="exportn()" mat-raised-button type="button" class="is-danger">
-          <mat-icon>arrow_upward</mat-icon> {{'global.label.export_entity' | translate:fileTypeParam }}
+          <mat-icon>arrow_upward</mat-icon>
+          {{ ls.locale.global.button.exportXLSX }}
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">

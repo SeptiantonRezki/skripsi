@@ -75,9 +75,9 @@ export class WholesalerService extends BaseService {
   }
 
   exportWholesalerNew(queryParams?, body?): Observable<any> {
-    const url = this.getUrl(this.namespace, "exportWholesaller", body);
+    const url = this.getUrl(this.namespace, "exportWhosaller", body);
     // return this.getBlobApi(url, queryParams);
-    return this.postBlobApi(url, body);
+    return this.getApi(url, body);
   }
   
   importExcel(body?): Observable<any> {
