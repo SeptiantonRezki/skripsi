@@ -8,11 +8,11 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 import moment from 'moment';
 
 @Component({
-  selector: "app-icon-stw-mitra",
-  templateUrl: "./icon-stw-mitra.component.html",
-  styleUrls: ["./icon-stw-mitra.component.scss"],
+  selector: "app-setup-stw-mitra",
+  templateUrl: "./setup-stw-mitra.component.html",
+  styleUrls: ["./setup-stw-mitra.component.scss"],
 })
-export class IconStwMitraComponent implements OnInit {
+export class SetupStwMitraComponent implements OnInit {
   isDetail: boolean;
   onLoad: boolean;
   formIcon: FormGroup;
