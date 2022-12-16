@@ -121,29 +121,10 @@ export class SetupStwMitraComponent implements OnInit {
     return option && value && option.toString() === value.toString();
   }
 
-  submitPublishUnpublish() {
-    const id = this.dataService.getFromStorage("spin_the_wheel").id;
-    // this.dataService.showLoading(true);
-    let body = {
-      status:
-        this.dataService.getFromStorage("spin_the_wheel").status === "unpublish"
-          ? "publish"
-          : "unpublish",
-    };
-    // this.spinTheWheelService.publishUnpublish({id: id}, body).subscribe(({data}) => {
-
-    // this.dataService.showLoading(false);
-    // this.router.navigate(['dte', 'spin-the-wheel'])
-    // }, err => {
-    //   this.dataService.showLoading(false);
-    // })
-  }
-
-  submitPreview() {
+  submit() {
     this.dataService.showLoading(true);
     const fd = new FormData();
-    const data = {
-      icon: this.imageRaw,
+    const data: { [key:string]: any } = {
       ...this.formIcon.getRawValue(),
       started_at: moment(this.formIcon.get("started_at").value).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -152,6 +133,8 @@ export class SetupStwMitraComponent implements OnInit {
         "YYYY-MM-DD HH:mm:ss"
       ),
     };
+
+    if (this.imageRaw) data.icon = this.imageRaw;
 
     const { day, ...payload } = data;
 
