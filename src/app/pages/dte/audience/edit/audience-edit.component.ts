@@ -149,7 +149,6 @@ export class AudienceEditComponent {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
-
     this.formAudienceError = {
       name: {},
       min: {},
@@ -167,6 +166,10 @@ export class AudienceEditComponent {
         "name": "SLSNTL"
       }
     ];
+
+    if(this.dataService.getDecryptedProfile().country == 'PH'){ 
+      this.retailClassification.push({ name: "ISR", value: "ISR" });
+    }
 
     this.list = {
       zone: [],
