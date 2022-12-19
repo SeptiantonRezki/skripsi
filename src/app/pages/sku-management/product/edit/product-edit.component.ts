@@ -264,6 +264,7 @@ export class ProductEditComponent {
         this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
         this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
         this.formProductGroup.get("is_paylater").setValue(res.data.is_paylater === 1 ? true : false);
+        this.formProductGroup.get("product_desc").setValue(res.data.product_desc);
         if (res && res.data.status_pin_up) {
           this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
           if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
@@ -1021,6 +1022,7 @@ export class ProductEditComponent {
       is_paylater: [false],
       listProdukPrivateLabel: this.formBuilder.array([]),
       upc: [0, Validators.required],
+      product_desc: ["", Validators.required],
     });
   }
 
@@ -1156,6 +1158,7 @@ export class ProductEditComponent {
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
           upc: this.formProductGroup.get("upc").value,
+          product_desc: this.formProductGroup.get("product_desc").value
         };
 
         let fd = new FormData();
@@ -1163,6 +1166,7 @@ export class ProductEditComponent {
         fd.append("code", body.code);
         fd.append("name", body.name);
         fd.append("upc", body.upc);
+        fd.append("product_desc", body.product_desc);
 
         if (body.barcode) fd.append("barcode", body.barcode);
 
