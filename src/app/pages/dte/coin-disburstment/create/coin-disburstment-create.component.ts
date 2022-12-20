@@ -97,6 +97,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   titleParam = {entity: this.pageName}
 
   priority_list: any[] = [];
+  isPublish: boolean = false;
   
   constructor(
     private dataService: DataService,
@@ -283,6 +284,17 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       if (this.detailCoin.opsi_penukaran === 'all') {
         this.isPojokBayar.setValue(true);
         this.isTransferBank.setValue(true);
+      }
+
+      if (this.detailCoin.status === "publish") {
+        this.formCoin.disable();
+        this.formFilter.disable();
+        this.formFilterRetailer.disable();
+        this.isTransferBank.disable();
+        this.isPojokBayar.disable();
+        this.isTargetedRetailer.disable();
+
+        this.isPublish = true;
       }
 
       this.getListAudience();
@@ -1169,7 +1181,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
   submit() {
     let args = this.getArgsForSubmit();
-    if (this.formCoin.valid) {
+
+    // CDE-5394 -> DISABLED ALL FORM WHEN STATUS PUBLISH, MAKES FORMCOIN ALWAYS INVALID
+    if (this.formCoin.valid || (this.isEdit && this.detailCoin.status === "publish")) {
       if (!this.isPojokBayar.value && !this.isTransferBank.value) {
         this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_select_exchange_options') });
         return;

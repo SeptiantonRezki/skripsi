@@ -57,7 +57,7 @@
                       (focus)="endDate.open()"
                       [matDatepicker]="endDate"
                       [min]="formCoin.get('start_date').value"
-                      [disabled]="!formCoin.get('start_date').value"
+                      [disabled]="!formCoin.get('start_date').value || isPublish"
                       placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}} Penukaran Koin">
                     <mat-datepicker-toggle matSuffix [for]="endDate">
                       <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -107,7 +107,7 @@
                         id="group_id"
                         formControlName="group_id"
                         placeholder="{{'dte.group_trade_program.text1' | translate}}"
-                        [disabled]="!priority_list.length"
+                        [disabled]="!priority_list.length || isPublish"
                       >
                         <mat-option *ngFor="let item of priority_list" [value]="item.id" [disabled]="isPriorityUsed(item.id)">
                           {{item.name}}
@@ -121,6 +121,7 @@
                         matTooltipPosition="below"
                         (click)="addPriority(priorities_index)"
                         [disabled]="!priority_list.length"
+                        *ngIf="!isPublish"
                       >
                         <mat-icon>add</mat-icon>
                       </button>
@@ -129,7 +130,7 @@
                         matTooltip="{{'global.button.delete' | translate}}"
                         matTooltipPosition="below"
                         (click)="removePriority(priorities_index)"
-                        *ngIf="formCoin.get('priorities').length > 1"
+                        *ngIf="formCoin.get('priorities').length > 1 && !isPublish"
                       >
                         <mat-icon>remove</mat-icon>
                       </button>
