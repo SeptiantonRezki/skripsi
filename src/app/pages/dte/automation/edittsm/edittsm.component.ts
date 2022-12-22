@@ -109,6 +109,9 @@ export class EdittsmComponent implements OnInit {
       skus: this.formBuilder.array([])
     });
 
+    console.log("ex_coin_per_sku",this.detailAutomation.extra_coin_sku);
+    console.log("max_qty_per_sku",this.detailAutomation.max_qty_order);
+
     if (this.detailAutomation.type === 'e-order' && (!this.detailAutomation.barcode || this.detailAutomation.barcode.length === 0)) {
       console.log('is empty create one');
       let skus = this.formAutomation.get('skus') as FormArray;
@@ -135,13 +138,15 @@ export class EdittsmComponent implements OnInit {
     if (this.detailAutomation.type === 'e-order') {
       let skus = this.formAutomation.get('skus') as FormArray;
       if (this.detailAutomation.barcode) {
-        this.detailAutomation.barcode.map(bc => {
+        this.detailAutomation.barcode.map((bc,index) => {
+          let ex_coin_per_sku_val = this.detailAutomation.extra_coin_sku[index] ? this.detailAutomation.extra_coin_sku[index] : null;
+          let max_qty_per_order_val = this.detailAutomation.max_qty_order[index]==10000 ? null : this.detailAutomation.max_qty_order[index];
           const formItem = this.formBuilder.group({
             formSku: bc,
             formFilterSku: new ReplaySubject<any[]>(1),
             filteredSku: new ReplaySubject<any[]>(1),
-            ex_coin_per_sku: null,
-            max_qty_per_order: null
+            ex_coin_per_sku: ex_coin_per_sku_val,
+            max_qty_per_order: max_qty_per_order_val
           });
 
           formItem.controls['formFilterSku'].value.next(bc);
