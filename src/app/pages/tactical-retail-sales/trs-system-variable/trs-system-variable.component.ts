@@ -105,6 +105,20 @@ export class TrsSystemVariableComponent implements OnInit {
     );
   }
 
+  confirmUpdateNA() {
+    if (!this.sysvariable.valid) {
+      this.validateFormGroup(this.sysvariable);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi data terlebih dahulu!",
+      });
+      return;
+    }
+	  this.dialogService.openSnackBar({
+		message: "Tidak memiliki hak perubahan data!",
+	  });
+	  return;
+  }
+
   submit() {
     if (!this.sysvariable.valid) {
       this.validateFormGroup(this.sysvariable);

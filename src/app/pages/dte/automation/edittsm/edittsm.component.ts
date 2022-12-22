@@ -147,31 +147,31 @@ export class EdittsmComponent implements OnInit {
           formItem.controls['formFilterSku'].value.next(bc);
           formItem.controls['filteredSku'].value.next([{ barcode: bc }].slice());
 
-          // formItem
-          //   .valueChanges
-          //   .pipe(
-          //     debounceTime(300),
-          //     tap(() => this.searching = true),
-          //     switchMap(value => {
-          //       console.log('val', value);
-          //       if (value.formFilterSku == null || value.formFilterSku == "") {
-          //         this.searching = false;
-          //         return [];
-          //       }
-          //       console.log('after', value);
-          //       return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
-          //         .pipe(
-          //           finalize(() => this.searching = false)
-          //         )
-          //     })
-          //   ).subscribe(res => {
-          //     console.log('res', res, formItem.controls['filteredSku'].value);
-          //     // this.filteredSku.next(res.data);
-          //     formItem.controls['filteredSku'].value.next(res.data);
-          //     // value.next(res.data);
-          //     // this.litSkus.push(value);
-          //     // this.filteredSku.next(this.litSkus);
-          //   });
+          formItem
+            .valueChanges
+            .pipe(
+              debounceTime(300),
+              tap(() => this.searching = true),
+              switchMap(value => {
+                console.log('val', value);
+                if (value.formFilterSku == null || value.formFilterSku == "") {
+                  this.searching = false;
+                  return [];
+                }
+                console.log('after', value);
+                return this.audienceTradeProgramService.getListSku({ search: value.formSku })
+                  .pipe(
+                    finalize(() => this.searching = false)
+                  )
+              })
+            ).subscribe(res => {
+              console.log('res', res, formItem.controls['filteredSku'].value);
+              // this.filteredSku.next(res.data);
+              formItem.controls['filteredSku'].value.next(res.data);
+              // value.next(res.data);
+              // this.litSkus.push(value);
+              // this.filteredSku.next(this.litSkus);
+            });
 
           skus.push(formItem);
           console.log('skus', skus);
@@ -247,16 +247,61 @@ export class EdittsmComponent implements OnInit {
     this._onDestroy.complete();
   }
 
+  // createFormSku() {
+  //   const formItem = this.formBuilder.group({
+  //     formSku: [""],
+  //     formFilterSku: [new ReplaySubject<any[]>(1)],
+  //     filteredSku: [new ReplaySubject<any[]>(1)]
+  //   });
+  //   let value = new ReplaySubject<any[]>(1);
+
+  //   formItem
+  //     .valueChanges
+  //     .pipe(
+  //       debounceTime(300),
+  //       tap(() => this.searching = true),
+  //       switchMap(value => {
+  //         console.log('val', value);
+  //         if (value.formFilterSku == null || value.formFilterSku == "") {
+  //           this.searching = false;
+  //           return [];
+  //         }
+  //         console.log('after', value);
+  //         return this.audienceTradeProgramService.getListSku({ search: value.formFilterSku })
+  //           .pipe(
+  //             finalize(() => this.searching = false)
+  //           )
+  //       })
+  //     ).subscribe(res => {
+  //       console.log('res', res, formItem.controls['filteredSku'].value);
+  //       // this.filteredSku.next(res.data);
+  //       formItem.controls['filteredSku'].value.next(res.data);
+  //       // value.next(res.data);
+  //       // this.litSkus.push(value);
+  //       // this.filteredSku.next(this.litSkus);
+  //     });
+  //   return formItem;
+  // }
   createFormSku() {
     const formItem = this.formBuilder.group({
       formSku: [""],
-      formFilterSku: [new ReplaySubject<any[]>(1)],
+      formFilterSku: [""],
       filteredSku: [new ReplaySubject<any[]>(1)],
       ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
       max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
+    this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
+      // console.log('resnew', res, formItem.controls['filteredSku'].value);
+      // console.log('resnew345', this.formFilterSku);
+       this.formFilterSku.setValue('1');
+        // this.filteredSku.next(res.data);.setValue('');
+        // console.log('resnew35', this.formAutomation.get('skus').value);
+        formItem.controls['filteredSku'].value.next(res.data);
+    }, error => {
 
+      alert(error);
+    })
     formItem
       .valueChanges
       .pipe(
@@ -284,7 +329,6 @@ export class EdittsmComponent implements OnInit {
       });
     return formItem;
   }
-
   addSkuProduct() {
     this.skus = this.formAutomation.get("skus") as FormArray;
     this.skus.insert(0, this.createFormSku());

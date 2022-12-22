@@ -229,7 +229,7 @@ export class TrsProposalComponent {
       area.map((level, i) => {
         let level_desc = level.level_desc;
         let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 2) {
+        if (lastDiffLevelIndex > levelIndex - 26) {
           if (!this.list[level.type]) this.list[level.type] = [];
           if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
             this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
@@ -651,12 +651,12 @@ console.log(areaSelected);
     }
 
     const page = this.dataService.getFromStorage("page");
-    const sort_type = this.dataService.getFromStorage("sort_type");
-    const sort = this.dataService.getFromStorage("sort");
+    //const sort_type = this.dataService.getFromStorage("sort_type");
+    //const sort = this.dataService.getFromStorage("sort");
 
     this.pagination.page = page;
-    this.pagination.sort_type = sort_type;
-    this.pagination.sort = sort;
+    //this.pagination.sort_type = sort_type;
+    //this.pagination.sort = sort;
 
     this.offsetPagination = page ? (page - 1) : 0;
     //this.pagination['gsw'] = this.gsw.value;

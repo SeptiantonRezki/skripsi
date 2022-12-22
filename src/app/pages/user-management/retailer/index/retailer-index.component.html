@@ -2,8 +2,8 @@
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.retailer.list.page_title">
     <div class="button-row" fxLayout="row">
-      <button style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/user-management','retailer','create']">
+      <button *ngIf="this.ls.selectedLanguages != 'km'" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/user-management','retailer','create']" [disabled]="ls.selectedLanguages == 'km'? true: null">
         <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
@@ -286,7 +286,7 @@
               </div>
             </ng-template>
           </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="60" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
+        <ngx-datatable-column [width]="100" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">

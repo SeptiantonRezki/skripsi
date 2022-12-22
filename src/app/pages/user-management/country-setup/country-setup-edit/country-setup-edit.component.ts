@@ -26,6 +26,7 @@ export class CountrySetupEditComponent implements OnInit {
   submiting = false;
   isDetail = false;
   horizontal = true;
+  timezones: any[];
   listApps: any[] = [{ name: 'Retailer', value: 'retailer' }];
   forceLogoutinfo: any;
   constructor(
@@ -49,6 +50,7 @@ export class CountrySetupEditComponent implements OnInit {
       name: [this.country.name, Validators.required],
       code: [this.country.country_code, Validators.required],
       locale: [this.country.locale_code, Validators.required],
+      time_zone_id: [this.country.time_zone_id, Validators.required],
       customer_service: formBuilder.array([
         formBuilder.group({
           telepon: [(this.country.customer_services) ? this.country.customer_services.telepon : '', Validators.required],
@@ -212,6 +214,18 @@ export class CountrySetupEditComponent implements OnInit {
       }
     
     })
+    this.getTimezones();
+  }
+
+  getTimezones() {
+    this.countrySetupService.getTimezones("per_page=150").subscribe(
+      res => {
+        this.timezones = res.data; 
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   buildFullAccessTogle() {

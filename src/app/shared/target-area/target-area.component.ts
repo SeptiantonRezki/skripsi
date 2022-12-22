@@ -329,7 +329,7 @@ export class TargetAreaComponent implements OnInit {
       this.downLoadFile(
         response,
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        `Area_${new Date().toLocaleString()}.xls`
+        `Area_${new Date().toLocaleString()}.xlsx`
       );
       this.dataService.showLoading(false);
     } catch (error) {

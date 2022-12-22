@@ -853,7 +853,7 @@ export class PanelRetailerVoucherComponent implements OnInit {
     try {
       const response = await this.b2cVoucherService.exportAudienceRetailer({ selected: body, audience: 'retailer' }).toPromise();
       this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      `B2CVoucher_Panel_Retailer_${new Date().toLocaleString()}.xls`);
+      `B2CVoucher_Panel_Retailer_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);

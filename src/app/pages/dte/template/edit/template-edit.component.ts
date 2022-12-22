@@ -2014,4 +2014,11 @@ export class TemplateEditComponent {
     }
   }
 
+  checkRejectedOption(reason){
+    let rejected = this.templateTaskForm.get("rejected_reason_choices").value;
+
+    if (reason.toLowerCase() === "others"){
+      return rejected.some(list => list.reason.toLowerCase() === "others");
+    } else return false;
+  }
 }

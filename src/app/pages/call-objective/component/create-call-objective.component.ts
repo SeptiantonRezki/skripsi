@@ -1494,7 +1494,7 @@ export class CreateCallObjectiveComponent implements OnInit {
     };
 
     try {
-      const response = await this.audienceService.exportExcel(body).toPromise();
+      const response = await this.audienceService.exportRequestExcel(body).toPromise();
       this.downloadLink.nativeElement.href = response.data;
       this.downloadLink.nativeElement.click();
       this.exportTemplate = false;

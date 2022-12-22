@@ -14,6 +14,7 @@ import { HelpService } from 'app/services/content-management/help.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Utils } from 'app/classes/utils';
 import { TranslateService } from '@ngx-translate/core';
+// import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-retailer-edit',
@@ -33,6 +34,7 @@ export class RetailerEditComponent {
   editPhoneNumberStatus: Boolean;
   editBankStatus: Boolean;
   viewPhoneNumberPBStatus: Boolean;
+  showQuery: any;
 
   detailRetailer: any;
   listStatus: any[] = [
@@ -118,6 +120,7 @@ export class RetailerEditComponent {
   ]
   countryList: any[] = [];
   country_phone: string;
+  idRetailer: any;
 
   formRefferalCode: FormGroup;
   
@@ -186,6 +189,7 @@ export class RetailerEditComponent {
 
     activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
+      this.idRetailer = params[2].path;
     })
 
     this.listLevelArea = [
@@ -232,6 +236,16 @@ export class RetailerEditComponent {
       type: [''],
       is_chat_bot: [0],
       order_online: [0],
+      order_rrp: [0],
+      block_order: [0],
+      is_monday_deliv: [0],
+      is_tuesday_deliv: [0],
+      is_wednesday_deliv: [0],
+      is_thursday_deliv: [0],
+      is_friday_deliv: [0],
+      is_saturday_deliv: [0],
+      is_sunday_deliv: [0],
+      cut_off_hours: ["00:00"],
       // cashier: ["", Validators.required],
       InternalClassification: ['', Validators.required],
       gsr: [0],
@@ -239,6 +253,54 @@ export class RetailerEditComponent {
       version_retailer: [''],
       version_cashier: [''],
       country: [""],
+      owner_verified: [0]
+    });
+
+    if (!this.permission.detail_rrp) {
+      this.formRetailer.get('order_rrp').disable();
+    } else {
+      this.formRetailer.get('order_rrp').enable();
+    }
+
+    this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
+      if (value !== 1 || !this.permission.detail_rrp) {
+        this.formRetailer.get('block_order').disable();
+      } else {
+        this.formRetailer.get('block_order').enable();
+      }
+
+      if (value !== 1 || !this.permission.jadwal_pengiriman) {
+        this.formRetailer.get('is_monday_deliv').disable();
+        this.formRetailer.get('is_tuesday_deliv').disable();
+        this.formRetailer.get('is_wednesday_deliv').disable();
+        this.formRetailer.get('is_thursday_deliv').disable();
+        this.formRetailer.get('is_friday_deliv').disable();
+        this.formRetailer.get('is_saturday_deliv').disable();
+        this.formRetailer.get('is_sunday_deliv').disable();
+      } else {
+        this.formRetailer.get('is_monday_deliv').enable();
+        this.formRetailer.get('is_tuesday_deliv').enable();
+        this.formRetailer.get('is_wednesday_deliv').enable();
+        this.formRetailer.get('is_thursday_deliv').enable();
+        this.formRetailer.get('is_friday_deliv').enable();
+        this.formRetailer.get('is_saturday_deliv').enable();
+        this.formRetailer.get('is_sunday_deliv').enable();
+      }
+    });
+
+    this.formRetailer.controls['order_rrp'].valueChanges.subscribe(value => {
+      console.log('order_rrp value', value);
+      if (value === 0) {
+        this.formRetailer.get('block_order').setValue(0);
+        this.formRetailer.get('is_monday_deliv').setValue(0);
+        this.formRetailer.get('is_tuesday_deliv').setValue(0);
+        this.formRetailer.get('is_wednesday_deliv').setValue(0);
+        this.formRetailer.get('is_thursday_deliv').setValue(0);
+        this.formRetailer.get('is_friday_deliv').setValue(0);
+        this.formRetailer.get('is_saturday_deliv').setValue(0);
+        this.formRetailer.get('is_sunday_deliv').setValue(0);
+        this.formRetailer.get('cut_off_hours').setValue("00:00");
+      }
     });
 
     this.formBankAccount = this.formBuilder.group({
@@ -261,7 +323,12 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
     this.dataService.showLoading(true);
-    this.retailerService.show({ retailer_id: this.dataService.getFromStorage('id_retailer') }).subscribe(async res => {
+    if (this.dataService.getFromStorage('country_retailer') === 'ID') {
+      this.showQuery = this.retailerService.show_v2({ retailer_id: this.idRetailer });
+    } else {
+      this.showQuery = this.retailerService.show({ retailer_id: this.idRetailer });
+    } 
+    this.showQuery.subscribe(async res => {
       this.dataService.showLoading(false);
       // console.log('show', res);
       this.detailRetailer = res.data;
@@ -286,6 +353,8 @@ export class RetailerEditComponent {
       } else if (this.detailRetailer.status === 'active') {
         this.formRetailer.controls['phone'].setValidators(Validators.required);
         this.formRetailer.updateValueAndValidity();
+      } else if(this.detailRetailer.status === 'inactive') {
+        this.formRetailer.get('status').disable();
       }
       this.onLoad = true;
       if (this.detailRetailer.area_code) {
@@ -351,6 +420,18 @@ export class RetailerEditComponent {
       })
     if (!this.isDetail) {
       this.setFormAbility();
+    }
+  }
+
+  onSelectedDay(event, day) {
+    if (event.checked === true) {
+      this.formRetailer.get(day).setValue(1);
+      console.log("day checked >>> ", day, this.formRetailer.get(day).value);
+      // this.selectedDay.push(day);
+    } else {
+      this.formRetailer.get(day).setValue(0);
+      console.log("day unchecked >>> ", day, this.formRetailer.get(day).value);
+      // this.selectedDay = this.selectedDay.filter(item => item !== day);
     }
   }
 
@@ -485,7 +566,6 @@ export class RetailerEditComponent {
       });
 
     }
-    console.log(this.detailRetailer.phone);
     
     if (this.detailRetailer.country) {
       this.country_phone = Utils.getPhoneCode(this.detailRetailer.country);
@@ -496,7 +576,7 @@ export class RetailerEditComponent {
     }
     let phone = '';
     if (this.viewPhoneNumberStatus) {
-      phone = (this.isDetail ? this.detailRetailer.phone : parseInt(this.detailRetailer.phone.split(this.country_phone)[1]));
+      phone = (this.isDetail ? this.detailRetailer.phone : (this.detailRetailer.phone)? parseInt(this.detailRetailer.phone.split(this.country_phone)[1]) : '' );
     } else {
       phone = Utils.reMaskInput(this.detailRetailer.phone, 4);
     }
@@ -525,9 +605,20 @@ export class RetailerEditComponent {
       territory: this.getArea('teritory'),
       is_chat_bot: this.detailRetailer.is_chat_bot ? 1 : 0,
       order_online: this.detailRetailer.order_online ? 1 : 0,
+      order_rrp: ((this.detailRetailer.classification === 'RRP') && (this.detailRetailer.order_rrp === null)) || this.detailRetailer.order_rrp ? 1 : 0,
+      block_order: this.detailRetailer.block_order || 0,
+      is_monday_deliv: this.detailRetailer.is_monday_deliv || 0,
+      is_tuesday_deliv: this.detailRetailer.is_tuesday_deliv || 0,
+      is_wednesday_deliv: this.detailRetailer.is_wednesday_deliv || 0,
+      is_thursday_deliv: this.detailRetailer.is_thursday_deliv || 0,
+      is_friday_deliv: this.detailRetailer.is_friday_deliv || 0,
+      is_saturday_deliv: this.detailRetailer.is_saturday_deliv || 0,
+      is_sunday_deliv: this.detailRetailer.is_sunday_deliv || 0,
+      cut_off_hours: this.detailRetailer.cut_off_hours || '00:00',
       // cashier: this.detailRetailer.cashier || 0,
       version_retailer: this.detailRetailer.version_retailer || '',
       version_cashier: this.detailRetailer.version_cashier || '',
+      owner_verified: this.detailRetailer.owner_verified === 1 ? 0 : 1,
     });
 
     this.formBankAccount.setValue({
@@ -558,7 +649,7 @@ export class RetailerEditComponent {
     this.formRetailer.controls['version_retailer'].disable();
     this.formRetailer.controls['version_cashier'].disable();
 
-    if (this.isDetail) {
+    if (this.isDetail || this.ls.selectedLanguages == 'km') {
       this.formRetailer.disable();
       this.formBankAccount.disable();
       this.npwp.disable();
@@ -765,6 +856,21 @@ export class RetailerEditComponent {
   submit() {
     console.log('invalid form field', this.findInvalidControls());
     if (!this.formRetailer.invalid) {
+      if ( this.formRetailer.get('order_rrp').value === 1 &&
+        (this.formRetailer.get('is_monday_deliv').value === 0 &&
+        this.formRetailer.get('is_tuesday_deliv').value === 0 &&
+        this.formRetailer.get('is_wednesday_deliv').value === 0 &&
+        this.formRetailer.get('is_thursday_deliv').value === 0 &&
+        this.formRetailer.get('is_friday_deliv').value === 0 &&
+        this.formRetailer.get('is_saturday_deliv').value === 0 &&
+        this.formRetailer.get('is_sunday_deliv').value === 0)
+      ) {
+        this.dialogService.openSnackBar({
+          message: "Jadwal Pengiriman Tidak Boleh Kosong"
+        });
+        return;
+      }
+
       const icValue = this.formRetailer.get('InternalClassification').value;
       let generalTrade = ["NON-SRC", "SRC", "Official Store", "RRP", "ISR"];
 
@@ -793,6 +899,18 @@ export class RetailerEditComponent {
         status_user: this.formRetailer.get('status_user').value,
         is_chat_bot: this.formRetailer.get('is_chat_bot').value,
         order_online: this.formRetailer.get('order_online').value,
+        order_rrp: this.formRetailer.get('order_rrp').value,
+        block_order: this.formRetailer.get('block_order').value,
+        is_monday_deliv: this.formRetailer.get('is_monday_deliv').value,
+        is_tuesday_deliv: this.formRetailer.get('is_tuesday_deliv').value,
+        is_wednesday_deliv: this.formRetailer.get('is_wednesday_deliv').value,
+        is_thursday_deliv: this.formRetailer.get('is_thursday_deliv').value,
+        is_friday_deliv: this.formRetailer.get('is_friday_deliv').value,
+        is_saturday_deliv: this.formRetailer.get('is_saturday_deliv').value,
+        is_sunday_deliv: this.formRetailer.get('is_sunday_deliv').value,
+        // cut_off_hours: `${this.formRetailer.get('cut_off_hours').value}:00`,
+        cut_off_hours: this.formRetailer.get('cut_off_hours').value,
+        owner_verified: this.formRetailer.get('owner_verified').value ? 0 : 1,
       };
 
       if (!this.viewPhoneNumberStatus || !this.editPhoneNumberStatus) {
@@ -822,16 +940,29 @@ export class RetailerEditComponent {
         body['npwp'] = '';
       }
 
-      this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
-        res => {
-          this.dialogService.openSnackBar({
-            message: 'Data berhasil diubah'
-          });
-          this.router.navigate(['user-management', 'retailer']);
-          window.localStorage.removeItem('detail_retailer');
-        },
-        err => { }
-      );
+      if(this.formRetailer.get('country').value === 'ID'){
+        this.retailerService.put_v2(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      } else {
+        this.retailerService.put(body, { retailer_id: this.detailRetailer.id }).subscribe(
+          res => {
+            this.dialogService.openSnackBar({
+              message: 'Data berhasil diubah'
+            });
+            this.router.navigate(['user-management', 'retailer']);
+            window.localStorage.removeItem('detail_retailer');
+          },
+          err => { }
+        );
+      }
     } else {
       this.dialogService.openSnackBar({
         message: this.translate.instant('global.label.please_complete_data')
@@ -841,7 +972,7 @@ export class RetailerEditComponent {
   }
 
   getToolTipData(value, array) {
-    if (value && array.length) {
+    if (value !== '' && array.length > 0) {
       let msg = array.filter(item => item.id === value)[0]['name'];
       return msg;
     } else {
@@ -968,6 +1099,18 @@ export class RetailerEditComponent {
     // jika tidak memiliki submenu samasekali maka disable simpan
     if (!this.isCan(ALL_ROLES, 'OR')) {
       this.disableSubmit = true;
+    }
+  }
+
+  onKtpToggle(e) {
+    
+    /** ONLY HAS PERMISSION KTP */
+    if(this.permission && !this.permission.ktp) {
+
+      const oldVal = this.detailRetailer.owner_verified === 1 ? 0 : 1;
+      e.source.checked = oldVal;
+      this.formRetailer.get('owner_verified').setValue(oldVal);
+      
     }
   }
 }

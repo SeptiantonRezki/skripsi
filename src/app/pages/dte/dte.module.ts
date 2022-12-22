@@ -193,6 +193,7 @@ import { SpinTheWheelMechanismComponent } from './spin-the-wheel/tab/mechanism/s
 import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
+import { FlushCoinComponent } from './flush-coin/flush-coin.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -400,6 +401,7 @@ export const MY_FORMATS = {
     SpinTheWheelNotifComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
+    FlushCoinComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -510,7 +512,6 @@ export const MY_FORMATS = {
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
-    ImportAudiencePersonalizeComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
     ImportAudiencePersonalizeComponentSPW,

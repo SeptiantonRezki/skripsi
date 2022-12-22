@@ -7,6 +7,7 @@ import { TrsProposalCreateComponent } from "./trs-proposal/create/trs-proposal-c
 import { TrsProposalEditComponent } from "./trs-proposal/edit/trs-proposal-edit.component";
 import { TrsProposalDetailComponent } from "./trs-proposal/detail/trs-proposal-detail.component";
 import { TrsSystemVariableComponent } from "./trs-system-variable/trs-system-variable.component";
+import { TrsReportComponent } from './trs-report/trs-report.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,13 @@ const routes: Routes = [
     component: TrsProposalDetailComponent,
     data: {
       breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
+    },
+  },
+  {
+    path: "trs-report",
+    component: TrsReportComponent,
+    data: {
+      breadcrumbs: brConfig.tactical_retail_sales.trs_report
     },
   },
 ]

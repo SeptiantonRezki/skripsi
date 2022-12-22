@@ -32,7 +32,7 @@ export class KeywordService extends BaseService {
 
   exportKeyword(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'exportKeyword');
-    return this.postApi(url, body);
+    return this.postBlobAsJsonApi(url, body);
   }
 
 }

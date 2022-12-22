@@ -71,6 +71,7 @@ import { SpinTheWheelComponent } from "./spin-the-wheel/index/spin-the-wheel.com
 import { SpinTheWheelNotifComponent } from "./spin-the-wheel/notif/spin-the-wheel-notif.component";
 import { SpinTheWheelCreateComponent } from "./spin-the-wheel/create/spin-the-wheel-create.component";
 import { SpinTheWheelEditComponent } from "./spin-the-wheel/edit/spin-the-wheel-edit.component";
+import { FlushCoinComponent } from "./flush-coin/flush-coin.component";
 import { LoyaltyMitraComponent } from "./loyalty-mitra/loyalty-mitra.component";
 
 const routes: Routes = [
@@ -939,6 +940,30 @@ const routes: Routes = [
       breadcrumbs: brConfig.dte.spinTheWheel.notif
     },
     //canActivate: [PageGuard]
+  },
+  {
+    path: 'flush-coin',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'flush-coin/create/:tab',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: 'flush-coin/edit/:id/:tab',
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
+  },
+  {
+    path: "flush-coin/detail/:id/:tab",
+    component: FlushCoinComponent,
+    canActivate: [PageGuard],
+    canDeactivate: [PendingChangesGuard]
   },
   {
     path: 'lottery',

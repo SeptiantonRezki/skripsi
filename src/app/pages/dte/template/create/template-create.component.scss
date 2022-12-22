@@ -156,6 +156,11 @@
         cursor: text;
       }
 
+      .add-option__rejected{
+        cursor: pointer;
+        color: #CD0005;
+      }
+
       &:hover {
         .add-option {
           border-bottom: 1px solid #ccc;

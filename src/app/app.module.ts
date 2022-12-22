@@ -118,6 +118,8 @@ import { VirtualAccountBinService } from './services/virtual-account/virtual-acc
 import { VirtualAccountPanelService } from './services/virtual-account/virtual-account-panel.service';
 import { VirtualAccountTncService } from './services/virtual-account/virtual-account-tnc.service';
 import { MedalBadgeService } from './services/user-management/retailer/medal-badge.service';
+import { OrdersService } from './services/user-management/retailer/orders.service';
+import { GoogleTagManagerService } from './services/gtm.service';
 
 // firebase notification
 import { AngularFireModule } from '@angular/fire';
@@ -138,6 +140,7 @@ import { OrderToMitraHubService } from './services/user-management/private-label
 import { Observable } from 'rxjs';
 import { GeneralBackendService } from './services/general-backend.service';
 import { KeywordService } from './services/content-management/keyword.service';
+import { NotificationConfigurationService } from './services/settings/notification-configuration.service';
 
 // const config = {
 //   apiKey: "AIzaSyD5x3GziNKf6WHwbDGwpMkqWbCsAIeK5Qc",
@@ -158,20 +161,22 @@ const config = {
   appId: '1:651041534914:web:be573accf451ec608e1c5b'
 };
 
-export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService) {
+export function HttpLoaderFactory(http: HttpClient, languageSetupService: LanguageSetupService, dataService: DataService) {
   // return new TranslateHttpLoader(http, '../assets/languages/', '.json');
 
-  return new CustomLoader(languageSetupService, http);
+  return new CustomLoader(languageSetupService, http, dataService);
 
 }
 
 class CustomLoader implements TranslateLoader {
 
-  constructor(private service: LanguageSetupService, private http: HttpClient) {}
+  constructor(private service: LanguageSetupService, private http: HttpClient, private dataService: DataService) {}
 
   getTranslation(lang: string): Observable<any> {
     return this.service.getTranslation({type: 'principal'}).map(({data}) => {
       localStorage.setItem('point_valuation', data.point_valuation);
+      this.dataService.setToStorage('json_locale', data);
+      this.dataService.setJsonLocale(data);
       return data.json_format;
     })
 
@@ -195,7 +200,7 @@ class CustomLoader implements TranslateLoader {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient, LanguageSetupService]
+        deps: [HttpClient, LanguageSetupService, DataService]
       }
     }),
     // Fuse Main and Shared modules
@@ -276,6 +281,7 @@ class CustomLoader implements TranslateLoader {
     PengajuanSrcService,
     OTPSettingService,
     InfoBoardService,
+    NotificationConfigurationService,
     GroupTradeProgramService,
     IdbService,
     SupplierCompanyService,
@@ -299,6 +305,8 @@ class CustomLoader implements TranslateLoader {
     VirtualAccountPanelService,
     VirtualAccountTncService,
     MedalBadgeService,
+    OrdersService,
+    GoogleTagManagerService,
     CoinAdjustmentApprovalService,
     CoinDisburstmentService,
     AreaService,
@@ -311,6 +319,7 @@ class CustomLoader implements TranslateLoader {
     OrderToMitraHubService,
     CountrySetupService,
     LanguageSetupService,
+    DataService,
     LotteryService,
     {
       provide: HTTP_INTERCEPTORS,

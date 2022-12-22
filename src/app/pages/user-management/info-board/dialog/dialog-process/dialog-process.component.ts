@@ -14,7 +14,7 @@ import { IdbService } from 'app/services/idb.service';
   templateUrl: './dialog-process.component.html',
   styleUrls: ['./dialog-process.component.scss']
 })
-export class DialogProcessComponent implements OnInit {
+export class DialogProcessComponentIB implements OnInit {
   uploading: Boolean;
   rows: any[];
   id: any;
@@ -29,7 +29,7 @@ export class DialogProcessComponent implements OnInit {
   detailData: any;
 
   constructor(
-    public dialogRef: MatDialogRef<DialogProcessComponent>,
+    public dialogRef: MatDialogRef<DialogProcessComponentIB>,
     public dialog: MatDialog,
     private dialogService: DialogService,
     private audienceService: AudienceService,

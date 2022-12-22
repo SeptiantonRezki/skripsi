@@ -70,10 +70,11 @@ export class TrsProposalEditComponent implements OnInit {
     import_audience_status_type: null
   }
 
-  minDateProposal: any = new Date();
-  minMaxDateProposal: any = new Date();
-  maxDateProposal: any = new Date();
-  maxPeriodProposal: any = 60;
+  todayDate: any = new Date();
+  minDateProposal: any;
+  minMaxDateProposal: any;
+  maxDateProposal: any;
+  maxPeriodProposal: any;
 
   selectedArea: any = [""];
   selectedSalesPoint: any = "";
@@ -116,10 +117,6 @@ export class TrsProposalEditComponent implements OnInit {
     this.list = {
       salespoint: [],
     }
-
-    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
-    this.minMaxDateProposal.setDate(this.minMaxDateProposal.getDate()+1);
-    this.maxDateProposal.setDate(this.minDateProposal.getDate()+1 + this.maxPeriodProposal);
   }
 
   ngOnInit() {
@@ -220,10 +217,28 @@ export class TrsProposalEditComponent implements OnInit {
         //this.disableForm = true;
       };
       
-      this.minMaxDateProposal = this.formCreateProposal.get('startDate').value;
-      this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
+      // ============== SET END DATE ================
+      this.TRSService.getSysVar().subscribe((res) => {
+        res.data.forEach((item) => {
+          if (item.param === 'max_period') {
+            if (this.proposalData.status == 'ongoing'){
+            } else {
+              this.minDateProposal = new Date();
+              this.minMaxDateProposal = new Date();
+              this.maxDateProposal = new Date();
 
+              this.maxPeriodProposal = parseInt(item.value);
 
+              this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+              this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
+              this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
+            }
+          }
+        });
+      }, err => {
+        console.log('err occured', err);
+        this.dataService.showLoading(false);
+      });
 
       this.dataService.showLoading(false);
       this.TRSService.getAreaByUser(request).subscribe(res => {
@@ -237,19 +252,6 @@ export class TrsProposalEditComponent implements OnInit {
     }, err => {
       this.dataService.showLoading(false);
       console.log('err occured', err);
-    })
-
-    // ============== SET END DATE ================
-    this.TRSService.getSysVar().subscribe((res) => {
-      res.data.forEach((item) => {
-        if (item.param === 'max_period') {
-          this.maxPeriodProposal = parseInt(item.value);
-          this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');
-        }
-      });
-    }, err => {
-      console.log('err occured', err);
-      this.dataService.showLoading(false);
     })
     
     this.keyUpCust1.debounceTime(300)
@@ -403,6 +405,84 @@ export class TrsProposalEditComponent implements OnInit {
     }
   }
 
+  submitnew(mode) {
+    console.log("submitnew");
+    if (this.formCreateProposal.valid) {
+      this.dataService.showLoading(true);
+      let fd = new FormData();
+      //fd.append('program_code', "XXX_Coba1"); generate di backend saja
+      fd.append('start_date', moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"));
+      fd.append('end_date', moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"));
+      fd.append('area_id', this.selectedArea);
+      fd.append('salespoint_id', this.selectedSalesPoint);
+
+      fd.append('customer1_code', this.formCreateProposal.get('custCode1').value);
+      fd.append('customer1_name', this.formCreateProposal.get('custName1').value);
+      fd.append('customer2_code', this.formCreateProposal.get('custCode2').value);
+      fd.append('customer2_name', this.formCreateProposal.get('custName2').value);
+      
+      fd.append('background', this.formCreateProposal.get('background').value);
+      fd.append('objective', this.formCreateProposal.get('objective').value);
+      fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
+      fd.append('flowingly', this.formCreateProposal.get('flowingly').value.trim());
+      
+      fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
+
+      fd.append('executors', this.selectedExecutor);
+      fd.append('kecamatans', this.selectedKecamatan);
+      fd.append('products', this.selectedProduct);
+
+      if (this.deleteFile.length > 0){
+        fd.append('remove_files', this.deleteFile.join("__"));
+      }
+      
+      fd.append('status', 'ongoing');
+
+      this.fileList.map(imgr => {
+        fd.append('files[]', imgr)
+      })
+
+      if (mode == 1){
+        let sisa_attchments = this.proposalData.attachments.length - this.deleteFile.length;
+
+        if ((sisa_attchments < 1 && this.fileList.length == 0) || this.formCreateProposal.get('flowingly').value.trim() == ""){
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: "Nomor Flowingly dan Attach File wajib diisi !"
+          });
+        } else {
+          console.log("submit bisa dilakukan");
+
+          this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: this.ls.locale.notification.popup_notifikasi.text22
+            });
+            this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+          }, err => {
+            this.dataService.showLoading(false);
+          })
+        }
+      } else {
+        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.router.navigate(['/tactical-retail-sales', 'trs-proposal']);
+        }, err => {
+          this.dataService.showLoading(false);
+        })
+      }
+    } else {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi pengisian data!"
+      });
+      commonFormValidator.validateAllFields(this.formCreateProposal);
+    }
+  }
+
   batal(){
     var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
     if (result) {
@@ -462,6 +542,8 @@ export class TrsProposalEditComponent implements OnInit {
             })
           }
         }
+      } else {
+        this.formCreateProposal.get(component_name).setValue("");
       }
     }
   }

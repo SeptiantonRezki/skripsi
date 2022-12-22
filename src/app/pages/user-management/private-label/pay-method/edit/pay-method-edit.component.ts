@@ -36,6 +36,7 @@ export class PayMethodEditComponent implements OnInit {
   payMethodId: any;
   formPaymentMethod: FormGroup;
   checkAll: boolean;
+  businessID = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,7 +52,6 @@ export class PayMethodEditComponent implements OnInit {
     this.isLoadingSave = false;
     this.payMethodData = null;
     this.checkAll = false;
-
     this.activatedRoute.url.subscribe(param => {
       console.log('param', param)
       this.isDetail = param[2].path === 'detail' ? true : false;
@@ -67,7 +67,7 @@ export class PayMethodEditComponent implements OnInit {
     });
 
     this.emitter.listenPayMethodDataEmitter.subscribe(async(data: any) => {
-      // console.log('emitter', data);
+      this.businessID = data.data.business_id;
       if (data.ubah) {
         this.payMethodData = data.data;
         // console.log('this.payMethodData', this.payMethodData);
@@ -126,10 +126,12 @@ export class PayMethodEditComponent implements OnInit {
   async onSave() {
     const body = new FormData();
     const fpm = this.formPaymentMethod.getRawValue();
+    body.append(`business_id`, this.businessID);
     await fpm.listPayments.forEach((item: any, index: number) => {
       body.append(`payments[${index}][name]`, item.name);
       body.append(`payments[${index}][value]`, item.value ? '1' : '0' );
     });
+    body.append(`_method`, 'PUT');
 
     this.dataService.showLoading(true);
     this.payMethodService.update(body, { payMethodId: this.payMethodId }).subscribe(res => {

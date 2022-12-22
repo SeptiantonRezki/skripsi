@@ -11,16 +11,13 @@
       <mat-list style="overflow: hidden;" class="pt-0">
         <mat-list-item>
           <div class="pl-8" fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-            <span fxFlex="15" class="h6 text-semibold">Nama Produk</span>
-            <span fxFlex="15" class="h6 text-semibold">Kategori</span>
-            <span fxFlex="70" class="h6 text-semibold">Metode Pembayaran</span>
+            <span fxFlex="15" class="h6 text-semibold">Nama Mitra</span>
           </div>
         </mat-list-item>
         <mat-divider></mat-divider>
         <form autocomplete="off" [formGroup]="formPaymentMethod">
           <mat-list-item class="custom-height mb-8">
-            <div fxFlex="15" >{{payMethodData.product_name}}</div>
-            <div fxFlex="15" >{{payMethodData.category_name}}</div>
+            <div fxFlex="15" >{{payMethodData.business_name}}</div>
             <div fxFlex="70" >
               <div fxLayout="column" *ngIf="payMethodData.payments.length > 0">
                 <mat-checkbox [checked]="checkAll" class="payments-column" (change)="selectionAll($event)">Pilih Semua</mat-checkbox>

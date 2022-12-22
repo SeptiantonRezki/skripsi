@@ -10,13 +10,16 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DialogProcessComponent } from '../../../dte/audience/dialog/dialog-process/dialog-process.component';
-import { DialogProcessSaveComponent } from '../../../dte/audience/dialog/dialog-process-save/dialog-process-save.component';
 import { GeotreeService } from 'app/services/geotree.service';
 import { DataService } from 'app/services/data.service';
 import { ImportAudiencePersonalizeInfoBoardComponent } from '../import/personalize/import-audience-personalize.component';
-import { takeUntil } from 'rxjs/operators';
 import { ProductService } from 'app/services/sku-management/product.service';
+import { DialogProcessComponentIB } from '../dialog/dialog-process/dialog-process.component';
+import { DialogProcessSaveIBComponent } from '../dialog/dialog-process-save-ib/dialog-process-save-ib.component';
+import { map, startWith, takeUntil } from 'rxjs/operators';
+import { MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
+import { BtoBVoucherService } from 'app/services/bto-bvoucher.service';
+import { ENTER, COMMA, SEMICOLON } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-info-board-edit',
@@ -53,6 +56,19 @@ export class InfoBoardEditComponent implements OnInit {
     1
   );
   isFour = false;
+  productList: any[] = [];
+  @ViewChild('productInput') productInput: ElementRef<HTMLInputElement>;
+  keyUpProduct = new Subject<string>();
+  product: FormControl = new FormControl('');
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  filteredSkuOptions: Observable<string[]>;
+  listProduct: any[] = [];
+  filterProduct: FormControl = new FormControl('');
+  public filteredProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  inputChipList = [];
+  listProductSkuBank: Array<any> = [];
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA, SEMICOLON];
 
   // 2 geotree property
   endArea: String;
@@ -133,6 +149,7 @@ export class InfoBoardEditComponent implements OnInit {
     private dataService: DataService,
     private activatedRoute: ActivatedRoute,
     private productService: ProductService,
+    private b2bVoucherService: BtoBVoucherService,
   ) {
     this.onLoad = true;
 
@@ -157,6 +174,14 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.keyUpProduct.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.getListProduct(res);
+        this.resetField(res);
+      });
     const status = this.dataService.getFromStorage('free_text');
     if (status ===  true) {
       this.selectedTab = 1;
@@ -171,7 +196,7 @@ export class InfoBoardEditComponent implements OnInit {
       end_date: [new Date()],
       end_time: ["00:00", Validators.required],
       status: [""],
-      brand_id: [[]]
+      product: [""],
     });
     this.infoBoardService.type().subscribe(
       res => {
@@ -221,7 +246,6 @@ export class InfoBoardEditComponent implements OnInit {
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
-      console.log('berhasil');
       this.getLevel('division');
     });
     this.formGeo.get('region').valueChanges.subscribe(res => {
@@ -281,6 +305,8 @@ export class InfoBoardEditComponent implements OnInit {
     this.showDetail = this.infoBoardService.detail(this.detailFormBoard.id).subscribe(res => { 
       if (res.data) {
         this.dataService.setToStorage('detail_info_board', res.data);
+        
+        this.minDateStart = new Date(this.convertDate(res.data.start_date));
 
         this.formBoard.setValue({
           name_board: res.data.name,
@@ -291,8 +317,15 @@ export class InfoBoardEditComponent implements OnInit {
           end_date: this.convertDate(res.data.end_date),
           end_time: this.convertTime(res.data.end_date ? res.data.end_date : ''),
           status: res.data.status,
-          brand_id: res.data.brand_id
+          product: res.data['limit_only'] ? res.data.limit_only : '',
         });
+
+
+        if (res.data['limit_only']) {
+          for (let i = 0; i < res.data.limit_only.length; i++) {
+            this.productList.push({ sku_id: res.data.limit_only[i], name: res.data.limit_only_data[i] });
+          }
+        }
 
         let zone = [];
         if (res.data.areas['zone']) {
@@ -365,7 +398,6 @@ export class InfoBoardEditComponent implements OnInit {
         this.geoList[subLevel] = res.data;
 
         if (value === 'national' && this.selectedZone.length > 0) {
-          console.log('berhasil2', this.selectedZone);
           this.formGeo.get('division').setValue(this.selectedZone);
           this.selectedZone = [];
         } else if (value === 'division' && this.selectedRegion.length > 0) {
@@ -768,7 +800,8 @@ export class InfoBoardEditComponent implements OnInit {
         start_date: `${moment(this.formBoard.get('start_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('start_time').value}:00`,
         end_date: `${moment(this.formBoard.get('end_date').value).format('YYYY-MM-DD')} ${this.formBoard.get('end_time').value}:00`,
         status: this.formBoard.get('status').value,
-        brand_id: this.formBoard.get('brand_id').value
+        limit_by: 'product',
+        limit_only: this.productList.map(prd => prd.sku_id)
       };
 
       this.infoBoardService.put(body, { id: this.detailFormBoard.id }).subscribe(
@@ -813,7 +846,7 @@ export class InfoBoardEditComponent implements OnInit {
       dialogConfig.data = { password: "P@ssw0rd" };
   
       this.dialogRef = this.dialog.open(
-        DialogProcessComponent,
+        DialogProcessComponentIB,
         {...dialogConfig, width: '400px'}
       );
 
@@ -865,7 +898,7 @@ export class InfoBoardEditComponent implements OnInit {
     dialogConfig.data = { password: "P@ssw0rd" };
 
     this.dialogRef = this.dialog.open(
-      DialogProcessSaveComponent,
+      DialogProcessSaveIBComponent,
       {...dialogConfig, width: '400px'}
     );
 
@@ -968,7 +1001,6 @@ export class InfoBoardEditComponent implements OnInit {
   }
 
   handleAudienceFilter(value) {
-    console.log('nilainya', value);
     if (value === 'population-blast') {
       this.isPopulation = true;
       // this.formGeo.get('audiencePopulation').setValue(value);
@@ -995,5 +1027,131 @@ export class InfoBoardEditComponent implements OnInit {
     }, err => {
       this.dataService.showLoading(false);
     })
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (value) {
+      this.productList.push(value);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.product.setValue(null);
+  }
+
+  remove(id: string): void {
+    const index = this.productList.findIndex((prd: any) => prd.sku_id === id);
+
+    if (index >= 0) {
+      this.productList.splice(index, 1);
+    }
+  }
+
+  selectedProduct(event: MatAutocompleteSelectedEvent): void {
+    // console.log('evenaksdjlak', event);
+    this.productList.push(event.option.viewValue);
+    if (this.productInput) {
+      this.productInput.nativeElement.value = '';
+    }
+    this.product.setValue(null);
+  }
+
+  getProducts() {
+    this.b2bVoucherService.getProductList({ page: 'all' }).subscribe(res => {
+      this.listProduct = res.data ? res.data : [];
+      this.filteredProduct.next(res.data ? res.data : []);
+    });
+  }
+
+  getProductObj(event, obj) {
+    let index = this.productList.findIndex(prd => prd.sku_id === obj.sku_id);
+    if (index === -1) {
+      this.productList.push(obj);
+    }
+    if (this.productInput) {
+      this.productInput.nativeElement.value = null;
+    }
+
+    if (this.inputChipList && this.inputChipList.length > 0) {
+      const itemClick = this.inputChipList.filter((item) => {
+        return item.toLowerCase().search(obj.name.toLowerCase());
+      });
+
+      if (itemClick && itemClick.length > 0) {
+        if (itemClick.length === 1 && itemClick[0] !== obj.name && itemClick[0].length < 6) {
+          /**
+           * jika pencarian produk kurang dari 6 char pencarian tidak akan dilanjutkan
+           */
+          this.listProductSkuBank = [];
+        } else {
+          // console.log('this.listProductSkuBank', this.listProductSkuBank)
+          this.product.setValue(itemClick.toString());
+          if (this.productInput) {
+            this.productInput.nativeElement.value = itemClick.toString();
+          }
+          this.getListProduct(itemClick.toString());
+        }
+      } else {
+        this.product.setValue(null);
+        if (this.productInput) {
+          this.productInput.nativeElement.value = null;
+        }
+        this.listProductSkuBank = [];
+      }
+      setTimeout(() => {
+        if (this.productInput) {
+          this.productInput.nativeElement.blur();
+          this.productInput.nativeElement.focus();
+        }
+      }, 500);
+    }
+  }
+
+  displayProductName(param?): any {
+    return param ? param.name : param;
+  }
+
+  getListProduct(param?): void {
+    if (param) {
+      const list = param.split(';').join(',').split(',');
+      this.inputChipList = list.map((item: any) => {
+        if (item.substr(0, 1) === ' ') { // remove space from first char
+          item = item.substr(1, item.length);
+        }
+        if (item.substr(item.length - 1, item.length) === ' ') { // remove space from last char
+          item = item.substr(0, item.length - 1);
+        }
+        return item;
+      });
+    }
+    if (param.length >= 3) {
+      this.b2bVoucherService.getProductList({ page: 'all', search: param }).subscribe(res => {
+        this.listProductSkuBank = res.data ? res.data : [];
+        this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+      })
+    } else {
+      this.listProductSkuBank = [];
+      this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(null), map(value => this._filterSku(value)));
+    }
+  }
+
+  _filterSku(value): any[] {
+    // console.log('valueee', value);
+    const filterValue = value && typeof value == "object" ? value.name.toLowerCase() : (value ? value.toLowerCase() : '');
+    return this.listProductSkuBank.filter(item => item.name.toLowerCase().includes(filterValue));
+  }
+
+  resetField(data?: any): void {
+    const filteredItem = this.listProductSkuBank.filter(item => item.name.toLowerCase() === data.toLowerCase());
+
+    if (filteredItem.length == 0) {
+      // this.product = undefined;
+    }
   }
 }

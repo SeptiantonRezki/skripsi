@@ -1,5 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="top-table">
-  <h2 class="pl-8">{{'global.label.list_entity' | translate:titleParam}}</h2>
+<div fxLayout="row" fxLayoutAlign="space-between center" class="top-table px-8">
+  <h2>{{'global.label.list_entity' | translate:titleParam}}</h2>
+  <span *ngIf="last_updated">Last Updated Data :<br />{{ last_updated }}</span>
 </div>
 <div class="mx-12" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
   <button id="btn-create-audience" style="width: 170px;" [routerLink]="['/dte', 'audience', 'create-personalize']" mat-raised-button type="button" class="confirmation-button">

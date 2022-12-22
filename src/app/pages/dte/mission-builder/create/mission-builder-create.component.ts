@@ -668,7 +668,14 @@ export class MissionBuilderCreateComponent implements OnInit {
   }
 
   public getStyles(node: any): any {
-    const styles = { 'border': '1px solid #999', 'height': '120px', 'text-align': 'center', 'padding': '20px', 'font-size': '1.5rem', 'border-radius': '10px' };
+    const styles = {
+      'border': '1px solid #999',
+      'text-align': 'center',
+      'padding': '20px',
+      'min-height': '120px',
+      'font-size': '1.5rem',
+      'border-radius': '10px'
+    };
     let temp = {}
     switch (node.data.type) {
       case 'mission':

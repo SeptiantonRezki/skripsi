@@ -34,6 +34,7 @@ import {
   MatListModule,
   MatSlideToggleModule,
   MatRadioModule,
+  MatMenuModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -141,6 +142,15 @@ import { InfoBoardComponent } from "./info-board/index/info-board.component";
 import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { DialogProcessComponentIB } from "./info-board/dialog/dialog-process/dialog-process.component";
+import { DialogProcessSaveIBComponent } from "./info-board/dialog/dialog-process-save-ib/dialog-process-save-ib.component";
+import { OrdersRrpComponent } from './retailer/orders-rrp/index/orders-rrp.component';
+import { TranslateInterpolatePipe } from "@fuse/pipes/translateInterpolate.pipe";
+import { OrdersRrpDetailComponent } from './retailer/orders-rrp/detail/orders-rrp-detail.component';
+import { TierPriceDialogComponent } from './retailer/orders-rrp/detail/tier-price-dialog/tier-price-dialog.component';
+import { CancelConfirmationDialogComponent } from './retailer/orders-rrp/detail/cancel-confirmation-dialog/cancel-confirmation-dialog.component';
+import { NgxMaterialTimepicker24HoursFaceComponent } from "ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component";
+import { PreviewImagePaymentComponent } from './retailer/orders-rrp/detail/preview-image-payment/preview-image-payment.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -185,8 +195,8 @@ export const MY_FORMATS = {
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     MatRadioModule,
-    MatSlideToggleModule,
-    NgxMaterialTimepickerModule
+    MatMenuModule,
+    NgxMaterialTimepickerModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -317,7 +327,14 @@ export const MY_FORMATS = {
     ImportAudiencePersonalizeInfoBoardComponent,
     InfoBoardComponent,
     InfoBoardCreateComponent,
-    InfoBoardEditComponent
+    InfoBoardEditComponent,
+    DialogProcessComponentIB,
+    DialogProcessSaveIBComponent,
+    OrdersRrpComponent,
+    OrdersRrpDetailComponent,
+    TierPriceDialogComponent,
+    CancelConfirmationDialogComponent,
+    PreviewImagePaymentComponent,
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -335,6 +352,9 @@ export const MY_FORMATS = {
     PopUpImageBlobComponent,
     DialogUploadLanguageComponent,
     ImportAudiencePersonalizeInfoBoardComponent,
+    DialogProcessComponentIB,
+    DialogProcessSaveIBComponent,
+    PreviewImagePaymentComponent
   ],
   providers: [
     // PendingChangesGuard,
@@ -353,6 +373,7 @@ export const MY_FORMATS = {
     ListAllCategoryProdukResolver,
     RupiahFormaterWithoutRpPipe,
     PageGuard,
+    TranslateInterpolatePipe
   ],
 })
 export class UserManagementModule { }

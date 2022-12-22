@@ -11,6 +11,9 @@ export class DataService {
 
     private newData = new BehaviorSubject<any>({});
 
+    private jsonLocale = new BehaviorSubject(this.getFromStorage("json_locale"));
+    currentJsonLocale = this.jsonLocale.asObservable();
+
     showLoading(show) {
         this.show = show;
         this.change.emit(this.show);
@@ -95,4 +98,8 @@ export class DataService {
       getDataSequencingInfo() {
         return this.newData.asObservable();
       }
+
+    setJsonLocale(data) {
+    this.jsonLocale.next(data);
+    }
 }
