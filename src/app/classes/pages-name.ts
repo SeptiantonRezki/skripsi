@@ -152,6 +152,8 @@ export class PagesName {
       "/dte/check-image-planogram/create": "principal.dte_image_recognition_check_image_planogram.buat",
       "/dte/check-image-planogram/detail/": "principal.dte_image_recognition_check_image_planogram.lihat",
 
+      "/payment-gateway/qris": "principal.approval_qris.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
@@ -231,8 +233,6 @@ export class PagesName {
       "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
       "/content-management/keyword-management": "principal.keywordmanagement.lihat",
       "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
-
-      "/payment-gateway/qris": "principal.approval_qris.lihat",
     };
     return PAGES[name];
   }
