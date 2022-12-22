@@ -231,6 +231,8 @@ export class PagesName {
       "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
       "/content-management/keyword-management": "principal.keywordmanagement.lihat",
       "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
+
+      "/payment-gateway/qris": "principal.approval_qris.lihat",
     };
     return PAGES[name];
   }

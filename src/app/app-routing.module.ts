@@ -202,6 +202,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'payment-gateway',
+    loadChildren: './pages/payment-gateway/payment-gateway.module#PaymentGatewayModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   },
