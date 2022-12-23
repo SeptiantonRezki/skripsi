@@ -153,13 +153,13 @@
                     <mat-icon>add</mat-icon>
                     Tambah Produk
                   </button> -->
-                  <button mat-icon-button type="button" *ngIf="i > 0" (click)="removeSkuProduct(i)">
+                  <button mat-icon-button type="button" *ngIf="i > 0 && !isDetail" (click)="removeSkuProduct(i)">
                     <mat-icon class="secondary-text">delete</mat-icon>
                   </button>
                   <!-- enhancement challenge 17/11/22 -->
                   <mat-form-field class="is-light form-primary mx-24" fxFlex="30%" *ngIf="ls.selectedLanguages.includes('ph')===true">
                     <input matInput type="number"
-                      placeholder="Extra coin/ SKU"
+                      placeholder="Extra coin / SKU"
                       formControlName="ex_coin_per_sku" min="0" max="10000">
                     <mat-error class="mt-8">
                       The number of Extra Coins per SKU must be between 0 and 10000.
@@ -168,7 +168,7 @@
                   <mat-form-field class="is-light form-primary" fxFlex="45%" *ngIf="ls.selectedLanguages.includes('ph')===true">
                     <input matInput type="number"
                       placeholder="Maximum Quantity / Order"
-                      formControlName="max_qty_per_order" max="10000">
+                      formControlName="max_qty_per_order" min="1" max="10000">
                     <mat-error class="mt-8">
                       The number of maximum quantity per order must be between 1 and 10000.
                     </mat-error>

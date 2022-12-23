@@ -44,7 +44,8 @@ export class AudienceEditComponent {
     { name: "IMO", value: "IMO" },
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
-    { name: "KA", value: "KA" }
+    { name: "KA", value: "KA" },
+    this.ls.selectedLanguages.includes('ph')===true?{ name: "ISR", value: "ISR" }:null
   ];
   srcClassification: any[] = [
     { name: this.translate.instant('global.label.all_type'), value: "all" }
@@ -1254,17 +1255,17 @@ export class AudienceEditComponent {
           trade_creator_id: this.formAudience.get("type").value === 'challenge' ? this.formAudience.get("trade_creator_id").value : null,
           business_type: this.formAudience.get("business_type").value,
         };
-  
+
         body["type"] = this.formAudience.get("type").value;
         body["audience_type"] = this.formAudience.get("audience_type").value;
-  
+
         if (this.formAudience.get("limit").value !== "pick-all") {
           body["retailer_id"] = this.selected.map((item) => item.id);
           body["min"] = this.formAudience.get("min").value;
           body["max"] = this.formAudience.get("max").value;
         } else {
           body["area_id"] = this.pagination.area;
-  
+
           if (this.pagination.area !== 1) {
             body["min"] = 1;
             body["max"] = this.pagination.total;
@@ -1273,7 +1274,7 @@ export class AudienceEditComponent {
             body["max"] = "";
           }
         }
-        
+
         this.saveData = true;
         this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
           (res) => {
@@ -1697,7 +1698,7 @@ export class AudienceEditComponent {
       }
 
       if (response) {
-        
+
         this.importAudienceResult = {...response};
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.router.navigate(["dte", "audience"]);
