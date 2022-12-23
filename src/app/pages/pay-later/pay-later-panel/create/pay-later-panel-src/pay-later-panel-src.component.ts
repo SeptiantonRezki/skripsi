@@ -405,6 +405,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -437,6 +438,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -472,6 +474,7 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -615,10 +618,12 @@ export class PayLaterPanelSrcComponent implements OnInit, OnDestroy {
 
       if (this.allRowsSelected) {
         body['all'] = '1';
+        body['search'] = this.pagination.search || '';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
         delete body['detail'];
       } else {
         body['all'] = '0';
+        body['search'] = '';
         body['area'] = [1];
       }
       // console.log('my body', body);
