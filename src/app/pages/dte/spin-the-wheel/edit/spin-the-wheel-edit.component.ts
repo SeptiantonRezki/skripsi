@@ -1,28 +1,26 @@
+import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import moment from 'moment';
-import { LanguagesService } from 'app/services/languages/languages.service';
+import { MatDialog, MatDialogConfig, MatSelect } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
-import { takeUntil } from 'rxjs/operators';
-import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
-import { GeotreeService } from 'app/services/geotree.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
-import { AudienceService } from 'app/services/dte/audience.service';
-import { Page } from 'app/classes/laravel-pagination';
-import { DataService } from 'app/services/data.service';
-import { NotificationService } from 'app/services/notification.service';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import { DialogService } from 'app/services/dialog.service';
-import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatDialogConfig, MatSelect, MatChipInputEvent } from '@angular/material';
+import { Page } from 'app/classes/laravel-pagination';
 import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service';
-import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
+import { DataService } from 'app/services/data.service';
+import { DialogService } from 'app/services/dialog.service';
+import { AudienceService } from 'app/services/dte/audience.service';
+import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
+import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { NotificationService } from 'app/services/notification.service';
 import { ProductService } from 'app/services/sku-management/product.service';
-import { DialogProcessComponentSPW } from '../dialog/dialog-process/dialog-process.component';
+import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
+import moment from 'moment';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { DialogProcessSaveComponentSPW } from '../dialog/dialog-process-save/dialog-process-save.component';
+import { DialogProcessComponentSPW } from '../dialog/dialog-process/dialog-process.component';
 import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/import-audience-personalize.component';
 
 @Component({
@@ -54,7 +52,8 @@ export class SpinTheWheelEditComponent implements OnInit {
   formPM: FormGroup;
   formPreview: FormGroup;
   onLoad: boolean;
-  minDate = new Date();
+  minDate: any = new Date();
+  maxDate: any;
   groupTradePrograms: any[] = [];
 
   files: File;
@@ -479,16 +478,35 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   getTradePrograms() {
-    this.audienceService.getListTradePrograms().subscribe(
+    this.pagination.per_page = 30;
+    this.audienceService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
       },
       (err) => {
         console.log("err trade programs", err);
       }
     );
+  }
+
+  tradeProgramChange(e: any){
+    // console.log(e);
+    const theIndex = this.listTradePrograms.findIndex(x => x.id === e.value);
+    console.log(this.listTradePrograms[theIndex]);
+    this.setDate(this.listTradePrograms[theIndex].end_date);
+    this.formSpin.patchValue({
+      trade_creator_name: this.listTradePrograms[theIndex].name,
+      total_budget: this.listTradePrograms[theIndex].budget,
+      endDateTrade: this.listTradePrograms[theIndex].end_date,
+      status: "unpublish",
+    });
+  }
+
+  setDate(d: any) {
+    this.maxDate = moment(d).format('YYYY-MM-DD');
+    this.minDate = moment(new Date()).format('YYYY-MM-DD');
   }
 
   // changeBlastType(type) {
