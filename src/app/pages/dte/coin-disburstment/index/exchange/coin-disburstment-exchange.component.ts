@@ -154,7 +154,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     })
 
     this.formFilterExchange.get('name').setValue(this.detailCoin.name);
-    this.formFilterExchange.get('name').disable();    
+    this.formFilterExchange.get('name').disable();
 
     this.initAreaV2();
 
@@ -288,7 +288,7 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
         }
       }
     }
-    
+
     this.pagination['coin_disbursement_id'] = this.detailCoin.id;
 
     if (this.formFilterExchange.get("group_trade_program").value) {
@@ -751,29 +751,20 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       params['name'] = this.formFilterExchange.get('name').value;
     }
 
+    if (!isDetail) {
+      params['group_by'] = true;
+    }
+
     try {
-      if (isDetail) {        
-        this.coinDisburstmentService.exportDetail(params).subscribe(res => {
-          this.downloadLink.nativeElement.href = res.data;
-          this.downloadLink.nativeElement.click();
-          this.dataService.showLoading(false);
-        }, err => {
-          console.warn('err', err);
-          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-          this.dataService.showLoading(false);
-        })
-      }
-      else{
-        this.coinDisburstmentService.exportExchange(params).subscribe(res => {
-          this.downloadLink.nativeElement.href = res.data;
-          this.downloadLink.nativeElement.click();
-          this.dataService.showLoading(false);
-        }, err => {
-          console.warn('err', err);
-          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-          this.dataService.showLoading(false);
-        })
-      }
+      this.coinDisburstmentService.exportDetail(params).subscribe(res => {
+        this.downloadLink.nativeElement.href = res.data;
+        this.downloadLink.nativeElement.click();
+        this.dataService.showLoading(false);
+      }, err => {
+        console.warn('err', err);
+        alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
+        this.dataService.showLoading(false);
+      })
     } catch (error) {
       this.dataService.showLoading(false);
       throw error;
