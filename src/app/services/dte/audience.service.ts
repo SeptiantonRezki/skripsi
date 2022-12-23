@@ -106,7 +106,7 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "show_preview_import");
     return this.postApi(url, body, queryParams);
   }
-  
+
   requestImportExcel(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "request_import");
     return this.postApi(url, body);
@@ -132,7 +132,7 @@ export class AudienceService extends BaseService {
     return this.postApi(url, body);
   }
   getListTradePrograms(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, "list_trade_program");
+    const url = this.getUrl("sequencing", "list_trade_program");
     return this.getApi(url, queryParams);
   }
 
@@ -145,7 +145,7 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "show_status");
     return this.getApi(url, queryParams);
   }
-  
+
   // Personalize
   getPersonalize(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'get_post_personalize');

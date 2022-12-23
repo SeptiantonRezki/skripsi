@@ -319,11 +319,12 @@ export class SpinTheWheelCreateComponent implements OnInit {
   }
 
   getTradePrograms() {
-    this.audienceService.getListTradePrograms().subscribe(
+    this.pagination.per_page = 30;
+    this.audienceService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
       },
       (err) => {
         console.log("err trade programs", err);
@@ -758,7 +759,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
 
   submit() {
     if (
-      this.formSpin.valid 
+      this.formSpin.valid
       // && this.formGeo.valid
       ) {
       let body = {
