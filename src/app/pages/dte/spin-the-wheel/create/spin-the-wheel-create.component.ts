@@ -165,6 +165,17 @@ export class SpinTheWheelCreateComponent implements OnInit {
       return;
     } else {
       search = search.toLowerCase();
+      this.pagination.search = search;
+      this.audienceService.getListTradePrograms(this.pagination).subscribe(
+        (res) => {
+          console.log("res trade programs", res);
+          this.listTradePrograms = res.data.data;
+          this.filteredTradeProgram.next(res.data.data);
+        },
+        (err) => {
+          console.log("err trade programs", err);
+        }
+      );
     }
     // filter the banks
     this.filteredTradeProgram.next(
@@ -173,6 +184,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
       )
     );
   }
+
 
   ngOnInit() {
     this.formSpin = this.formBuilder.group({
