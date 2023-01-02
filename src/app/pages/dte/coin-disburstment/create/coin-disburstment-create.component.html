@@ -259,7 +259,7 @@
           <div class="p-0" *ngIf="isTargetedRetailer.value === true">
             <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
               fxLayoutAlign="end center" class="p-16 export">
-              <button mat-raised-button type="button" class="is-danger" (click)="importAudience()">
+              <button mat-raised-button type="button" class="is-danger" (click)="importAudience()" [disabled]="isPublish">
                 <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLS
               </button>
               <button mat-raised-button type="button" class="is-danger" (click)="exportAudience()">
@@ -276,7 +276,7 @@
 
               <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
                 <ng-template ngx-datatable-header-template let-value="value">
-                  <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
+                  <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)" [disabled]="isPublish"></mat-checkbox>
                 </ng-template>
 
                 <!-- <ng-template ngx-datatable-header-template let-value="value">
@@ -285,7 +285,7 @@
 
                 <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
                   let-onCheckboxChangeFn="onCheckboxChangeFn">
-                  <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+                  <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="isPublish"></mat-checkbox>
                 </ng-template>
               </ngx-datatable-column>
 
