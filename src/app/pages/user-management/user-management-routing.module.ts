@@ -272,6 +272,22 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "retailer-image-verification",
+    component: StorePhotoVerificationComponent,
+    data: {
+
+    },
+    canActivate: []
+  },
+  {
+    path: "retailer/store-photo-types",
+    component: StorePhotoTypesComponent,
+    data: {
+
+    },
+    canActivate: []
+  },
+  {
     path: "rrp-retailer",
     component: OrdersRrpComponent,
     data: {

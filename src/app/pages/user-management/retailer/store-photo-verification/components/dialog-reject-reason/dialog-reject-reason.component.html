@@ -3,7 +3,7 @@
   <!-- HEADER -->
   <div fxLayout="row" fxLayoutAlign="space-between center">
     <h4><strong>Alasan Penolakan</strong></h4>
-    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog">
+    <button mat-icon-button (click)="onCancel()" aria-label="Close Dialog">
       <mat-icon style="color: #9F9F9F;">close</mat-icon>
     </button>
   </div>
@@ -14,43 +14,63 @@
     <mat-dialog-content>
       <mat-list>
         <mat-list-item *ngFor="let reason of reasons" class="reject-reason-list">
-          <span>{{reason.name}}</span>
-          <button mat-icon-button (click)="delete(reason)" color="primary">
+
+          <mat-radio-button *ngIf="actionType==='confirmation'" color="primary" [checked]="reason.id == selectedReason"
+            [value]="reason" (change)="selectedReason = $event.value">
+            {{reason.reason}}
+          </mat-radio-button>
+
+          <span *ngIf="!actionType">{{reason.reason}}</span>
+          <button *ngIf="!actionType" mat-icon-button (click)="delete(reason)" color="primary">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-list-item>
-        <form [formGroup]="formReasons">
-          <mat-list-item formArrayName="reasonList"
-            *ngFor="let formReason of formReasons.get('reasonList').controls; let i = index" class="reject-reason-list">
-            <!-- <mat-form-field [formGroupName]="i" appearance="outline"> -->
-            <div fxFlex [formGroupName]="i">
-              <div fxLayout="row wrap" fxLayoutGap="4px">
-                <div fxFlex="80" class="pb-8">
-                  <input class="new-reason-field" matInput formControlName="name" placeholder="Alasan">
-                  <mat-error *ngIf="formReason.get('name').hasError('required') && formReason.get('name').touched">
-                    Alasan Tidak Boleh Kosong
-                  </mat-error>
-                </div>
-                <button class="new-reason-btn" fxFlex (click)="onCancelNewReason(formReason, i)">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button class="new-reason-btn" fxFlex (click)="onSaveNewReason(formReason, i)">
-                  <mat-icon>check</mat-icon>
-                </button>
-              </div>
-            </div>
-            <!-- </mat-form-field> -->
-          </mat-list-item>
-        </form>
+        <div *ngIf="!actionType;">
 
-        <mat-list-item>
-          <button class="add-reason-btn" (click)="addNewReasonItem()">+ Tambah Alasan Baru</button>
-        </mat-list-item>
+          <form [formGroup]="formReasons">
+            <mat-list-item formArrayName="reasonList"
+              *ngFor="let formReason of formReasons.get('reasonList').controls; let i = index"
+              class="reject-reason-list">
+              <!-- <mat-form-field [formGroupName]="i" appearance="outline"> -->
+              <div fxFlex [formGroupName]="i">
+                <div fxLayout="row wrap" fxLayoutGap="4px">
+                  <div fxFlex="80" class="pb-8">
+                    <input class="new-reason-field" matInput formControlName="reason" placeholder="Alasan">
+                    <mat-error
+                      *ngIf="formReason.get('reason').hasError('required') && formReason.get('reason').touched">
+                      Alasan Tidak Boleh Kosong
+                    </mat-error>
+                  </div>
+                  <button class="new-reason-btn" fxFlex (click)="onCancelNewReason(formReason, i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <button class="new-reason-btn" fxFlex (click)="onSaveNewReason(formReason, i)">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <!-- </mat-form-field> -->
+            </mat-list-item>
+          </form>
+
+          <mat-list-item>
+            <button class="add-reason-btn" (click)="addNewReasonItem()">+ Tambah Alasan Baru</button>
+          </mat-list-item>
+
+        </div>
 
       </mat-list>
     </mat-dialog-content>
-
   </mat-card>
+  <div *ngIf="actionType === 'confirmation'" fxLayout="row wrap" class="mt-16" fxLayoutGap="20px" fxLayoutAlign="flex-end">
+    <button id="confirm-reject" mat-raised-button type="button" color="white" (click)="onCancel()">
+      Cancel
+    </button>
+    <button [disabled]="!selectedReason" id="confirm-reject" mat-raised-button type="button" color="primary" (click)="onRejectConfirmed()">
+      Reject
+    </button>
+  </div>
+
   <!--/ CONTENT -->
 
 </div>

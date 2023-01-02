@@ -8,6 +8,7 @@ import { PagesName } from 'app/classes/pages-name';
 import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
 import { PopupImageComponent } from 'app/components/popup-image/popup-image.component';
 import { DataService } from 'app/services/data.service';
+import { DialogService } from 'app/services/dialog.service';
 import { StorePhotoVerificationService } from 'app/services/store-photo-verification.service';
 import { OnSelectDateDropdownChange } from 'app/shared/select-date-dropdown/select-date-dropdown.component';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
@@ -51,6 +52,7 @@ export class StorePhotoVerificationComponent implements OnInit {
 
   dialogRefPreviewImage: MatDialogRef<PopupImageComponent>;
   dialogRefRejectReason: MatDialogRef<DialogRejectReasonComponent>;
+  dialogRefRejectPhoto: MatDialogRef<DialogRejectReasonComponent>;
 
   // endArea: String;
   // lastLevel: any;
@@ -61,6 +63,7 @@ export class StorePhotoVerificationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private dataService: DataService,
+    private dialogService: DialogService,
   ) {
     this.filters = this.formBuilder.group({
       query: '',
@@ -77,6 +80,7 @@ export class StorePhotoVerificationComponent implements OnInit {
 
     this.fetchRows();
     this.fetchJenisPhoto();
+    this.storePhotoVerificationService.fetchRejectReasons();
 
     this.filters.valueChanges.debounceTime(300).subscribe(filterValues => {
 
@@ -151,15 +155,15 @@ export class StorePhotoVerificationComponent implements OnInit {
     }
     // this.isSetPage = true;
     // if (this.isSetPage === true) {
-      this.storePhotoVerificationService.getListStoreVerification(this.pagination).subscribe( res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
-        // await this.getAndCreateRoomById(res);
-        // this.loadingIndicator = false;
-        // this.dataService.showLoading(false);
-      }, err => {
-        // this.dataService.showLoading(false);
-      });
+    this.storePhotoVerificationService.getListStoreVerification(this.pagination).subscribe(res => {
+      Page.renderPagination(this.pagination, res);
+      this.rows = res.data;
+      // await this.getAndCreateRoomById(res);
+      // this.loadingIndicator = false;
+      // this.dataService.showLoading(false);
+    }, err => {
+      // this.dataService.showLoading(false);
+    });
     // } else {
     //   this.isSetPage = false;
     //   this.dataService.showLoading(false);
@@ -198,29 +202,80 @@ export class StorePhotoVerificationComponent implements OnInit {
   onClickRejectReason() {
     const config = new MatDialogConfig();
 
-    const reasons = [
-      {
-        id: 1,
-        name: 'Foto Tidak Sesuai Ketentuan Yang Berlaku'
-      },
-      {
-        id: 2,
-        name: 'Foto Buram'
-      },
-      {
-        id: 3,
-        name: 'Foto Terlalu Gelap'
-      },
-    ]
-
     config.disableClose = false;
     config.autoFocus = false;
-    config.data = { reasons };
+    config.data = {};
 
     this.dialogRefRejectReason = this.dialog.open(DialogRejectReasonComponent, config);
     this.dialogRefRejectReason.afterClosed().subscribe(result => {
-      console.log({ result });
+      // console.log({ result });
+      if (!result) {
+        this.storePhotoVerificationService.fetchRejectReasons();
+      }
     })
+  }
+
+  onClickReject(storePhotoItem) {
+    console.log({ storePhotoItem });
+
+    const config = new MatDialogConfig();
+    config.disableClose = true;
+    config.autoFocus = false;
+    config.data = { actionType: 'confirmation' };
+
+    this.dialogRefRejectPhoto = this.dialog.open(DialogRejectReasonComponent, config);
+
+    this.dialogRefRejectPhoto.afterClosed().subscribe(({ reason, confirmed }) => {
+
+      //if confirmed reject clicked
+      if (reason && confirmed) {
+
+        const payload = {
+          id: storePhotoItem.id,
+          status: 0, // 0 is rejected
+          reject_reason_id: reason.id
+        }
+
+        this.storePhotoVerificationService.postVerifyStoreVerification(payload).subscribe(res => {
+
+          this.fetchRows();
+
+        }, err => {
+
+        });
+      }
+
+    })
+  }
+  onClickApprove(storePhotoItem, confirmed = false) {
+    const payload = {
+      id: storePhotoItem.id,
+      status: 1, // 1 is approved
+    }
+    
+    if(confirmed) {
+
+      this.storePhotoVerificationService.postVerifyStoreVerification(payload).subscribe(res => {
+  
+        this.fetchRows();
+        this.dialogService.brodcastCloseConfirmation();
+  
+      }, err => {
+  
+      });
+
+    } else {
+      
+      const data = {
+        titleDialog: 'Approve Store Photo',
+        captionDialog: 'Apakah anda yakin?',
+        confirmCallback: () => { this.onClickApprove(storePhotoItem, true) },
+        buttonText: ['Ya, Lanjutkan', 'Batal']
+      };
+  
+      this.dialogService.openCustomConfirmationDialog(data);
+
+    }
   }
   onDropOne(e) {
     console.log('drop', { e });

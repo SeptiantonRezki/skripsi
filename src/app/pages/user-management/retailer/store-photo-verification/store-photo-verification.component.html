@@ -134,10 +134,10 @@
         <ngx-datatable-column name="Action" prop="action">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="row.status_verifikasi === 'Dalam Verifikasi'">
-              <button (click)="onClickVerify('approve')" class="spv-icon approve" mat-icon-button>
+              <button (click)="onClickApprove(row)" class="spv-icon approve" mat-icon-button>
                 <mat-icon>check</mat-icon>
               </button>
-              <button (click)="onClickVerify('reject')" class="spv-icon reject" mat-icon-button>
+              <button (click)="onClickReject(row)" class="spv-icon reject" mat-icon-button>
                 <mat-icon>close</mat-icon>
               </button>
             </div>

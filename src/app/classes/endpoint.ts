@@ -1266,7 +1266,11 @@ export class Endpoint {
       },
       store_photo_verification: {
         calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/calculation-result`,
-        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-retailer-uploaded`
+        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-retailer-uploaded`,
+        post_verify_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/verify`,
+        list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-reason`,
+        post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/add-reason`,
+        delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/delete-reason/${context.id}`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
