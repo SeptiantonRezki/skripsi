@@ -486,6 +486,11 @@
                 <span>{{row.Territory}}</span>
               </ng-template>
             </ngx-datatable-column>
+            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_type}}" prop="tgl_journey">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.journey_type}}</span>
