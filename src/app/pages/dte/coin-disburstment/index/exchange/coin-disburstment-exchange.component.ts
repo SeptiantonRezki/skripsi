@@ -756,15 +756,27 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
     }
 
     try {
-      this.coinDisburstmentService.exportDetail(params).subscribe(res => {
-        this.downloadLink.nativeElement.href = res.data;
-        this.downloadLink.nativeElement.click();
-        this.dataService.showLoading(false);
-      }, err => {
-        console.warn('err', err);
-        alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-        this.dataService.showLoading(false);
-      })
+      if (isDetail) {
+        this.coinDisburstmentService.exportDetail(params).subscribe(res => {
+          this.downloadLink.nativeElement.href = res.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, err => {
+          console.warn('err', err);
+          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
+          this.dataService.showLoading(false);
+        })
+      } else {
+        this.coinDisburstmentService.exportExchange(params).subscribe(res => {
+          this.downloadLink.nativeElement.href = res.data;
+          this.downloadLink.nativeElement.click();
+          this.dataService.showLoading(false);
+        }, err => {
+          console.warn('err', err);
+          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
+          this.dataService.showLoading(false);
+        })
+      }
     } catch (error) {
       this.dataService.showLoading(false);
       throw error;
