@@ -349,6 +349,8 @@ export class SpinTheWheelEditComponent implements OnInit {
           this.formGeo.get('classification').setValue(res.data.class_groups);
         }
 
+        this.setDate(res.data.trade_creator_end_date);
+
         let zone = [];
         if (res.data.areas) {
           for (let i = 0; i < res.data.areas.length; i++) {
@@ -610,7 +612,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       // console.log('on set', thisAreaOnSet, selection, id);
     }
 
-    console.log('XYZ--------')
     switch (this.parseArea(selection)) {
       case 'zone':
         // area = this.formFilter.get(selection).value;
@@ -919,7 +920,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       body['start_date'] = `${moment(this.formSpin.get('start_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('start_time').value}:00`;
       body['end_date'] = `${moment(this.formSpin.get('end_date').value).format('YYYY-MM-DD')} ${this.formSpin.get('end_time').value}:00`;
 
-      console.log(body);
 
       this.dataService.showLoading(true);
       this.spinTheWheelService.put_spin({ id: id }, body).subscribe(
@@ -942,7 +942,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   submitAudience() {
-    console.log('final', this.formGeo.get('area').value);
     let body = {};
     const id = this.dataService.getFromStorage('spin_the_wheel').id;
     if (this.isPopulation === true) {
