@@ -202,6 +202,7 @@ export class SpinTheWheelEditComponent implements OnInit {
       territory: []
     }
     this.filterTradeProgram.valueChanges
+      .debounceTime(1000)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringTradeProgram();
@@ -231,23 +232,18 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
     // get the search keyword
     let search = this.filterTradeProgram.value;
-    if (!search) {
-      this.filteredTradeProgram.next(this.listTradePrograms.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-      this.pagination.search = search;
-      this.audienceService.getListTradePrograms(this.pagination).subscribe(
-        (res) => {
-          console.log("res trade programs", res);
-          this.listTradePrograms = res.data.data;
-          this.filteredTradeProgram.next(res.data.data);
-        },
-        (err) => {
-          console.log("err trade programs", err);
-        }
-      );
-    }
+    search = search.toLowerCase();
+    this.pagination.search = search;
+    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+      (res) => {
+        console.log("res trade programs", res);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
+      },
+      (err) => {
+        console.log("err trade programs", err);
+      }
+    );
     // filter the banks
     this.filteredTradeProgram.next(
       this.listTradePrograms.filter(
