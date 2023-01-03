@@ -713,7 +713,7 @@ export class AudienceEditComponent {
   getTradePrograms() {
     this.audienceService.getListTradePrograms({ id: this.detailAudience.trade_creator_id }).subscribe(res => {
       console.log('res trade programs', res);
-      this.listTradePrograms = res.data;
+      this.listTradePrograms = res.data.data;
       this.filteredTradeProgram.next(this.listTradePrograms.slice());
     }, err => {
       console.log('err trade programs', err);
