@@ -49,7 +49,7 @@ export class CoinDisburstmentService extends BaseService {
 
   exportExchange(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "export_exchange");
-    return this.postApi(url, body);
+    return this.postBlobApi(url, body);
   }
 
   exportDetail(body?: any): Observable<any> {
