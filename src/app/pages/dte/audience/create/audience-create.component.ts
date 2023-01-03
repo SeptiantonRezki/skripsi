@@ -189,7 +189,7 @@ export class AudienceCreateComponent {
       },
     ];
 
-    if(this.dataService.getDecryptedProfile().country == 'PH'){ 
+    if(this.dataService.getDecryptedProfile()["country"] == 'PH'){ 
       this.retailClassification.push({ name: "ISR", value: "ISR" });
     }
 
