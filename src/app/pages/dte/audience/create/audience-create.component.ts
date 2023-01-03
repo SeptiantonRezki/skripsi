@@ -914,8 +914,8 @@ export class AudienceCreateComponent {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
         console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
       },
       (err) => {
         console.log("err trade programs", err);
