@@ -63,7 +63,7 @@ export class AudienceCreateComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" },
-    { name: "ISR", value: "ISR" }
+    // { name: "ISR", value: "ISR" }
   ]; // TODO
   srcClassification: any[] = [
     { name: this.translate.instant('global.label.all_type'), value: "all" }
@@ -188,6 +188,10 @@ export class AudienceCreateComponent {
         name: "SSLSNTL",
       },
     ];
+
+    if(this.dataService.getDecryptedProfile()["country"] == 'PH'){ 
+      this.retailClassification.push({ name: "ISR", value: "ISR" });
+    }
 
     this.list = {
       zone: [],
@@ -910,8 +914,8 @@ export class AudienceCreateComponent {
     this.audienceService.getListTradePrograms().subscribe(
       (res) => {
         console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
       },
       (err) => {
         console.log("err trade programs", err);
