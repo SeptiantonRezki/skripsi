@@ -160,8 +160,12 @@ export class TradeEditComponent {
         : "",
     });
 
-    if (this.detailFormTrade.status === "active") {
+    const isExpired = moment().format("YYYY-MM-DD HH:mm:ss") > this.detailFormTrade.end_date;
+    if (this.detailFormTrade.status === "active" || isExpired) {
       this.formTradeProgram.disable();
+    }
+
+    if (this.detailFormTrade.status === "active") {
       this.formTradeProgram.controls.budget.enable();
       this.formTradeProgram.controls.coin_expiry_date.enable();
     }
