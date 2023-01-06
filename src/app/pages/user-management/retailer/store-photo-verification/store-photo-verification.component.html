@@ -44,34 +44,34 @@
           </select-date-dropdown>
           <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Jenis Foto">
+            <mat-select class="custom-select" formControlName="jenis_foto" [multiple]="true" placeholder="Jenis Foto">
               <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
                 noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
               <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
+                {{ item.type_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
+
+            <mat-select class="custom-select" formControlName="status" [multiple]="true" placeholder="Status">
+              <!-- <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Status"
+                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+              </ngx-mat-select-search> -->
+              <mat-option *ngFor="let item of statusOptions" [value]="item.id">
                 {{ item.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Status">
-              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
-                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+            <mat-select class="custom-select" formControlName="admin" [multiple]="true" placeholder="Admin">
+              <ngx-mat-select-search [formControl]="searchKeywordAdmin" placeholderLabel="Cari Admin"
+                noEntriesFoundLabel="Admin Tidak Ditemukan..." [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
-              <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
-                {{ item.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
-
-            <mat-select class="custom-select" formControlName="photo_type" [multiple]="true" placeholder="Admin">
-              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
-                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
-              </ngx-mat-select-search>
-              <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
-                {{ item.name }}
+              <mat-option *ngFor="let item of adminOptions | async" [value]="item.id">
+                {{ item.fullname }}
               </mat-option>
             </mat-select>
           </mat-form-field>

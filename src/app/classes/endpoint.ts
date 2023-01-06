@@ -1271,6 +1271,12 @@ export class Endpoint {
         list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-reason`,
         post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/add-reason`,
         delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/delete-reason/${context.id}`,
+        delete_store_photo_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/delete-list-type/${context.id}`,
+        list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-type`,
+        list_detail_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-detil-type`,
+        list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-admin`,
+        update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/update-urutan-list-type`,
+        update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/publish-type`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

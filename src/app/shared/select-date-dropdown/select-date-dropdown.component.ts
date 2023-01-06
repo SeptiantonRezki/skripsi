@@ -131,7 +131,11 @@ export class SelectDateDropdownComponent implements OnInit {
 
     this.selectedDate = { id: this.CUSTOM_RANGE_ID, title: `${from} - ${to}`, range: 0 }
     
-    if(startDate.valid && endDate.valid && startDate.value && endDate.value) this.onChange.emit({ from, to });
+    if(startDate.valid && endDate.valid && startDate.value && endDate.value) {
+      this.onChange.emit({
+        from: startDate.value.format('YYYY-MM-DD'), to: endDate.value.format('YYYY-MM-DD')
+      });
+    }
 
   }
 

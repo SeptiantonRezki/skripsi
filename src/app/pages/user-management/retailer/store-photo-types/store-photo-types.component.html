@@ -27,13 +27,13 @@
       <div fxLayout="row wrap" *ngFor="let item of storeTypes; let i=index;" [dndDraggable]="item" dndEffectAllowed="copyMove"
         (dndMoved)="onDragged(item, storeTypes, 'move')"
         [ngClass]="{'drag-row': true, 'round-bt' : i === storeTypes?.length - 1}">
-        <div fxFlex="25" fxLayoutAlign="start center" class="p-8">{{item.name}}</div>
-        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.incoming}}</div>
-        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.verified}}</div>
-        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.count_audience}}</div>
+        <div fxFlex="25" fxLayoutAlign="start center" class="p-8">{{item.jenis_foto}}</div>
+        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_foto_masuk | rupiahFormaterWithoutRp}}</div>
+        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_foto_diverifikasi | rupiahFormaterWithoutRp}}</div>
+        <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_audience | rupiahFormaterWithoutRp}}</div>
         <div fxFlex fxLayoutAlign="start center" class="p-8">
           <mat-form-field fxLayoutAlign="center center">
-            <mat-select>
+            <mat-select [(ngModel)]="item.is_publish" (selectionChange)="onChangePublish($event, item)">
               <mat-option [value]="true">Yes</mat-option>
               <mat-option [value]="false">No</mat-option>
             </mat-select>
@@ -41,7 +41,12 @@
 
         </div>
         <div fxFlex="10" fxLayoutAlign="space-between center" class="p-8">
-          <mat-icon color="primary">delete</mat-icon>
+          <button (click)="onClickDelete(item)" mat-icon-button>
+            <mat-icon color="primary">delete</mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
           <mat-icon>drag_handle</mat-icon>
         </div>
       </div>

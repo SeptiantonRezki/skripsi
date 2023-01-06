@@ -39,16 +39,40 @@ export class StorePhotoVerificationService extends BaseService {
         const url = this.getUrl(this.namespace, 'delete_reject_reason', context);
         return this.deleteApi(url);
     }
+    deleteStorePhotoType(context: { id: number }): Observable<any> {
+        const url = this.getUrl(this.namespace, 'delete_store_photo_type', context);
+        return this.deleteApi(url);
+    }
+    getListPhotoType(queryParams?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'list_type');
+        return this.getApi(url, queryParams);
+    }
+    getListDetailPhotoType(queryParams?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'list_detail_type');
+        return this.getApi(url, queryParams);
+    }
+    updateSortListPhotoType(body?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'update_sort_list_type');
+        return this.postApi(url, body);
+    }
+    updatePhotoTypePublishStatus(body: {id: number; publish: 1 | 0}): Observable<any> {
+        const url = this.getUrl(this.namespace, 'update_store_photo_type_publish_status');
+        return this.postApi(url, body);
+    }
+    getListAdmin(queryParams?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'list_admin');
+        return this.getApi(url, queryParams);
+    }
 
     fetchRejectReasons() {
-        
-        this.getListRejectReason().subscribe(({data}) => {
+
+        this.getListRejectReason().subscribe(({ data }) => {
 
             this.setRejectReasonData(data);
 
         }, err => {
 
-            console.log({err});
+            console.log({ err });
 
         });
     }

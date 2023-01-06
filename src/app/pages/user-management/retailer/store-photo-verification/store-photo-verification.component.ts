@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
-import { Page } from 'app/classes/laravel-pagination';
+import { Page, StorePhotoVerificationPage } from 'app/classes/laravel-pagination';
 import { PagesName } from 'app/classes/pages-name';
 import { PopUpImageBlobComponent } from 'app/components/popup-image-blob/popup-image-blob.component';
 import { PopupImageComponent } from 'app/components/popup-image/popup-image.component';
@@ -30,7 +30,7 @@ export class StorePhotoVerificationComponent implements OnInit {
 
   loadingIndicator = false;
   reorderable = true;
-  pagination: Page = new Page();
+  pagination: StorePhotoVerificationPage = new StorePhotoVerificationPage();
   onLoad: boolean;
   keyUp = new Subject<string>();
   permission: any;
@@ -46,8 +46,11 @@ export class StorePhotoVerificationComponent implements OnInit {
   table: DatatableComponent;
 
   jenisPhotoOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  statusOptions: Array<any>;
+  adminOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);;
 
   searchKeywordJenisPhoto: FormControl = new FormControl('');
+  searchKeywordAdmin: FormControl = new FormControl('');
   loadingJenisPhoto: boolean;
 
   dialogRefPreviewImage: MatDialogRef<PopupImageComponent>;
@@ -68,23 +71,39 @@ export class StorePhotoVerificationComponent implements OnInit {
     this.filters = this.formBuilder.group({
       query: '',
       verified_date: '',
-      from_date: '',
-      to_date: '',
-      photo_type: '',
+      start_date: '',
+      end_date: '',
+      jenis_foto: '',
       status: '',
       admin: '',
     });
+    this.statusOptions = [
+      {
+        id: 'dalam-verifikasi',
+        name: 'Dalam Verifikasi'
+      },
+      {
+        id: 'success-verifikasi',
+        name: 'Sukses Verifikasi'
+      },
+      {
+        id: 'gagal-verifikasi',
+        name: 'Gagal Verifikasi'
+      }
+    ];
   }
 
   ngOnInit() {
 
     this.fetchRows();
     this.fetchJenisPhoto();
+    this.fetchListAdmin();
     this.storePhotoVerificationService.fetchRejectReasons();
 
     this.filters.valueChanges.debounceTime(300).subscribe(filterValues => {
 
       console.log({ filterValues });
+      this.fetchRows();
 
     });
 
@@ -107,7 +126,17 @@ export class StorePhotoVerificationComponent implements OnInit {
     this.pagination.page = page;
     // this.pagination.per_page = 1;
     this.offsetPagination = page ? (page - 1) : 0;
-
+    
+    // FILTERS
+    const jenisFoto = this.filters.get('jenis_foto').value;
+    const statuses = this.filters.get('status').value
+    const admins = this.filters.get('admin').value
+    this.pagination.jenis_foto = jenisFoto.length ? jenisFoto : undefined;
+    this.pagination.status = statuses.length ? statuses : undefined;
+    this.pagination.admin = admins.length ? admins : undefined;
+    this.pagination.search = this.filters.get('query').value;
+    this.pagination.start_date = this.filters.get('start_date').value
+    this.pagination.end_date = this.filters.get('end_date').value
     this.storePhotoVerificationService.getListStoreVerification(this.pagination).subscribe(res => {
       const { data } = res;
       this.rows = data || [];
@@ -124,19 +153,22 @@ export class StorePhotoVerificationComponent implements OnInit {
   fetchJenisPhoto(keyword: string = '') {
     this.loadingJenisPhoto = true;
 
-    setTimeout(() => {
-      this.jenisPhotoOptions.next([
-        {
-          id: 2,
-          name: 'Tampak Dalam Toko'
-        },
-        {
-          id: 3,
-          name: 'Chiller'
-        }
-      ])
+    this.storePhotoVerificationService.getListPhotoType({search: keyword}).subscribe(res => {
+      this.jenisPhotoOptions.next(res.data || []);
+      console.log({res});
       this.loadingJenisPhoto = false;
-    }, 3000)
+
+    }, err => {
+      
+      this.loadingJenisPhoto = false;
+
+    });
+  }
+  fetchListAdmin() {
+    this.storePhotoVerificationService.getListAdmin().subscribe(res => {
+      // this.adminOptions = res.data || [];
+      this.adminOptions.next(res.data || []);
+    })
   }
 
   changePerPage(event: any) {
@@ -179,7 +211,7 @@ export class StorePhotoVerificationComponent implements OnInit {
 
   onDateFilterChange(event: OnSelectDateDropdownChange) {
 
-    this.filters.patchValue({ from_date: event.from, to_date: event.to });
+    this.filters.patchValue({ start_date: event.from, end_date: event.to });
   }
   onJenisFotoFilterChange(event) {
     console.log({ event });
@@ -254,14 +286,14 @@ export class StorePhotoVerificationComponent implements OnInit {
     }
     
     if(confirmed) {
-
+      this.dataService.showLoading(true);
       this.storePhotoVerificationService.postVerifyStoreVerification(payload).subscribe(res => {
-  
+        this.dataService.showLoading(false);
         this.fetchRows();
         this.dialogService.brodcastCloseConfirmation();
   
       }, err => {
-  
+        this.dataService.showLoading(false);
       });
 
     } else {

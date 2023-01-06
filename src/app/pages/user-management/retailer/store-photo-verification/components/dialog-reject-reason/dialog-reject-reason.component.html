@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div fxLayout="row" fxLayoutAlign="space-between center">
-    <h4><strong>Alasan Penolakan</strong></h4>
+    <h4 class="p-8"><strong>Alasan Penolakan</strong></h4>
     <button mat-icon-button (click)="onCancel()" aria-label="Close Dialog">
       <mat-icon style="color: #9F9F9F;">close</mat-icon>
     </button>
@@ -62,7 +62,7 @@
       </mat-list>
     </mat-dialog-content>
   </mat-card>
-  <div *ngIf="actionType === 'confirmation'" fxLayout="row wrap" class="mt-16" fxLayoutGap="20px" fxLayoutAlign="flex-end">
+  <div *ngIf="actionType === 'confirmation'" fxLayout="row wrap" class="mt-16 p-8" fxLayoutGap="20px" fxLayoutAlign="flex-end">
     <button id="confirm-reject" mat-raised-button type="button" color="white" (click)="onCancel()">
       Cancel
     </button>
