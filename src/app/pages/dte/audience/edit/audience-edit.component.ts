@@ -238,6 +238,8 @@ export class AudienceEditComponent {
     this.initAudience();
     // this.initArea();
     this.initAreaV2();
+
+    this.pagination['business_type'] = this.detailAudience.business_type;  
     this.getRetailer();
 
     this.formAudience.controls['limit'].valueChanges.subscribe(res => {
