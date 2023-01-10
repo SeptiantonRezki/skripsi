@@ -729,9 +729,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
   async exportExchange(isDetail: boolean) {
     this.dataService.showLoading({ show: true });
     const params = {
-      area: this.pagination['area'],
-      self_area: this.pagination['self_area'],
-      last_self_area: this.pagination['last_self_area'],
+      area: this.handleDataType(this.pagination['area']),
+      self_area: this.handleDataType(this.pagination['self_area']),
+      last_self_area: this.handleDataType(this.pagination['last_self_area']),
       after_level: this.pagination['after_level'],
       group: this.pagination['group'],
       coin_disbursement_id: this.detailCoin.id
@@ -800,5 +800,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
         cells[indexCell].id = 'data-cell';
       }
     }
+  }
+
+  handleDataType(item: any) {
+    return isArray(item) ? item.join(",") : item;
   }
 }
