@@ -15,6 +15,7 @@ import { Observable, Subject } from 'rxjs';
 import { ImportExchangeCoinComponent } from '../import-exchange-coin/import-exchange-coin.component';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 
 @Component({
   selector: 'app-coin-disburstment-exchange',
@@ -754,33 +755,30 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       params['name'] = this.formFilterExchange.get('name').value;
     }
 
-    if (!isDetail) {
-      params['group_by'] = true;
-    }
+    if (!isDetail) params["group_by"] = true;
 
     try {
-      if (isDetail) {
-        this.coinDisburstmentService.exportDetail(params).subscribe(res => {
-          this.downloadLink.nativeElement.href = res.data;
-          this.downloadLink.nativeElement.click();
-          this.dataService.showLoading(false);
-        }, err => {
-          console.warn('err', err);
-          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-          this.dataService.showLoading(false);
-        })
-      } else {
-        this.coinDisburstmentService.exportExchange(params).subscribe(res => {
-          this.downloadLink.nativeElement.href = res.data;
-          this.downloadLink.nativeElement.click();
-          this.dataService.showLoading(false);
-        }, err => {
-          console.warn('err', err);
-          alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-          this.dataService.showLoading(false);
-        })
-      }
+      const response = await this.coinDisburstmentService.export(params).toPromise();
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const getTime = moment().format("YYYYMMDDHHmmss");
+      link.download = `list-${isDetail ? "detail-" : ""}penukaran-coin-${getTime}.xlsx`;
+      
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+      
+      this.dataService.showLoading(false);
     } catch (error) {
+      alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
       this.dataService.showLoading(false);
       throw error;
     }
