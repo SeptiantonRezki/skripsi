@@ -313,6 +313,9 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       delete this.pagination['name'];
     }
 
+    this.pagination["list_penukaran"] = true;
+    this.pagination["group_by"] = true;
+
     this.offsetPagination = 0;
 
     this.coinDisburstmentService.getExhanges(this.pagination).subscribe(

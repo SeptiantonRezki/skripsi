@@ -1108,7 +1108,7 @@ export class Endpoint {
       },
       CoinDisburstment: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
-        get_exchanges: `${AYO_API_SERVICE((SERVER.coin))}/api/v1/coin/principal/coin-redemption/penukaran`,
+        get_exchanges: `${AYO_API_SERVICE((SERVER.export))}/api/v1/export/dte/coin-redemption/penukaran/result`,
         detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,
         create: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
         update: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,

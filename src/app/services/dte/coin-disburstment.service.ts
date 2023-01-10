@@ -19,7 +19,7 @@ export class CoinDisburstmentService extends BaseService {
 
   getExhanges(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'get_exchanges');
-    return this.getApi(url, queryParams);
+    return this.postApi(url, queryParams);
   }
 
   getDetail(context?: any): Observable<any> {
