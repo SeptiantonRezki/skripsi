@@ -156,13 +156,15 @@ export class SpinTheWheelCreateComponent implements OnInit {
       });
   }
   filteringTradeProgram() {
-    if (!this.listTradePrograms) {
-      return;
-    }
     // get the search keyword
     let search = this.filterTradeProgram.value;
+    if (!search) {
+      this.filteredTradeProgram.next(this.listTradePrograms.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
 
-    search = search.toLowerCase();
     this.pagination.search = search;
     this.audienceService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
