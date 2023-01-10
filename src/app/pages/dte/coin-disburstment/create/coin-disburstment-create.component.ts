@@ -97,6 +97,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   titleParam = {entity: this.pageName}
   priority_list: any[] = [];
   importType = "XLSX";
+  isPublish: boolean = false;
   
   constructor(
     private dataService: DataService,
@@ -239,6 +240,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         delete this.pagination['classification'];
       }
     });
+
+    this.formCoin.get("start_date").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
+      if(!res) this.formCoin.get("end_date").setValue(null);
+    });
   }
 
   ngOnDestroy() {
@@ -255,7 +260,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     let priorities = this.formCoin.get('priorities') as FormArray;
 
     this.coinDisburstmentService.getDetail({ coin_id: this.detailCoin.id }).subscribe(res => {
-      this.detailCoin = res.data;
+      this.detailCoin = {...this.detailCoin, ...res.data};
 
       this.formCoin.get('name').setValue(this.detailCoin.name);
       this.formCoin.get('coin_valuation').setValue(this.detailCoin.coin_valuation);
@@ -283,6 +288,17 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       if (this.detailCoin.opsi_penukaran === 'all') {
         this.isPojokBayar.setValue(true);
         this.isTransferBank.setValue(true);
+      }
+
+      if (this.detailCoin.status === "publish") {
+        this.formCoin.disable();
+        this.formFilter.disable();
+        this.formFilterRetailer.disable();
+        this.isTransferBank.disable();
+        this.isPojokBayar.disable();
+        this.isTargetedRetailer.disable();
+
+        this.isPublish = true;
       }
 
       this.getListAudience();
@@ -1177,7 +1193,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
   submit() {
     let args = this.getArgsForSubmit();
-    if (this.formCoin.valid) {
+
+    // CDE-5394 -> DISABLED ALL FORM WHEN STATUS PUBLISH, MAKES FORMCOIN ALWAYS INVALID
+    if (this.formCoin.valid || (this.isEdit && this.detailCoin.status === "publish")) {
       if (!this.isPojokBayar.value && !this.isTransferBank.value) {
         this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_select_exchange_options') });
         return;
@@ -1399,5 +1417,12 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     });
 
     return value;
+  }
+
+  handleGTP(id){
+    if (this.isEdit && this.detailCoin.retailer_menukarkan_koin)
+      return this.detailCoin.group && this.detailCoin.group.some(group => group.trade_creator_group_id === id);
+    else
+      return false;
   }
 }
