@@ -21,6 +21,7 @@ export class SetupStwMitraComponent implements OnInit {
   imageConverted: any;
   imageRaw: any;
   minDate: any;
+  imageValidationMsg: string;
 
   dayList: string[] = [
     "senin",
@@ -44,6 +45,8 @@ export class SetupStwMitraComponent implements OnInit {
   ) {
     this.isDetail = false;
     this.onLoad = false;
+    this.imageValidationMsg = "";
+    this.validComboDrag = true;
   }
 
   ngOnInit() {
@@ -102,9 +105,23 @@ export class SetupStwMitraComponent implements OnInit {
     );
   }
 
-  changeImage(event) {
-    this.imageRaw = event;
-    this.readThis(event);
+  changeImage(file) {
+    this.imageRaw = file;
+    this.readThis(file);
+    const imageType = file.type.split("/").pop();
+    const allowType = ["jpeg", "png", "gif"];
+
+    console.log(imageType);
+    if (!allowType.includes(imageType)) {
+      this.imageValidationMsg = "Hanya bisa upload image berupa file jpg, png, dan gif";
+      this.validComboDrag = false;
+    } else if (file.size > 2097152) {
+      this.imageValidationMsg = "Image tidak boleh lebih dari 2 MB";
+      this.validComboDrag = false;
+    } else {
+      this.imageValidationMsg = "";
+      this.validComboDrag = true;
+    }
   }
 
   readThis(inputValue: any): void {

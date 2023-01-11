@@ -28,7 +28,7 @@
                   class="rectangle-16"
                   [(validDrag)]="validComboDrag"
                   [(file)]="files"
-                  accept="image/*"
+                  accept=".jpg, .gif, .png"
                   [class.invalid-drag]="validComboDrag === false"
                   [class.valid-drag]="validComboDrag"
                   (fileChange)="changeImage($event)"
@@ -67,6 +67,11 @@
               >
                 Floating Icon AYO SRC Toko Home Page
               </p>
+              <mat-error *ngIf="imageValidationMsg !== ''">
+                <mat-error style="text-align: center;">
+                  {{imageValidationMsg}}
+                </mat-error>
+              </mat-error>
             </div>
 
             <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
