@@ -19,7 +19,7 @@ export class CoinDisburstmentService extends BaseService {
 
   getExhanges(queryParams?: any): Observable<any> {
     const url = this.getUrl(this.namespace, 'get_exchanges');
-    return this.getApi(url, queryParams);
+    return this.postApi(url, queryParams);
   }
 
   getDetail(context?: any): Observable<any> {
@@ -47,14 +47,9 @@ export class CoinDisburstmentService extends BaseService {
     return this.getApi(url);
   }
 
-  exportExchange(body?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_exchange");
-    return this.postApi(url, body);
-  }
-
-  exportDetail(body?: any): Observable<any> {
-    const url = this.getUrl(this.namespace, "export_detail");
-    return this.postApi(url, body);
+  export(body?: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "export");
+    return this.postBlobApi(url, body);
   }
 
   download(body?: any): Observable<any> {
