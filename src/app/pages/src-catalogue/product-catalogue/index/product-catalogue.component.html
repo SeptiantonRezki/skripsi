@@ -20,10 +20,12 @@
           {{ ls.locale.katalog_src.produk.text3 }}
         </button>
         <button mat-raised-button type="button" class="is-danger" (click)="import()">
-          <mat-icon>arrow_downward</mat-icon> Import XLS
+          <mat-icon>arrow_downward</mat-icon>
+          {{ls.locale.global.button.importXLSX}}
         </button>
         <button (click)="export()" mat-raised-button type="button" class="is-danger">
-          <mat-icon>arrow_upward</mat-icon> Export XLS
+          <mat-icon>arrow_upward</mat-icon>
+          {{ls.locale.global.button.exportXLSX}}
         </button>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">

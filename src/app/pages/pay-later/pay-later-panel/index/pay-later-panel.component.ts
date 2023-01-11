@@ -190,7 +190,7 @@ export class PayLaterPanelComponent implements OnInit {
     try {
       const response = await this.payLaterPanelServicer.exportAllPanel(fd).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterAllPanel_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterAllPanel_${new Date().toLocaleString()}.xlsx`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();

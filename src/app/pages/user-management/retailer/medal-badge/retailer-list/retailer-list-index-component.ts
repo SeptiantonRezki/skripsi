@@ -696,7 +696,7 @@ export class RetailerListIndexComponent implements OnInit {
     try {
       const response = await this.medalBadgeService.exportRetailer().toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_MedalBadge_Retailer_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `Export_MedalBadge_Retailer_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);
