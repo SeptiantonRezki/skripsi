@@ -275,7 +275,7 @@ export class PanelMitraIndexComponent implements OnInit {
   async export(id) {
     try {
       const response = await this.panelMitraService.exportSupplierPanelMitra({ id: id }).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportPanelMitraSupplier_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportPanelMitraSupplier_${new Date().toLocaleString()}.xlsx`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
       this.dataService.showLoading(false);

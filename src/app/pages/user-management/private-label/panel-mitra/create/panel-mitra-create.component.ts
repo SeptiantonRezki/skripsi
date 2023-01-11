@@ -1093,7 +1093,7 @@ export class PanelMitraCreateComponent implements OnInit {
 
   async exportMitra() {
     this.dataService.showLoading(true);
-    const fileName = `Private_Label_Panel_Mitra_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    const fileName = `Private_Label_Panel_Mitra_${moment(new Date()).format('YYYY_MM_DD')}.xlsx`;
     const areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     const area = areaSelected[areaSelected.length - 1].value;
     if (!this.allRowsSelected) {

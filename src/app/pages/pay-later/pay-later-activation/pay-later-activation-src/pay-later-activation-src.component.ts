@@ -841,7 +841,7 @@ export class PayLaterActivationSrcComponent implements OnInit {
     this.dataService.showLoading(true);
     try {
       const response = await this.payLaterDeactivateService.export({...this.pagination, paylater_company_type_id: this.dataType === "invoice-financing" ? 1 : this.dataType === "retailer-financing" ? 2 : this.dataType === "kur" ? 3 : null}).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PaylaterActivateSrc_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PaylaterActivateSrc_${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
       
     } catch (error) {
