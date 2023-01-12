@@ -236,7 +236,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.search = search;
     this.audienceService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
-        console.log("res trade programs", res);
         this.listTradePrograms = res.data.data;
         this.filteredTradeProgram.next(res.data.data);
       },
@@ -253,6 +252,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.formSpin = this.formBuilder.group({
       name: ["", Validators.required],
       trade_creator_id: ["", Validators.required],
@@ -260,6 +260,15 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
+    });
+
+    this.formSpin.get("start_date").valueChanges.subscribe((value) => {
+      const selectedDate = moment(value).format('YYYY-MM-DD');
+      const endDate = moment(this.detailFormSpin.end_date).format('YYYY-MM-DD');
+
+      if (selectedDate >= endDate) {
+        this.formSpin.get("end_date").setValue("");
+      }
     });
 
     if(this.isDetail){
@@ -370,7 +379,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   initAreaSelected(data = null) {
-    console.log('=================');
     let arr = data.areas;
     let arr_area = [];
     let arr_region = [];
@@ -392,9 +400,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         }
       });
     }
-    console.log(arr_area);
-    console.log(arr_region);
-    console.log(arr_zone);
     if (arr_region.length === 0 || parseInt(arr_region[0], 10) === 0) {
       this.loadingRegion = false;
     }
@@ -490,7 +495,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.per_page = 30;
     this.audienceService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
-        console.log("res trade programs", res);
         this.listTradePrograms = res.data.data;
         this.filteredTradeProgram.next(res.data.data);
       },
@@ -501,9 +505,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   tradeProgramChange(e: any){
-    // console.log(e);
     const theIndex = this.listTradePrograms.findIndex(x => x.id === e.value);
-    console.log(this.listTradePrograms[theIndex]);
     this.setDate(this.listTradePrograms[theIndex].end_date);
     this.formSpin.patchValue({
       trade_creator_name: this.listTradePrograms[theIndex].name,
@@ -541,8 +543,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     let fd = new FormData();
     let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
     let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    // console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
     if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
       fd.append('area_id[]', areaSelected[0].value);
     } else if (areaSelected.length > 0) {
@@ -554,7 +554,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         if (areaSelected[0].value.length === 0) {
           let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
           let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          // console.log('the selection', this.parseArea(selection), newAreaSelected);
           if (newAreaSelected[0].key !== 'national') {
             newAreaSelected[0].value.map(ar => {
               fd.append('area_id[]', ar);
@@ -567,7 +566,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     } else {
       let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
       areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
       if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
         fd.append('area_id[]', areaSelected[0].value);
       } else if (areaSelected.length > 0) {
@@ -579,7 +577,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           if (areaSelected[0].value.length === 0) {
             let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
             let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            // console.log('the selection', this.parseArea(selection), newAreaSelected);
             if (newAreaSelected[0].key !== 'national') {
               newAreaSelected[0].value.map(ar => {
                 fd.append('area_id[]', ar);
@@ -609,7 +606,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       }
 
       if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
-      // console.log('on set', thisAreaOnSet, selection, id);
     }
 
     switch (this.parseArea(selection)) {
@@ -638,7 +634,6 @@ export class SpinTheWheelEditComponent implements OnInit {
         this.list['salespoint'] = [];
         this.list['district'] = [];
         this.list['territory'] = [];
-        // console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
         break;
       case 'region':
         // area = this.formFilter.get(selection).value;
@@ -680,7 +675,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          // console.log('area hitted', selection, item, this.list['region']);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -714,7 +708,6 @@ export class SpinTheWheelEditComponent implements OnInit {
           item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
             return id && id.length > 0 ? id[0] : id;
           })[0] : {};
-          // console.log('item', item);
           if (item && item.name && item.name !== 'all') {
             this.geotreeService.getChildFilterArea(fd).subscribe(res => {
               // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
@@ -799,19 +792,11 @@ export class SpinTheWheelEditComponent implements OnInit {
     let indexAreaSelected = areaList.indexOf(area.key);
     let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
     let newLastSelfArea = []
-    // console.log('[checkAreaLocation:area]', area);
-    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
-    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
     if (area.value !== 1) {
-      // console.log('[checkAreaLocation:list]', this.list[area.key]);
-      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
-      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
       if (indexAreaSelected >= indexAreaAfterEndLevel) {
         // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
         let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
         newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
-        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
-        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
       }
     }
 
@@ -824,7 +809,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
 
-    // console.log('area_selected on ff list', areaSelected, this.list);
     if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
       this.pagination['after_level'] = true;
     } else {
@@ -862,22 +846,17 @@ export class SpinTheWheelEditComponent implements OnInit {
       if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
         let oneAreaSelected = lastSelectedArea.value[0];
         let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        // console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
         if (findOnFirstArea) is_area_2 = false;
         else is_area_2 = true;
 
-        // console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
         if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
           if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
           else this.pagination['last_self_area'] = [last_self_area[0]];
         } else {
-          // console.log('its hitted [other level]');
           this.pagination['after_level'] = true;
           this.pagination['last_self_area'] = newLastSelfArea;
         }
       } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
         this.pagination['after_level'] = true;
         if (newLastSelfArea.length > 0) {
           this.pagination['last_self_area'] = newLastSelfArea;

@@ -147,7 +147,7 @@
                         (focus)="endDate.open()"
                         [matDatepicker]="endDate"
                         placeholder="Tanggal Berakhir"
-                        [min]="minDate"
+                        [min]="formSpin.get('start_date').value || minDate"
                         [max]="maxDate"
                       />
                       <mat-datepicker-toggle matSuffix [for]="endDate">
