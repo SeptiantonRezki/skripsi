@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { StorePhotoVerificationService } from 'app/services/store-photo-verification.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class WidgetStorePhotoCounterComponent implements OnInit {
   verified: number = 0;
 
   constructor(
-    private storePhotoVerificationService: StorePhotoVerificationService
+    private storePhotoVerificationService: StorePhotoVerificationService,
+    private translate: TranslateService,
   ) {
   }
 

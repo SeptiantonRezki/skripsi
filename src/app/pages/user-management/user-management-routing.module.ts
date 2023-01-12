@@ -74,6 +74,7 @@ import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
 import { StorePhotoVerificationComponent } from "./retailer/store-photo-verification/store-photo-verification.component";
 import { StorePhotoTypesComponent } from "./retailer/store-photo-types/store-photo-types.component";
+import { StorePhotoTypeFormComponent } from "./retailer/store-photo-types/store-photo-type-form/store-photo-type-form.component";
 
 const routes: Routes = [
   {
@@ -280,8 +281,24 @@ const routes: Routes = [
     canActivate: []
   },
   {
-    path: "retailer/store-photo-types",
+    path: "retailer-image-verification/store-photo-types",
     component: StorePhotoTypesComponent,
+    data: {
+
+    },
+    canActivate: []
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/create",
+    component: StorePhotoTypeFormComponent,
+    data: {
+
+    },
+    canActivate: []
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/edit/:id",
+    component: StorePhotoTypeFormComponent,
     data: {
 
     },

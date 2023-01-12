@@ -1,6 +1,6 @@
 <div fxLayout="row wrap" fxLayoutGap="8px" class="mb-16">
   <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
-    <span>Total Retailer Upload</span>
+    <span>{{'retailer_image_verification.total_retailer_uploaded' | translate }}</span>
     <br />
     <div class="shimmerBG title-line" *ngIf="loading;else _uploading"></div>
     <ng-template #_uploading>
@@ -10,7 +10,7 @@
 
   <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
 
-    <span>Total Foto Terupload</span>
+    <span>{{'retailer_image_verification.total_uploaded_photo' | translate }}</span>
     <br />
     <div class="shimmerBG title-line" *ngIf="loading;else _uploaded"></div>
     <ng-template #_uploaded>
@@ -20,7 +20,7 @@
   </mat-card>
 
   <mat-card class="wg-store-photo-counter-item pt-8 pb-8">
-    <span>Total Foto Terverifikasi</span>
+    <span>{{'retailer_image_verification.total_verified_photo' | translate }}</span>
     <br />
     <div class="shimmerBG title-line" *ngIf="loading;else _verified"></div>
     <ng-template #_verified>

@@ -57,6 +57,8 @@ export class StorePhotoVerificationComponent implements OnInit {
   dialogRefRejectReason: MatDialogRef<DialogRejectReasonComponent>;
   dialogRefRejectPhoto: MatDialogRef<DialogRejectReasonComponent>;
 
+  focusEditId = null;
+
   // endArea: String;
   // lastLevel: any;
 
@@ -91,6 +93,7 @@ export class StorePhotoVerificationComponent implements OnInit {
         name: 'Gagal Verifikasi'
       }
     ];
+    this.getRowClass = this.getRowClass.bind(this);
   }
 
   ngOnInit() {
@@ -118,13 +121,14 @@ export class StorePhotoVerificationComponent implements OnInit {
   }
 
   fetchRows() {
+    this.focusEditId = null;
     this.loadingIndicator = true;
 
     // this.pagination.total = 10;
     const page = 1
 
     this.pagination.page = page;
-    // this.pagination.per_page = 1;
+    // this.pagination.per_page = 10;
     this.offsetPagination = page ? (page - 1) : 0;
     
     // FILTERS
@@ -172,7 +176,10 @@ export class StorePhotoVerificationComponent implements OnInit {
   }
 
   changePerPage(event: any) {
-    throw new Error('Method not implemented.');
+    console.log({event});
+    this.pagination.per_page = event.value;
+    this.fetchRows();
+    // throw new Error('Method not implemented.');
   }
   setPage(pageInfo) {
     // this.dataService.showLoading(true);
@@ -307,6 +314,19 @@ export class StorePhotoVerificationComponent implements OnInit {
   
       this.dialogService.openCustomConfirmationDialog(data);
 
+    }
+  }
+  onClickEditStatus(storePhotoItem, cancel = false) {
+    if(cancel) {
+      this.focusEditId = null;
+      return;
+    }
+    this.focusEditId = storePhotoItem.id;
+  }
+  getRowClass(row) {
+    return {
+      'inactive-row': this.focusEditId && row.id !== this.focusEditId
+      // 'inactive-row': false
     }
   }
   onDropOne(e) {

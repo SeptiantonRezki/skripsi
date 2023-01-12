@@ -1,10 +1,16 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header contentTitle="{{ 'store_photo_verification.index' | translate}}">
+  <page-content-header contentTitle="{{ 'retailer_image_type.index' | translate}}">
     <div class="button-row" fxLayout="row">
       <button id="add-store-photo" mat-raised-button type="button" color="primary"
-        [routerLink]="['/user-management','retailer','store-photo-types']">
+        [routerLink]="['/user-management','retailer-image-verification','store-photo-types', 'create']">
+        <mat-icon>add</mat-icon>
         Tambah Baru
+      </button>
+      <button id="add-store-photo" mat-raised-button type="button"
+        [routerLink]="['/user-management','retailer-image-verification','store-photo-types', 'create']">
+        <mat-icon>launch</mat-icon>
+        Export CSV
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
@@ -44,7 +50,7 @@
           <button (click)="onClickDelete(item)" mat-icon-button>
             <mat-icon color="primary">delete</mat-icon>
           </button>
-          <button mat-icon-button>
+          <button mat-icon-button [routerLink]="['/user-management','retailer-image-verification','store-photo-types', 'edit', item.id]">
             <mat-icon>edit</mat-icon>
           </button>
           <mat-icon>drag_handle</mat-icon>
@@ -56,7 +62,7 @@
 
       <div fxLayout="row wrap" *ngIf="!storeTypes.length">
         <div fxFlex fxLayoutAlign="center center" class="p-8">
-          <span style="color: #bdc3c7;">EMPTY DATA</span>
+          <span style="color: #bdc3c7;">Loading...</span>
         </div>
       </div>
   

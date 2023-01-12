@@ -55,7 +55,7 @@ export class StorePhotoVerificationService extends BaseService {
         const url = this.getUrl(this.namespace, 'update_sort_list_type');
         return this.postApi(url, body);
     }
-    updatePhotoTypePublishStatus(body: {id: number; publish: 1 | 0}): Observable<any> {
+    updatePhotoTypePublishStatus(body: {id: number; publish: number}): Observable<any> {
         const url = this.getUrl(this.namespace, 'update_store_photo_type_publish_status');
         return this.postApi(url, body);
     }

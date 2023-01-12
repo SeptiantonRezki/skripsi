@@ -54,9 +54,37 @@ export class StorePhotoTypesComponent implements OnInit {
 
     });
   }
-  onChangePublish(event, item) {
-    // console.log({ event });
-    // this.storePhotoVerificationService.updatePhotoTypePublishStatus({})
+  onChangePublish(event, item, confirmed = false) {
+    console.log({ event, item });
+    const statusTxt = (event.value) ? 'Unpublish' : 'Publish';
+    if(!confirmed) {
+      const data = {
+        titleDialog: `${statusTxt} Jenis Foto`,
+        captionDialog: `Apakah anda yakin melakukan ${statusTxt} jenis foto?`,
+        confirmCallback: () => { this.onChangePublish(event, item, true) },
+        buttonText: ['Ya, Lanjutkan', 'Batal']
+      };
+  
+      this.dialogService.openCustomConfirmationDialog(data);
+      event.source.value = !event.value
+      item.is_publish = !event.value
+      event.value = !event.value
+      return;
+    }
+    event.source.value = !event.value;
+    item.is_publish = !event.value;
+    event.value = !event.value;
+    console.log({newEvent: event, item, confirmed});
+    this.dataService.showLoading(true)
+    const body = { id: item.id, publish: event.value ? 1 : 0 }
+
+    this.storePhotoVerificationService.updatePhotoTypePublishStatus(body).subscribe(res => {
+      this.dialogService.brodcastCloseConfirmation();
+      this.dataService.showLoading(false)
+      this.fetchRows();
+    }, err => {
+      this.dataService.showLoading(false)
+    });
   }
   onDrop(event: DndDropEvent, list?: Array<StorePhotoTypeDetail>) {
 

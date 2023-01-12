@@ -1,14 +1,14 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header contentTitle="{{ 'store_photo_verification.index' | translate}}">
+  <page-content-header contentTitle="{{ 'retailer_image_verification.index' | translate}}">
     <div class="button-row" fxLayout="row">
       <button id="edit-jenis-foto" mat-raised-button type="button" color="primary"
-        [routerLink]="['/user-management','retailer','store-photo-types']">
-        Edit Jenis Foto
+        [routerLink]="['/user-management','retailer-image-verification','store-photo-types']">
+        {{'retailer_image_verification.edit_photo_type' | translate }}
       </button>
       <button id="edit-jenis-foto" mat-raised-button type="button" color="primary"
         (click)="onClickRejectReason()">
-        Edit Alasan Penolakan
+        {{'retailer_image_verification.edit_reject_reason' | translate }}
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
@@ -28,7 +28,7 @@
           class="top-table pb-24">
 
           <div fxFlex="30" class="search-field rounded" fxLayout="row" fxLayoutAlign="center center">
-            <input class="textbox-search" matInput placeholder="Cari Kode Toko/Jenis Foto/Status/Admin"
+            <input class="textbox-search" matInput placeholder="{{'retailer_image_verification.main_search_field' | translate}}"
               (keyup)="keyUp.next($event.target.value)">
             <div class="icon-search">
               <mat-icon class="mat-icon-search">search</mat-icon>
@@ -39,14 +39,14 @@
             <input matInput placeholder="Cari Kode Toko/Jenis Foto/Status/Admin">
             <mat-icon matSuffix class="my-icon">sentiment_very_satisfied</mat-icon>
           </mat-form-field> -->
-          <select-date-dropdown placeholder="Filter Tanggal Verifikasi" fxLayoutAlign="center center"
+          <select-date-dropdown placeholder="{{ 'retailer_image_verification.filter_verification_date' | translate}}" fxLayoutAlign="center center"
             (onChange)="onDateFilterChange($event)">
           </select-date-dropdown>
           <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select class="custom-select" formControlName="jenis_foto" [multiple]="true" placeholder="Jenis Foto">
-              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Jenis Foto"
-                noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+            <mat-select class="custom-select" formControlName="jenis_foto" [multiple]="true" placeholder="{{'retailer_image_verification.photo_type' | translate }}">
+              <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="{{'retailer_image_verification.search_photo_type' | translate }}"
+                noEntriesFoundLabel="{{'retailer_image_verification.notfound_photo_type' | translate }}" [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
               <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
                 {{ item.type_name }}
@@ -55,7 +55,7 @@
           </mat-form-field>
           <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select class="custom-select" formControlName="status" [multiple]="true" placeholder="Status">
+            <mat-select class="custom-select" formControlName="status" [multiple]="true" placeholder="{{'retailer_image_verification.status' | translate }}">
               <!-- <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Status"
                 noEntriesFoundLabel="Jenis Foto Tidak Ditemukan..." [searching]="loadingJenisPhoto">
               </ngx-mat-select-search> -->
@@ -66,9 +66,9 @@
           </mat-form-field>
           <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
 
-            <mat-select class="custom-select" formControlName="admin" [multiple]="true" placeholder="Admin">
-              <ngx-mat-select-search [formControl]="searchKeywordAdmin" placeholderLabel="Cari Admin"
-                noEntriesFoundLabel="Admin Tidak Ditemukan..." [searching]="loadingJenisPhoto">
+            <mat-select class="custom-select" formControlName="admin" [multiple]="true" placeholder="{{'retailer_image_verification.admin' | translate }}">
+              <ngx-mat-select-search [formControl]="searchKeywordAdmin" placeholderLabel="{{'retailer_image_verification.search_admin' | translate }}"
+                noEntriesFoundLabel="{{'retailer_image_verification.notfound_admin' | translate }}" [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
               <mat-option *ngFor="let item of adminOptions | async" [value]="item.id">
                 {{ item.fullname }}
@@ -85,6 +85,7 @@
         [footerHeight]="56" [rowHeight]="'auto'" [footerHeight]="56" [scrollbarH]="true" [offset]="offsetPagination"
         [reorderable]="reorderable" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true"
         [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)"
+        [rowClass]="getRowClass"
         >
         <!-- <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -93,19 +94,19 @@
           </ng-template>
         </ngx-datatable-column> -->
 
-        <ngx-datatable-column name="Kode Toko" prop="business_code">
+        <ngx-datatable-column name="{{'retailer_image_verification.store_code' | translate }}" prop="business_code">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.business_code}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jenis Foto" prop="jenis_foto">
+        <ngx-datatable-column name="{{'retailer_image_verification.photo_type' | translate }}" prop="jenis_foto">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.jenis_foto}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="100" name="Foto Terupload" prop="url_path_photo">
+        <ngx-datatable-column [width]="100" name="{{'retailer_image_verification.uploaded_photo' | translate }}" prop="url_path_photo">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <div class="w-100 h-80 clickable product-image">
               <img (click)="previewImage(row.url_path_photo)" [src]="row.url_path_photo">
@@ -114,7 +115,7 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Status" prop="status_verifikasi">
+        <ngx-datatable-column name="{{'retailer_image_verification.status' | translate }}" prop="status_verifikasi">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <span
               [ngClass]="{
@@ -131,9 +132,9 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Action" prop="action">
+        <ngx-datatable-column name="{{'retailer_image_verification.action' | translate }}" prop="action">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="row.status_verifikasi === 'Dalam Verifikasi'">
+            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="row.status_verifikasi === 'Dalam Verifikasi' || focusEditId === row.id">
               <button (click)="onClickApprove(row)" class="spv-icon approve" mat-icon-button>
                 <mat-icon>check</mat-icon>
               </button>
@@ -144,15 +145,28 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Waktu Verifikasi" prop="waktu_verifikasi">
+        <ngx-datatable-column name="{{'retailer_image_verification.verification_time' | translate }}" prop="waktu_verifikasi">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.waktu_verifikasi}}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Admin" prop="admin">
+        <ngx-datatable-column name="{{'retailer_image_verification.admin' | translate }}" prop="admin">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             {{row.admin}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="{{'retailer_image_verification.action2' | translate }}">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            
+            <span *ngIf="true"> <!-- TODO: check permission verifikasi edit foto -->
+              <button *ngIf="!focusEditId && row.status_verifikasi !== 'Dalam Verifikasi'" mat-icon-button (click)="onClickEditStatus(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button *ngIf="row.id === focusEditId" mat-icon-button (click)="onClickEditStatus(row, true)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </span>
           </ng-template>
         </ngx-datatable-column>
 

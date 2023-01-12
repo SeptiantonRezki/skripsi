@@ -160,6 +160,8 @@ import { WidgetStorePhotoCounterComponent } from './retailer/store-photo-verific
 import { StorePhotoTypesComponent } from './retailer/store-photo-types/store-photo-types.component';
 import { DndModule } from "ngx-drag-drop";
 import { NgxDnDModule } from '@swimlane/ngx-dnd'
+import { StorePhotoTypeFormComponent } from "./retailer/store-photo-types/store-photo-type-form/store-photo-type-form.component";
+
 export const MY_FORMATS = {
   parse: {
     dateInput: "LL"
@@ -342,6 +344,7 @@ export const MY_FORMATS = {
     InfoBoardEditComponent,
     DialogProcessComponentIB,
     DialogProcessSaveIBComponent,
+    StorePhotoTypeFormComponent,
     OrdersRrpComponent,
     OrdersRrpDetailComponent,
     TierPriceDialogComponent,
@@ -371,7 +374,7 @@ export const MY_FORMATS = {
     ImportAudiencePersonalizeInfoBoardComponent,
     DialogProcessComponentIB,
     DialogProcessSaveIBComponent,
-    PreviewImagePaymentComponent
+    PreviewImagePaymentComponent,
     PopupImageComponent,
     DialogRejectReasonComponent,
   ],
