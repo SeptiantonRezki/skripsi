@@ -55,7 +55,9 @@ export class DiaglogMisiComponent implements OnInit {
       task_template_id: "",
       task_template_other_name_id: "",
       start_date: "",
+      start_time: "",
       end_date: "",
+      end_time: "",
       pushFF: this.pushFF,
       verifikasi: this.verifikasi,
       verifikasiFF: this.verifikasiFF,
@@ -99,7 +101,7 @@ export class DiaglogMisiComponent implements OnInit {
 
     if (this.data !== null) {
       const { attribute } = this.data.data;
-      
+
       this.form.patchValue({
         task_template_id: parseInt(this.data.data.attribute.task_template_id, 10),
         task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
@@ -157,7 +159,7 @@ export class DiaglogMisiComponent implements OnInit {
       }
 
       this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
-      
+
       if (attribute.verification_notes && attribute.verification_notes.length) {
         const verif_notes = this.form.get('verification_notes') as FormArray;
         attribute.verification_notes.forEach(verif => {
@@ -173,7 +175,7 @@ export class DiaglogMisiComponent implements OnInit {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {

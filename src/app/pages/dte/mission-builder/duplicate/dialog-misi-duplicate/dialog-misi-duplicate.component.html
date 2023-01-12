@@ -43,19 +43,37 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field style="width: 100%">
-      <input id="start-date" matInput formControlName="start_date" placeholder="Tanggal Awal" [matDatepicker]="start_date"
-        (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly />
-      <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
-      <mat-datepicker #start_date></mat-datepicker>
-    </mat-form-field>
+    <div fxLayout="row" fxLayoutGap="24px">
+      <mat-form-field style="width: 100%">
+        <input id="start-date" matInput formControlName="start_date" placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" [matDatepicker]="start_date"
+          (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly />
+        <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+        <mat-datepicker #start_date></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field fxFlex class="is-light form-primary" id="start_time">
+        <input matInput  placeholder="{{
+            'notification.popup_notifikasi.text8' | translate
+          }}" [ngxTimepicker]="start_time" [format]="24" readonly />
+        <mat-icon matSuffix>access_time</mat-icon>
+        <ngx-material-timepicker #start_time></ngx-material-timepicker>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field style="width: 100%">
-      <input id="end-date" matInput formControlName="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [matDatepicker]="end_date"
-        (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly />
-      <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
-      <mat-datepicker #end_date></mat-datepicker>
-    </mat-form-field>
+    <div fxLayout="row" fxLayoutGap="24px">
+      <mat-form-field style="width: 100%">
+        <input id="end-date" matInput formControlName="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [matDatepicker]="end_date"
+          (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly />
+        <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
+        <mat-datepicker #end_date></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field fxFlex class="is-light form-primary" id="end_time">
+        <input matInput  placeholder="{{
+            'notification.popup_notifikasi.text10' | translate
+          }}" [ngxTimepicker]="end_time" [format]="24" readonly />
+        <mat-icon matSuffix>access_time</mat-icon>
+        <ngx-material-timepicker #end_time></ngx-material-timepicker>
+      </mat-form-field>
+    </div>
 
     Push To FF
     <mat-slide-toggle id="toggle-pushToFF" style="margin-right: 20px" [formControl]="pushFF" name="push-to-ff"

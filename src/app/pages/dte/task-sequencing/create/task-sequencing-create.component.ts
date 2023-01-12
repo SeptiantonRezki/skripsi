@@ -52,7 +52,9 @@ export class TaskSequencingCreateComponent implements OnInit {
       trade_creator_id: ["", Validators.required],
       trade_audience_group_id: ["", Validators.required],
       start_date: ["", Validators.required],
+      start_time: ["", Validators.required],
       end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       trade_creator_name: ["", Validators.required],
       total_budget: ["", Validators.required],
       endDateTrade: ["", Validators.required],
@@ -81,7 +83,7 @@ export class TaskSequencingCreateComponent implements OnInit {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {

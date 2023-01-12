@@ -47,7 +47,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   pagination: Page = new Page();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
-  
+
   pageName = this.translate.instant('dte.task_sequencing.text1');
   titleParam = {entity: this.pageName};
 
@@ -77,7 +77,9 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       trade_creator_id: ["", Validators.required],
       trade_audience_group_id: ["", Validators.required],
       start_date: ["", Validators.required],
+      start_time: ["", Validators.required],
       end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       trade_creator_name: ["", Validators.required],
       is_editable: [0],
       total_budget: ["", Validators.required],
@@ -113,7 +115,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
@@ -292,7 +294,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     //   this.downloadLink.nativeElement.click();
 
     // } else {
-    
+
       this.dataService.showLoading(true);
       const body = {
         trade_creator_id: this.data.trade_creator_id,
@@ -319,11 +321,11 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       trade_creator_id : this.data.trade_creator_id,
       per_page : 15,
     };
-    
+
     this.sequencingService.getImportPreviewAdjustmentCoin(body).subscribe(res => {
       if (res.data.last_request) {
         const date = String(moment(res.data.last_request).format('DD MMMM YYYY'));
-    
+
         let data = {
           titleDialog: this.translate.instant('dte.task_sequencing.coin_adjustment_confirm', {date: date}),
           captionDialog: "",
