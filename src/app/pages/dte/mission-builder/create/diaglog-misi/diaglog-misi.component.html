@@ -51,7 +51,7 @@
         <mat-datepicker #start_date></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex class="is-light form-primary" id="start_time">
-        <input matInput  placeholder="{{
+        <input matInput formControlName="start_time" placeholder="{{
             'notification.popup_notifikasi.text8' | translate
           }}" [ngxTimepicker]="start_time" [format]="24" readonly />
         <mat-icon matSuffix>access_time</mat-icon>
@@ -67,10 +67,10 @@
         <mat-datepicker #end_date></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex class="is-light form-primary" id="end_time">
-        <input matInput  placeholder="{{
+        <input matInput formControlName="end_time" placeholder="{{
             'notification.popup_notifikasi.text10' | translate
           }}" [ngxTimepicker]="end_time" [format]="24"
-          [disabled]="!taskSequenceForm.get('start_date').value" readonly />
+          [disabled]="!form.get('start_date').value" readonly />
         <mat-icon matSuffix>access_time</mat-icon>
         <ngx-material-timepicker #end_time></ngx-material-timepicker>
       </mat-form-field>
