@@ -253,6 +253,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.formSpin = this.formBuilder.group({
       name: ["", Validators.required],
       trade_creator_id: ["", Validators.required],
@@ -260,6 +261,19 @@ export class SpinTheWheelEditComponent implements OnInit {
       start_time: ["00:00", Validators.required],
       end_date: [new Date(), Validators.required],
       end_time: ["00:00", Validators.required],
+    });
+
+    this.formSpin.get("start_date").valueChanges.subscribe((value) => {
+      const selectedDate = moment(value).format('YYYY-MM-DD');
+      const endDate = moment(this.detailFormSpin.end_date).format('YYYY-MM-DD');
+
+      console.log("compare", selectedDate >= endDate);
+
+      console.log()
+      if (selectedDate >= endDate) {
+        console.log("run")
+        this.formSpin.get("end_date").setValue("");
+      }
     });
 
     if(this.isDetail){
