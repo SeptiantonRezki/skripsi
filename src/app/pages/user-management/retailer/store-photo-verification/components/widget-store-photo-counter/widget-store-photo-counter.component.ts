@@ -22,6 +22,9 @@ export class WidgetStorePhotoCounterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.fetchTotal();
+  }
+  fetchTotal() {
     this.storePhotoVerificationService.getCalculationResult().subscribe(({data}) => {
     
       this.uploading = data['total-retailer-upload'];

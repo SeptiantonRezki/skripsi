@@ -1265,18 +1265,18 @@ export class Endpoint {
         update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
       },
       store_photo_verification: {
-        calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/calculation-result`,
-        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-retailer-uploaded`,
-        post_verify_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/verify`,
-        list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-reason`,
-        post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/add-reason`,
-        delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/delete-reason/${context.id}`,
-        delete_store_photo_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/delete-list-type/${context.id}`,
-        list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-type`,
-        list_detail_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-detil-type`,
-        list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/list-admin`,
-        update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/update-urutan-list-type`,
-        update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/foto-toko/publish-type`,
+        calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/detail-total`,
+        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get`,
+        post_verify_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/verify`,
+        list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/get`,
+        post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/create`,
+        delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/delete/${context.id}`,
+        delete_store_photo_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/delete/${context.id}`,
+        list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get`,
+        list_detail_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get-detail`,
+        list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get-admin`,
+        update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/update-urutan`,
+        update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/publish`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];

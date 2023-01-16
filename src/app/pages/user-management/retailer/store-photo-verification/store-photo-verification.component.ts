@@ -13,6 +13,7 @@ import { StorePhotoVerificationService } from 'app/services/store-photo-verifica
 import { OnSelectDateDropdownChange } from 'app/shared/select-date-dropdown/select-date-dropdown.component';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { DialogRejectReasonComponent } from './components/dialog-reject-reason/dialog-reject-reason.component';
+import { WidgetStorePhotoCounterComponent } from './components/widget-store-photo-counter/widget-store-photo-counter.component';
 import { HasTable } from './has-table.interface';
 
 @Component({
@@ -43,6 +44,7 @@ export class StorePhotoVerificationComponent implements OnInit {
   filters: FormGroup;
 
   @ViewChild(DatatableComponent)
+  @ViewChild(WidgetStorePhotoCounterComponent) widgetStorePhotoCounter: WidgetStorePhotoCounterComponent;
   table: DatatableComponent;
 
   jenisPhotoOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -130,7 +132,7 @@ export class StorePhotoVerificationComponent implements OnInit {
     this.pagination.page = page;
     // this.pagination.per_page = 10;
     this.offsetPagination = page ? (page - 1) : 0;
-    
+
     // FILTERS
     const jenisFoto = this.filters.get('jenis_foto').value;
     const statuses = this.filters.get('status').value
@@ -163,7 +165,7 @@ export class StorePhotoVerificationComponent implements OnInit {
       this.loadingJenisPhoto = false;
 
     }, err => {
-      
+
       this.loadingJenisPhoto = false;
 
     });
@@ -278,6 +280,7 @@ export class StorePhotoVerificationComponent implements OnInit {
         this.storePhotoVerificationService.postVerifyStoreVerification(payload).subscribe(res => {
 
           this.fetchRows();
+          this.widgetStorePhotoCounter.fetchTotal();
 
         }, err => {
 
@@ -291,27 +294,28 @@ export class StorePhotoVerificationComponent implements OnInit {
       id: storePhotoItem.id,
       status: 1, // 1 is approved
     }
-    
+
     if(confirmed) {
       this.dataService.showLoading(true);
       this.storePhotoVerificationService.postVerifyStoreVerification(payload).subscribe(res => {
         this.dataService.showLoading(false);
         this.fetchRows();
+        this.widgetStorePhotoCounter.fetchTotal();
         this.dialogService.brodcastCloseConfirmation();
-  
+
       }, err => {
         this.dataService.showLoading(false);
       });
 
     } else {
-      
+
       const data = {
         titleDialog: 'Approve Store Photo',
         captionDialog: 'Apakah anda yakin?',
         confirmCallback: () => { this.onClickApprove(storePhotoItem, true) },
         buttonText: ['Ya, Lanjutkan', 'Batal']
       };
-  
+
       this.dialogService.openCustomConfirmationDialog(data);
 
     }
