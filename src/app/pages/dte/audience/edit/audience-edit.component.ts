@@ -149,7 +149,6 @@ export class AudienceEditComponent {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
-
     this.formAudienceError = {
       name: {},
       min: {},
@@ -167,6 +166,10 @@ export class AudienceEditComponent {
         "name": "SLSNTL"
       }
     ];
+
+    if(this.dataService.getDecryptedProfile()["country"] == 'PH'){ 
+      this.retailClassification.push({ name: "ISR", value: "ISR" });
+    }
 
     this.list = {
       zone: [],
@@ -710,7 +713,7 @@ export class AudienceEditComponent {
   getTradePrograms() {
     this.audienceService.getListTradePrograms({ id: this.detailAudience.trade_creator_id }).subscribe(res => {
       console.log('res trade programs', res);
-      this.listTradePrograms = res.data;
+      this.listTradePrograms = res.data.data;
       this.filteredTradeProgram.next(this.listTradePrograms.slice());
     }, err => {
       console.log('err trade programs', err);
