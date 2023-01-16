@@ -22,6 +22,7 @@ export class DialogRejectReasonComponent {
 
   actionType: any;
   selectedReason: any;
+  editable: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<DialogRejectReasonComponent>,
@@ -30,6 +31,7 @@ export class DialogRejectReasonComponent {
     private formBuilder: FormBuilder,
     private storePhotoVerificationService: StorePhotoVerificationService
   ) {
+    this.editable = data.editable;
     this.storePhotoVerificationService.rejectReasonData.subscribe(data => {
       this.reasons = data;
     })

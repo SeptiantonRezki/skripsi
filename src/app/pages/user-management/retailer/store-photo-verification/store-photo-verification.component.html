@@ -134,7 +134,7 @@
 
         <ngx-datatable-column name="{{'retailer_image_verification.action' | translate }}" prop="action">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="row.status_verifikasi === 'Dalam Verifikasi' || focusEditId === row.id">
+            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="(row.status_verifikasi === 'Dalam Verifikasi' && permission?.verifikasi_foto) || (focusEditId === row.id && permission?.edit_verifikasi_foto)">
               <button (click)="onClickApprove(row)" class="spv-icon approve" mat-icon-button>
                 <mat-icon>check</mat-icon>
               </button>
@@ -159,7 +159,7 @@
         <ngx-datatable-column name="{{'retailer_image_verification.action2' | translate }}">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             
-            <span *ngIf="true"> <!-- TODO: check permission verifikasi edit foto -->
+            <span *ngIf="permission?.edit_verifikasi_foto">
               <button *ngIf="!focusEditId && row.status_verifikasi !== 'Dalam Verifikasi'" mat-icon-button (click)="onClickEditStatus(row)">
                 <mat-icon>edit</mat-icon>
               </button>

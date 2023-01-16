@@ -72,6 +72,8 @@ export class StorePhotoVerificationComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
   ) {
+    this.permission = this.roles.getRoles('principal.retailer');
+    // console.log({permission: this.permission});
     this.filters = this.formBuilder.group({
       query: '',
       verified_date: '',
@@ -245,7 +247,9 @@ export class StorePhotoVerificationComponent implements OnInit {
 
     config.disableClose = false;
     config.autoFocus = false;
-    config.data = {};
+    config.data = {
+      editable: this.permission.edit_verifikasi_foto
+    };
 
     this.dialogRefRejectReason = this.dialog.open(DialogRejectReasonComponent, config);
     this.dialogRefRejectReason.afterClosed().subscribe(result => {

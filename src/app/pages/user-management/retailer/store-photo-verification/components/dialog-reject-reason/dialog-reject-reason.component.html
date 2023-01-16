@@ -21,7 +21,7 @@
           </mat-radio-button>
 
           <span *ngIf="!actionType">{{reason.reason}}</span>
-          <button *ngIf="!actionType" mat-icon-button (click)="delete(reason)" color="primary">
+          <button *ngIf="!actionType" mat-icon-button (click)="delete(reason)" color="primary" [disabled]="!editable">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-list-item>
@@ -54,7 +54,7 @@
           </form>
 
           <mat-list-item>
-            <button class="add-reason-btn" (click)="addNewReasonItem()">+ Tambah Alasan Baru</button>
+            <button class="add-reason-btn" (click)="addNewReasonItem()" [disabled]="!editable">+ Tambah Alasan Baru</button>
           </mat-list-item>
 
         </div>

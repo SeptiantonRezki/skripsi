@@ -276,23 +276,22 @@ const routes: Routes = [
     path: "retailer-image-verification",
     component: StorePhotoVerificationComponent,
     data: {
-
+      breadcrumbs: brConfig.store_photo_verification.index
     },
-    canActivate: []
+    canActivate: [PageGuard]
   },
   {
     path: "retailer-image-verification/store-photo-types",
     component: StorePhotoTypesComponent,
     data: {
-
+      breadcrumbs: brConfig.store_photo_verification.store_photo_type
     },
-    canActivate: []
+    canActivate: [PageGuard]
   },
   {
     path: "retailer-image-verification/store-photo-types/create",
     component: StorePhotoTypeFormComponent,
     data: {
-
     },
     canActivate: []
   },
@@ -300,7 +299,6 @@ const routes: Routes = [
     path: "retailer-image-verification/store-photo-types/edit/:id",
     component: StorePhotoTypeFormComponent,
     data: {
-
     },
     canActivate: []
   },
