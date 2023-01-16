@@ -9,6 +9,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from "app/services/languages/languages.service";
 import { TranslateService } from "@ngx-translate/core";
+import moment from "moment";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -473,8 +474,18 @@ export class DiaglogMisiComponent implements OnInit {
     }
 
     this.form.get('coin_verification').enable();
-    form.get('start_date').patchValue(this.formatDate(form.value.start_date));
-    form.get('end_date').patchValue(this.formatDate(form.value.end_date));
+    form.get('start_date')
+      .patchValue(
+        `${moment(form.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.start_time}:00`
+      );
+    form.get('end_date')
+      .patchValue(
+        `${moment(form.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.end_time}:00`
+      );
 
     form.get('verification_type').patchValue(
       (!form.value.verifikasiFF && !form.value.verifikasi) ? null :

@@ -162,7 +162,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
       }
 
       this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
-      
+
       if (attribute.verification_notes && attribute.verification_notes.length) {
         const verif_notes = this.form.get('verification_notes') as FormArray;
         attribute.verification_notes.forEach(verif => {
@@ -182,7 +182,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
@@ -196,7 +196,7 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     // this.filterMissionOther.setValue(e.value);
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
-    
+
     const verif_notes = this.form.get("verification_notes") as FormArray;
     this.rejected_list = this.missions[theIndex].rejected_reason_choices;
     this.form.get('mission_reblast').setValue(false);
@@ -502,8 +502,18 @@ export class DialogMisiDuplicateComponent implements OnInit, OnDestroy {
     }
 
     this.form.get('coin_verification').enable();
-    form.get('start_date').patchValue(this.formatDate(form.value.start_date));
-    form.get('end_date').patchValue(this.formatDate(form.value.end_date));
+    form.get('start_date')
+      .patchValue(
+        `${moment(form.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.start_time}:00`
+      );
+    form.get('end_date')
+      .patchValue(
+        `${moment(form.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.end_time}:00`
+      );
 
     form.get('verification_type').patchValue(
       (form.value.verifikasiFF === false && form.value.verifikasi === false) ? null :

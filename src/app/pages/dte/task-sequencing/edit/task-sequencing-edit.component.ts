@@ -138,7 +138,9 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         trade_creator_id: this.data.trade_creator_id,
         trade_audience_group_id: this.data.trade_audience_group_id,
         start_date: this.data.start_date,
+        start_time: moment(this.data.start_date).format("HH:mm"),
         end_date: this.data.end_date,
+        end_time: moment(this.data.end_date).format("HH:mm"),
         is_editable: this.data.is_editable,
         trade_creator_name: this.data.trade_creator_name,
         total_budget: this.data.total_budget,
@@ -170,9 +172,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       total_budget: this.programs[theIndex].budget,
       endDateTrade: this.programs[theIndex].end_date,
       status: "unpublish",
-
     });
-
   }
 
   setDate(d: any) {
@@ -195,14 +195,24 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
-    this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
+    this.taskSequenceForm
+      .get("start_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.start_time}:00`
+      );
+    this.taskSequenceForm
+      .get("end_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.end_time}:00`
+      );
     this.taskSequenceForm.value.actions = this.actions;
     this.dataService.setDataSequencing({
       data: this.taskSequenceForm.value,
     });
-
-    console.log(this.taskSequenceForm.value);
   }
 
   filteringGTP() {

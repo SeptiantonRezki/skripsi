@@ -93,7 +93,6 @@ export class TaskSequencingCreateComponent implements OnInit {
   }
 
   selectChange(e: any){
-    // console.log(e);
     const theIndex = this.programs.findIndex(x => x.id === e.value);
     console.log(this.programs[theIndex]);
     this.setDate(this.programs[theIndex].end_date);
@@ -113,7 +112,6 @@ export class TaskSequencingCreateComponent implements OnInit {
   }
 
   selectChangeAudince(e: any){
-    // console.log(e);
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
     console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
@@ -128,12 +126,23 @@ export class TaskSequencingCreateComponent implements OnInit {
   }
 
   submit() {
-    this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
-    this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
+    this.taskSequenceForm
+      .get("start_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.start_time}:00`
+      );
+    this.taskSequenceForm
+      .get("end_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.end_time}:00`
+      );
     this.dataService.setDataSequencing({
       data: this.taskSequenceForm.value,
     });
-    console.log(this.taskSequenceForm.value);
   }
 
   filteringGTP() {

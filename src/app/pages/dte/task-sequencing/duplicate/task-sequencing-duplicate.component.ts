@@ -108,14 +108,15 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   setValue(){
     this.sequencingService.show({ sequencing_id: this.detailSequencing.id }).subscribe(res => {
       this.data = res.data;
-      console.log(this.data);
       this.taskSequenceForm.patchValue({
         id: this.data.id,
         name: this.data.name,
         trade_creator_id: this.data.trade_creator_id,
         trade_audience_group_id: this.data.trade_audience_group_id,
         start_date: this.data.start_date,
+        start_time: moment(this.data.start_date).format("HH:mm"),
         end_date: this.data.end_date,
+        end_time: moment(this.data.end_date).format("HH:mm"),
         is_editable: 1,
         trade_creator_name: this.data.trade_creator_name,
         total_budget: this.data.total_budget,
@@ -133,7 +134,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   selectChange(e: any){
     // console.log(e);
     const theIndex = this.programs.findIndex(x => x.id === e.value);
-    console.log(this.programs[theIndex]);
     this.setDate(this.programs[theIndex].end_date);
     this.taskSequenceForm.patchValue({
       trade_creator_name: this.programs[theIndex].name,
@@ -152,7 +152,6 @@ export class TaskSequencingDuplicateComponent implements OnInit {
 
   selectChangeAudince(e: any){
     const theIndex = this.audiences.findIndex(x => x.id === e.value);
-    console.log(this.audiences[theIndex]);
     this.taskSequenceForm.patchValue({
       trade_audience_group_name: this.audiences[theIndex].name
     });
@@ -165,8 +164,20 @@ export class TaskSequencingDuplicateComponent implements OnInit {
   }
 
   submit(){
-    this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
-    this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
+    this.taskSequenceForm
+      .get("start_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.start_time}:00`
+      );
+    this.taskSequenceForm
+      .get("end_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.end_time}:00`
+      );
     this.taskSequenceForm.value.actions = this.actions;
     this.dataService.setDataSequencing({
       data: this.taskSequenceForm.value,
