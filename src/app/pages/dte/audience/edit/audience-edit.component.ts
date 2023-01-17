@@ -45,7 +45,7 @@ export class AudienceEditComponent {
     { name: "LAMP/HOP", value: "LAMP/HOP" },
     { name: "GT", value: "GT" },
     { name: "KA", value: "KA" },
-    { name: "ISR", value: "ISR" }
+    // { name: "ISR", value: "ISR" }
   ];
   srcClassification: any[] = [
     { name: this.translate.instant('global.label.all_type'), value: "all" }
