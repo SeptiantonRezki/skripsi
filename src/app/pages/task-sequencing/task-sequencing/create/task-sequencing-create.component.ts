@@ -89,10 +89,8 @@ export class TaskSequencingCreateComponent implements OnInit {
   getTradePrograms() {
     this.sequencingService.getListTradePrograms().subscribe(
       (res) => {
-        // console.log("res trade programs", res);
         this.programs = res.data;
         this.filteredGTP.next(this.programs.slice());
-        // this.programs = res.data;
       },
       (err) => {
         console.log("err trade programs", err);
@@ -121,10 +119,8 @@ export class TaskSequencingCreateComponent implements OnInit {
   getTradeAudience() {
     this.sequencingService.getListTradeAudienceGroup().subscribe(
       (res) => {
-        // console.log("res trade programs", res);
         this.audiences = res.data;
         this.filteredGTA.next(this.audiences.slice());
-        // this.audiences = res.data;
       },
       (err) => {
         console.log("err trade programs", err);
