@@ -8,6 +8,7 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { AudienceService } from 'app/services/dte/audience.service';
+import { SequencingService } from 'app/services/dte/sequencing.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
 import { GeotreeService } from 'app/services/geotree.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
@@ -116,6 +117,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
     private translate: TranslateService,
     private geoService: GeotreeService,
     private audienceService: AudienceService,
+    private sequencingService: SequencingService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private notificationService: NotificationService,
@@ -332,7 +334,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
 
   getTradePrograms() {
     this.pagination.per_page = 30;
-    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         console.log("res trade programs", res);
         this.listTradePrograms = res.data.data;

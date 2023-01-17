@@ -132,7 +132,7 @@ export class AudienceService extends BaseService {
     return this.postApi(url, body);
   }
   getListTradePrograms(queryParams?): Observable<any> {
-    const url = this.getUrl("sequencing", "list_trade_program");
+    const url = this.getUrl(this.namespace, "list_trade_program");
     return this.getApi(url, queryParams);
   }
 

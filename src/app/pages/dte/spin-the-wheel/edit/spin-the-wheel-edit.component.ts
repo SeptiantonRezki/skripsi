@@ -22,6 +22,7 @@ import { map, startWith, takeUntil } from 'rxjs/operators';
 import { DialogProcessSaveComponentSPW } from '../dialog/dialog-process-save/dialog-process-save.component';
 import { DialogProcessComponentSPW } from '../dialog/dialog-process/dialog-process.component';
 import { ImportAudiencePersonalizeComponentSPW } from '../import/personalize/import-audience-personalize.component';
+import { SequencingService } from 'app/services/dte/sequencing.service';
 
 @Component({
   selector: 'app-spin-the-wheel-edit',
@@ -166,6 +167,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     private translate: TranslateService,
     private geoService: GeotreeService,
     private audienceService: AudienceService,
+    private sequencingService: SequencingService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private notificationService: NotificationService,
@@ -234,7 +236,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     let search = this.filterTradeProgram.value;
     search = search.toLowerCase();
     this.pagination.search = search;
-    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         this.listTradePrograms = res.data.data;
         this.filteredTradeProgram.next(res.data.data);
