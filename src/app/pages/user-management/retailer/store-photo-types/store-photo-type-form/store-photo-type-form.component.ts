@@ -44,7 +44,7 @@ export class StorePhotoTypeFormComponent implements OnInit {
   ngOnInit() {
     const targetPath = this.router.url;
     this.authService.getEncryptedToken().subscribe(res => {
-      const baseurl = environment.SRC_KATALOG_KOIN_BASE_IFRAME_URL;
+      const baseurl = environment.REACT_BASE_URL;
 
       const encodedToken = encodeURI(res.data);
       const httpParams = new HttpParams().set('dceauth', encodedToken).set('destination', targetPath).set('platform', 'principal').set('allowBack', '1').set('_prmdxtrn', JSON.stringify(this.permission));

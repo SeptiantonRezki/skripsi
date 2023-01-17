@@ -293,14 +293,21 @@ const routes: Routes = [
     component: StorePhotoTypeFormComponent,
     data: {
     },
-    canActivate: []
+    canActivate: [PageGuard]
   },
   {
     path: "retailer-image-verification/store-photo-types/edit/:id",
     component: StorePhotoTypeFormComponent,
     data: {
     },
-    canActivate: []
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/detail/:id",
+    component: StorePhotoTypeFormComponent,
+    data: {
+    },
+    canActivate: [PageGuard]
   },
   {
     path: "rrp-retailer",

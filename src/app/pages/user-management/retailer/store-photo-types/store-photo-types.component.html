@@ -33,7 +33,9 @@
       <div fxLayout="row wrap" *ngFor="let item of storeTypes; let i=index;" [dndDraggable]="item" dndEffectAllowed="copyMove"
         (dndMoved)="onDragged(item, storeTypes, 'move')"
         [ngClass]="{'drag-row': true, 'round-bt' : i === storeTypes?.length - 1}">
-        <div fxFlex="25" fxLayoutAlign="start center" class="p-8">{{item.jenis_foto}}</div>
+        <div fxFlex="25" fxLayoutAlign="start center" class="p-8">
+          <button color="primary" style="cursor: pointer;" [routerLink]="['/user-management','retailer-image-verification','store-photo-types', 'detail', item.id]">{{item.jenis_foto}}</button>
+        </div>
         <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_foto_masuk | rupiahFormaterWithoutRp}}</div>
         <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_foto_diverifikasi | rupiahFormaterWithoutRp}}</div>
         <div fxFlex fxLayoutAlign="start center" class="p-8">{{item.jumlah_audience | rupiahFormaterWithoutRp}}</div>

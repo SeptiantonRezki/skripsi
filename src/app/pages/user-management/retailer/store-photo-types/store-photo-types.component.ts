@@ -56,7 +56,7 @@ export class StorePhotoTypesComponent implements OnInit {
   }
   onChangePublish(event, item, confirmed = false) {
     console.log({ event, item });
-    const statusTxt = (event.value) ? 'Unpublish' : 'Publish';
+    const statusTxt = (!event.value) ? 'Unpublish' : 'Publish';
     if(!confirmed) {
       const data = {
         titleDialog: `${statusTxt} Jenis Foto`,
