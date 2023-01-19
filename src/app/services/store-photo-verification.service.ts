@@ -79,4 +79,8 @@ export class StorePhotoVerificationService extends BaseService {
     setRejectReasonData(data) {
         this._rejectReasonData.next(data || []);
     }
+    exportImageType(queryParams?): Observable<any> {
+        const url = this.getUrl(this.namespace, 'export_image_type');
+        return this.getApi(url, queryParams);
+    }
 }

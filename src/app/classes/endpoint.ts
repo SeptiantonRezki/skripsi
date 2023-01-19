@@ -1277,6 +1277,7 @@ export class Endpoint {
         list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get-admin`,
         update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/update-urutan`,
         update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/publish`,
+        export_image_type: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/foto-toko/image-type/retailer/request-export`,
       }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
