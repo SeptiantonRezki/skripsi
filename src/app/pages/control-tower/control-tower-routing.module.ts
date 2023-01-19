@@ -16,7 +16,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.area_configuration.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
 ]
 

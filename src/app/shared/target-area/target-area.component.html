@@ -66,6 +66,16 @@
       type="button"
       class="is-danger"
       (click)="import()"
+      *ngIf="hitFrom!='area-configuration'"
+    >
+      <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
+    </button>
+    <button
+      mat-raised-button
+      type="button"
+      class="is-danger"
+      (click)="importFromAreaConfiguration()"
+      *ngIf="hitFrom=='area-configuration'"
     >
       <mat-icon>arrow_downward</mat-icon> {{'global.button.import' | translate}} XLSX
     </button>
@@ -157,6 +167,11 @@
     <ngx-datatable-column
       name="{{'global.label.type' | translate}}"
       prop="type"
+      [sortable]="false"
+    ></ngx-datatable-column>
+    <ngx-datatable-column
+      name="PIC Email"
+      prop="pic_email"
       [sortable]="false"
     ></ngx-datatable-column>
     <ngx-datatable-footer>

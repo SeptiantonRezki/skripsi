@@ -32,6 +32,7 @@ export class TargetAreaComponent implements OnInit {
   @Output() selectedAllId: EventEmitter<any[]> = new EventEmitter();
   @Input() areas: any[] = [];
   @Input() isNotifValidation: boolean = false;
+  @Input() hitFrom: any = "";
 
   geoLevel: string[] = ["national", "division", "region", "area"];
   geoList: any = {
@@ -292,6 +293,26 @@ export class TargetAreaComponent implements OnInit {
       if (res) {
         this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text8') });
         this.onSelect({ selected: res });
+      }
+    });
+  }
+
+  importFromAreaConfiguration() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      isNotifValidation: this.isNotifValidation,
+      hitFrom: this.hitFrom
+    };
+
+    this.dialogRef = this.dialog.open(DialogImportComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe((res: any) => {
+      if (res) {
+        this.dialogService.openSnackBar({ message: this.translate.instant('global.messages.text8') });
+        this.getArea(this.getSelectedAllId())
       }
     });
   }

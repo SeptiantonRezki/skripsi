@@ -204,7 +204,7 @@ const appRoutes: Routes = [
   {
     path: 'control-tower',
     loadChildren: './pages/control-tower/control-tower.module#ControlTowerModule',
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
