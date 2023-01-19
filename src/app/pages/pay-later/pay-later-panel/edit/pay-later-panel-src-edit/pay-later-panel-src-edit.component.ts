@@ -406,6 +406,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -438,6 +439,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -473,6 +475,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     }).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data ? res.data.data : [];
+      this.totalData = res.data.total;
       this.loadingIndicator = false;
       this.dataService.showLoading(false);
     }, err => {
@@ -522,7 +525,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
     try {
       const response = await this.panelService.exportPanel(fd).toPromise();
       console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterPanelSrc_${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_PayLaterPanelSrc_${new Date().toLocaleString()}.xlsx`);
       // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Retailer_${new Date().toLocaleString()}.csv`);
       // this.downloadLink.nativeElement.href = response;
       // this.downloadLink.nativeElement.click();
@@ -625,6 +628,7 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
           }).subscribe(res => {
             Page.renderPagination(this.pagination, res.data);
             this.rows = res.data ? res.data.data : [];
+            this.totalData = res.data.total;
             this.loadingIndicator = false;
           }, err => {
             this.loadingIndicator = false;
@@ -677,10 +681,12 @@ export class PayLaterPanelSrcEditComponent implements OnInit, OnDestroy {
 
       if (this.allRowsSelected) {
         body['all'] = '1';
+        body['search'] = this.pagination.search || '';
         body['area'] = Array.isArray(this.pagination.area) ? this.pagination.area : [this.pagination.area];
         delete body['detail'];
       } else {
         body['all'] = '0';
+        body['search'] = '';
         body['area'] = [1];
       }
       // console.log('my body', body);

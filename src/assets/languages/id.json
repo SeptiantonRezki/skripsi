@@ -465,7 +465,9 @@
       "check": "CHECK",
       "download_file": "Download File",
       "filter": "FILTER",
-      "submit": "SUBMIT"
+      "submit": "SUBMIT",
+      "importXLSX": "Import XLSX",
+      "exportXLSX": "Export XLSX"
     },
     "area": {
       "national": "National",
