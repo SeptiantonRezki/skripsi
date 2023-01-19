@@ -25,4 +25,9 @@ export class AreaService extends BaseService {
     const url = this.getUrl(this.namespace, "import");
     return this.postApi(url, body);
   }
+
+  importFromAreaConfiguration(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "importFromAreaConfiguration");
+    return this.postApi(url, body);
+  }
 }

@@ -11,6 +11,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class AreaConfiguration
 {
     pageName = "Area Configuration";
+
+    onLoad: boolean;
+    selectedArea: any[] = [];
+    selectedAll: boolean = false;
+    selectedAllId: any[] = [];
+    Country: any = '';
+
     constructor(
       private router: Router,
       private dataService: DataService,
@@ -18,6 +25,30 @@ export class AreaConfiguration
       private translate: TranslateService,
     )
     {
+      this.onLoad = false;
+    }
 
+    ngOnInit() {
+      if (this.ls.selectedLanguages == 'id') {
+        this.Country = 'ID';
+      }
+      else if (this.ls.selectedLanguages == 'km') {
+        this.Country = 'KH';
+      }
+      else if (this.ls.selectedLanguages == 'en-ph') {
+        this.Country = 'PH';
+      }
+    }
+
+    getSelectedArea(value: any) {
+      this.selectedArea = value;
+    }
+
+    getSelectedAll(value: any) {
+      this.selectedAll = value;
+    }
+
+    getSelectedAllId(value: any) {
+      this.selectedAllId = value;
     }
 }

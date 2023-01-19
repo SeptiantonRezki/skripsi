@@ -249,7 +249,7 @@ export class OrderCatalogueComponent implements OnInit {
       query['start_date'] = this.convertDate(this.formFilter.get("from").value);
       query['end_date'] = this.convertDate(this.formFilter.get("to").value);
       const response = await this.ordersService.export(query).toPromise();
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `OrderSrcCatalogue${new Date().toLocaleString()}.xls`);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `OrderSrcCatalogue${new Date().toLocaleString()}.xlsx`);
       this.dataService.showLoading(false);
     } catch (error) {
       this.handleError(error);

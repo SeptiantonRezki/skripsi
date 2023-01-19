@@ -96,6 +96,7 @@ export class WholesalerEditComponent {
     this.permissionSupplierOrder = this.roles.getRoles('principal.supplierorder');
     this.formdataErrors = {
       name: {},
+      email: {},
       address: {},
       gsw: {},
       code: {},
@@ -169,9 +170,10 @@ export class WholesalerEditComponent {
     this.getCountryList();
     this.onLoad = true;
     let regex = new RegExp(/[0-9]/g);
-    
+
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
+      email: ["", Validators.required],
       address: ["", Validators.required],
       gsw: [""],
       code: ["", Validators.required],
@@ -246,7 +248,7 @@ export class WholesalerEditComponent {
         })
 
       }
-      
+
       if(this.detailWholesaler.status === 'inactive') {
         this.formWs.get('status').disable();
       }
@@ -283,7 +285,7 @@ export class WholesalerEditComponent {
           this.formWs.get('npwp').setValue(str, { emitEvent: false });
         }
       })
-    
+
   }
 
   handleCountryPhone(event){
@@ -348,7 +350,7 @@ export class WholesalerEditComponent {
       commonFormValidator.validateAllFields(this.formBankAccount);
     }
   }
-  
+
   isDistribution(value){
     if(value.checked === true) {
       this.formWs.get("npwp").setValidators(Validators.required);
@@ -422,6 +424,7 @@ export class WholesalerEditComponent {
 
     this.formWs.setValue({
       name: this.detailWholesaler.name || '',
+      email: this.detailWholesaler.email || '',
       address: this.detailWholesaler.address || '',
       code: this.detailWholesaler.code || '',
       owner: this.detailWholesaler.owner || '',
@@ -748,6 +751,7 @@ export class WholesalerEditComponent {
       const body = {
         _method: "PUT",
         name: this.formWs.get("name").value,
+        email: this.formWs.get("email").value,
         address: this.formWs.get("address").value,
         business_code: this.formWs.get("code").value,
         owner: this.formWs.get("owner").value,
@@ -900,7 +904,7 @@ export class WholesalerEditComponent {
 
     if (!this.isCan(['ubah', 'profile_toko'])) {
 
-      const fields = ['name', 'address', 'code', 'owner'];
+      const fields = ['name', 'email','address', 'code', 'owner'];
 
       this.disableFields(fields);
       this.rmValidators(fields);

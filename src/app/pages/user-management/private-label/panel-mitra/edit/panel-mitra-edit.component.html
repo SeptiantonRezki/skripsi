@@ -61,12 +61,14 @@
       <div class='import-export-bar p-16' fxLayoutGap="20px" fxLayout="row wrap" fxLayoutAlign="end center">
         <div class="button-row" *ngIf="!isDetail">
           <button mat-flat-button style="width: 160px" color="white" (click)="importMitra()">
-            <mat-icon>vertical_align_bottom</mat-icon> Import XLS
+            <mat-icon>vertical_align_bottom</mat-icon>
+            {{ ls.locale.global.button.importXLSX }}
           </button>
         </div>
         <div class="button-row">
           <button mat-flat-button style="width: 160px" color="white" (click)="exportMitra()">
-            <mat-icon>vertical_align_top</mat-icon> Export XLS
+            <mat-icon>vertical_align_top</mat-icon>
+            {{ ls.locale.global.button.exportXLSX }}
           </button>
         </div>
       </div>

@@ -19,10 +19,12 @@
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button> -->
       <button mat-raised-button type="button" class="is-danger" (click)="import()">
-        <mat-icon>arrow_downward</mat-icon> Import XLS
+        <mat-icon>arrow_downward</mat-icon>
+        {{ ls.locale.global.button.importXLSX }}
       </button>
       <button *ngIf="permission.export" (click)="exportwholesaler()" mat-raised-button type="button" class="is-danger">
-        <mat-icon>arrow_upward</mat-icon> Export XLS
+        <mat-icon>arrow_upward</mat-icon>
+        {{ ls.locale.global.button.exportXLSX }}
       </button>
     </div>
     <div class="table-wrapper">
@@ -141,6 +143,12 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column [name]="ls.locale.wholesaler.ws_code" prop="code" summary-template="activeCell">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [minWidth]="200" name="Email" prop="email">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.email ? row.email : '-'}}
+          </ng-template>
         </ngx-datatable-column>
 
         <!-- TOKO MITRA CABANG -->

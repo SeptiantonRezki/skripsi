@@ -25,14 +25,14 @@
       accept=".xlsx"
       [class.invalid-drag]="validComboDrag === false"
       [class.valid-drag]="validComboDrag"
-      (fileChange)="preview($event)"
+      (fileChange)="payload.hitFrom=='area-configuration'?previewFromAreaConfiguration($event):preview($event)"
     >
       <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br />
         <span matPrefix
           >{{ls.locale.global.messages.file_browse_label}}
-           
+
         </span>
       </div>
     </div>
@@ -48,6 +48,7 @@
               <th nowrap>{{'global.area.regional' | translate}}</th>
               <th nowrap>{{'global.area.zone' | translate}}</th>
               <th nowrap>{{'global.label.type' | translate}}</th>
+              <th nowrap>PIC email</th>
             </tr>
           </thead>
           <tbody>
@@ -66,6 +67,9 @@
               </td>
               <td nowrap>
                 {{ item.is_valid === 0 ? "-" : ('global.area.area' | translate) }}
+              </td>
+              <td nowrap>
+                {{ item.pic_email || "-"  }}
               </td>
             </tr>
           </tbody>

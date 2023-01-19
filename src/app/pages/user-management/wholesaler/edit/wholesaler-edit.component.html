@@ -42,6 +42,12 @@
             </mat-error>
           </mat-form-field>
           <mat-form-field fxFlex="100" class="is-light">
+            <input matInput [placeholder]="ls.locale.global.label.email" type="email" formControlName="email">
+            <mat-error *ngIf="formWs.controls['email'].hasError('required') && formWs.controls['email'].touched ">
+              {{ ls.locale.global.label.email }} {{ ls.locale.global.messages.mandatory_text }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxFlex="100" class="is-light">
             <input matInput [placeholder]="ls.locale.global.label.store_address" type="address"
               formControlName="address">
             <mat-error *ngIf="formWs.controls['address'].hasError('required') && formWs.controls['address'].touched ">

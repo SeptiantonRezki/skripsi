@@ -49,6 +49,7 @@ export class WholesalerCreateComponent {
 
     this.verticalStepperStep1Errors = {
       name: {},
+      email: {},
       address: {},
       business_code: {}
     };
@@ -90,6 +91,7 @@ export class WholesalerCreateComponent {
 
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
+      email: ["", Validators.required],
       address: ["", Validators.required],
       business_code: ["", Validators.required],
     });
@@ -329,6 +331,7 @@ export class WholesalerCreateComponent {
 
       let body = {
         name: this.verticalStepperStep1.get("name").value,
+        email: this.verticalStepperStep1.get("email").value,
         address: this.verticalStepperStep1.get("address").value,
         business_code: this.verticalStepperStep1.get("business_code").value,
         owner: this.verticalStepperStep2.get("owner").value,
