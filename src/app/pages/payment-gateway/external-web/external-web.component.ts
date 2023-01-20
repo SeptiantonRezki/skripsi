@@ -19,6 +19,7 @@ export class ExternalWebComponent implements OnInit {
   permission: any;
   permissionId: any = {
     qris: 'approval_qris',
+    cashier: 'payment_option',
   };
 
   constructor(

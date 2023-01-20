@@ -9,6 +9,11 @@ const routes: Routes = [
     component: ExternalWebComponent,
     canActivate: [PageGuard]
   },
+  {
+    path: "cashier",
+    component: ExternalWebComponent,
+    canActivate: [PageGuard]
+  },
 ];
 
 @NgModule({
