@@ -10,6 +10,7 @@ import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from "app/services/languages/languages.service";
 import { TranslateService } from "@ngx-translate/core";
 import moment from "moment";
+import { commonFormValidator } from "app/classes/commonFormValidator";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -53,19 +54,19 @@ export class DiaglogMisiComponent implements OnInit {
   ngOnInit() {
     this.getMission(true);
     this.form = this.formBuilder.group({
-      task_template_id: "",
+      task_template_id: ["", Validators.required],
       task_template_other_name_id: "",
-      start_date: "",
-      start_time: "",
-      end_date: "",
-      end_time: "",
+      start_date: ["", Validators.required],
+      start_time: ["", Validators.required],
+      end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       pushFF: this.pushFF,
       verifikasi: this.verifikasi,
       verifikasiFF: this.verifikasiFF,
       verification_type: null,
       is_push_to_ff: 0,
-      coin_submission: null,
-      coin_verification: null,
+      coin_submission: ["", Validators.required],
+      coin_verification: ["", Validators.required],
       is_ir_template: null,
       status_pin_up: this.status_pin_up,
       non_coin_reward: this.non_coin_reward,
@@ -467,6 +468,10 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   submit(form: any) {
+    commonFormValidator.validateAllFields(this.form);
+
+    if (!this.form.valid) return;
+
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
       this.dialogService.openSnackBar({ message: this.translate.instant('dte.task_sequencing.reward_description') + ' ' + this.translate.instant('global.messages.mandatory_text') });

@@ -23,12 +23,17 @@
       <mat-select formControlName="task_template_id" placeholder="{{'dte.task_sequencing.text29' | translate}}" id="task-template-id" (click)="selectForm('template')"
         (selectionChange)="selectChangeMisi($event)" #singleSelect>
         <ngx-mat-select-search id="select-search-template" [formControl]="filterMission" placeholderLabel="{{'global.label.search' | translate}}"
-          noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false">
+          noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" >
         </ngx-mat-select-search>
         <mat-option *ngFor="let item of filteredMission | async" [value]="item.id">
           {{item.name}}
         </mat-option>
       </mat-select>
+      <mat-error
+        *ngIf="form.controls['task_template_id'].hasError('required') && form.controls['task_template_id'].touched">
+        {{"dte.task_sequencing.text29" | translate}}
+        {{ "global.messages.mandatory_text" | translate }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
@@ -49,6 +54,10 @@
           (focus)="start_date.open()" [min]="minDate" [max]="maxDate" readonly />
         <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
         <mat-datepicker #start_date></mat-datepicker>
+        <mat-error
+          *ngIf="form.controls['start_date'].hasError('required') && form.controls['start_date'].touched">
+          {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex class="is-light form-primary" id="start_time">
         <input matInput formControlName="start_time" placeholder="{{
@@ -56,15 +65,24 @@
           }}" [ngxTimepicker]="start_time" [format]="24" readonly />
         <mat-icon matSuffix>access_time</mat-icon>
         <ngx-material-timepicker #start_time></ngx-material-timepicker>
+        <mat-error
+          *ngIf="form.controls['start_time'].hasError('required') && form.controls['start_time'].touched">
+          {{ ls.locale.notification.popup_notifikasi.text8 }}
+          {{ "global.messages.mandatory_text" | translate }}
+        </mat-error>
       </mat-form-field>
     </div>
 
-    <div fxLayout="row" fxLayoutGap="24px">
+    <div class="mt-8" fxLayout="row" fxLayoutGap="24px">
       <mat-form-field style="width: 100%">
         <input id="end-date" matInput formControlName="end_date" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" [matDatepicker]="end_date"
           (focus)="end_date.open()" [min]="minDate" [max]="maxDate" readonly />
         <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
         <mat-datepicker #end_date></mat-datepicker>
+        <mat-error
+          *ngIf="form.controls['end_date'].hasError('required') && form.controls['end_date'].touched">
+          {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
+        </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex class="is-light form-primary" id="end_time">
         <input matInput formControlName="end_time" placeholder="{{
@@ -73,6 +91,11 @@
           [disabled]="!form.get('start_date').value" readonly />
         <mat-icon matSuffix>access_time</mat-icon>
         <ngx-material-timepicker #end_time></ngx-material-timepicker>
+        <mat-error
+          *ngIf="form.controls['end_time'].hasError('required') && form.controls['end_time'].touched">
+          {{ ls.locale.notification.popup_notifikasi.text10 }}
+          {{ "global.messages.mandatory_text" | translate }}
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -94,10 +117,20 @@
     <div *ngIf="form.value.pushFF === false">
       <mat-form-field style="width: 100%">
         <input id="coinSubmission" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_submission" placeholder="{{'dte.task_sequencing.text35' | translate}}" />
+        <mat-error
+          *ngIf="form.controls['coin_submission'].hasError('required') && form.controls['coin_submission'].touched">
+          {{'dte.task_sequencing.text35' | translate}}
+          {{ "global.messages.mandatory_text" | translate }}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field style="width: 100%">
         <input id="coinVerification" matInput type="text" (keypress)="numberOnly($event)" formControlName="coin_verification" placeholder="{{'dte.task_sequencing.text36' | translate}}" />
+        <mat-error
+          *ngIf="form.controls['coin_verification'].hasError('required') && form.controls['coin_verification'].touched">
+          {{'dte.task_sequencing.text36' | translate}}
+          {{ "global.messages.mandatory_text" | translate }}
+        </mat-error>
       </mat-form-field>
     </div>
 

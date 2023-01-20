@@ -96,7 +96,8 @@
                   }}" [ngxTimepicker]="start_time" [format]="24" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #start_time></ngx-material-timepicker>
-                <mat-error>
+                <mat-error
+                  *ngIf="taskSequenceForm.controls['start_time'].hasError('required') && taskSequenceForm.controls['start_time'].touched">
                   {{ ls.locale.notification.popup_notifikasi.text8 }}
                   {{ "global.messages.mandatory_text" | translate }}
                 </mat-error>
@@ -131,7 +132,8 @@
                   [disabled]="!taskSequenceForm.get('start_date').value" readonly />
                 <mat-icon matSuffix>access_time</mat-icon>
                 <ngx-material-timepicker #end_time></ngx-material-timepicker>
-                <mat-error>
+                <mat-error
+                  *ngIf="taskSequenceForm.controls['end_time'].hasError('required') && taskSequenceForm.controls['end_time'].touched">
                   {{ ls.locale.notification.popup_notifikasi.text10 }}
                   {{ "global.messages.mandatory_text" | translate }}
                 </mat-error>
