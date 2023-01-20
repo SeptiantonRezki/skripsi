@@ -23,7 +23,7 @@
       <mat-select formControlName="task_template_id" placeholder="{{'dte.task_sequencing.text29' | translate}}" id="task-template-id" (click)="selectForm('template')"
         (selectionChange)="selectChangeMisi($event)" #singleSelect>
         <ngx-mat-select-search id="select-search-template" [formControl]="filterMission" placeholderLabel="{{'global.label.search' | translate}}"
-          noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" >
+          noEntriesFoundLabel="{{'global.messages.data_not_found' | translate}}" [clearSearchInput]="false" >
         </ngx-mat-select-search>
         <mat-option *ngFor="let item of filteredMission | async" [value]="item.id">
           {{item.name}}

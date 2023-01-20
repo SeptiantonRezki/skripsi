@@ -105,8 +105,8 @@ export class DiaglogMisiComponent implements OnInit {
       const { attribute } = this.data.data;
 
       this.form.patchValue({
-        task_template_id: parseInt(this.data.data.attribute.task_template_id, 10),
-        task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
+        task_template_id: attribute.task_template_id ? Number(attribute.task_template_id) : "",
+        task_template_other_name_id: Number(attribute.task_template_other_name_id),
         start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
         end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
         start_time: attribute.start_time ? attribute.start_time : "",
