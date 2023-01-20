@@ -47,9 +47,12 @@ export class StorePhotoVerificationComponent implements OnInit {
   @ViewChild(WidgetStorePhotoCounterComponent) widgetStorePhotoCounter: WidgetStorePhotoCounterComponent;
   table: DatatableComponent;
 
-  jenisPhotoOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  jenisPhotoOptions: Array<any> = [];
+  filteredJenisPhotoOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  
   statusOptions: Array<any>;
-  adminOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);;
+  adminOptions: Array<any> = [];
+  filteredAdminOptions: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   searchKeywordJenisPhoto: FormControl = new FormControl('');
   searchKeywordAdmin: FormControl = new FormControl('');
@@ -119,7 +122,16 @@ export class StorePhotoVerificationComponent implements OnInit {
       .flatMap(search => Observable.of(search).delay(500))
       .subscribe(query => { this.filters.patchValue({ query }); });
 
-    this.searchKeywordJenisPhoto.valueChanges.debounceTime(300).subscribe(keyword => { this.fetchJenisPhoto(keyword) });
+    this.searchKeywordJenisPhoto.valueChanges.debounceTime(300).subscribe(keyword => {
+      this.filteredJenisPhotoOptions.next(
+        this.jenisPhotoOptions.filter((item) => item.type_name.toLowerCase().indexOf(String(keyword).toLowerCase()) > -1)
+      )
+    });
+    this.searchKeywordAdmin.valueChanges.debounceTime(300).subscribe(keyword => {
+      this.filteredAdminOptions.next(
+        this.adminOptions.filter((item) => String(item).toLowerCase().indexOf(String(keyword).toLowerCase()) > -1)
+      )
+    })
 
 
   }
@@ -162,7 +174,8 @@ export class StorePhotoVerificationComponent implements OnInit {
     this.loadingJenisPhoto = true;
 
     this.storePhotoVerificationService.getListPhotoType({search: keyword}).subscribe(res => {
-      this.jenisPhotoOptions.next(res.data || []);
+      this.jenisPhotoOptions = res.data;
+      this.filteredJenisPhotoOptions.next(res.data || []);
       console.log({res});
       this.loadingJenisPhoto = false;
 
@@ -174,8 +187,8 @@ export class StorePhotoVerificationComponent implements OnInit {
   }
   fetchListAdmin() {
     this.storePhotoVerificationService.getListAdmin().subscribe(res => {
-      // this.adminOptions = res.data || [];
-      this.adminOptions.next(res.data || []);
+      this.adminOptions = res.data || [];
+      this.filteredAdminOptions.next(res.data || []);
     })
   }
 

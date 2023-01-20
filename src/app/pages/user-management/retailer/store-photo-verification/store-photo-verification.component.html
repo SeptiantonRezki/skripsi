@@ -48,7 +48,7 @@
               <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="{{'retailer_image_verification.search_photo_type' | translate }}"
                 noEntriesFoundLabel="{{'retailer_image_verification.notfound_photo_type' | translate }}" [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
-              <mat-option *ngFor="let item of jenisPhotoOptions | async" [value]="item.id">
+              <mat-option *ngFor="let item of filteredJenisPhotoOptions | async" [value]="item.id">
                 {{ item.type_name }}
               </mat-option>
             </mat-select>
@@ -70,8 +70,8 @@
               <ngx-mat-select-search [formControl]="searchKeywordAdmin" placeholderLabel="{{'retailer_image_verification.search_admin' | translate }}"
                 noEntriesFoundLabel="{{'retailer_image_verification.notfound_admin' | translate }}" [searching]="loadingJenisPhoto">
               </ngx-mat-select-search>
-              <mat-option *ngFor="let item of adminOptions | async" [value]="item.id">
-                {{ item.fullname }}
+              <mat-option *ngFor="let item of filteredAdminOptions | async" [value]="item">
+                {{ item }}
               </mat-option>
             </mat-select>
           </mat-form-field>
