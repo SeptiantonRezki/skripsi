@@ -10,6 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { CoinDisburstmentService } from 'app/services/dte/coin-disburstment.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
+import moment from 'moment';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -176,23 +177,40 @@ export class CoinDisburstmentComponent implements OnInit {
     this.router.navigate(["dte", "coin-disbursement", "edit"]);
   }
 
-  download(row_id: any) {
+  async download(row: any) {
     this.dataService.showLoading({ show: true });
     const params = {
-      coin_disbursement_id: row_id
+      area: 1,
+      self_area: [1],
+      last_self_area: [1],
+      after_level: true,
+      coin_disbursement_id: row.id,
+      name: row.name,
+      group_by: true
     }
 
     try {
-      this.coinDisburstmentService.download(params).subscribe(res => {
-        this.downloadLink.nativeElement.href = res.data;
-        this.downloadLink.nativeElement.click();
-        this.dataService.showLoading(false);
-      }, err => {
-        console.warn('err', err);
-        alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
-        this.dataService.showLoading(false);
-      })
+      const response = await this.coinDisburstmentService.export(params).toPromise();
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const getTime = moment().format("YYYYMMDDHHmmss");
+      link.download = `list-detail-penukaran-coin-${getTime}.xlsx`;
+      
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+      
+      this.dataService.showLoading(false);
     } catch (error) {
+      alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
       this.dataService.showLoading(false);
       throw error;
     }
