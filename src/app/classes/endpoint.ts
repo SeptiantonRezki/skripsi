@@ -1227,11 +1227,8 @@ export class Endpoint {
         weekly_summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/weekly-summary-visit`,
         detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/detail-visit`,
         stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
-<<<<<<< HEAD
         stock_movement_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement-2`,
         stock_movement_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement-3`,
-=======
->>>>>>> CDE-5076#AYO_SRC_MITRA_Spin_The_Wheel
 
         export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-total-per-brand`,
         export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-visit`,
