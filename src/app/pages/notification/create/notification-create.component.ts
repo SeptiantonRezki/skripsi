@@ -33,7 +33,10 @@ export class NotificationCreateComponent {
   onLoad: boolean;
   loadingIndicator: boolean;
   formFilter: FormGroup;
-  listEmployee: any[] = [{ name: this.translate.instant('global.label.all'), value: "all" }, { name: this.translate.instant('global.label.employee_only'), value: "yes" }];
+  listEmployee: any[] = [
+    { name: this.translate.instant('global.label.all'), value: "all", id: 'employee_all' },
+    { name: this.translate.instant('global.label.employee_only'), value: "yes", id: 'employee_only' },
+  ];
   formNotification: FormGroup;
   formArea: FormGroup;
   formNotificationError: any;
@@ -45,7 +48,11 @@ export class NotificationCreateComponent {
   formRecurrenceCommon: FormGroup;
   listProductBarcodes: Array<any> = []
 
-  listSubscriptionStatus: any[] = [{ name: this.translate.instant('global.label.all'), value: 'all' }, { name: this.translate.instant('global.label.subscribe'), value: 'subscribed' }, { name: this.translate.instant('global.label.unsubscribe'), value: 'not-subscribed' }]
+  listSubscriptionStatus: any[] = [
+    { name: this.translate.instant('global.label.all'), value: 'all', id: 'subscription_all' },
+    { name: this.translate.instant('global.label.subscribe'), value: 'subscribed', id: 'berlangganan' },
+    { name: this.translate.instant('global.label.unsubscribe'), value: 'not-subscribed', id: 'tidak_berlangganan' },
+  ]
   userGroup: any[] = [
     { name: this.translate.instant('global.menu.field_force'), value: "field-force" },
     { name: this.translate.instant('global.menu.wholesaler'), value: "wholesaler" },
