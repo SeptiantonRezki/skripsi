@@ -37,12 +37,12 @@ export class SpinTheWheelService extends BaseService {
     const url = this.getUrl(this.namespace, "update_spin", context);
     return this.postApi(url, body);
   }
-  
+
   put_preview(context: any, body: any): Observable<any> {
     const url = this.getUrl(this.namespace, "update_preview", context);
     return this.postApi(url, body);
   }
-  
+
   saveSettings(body?: any): Observable<any> {
     const url = this.getUrl(this.namespace, "save_settings");
     return this.postApi(url, body);
@@ -86,5 +86,15 @@ export class SpinTheWheelService extends BaseService {
   getPushnotif(): Observable<any> {
     const url = this.getUrl(this.namespace, "get_pushnotif");
     return this.getApi(url);
+  }
+
+  getConfigSpinMitra(): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_config_spin_mitra");
+    return this.getApi(url);
+  }
+
+  manageSpinMitra(body: any): Observable<any> {
+    const url = this.getUrl(this.namespace, "manage_spin_mitra");
+    return this.postApi(url, body);
   }
 }
