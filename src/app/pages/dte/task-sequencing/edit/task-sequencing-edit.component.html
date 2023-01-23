@@ -115,8 +115,18 @@
             </mat-form-field>
 
             <mat-form-field fxFlex="100" class="is-light">
-              <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
-                placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" formControlName="end_date" [readonly]="data?.is_editable === 0">
+              <input
+                id="end-date"
+                matInput
+                (focus)="end_date.open()"
+                [max]="maxDate"
+                [min]="taskSequenceForm.get('start_date').value"
+                [disabled]="!taskSequenceForm.get('start_date').value"
+                [matDatepicker]="end_date"
+                placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}"
+                formControlName="end_date"
+                [readonly]="data?.is_editable === 0"
+              >
               <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
               </mat-datepicker-toggle>
               <mat-datepicker #end_date [disabled]="data?.is_editable === 0"></mat-datepicker>
