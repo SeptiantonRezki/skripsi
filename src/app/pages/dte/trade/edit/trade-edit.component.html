@@ -8,7 +8,15 @@
       <form autocomplete="off" [formGroup]="formTradeProgram" (keydown.enter)="$event.preventDefault();">
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <h2 class="">{{isDetail ? ('breadcrumbs.trade_program.detail' | translate) : ('breadcrumbs.trade_program.edit' | translate) }}</h2>
-          <div>
+          <div fxLayout="row" fxLayoutGap="24px" fxLayoutAlign="start center">
+            <span *ngIf="detailFormTrade.coin_expiry_date_update_status">
+              Status:<br />
+              {{ detailFormTrade.coin_expiry_date_update_status }}
+            </span>
+            <span *ngIf="detailFormTrade.coin_expiry_date_updated_at">
+              Last Updated Data:<br />
+              {{ detailFormTrade.coin_expiry_date_updated_at }}
+            </span>
             <mat-form-field
               [class]="formTradeProgram.get('status').value === 'publish' ? 'radius-select green' : 'radius-select red'">
               <mat-select formControlName="status">
