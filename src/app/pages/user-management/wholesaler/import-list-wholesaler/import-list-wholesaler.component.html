@@ -25,7 +25,7 @@
         <mat-icon class="secondary-text s-48">attach_file</mat-icon>
         <br>
         <span matPrefix>{{ls.locale.global.messages.file_browse_label}}
-           
+
         </span>
       </div>
     </div>
@@ -56,6 +56,7 @@
             <th nowrap>Bank_account_number</th>
             <th nowrap>Bank_account_name</th>
             <th nowrap>Branch</th>
+            <th nowrap>Email</th>
           </tr>
         </thead>
         <tbody>
@@ -116,6 +117,9 @@
             </td>
             <td nowrap>
               {{ item.branch }}
+            </td>
+            <td nowrap>
+              {{ item.email }}
             </td>
           </tr>
           <tr *ngIf="rows.length === 0">
