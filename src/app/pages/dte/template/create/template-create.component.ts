@@ -1224,8 +1224,8 @@ export class TemplateCreateComponent {
     const type = questions.at(idx1).get('type').value;
 
     if (this.frmQuiz.value === 'quiz') {
-      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
-      if (isAnswerIsExist > -1) {
+      let isAnswerIsExist = this.listAnswerKeys.length && this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (this.listAnswerKeys.length && isAnswerIsExist > -1) {
         this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
         if (selectionValue && selectionValue === 'checkbox') {
           this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
@@ -1318,6 +1318,21 @@ export class TemplateCreateComponent {
         if (hasEmptyNext) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
+      if (this.frmQuiz.value === 'quiz') {
+        let isEmpty = true;
+
+        if (this.listAnswerKeys.length && this.listAnswerKeys.length === questions.length) {
+          const isFilled = this.listAnswerKeys.map(key => key.length > 0);
+          isEmpty = isFilled.some(val => val === false);
+        }
+
+        if (isEmpty) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: this.translate.instant("dte.template_tugas.answer_key")+" "+ this.translate.instant("global.messages.mandatory_text")});
           return;
         }
       }
