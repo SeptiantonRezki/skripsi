@@ -168,7 +168,7 @@ export class AudienceEditComponent {
       }
     ];
 
-    if(this.dataService.getDecryptedProfile()["country"] == 'PH'){ 
+    if(this.dataService.getDecryptedProfile()["country"] == 'PH'){
       this.retailClassification.push({ name: "ISR", value: "ISR" });
     }
 
@@ -242,7 +242,7 @@ export class AudienceEditComponent {
     // this.initArea();
     this.initAreaV2();
 
-    this.pagination['business_type'] = this.detailAudience.business_type;  
+    this.pagination['business_type'] = this.detailAudience.business_type;
     this.getRetailer();
 
     this.formAudience.controls['limit'].valueChanges.subscribe(res => {
@@ -1271,7 +1271,7 @@ export class AudienceEditComponent {
         message: this.translate.instant('dte.audience.max_audience', {max: max}),
       });
     }
-    
+
     // Audience Type = TSM, Type = any
     if (this.formAudience.get("audience_type").value === "tsm") {
       let body = {
@@ -1300,7 +1300,7 @@ export class AudienceEditComponent {
         }
       }
 
-      
+
       if (this.allRowsSelected) {
         body['all'] = '1';
         body["retailer_id"] = null;
@@ -1308,7 +1308,7 @@ export class AudienceEditComponent {
       } else {
         body['all'] = '0';
       }
-      
+
       this.saveData = true;
       this.audienceService.put(body, { audience_id: this.detailAudience.id }).subscribe(
         (res) => {
@@ -1590,7 +1590,7 @@ export class AudienceEditComponent {
       }
 
       if (response) {
-        
+
         this.importAudienceResult = {...response};
         this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
         this.router.navigate(["dte", "audience"]);

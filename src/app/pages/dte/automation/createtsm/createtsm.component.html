@@ -140,19 +140,44 @@
                   </mat-select>
                 </mat-form-field>
                 <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
-                <div class="mt-24 mb-24" fxFlex="45%">
-                  <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
+                <div fxFlex="45%">
+                  <!-- <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
                     mat-raised-button type="button">
                     <mat-icon>add</mat-icon>
                     Tambah Produk
-                  </button>
+                  </button> -->
                   <button mat-icon-button type="button" *ngIf="i > 0" (click)="removeSkuProduct(i)">
                     <mat-icon class="secondary-text">delete</mat-icon>
                   </button>
+                  <!-- enhancement challenge 17/11/22 -->
+                  <mat-form-field class="is-light form-primary mx-24" fxFlex="30%" *ngIf="ls.selectedLanguages.includes('ph')===true">
+                    <input matInput type="number"
+                      placeholder="Extra coin / SKU"
+                      formControlName="ex_coin_per_sku" min="0" max="10000">
+                    <mat-error class="mt-8">
+                      The number of Extra Coins per SKU must be between 0 and 10000.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary" fxFlex="45%" *ngIf="ls.selectedLanguages.includes('ph')===true">
+                    <input matInput type="number"
+                      placeholder="Maximum Quantity / Order"
+                      formControlName="max_qty_per_order" min="1" max="10000">
+                    <mat-error class="mt-8">
+                      The number of maximum quantity per order must be between 1 and 10000.
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- end enhancement -->
                 </div>
               </div>
             </div>
           </ng-container>
+          <div class="my-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" *ngIf="formAutomation.get('automation').value === 'e-order'">
+            <button type="button" class="mb-10" (click)="addSkuProduct()" fxFlex="20%"
+              mat-raised-button type="button">
+              <mat-icon>add</mat-icon>
+              Tambah Produk
+            </button>
+          </div>
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" placeholder="Judul Tantangan" formControlName="title_challenge">
@@ -180,6 +205,15 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <!-- enhancement challenge 17/11/22 -->
+          <!-- <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" *ngIf="ls.selectedLanguages.includes('ph')===true && formAutomation.get('automation').value === 'e-order'">
+            <mat-form-field fxFlex="45%" class="is-light form-primary">
+              <mat-select placeholder="DSR Can Participate?" formControlName="dsr_can_participate">
+                <mat-option *ngFor="let item of listDSRCanParticipate" [value]="item.value">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+          <!-- end enhancement challenge 17/11/22 -->
           <div class="px-24" fxLayout="column">
             <div class="pt-16" fxLayout="row" fxLayoutAlign="start center">
               <h3 class="">

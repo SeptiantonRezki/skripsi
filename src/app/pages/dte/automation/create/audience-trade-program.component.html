@@ -140,8 +140,8 @@
                   </mat-select>
                 </mat-form-field>
                 <!-- {{ formAutomation.get('skus').at(i).controls['filteredSku'].value ? (formAutomation.get('skus').at(i).controls['filteredSku'].value | async) : 'gak ada' }} -->
-                <div class="mt-24 mb-24" fxFlex="45%">
-                  <button type="button" *ngIf="i === 0" class="mb-10" (click)="addSkuProduct()" fxFlex="45%"
+                <div fxFlex="45%">
+                  <button type="button" class="mb-10" *ngIf="i === 0" (click)="addSkuProduct()" fxFlex="45%"
                     mat-raised-button type="button">
                     <mat-icon>add</mat-icon>
                     Tambah Produk
@@ -149,10 +149,32 @@
                   <button mat-icon-button type="button" *ngIf="i > 0" (click)="removeSkuProduct(i)">
                     <mat-icon class="secondary-text">delete</mat-icon>
                   </button>
+                  <!-- enhancement challenge 17/11/22 -->
+                  <!-- <mat-form-field class="is-light form-primary mx-24" fxFlex="30%">
+                    <input matInput type="number"
+                      placeholder="Extra coin/ SKU"
+                      formControlName="ex_coin_per_sku">
+                    <mat-error class="mt-8">
+                      Jumlah Extra Coin per SKU harus diisi.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="is-light form-primary" fxFlex="45%">
+                    <input matInput type="number"
+                      placeholder="Maximum Quantity / Order"
+                      formControlName="max_qty_per_order">
+                  </mat-form-field> -->
+                  <!-- end enhancement -->
                 </div>
               </div>
             </div>
           </ng-container>
+          <!-- <div class="my-8  px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" *ngIf="formAutomation.get('automation').value === 'e-order'">
+            <button type="button" class="mb-10" (click)="addSkuProduct()" fxFlex="20%"
+              mat-raised-button type="button">
+              <mat-icon>add</mat-icon>
+              Tambah Produk
+            </button>
+          </div> -->
           <div class="mt-8 px-24" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
             <mat-form-field fxFlex="45%" class="is-light form-primary">
               <input matInput type="text" placeholder="Judul Tantangan" formControlName="title_challenge">
