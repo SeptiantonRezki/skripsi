@@ -1326,7 +1326,10 @@ export class TemplateCreateComponent {
         let isEmpty = true;
 
         if (this.listAnswerKeys.length && this.listAnswerKeys.length === questions.length) {
-          const isFilled = this.listAnswerKeys.map(key => key.length > 0);
+          const isFilled = this.listAnswerKeys.map(key => {
+            if (!key.length) return false;
+            return key.every(val => val > -1);
+          });
           isEmpty = isFilled.some(val => val === false);
         }
 
