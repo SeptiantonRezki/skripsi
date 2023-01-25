@@ -298,14 +298,14 @@ export class TrsProposalCreateComponent implements OnInit {
   }
 
   setCustName(id, component_name): void {
-    if (id) {
+    if (true) {
       if (id.length >= 10) {
         if (this.selectedSalesPoint == ""){
           alert("Pilih salespoint terlebih dahulu !");
         } else {
           let custCode1 = this.formCreateProposal.get('custCode1').value;
           let custCode2 = this.formCreateProposal.get('custCode2').value;
-          if (custCode1 == custCode2){
+          if (custCode1.toUpperCase() == custCode2.toUpperCase()){
             alert('Customer tidak boleh sama');
           } else {
             id = id+"__"+this.selectedSalesPoint;

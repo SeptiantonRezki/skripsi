@@ -127,7 +127,7 @@ export class Endpoint {
         // put: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/${type_api}/user/wholesaler/${context.wholesaler_id}`,
         export: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/data?area=${context.area_id}`,
-        exportWhosaller: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/wholesaler/export/list`,
+        exportWhosaller: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/export/list?area=${context.area_id}`,
         import_preview: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/preview`,
         store_import: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/wholesaler/import/list`,
         // roles: `http://demo6191696.mockable.io/api/v1/business/principal/wholesaler/tingkat-fitur`,
@@ -1108,14 +1108,13 @@ export class Endpoint {
       },
       CoinDisburstment: {
         get: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
-        get_exchanges: `${AYO_API_SERVICE((SERVER.coin))}/api/v1/coin/principal/coin-redemption/penukaran`,
+        get_exchanges: `${AYO_API_SERVICE((SERVER.export))}/api/v1/export/dte/coin-redemption/penukaran/result`,
         detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,
         create: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement`,
         update: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,
         delete: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/${context.coin_id}`,
         audience: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/disbursement/audience/${context.coin_id}`,
-        export_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export`,
-        export_detail: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/export-detail`,
+        export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/dte/coin-redemption/penukaran/export`,
         download: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/download`,
         preview_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/preview`,
         import_exchange: `${AYO_API_SERVICE(SERVER.coin)}/api/v1/coin/principal/coin-redemption/penukaran/import`,
@@ -1200,6 +1199,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
         save_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
         get_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
+        get_config_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/config-spin-mitra`,
+        manage_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/manage-config-spin-mitra`,
       },
       tactical_retail_sales: {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
@@ -1220,7 +1221,7 @@ export class Endpoint {
         export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_export/list`,
 
         proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/proposal_summary/${context.id}`,
-        
+
         total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/total-per-brand`,
         summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/summary-visit`,
         weekly_summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/weekly-summary-visit`,
@@ -1228,11 +1229,11 @@ export class Endpoint {
         stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement`,
         stock_movement_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement-2`,
         stock_movement_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/stock-movement-3`,
-        
+
         export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-total-per-brand`,
         export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-visit`,
         export_stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/export-stock-movement`,
-      
+
         report_filter_1: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_1`,
         report_filter_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_2`,
         report_filter_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_3`,

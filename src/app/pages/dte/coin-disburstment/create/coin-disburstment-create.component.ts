@@ -97,6 +97,7 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
   titleParam = {entity: this.pageName}
   priority_list: any[] = [];
   importType = "XLSX";
+  isPublish: boolean = false;
   
   constructor(
     private dataService: DataService,
@@ -161,7 +162,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       name: ["", Validators.required],
       coin_valuation: [0, [Validators.required, Validators.min(0)]],
       start_date: [null, Validators.required],
+      start_time: ["00:00", Validators.required],
       end_date: [null, Validators.required],
+      end_time: ["00:00", Validators.required],
       group_trade_id: ["", Validators.required],
       status: ["draft"],
       priorities: this.formBuilder.array([])
@@ -237,6 +240,10 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         delete this.pagination['classification'];
       }
     });
+
+    this.formCoin.get("start_date").valueChanges.takeUntil(this._onDestroy).subscribe((res) => {
+      if(!res) this.formCoin.get("end_date").setValue(null);
+    });
   }
 
   ngOnDestroy() {
@@ -253,12 +260,14 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     let priorities = this.formCoin.get('priorities') as FormArray;
 
     this.coinDisburstmentService.getDetail({ coin_id: this.detailCoin.id }).subscribe(res => {
-      this.detailCoin = res.data;
+      this.detailCoin = {...this.detailCoin, ...res.data};
 
       this.formCoin.get('name').setValue(this.detailCoin.name);
       this.formCoin.get('coin_valuation').setValue(this.detailCoin.coin_valuation);
       this.formCoin.get('start_date').setValue(this.detailCoin.start_date);
       this.formCoin.get('end_date').setValue(this.detailCoin.end_date);
+      this.formCoin.get('start_time').setValue(this.convertTime(this.detailCoin.start_date));
+      this.formCoin.get('end_time').setValue(this.convertTime(this.detailCoin.end_date));
       this.formCoin.get('status').setValue(this.detailCoin.status);
       this.formCoin.get('group_trade_id').setValue(this.detailCoin.group.map(group => {
         this.priority_list.push({id: group.trade_creator_group_id, name: group.name});
@@ -281,11 +290,30 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
         this.isTransferBank.setValue(true);
       }
 
+      if (this.detailCoin.status === "publish") {
+        this.formCoin.disable();
+        this.formFilter.disable();
+        this.formFilterRetailer.disable();
+        this.isTransferBank.disable();
+        this.isPojokBayar.disable();
+        this.isTargetedRetailer.disable();
+
+        this.isPublish = true;
+      }
+
       this.getListAudience();
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
     });
+  }
+
+  convertTime(param: Date) {
+    if (param) {
+      return moment(param).format('HH:mm');
+    }
+
+    return "";
   }
 
   getListAudience() {
@@ -1165,7 +1193,9 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
 
   submit() {
     let args = this.getArgsForSubmit();
-    if (this.formCoin.valid) {
+
+    // CDE-5394 -> DISABLED ALL FORM WHEN STATUS PUBLISH, MAKES FORMCOIN ALWAYS INVALID
+    if (this.formCoin.valid || (this.isEdit && this.detailCoin.status === "publish")) {
       if (!this.isPojokBayar.value && !this.isTransferBank.value) {
         this.dialogService.openSnackBar({ message: this.translate.instant('dte.coin_disbursement.please_select_exchange_options') });
         return;
@@ -1182,8 +1212,8 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
       let body = {
         name: this.formCoin.get("name").value,
         coin_valuation: this.formCoin.get("coin_valuation").value,
-        start_date: moment(this.formCoin.get("start_date").value).format("YYYY-MM-DD"),
-        end_date: moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD"),
+        start_date: `${moment(this.formCoin.get("start_date").value).format("YYYY-MM-DD")} ${this.formCoin.get("start_time").value}:00`,
+        end_date: `${moment(this.formCoin.get("end_date").value).format("YYYY-MM-DD")} ${this.formCoin.get("end_time").value}:00`,
         opsi_penukaran: opsiPenukaran,
         status: args && args === 'publish' ? 'publish' : (args && args === 'unpublish' ? 'unpublish' : 'draft'),
         targeted_audience: this.isTargetedRetailer.value ? "1" : "0",
@@ -1387,5 +1417,12 @@ export class CoinDisburstmentCreateComponent implements OnInit, OnDestroy {
     });
 
     return value;
+  }
+
+  handleGTP(id){
+    if (this.isEdit && this.detailCoin.retailer_menukarkan_koin)
+      return this.detailCoin.group && this.detailCoin.group.some(group => group.trade_creator_group_id === id);
+    else
+      return false;
   }
 }

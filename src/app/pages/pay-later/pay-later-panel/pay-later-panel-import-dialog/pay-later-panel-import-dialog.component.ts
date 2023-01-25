@@ -47,8 +47,8 @@ export class PayLaterPanelImportDialogComponent implements OnInit {
     this.files = event;
 
     console.log('files info', this.files);
-    if (this.files.name.indexOf(".xls") === -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    if (this.files.name.indexOf(".xlsx") === -1) {
+      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLSX!" });
       return;
     }
 

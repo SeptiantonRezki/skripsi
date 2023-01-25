@@ -334,15 +334,18 @@
           </ng-template>
         </ngx-datatable-column> -->
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="true">
-          <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-            let-selectFn="selectFn">
+          <ng-template ngx-datatable-header-template>
             <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
           </ng-template>
 
           <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
             let-onCheckboxChangeFn="onCheckboxChangeFn">
-            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"></mat-checkbox>
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)" [disabled]="allRowsSelected"
+              *ngIf="!allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"
+              class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
+
         </ngx-datatable-column>
         <ngx-datatable-column name="{{'call_objective.text8' | translate}}" prop="name"></ngx-datatable-column>
         <!-- <ngx-datatable-column name="No Ponsel" [width]="180" prop="phone" [sortable]="false"></ngx-datatable-column> -->

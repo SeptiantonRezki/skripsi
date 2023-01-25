@@ -1,21 +1,21 @@
+import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import moment from 'moment';
-import { LanguagesService } from 'app/services/languages/languages.service';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
-import { GeotreeService } from 'app/services/geotree.service';
-import { GroupTradeProgramService } from 'app/services/dte/group-trade-program.service';
-import { AudienceService } from 'app/services/dte/audience.service';
+import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { Page } from 'app/classes/laravel-pagination';
 import { DataService } from 'app/services/data.service';
-import { NotificationService } from 'app/services/notification.service';
-import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { DialogService } from 'app/services/dialog.service';
+import { AudienceService } from 'app/services/dte/audience.service';
+import { SequencingService } from 'app/services/dte/sequencing.service';
 import { SpinTheWheelService } from 'app/services/dte/spin-the-wheel.service';
-import { Router } from '@angular/router';
+import { GeotreeService } from 'app/services/geotree.service';
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { NotificationService } from 'app/services/notification.service';
+import moment from 'moment';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-spin-the-wheel-create',
@@ -28,7 +28,8 @@ export class SpinTheWheelCreateComponent implements OnInit {
   formSpin: FormGroup;
   formGeo: FormGroup;
   onLoad: boolean;
-  minDate = new Date();
+  minDate: any = new Date();
+  maxDate: any;
   groupTradePrograms: any[] = [];
 
   files: File;
@@ -116,6 +117,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
     private translate: TranslateService,
     private geoService: GeotreeService,
     private audienceService: AudienceService,
+    private sequencingService: SequencingService,
     private dataService: DataService,
     private geotreeService: GeotreeService,
     private notificationService: NotificationService,
@@ -149,15 +151,13 @@ export class SpinTheWheelCreateComponent implements OnInit {
       territory: []
     }
     this.filterTradeProgram.valueChanges
+      .debounceTime(1000)
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filteringTradeProgram();
       });
   }
   filteringTradeProgram() {
-    if (!this.listTradePrograms) {
-      return;
-    }
     // get the search keyword
     let search = this.filterTradeProgram.value;
     if (!search) {
@@ -166,6 +166,19 @@ export class SpinTheWheelCreateComponent implements OnInit {
     } else {
       search = search.toLowerCase();
     }
+
+    this.pagination.search = search;
+    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+      (res) => {
+        console.log("res trade programs", res);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
+      },
+      (err) => {
+        console.log("err trade programs", err);
+      }
+    );
+
     // filter the banks
     this.filteredTradeProgram.next(
       this.listTradePrograms.filter(
@@ -173,6 +186,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
       )
     );
   }
+
 
   ngOnInit() {
     this.formSpin = this.formBuilder.group({
@@ -319,16 +333,35 @@ export class SpinTheWheelCreateComponent implements OnInit {
   }
 
   getTradePrograms() {
-    this.audienceService.getListTradePrograms().subscribe(
+    this.pagination.per_page = 30;
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         console.log("res trade programs", res);
-        this.listTradePrograms = res.data;
-        this.filteredTradeProgram.next(res.data);
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
       },
       (err) => {
         console.log("err trade programs", err);
       }
     );
+  }
+
+  tradeProgramChange(e: any){
+    // console.log(e);
+    const theIndex = this.listTradePrograms.findIndex(x => x.id === e.value);
+    console.log(this.listTradePrograms[theIndex]);
+    this.setDate(this.listTradePrograms[theIndex].end_date);
+    this.formSpin.patchValue({
+      trade_creator_name: this.listTradePrograms[theIndex].name,
+      total_budget: this.listTradePrograms[theIndex].budget,
+      endDateTrade: this.listTradePrograms[theIndex].end_date,
+      status: "unpublish",
+    });
+  }
+
+  setDate(d: any) {
+    this.maxDate = moment(d).format('YYYY-MM-DD');
+    this.minDate = moment(new Date()).format('YYYY-MM-DD');
   }
 
   changeBlastType(type) {
@@ -758,7 +791,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
 
   submit() {
     if (
-      this.formSpin.valid 
+      this.formSpin.valid
       // && this.formGeo.valid
       ) {
       let body = {

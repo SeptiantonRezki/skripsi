@@ -49,7 +49,9 @@
                     <mat-select
                       formControlName="trade_creator_id"
                       placeholder="{{ 'dte.trade_program.text3' | translate }}"
+                      (selectionChange)="tradeProgramChange($event)"
                       #singleSelect
+                      id="tradeCreatorId"
                     >
                       <ngx-mat-select-search
                         [formControl]="filterTradeProgram"
@@ -82,7 +84,8 @@
                         (focus)="startDate.open()"
                         [matDatepicker]="startDate"
                         placeholder="Tanggal Mulai"
-                        
+                        [min]="minDate"
+                        [max]="maxDate"
                       />
                       <mat-datepicker-toggle matSuffix [for]="startDate">
                         <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -144,7 +147,8 @@
                         (focus)="endDate.open()"
                         [matDatepicker]="endDate"
                         placeholder="Tanggal Berakhir"
-                        
+                        [min]="formSpin.get('start_date').value || minDate"
+                        [max]="maxDate"
                       />
                       <mat-datepicker-toggle matSuffix [for]="endDate">
                         <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
@@ -223,7 +227,7 @@
                 Population Blast
                 </mat-radio-button>
               </mat-radio-group> -->
-              
+
               <form autocomplete="off" fxLayout="row" fxLayoutGap="16px" fxFlex="45" [formGroup]="formGeo">
                 <div fxFlex="100">
                   <div fxLayout="row" class="px-16">
@@ -402,7 +406,7 @@
                 </mat-form-field>
               </div>
             </div> -->
-  
+
             <!-- <div class="p-0">
               <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
                 fxLayoutAlign="end center" class="p-16 export">
@@ -421,23 +425,23 @@
                 [externalPaging]="true" [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)"
                 [selected]="selected" [selectionType]="'checkbox'" (select)='onSelect($event)'
                 [selectCheck]='selectCheck'>
-  
+
                 <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-                  
+
                     dihapus .....
                     <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
                     let-selectFn="selectFn">
                     <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"></mat-checkbox>
-                  </ng-template> 
+                  </ng-template>
                   .....
-  
+
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-isSelected="isSelected"
                     let-onCheckboxChangeFn="onCheckboxChangeFn">
                     <mat-checkbox [checked]="bindSelector(isSelected, row)" (change)="onSelectAudience($event, row)">
                     </mat-checkbox>
                   </ng-template>
                 </ngx-datatable-column>
-  
+
                 <ngx-datatable-column name="Name" prop="name"></ngx-datatable-column>
                 <ngx-datatable-column name="Code" prop="code" [sortable]="false">
                   <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
@@ -456,7 +460,7 @@
                 </ngx-datatable-column>
               </ngx-datatable>
             </div> -->
-            
+
             <div fxLayout="row" fxLayoutGap="16px" *ngIf="!isDetail">
               <div fxLayout="column">
                 <button
@@ -504,7 +508,7 @@
         </mat-tab>
         <mat-tab label="Preview" [disabled]="false">
           <div class="ayo-middle py-24" fxLayout="column">
-            
+
             <form
               autocomplete="off"
               [formGroup]="formPreview"
@@ -582,16 +586,16 @@
                     {{ ls.locale.global.button.save }}
                   </button>
 
-                  <button 
-                    mat-raised-button 
-                    type="button" 
-                    class="ml-24 confirmation-button" 
-                    (click)="submitPublishUnpublish()" 
+                  <button
+                    mat-raised-button
+                    type="button"
+                    class="ml-24 confirmation-button"
+                    (click)="submitPublishUnpublish()"
                     fxFlex="20">
                       {{ detailFormSpin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
                   </button>
                 </div>
-                
+
               </div>
               <div fxFlex="1"></div>
               <div fxFlex="50%">
@@ -613,9 +617,9 @@
                 <div fxLayout="row" class="px-24 pb-24">
                   <img mat-list-icon src="assets/images/ayo/preview-spin.png" style="max-height: 100%;" />
                 </div>
-                
+
               </div>
-              
+
             </form>
 
           </div>
