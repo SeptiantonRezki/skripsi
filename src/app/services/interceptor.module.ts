@@ -133,24 +133,21 @@ export class BaseInterceptor implements HttpInterceptor {
       } else if (err.status == 422) {
         // let reqOtc = Object.entries(req.body).map(([key]) => ({ key }));
         if (req.method === "POST") {
-          // if (reqOtc[0]["key"] === "password_current") {
-          //   return Observable.throw(err);
-          // }
-
-          // if (err.error.errors['status']) {
-          //   this.injector.get(DialogService).openSnackBar({ message: err.error.errors['status'] })
-          // } else
-          if (err.error.errors) {
-            if (err.error.errors.access_lock) {
-              this.injector.get(DialogService).openSnackBar({ message: err.error.errors.access_lock });
+          // PARSE ARRAYBUFFER AGAR BISA MEMUNCULKAN NOTIF
+          let newError = err.error instanceof ArrayBuffer ? (JSON.parse(
+            String.fromCharCode.apply(null, new Uint8Array(err.error))
+          )) : (err.error);
+          
+          if (newError.errors) {
+            if (newError.errors.access_lock) {
+              this.injector.get(DialogService).openSnackBar({ message: newError.errors.access_lock });
             } else {
-              let errorArray = Object.values(err.error.errors);
+              let errorArray = Object.values(newError.errors);
               this.injector.get(DialogService).openSnackBar({ message: errorArray[0][0] })
             }
           } else {
-            this.injector.get(DialogService).openSnackBar({ message: err.error.message });
+            this.injector.get(DialogService).openSnackBar({ message: newError.message });
           }
-
         } else if (req.method === "DELETE") {
           let errorArray;
           if (err.status === 422) {

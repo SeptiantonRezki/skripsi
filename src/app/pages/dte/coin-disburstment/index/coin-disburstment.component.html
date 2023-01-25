@@ -92,7 +92,7 @@
               <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
                 <div class="button-row" style="margin-left: -10px">
                   <button type="button" mat-icon-button [disabled]="!row.retailer_menukarkan_koin"
-                    matTooltip="{{'dte.coin_disbursement.export_detail' | translate}}" (click)="download(row.id)">
+                    matTooltip="{{'dte.coin_disbursement.export_detail' | translate}}" (click)="download(row)">
                     <mat-icon *ngIf="row.retailer_menukarkan_koin" class="orange-500-fg">save_alt</mat-icon>
                     <mat-icon *ngIf="!row.retailer_menukarkan_koin" class="secondary-text">save_alt</mat-icon>
                   </button>

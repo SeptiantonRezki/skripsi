@@ -211,9 +211,7 @@ export class DataLogComponent implements OnInit {
 
       this.dataService.showLoading(false);
     } catch (error) {
-      console.log("err", error);
       this.dataService.showLoading(false);
-      this.dialogService.openSnackBar(error);
       throw error;
     }
   }
