@@ -193,6 +193,8 @@ import { SpinTheWheelMechanismComponent } from './spin-the-wheel/tab/mechanism/s
 import { DialogProcessComponentSPW } from './spin-the-wheel/dialog/dialog-process/dialog-process.component';
 import { DialogProcessSaveComponentSPW } from './spin-the-wheel/dialog/dialog-process-save/dialog-process-save.component';
 import { ImportAudiencePersonalizeComponentSPW } from './spin-the-wheel/import/personalize/import-audience-personalize.component';
+import { FlushCoinComponent } from './flush-coin/flush-coin.component';
+import { SetupStwMitraComponent } from './spin-the-wheel/setup-stw-mitra/setup-stw-mitra.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -400,6 +402,8 @@ export const MY_FORMATS = {
     SpinTheWheelNotifComponent,
     SpinTheWheelCreateComponent,
     SpinTheWheelEditComponent,
+    FlushCoinComponent,
+    SetupStwMitraComponent,
   ],
   exports: [
     TemplateIndexComponent,
@@ -452,7 +456,8 @@ export const MY_FORMATS = {
     DialogPopUpNotifDuplicateComponent,
     DialogWaktuTungguDuplicateComponent,
     DialogPushNotifDuplicateComponent,
-    ImportExchangeCoinComponent
+    ImportExchangeCoinComponent,
+    SetupStwMitraComponent
   ],
   providers: [
     RupiahFormaterPipe,
@@ -510,10 +515,10 @@ export const MY_FORMATS = {
     DialogProcessSaveComponentLottery,
     ImportAudiencePersonalizeComponent,
     ImportAudiencePersonalizeComponentLottery,
-    ImportAudiencePersonalizeComponent,
     DialogProcessComponentSPW,
     DialogProcessSaveComponentSPW,
     ImportAudiencePersonalizeComponentSPW,
+    SetupStwMitraComponent
   ],
 })
 export class DteModule { }

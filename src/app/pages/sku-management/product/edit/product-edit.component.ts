@@ -264,6 +264,8 @@ export class ProductEditComponent {
         this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
         this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
         this.formProductGroup.get("is_paylater").setValue(res.data.is_paylater === 1 ? true : false);
+        this.formProductGroup.get("description").setValue(res.data.description);
+        this.formProductGroup.get("product_desc").setValue(res.data.product_desc);
         if (res && res.data.status_pin_up) {
           this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
           if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
@@ -440,7 +442,12 @@ export class ProductEditComponent {
         }, 1500);
 
         if (this.isDetail) this.formProductGroup.disable();
-
+        if (this.ls.selectedLanguages == 'km'){
+          this.isDetail = true;
+          this.formProductGroup.disable();
+          this.formProductGroup.get("subCategory").enable();
+          this.formProductGroup.get("category").enable();
+        }
       })
     } catch (ex) {
       console.log('ex', ex);
@@ -1016,6 +1023,8 @@ export class ProductEditComponent {
       is_paylater: [false],
       listProdukPrivateLabel: this.formBuilder.array([]),
       upc: [0, Validators.required],
+      description: [""],
+      product_desc: [""],
     });
   }
 
@@ -1151,6 +1160,8 @@ export class ProductEditComponent {
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
           upc: this.formProductGroup.get("upc").value,
+          description: this.formProductGroup.get("description").value,
+          product_desc: this.formProductGroup.get("product_desc").value
         };
 
         let fd = new FormData();
@@ -1158,6 +1169,8 @@ export class ProductEditComponent {
         fd.append("code", body.code);
         fd.append("name", body.name);
         fd.append("upc", body.upc);
+        fd.append("description", body.description);
+        fd.append("product_desc", body.product_desc);
 
         if (body.barcode) fd.append("barcode", body.barcode);
 
@@ -1196,7 +1209,6 @@ export class ProductEditComponent {
           });
         }
 
-        fd.append("description", "");
         fd.append("brand_id", body.brand_id);
         fd.append("priority_product", body.priority_product);
         fd.append("category_id", body.category_id);

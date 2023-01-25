@@ -456,6 +456,11 @@ export class DiaglogMisiComponent implements OnInit {
     return verif_notes.some(verif => verif.reason === item);
   }
 
+  checkReasonClose(index){
+    const verif_notes = this.form.get("verification_notes").value;
+    return verif_notes[index].reason.toLowerCase() === "others";
+  }
+
   submit(form: any) {
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;

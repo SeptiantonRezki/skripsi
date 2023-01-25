@@ -527,9 +527,9 @@
             <div class="">
               <div fxLayout="row">
                 <mat-form-field fxFlex="45" class="is-light form-primary">
-                  <mat-select formControlName="employee"
+                  <mat-select formControlName="employee" id="employee"
                     placeholder="{{'iklan_dalam_aplikasi.spanduk_online.text13' | translate}}">
-                    <mat-option *ngFor="let item of listEmployee" [value]="item.value">{{item.name}}</mat-option>
+                    <mat-option *ngFor="let item of listEmployee" [value]="item.value"><span [id]="item.id">{{item.name}}</span></mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="formNotification.controls['employee'].hasError('required') && formNotification.controls['employee'].touched">
@@ -542,10 +542,9 @@
 
             <div class="" fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="45" class="is-light form-primary">
-                <mat-select formControlName="subscription_status"
+                <mat-select formControlName="subscription_status" id="subscription_status"
                   placeholder="{{'iklan_dalam_aplikasi.spanduk_online.subscription_status' | translate}}">
-                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value">{{item.name}}
-                  </mat-option>
+                  <mat-option *ngFor="let item of listSubscriptionStatus" [value]="item.value"><span [id]="item.id">{{item.name}}</span></mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="formNotification.controls['subscription_status'].hasError('required') && formNotification.controls['subscription_status'].touched">

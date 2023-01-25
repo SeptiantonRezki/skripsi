@@ -20,6 +20,9 @@ export class Page {
   type_banner: string;
   notification_id: any;
   is_valid: number;
+  delivery_courier_id: string;
+  payment_type: string;
+  status_dashboard: string;
   
   constructor() {
     this.per_page = 15;

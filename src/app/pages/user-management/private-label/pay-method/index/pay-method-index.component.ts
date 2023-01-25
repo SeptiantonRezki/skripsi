@@ -88,7 +88,7 @@ export class PayMethodIndexComponent implements OnInit {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.payMethodService.plGet(this.pagination).subscribe(res => {
       if (res.status == 'success') {
         Page.renderPagination(this.pagination, res.data);
         this.rows = res.data.data;
@@ -117,7 +117,7 @@ export class PayMethodIndexComponent implements OnInit {
 
     this.offsetPagination = page ? (page - 1) : 0;
 
-    this.payMethodService.getList(this.pagination).subscribe(
+    this.payMethodService.plGet(this.pagination).subscribe(
       res => {
         if (res.status == 'success') {
           if (res.data.total < res.data.per_page && page !== 1) {
@@ -203,7 +203,7 @@ export class PayMethodIndexComponent implements OnInit {
       this.pagination.page = this.dataService.getFromStorage("page");
     }
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.payMethodService.plGet(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;
@@ -220,7 +220,7 @@ export class PayMethodIndexComponent implements OnInit {
     this.dataService.setToStorage("sort", event.column.prop);
     this.dataService.setToStorage("sort_type", event.newValue);
 
-    this.payMethodService.getList(this.pagination).subscribe(res => {
+    this.payMethodService.plGet(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
       this.rows = res.data.data;
       this.loadingIndicator = false;

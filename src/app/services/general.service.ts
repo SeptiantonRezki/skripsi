@@ -88,6 +88,11 @@ export class GeneralService extends BaseService {
     return this.getApi(url);
   }
 
+  // updateLastOpen(body?): Observable<any> {
+  //   const url = this.getUrl(this.namespace, "last_open");
+  //   return this.postApi(url, body);
+  // }
+
   getAppVersions(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, "app_versions");
     return this.getApi(url, queryParams);

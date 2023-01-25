@@ -1,6 +1,9 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header contentTitle="Spin The Wheel">
+    <button mat-raised-button type="button" [routerLink]="['/dte','spin-the-wheel','setup-stw-mitra']">
+      Setup STW Mitra
+    </button>
     <button mat-raised-button type="button" [routerLink]="['/dte','spin-the-wheel','notif']">
       Buat Push Notif
     </button>
@@ -50,10 +53,10 @@
             <div class="name-container">
               <p id="status_label" class="status text-truncate h6 p-4 status-order" style="text-transform: uppercase;"
                 [ngClass]="
-                row.status_label === 'Belum Berjalan' ? 
-                  'mat-primary-800-bg' : 
-                  row.status_label === 'Draft' ? 
-                  'mat-blue-900-bg' : 
+                row.status_label === 'Belum Berjalan' ?
+                  'mat-primary-800-bg' :
+                  row.status_label === 'Draft' ?
+                  'mat-blue-900-bg' :
                   row.status_label === 'Berakhir' ?
                   'mat-red-900-bg' :
                 'mat-green-900-bg'">

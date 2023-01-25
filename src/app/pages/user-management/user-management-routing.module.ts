@@ -17,6 +17,8 @@ import { WholesalerEditComponent } from "./wholesaler/edit/wholesaler-edit.compo
 import { RetailerCreateComponent } from "./retailer/create/retailer-create.component";
 import { RetailerIndexComponent } from "./retailer/index/retailer-index.component";
 import { RetailerEditComponent } from "./retailer/edit/retailer-edit.component";
+import { OrdersRrpComponent } from './retailer/orders-rrp/index/orders-rrp.component';
+import { OrdersRrpDetailComponent } from './retailer/orders-rrp/detail/orders-rrp-detail.component';
 import { PageGuard } from "app/classes/auth.guard";
 import {
   ListRoleAdminResolver,
@@ -220,7 +222,7 @@ const routes: Routes = [
     // }
   },
   {
-    path: "wholesaler/edit",
+    path: "wholesaler/edit/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.edit
@@ -228,7 +230,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "wholesaler/detail",
+    path: "wholesaler/detail/:id",
     component: WholesalerEditComponent,
     data: {
       breadcrumbs: brConfig.wholesaler.detail
@@ -252,7 +254,7 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/edit",
+    path: "retailer/edit/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.edit
@@ -260,11 +262,30 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
-    path: "retailer/detail",
+    path: "retailer/detail/:id",
     component: RetailerEditComponent,
     data: {
       breadcrumbs: brConfig.retailer.detail
     },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "rrp-retailer",
+    component: OrdersRrpComponent,
+    data: {
+      breadcrumbs: brConfig.order_rrp.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "rrp-retailer/detail/:id",
+    component: OrdersRrpDetailComponent,
+    data: {
+      breadcrumbs: brConfig.order_rrp.detail
+    },
+    // resolve: {
+    //   listLevel: ListLevelResolver
+    // },
     canActivate: [PageGuard]
   },
   {

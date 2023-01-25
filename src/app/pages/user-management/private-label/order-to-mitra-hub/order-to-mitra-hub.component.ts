@@ -243,7 +243,7 @@ export class OrderToMitraHubComponent implements OnInit {
 
     delete this.pagination.page;
     this.offsetPagination = 0;
-    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xls`;
+    let fileName = `PO_${moment(new Date()).format('YYYY_MM_DD')}.xlsx`;
 
     if (this.formFilter.get("status").value) {
       this.pagination.status = this.formFilter.get("status").value;
@@ -255,7 +255,7 @@ export class OrderToMitraHubComponent implements OnInit {
     if (this.formFilter.get("from").value && this.formFilter.get("to").value) {
       this.pagination.start_date = this.convertDate(this.formFilter.get("from").value);
       this.pagination.end_date = this.convertDate(this.formFilter.get("to").value);
-      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xls`;
+      fileName = `PO_${moment(this.formFilter.get("from").value).format('YYYY_MM_DD')}_to_${moment(this.formFilter.get("to").value).format('YYYY_MM_DD')}.xlsx`;
       params['start_date'] = this.pagination.start_date;
       params['end_date'] = this.pagination.end_date;
     } else {

@@ -94,6 +94,81 @@ export class TacticalRetailSalesService extends BaseService {
     return this.getApi(url);
   }
 
+  //tab pertama
+  totalPerBrand(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "total_per_brand");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
+    return this.getApi(url, queryParams);
+  }
+
+  summaryVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "summary_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
+    return this.getApi(url, queryParams);
+  }
+
+  weeklySummaryVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "weekly_summary_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    console.log(queryParams);
+    return this.getApi(url, queryParams);
+  }
+
+  detailVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "detail_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+  
+  stockMovement(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
+  stockMovement2(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement_2");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
+  stockMovement3(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "stock_movement_3");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getApi(url, queryParams);
+  }
+
+  exportTotalPerBrand(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_total_per_brand");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportVisit(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_visit");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getBlobApi(url, queryParams);
+  }
+
+  exportStockMovement(queryParams?, additionalParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "export_stock_movement");
+    for (var key of Object.keys(additionalParams))
+      queryParams[key] = additionalParams[key]
+    return this.getBlobApi(url, queryParams);
+  }
+
 
 
 
@@ -165,7 +240,21 @@ export class TacticalRetailSalesService extends BaseService {
     return this.postBlobAsJsonApi(url, body);
   }
 
+  //proposal yg available utk user ini
+  getReportFilter1(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_1");
+    return this.getApi(url, queryParams);
+  }
 
+  getReportFilter2(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_2");
+    return this.getApi(url, queryParams);
+  }
+
+  getReportFilter3(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "report_filter_3");
+    return this.getApi(url, queryParams);
+  }
 
 
 }

@@ -21,6 +21,11 @@ export class RetailerService extends BaseService {
     return this.getApi(url);
   }
 
+  show_v2(context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "show_v2", context);
+    return this.getApi(url);
+  }
+
   create(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "create");
     return this.postApi(url, body);
@@ -28,6 +33,11 @@ export class RetailerService extends BaseService {
 
   put(body?, context?): Observable<any> {
     const url = this.getUrl(this.namespace, "put", context);
+    return this.putApi(url, body);
+  }
+
+  put_v2(body?, context?): Observable<any> {
+    const url = this.getUrl(this.namespace, "put_v2", context);
     return this.putApi(url, body);
   }
 

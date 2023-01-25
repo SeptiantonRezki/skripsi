@@ -10,6 +10,9 @@ import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { LotteryService } from "../../../../services/dte/lottery.service";
 import { Observable, Subject } from 'rxjs';
+import moment from 'moment';
+import * as CryptoJS from 'crypto-js';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-lottery',
@@ -204,34 +207,100 @@ export class LotteryComponent implements OnInit {
   async exportDetailCoupon(param?: any) {
     this.dataService.showLoading(true);
     let fd = new FormData();
-        fd.append('lottery_id', param.id);
+    fd.append('lottery_id', param.id);
+
     try {
-      const response = await this.lotteryService.exportDetailCoupon(fd).toPromise();
-      this.downloadLinkDetailCoupon.nativeElement.href = response.data;
-      this.downloadLinkDetailCoupon.nativeElement.click();
-      setTimeout(() => {
-        this.dataService.showLoading(false);
-      }, 3000);
-    } catch (error) {
+      const response = await this.lotteryService.exportDetailCoupon({ lottery_id: param.id }).toPromise();
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encryptTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      link.download = `Export-Detail_${param.name}-${encryptTime}.xlsx`;
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
       this.dataService.showLoading(false);
-      throw error;
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
     }
   }
 
   async exportCoupon(param?: any) {
     this.dataService.showLoading(true);
     let fd = new FormData();
-        fd.append('lottery_id', param.id);
+    fd.append('lottery_id', param.id);
+    
     try {
-      const response = await this.lotteryService.exportCoupon(fd).toPromise();
-      this.downloadLinkCoupon.nativeElement.href = response.data;
-      this.downloadLinkCoupon.nativeElement.click();
-      setTimeout(() => {
-        this.dataService.showLoading(false);
-      }, 3000);
-    } catch (error) {
+      const response = await this.lotteryService.exportCoupon({ lottery_id: param.id }).toPromise();
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encryptTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      link.download = `Export_${param.name}-${encryptTime}.xlsx`;
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
       this.dataService.showLoading(false);
-      throw error;
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
     }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
   }
 }

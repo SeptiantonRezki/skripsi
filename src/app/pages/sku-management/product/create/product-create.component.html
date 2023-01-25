@@ -1,7 +1,7 @@
 <div class="page-layout simple fullwidth" #containerScroll fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
   <page-content-header contentTitle="{{'manajemen_barang_sku.produk.text3' | translate}}">
-    <button style="min-width: 170px;" mat-raised-button aria-label="save" (click)="submit()"
+    <button *ngIf="this.ls.selectedLanguages != 'km'" style="min-width: 170px;" mat-raised-button aria-label="save" (click)="submit()"
       type="button">{{ls.locale.global.button.save}}</button>
   </page-content-header>
   <!-- / HEADER -->
@@ -139,6 +139,14 @@
                   </mat-form-field> -->
                 </div>
                 
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="text" placeholder="{{'katalog_src.produk.text16' | translate}}" formControlName="description">
+                </mat-form-field>
+
+                <mat-form-field fxFlex="100" class="is-light form-primary">
+                  <input matInput type="text" placeholder="WMS {{'katalog_src.produk.text16' | translate}}" formControlName="product_desc">
+                </mat-form-field>
+
                 <div fxLayout="row wrap" class="pt-16" style="gap: 24px 40px;">
                   <div fxLayout="column">
                     <strong>{{'manajemen_barang_sku.produk.text16' | translate}}</strong>

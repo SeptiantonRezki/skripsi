@@ -394,6 +394,7 @@ export class ImportAudienceDialogComponent {
     this.dataService.showLoading(true);
     // this.idbService.reset();
     const {trade_audience_group_id} = this.detailData;
+    if (trade_audience_group_id) this.pagination["trade_audience_group_id"] = trade_audience_group_id;
     this.offsetPagination = 0;
 
     this.audienceService.showPreviewImportNew(this.pagination).subscribe(({data}) => {

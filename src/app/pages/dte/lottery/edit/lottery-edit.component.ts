@@ -26,6 +26,8 @@ import { B2BVoucherInjectService } from 'app/services/b2b-voucher-inject.service
 import { SupplierCompanyService } from 'app/services/user-management/private-label/supplier-company.service';
 import { ProductService } from 'app/services/sku-management/product.service';
 import { LotteryService } from "app/services/dte/lottery.service";
+import * as CryptoJS from 'crypto-js';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-lottery-edit',
@@ -981,14 +983,11 @@ export class LotteryEditComponent implements OnInit {
   previewPemenang(event) {
     this.files4 = undefined;
     this.files4 = event;
-
-    console.log('files info', this.files4);
     
-    if (this.files4.name.indexOf(".xlsx") > -1) {
-      this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
-      return;
-    }
-    console.log(this.files4.name);
+    // if (this.files4.name.indexOf(".xlsx") > -1) {
+    //   this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLS!" });
+    //   return;
+    // }
     this.fileNameListExcel = this.files4.name;
 
     //let fd = new FormData();
@@ -1182,14 +1181,16 @@ export class LotteryEditComponent implements OnInit {
       if (this.files2) body.append('header_list_img', this.files2);
       // Replacing tag div with p
       let lottery_desc = this.formPreview.get('desc').value;
-      lottery_desc = lottery_desc.split('<div').join('<p');
-      lottery_desc = lottery_desc.split('<div>').join('<p>');
-      lottery_desc = lottery_desc.split('</div>').join('</p>');
+      // lottery_desc = lottery_desc.split('<div').join('<p');
+      // lottery_desc = lottery_desc.split('<div>').join('<p>');
+      // lottery_desc = lottery_desc.split('</div>').join('</p>');
+      lottery_desc = (lottery_desc) ? lottery_desc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
 
       let lottery_desc_tnc = this.formPreview.get('desc_tc').value;
-      lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
-      lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
-      lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div').join('<p');
+      // lottery_desc_tnc = lottery_desc_tnc.split('<div>').join('<p>');
+      // lottery_desc_tnc = lottery_desc_tnc.split('</div>').join('</p>');
+      lottery_desc_tnc = (lottery_desc_tnc) ? lottery_desc_tnc.replace(/<div/g, '<p').replace(/<\/div/g, '</p') : '';
       body.append('desc', lottery_desc);
       body.append('desc_tc', lottery_desc_tnc);
       body.append('desc_tc_status', this.formPreview.get('desc_tc_status').value === true ? 'active' : 'inactive');
@@ -1213,35 +1214,113 @@ export class LotteryEditComponent implements OnInit {
 
   async downloadWinnerList() {
     this.dataService.showLoading(true);
+
     try {
       const response = await this.lotteryService.downloadWinner(this.detailFormUndian.id).toPromise();
-      this.downloadLinkWinner.nativeElement.href = response.data;
-      this.downloadLinkWinner.nativeElement.click();
-      setTimeout(() => {
-        this.dataService.showLoading(false);
-      }, 3000);
-    } catch (error) {
+      const newBlob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url= window.URL.createObjectURL(newBlob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const timestamp = new Date().getTime();
+      const getTime = moment(timestamp).format("HHmmss");
+      const encryptTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
+      link.download = `Export_Pemenang-${encryptTime}.xlsx`;
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(url);
+        link.remove();
+      }, 100);
+
       this.dataService.showLoading(false);
-      throw error;
+    } catch (error) {
+      console.log("err", error);
+      this.dataService.showLoading(false);
     }
   }
 
-  submitPemenang() {
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+  }
+
+  async submitPemenang() {
     const id = this.dataService.getFromStorage('detail_lottery').id;
     this.dataService.showLoading(true);
     
     let body = new FormData();
     body.append('lottery_id', this.dataService.getFromStorage('detail_lottery').id);
     if (this.files3) body.append('winner_img', this.files3);
+    let upload_image = 0;
+    let upload_file = 0;
+    if (this.files3) {
+      try {
+        const response = await this.lotteryService.put_winner_image({ id: id }, body).toPromise();
+        this.dataService.showLoading(false);
+        upload_image = 1;
+      } catch (error) {
+        upload_image = 2;
+        this.dataService.showLoading(false);
+        throw error;
+      }
+    }
     if (this.files4) body.append('file', this.files4);
-  
-    this.lotteryService.put_winner({ id: id }, body).subscribe(res => {
-      this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
-      this.dataService.showLoading(false);
-      this.setStorageDetail();
-    }, err => {
-      this.dataService.showLoading(false);
-    });
+    if (this.files4) {
+      if (this.files3) body.delete('winner_img');
+      try {
+        const response = await this.lotteryService.put_winner({ id: id }, body).toPromise();
+        this.dataService.showLoading(false);
+        upload_file = 1;
+      } catch (error) {
+        upload_file = 2;
+        this.dataService.showLoading(false);
+        throw error;
+      }
+    }
+    console.log('DATA IMAGE ', upload_image);
+    console.log('DATA FILE ', upload_file);
+    if (upload_image === 1 || upload_file === 1) { 
+      console.log('RUN THIS');
+      this.dialogService.openSnackBar({
+        message: this.ls.locale.notification.popup_notifikasi.text22
+      });
+      this.setStorageDetail(); 
+    }
+    this.dataService.showLoading(false);
   }
 
   submitPublishUnpublish() {

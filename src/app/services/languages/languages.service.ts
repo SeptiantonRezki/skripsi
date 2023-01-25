@@ -13,7 +13,7 @@ export class LanguagesService {
   public selectedLanguages: string;
 
   constructor(
-    private translate: TranslateService,
+    public translate: TranslateService,
     private generalBackendService: GeneralBackendService,
   ) {
     const lang = localStorage.getItem('user_country');

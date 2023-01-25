@@ -279,6 +279,8 @@ export class ProductCreateComponent {
       // prioritas_produk: ["", Validators.required],
       listProdukPrivateLabel: this.formBuilder.array([]),
       upc: [0, Validators.required],
+      description: [""],
+      product_desc: [""],
     });
   }
 
@@ -689,7 +691,8 @@ export class ProductCreateComponent {
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
           upc: this.formProductGroup.get("upc").value,
-
+          description: this.formProductGroup.get("description").value,
+          product_desc: this.formProductGroup.get("product_desc").value,
           // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
           // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
 
@@ -701,7 +704,6 @@ export class ProductCreateComponent {
         fd.append("name", body.name);
         fd.append("barcode", body.barcode);
         fd.append("image", body.image);
-        fd.append("description", "");
         fd.append("brand_id", body.brand_id);
         fd.append("priority_product", body.priority_product);
         fd.append("category_id", body.category_id);
@@ -711,6 +713,8 @@ export class ProductCreateComponent {
         fd.append("is_promo_src", body.is_promo_src);
         fd.append("priority_product", body.priority_product);
         fd.append("upc", body.upc);
+        fd.append("description", body.description);
+        fd.append("product_desc", body.product_desc);
 
         if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
           fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);

@@ -53,4 +53,9 @@ export class CountrySetupService extends BaseService {
 //     const url = this.getUrl(this.namespace, "detail", context);
 //     return this.getApi(url);
 //   }
+
+  getTimezones(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, "get_timezones") + "?" + queryParams
+    return this.getApi(url);
+  }
 }

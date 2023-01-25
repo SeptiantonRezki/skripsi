@@ -41,6 +41,16 @@
                   {{ ls.locale.country_setup.locale }} {{ ls.locale.global.messages.mandatory_text }}.
                 </mat-error>
               </mat-form-field>
+              <h2>{{ls.locale.country_setup.time_zone}}</h2>
+              <mat-form-field fxFlex="100" class="is-light">
+                <mat-select placeholder="{{ls.locale.country_setup.time_zone}}" formControlName="time_zone_id">
+                  <mat-option *ngFor="let zone of timezones" [value]="zone.id">{{ zone.name }}</mat-option>
+                </mat-select>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="formCountry.controls['time_zone_id'].hasError('required') && formCountry.controls['time_zone_id'].touched">
+                  {{ls.locale.country_setup.time_zone}} {{ ls.locale.global.messages.mandatory_text }}.
+                </mat-error>
+              </mat-form-field>
 
               <h2>Phone Code</h2>
               <mat-form-field fxFlex="100" class="is-light">

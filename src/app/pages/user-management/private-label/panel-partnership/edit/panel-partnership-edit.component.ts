@@ -1127,14 +1127,25 @@ export class PanelPartnershipEditComponent {
 
     try {
       const response = await this.audienceService.exportExcel(body).toPromise();
-      this.downloadLink.nativeElement.href = response.data;
-      this.downloadLink.nativeElement.click();
+      this.downLoadFile(response.data)
       this.exportTemplate = false;
 
     } catch (error) {
       this.exportTemplate = false;
       throw error;
     }
+  }
+
+  downLoadFile(url: any) {
+
+    var link = document.createElement('a');
+    link.href = url;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      link.remove();
+    }, 100);
   }
 
 

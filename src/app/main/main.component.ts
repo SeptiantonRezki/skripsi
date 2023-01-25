@@ -91,6 +91,7 @@ export class FuseMainComponent implements OnDestroy {
         });
 
         this.listenOnLangChange = this.translate.onLangChange.subscribe((res: any) => {
+            // console.log('res.translations >>> ', res.translations)
             if (res && res.translations) {
                 this.ls.locale = res.translations;
             }

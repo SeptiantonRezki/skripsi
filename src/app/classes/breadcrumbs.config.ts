@@ -498,6 +498,27 @@ export const brConfig = {
       }
     ],
   },
+  order_rrp: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "lihat_pesanan.text1"
+      }
+    ],
+    detail: [
+      {
+        type: "parent",
+        url: "/user-management/rrp-retailer",
+        name: "lihat_pesanan.text1"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "global.label.order_detail"
+      }
+    ],
+  },
   customer: {
     index: [
       {
@@ -2536,6 +2557,15 @@ export const brConfig = {
           name: "Detail Tingkat Fitur"
         }
       ]
+    },
+    notification: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Mitra Notification Configuration"
+        }
+      ]
     }
   },
   admin: {
@@ -3513,6 +3543,13 @@ export const brConfig = {
         type: "current",
         url: "",
         name: "TRS System Variable"
+      }
+    ],
+    trs_report: [
+      {
+        type: "current",
+        url: "",
+        name: "TRS Report"
       }
     ],
     trs_proposal: {
