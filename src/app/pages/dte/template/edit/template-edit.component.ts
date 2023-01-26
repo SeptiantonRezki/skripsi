@@ -817,7 +817,6 @@ export class TemplateEditComponent {
         this.templateList.push([]);
         this.templateListImageIR.push({ item_id: index + 1 });
       }
-      console.log('cek item', item.question_image_description);
       if (item.question_answer && this.detailTask.is_quiz === 1) {
         let answerKey = item.question_answer.map(answer => {
           return item.additional.findIndex(addt => addt === answer);
@@ -1404,8 +1403,8 @@ export class TemplateEditComponent {
     const type = questions.at(idx1).get('type').value;
 
     if (this.frmQuiz.value === 'quiz') {
-      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
-      if (isAnswerIsExist > -1) {
+      let isAnswerIsExist = this.listAnswerKeys.length && this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (this.listAnswerKeys.length && isAnswerIsExist > -1) {
         this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
         if (selectionValue && selectionValue === 'checkbox') {
           this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
@@ -1457,6 +1456,24 @@ export class TemplateEditComponent {
         if (hasEmptyNext) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
+      if (this.frmQuiz.value === 'quiz') {
+        let isEmpty = true;
+
+        if (this.listAnswerKeys.length && this.listAnswerKeys.length === questions.length) {
+          const isFilled = this.listAnswerKeys.map(key => {
+            if (!key.length) return false;
+            return key.every(val => val > -1);
+          });
+          isEmpty = isFilled.some(val => val === false);
+        }
+
+        if (isEmpty) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: this.translate.instant("dte.template_tugas.answer_key")+" "+ this.translate.instant("global.messages.mandatory_text")});
           return;
         }
       }
