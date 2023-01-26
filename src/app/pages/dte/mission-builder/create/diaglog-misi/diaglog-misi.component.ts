@@ -9,6 +9,8 @@ import { Page } from 'app/classes/laravel-pagination';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from "app/services/languages/languages.service";
 import { TranslateService } from "@ngx-translate/core";
+import moment from "moment";
+import { commonFormValidator } from "app/classes/commonFormValidator";
 
 @Component({
   selector: 'app-diaglog-misi',
@@ -52,17 +54,19 @@ export class DiaglogMisiComponent implements OnInit {
   ngOnInit() {
     this.getMission(true);
     this.form = this.formBuilder.group({
-      task_template_id: "",
+      task_template_id: ["", Validators.required],
       task_template_other_name_id: "",
-      start_date: "",
-      end_date: "",
+      start_date: ["", Validators.required],
+      start_time: ["", Validators.required],
+      end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       pushFF: this.pushFF,
       verifikasi: this.verifikasi,
       verifikasiFF: this.verifikasiFF,
       verification_type: null,
       is_push_to_ff: 0,
-      coin_submission: null,
-      coin_verification: null,
+      coin_submission: ["", Validators.required],
+      coin_verification: ["", Validators.required],
       is_ir_template: null,
       status_pin_up: this.status_pin_up,
       non_coin_reward: this.non_coin_reward,
@@ -99,12 +103,14 @@ export class DiaglogMisiComponent implements OnInit {
 
     if (this.data !== null) {
       const { attribute } = this.data.data;
-      
+
       this.form.patchValue({
-        task_template_id: parseInt(this.data.data.attribute.task_template_id, 10),
-        task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
+        task_template_id: attribute.task_template_id ? Number(attribute.task_template_id) : "",
+        task_template_other_name_id: Number(attribute.task_template_other_name_id),
         start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
         end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
+        start_time: attribute.start_time ? attribute.start_time : "",
+        end_time: attribute.end_time ? attribute.end_time : "",
         verification_type: this.data.data.attribute.verification_type,
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
@@ -157,7 +163,7 @@ export class DiaglogMisiComponent implements OnInit {
       }
 
       this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
-      
+
       if (attribute.verification_notes && attribute.verification_notes.length) {
         const verif_notes = this.form.get('verification_notes') as FormArray;
         attribute.verification_notes.forEach(verif => {
@@ -173,7 +179,7 @@ export class DiaglogMisiComponent implements OnInit {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
@@ -462,6 +468,10 @@ export class DiaglogMisiComponent implements OnInit {
   }
 
   submit(form: any) {
+    commonFormValidator.validateAllFields(this.form);
+
+    if (!this.form.valid) return;
+
     if (form.value.non_coin_reward === true && (form.value.reward_description == "" || form.value.reward_description == undefined)) {
       this.isRewardError = true;
       this.dialogService.openSnackBar({ message: this.translate.instant('dte.task_sequencing.reward_description') + ' ' + this.translate.instant('global.messages.mandatory_text') });
@@ -469,8 +479,18 @@ export class DiaglogMisiComponent implements OnInit {
     }
 
     this.form.get('coin_verification').enable();
-    form.get('start_date').patchValue(this.formatDate(form.value.start_date));
-    form.get('end_date').patchValue(this.formatDate(form.value.end_date));
+    form.get('start_date')
+      .patchValue(
+        `${moment(form.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.start_time}:00`
+      );
+    form.get('end_date')
+      .patchValue(
+        `${moment(form.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.end_time}:00`
+      );
 
     form.get('verification_type').patchValue(
       (!form.value.verifikasiFF && !form.value.verifikasi) ? null :

@@ -47,7 +47,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   pagination: Page = new Page();
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
-  
+
   pageName = this.translate.instant('dte.task_sequencing.text1');
   titleParam = {entity: this.pageName};
 
@@ -77,7 +77,9 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       trade_creator_id: ["", Validators.required],
       trade_audience_group_id: ["", Validators.required],
       start_date: ["", Validators.required],
+      start_time: ["", Validators.required],
       end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       trade_creator_name: ["", Validators.required],
       is_editable: [0],
       total_budget: ["", Validators.required],
@@ -113,7 +115,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
@@ -136,7 +138,9 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
         trade_creator_id: this.data.trade_creator_id,
         trade_audience_group_id: this.data.trade_audience_group_id,
         start_date: this.data.start_date,
+        start_time: moment(this.data.start_date).format("HH:mm"),
         end_date: this.data.end_date,
+        end_time: moment(this.data.end_date).format("HH:mm"),
         is_editable: this.data.is_editable,
         trade_creator_name: this.data.trade_creator_name,
         total_budget: this.data.total_budget,
@@ -168,9 +172,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       total_budget: this.programs[theIndex].budget,
       endDateTrade: this.programs[theIndex].end_date,
       status: "unpublish",
-
     });
-
   }
 
   setDate(d: any) {
@@ -193,14 +195,24 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.taskSequenceForm.get('start_date').patchValue(this.formatDate(this.taskSequenceForm.value.start_date));
-    this.taskSequenceForm.get('end_date').patchValue(this.formatDate(this.taskSequenceForm.value.end_date));
+    this.taskSequenceForm
+      .get("start_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.start_time}:00`
+      );
+    this.taskSequenceForm
+      .get("end_date")
+      .patchValue(
+        `${moment(this.taskSequenceForm.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${this.taskSequenceForm.value.end_time}:00`
+      );
     this.taskSequenceForm.value.actions = this.actions;
     this.dataService.setDataSequencing({
       data: this.taskSequenceForm.value,
     });
-
-    console.log(this.taskSequenceForm.value);
   }
 
   filteringGTP() {
@@ -292,7 +304,7 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
     //   this.downloadLink.nativeElement.click();
 
     // } else {
-    
+
       this.dataService.showLoading(true);
       const body = {
         trade_creator_id: this.data.trade_creator_id,
@@ -319,11 +331,11 @@ export class TaskSequencingEditComponent implements OnInit, OnDestroy {
       trade_creator_id : this.data.trade_creator_id,
       per_page : 15,
     };
-    
+
     this.sequencingService.getImportPreviewAdjustmentCoin(body).subscribe(res => {
       if (res.data.last_request) {
         const date = String(moment(res.data.last_request).format('DD MMMM YYYY'));
-    
+
         let data = {
           titleDialog: this.translate.instant('dte.task_sequencing.coin_adjustment_confirm', {date: date}),
           captionDialog: "",

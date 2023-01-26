@@ -54,17 +54,19 @@ export class DialogMisiEditComponent implements OnInit {
   ngOnInit() {
     this.getMission(true);
     this.form = this.formBuilder.group({
-      task_template_id: "",
+      task_template_id: ["", Validators.required],
       task_template_other_name_id: "",
       start_date: [moment(), Validators.required],
-      end_date: "",
+      start_time: ["", Validators.required],
+      end_date: ["", Validators.required],
+      end_time: ["", Validators.required],
       pushFF: this.pushFF,
       verifikasi: this.verifikasi,
       verifikasiFF: this.verifikasiFF,
       verification_type: null,
       is_push_to_ff: 0,
-      coin_submission: "",
-      coin_verification: "",
+      coin_submission: ["", Validators.required],
+      coin_verification: ["", Validators.required],
       is_ir_template: null,
       status_pin_up: this.status_pin_up,
       non_coin_reward: this.non_coin_reward,
@@ -107,6 +109,8 @@ export class DialogMisiEditComponent implements OnInit {
         task_template_other_name_id: parseInt(this.data.data.attribute.task_template_id, 10),
         start_date: this.data.data.attribute.start_date === null ? "" : this.data.data.attribute.start_date,
         end_date: this.data.data.attribute.end_date === null ? "" : this.data.data.attribute.end_date,
+        start_time: attribute.start_time ? attribute.start_time : "",
+        end_time: attribute.end_time ? attribute.end_time : "",
         verification_type: this.data.data.attribute.verification_type,
         coin_submission: this.data.data.attribute.coin_submission === 0 ? null : this.data.data.attribute.coin_submission,
         coin_verification: this.data.data.attribute.coin_verification === 0 ? null : this.data.data.attribute.coin_verification,
@@ -182,7 +186,7 @@ export class DialogMisiEditComponent implements OnInit {
       }
 
       this.form.get('mission_reblast').patchValue(attribute.mission_reblast === "active" ? true : false);
-      
+
       if (attribute.verification_notes && attribute.verification_notes.length) {
         const verif_notes = this.form.get('verification_notes') as FormArray;
         attribute.verification_notes.forEach(verif => {
@@ -198,7 +202,7 @@ export class DialogMisiEditComponent implements OnInit {
     for (let index = 0; index < inputTag.length; index++) {
       inputTag[index].id = "search-"+form;
     }
-    
+
     let matOption = document.querySelectorAll('mat-option');
     if (matOption) {
       for (let index = 0; index < matOption.length; index++) {
@@ -251,7 +255,7 @@ export class DialogMisiEditComponent implements OnInit {
   selectChangeMisi(e: any) {
     this.form.get("task_template_other_name_id").setValue(e.value);
     const theIndex = this.missions.findIndex(x => x.id === e.value);
-    
+
     const verif_notes = this.form.get("verification_notes") as FormArray;
     this.rejected_list = this.missions[theIndex].rejected_reason_choices;
     this.form.get('mission_reblast').setValue(false);
@@ -523,10 +527,20 @@ export class DialogMisiEditComponent implements OnInit {
       this.dialogService.openSnackBar({ message: 'Keterangan Reward harus diisi' });
       return;
     }
-    
+
     this.form.get('coin_verification').enable();
-    form.get('start_date').patchValue(this.formatDate(form.value.start_date));
-    form.get('end_date').patchValue(this.formatDate(form.value.end_date));
+    form.get('start_date')
+      .patchValue(
+        `${moment(form.value.start_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.start_time}:00`
+      );
+    form.get('end_date')
+      .patchValue(
+        `${moment(form.value.end_date).format(
+          "YYYY-MM-DD"
+        )} ${form.value.end_time}:00`
+      );
 
     form.get('verification_type').patchValue(
       (!form.value.verifikasiFF && !form.value.verifikasi) ? null :
