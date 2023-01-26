@@ -152,6 +152,9 @@ export class PagesName {
       "/dte/check-image-planogram/create": "principal.dte_image_recognition_check_image_planogram.buat",
       "/dte/check-image-planogram/detail/": "principal.dte_image_recognition_check_image_planogram.lihat",
 
+      "/payment-gateway/qris": "principal.approval_qris.lihat",
+      "/payment-gateway/cashier": "principal.payment_option.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
