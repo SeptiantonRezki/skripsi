@@ -140,25 +140,25 @@ export class StorePhotoTypesComponent implements OnInit {
     });
 
   }
-  exportImageType() {
-    this.dataService.showLoading(true);
+  // exportImageType() {
+  //   this.dataService.showLoading(true);
 
-    this.storePhotoVerificationService.exportImageType().subscribe(({data}) => {
-      const link = document.createElement('a');
-      link.href = data;
-      // link.download = fileName;
-      // this is necessary as link.click() does not work on the latest firefox
-      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  //   this.storePhotoVerificationService.exportImageType().subscribe(({data}) => {
+  //     const link = document.createElement('a');
+  //     link.href = data;
+  //     // link.download = fileName;
+  //     // this is necessary as link.click() does not work on the latest firefox
+  //     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 
-      setTimeout(function () {
-        // For Firefox it is necessary to delay revoking the ObjectURL
-        window.URL.revokeObjectURL(data);
-        link.remove();
-      }, 100);
-      this.dataService.showLoading(false);
-    }, err => {
-      this.dataService.showLoading(false);
-    });
-  }
+  //     setTimeout(function () {
+  //       // For Firefox it is necessary to delay revoking the ObjectURL
+  //       window.URL.revokeObjectURL(data);
+  //       link.remove();
+  //     }, 100);
+  //     this.dataService.showLoading(false);
+  //   }, err => {
+  //     this.dataService.showLoading(false);
+  //   });
+  // }
 
 }

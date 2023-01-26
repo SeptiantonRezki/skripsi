@@ -40,11 +40,14 @@ export class DialogRejectReasonComponent {
   }
 
   delete(reason: RejectReason) {
+
+    const tempReasons = [...this.reasons];
     this.reasons = [...this.reasons].filter(item => item.id !== reason.id);
     // delete be
     this.storePhotoVerificationService.deleteRejectReason({ id: reason.id }).subscribe(res => {
       console.log({ res });
     }, err => {
+      this.reasons = tempReasons;
       console.log({ err });
     })
   }

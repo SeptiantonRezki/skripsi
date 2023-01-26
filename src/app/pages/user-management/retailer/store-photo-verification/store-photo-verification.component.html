@@ -2,6 +2,11 @@
   <!-- HEADER -->
   <page-content-header contentTitle="{{ 'retailer_image_verification.index' | translate}}">
     <div class="button-row" fxLayout="row">
+      <button id="add-store-photo" mat-raised-button type="button"
+        (click)="exportImageType()">
+        <mat-icon>launch</mat-icon>
+        Export XLSX
+      </button>
       <button id="edit-jenis-foto" mat-raised-button type="button" color="primary"
         [routerLink]="['/user-management','retailer-image-verification','store-photo-types']">
         {{'retailer_image_verification.edit_photo_type' | translate }}

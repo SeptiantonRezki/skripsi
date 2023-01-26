@@ -67,5 +67,6 @@ export class StorePhotoVerificationPage extends Page {
 
   constructor() {
     super();
+    this.per_page = 10;
   }
 }

@@ -140,8 +140,7 @@ export class StorePhotoVerificationComponent implements OnInit {
     this.focusEditId = null;
     this.loadingIndicator = true;
 
-    // this.pagination.total = 10;
-    const page = 1
+    const page = this.dataService.getFromStorage('verifikasi_foto_page');
 
     this.pagination.page = page;
     // this.pagination.per_page = 10;
@@ -206,8 +205,8 @@ export class StorePhotoVerificationComponent implements OnInit {
     if (this.pagination['search']) {
       this.pagination.page = pageInfo.offset + 1;
     } else {
-      this.dataService.setToStorage('page', pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage('page');
+      this.dataService.setToStorage('verifikasi_foto_page', pageInfo.offset + 1);
+      this.pagination.page = this.dataService.getFromStorage('verifikasi_foto_page');
     }
     // this.isSetPage = true;
     // if (this.isSetPage === true) {
@@ -355,6 +354,26 @@ export class StorePhotoVerificationComponent implements OnInit {
   }
   onDragOne(e) {
     console.log('drag', { e });
+  }
+  exportImageType() {
+    this.dataService.showLoading(true);
+
+    this.storePhotoVerificationService.exportImageType(this.pagination).subscribe(({data}) => {
+      const link = document.createElement('a');
+      link.href = data;
+      // link.download = fileName;
+      // this is necessary as link.click() does not work on the latest firefox
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+      setTimeout(function () {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(data);
+        link.remove();
+      }, 100);
+      this.dataService.showLoading(false);
+    }, err => {
+      this.dataService.showLoading(false);
+    });
   }
 
 }
