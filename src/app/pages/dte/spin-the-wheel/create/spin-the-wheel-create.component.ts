@@ -160,17 +160,10 @@ export class SpinTheWheelCreateComponent implements OnInit {
   filteringTradeProgram() {
     // get the search keyword
     let search = this.filterTradeProgram.value;
-    if (!search) {
-      this.filteredTradeProgram.next(this.listTradePrograms.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
 
-    this.pagination.search = search;
-    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+    this.pagination.search = search.toLowerCase();
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
-        console.log("res trade programs", res);
         this.listTradePrograms = res.data.data;
         this.filteredTradeProgram.next(res.data.data);
       },
