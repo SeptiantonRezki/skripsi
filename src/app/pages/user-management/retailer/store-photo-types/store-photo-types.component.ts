@@ -121,7 +121,7 @@ export class StorePhotoTypesComponent implements OnInit {
 
       this.dialogService.openCustomConfirmationDialog({
         titleDialog: 'Hapus Jenis Foto',
-        captionDialog: 'Apakah anda yakin?',
+        captionDialog: 'Apakah Anda yakin untuk menghapus jenis foto ini? Data foto dari retailer juga akan terhapus.',
         confirmCallback: () => { this.onClickDelete(item, true) },
         buttonText: ['Ya, Lanjutkan', 'Batal']
       });
