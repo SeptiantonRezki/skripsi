@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { StorePhotoVerificationService } from 'app/services/store-photo-verification.service';
@@ -27,6 +28,7 @@ export class StorePhotoTypesComponent implements OnInit {
     private storePhotoVerificationService: StorePhotoVerificationService,
     private dialogService: DialogService,
     private dataService: DataService,
+    private translate: TranslateService,
   ) {
   }
 
@@ -48,7 +50,7 @@ export class StorePhotoTypesComponent implements OnInit {
 
     this.storePhotoVerificationService.updateSortListPhotoType(payload).subscribe(res => {
 
-      this.dialogService.openSnackBar({ message: 'Berhasil mengubah urutan' });
+      this.dialogService.openSnackBar({ message: this.translate.instant('retailer_image_type.change_order_success') });
 
     }, err => {
 
@@ -56,13 +58,13 @@ export class StorePhotoTypesComponent implements OnInit {
   }
   onChangePublish(event, item, confirmed = false) {
     console.log({ event, item });
-    const statusTxt = (!event.value) ? 'Unpublish' : 'Publish';
+    const statusTxt = (!event.value) ? this.translate.instant('retailer_image_type.unpublish') : this.translate.instant('retailer_image_type.publish');
     if(!confirmed) {
       const data = {
-        titleDialog: `${statusTxt} Jenis Foto`,
-        captionDialog: `Apakah anda yakin melakukan ${statusTxt} jenis foto?`,
+        titleDialog: this.translate.instant('retailer_image_type.change_status_title', {statusTxt}),
+        captionDialog: this.translate.instant('retailer_image_type.change_status_message', {statusTxt}),
         confirmCallback: () => { this.onChangePublish(event, item, true) },
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.translate.instant('global.button.yes_continue'), this.translate.instant('global.button.cancel')]
       };
   
       this.dialogService.openCustomConfirmationDialog(data);
@@ -120,10 +122,10 @@ export class StorePhotoTypesComponent implements OnInit {
     if(!confirmed) {
 
       this.dialogService.openCustomConfirmationDialog({
-        titleDialog: 'Hapus Jenis Foto',
-        captionDialog: 'Apakah Anda yakin untuk menghapus jenis foto ini? Data foto dari retailer juga akan terhapus.',
+        titleDialog: this.translate.instant('retailer_image_type.delete_confirm_title'),
+        captionDialog: this.translate.instant('retailer_image_type.delete_confirm_message'),
         confirmCallback: () => { this.onClickDelete(item, true) },
-        buttonText: ['Ya, Lanjutkan', 'Batal']
+        buttonText: [this.translate.instant('global.button.yes_continue'), this.translate.instant('global.button.cancel')]
       });
       return;
     }
@@ -132,7 +134,7 @@ export class StorePhotoTypesComponent implements OnInit {
     this.storePhotoVerificationService.deleteStorePhotoType({id: item.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.brodcastCloseConfirmation();
-      this.dialogService.openSnackBar({message: `Berhasil menghapus jenis foto`});
+      this.dialogService.openSnackBar({message: this.translate.instant('retailer_image_type.delete_success_message')});
       this.fetchRows();
 
     }, err => {
