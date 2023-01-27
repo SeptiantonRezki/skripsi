@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { KeysPipe } from "./keys.pipe";
 import { GetByIdPipe } from "./getById.pipe";
 import { HtmlToPlaintextPipe } from "./htmlToPlaintext.pipe";
-import { FilterPipe, DateToMomentPipe, ExcludeArrayPipe } from "./filter.pipe";
+import { FilterPipe, DateToMomentPipe, ExcludeArrayPipe, DateRangePipe } from "./filter.pipe";
 import { CamelCaseToDashPipe } from "./camelCaseToDash.pipe";
 import {
   RupiahFormaterPipe,
@@ -29,7 +29,8 @@ import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
     TimeRemainingPipe,
     UnderscoreToCapitalizePipe,
     TranslateInterpolatePipe,
-    BreadCrumbTranslatePipe
+    BreadCrumbTranslatePipe,
+    DateRangePipe,
   ],
   imports: [],
   exports: [
@@ -46,7 +47,8 @@ import { BreadCrumbTranslatePipe } from "./bradcrumb-translate.pipe";
     TimeRemainingPipe,
     UnderscoreToCapitalizePipe,
     TranslateInterpolatePipe,
-    BreadCrumbTranslatePipe
+    BreadCrumbTranslatePipe,
+    DateRangePipe,
   ]
 })
 export class FusePipesModule { }

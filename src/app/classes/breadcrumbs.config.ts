@@ -3661,4 +3661,42 @@ export const brConfig = {
       }
     ],
   },
+  store_photo_verification: {
+    index: [
+      {
+        type: "current",
+        url: "/user-management/retailer-image-verification",
+        name: "Verifikasi Foto Toko"
+      }
+    ],
+    store_photo_type: [
+      {
+        type: "parent",
+        url: "/user-management/retailer-image-verification",
+        name: "Verifikasi Foto Toko"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Jenis Foto"
+      }
+    ],
+    store_photo_type_edit: [
+      {
+        type: "parent",
+        url: "/user-management/retailer-image-verification",
+        name: "Verifikasi Foto Toko"
+      },
+      {
+        type: "parent",
+        url: "/user-management/retailer-image-verification/store-photo-types",
+        name: "Jenis Foto"
+      },
+      {
+        type: "current",
+        url: "",
+        name: "Ubah Jenis Foto"
+      }
+    ]
+  }
 };

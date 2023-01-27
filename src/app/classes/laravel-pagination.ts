@@ -59,3 +59,14 @@ export class Page {
     Object.keys(filters).map(keyFilter => { pagination[keyFilter] = filters[keyFilter] })
   }
 }
+
+export class StorePhotoVerificationPage extends Page {
+  
+  admin: string = '';
+  jenis_foto: string = '';
+
+  constructor() {
+    super();
+    this.per_page = 10;
+  }
+}

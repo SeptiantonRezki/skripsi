@@ -1267,6 +1267,21 @@ export class Endpoint {
         get_step: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-status-orders`,
         update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
       },
+      store_photo_verification: {
+        calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/detail-total`,
+        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get`,
+        post_verify_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/verify`,
+        list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/get`,
+        post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/create`,
+        delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/delete/${context.id}`,
+        delete_store_photo_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/delete/${context.id}`,
+        list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get`,
+        list_detail_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get-detail`,
+        list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get-admin`,
+        update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/update-urutan`,
+        update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/publish`,
+        export_image_type: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/foto-toko/image-type/retailer/request-export`,
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

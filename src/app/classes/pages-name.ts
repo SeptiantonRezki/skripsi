@@ -234,6 +234,11 @@ export class PagesName {
       "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
       "/content-management/keyword-management": "principal.keywordmanagement.lihat",
       "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
+      "/user-management/retailer-image-verification": "principal.retailer.submenu.lihat_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/create": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/edit/": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/detail/": "principal.retailer.submenu.edit_verifikasi_foto",
     };
     return PAGES[name];
   }

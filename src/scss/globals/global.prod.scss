@@ -1416,3 +1416,8 @@ a {
 .mat-tooltip {
   font-size: 14px !important;
 }
+.mat-card {
+  &.rounded {
+    border-radius: 8px !important;
+  }
+}
