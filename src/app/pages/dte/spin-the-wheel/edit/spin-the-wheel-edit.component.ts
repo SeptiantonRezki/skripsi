@@ -312,6 +312,7 @@ export class SpinTheWheelEditComponent implements OnInit {
     });
     if (this.isDetail) this.formPreview.disable();
 
+    console.log("detail", this.detailFormSpin);
     this.formSpin.setValue({
       name: this.detailFormSpin.name ? this.detailFormSpin.name : '',
       trade_creator_id: this.detailFormSpin.trade_creator_id ? this.detailFormSpin.trade_creator_id : '',
@@ -495,7 +496,7 @@ export class SpinTheWheelEditComponent implements OnInit {
 
   getTradePrograms() {
     this.pagination.per_page = 30;
-    this.audienceService.getListTradePrograms(this.pagination).subscribe(
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         this.listTradePrograms = res.data.data;
         this.filteredTradeProgram.next(res.data.data);
