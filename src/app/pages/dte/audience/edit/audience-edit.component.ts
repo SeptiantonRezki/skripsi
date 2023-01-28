@@ -61,6 +61,7 @@ export class AudienceEditComponent {
   ];
 
   selected = [];
+  getListRetailerParam = {selected_businesses: []};
   area: Array<any>;
   queries: any;
   loadingIndicator: Boolean;
@@ -243,7 +244,7 @@ export class AudienceEditComponent {
     this.initAreaV2();
 
     this.pagination['business_type'] = this.detailAudience.business_type;  
-    this.getRetailer();
+    // this.getRetailer();
 
     this.formAudience.controls['limit'].valueChanges.subscribe(res => {
       if (res === 'pick-all') {
@@ -1059,7 +1060,7 @@ export class AudienceEditComponent {
     this.loadingIndicator = true;
     this.pagination.area = this.formAudience.get('limit').value === 'pick-all' ? 1 : area_id;
 
-    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
+    this.audienceService.getListRetailerForAudienceList(this.getListRetailerParam, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.pagination.page = 1;
 
@@ -1072,7 +1073,7 @@ export class AudienceEditComponent {
     this.loadingIndicator = true;
     this.pagination.page = pageInfo.offset + 1;
 
-    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
+    this.audienceService.getListRetailerForAudienceList(this.getListRetailerParam, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
 
       this.rows = res.data;
@@ -1086,7 +1087,7 @@ export class AudienceEditComponent {
     this.pagination.page = 1;
     this.loadingIndicator = true;
 
-    this.audienceService.getListRetailer(this.pagination).subscribe(res => {
+    this.audienceService.getListRetailerForAudienceList(this.getListRetailerParam, this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res);
       this.rows = res.data;
 
@@ -1099,9 +1100,10 @@ export class AudienceEditComponent {
       res => {
         console.log('this.selected', res);
         this.selected = res;
-
+        this.getListRetailerParam.selected_businesses = res.map((it) => it.id);
         this.formAudience.get('min').setValue(this.detailAudience.min ? this.detailAudience.min : 1);
         this.formAudience.get('max').setValue(this.detailAudience.max ? this.detailAudience.max : res.length);
+        this.getRetailer();
       }
     )
   }
