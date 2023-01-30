@@ -13,7 +13,7 @@ export interface RejectReason {
   selector: 'app-dialog-reject-reason',
   templateUrl: './dialog-reject-reason.component.html',
   styleUrls: ['./dialog-reject-reason.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  // encapsulation: ViewEncapsulation.None
 })
 export class DialogRejectReasonComponent {
   reasons: Array<any> = [];

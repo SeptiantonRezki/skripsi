@@ -1,4 +1,4 @@
-::ng-deep mat-form-field.min-150.dropdown {
+mat-form-field.min-150.dropdown {
     padding-bottom: 0px !important;
     &.select-date-dropdown .mat-form-field-infix {
         // color: transparent !important;
@@ -12,19 +12,20 @@
     height: 57px !important;
     border-bottom: solid 1px #dbdbdb;
 }
-::ng-deep mat-option {
+mat-option {
     &.custom-option.mat-option.mat-option-disabled {
         color: rgba(black, 0.87);
         cursor: pointer;
     }
 }
-::ng-deep .mat-select-content{
+.mat-select-content{
     min-width: 300px;
+    min-height: 350px;
 }
-::ng-deep .custom-select .mat-select-placeholder {
+.custom-select .mat-select-placeholder {
     color: rgba(black, 0.87) !important;
     font-size: .8em;
 }
-::ng-deep .select-date-dropdown .mat-form-field-label {
+.select-date-dropdown .mat-form-field-label {
     visibility: hidden;
 }
