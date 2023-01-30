@@ -47,7 +47,7 @@
           <select-date-dropdown placeholder="{{ 'retailer_image_verification.filter_verification_date' | translate}}" fxLayoutAlign="center center"
             (onChange)="onDateFilterChange($event)">
           </select-date-dropdown>
-          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
+          <mat-form-field fxLayoutAlign="center center" class="min-150 dropdown custom-field">
 
             <mat-select class="custom-select" formControlName="jenis_foto" [multiple]="true" placeholder="{{'retailer_image_verification.photo_type' | translate }}">
               <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="{{'retailer_image_verification.search_photo_type' | translate }}"
@@ -58,7 +58,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
+          <mat-form-field fxLayoutAlign="center center" class="min-150 dropdown custom-field">
 
             <mat-select class="custom-select" formControlName="status" [multiple]="true" placeholder="{{'retailer_image_verification.status' | translate }}">
               <!-- <ngx-mat-select-search [formControl]="searchKeywordJenisPhoto" placeholderLabel="Cari Status"
@@ -69,7 +69,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field fxLayoutAlign="center center" class="orders dropdown custom-field">
+          <mat-form-field fxLayoutAlign="center center" class="min-150 dropdown custom-field">
 
             <mat-select class="custom-select" formControlName="admin" [multiple]="true" placeholder="{{'retailer_image_verification.admin' | translate }}">
               <ngx-mat-select-search [formControl]="searchKeywordAdmin" placeholderLabel="{{'retailer_image_verification.search_admin' | translate }}"
