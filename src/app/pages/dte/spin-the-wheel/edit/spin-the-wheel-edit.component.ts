@@ -213,9 +213,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     });
 
     this.getDetail();
-    // this.setStorageDetail();
-    // this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
-    console.log("detail", this.detailFormSpin);
 
     this.filterTradeProgram.valueChanges
       .debounceTime(1000)
@@ -231,9 +228,6 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
-
-
-    console.log(this.formId);
 
     this.formSpin = this.formBuilder.group({
       name: ["", Validators.required],
@@ -344,7 +338,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   getDetail() {
     this.showDetail = this.spinTheWheelService.showAudience(this.formId).subscribe(res => {
       if(res.data){
-        console.log("detail", res.data);
         this.detailFormSpin = res.data;
         this.taskSpinId = res.data.id;
         this.settingsData = res.data.settings;
@@ -389,7 +382,6 @@ export class SpinTheWheelEditComponent implements OnInit {
   setStorageDetail() {
     // Show detail
     this.showDetail = this.spinTheWheelService.showAudience(this.formId).subscribe(res => {
-      console.log("setStorage", res);
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
         this.detailFormSpin = res.data;
@@ -537,13 +529,13 @@ export class SpinTheWheelEditComponent implements OnInit {
     this.pagination.per_page = 15;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
-        if(defaultValue) {
-          this.filteredTradeProgram.next([defaultValue, ...res.data.data]);
-          this.listTradePrograms = [defaultValue, ...res.data.data];
-        } else {
-          this.filteredTradeProgram.next(res.data.data);
-          this.listTradePrograms = res.data.data;
-        }
+        this.listTradePrograms = defaultValue
+          ? [
+              defaultValue,
+              ...res.data.data.filter((i) => i.id !== defaultValue.id),
+            ]
+          : res.data.data;
+        this.filteredTradeProgram.next(this.listTradePrograms);
       },
       (err) => {
         console.log("err trade programs", err);
