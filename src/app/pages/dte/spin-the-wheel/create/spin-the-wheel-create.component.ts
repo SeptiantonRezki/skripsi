@@ -157,29 +157,6 @@ export class SpinTheWheelCreateComponent implements OnInit {
         this.filteringTradeProgram();
       });
   }
-  filteringTradeProgram() {
-    // get the search keyword
-    let search = this.filterTradeProgram.value;
-
-    this.pagination.search = search.toLowerCase();
-    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
-      (res) => {
-        this.listTradePrograms = res.data.data;
-        this.filteredTradeProgram.next(res.data.data);
-      },
-      (err) => {
-        console.log("err trade programs", err);
-      }
-    );
-
-    // filter the banks
-    this.filteredTradeProgram.next(
-      this.listTradePrograms.filter(
-        (item) => item.name.toLowerCase().indexOf(search) > -1
-      )
-    );
-  }
-
 
   ngOnInit() {
     this.formSpin = this.formBuilder.group({
@@ -265,6 +242,32 @@ export class SpinTheWheelCreateComponent implements OnInit {
     });
   }
 
+  filteringTradeProgram() {
+    // get the search keyword
+    const search = this.filterTradeProgram.value;
+    const selectedValue = this.formSpin.get("trade_creator_id").value;
+    if (!search && !!selectedValue) return;
+
+    this.pagination.search = search.toLowerCase();
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
+      (res) => {
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
+      },
+      (err) => {
+        console.log("err trade programs", err);
+      }
+    );
+
+    // filter the banks
+    this.filteredTradeProgram.next(
+      this.listTradePrograms.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
+  }
+
+
   removeImage(): void {
     this.files = undefined;
     this.imageConverted = undefined;
@@ -326,7 +329,7 @@ export class SpinTheWheelCreateComponent implements OnInit {
   }
 
   getTradePrograms() {
-    this.pagination.per_page = 30;
+    this.pagination.per_page = 15;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
         console.log("res trade programs", res);

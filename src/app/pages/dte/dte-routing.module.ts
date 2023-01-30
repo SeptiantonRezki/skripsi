@@ -926,7 +926,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "spin-the-wheel/detail",
+    path: "spin-the-wheel/detail/:id",
     component: SpinTheWheelEditComponent,
     data: {
       breadcrumbs: brConfig.dte.spinTheWheel.detail

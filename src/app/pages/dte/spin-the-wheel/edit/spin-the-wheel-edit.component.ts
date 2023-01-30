@@ -155,6 +155,7 @@ export class SpinTheWheelEditComponent implements OnInit {
   detailFormSpin: any;
   showDetail: any;
   isDetail: Boolean;
+  formId: number;
 
   settingsData: any = null;
   taskSpinId: number;
@@ -203,6 +204,19 @@ export class SpinTheWheelEditComponent implements OnInit {
       district: [],
       territory: []
     }
+
+  }
+
+  ngOnInit() {
+    this.activatedRoute.paramMap.subscribe(param => {
+      this.formId = Number(param.get("id"));
+    });
+
+    this.getDetail();
+    // this.setStorageDetail();
+    // this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
+    console.log("detail", this.detailFormSpin);
+
     this.filterTradeProgram.valueChanges
       .debounceTime(1000)
       .pipe(takeUntil(this._onDestroy))
@@ -214,46 +228,12 @@ export class SpinTheWheelEditComponent implements OnInit {
       startWith(null),
       map((prd: string | null) => prd ? this._filter(prd) : this.productList.slice()));
 
-    this.detailFormSpin = this.dataService.getFromStorage('spin_the_wheel');
-
-    activatedRoute.url.subscribe(params => {
+    this.activatedRoute.url.subscribe(params => {
       this.isDetail = params[1].path === 'detail' ? true : false;
     })
 
-  }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  filteringTradeProgram() {
-    if (!this.listTradePrograms) {
-      return;
-    }
-    // get the search keyword
-    let search = this.filterTradeProgram.value;
-    search = search.toLowerCase();
-    this.pagination.search = search;
-    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
-      (res) => {
-        this.listTradePrograms = res.data.data;
-        this.filteredTradeProgram.next(res.data.data);
-      },
-      (err) => {
-        console.log("err trade programs", err);
-      }
-    );
-    // filter the banks
-    this.filteredTradeProgram.next(
-      this.listTradePrograms.filter(
-        (item) => item.name.toLowerCase().indexOf(search) > -1
-      )
-    );
-  }
-
-  ngOnInit() {
+    console.log(this.formId);
 
     this.formSpin = this.formBuilder.group({
       name: ["", Validators.required],
@@ -282,9 +262,6 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formSpin.get('end_time').disable();
     }
 
-    if (this.detailFormSpin.status === "publish") {
-      this.formSpin.get('trade_creator_id').disable();
-    }
 
     this.formGeo = this.formBuilder.group({
       national: [{ value: [1], disabled: true }],
@@ -312,26 +289,12 @@ export class SpinTheWheelEditComponent implements OnInit {
     });
     if (this.isDetail) this.formPreview.disable();
 
-    console.log("detail", this.detailFormSpin);
-    this.formSpin.setValue({
-      name: this.detailFormSpin.name ? this.detailFormSpin.name : '',
-      trade_creator_id: this.detailFormSpin.trade_creator_id ? this.detailFormSpin.trade_creator_id : '',
-      start_date: this.convertDate(this.detailFormSpin.start_date ? this.detailFormSpin.start_date : ''),
-      start_time: this.convertTime(this.detailFormSpin.start_date ? this.detailFormSpin.start_date : ''),
-      end_date: this.convertDate(this.detailFormSpin.end_date ? this.detailFormSpin.end_date : ''),
-      end_time: this.convertTime(this.detailFormSpin.end_date ? this.detailFormSpin.end_date : '')
-    });
-
-    this.formPreview.setValue({
-      preview_header: this.detailFormSpin.header ? this.detailFormSpin.header : '',
-    })
 
     this.onLoad = false;
 
     this.getLevel('national');
     this.getTradePrograms();
 
-    this.setStorageDetail();
 
     this.formGeo.get('division').valueChanges.subscribe(res => {
       this.loadingRegion = true;
@@ -346,14 +309,90 @@ export class SpinTheWheelEditComponent implements OnInit {
       this.formGeo.get('classification').setValue(['all']);
     }
 
-    this.setValueDetail();
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.listProduct.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  filteringTradeProgram() {
+    // get the search keyword
+    const search = this.filterTradeProgram.value;
+    const selectedValue = this.formSpin.get("trade_creator_id").value;
+    if (!search && !!selectedValue) return;
+
+    this.pagination.search = search.toLowerCase();
+    this.sequencingService.getListTradePrograms(this.pagination).subscribe(
+      (res) => {
+        this.listTradePrograms = res.data.data;
+        this.filteredTradeProgram.next(res.data.data);
+      },
+      (err) => {
+        console.log("err trade programs", err);
+      }
+    );
+    // filter the banks
+    this.filteredTradeProgram.next(
+      this.listTradePrograms.filter(
+        (item) => item.name.toLowerCase().indexOf(search) > -1
+      )
+    );
+  }
+
+  getDetail() {
+    this.showDetail = this.spinTheWheelService.showAudience(this.formId).subscribe(res => {
+      if(res.data){
+        console.log("detail", res.data);
+        this.detailFormSpin = res.data;
+        this.taskSpinId = res.data.id;
+        this.settingsData = res.data.settings;
+        // this.changeBlastType(res.data.audience_filter);
+        if(res.data.audience_filter === 'population-blast'){
+          this.formGeo.get('classification').setValue(res.data.class_groups);
+        }
+
+        this.setDate(res.data.trade_creator_end_date);
+
+        let zone = [];
+        if (res.data.areas) {
+          for (let i = 0; i < res.data.areas.length; i++) {
+            if (res.data.areas[i].level_desc === 'zone') {
+              if (!( res.data.areas[i].area_id in zone )) {
+                zone.push(res.data.areas[i].area_id);
+              }
+            }
+          }
+        }
+        this.selectedZone = zone;
+        this.imageConverted = res.data.icon_url;
+
+        const selectedTp = {
+          id: res.data.trade_creator_id,
+          name: res.data.trade_creator_name,
+          start_date: res.data.trade_creator_start_date,
+          end_date: res.data.trade_creator_end_date
+        };
+
+        this.initAreaSelected(res.data);
+        this.setValueDetail(res.data);
+        this.getTradePrograms(selectedTp);
+
+        if (res.data.status === "publish") {
+          this.formSpin.get('trade_creator_id').disable();
+        }
+      }
+    });
   }
 
   setStorageDetail() {
     // Show detail
-    this.showDetail = this.spinTheWheelService.showAudience(this.detailFormSpin.id).subscribe(res => {
+    this.showDetail = this.spinTheWheelService.showAudience(this.formId).subscribe(res => {
+      console.log("setStorage", res);
       if(res.data){
         this.dataService.setToStorage('spin_the_wheel', res.data);
+        this.detailFormSpin = res.data;
         this.taskSpinId = res.data.id;
         this.settingsData = res.data.settings;
         // this.changeBlastType(res.data.audience_filter);
@@ -494,12 +533,17 @@ export class SpinTheWheelEditComponent implements OnInit {
     });
   }
 
-  getTradePrograms() {
-    this.pagination.per_page = 30;
+  getTradePrograms(defaultValue?: any) {
+    this.pagination.per_page = 15;
     this.sequencingService.getListTradePrograms(this.pagination).subscribe(
       (res) => {
-        this.listTradePrograms = res.data.data;
-        this.filteredTradeProgram.next(res.data.data);
+        if(defaultValue) {
+          this.filteredTradeProgram.next([defaultValue, ...res.data.data]);
+          this.listTradePrograms = [defaultValue, ...res.data.data];
+        } else {
+          this.filteredTradeProgram.next(res.data.data);
+          this.listTradePrograms = res.data.data;
+        }
       },
       (err) => {
         console.log("err trade programs", err);
@@ -1167,18 +1211,30 @@ export class SpinTheWheelEditComponent implements OnInit {
     }
   }
 
-  setValueDetail() {
+  setValueDetail(value: any) {
+    this.formSpin.setValue({
+      name: value.name ? value.name : '',
+      trade_creator_id: value.trade_creator_id ? value.trade_creator_id : '',
+      start_date: this.convertDate(value.start_date ? value.start_date : ''),
+      start_time: this.convertTime(value.start_date ? value.start_date : ''),
+      end_date: this.convertDate(value.end_date ? value.end_date : ''),
+      end_time: this.convertTime(value.end_date ? value.end_date : '')
+    });
 
-    this.panelBlast = this.detailFormSpin.panel_count;
+    this.formPreview.setValue({
+      preview_header: value.header ? value.header : '',
+    })
 
-    const filter = this.detailFormSpin.audience_filter;
+    this.panelBlast = value.panel_count;
+
+    const filter = value.audience_filter;
     this.handleAudienceFilter(filter);
 
     if (filter !== 'fixed-panel') {
-      this.formGeo.get('classification').setValue(this.detailFormSpin.class_groups);
+      this.formGeo.get('classification').setValue(value.class_groups);
     }
 
-    if (this.detailFormSpin.panel_count > 0) {
+    if (value.panel_count > 0) {
       this.isChecked = true;
     }
 
