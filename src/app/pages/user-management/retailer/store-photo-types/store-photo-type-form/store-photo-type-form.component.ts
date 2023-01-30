@@ -37,7 +37,7 @@ export class StorePhotoTypeFormComponent implements OnInit {
     private authService: AuthenticationService,
     private router: Router,
   ) {
-    this.permission = this.roles.getArrayRoles('principal.dtexp');
+    this.permission = this.roles.getArrayRoles('principal.retailer');
     this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl('');
   }
 
