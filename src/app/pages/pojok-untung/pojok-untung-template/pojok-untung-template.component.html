@@ -7,20 +7,22 @@
   <div class="content p-24">
     <div class="table-wrapper">
       <div fxLayout="row" fxLayoutAlign="start center" class="top-table pt-8">
-        <!-- <form fxFlex="100" *ngIf="{results: filteredOptions | async} as obs"> -->
-        <form fxFlex="100">
+        <!-- <div fxFlex="100" *ngIf="{results: filteredOptions | async} as obs"> -->
+        <div fxFlex="100">
           <div class="search-field" fxLayout="row" [style.width.%]="30" style="align-items: center;">
             <mat-icon>search</mat-icon>
             <mat-form-field class="is-light tab-search">
-              <!-- <input matInput type="text" placeholder="Cari Template Pojok Untung" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> -->
-              <input matInput type="text" placeholder="Cari Template Pojok Untung" autocomplete="off">
+              <!-- <input matInput type="text" placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> -->
+              <input matInput type="text" placeholder="Cari" autocomplete="off">
             </mat-form-field>
           </div>
-        </form>
+        </div>
         <!-- <button mat-button matSuffix mat-raised-button color="primary" class="add-btn" aria-label="add" (click)="addTemplate()" *ngIf="permission?.buat"> -->
-        <button mat-button matSuffix mat-raised-button color="primary" aria-label="add" (click)="addTemplate()">
-          <mat-icon>add</mat-icon>TAMBAH
-        </button>
+          <div class="button-row" fxLayout="row" style="padding-right: 24px; padding-top: 24px; justify-content: end">
+            <button style="width: 170px;" mat-raised-button aria-label="add" type="button" (click)="addTemplate()">
+              <mat-icon>add</mat-icon>BUAT
+            </button>
+          </div>
       </div>
 
       <ngx-datatable #table class="material" [rows]="rows" [columnMode]="'force'"
