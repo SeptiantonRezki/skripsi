@@ -3060,6 +3060,59 @@ export const brConfig = {
       ]
     }
   },
+  pojokuntung: {
+    templatePojokUntung: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/template-pojok-untung",
+          name: "Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Template Pojok Untung"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/template-pojok-untung",
+          name: "Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Template Pojok Untung"
+        }
+      ],
+    },
+    partners: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: " Pojok Untung"
+        }
+      ],
+    },
+    partnersTemplate: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: " Pojok Untung"
+        }
+      ],
+    }
+  },
   virtualaccount: {
     company: {
       index: [

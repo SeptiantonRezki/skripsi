@@ -135,6 +135,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "pojok-untung",
+    loadChildren: "./pages/pojok-untung/pojok-untung.module#PojokUntungModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "virtual-account",
     loadChildren: "./pages/virtual-account/virtual-account.module#VirtualAccountModule",
     canActivate: [AuthGuard]
