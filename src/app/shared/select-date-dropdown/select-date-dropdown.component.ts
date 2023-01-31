@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { DateAdapter, MatDatepicker, MatInput, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -48,7 +48,8 @@ export interface OnSelectDateDropdownChange {
       provide: MAT_DATE_FORMATS, useValue: SELECT_DATE_DROPDOWN_DATE_FORMAT
     },
     DateRangePipe
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class SelectDateDropdownComponent implements OnInit {
 

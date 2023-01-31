@@ -6,7 +6,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material';
   selector: 'app-popup-image',
   templateUrl: './popup-image.component.html',
   styleUrls: ['./popup-image.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  // encapsulation: ViewEncapsulation.None
 })
 export class PopupImageComponent {
 
