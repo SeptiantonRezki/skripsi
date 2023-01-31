@@ -62,7 +62,7 @@ export class SpinTheWheelComponent implements OnInit {
     private ls: LanguagesService,
     private translate: TranslateService,
     private spinService: SpinTheWheelService,
-  ) { 
+  ) {
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {
@@ -165,13 +165,13 @@ export class SpinTheWheelComponent implements OnInit {
 
   directDetail(param?: any): void {
     this.dataService.setToStorage('spin_the_wheel', param);
-    this.router.navigate(['dte', 'spin-the-wheel', 'detail']);
+    this.router.navigate(['dte', 'spin-the-wheel', 'detail', param.id]);
   }
 
   // export(row) {
   //   this.dataService.showLoading(true);
   //   this.spinService.exportSpin({id: row.id}).subscribe(({data}) => {
-      
+
   //     console.log({data});
   //     this.downLoadFile(data.file);
   //     this.dataService.showLoading(false);
@@ -204,7 +204,7 @@ export class SpinTheWheelComponent implements OnInit {
       const getTime = moment(timestamp).format("HHmmss");
       const encryptTime = CryptoJS.AES.encrypt(getTime, "timestamp").toString();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `ExportSpinTheWheel_${encryptTime}.xlsx`);
-      
+
       this.dataService.showLoading(false);
     } catch (error) {
       console.log(error);

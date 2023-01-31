@@ -592,7 +592,7 @@
                     class="ml-24 confirmation-button"
                     (click)="submitPublishUnpublish()"
                     fxFlex="20">
-                      {{ detailFormSpin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
+                      {{ detailFormSpin && detailFormSpin.status === 'publish' ? ('dte.pengatur_jadwal_program.text9' | translate) : ('dte.pengatur_jadwal_program.text8' | translate) }}
                   </button>
                 </div>
 
