@@ -37,7 +37,11 @@ import { PojokUntungTemplateComponent } from './pojok-untung-template/pojok-untu
 import { PojokUntungTemplateCreateComponent } from './pojok-untung-template/create/pojok-untung-template-create.component';
 import { PojokUntungTemplateEditComponent } from './pojok-untung-template/edit/pojok-untung-template-edit.component';
 import { PojokUntungPartnersListComponent } from './pojok-untung-partners-list/pojok-untung-partners-list.component';
+import { PojokUntungPartnersListCreateComponent } from './pojok-untung-partners-list/create/pojok-untung-partners-list-create.component';
+import { PojokUntungPartnersListEditComponent } from './pojok-untung-partners-list/edit/pojok-untung-partners-list-edit.component';
 import { PojokUntungPartnersTemplateComponent } from './pojok-untung-partners-template/pojok-untung-partners-template.component';
+import { PojokUntungPartnersTemplateCreateComponent } from './pojok-untung-partners-template/create/pojok-untung-partners-template-create.component';
+import { PojokUntungPartnersTemplateEditComponent } from './pojok-untung-partners-template/edit/pojok-untung-partners-template-edit.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -93,7 +97,7 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot(),
     PojokUntungRoutingModule
   ],
-  declarations: [PojokUntungTemplateComponent, PojokUntungPartnersListComponent, PojokUntungTemplateCreateComponent, PojokUntungTemplateEditComponent, PojokUntungPartnersTemplateComponent],
+  declarations: [PojokUntungTemplateComponent, PojokUntungPartnersListComponent, PojokUntungTemplateCreateComponent, PojokUntungTemplateEditComponent, PojokUntungPartnersTemplateComponent, PojokUntungPartnersListCreateComponent, PojokUntungPartnersListEditComponent, PojokUntungPartnersTemplateCreateComponent, PojokUntungPartnersTemplateEditComponent],
   providers: [
     {
       provide: DateAdapter,

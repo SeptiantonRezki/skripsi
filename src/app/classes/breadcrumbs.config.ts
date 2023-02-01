@@ -3099,7 +3099,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: " Pojok Untung"
+          name: "Partner Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-list",
+          name: "Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Partner"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-list",
+          name: "Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Partner"
         }
       ],
     },
@@ -3108,7 +3132,31 @@ export const brConfig = {
         {
           type: "current",
           url: "",
-          name: " Pojok Untung"
+          name: "Template Partner Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-template",
+          name: "Template Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Template Partner"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-template",
+          name: "Template Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Template Partner"
         }
       ],
     }

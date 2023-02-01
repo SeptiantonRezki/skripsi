@@ -1,3 +1,61 @@
-<p>
-  pojok-untung-partners-list works!
-</p>
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Daftar Partner'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="start center" class="top-table pt-8">
+        <!-- <div fxFlex="100" *ngIf="{results: filteredOptions | async} as obs"> -->
+        <div fxFlex="100">
+          <div class="search-field" fxLayout="row" [style.width.%]="30" style="align-items: center;">
+            <mat-icon>search</mat-icon>
+            <mat-form-field class="is-light tab-search">
+              <!-- <input matInput type="text" placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off"> -->
+              <input matInput type="text" placeholder="Cari" autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- <button mat-button matSuffix mat-raised-button color="primary" class="add-btn" aria-label="add" (click)="addPartner()" *ngIf="permission?.buat"> -->
+          <div class="button-row" fxLayout="row" style="padding-right: 24px; padding-top: 24px; justify-content: end">
+            <button style="width: 170px;" mat-raised-button aria-label="add" type="button" (click)="addPartner()">
+              <mat-icon>add</mat-icon>BUAT PARTNER
+            </button>
+          </div>
+      </div>
+
+      <ngx-datatable #table class="material" [rows]="rows" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable">
+        
+        <ngx-datatable-column name="Daftar Partner" prop="name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <!-- <span class="row-name" (click)="editPartner(row)" *ngIf="permission?.ubah">{{row.name}}</span> -->
+            <span class="row-name" (click)="editPartner()">{{row.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jenis Partner" prop="type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.type}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <!-- <button mat-icon-button color="primary" (click)="deleteTemplate(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center"> -->
+              <button mat-icon-button color="primary" fxLayoutAlign="center center">
+                <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
+                <ng-template #showIcon>
+                  <mat-icon>delete</mat-icon>
+                </ng-template>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

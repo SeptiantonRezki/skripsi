@@ -12,12 +12,8 @@ export class PojokUntungTemplateComponent implements OnInit {
   rows: any[] = [
     {
       id: 1,
-      name: "Template Test 1"
+      name: "Template Pojok Untung Test"
     },
-    {
-      id: 2,
-      name: "Template Test 2"
-    }
   ];
 
   @ViewChild('table') table: DatatableComponent;
