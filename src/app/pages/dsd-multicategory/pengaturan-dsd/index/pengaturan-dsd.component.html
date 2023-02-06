@@ -1,12 +1,12 @@
 <div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
   <!-- HEADER -->
-  <page-content-header contentTitle="TRS Proposal">
+  <page-content-header contentTitle="Pengaturan DSD">
     <div class="button-row" fxLayout="row">
       <button (click)="exportProposal()" mat-raised-button type="button" class="">
         <mat-icon>arrow_upward</mat-icon> Export XLSX
       </button>
       <button *ngIf="permission.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/tactical-retail-sales','pengaturan-dsd','create']">
+        [routerLink]="['/dsd-multicategory','pengaturan-dsd','create']">
         <mat-icon>add</mat-icon>{{ls.locale.tactical_retail_sales.proposal_add}}
       </button>
 
@@ -15,178 +15,335 @@
   </page-content-header>
   <!-- / HEADER -->
 
-  <div class="content" *ngIf="!onLoad">
-    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-      style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
-    </div>
-    <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-
-        <h2 class="pl-8" *ngIf="!isShared">TRS Proposal</h2>
-
-        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
-          <mat-icon>search</mat-icon>
-          <mat-form-field class="is-light tab-search">
-            <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)"
-              autocomplete="off">
-          </mat-form-field>
-        </div>
-      </div>
-      <form [formGroup]="formFilter" autoComplete="off">
-        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field class="is-light form-primary" style="display: none !important;">
-            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
-              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="10.5%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua Zona' :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="7%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
-                ? 'Semua Regional'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="7%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua Area'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="7%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
-                'all' ?
-                'Semua Salespoint'
-                :
-                item.code}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-
-          <div fxFlex="1%" class=""></div>
-
-          <mat-form-field fxFlex="7%" class="orders datepicker is-light">
-            <input matInput #date_start [matDatepicker]="date_start" (focus)="date_start.open()" placeholder="{{ls.locale.tactical_retail_sales.proposal_start_date}}"
-              formControlName="date_start" (dateChange)="setMinDate(formFilter.get('date_start').value)" readonly>
-            <button mat-button *ngIf="formFilter.get('date_start').value" matSuffix mat-icon-button aria-label="Clear"
-              (click)="formFilter.get('date_start').setValue('')">
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-datepicker-toggle matSuffix [for]="date_start">
-              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-            </mat-datepicker-toggle>
-            <mat-datepicker #date_start></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field fxFlex="7%" class="orders datepicker is-light">
-            <input matInput [matDatepicker]="date_end" (focus)="date_end.open()" [min]="minDate"
-              placeholder="{{ls.locale.tactical_retail_sales.proposal_end_date}}" formControlName="date_end" readonly>
-            <button mat-button *ngIf="formFilter.get('date_end').value" matSuffix mat-icon-button aria-label="Clear"
-              (click)="formFilter.get('date_end').setValue('')">
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-datepicker-toggle matSuffix [for]="date_end">
-              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-            </mat-datepicker-toggle>
-            <mat-datepicker #date_end></mat-datepicker>
-          </mat-form-field>
-
-          <div fxFlex="1%" class=""></div>
-
-          <mat-form-field fxFlex="10.5%" class="orders dropdown is-light form-primary">
-            <mat-select placeholder="{{ls.locale.tactical_retail_sales.proposal_status_trs_proposal}}" formControlName="status">
-              <mat-option *ngFor="let status of statusList" [value]="status.value">{{status.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-bg-white">
+      <form autocomplete="off" [formGroup]="formCreateProposal">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
+          <h2 class="">{{ls.locale.tactical_retail_sales.proposal_edit}}</h2>
         </div>
 
-      </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'"
-        [sorts]="[{prop: 'created_at', dir: 'desc'}]">
+        <div class="ayo-middle pt-8" fxLayout="column">
+          <div class="mt-8" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <div fxFlex="45%">
+              <!-- SISI KIRI -->
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_program_code}}" prop="program_code">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.program_code }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div formArrayName="areas" *ngFor="let wil of formCreateProposal.get('areas')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
+                        matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
+                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
+                        [disabled] = "true">
+                        <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
+                          {{item.code}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                        {{'global.area.area' | translate}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
+                        matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
+                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
+                          {{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                        {{'global.area.salespoint' | translate}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_area_name}}" prop="area_name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.area_name }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput (focus)="startPicker.open()" [matDatepicker]="startPicker" (dateChange)="setMinDate(formCreateProposal.get('startDate').value)"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_program_start_date}}" formControlName="startDate" [min]="minDateProposal"
+                    [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['startDate'].hasError('required') && formCreateProposal.controls['startDate'].touched">
+                    {{ls.locale.tactical_retail_sales.proposal_program_start_date}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput (focus)="endDate.open()" [matDatepicker]="endDate" (dateChange)="dateChanged()"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_program_end_date}}" formControlName="endDate" [min]="minMaxDateProposal" [max]="maxDateProposal"
+                    [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                  <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                  <mat-datepicker #endDate></mat-datepicker>
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['endDate'].hasError('required') && formCreateProposal.controls['endDate'].touched">
+                    {{ls.locale.tactical_retail_sales.proposal_program_end_date}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}.
+                  </mat-error>
+                  <mat-error *ngIf="proposalData?.status != 'ongoing' && formCreateProposal.controls['endDate'].invalid">
+                    {{ls.locale.tactical_retail_sales.proposal_program_end_date}} Tidak Valid
+                  </mat-error>
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_sales_office}}" prop="salespoint_name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.salespoint_name }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="number" min="1" formControlName="maxExecutor" oninput="this.value = Math.abs(this.value) > 0 ? Math.abs(this.value) : 1"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_max_executor}}" 
+                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_start_date}}" prop="start_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.start_date }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="executor" (click)="modalExecutor()" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_executor}}">
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_end_date}}" prop="end_date">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.end_date }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px" 
+              *ngIf = "proposalData?.status != 'ongoing' && proposalData?.status != 'ready to execute'">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="kecamatan" (click)="modalKecamatan()" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_district}}">
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_created}}" prop="created_at">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.created_at }}<br />{{row.created_by }}
-          </ng-template>
-        </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_modified}}" prop="updated_at">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.updated_at }}<br />{{row.updated_by }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <mat-select placeholder="{{ls.locale.tactical_retail_sales.proposal_geotagging}}" formControlName="geotagging">
+                    <mat-option *ngFor="let ogeo of opsiGeotagging" [value]="ogeo.value">{{ ogeo.name }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_status}}" prop="status">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.status }}
-          </ng-template>
-        </ngx-datatable-column>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="product" (click)="modalProduct()" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_product}}">
+                </mat-form-field>
+              </div>
 
-        <ngx-datatable-column [width]="200" [name]="ls.locale.tactical_retail_sales.proposal_action" headerClass="textright"
-          [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
-            <div class="button-row pl-8">
-              <button mat-icon-button color="" (click)="goDetail(row)" *ngIf="permission.lihat">
-                <mat-icon class="secondary-text">visibility</mat-icon>
-              </button>
-              <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah && row.status != 'finish' && row.status != 'cancel'">
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-              <button mat-icon-button color="" class="disabled" (click)="doNothing(row)" *ngIf="permission.ubah && (row.status == 'finish' || row.status == 'cancel')">
-                <mat-icon class="secondary-text">edit</mat-icon>
-              </button>
-              <button mat-icon-button color="" (click)="getDetailOrder(row.program_code)">
-                <mat-icon class="secondary-text">assignment</mat-icon>
-              </button>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custCode1" (keyup)="keyUpCust1.next($event.target.value)" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_1}}"
+                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custCode1'].hasError('required') && formCreateProposal.controls['custCode1'].touched">
+                    {{ls.locale.tactical_retail_sales.proposal_cust_code_1}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
+                  <input matInput type="text" formControlName="custName1" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_name_1}}">
+                  <mat-error
+                    *ngIf="formCreateProposal.controls['custName1'].hasError('required') && formCreateProposal.controls['custName1'].touched">
+                    {{ls.locale.tactical_retail_sales.proposal_cust_code_1}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="custCode2" (keyup)="keyUpCust2.next($event.target.value)" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_code_2}} ({{ls.locale.tactical_retail_sales.proposal_optional}})"
+                    [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
+                  <input matInput type="text" formControlName="custName2" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_cust_name_2}}">
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="flowingly" placeholder="{{ls.locale.tactical_retail_sales.proposal_flowingly}}"
+                  [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                </mat-form-field>
+              </div>
+
+
+              <div class="px-24" style="margin-top:15px;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly">
+                  <input matInput type="text" [value]="trs_program_code" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_program_code}}">
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData?.created_by" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_created}}">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData?.created_at" readonly>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData?.updated_by" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_modified}}">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData?.updated_at" readonly>
+                </mat-form-field>
+              </div>
+
             </div>
-          </ng-template>
-        </ngx-datatable-column>
-      </ngx-datatable>
+
+
+            <div fxFlex="45%" class="is-light form-primary">
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_selected_executor}}</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_selected_executor}}" formControlName="executor_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['executor_selected'].hasError('required') && formCreateProposal.controls['executor_selected'].touched">
+                      {{ls.locale.tactical_retail_sales.proposal_executor}} {{ls.locale.tactical_retail_sales.proposal_must_be_choosen}}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_selected_regency}}</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_selected_regency}}" formControlName="kecamatan_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['kecamatan_selected'].hasError('required') && formCreateProposal.controls['kecamatan_selected'].touched">
+                      {{ls.locale.tactical_retail_sales.proposal_district}} {{ls.locale.tactical_retail_sales.proposal_must_be_choosen}}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_selected_product}}</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_selected_product}}" formControlName="product_selected" wrap="soft" [readonly]="true"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['product_selected'].hasError('required') && formCreateProposal.controls['product_selected'].touched">
+                      {{ls.locale.tactical_retail_sales.proposal_product}} {{ls.locale.tactical_retail_sales.proposal_must_be_choosen}}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_backgorund}}</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_backgorund}}" formControlName="background" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['background'].hasError('required') && formCreateProposal.controls['background'].touched">
+                      {{ls.locale.tactical_retail_sales.proposal_backgorund}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_objective}}</label>
+                    <div fxLayout="row" >
+                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="100">
+                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_objective}}" formControlName="objective" wrap="soft" [attr.disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'"></textarea>
+                      </div>
+                    </div>
+                    <mat-error *ngIf="formCreateProposal.controls['objective'].hasError('required') && formCreateProposal.controls['objective'].touched">
+                      {{ls.locale.tactical_retail_sales.proposal_objective}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="">
+                    <h3>{{ls.locale.tactical_retail_sales.proposal_attach_file}}</h3>
+                    <small>{{ls.locale.tactical_retail_sales.proposal_attach_file_explanation}}</small>
+                    <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                      <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                        [accept]="accept" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                        (fileChange)="changeFile($event)">
+                        <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                          <span matPrefix>{{ls.locale.tactical_retail_sales.proposal_choose_file}}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div fxLayout="column" style="margin-top: 5px;">
+                    <div class="" *ngFor="let item of fileList;let i = index" style="margin: 5px 0 5px 0;">
+                      <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
+                        {{ item.name }}
+                        <div class="deleteFile">
+                          <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="" *ngFor="let item of proposalData?.attachments;let i = index" style="margin: 5px 0 5px 0;">
+                      <div style="padding: 10px 10px 1px;background-color: #ffd2e0;position: relative;">
+                        <a id="{{ item.id }}" target="_blank" href="{{ item.attachment }}">{{ item.attachment }}</a>
+                        <div class="deleteFile">
+                          <mat-icon style="cursor: pointer;" (click)="removeExistingImage(i, item.id)">cancel_outline</mat-icon>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="confirm pt-24 pb-24" style="padding-left: 22px;" fxLayout="row" fxLayoutGap="20px">
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit(0)" *ngIf="proposalData?.status!='ongoing'">
+          {{ls.locale.tactical_retail_sales.save}}
+        </button>
+        <button mat-raised-button type="button" class="confirmation-button" fxFlex="21" (click)="submitnew(1)" *ngIf="proposalData?.status=='ongoing'">
+          {{ls.locale.tactical_retail_sales.save}}
+        </button>
+        <button mat-raised-button type="button" class="submit-button" fxFlex="20" (click)="submit(1)" *ngIf="proposalData?.status=='draft'">
+          {{ls.locale.tactical_retail_sales.proposal_submit}}
+        </button>
+        <button mat-raised-button type="button" class="warning-button" fxFlex="20" (click)="cancel()" *ngIf="proposalData?.status=='draft' || proposalData?.status=='ready to execute'">
+          {{ls.locale.tactical_retail_sales.proposal_cancel}}
+        </button>
+        <button mat-raised-button type="button" class="cancel-button" fxFlex="20" (click)="batal()">
+          {{ls.locale.tactical_retail_sales.proposal_back_to_trs_list}}
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -277,7 +277,7 @@ export class PengaturanDsdCreateComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         });
-        this.router.navigate(['/tactical-retail-sales', 'pengaturan-dsd']);
+        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
       }, err => {
         this.dataService.showLoading(false);
       })
@@ -293,7 +293,7 @@ export class PengaturanDsdCreateComponent implements OnInit {
   batal(){
     var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
     if (result) {
-      this.router.navigate(['/tactical-retail-sales', 'pengaturan-dsd']);
+      this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
     }
   }
 

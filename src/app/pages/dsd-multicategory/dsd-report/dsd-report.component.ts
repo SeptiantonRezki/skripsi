@@ -25,11 +25,11 @@ interface DataTableData {
 };
 
 @Component({
-  selector: 'app-trs-report',
-  templateUrl: './trs-report.component.html',
-  styleUrls: ['./trs-report.component.scss']
+  selector: 'app-dsd-report',
+  templateUrl: './dsd-report.component.html',
+  styleUrls: ['./dsd-report.component.scss']
 })
-export class TrsReportComponent implements OnInit {
+export class DsdReportComponent implements OnInit {
 
   permission: any;
   roles: PagesName = new PagesName();
@@ -113,6 +113,53 @@ export class TrsReportComponent implements OnInit {
   minDateFilter: any = new Date();
   dateFilter: any = new Date();
 
+
+
+  defaultParams: any = { from: moment().subtract(6, 'days').format('YYYY-MM-DD'), to: moment().format('YYYY-MM-DD') };
+  params: any = {};
+  paramsExport: any = {};
+  defaultDaysDifference = 7;
+  daysDifference: number;
+
+  defaultSelectedPeriode: any = {
+    id: 1,
+    name: '7 Hari Terakhir',
+    label: `7 Hari Terakhir (${moment().subtract(6, 'days').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')})`,
+    sub: `${moment().subtract(6, 'days').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`,
+    date: { from: moment().subtract(6, 'days'), to: moment() }
+  };
+  listPeriode: any[] = [
+    {
+      id: 0,
+      name: 'Semua Transaksi'
+    },
+    {
+      id: 1,
+      name: '7 Hari Terakhir',
+      sub: `${moment().subtract(6, 'days').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`,
+      date: { from: moment().subtract(6, 'days'), to: moment() }
+    },
+    {
+      id: 2,
+      name: '30 Hari Terakhir',
+      sub: `${moment().subtract(29, 'days').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`,
+      date: { from: moment().subtract(29, 'days'), to: moment() }
+    },
+    {
+      id: 3,
+      name: 'Pilih Tanggal Sendiri'
+    },
+    {
+      id: 4,
+      name: 'Hari Ini',
+      date: { from: moment(), to: moment() }
+    },
+  ];
+  selectedPeriode: any;
+
+
+
+
   constructor(
     private dataService: DataService,
     private TRSService: DSDMulticategoryService,
@@ -127,6 +174,12 @@ export class TrsReportComponent implements OnInit {
   ngOnInit() {
     //chanif
     this.dataService.showLoading(true);
+
+    //filter custom
+    this.selectedPeriode = this.defaultSelectedPeriode;
+
+
+
     
     let request = {
       level: 6,
@@ -210,9 +263,70 @@ export class TrsReportComponent implements OnInit {
       console.log('err occured', err);
       this.dataService.showLoading(false);
     });
-
-    
   }
+
+
+  getSelectItemHandler(item) {
+    this.selectedPeriode = item;
+    if(item.date) {
+      this.params = {
+        ...this.params,
+        from: item.date.from.format('YYYY-MM-DD'), 
+        to: item.date.to.format('YYYY-MM-DD')
+      };
+      this.paramsExport = {
+        ...this.paramsExport,
+        from: item.date.from.format('YYYY-MM-DD'),
+        to: item.date.to.format('YYYY-MM-DD')
+      };
+    } else {
+      delete this.params.from;
+      delete this.params.to;
+      delete this.paramsExport.from;
+      delete this.paramsExport.to;
+    };
+    this.daysDifference = moment(this.params.to).diff(moment(this.params.from), 'days') + 1;
+    /*
+    this.resetPage();
+    this.resetTime(item);
+    if (this.selectedChips === 0) {
+      if(this.selectedTabs === 0) this.getKasirAnalisis();
+      else if(this.selectedTabs === 1) this.getPembelianAnalisis();
+    } else if (this.selectedChips === 1) {
+      if(this.selectedTabs === 0) this.getRiwayatPenjualan();
+      else if(this.selectedTabs === 1) this.getRiwayatPembelian();
+    } else this.getAkumulasiProduk();
+    */
+  }
+
+  /*
+  resetPage() {
+    this.paginationPenjualan.page = 1;
+    this.paginationPembelian.page = 1;
+    this.paginationAkumulasi.page = 1;
+    this.offsetPagination = 0;
+  }
+
+  resetTime(item) {
+    const diff = item.id === 3 ? this.daysDifference : null;
+    if (this.selectedChips === 2 && (item.id === 4 || diff === 1)) {
+      this.disabledTime = false;
+      this.formTime.enable();
+    } else {
+      this.disabledTime = true;
+      this.formTime.disable();
+      this.formTime.get('startTime').setValue(null);
+      this.formTime.get('endTime').setValue(null);
+      this.timeRange = { startMax: null, endMin: null };
+      delete this.params.time_start;
+      delete this.paramsExport.time_start;
+      delete this.params.time_end;
+      delete this.paramsExport.time_end;
+    };
+  }
+  */
+
+
 
   filterReport1(){
     let param = {

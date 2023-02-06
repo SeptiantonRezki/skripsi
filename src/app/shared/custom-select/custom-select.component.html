@@ -1,0 +1,44 @@
+<div class="custom-select">
+  <button (click)="toggleSelect()"  mat-button class="custom-select__input">
+    <div class="custom-select__input-inner">
+      <div>{{selectedPeriodeValue}}</div>
+      <img src="assets/images/ayo/icon/arrow-select.svg">
+    </div>
+  </button>
+  <div *ngIf="isSelectedActive" class="custom-select__panel">
+    <div *ngFor="let item of listPeriode" class="custom-select__panel-content">
+      <div *ngIf="item.id !== 0" class="custom-select__panel-content-line"></div>
+      <button mat-button (click)="selectingPeriode(item)">
+        <div class="custom-select__panel-content-inner">
+          <div class="custom-select__panel-content-inner__text">
+            <div class="custom-select__panel-content-inner__text-top">{{item.name}}</div>
+            <div class="custom-select__panel-content-inner__text-bottom">{{item.sub}}</div>
+          </div>
+          <div class="custom-select__panel-content-inner__toggle" [ngClass]="{'custom-select__panel-content-inner__toggle--active': item.id == selectedPeriode.id}"></div>
+        </div>
+      </button>
+      <div *ngIf="item.id == 3 && selectedPeriode.id == 3" class="custom-select__panel-content-footer">
+        <div class="custom-select__panel-content-footer__datepicker">
+          <div class="custom-select__panel-content-footer__datepicker-inner">
+            <input [max]="maxFrom" [ngModel]="riwayatParams.from" placeholder="Dari"
+              #from="ngModel" (ngModelChange)="changeDate($event,from)" name="from" type="text"
+              [matDatepicker]="pickerFromDate" (click)="pickerFromDate.open()" readonly required>
+            <img src="assets/images/ayo/icon/calendar.svg" alt="calendar" (click)="pickerFromDate.open()">
+          </div>
+          <mat-datepicker #pickerFromDate></mat-datepicker>
+        </div>
+        <div class="custom-select__panel-content-footer__hypen"></div>
+        <div class="custom-select__panel-content-footer__datepicker">
+          <div class="custom-select__panel-content-footer__datepicker-inner">
+            <input [min]="minTo" [ngModel]="riwayatParams.to" placeholder="Hingga"
+              #to="ngModel" (ngModelChange)="changeDate($event,to)" name="to" type="text"
+              [matDatepicker]="pickerToDate" (click)="pickerToDate.open()" readonly required>
+            <img src="assets/images/ayo/icon/calendar.svg" alt="calendar" (click)="pickerToDate.open()">
+          </div>
+          <mat-datepicker #pickerToDate></mat-datepicker>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div (click)="toggleSelect()" class="custom-select__background" [ngClass]="{'custom-select__background--active': isSelectedActive}"></div>
+</div>

@@ -6,55 +6,33 @@ import { brConfig } from "app/classes/breadcrumbs.config";
 import { PengaturanDsdCreateComponent } from "./pengaturan-dsd/create/pengaturan-dsd-create.component";
 import { PengaturanDsdEditComponent } from "./pengaturan-dsd/edit/pengaturan-dsd-edit.component";
 import { PengaturanDsdDetailComponent } from "./pengaturan-dsd/detail/pengaturan-dsd-detail.component";
-import { TrsSystemVariableComponent } from "./dsd-system-variable/trs-system-variable.component";
-import { TrsReportComponent } from './dsd-report/trs-report.component';
+import { DsdReportComponent } from './dsd-report/dsd-report.component';
 
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "pengaturan-dsd",
+    redirectTo: "dsd-multicategory",
     pathMatch: "full"
-  },
-  {
-    path: "trs-system-variable",
-    component: TrsSystemVariableComponent,
-    data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_system_variable
-    },
   },
   {
     path: "pengaturan-dsd",
     component: PengaturanDsdComponent,
     data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.index
-    },
-  },
-  {
-    path: "pengaturan-dsd/create",
-    component: PengaturanDsdCreateComponent,
-    data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.create
+      breadcrumbs: brConfig.dsd_multicategory.pengaturan_dsd
     },
   },
   {
     path: "pengaturan-dsd/edit/:id",
     component: PengaturanDsdEditComponent,
     data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.edit
+      breadcrumbs: brConfig.dsd_multicategory.pengaturan_dsd
     },
   },
   {
-    path: "pengaturan-dsd/detail/:id",
-    component: PengaturanDsdDetailComponent,
+    path: "dsd-report",
+    component: DsdReportComponent,
     data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_proposal.detail
-    },
-  },
-  {
-    path: "trs-report",
-    component: TrsReportComponent,
-    data: {
-      breadcrumbs: brConfig.tactical_retail_sales.trs_report
+      breadcrumbs: brConfig.dsd_multicategory.dsd_report
     },
   },
 ]

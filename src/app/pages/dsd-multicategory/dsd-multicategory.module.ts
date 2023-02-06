@@ -42,13 +42,11 @@ import { PengaturanDsdComponent } from './pengaturan-dsd/index/pengaturan-dsd.co
 import { PengaturanDsdCreateComponent } from './pengaturan-dsd/create/pengaturan-dsd-create.component';
 import { PengaturanDsdEditComponent } from './pengaturan-dsd/edit/pengaturan-dsd-edit.component';
 import { PengaturanDsdDetailComponent } from './pengaturan-dsd/detail/pengaturan-dsd-detail.component';
-import { TrsSystemVariableComponent } from './dsd-system-variable/trs-system-variable.component';
 import { PengaturanDsdExecutorComponent } from './pengaturan-dsd/component/pengaturan-dsd-executor.component';
 import { PengaturanDsdKecamatanComponent } from './pengaturan-dsd/component/pengaturan-dsd-kecamatan.component';
 import { PengaturanDsdProductComponent } from './pengaturan-dsd/component/pengaturan-dsd-product.component';
 import { TrsCancelReasonComponent } from './pengaturan-dsd/component/trs-cancel-reason.component';
-import { ConfirmationDialogComponent } from './dsd-system-variable/confirmation-dialog/confirmation-dialog.component';
-import { TrsReportComponent } from './dsd-report/trs-report.component';
+import { DsdReportComponent } from './dsd-report/dsd-report.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -92,7 +90,7 @@ export const MY_FORMATS = {
     MatMenuModule,
     TranslateModule.forChild(),
   ],
-  declarations: [PengaturanDsdComponent, PengaturanDsdCreateComponent, PengaturanDsdEditComponent, PengaturanDsdDetailComponent, TrsSystemVariableComponent, PengaturanDsdExecutorComponent, PengaturanDsdKecamatanComponent, PengaturanDsdProductComponent, TrsCancelReasonComponent, ConfirmationDialogComponent, TrsReportComponent],
+  declarations: [PengaturanDsdComponent, PengaturanDsdCreateComponent, PengaturanDsdEditComponent, PengaturanDsdDetailComponent, PengaturanDsdExecutorComponent, PengaturanDsdKecamatanComponent, PengaturanDsdProductComponent, TrsCancelReasonComponent, DsdReportComponent],
   providers: [
     PengaturanDsdExecutorComponent,
     {
@@ -107,8 +105,7 @@ export const MY_FORMATS = {
     PengaturanDsdExecutorComponent,
     PengaturanDsdKecamatanComponent,
     PengaturanDsdProductComponent,
-    TrsCancelReasonComponent,
-    ConfirmationDialogComponent
+    TrsCancelReasonComponent
   ],
 })
 

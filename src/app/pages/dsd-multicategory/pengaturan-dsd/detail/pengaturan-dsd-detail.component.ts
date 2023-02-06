@@ -283,7 +283,7 @@ export class PengaturanDsdDetailComponent implements OnInit {
   }
 
   batal(){
-    this.router.navigate(['/tactical-retail-sales', 'pengaturan-dsd']);
+    this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
   }
 
   parseArea(type) {

@@ -1,272 +1,695 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, Input, Output, EventEmitter } from "@angular/core";
 import { Page } from "app/classes/laravel-pagination";
-import { Subject, Observable } from "rxjs";
-import { DatatableComponent } from "@swimlane/ngx-datatable";
+import { Subject, Observable, ReplaySubject } from "rxjs";
+import { DatatableComponent, SelectionType } from "@swimlane/ngx-datatable";
 import { Router } from "@angular/router";
 import { DialogService } from "app/services/dialog.service";
 import { DataService } from "app/services/data.service";
 import { DSDMulticategoryService } from "app/services/dsd-multicategory.service";
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
-import { FormGroup, FormBuilder, FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { PagesName } from "app/classes/pages-name";
 import { HttpErrorResponse } from "@angular/common/http";
 import { GeotreeService } from "app/services/geotree.service";
-import { MatDialog, MatDialogConfig } from "@angular/material";
 import { LanguagesService } from "app/services/languages/languages.service";
 import moment from 'moment';
 import { GenerateTRS } from "app/classes/generate-trs";
+
+import { NewSignService } from 'app/services/settings/new-sign.service';
+import { NotificationService } from 'app/services/notification.service';
+import { RetailerService } from 'app/services/user-management/retailer.service';
+import * as _ from "lodash";
+import { PengaturanDsdExecutorComponent } from "../component/pengaturan-dsd-executor.component";
+import { PengaturanDsdKecamatanComponent } from "../component/pengaturan-dsd-kecamatan.component";
+import { PengaturanDsdProductComponent } from "../component/pengaturan-dsd-product.component";
+import { TrsCancelReasonComponent } from "../component/trs-cancel-reason.component";
+import { commonFormValidator } from 'app/classes/commonFormValidator';
+
+import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
 @Component({
   selector: 'app-pengaturan-dsd',
   templateUrl: './pengaturan-dsd.component.html',
   styleUrls: ['./pengaturan-dsd.component.scss']
 })
-export class PengaturanDsdComponent {
-  rows: any[];
-  selected: any[];
-  id: any[];
+export class PengaturanDsdComponent  implements OnInit {
+  formCreateProposal: FormGroup;
+  formFilter: FormGroup;
+  onLoad: boolean;
+  loadingIndicator: boolean;
+  showLoading: Boolean;
+  listLevelArea: any[];
+  indexDelete: any;
+  list: any;
+  typeArea: any[] = ["area", "salespoint"];
+  areaFromLogin;
 
-  loadingIndicator = true;
+  rows: any[];
+  selected: any[] = [];
+  id: any[];
   reorderable = true;
   pagination: Page = new Page();
-  onLoad: boolean;
 
   keyUp = new Subject<string>();
+  areaType: any[] = [];
 
-  @ViewChild("activeCell")
-  @ViewChild(DatatableComponent)
-  table: DatatableComponent;
-  activeCellTemp: TemplateRef<any>;
-
-  listLevelArea: any[];
-  list: any;
-  areaFromLogin;
-  formFilter: FormGroup;
-  filterArea: Boolean;
-
-  permission: any;
-  roles: PagesName = new PagesName();
-
-  offsetPagination: any;
-  area_id_list: any = [];
-
-  gsw: FormControl = new FormControl('');
-
-  dialogRef: any;
   // 2 geotree property
   endArea: String;
+  area_id_list: any = [];
   lastLevel: any;
-  listGsw: any[] = [{ name: this.ls.locale.global.label.all + ' GSW', value: 'all' }, { name: 'OFF', value: '0' }, { name: 'ON', value: 1 }];
-  statusList: any[] = [
-    { name: 'All Status', value: 'all' }, 
-    { name: 'Draft', value: 'draft' },
-    { name: 'Ready to Execute', value: 'ready to execute' },
-    { name: 'Ongoing', value: 'ongoing' },
-    { name: 'Finish', value: 'finish' },
-    { name: 'Cancel', value: 'cancel' },
+  menuList: any[] = [];
+  iconList: any[] = [];
+  areaIdNonTargetAudience: any = 1;
+
+  opsiGeotagging = [
+    { name: 'Wajib', value: 'wajib' },
+    { name: 'Optional', value: 'optional' },
   ];
 
-  minDate: any;
+  keyUpCust1 = new Subject<string>();
+  keyUpCust2 = new Subject<string>();
 
-  /** shared component */
-  // @Input() customExportImport = false;
-  // @Input() wholesalerSelectable = false;
-  // @Output() onSelectWholesaler = new EventEmitter();
-  @Input() paramsPaginate = {};
+  dialogRef: any;
+  importingDataStatus = {
+    import_audience_status: null,
+    import_audience_status_type: null
+  }
 
-  detailOrder: any = null;
-  generateTRS: GenerateTRS = new GenerateTRS();
+  todayDate: any = new Date();
+  minDateProposal: any;
+  minMaxDateProposal: any;
+  maxDateProposal: any;
+  maxPeriodProposal: any;
+
+  selectedArea: any = [""];
+  selectedSalesPoint: any = "";
+
+  selectedExecutor: any = [];
+  selectedKecamatan: any = [];
+  selectedProduct: any = [];
+
+  imageSku: any;
+  files: File;
+  fileList: Array<File> = [];
+  deleteFile: any = [];
+  validComboDrag: Boolean;
+
+  proposalData: any;
+  trs_program_code: any;
 
   constructor(
-    private router: Router,
-    public dialogService: DialogService,
-    private dataService: DataService,
-    private fuseSplashScreen: FuseSplashScreenService,
-    private TRSService: DSDMulticategoryService,
     private formBuilder: FormBuilder,
-    public dialog: MatDialog,
+    private dataService: DataService,
+    private dialogService: DialogService,
+    private newSignService: NewSignService,
     private geotreeService: GeotreeService,
+    private TRSService: DSDMulticategoryService,
+    private notificationService: NotificationService,
+    private retailerService: RetailerService,
+    private dialog: MatDialog,
+    private router: Router,
     private ls: LanguagesService
   ) {
-    this.onLoad = true;
-    this.selected = [];
-
-    this.permission = this.roles.getRoles('principal.trsproposal');
-    console.log("this.permission");
-    console.log(this.permission);
-
+    this.areaType = this.dataService.getDecryptedProfile()['area_type'];
     this.areaFromLogin = this.dataService.getDecryptedProfile()['areas'];
     this.area_id_list = this.dataService.getDecryptedProfile()['area_id'];
-    this.listLevelArea = [
-      {
-        "id": 1,
-        "parent_id": null,
-        "code": "SLSNTL      ",
-        "name": "SLSNTL"
-      }
-    ];
+
+    //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+    //let areas = this.dataService.getDecryptedProfile()['areas'] || [];
+
+    this.selected = [];
 
     this.list = {
-      zone: [],
-      region: [],
-      area: [],
       salespoint: [],
-      district: [],
-      territory: []
     }
-
-    const observable = this.keyUp.debounceTime(1000)
-      .distinctUntilChanged()
-      .flatMap(search => {
-        return Observable.of(search).delay(500);
-      })
-      .subscribe(data => {
-        this.updateFilter(data);
-      });
   }
 
   ngOnInit() {
-    // this.fuseSplashScreen.show();
-    this.formFilter = this.formBuilder.group({
-      national: [""],
-      zone: new FormControl(),
-      region: new FormControl(),
-      area: new FormControl(),
-      salespoint: new FormControl(),
-      district: new FormControl(),
-      territory: new FormControl(),
 
+    this.formCreateProposal = this.formBuilder.group({
+      areas: this.formBuilder.array([]),
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required],
+      geotagging: ['wajib', Validators.required],
+      custCode1: ["", Validators.required],
+      custName1: ["", Validators.required],
+      custCode2: [""],
+      custName2: [""],
+      maxExecutor: [1, Validators.required],      
+      flowingly: [""],
       
-      date_start: "",
-      date_end: "",
-      status: "",
+      executor: [""],
+      kecamatan: [""],
+      product: [""],
+
+      //kanan
+      executor_selected: ["", Validators.required],
+      kecamatan_selected: ["", Validators.required],
+      product_selected: ["", Validators.required],
+
+      background: ["", Validators.required],
+      objective: ["", Validators.required],
+
+      area: [""],
+      salespoint: [""],
     })
 
-    this.initAreaV2();
-    this.getTRSProposalList();
+    // =========== GET AREA AWAL ===========
+    let areas = this.dataService.getDecryptedProfile()['area_id'];
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe(() => {
-      this.getTRSProposalList();
-    });
+    let request = {
+      level: 4, // area
+      area_id: areas
+    };
 
-    this.formFilter.get('zone').valueChanges.subscribe(res => {
-      console.log('zone', res);
-      if (res) {
-        this.getAudienceAreaV2('region', res);
-      }
-    });
-    this.formFilter.get('region').valueChanges.subscribe(res => {
-      console.log('region', res);
-      if (res) {
-        this.getAudienceAreaV2('area', res);
-      }
-    });
-    this.formFilter.get('area').valueChanges.subscribe(res => {
-      console.log('area', res, this.formFilter.value['area']);
-      if (res) {
-        this.getAudienceAreaV2('salespoint', res);
-      }
-    });
-    this.formFilter.get('salespoint').valueChanges.subscribe(res => {
-      console.log('salespoint', res);
-      if (res) {
-        this.getAudienceAreaV2('district', res);
-      }
-    });
-    this.formFilter.get('district').valueChanges.subscribe(res => {
-      console.log('district', res);
-      if (res) {
-        this.getAudienceAreaV2('territory', res);
-      }
-    });
+    const thisURL = this.router.url;
+    //this.trs_program_code = thisURL.split('/').pop();
+    //CHANIF
+    this.trs_program_code = 'AMI2210003';
 
-    this.gsw.valueChanges.subscribe(res => {
-      if (res) {
-        this.getTRSProposalList();
-      }
-    });
+    this.dataService.showLoading(true);
+    this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
+      this.proposalData = resProposal.data;
 
-    this.formFilter.get('date_start').valueChanges.subscribe(res => {
-      if (res) {
-        this.getTRSProposalList();
+      if (this.proposalData.status == 'cancel' || this.proposalData.status == 'finish'){
+        this.dialogService.openSnackBar({
+          message: "Program tidak dapat diedit"
+        });
+        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
       }
-    });
 
-    this.formFilter.get('date_end').valueChanges.subscribe(res => {
-      if (res) {
-        this.getTRSProposalList();
-      }
-    });
+      this.formCreateProposal.patchValue({
+        startDate: this.proposalData.start_date,
+        endDate: this.proposalData.end_date,
+        geotagging: this.proposalData.geotag_flag,
+        custCode1: this.proposalData.customer1_code,
+        custName1: this.proposalData.customer1_name,
+        custCode2: this.proposalData.customer2_code,
+        custName2: this.proposalData.customer2_name,
+        maxExecutor: this.proposalData.max_executor,
+        flowingly: this.proposalData.flowingly,
+        background: this.proposalData.background,
+        objective: this.proposalData.objective,
 
-    this.formFilter.get('status').valueChanges.subscribe(res => {
-      if (res) {
-        this.getTRSProposalList();
-      }
-    });
+        executor_selected: this.proposalData.textarea_executors,
+        kecamatan_selected: this.proposalData.textarea_kecamatans,
+        product_selected: this.proposalData.textarea_products,
+        
+        /*
+        executor: [""],
+        kecamatan: [""],
+        product: [""],
+
+        //kanan
+        executor_selected: ["", Validators.required],
+        kecamatan_selected: ["", Validators.required],
+        product_selected: ["", Validators.required],
+        */
+
+      });
+
+      this.selectedArea = this.proposalData.area_id;
+      this.selectedSalesPoint = this.proposalData.salespoint_id;
+
+      this.selectedExecutor = this.proposalData.selected_executors;
+      this.selectedKecamatan = this.proposalData.selected_kecamatans;
+      this.selectedProduct = this.proposalData.selected_products;
+
+      console.log("this.proposalData.attachments");
+      console.log(this.proposalData.attachments);
+
+      // disable form
+      if(this.proposalData.status !== 'draft') {
+        //this.formDetailVoucher.disable();
+        //this.disableForm = true;
+      };
+      
+      // ============== SET END DATE ================
+      this.TRSService.getSysVar().subscribe((res) => {
+        res.data.forEach((item) => {
+          if (item.param === 'max_period') {
+            if (this.proposalData.status == 'ongoing'){
+            } else {
+              this.minDateProposal = new Date();
+              this.minMaxDateProposal = new Date();
+              this.maxDateProposal = new Date();
+
+              this.maxPeriodProposal = parseInt(item.value);
+
+              this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+              this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
+              this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
+            }
+          }
+        });
+      }, err => {
+        console.log('err occured', err);
+        this.dataService.showLoading(false);
+      });
+
+      this.dataService.showLoading(false);
+      this.TRSService.getAreaByUser(request).subscribe(res => {
+        this.listLevelArea = res.data;
+        this.addArea();
+      }, err => {
+        console.log('err occured', err);
+        this.dataService.showLoading(false);
+      });
+
+    }, err => {
+      this.dataService.showLoading(false);
+      console.log('err occured', err);
+    })
+    
+    this.keyUpCust1.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.setCustName(res, 'custName1');
+      });
+
+    this.keyUpCust2.debounceTime(300)
+      .flatMap(key => {
+        return Observable.of(key).delay(300);
+      })
+      .subscribe(res => {
+        this.setCustName(res, 'custName2');
+      });
+  }
+
+  
+  changeFile(evt) {
+    this.readThis(evt);
+  }
+
+  readThis(inputValue: any): void {
+    var file: File = inputValue;
+    if (file.size > 2000000) {
+      this.dialogService.openSnackBar({
+        message: "File melebihi maksimum 2mb!"
+      });
+      return;
+    }
+    this.fileList = [
+      ...this.fileList,
+      file
+    ];
+
+    console.log("this.fileList");
+    console.log(this.fileList);
+  }
+
+  removeImage(idx) {
+    console.log('index you find!', idx);
+    this.fileList.splice(idx, 1);
+  }
+
+  removeExistingImage(idx, id) {
+    this.proposalData.attachments.splice(idx, 1);
+    this.deleteFile.push(id);
   }
 
   setMinDate(param?: any): void {
-    this.formFilter.get('date_end').setValue("");
-    this.minDate = param;
+    this.formCreateProposal.get("endDate").setValue("");
+    this.minMaxDateProposal = param;
+    console.log("kaaaa");
+    console.log(this.maxPeriodProposal);
+    this.maxDateProposal = moment(param).add(parseInt(this.maxPeriodProposal), 'd');
+
+    this.selectedExecutor = [];
+    this.selectedKecamatan = [];
+    this.formCreateProposal.get('executor_selected').setValue("");
+    this.formCreateProposal.get('kecamatan_selected').setValue("");
   }
 
-  initAreaV2() {
-    let areas = this.dataService.getDecryptedProfile()['areas'] || [];
-    this.geotreeService.getFilter2Geotree(areas);
-    let sameArea = this.geotreeService.diffLevelStarted;
-    let areasDisabled = this.geotreeService.disableArea(sameArea);
-    this.lastLevel = areasDisabled;
-    let lastLevelDisabled = null;
-    let levelAreas = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let lastDiffLevelIndex = levelAreas.findIndex(level => level === (sameArea.type === 'teritory' ? 'territory' : sameArea.type));
+  dateChanged(): void {
+    this.selectedExecutor = [];
+    this.selectedKecamatan = [];
+    this.formCreateProposal.get('executor_selected').setValue("");
+    this.formCreateProposal.get('kecamatan_selected').setValue("");
+  }
 
-    if (!this.formFilter.get('national') || this.formFilter.get('national').value === '') {
-      this.formFilter.get('national').setValue(1);
-      this.formFilter.get('national').disable();
-      lastLevelDisabled = 'national';
+  submit(mode) {
+    console.log("qqqq");
+    if (this.formCreateProposal.valid) {
+      this.dataService.showLoading(true);
+      let fd = new FormData();
+      //fd.append('program_code', "XXX_Coba1"); generate di backend saja
+      fd.append('start_date', moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"));
+      fd.append('end_date', moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"));
+      fd.append('area_id', this.selectedArea);
+      fd.append('salespoint_id', this.selectedSalesPoint);
+
+      fd.append('customer1_code', this.formCreateProposal.get('custCode1').value);
+      fd.append('customer1_name', this.formCreateProposal.get('custName1').value);
+      fd.append('customer2_code', this.formCreateProposal.get('custCode2').value);
+      fd.append('customer2_name', this.formCreateProposal.get('custName2').value);
+      
+      fd.append('background', this.formCreateProposal.get('background').value);
+      fd.append('objective', this.formCreateProposal.get('objective').value);
+      fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
+      fd.append('flowingly', this.formCreateProposal.get('flowingly').value.trim());
+      
+      fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
+
+      fd.append('executors', this.selectedExecutor);
+      fd.append('kecamatans', this.selectedKecamatan);
+      fd.append('products', this.selectedProduct);
+
+      if (this.deleteFile.length > 0){
+        fd.append('remove_files', this.deleteFile.join("__"));
+      }
+      
+      if (mode == 1){
+        fd.append('status', 'ready to execute');
+      } else {
+        fd.append('status', "");
+      }
+
+      this.fileList.map(imgr => {
+        fd.append('files[]', imgr)
+      })
+
+      if (mode == 1){
+        let sisa_attchments = this.proposalData.attachments.length - this.deleteFile.length;
+
+        if ((sisa_attchments < 1 && this.fileList.length == 0) || this.formCreateProposal.get('flowingly').value.trim() == ""){
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: "Nomor Flowingly dan Attach File wajib diisi !"
+          });
+        } else {
+          console.log("submit bisa dilakukan");
+
+          this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: this.ls.locale.notification.popup_notifikasi.text22
+            });
+            this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+          }, err => {
+            this.dataService.showLoading(false);
+          })
+        }
+      } else {
+        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+        }, err => {
+          this.dataService.showLoading(false);
+        })
+      }
+    } else {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi pengisian data!"
+      });
+      commonFormValidator.validateAllFields(this.formCreateProposal);
     }
-    areas.map((area, index) => {
-      area.map((level, i) => {
-        let level_desc = level.level_desc;
-        let levelIndex = levelAreas.findIndex(lvl => lvl === level.type);
-        if (lastDiffLevelIndex > levelIndex - 26) {
-          if (!this.list[level.type]) this.list[level.type] = [];
-          if (!this.formFilter.controls[this.parseArea(level.type)] || !this.formFilter.controls[this.parseArea(level.type)].value || this.formFilter.controls[this.parseArea(level.type)].value === '') {
-            this.formFilter.controls[this.parseArea(level.type)].setValue([level.id]);
-            console.log('ff value', this.formFilter.value);
-            // console.log(this.formFilter.controls[this.parseArea(level.type)]);
-            if (sameArea.level_desc === level.type) {
-              lastLevelDisabled = level.type;
+  }
 
-              this.formFilter.get(this.parseArea(level.type)).disable();
-            }
+  submitnew(mode) {
+    console.log("submitnew");
+    if (this.formCreateProposal.valid) {
+      this.dataService.showLoading(true);
+      let fd = new FormData();
+      //fd.append('program_code', "XXX_Coba1"); generate di backend saja
+      fd.append('start_date', moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"));
+      fd.append('end_date', moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"));
+      fd.append('area_id', this.selectedArea);
+      fd.append('salespoint_id', this.selectedSalesPoint);
 
-            if (areasDisabled.indexOf(level.type) > -1) this.formFilter.get(this.parseArea(level.type)).disable();
-            // if (this.formFilter.get(this.parseArea(level.type)).disabled) this.getFilterArea(level_desc, level.id);
-            console.log(this.parseArea(level.type), this.list[this.parseArea(level.type)]);
-          }
+      fd.append('customer1_code', this.formCreateProposal.get('custCode1').value);
+      fd.append('customer1_name', this.formCreateProposal.get('custName1').value);
+      fd.append('customer2_code', this.formCreateProposal.get('custCode2').value);
+      fd.append('customer2_name', this.formCreateProposal.get('custName2').value);
+      
+      fd.append('background', this.formCreateProposal.get('background').value);
+      fd.append('objective', this.formCreateProposal.get('objective').value);
+      fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
+      fd.append('flowingly', this.formCreateProposal.get('flowingly').value.trim());
+      
+      fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
 
-          let isExist = this.list[this.parseArea(level.type)].find(ls => ls.id === level.id);
-          level['area_type'] = `area_${index + 1}`;
-          this.list[this.parseArea(level.type)] = isExist ? [...this.list[this.parseArea(level.type)]] : [
-            ...this.list[this.parseArea(level.type)],
-            level
-          ];
-          console.log('area you choose', level.type, this.parseArea(level.type), this.geotreeService.getNextLevel(this.parseArea(level.type)));
-          if (!this.formFilter.controls[this.parseArea(level.type)].disabled) this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+      fd.append('executors', this.selectedExecutor);
+      fd.append('kecamatans', this.selectedKecamatan);
+      fd.append('products', this.selectedProduct);
 
-          if (i === area.length - 1) {
-            this.endArea = this.parseArea(level.type);
-            this.getAudienceAreaV2(this.geotreeService.getNextLevel(this.parseArea(level.type)), level.id);
+      if (this.deleteFile.length > 0){
+        fd.append('remove_files', this.deleteFile.join("__"));
+      }
+      
+      fd.append('status', 'ongoing');
+
+      this.fileList.map(imgr => {
+        fd.append('files[]', imgr)
+      })
+
+      if (mode == 1){
+        let sisa_attchments = this.proposalData.attachments.length - this.deleteFile.length;
+
+        if ((sisa_attchments < 1 && this.fileList.length == 0) || this.formCreateProposal.get('flowingly').value.trim() == ""){
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: "Nomor Flowingly dan Attach File wajib diisi !"
+          });
+        } else {
+          console.log("submit bisa dilakukan");
+
+          this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+            this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({
+              message: this.ls.locale.notification.popup_notifikasi.text22
+            });
+            this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+          }, err => {
+            this.dataService.showLoading(false);
+          })
+        }
+      } else {
+        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+        }, err => {
+          this.dataService.showLoading(false);
+        })
+      }
+    } else {
+      this.dataService.showLoading(false);
+      this.dialogService.openSnackBar({
+        message: "Silahkan lengkapi pengisian data!"
+      });
+      commonFormValidator.validateAllFields(this.formCreateProposal);
+    }
+  }
+
+  batal(){
+    var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
+    if (result) {
+      this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+    }
+  }
+
+  cancel(){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.maxWidth = "90vw";
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    dialogConfig.data = {
+      password: 'P@ssw0rd',
+      IMPORT_FROM_METHOD: 'CREATE',
+      program_code: this.trs_program_code
+    };
+
+    this.dialogRef = this.dialog.open(TrsCancelReasonComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+        
+      console.log("kakakaka");
+      console.log(response);
+      if (response == 'success'){
+        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+      }
+    });
+  }
+
+  setCustName(id, component_name): void {
+    if (true) {
+      if (id.length >= 10) {
+        if (this.selectedSalesPoint == ""){
+          alert("Pilih salespoint terlebih dahulu !");
+        } else {
+          let custCode1 = this.formCreateProposal.get('custCode1').value;
+          let custCode2 = this.formCreateProposal.get('custCode2').value;
+          if (custCode1.toUpperCase() == custCode2.toUpperCase()){
+            alert('Customer tidak boleh sama');
+          } else {
+            id = id+"__"+this.selectedSalesPoint;
+            this.dataService.showLoading(true);
+            this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
+              this.dataService.showLoading(false);
+              if (res.status ==  'success'){
+                this.formCreateProposal.get(component_name).setValue(res.data.name);
+              } else {
+                alert(res.message);
+                this.formCreateProposal.get(component_name).setValue("");
+              }
+            }, err => {
+              this.dataService.showLoading(false);
+              console.log('err occured', err);
+            })
           }
         }
-      });
-    });
+      } else {
+        this.formCreateProposal.get(component_name).setValue("");
+      }
+    }
+  }
 
-    // let mutableAreas = this.geotreeService.listMutableArea(lastLevelDisabled);
-    // mutableAreas.areas.map((ar, i) => {
-    //   this.list[ar].splice(1, 1);
-    // });
+  modalExecutor() {
+    if (this.selectedArea == ""){
+      alert("Tunggu, data Area sedang di load");
+    } else if (this.formCreateProposal.get('startDate').value == null || this.formCreateProposal.get('endDate').value == null || this.formCreateProposal.get('endDate').value == ""){
+      alert("Tanggal Awal dan Tanggal Akhir wajib diisi");
+    } else {
+      const dialogConfig = new MatDialogConfig();
+      const formCreateProposal = this.formCreateProposal.getRawValue();
+  
+      dialogConfig.maxWidth = "90vw";
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = 'scrumboard-card-dialog';
+      dialogConfig.data = {
+        password: 'P@ssw0rd',
+        IMPORT_FROM_METHOD: 'CREATE',
+        max: this.formCreateProposal.get('maxExecutor').value,
+        area: this.selectedArea,
+        selected: this.selectedExecutor,
+        program_code: this.trs_program_code,
+        formCreateProposal,
+        start_date: moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"),
+        end_date: moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"),
+      };
+  
+      this.dialogRef = this.dialog.open(PengaturanDsdExecutorComponent, dialogConfig);
+  
+      this.dialogRef.afterClosed().subscribe(response => {
+        
+        console.log("kakakaka");
+        console.log(response);
+        var result = [];
+        var result_id = [];
+        if (typeof response !== "undefined") {
+          response.forEach(function (item) {
+            result_id.push(item.id);
+            
+            if (item.territory != "" && item.territory != "-"){
+              result.push(item.fullname + " (" + item.territory.trim() + ")");
+            } else {
+              if (item.district == "" || item.district == "-"){
+                result.push(item.fullname + " (" + item.salespoint.trim() + ")");
+              } else {
+                result.push(item.fullname + " (" + item.district.trim() + ")");
+              }
+            }
+          });
+  
+          this.selectedExecutor = result_id.join("__");
+          this.formCreateProposal.get('executor_selected').setValue(result.join(", "));
+  
+          console.log(result);
+        }
+      });
+    }
+  }
+
+  modalKecamatan() {
+    if (this.selectedSalesPoint == ""){
+      alert("Pilih salespoint terlebih dahulu !");
+    } else {
+      const dialogConfig = new MatDialogConfig();
+      const formCreateProposal = this.formCreateProposal.getRawValue();
+  
+      dialogConfig.maxWidth = "90vw";
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = 'scrumboard-card-dialog';
+      dialogConfig.data = {
+        password: 'P@ssw0rd',
+        IMPORT_FROM_METHOD: 'CREATE',
+        area: this.selectedSalesPoint,
+        selected: this.selectedKecamatan,
+        formCreateProposal,
+      };
+  
+      this.dialogRef = this.dialog.open(PengaturanDsdKecamatanComponent, dialogConfig);
+  
+      this.dialogRef.afterClosed().subscribe(response => {
+        // regency = kabupaten
+        // district = kecamatan
+        var result = [];
+        var result_id = [];
+        if (typeof response !== "undefined") {
+          response.forEach(function (item) {
+            result_id.push(item.id);
+            result.push(item.regency + " - " + item.district);
+          });
+  
+          this.selectedKecamatan = result_id.join("__");
+          this.formCreateProposal.get('kecamatan_selected').setValue(result.join(", "));
+  
+          console.log(result);
+        }
+      });
+    }
+  }
+
+  modalProduct() {
+    if (this.selectedArea == ""){
+      alert("Tunggu, data Area sedang di load");
+    } else {
+      const dialogConfig = new MatDialogConfig();
+      const formCreateProposal = this.formCreateProposal.getRawValue();
+  
+      dialogConfig.maxWidth = "90vw";
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.panelClass = 'scrumboard-card-dialog';
+      dialogConfig.data = {
+        password: 'P@ssw0rd',
+        IMPORT_FROM_METHOD: 'CREATE',
+        area: this.selectedArea,
+        selected: this.selectedProduct,
+        formCreateProposal,
+      };
+  
+      this.dialogRef = this.dialog.open(PengaturanDsdProductComponent, dialogConfig);
+  
+      this.dialogRef.afterClosed().subscribe(response => {
+        var result = [];
+        var result_id = [];
+        if (typeof response !== "undefined") {
+          response.forEach(function (item) {
+            result_id.push(item.id);
+            result.push(item.code + " (" + item.name + ")");
+          });
+  
+          this.selectedProduct = result_id.join("__");
+          this.formCreateProposal.get('product_selected').setValue(result.join(", "));
+  
+          console.log(result);
+        }
+      });
+    }
   }
 
   parseArea(type) {
@@ -282,262 +705,39 @@ export class PengaturanDsdComponent {
     }
   }
 
-  getAudienceAreaV2(selection, id, event?) {
+  filteringGeotree(areaList) {
+    return areaList;
+  }
+
+  initFilterArea() {
+    this.areaFromLogin.map(item => {
+      let level_desc = '';
+      switch (item.type.trim()) {
+        case 'area':
+          level_desc = 'salespoint';
+          this.formCreateProposal.get('area').setValue(item.id);
+          this.formCreateProposal.get('area').disable();
+          break
+        case 'salespoint':
+          level_desc = 'district';
+          this.formCreateProposal.get('salespoint').setValue(item.id);
+          this.formCreateProposal.get('salespoint').disable();
+          break;
+      }
+      this.getAudienceArea(level_desc, item.id);
+    });
+  }
+
+  getAudienceArea(selection, id) {
     let item: any;
-    let fd = new FormData();
-    let lastLevel = this.geotreeService.getBeforeLevel(this.parseArea(selection));
-    let areaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(lastLevel));
-    // console.log('areaSelected', areaSelected, selection, lastLevel, Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })));
-    console.log('audienceareav2', this.formFilter.getRawValue(), areaSelected[0]);
-    if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-      fd.append('area_id[]', areaSelected[0].value);
-    } else if (areaSelected.length > 0) {
-      if (areaSelected[0].value !== "") {
-        areaSelected[0].value.map(ar => {
-          fd.append('area_id[]', ar);
-        })
-        // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
-        if (areaSelected[0].value.length === 0) {
-          let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-          let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-          console.log('the selection', this.parseArea(selection), newAreaSelected);
-          if (newAreaSelected[0].key !== 'national') {
-            newAreaSelected[0].value.map(ar => {
-              fd.append('area_id[]', ar);
-            })
-          } else {
-            fd.append('area_id[]', newAreaSelected[0].value);
-          }
-        }
-      }
-    } else {
-      let beforeLastLevel = this.geotreeService.getBeforeLevel(lastLevel);
-      areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLastLevel));
-      // console.log('new', beforeLastLevel, areaSelected);
-      if (areaSelected && areaSelected[0] && areaSelected[0].key === 'national') {
-        fd.append('area_id[]', areaSelected[0].value);
-      } else if (areaSelected.length > 0) {
-        if (areaSelected[0].value !== "") {
-          areaSelected[0].value.map(ar => {
-            fd.append('area_id[]', ar);
-          })
-          // if (areaSelected[0].value.length === 0) fd.append('area_id[]', "1");
-          if (areaSelected[0].value.length === 0) {
-            let beforeLevel = this.geotreeService.getBeforeLevel(areaSelected[0].key);
-            let newAreaSelected: any = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter(item => item.key === this.parseArea(beforeLevel));
-            console.log('the selection', this.parseArea(selection), newAreaSelected);
-            if (newAreaSelected[0].key !== 'national') {
-              newAreaSelected[0].value.map(ar => {
-                fd.append('area_id[]', ar);
-              })
-            } else {
-              fd.append('area_id[]', newAreaSelected[0].value);
-            }
-          }
-        }
-      }
-    }
-
-    fd.append('area_type', selection === 'territory' ? 'teritory' : selection);
-    let thisAreaOnSet = [];
-    let areaNumber = 0;
-    let expectedArea = [];
-    if (!this.formFilter.get(this.parseArea(selection)).disabled) {
-      thisAreaOnSet = this.areaFromLogin[0] ? this.areaFromLogin[0] : [];
-      if (this.areaFromLogin[1]) thisAreaOnSet = [
-        ...thisAreaOnSet,
-        ...this.areaFromLogin[1]
-      ];
-
-      thisAreaOnSet = thisAreaOnSet.filter(ar => (ar.level_desc === 'teritory' ? 'territory' : ar.level_desc) === selection);
-      if (id && id.length > 1) {
-        areaNumber = 1;
-      }
-
-      if (areaSelected && areaSelected[0] && areaSelected[0].key !== 'national') expectedArea = thisAreaOnSet.filter(ar => areaSelected[0].value.includes(ar.parent_id));
-      // console.log('on set', thisAreaOnSet, selection, id);
-    }
-
-
-    switch (this.parseArea(selection)) {
-      case 'zone':
-        // area = this.formFilter.get(selection).value;
-        this.dataService.showLoading(true);
-        this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-          // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-          this.dataService.showLoading(true);
-          this.list[this.parseArea(selection)] = res.data;
-          
-            this.dataService.showLoading(false);
-          
-          // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
-          // fd = null
+    switch (selection) {
+      case 'salespoint':
+        item = this.list['area'].length > 0 ? this.list['area'].filter(item => item.id === id)[0] : {};
+        this.retailerService.getListOtherChildren({ parent_id: id }).subscribe(res => {
+          this.list[selection] = res;
         });
 
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['region'] = [];
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        console.log('zone selected', selection, this.list['region'], this.formFilter.get('region').value);
-        break;
-      case 'region':
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item = this.list['zone'].length > 0 ? this.list['zone'].filter(item => {
-            return id && id.length > 0 ? id[0] : id;
-          })[0] : {};
-          if (item && item.name && item.name !== 'all') {
-            this.dataService.showLoading(true);
-            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = res.data;
-              this.dataService.showLoading(false);
-              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-            this.dataService.showLoading(false);
-          }
-        } else {
-          this.list['region'] = [];
-          this.dataService.showLoading(false);
-        }
-        this.formFilter.get('region').setValue('');
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['area'] = [];
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'area':
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item = this.list['region'].length > 0 ? this.list['region'].filter(item => {
-            return id && id.length > 0 ? id[0] : id;
-          })[0] : {};
-          console.log('area hitted', selection, item, this.list['region']);
-          if (item && item.name && item.name !== 'all') {
-            this.dataService.showLoading(true);
-            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = res.data;
-              this.dataService.showLoading(false);
-              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-            this.dataService.showLoading(false);
-          }
-        } else {
-          this.list['area'] = [];
-          this.dataService.showLoading(false);
-        }
-
-        this.formFilter.get('area').setValue('');
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['salespoint'] = [];
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'salespoint':
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item = this.list['area'].length > 0 ? this.list['area'].filter(item => {
-            return id && id.length > 0 ? id[0] : id;
-          })[0] : {};
-          console.log('item', item);
-          if (item && item.name && item.name !== 'all') {
-            this.dataService.showLoading(true);
-            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = res.data;
-              this.dataService.showLoading(false);
-              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-            this.dataService.showLoading(false);
-          }
-        } else {
-          this.list['salespoint'] = [];
-          this.dataService.showLoading(false);
-        }
-
-        this.formFilter.get('salespoint').setValue('');
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['district'] = [];
-        this.list['territory'] = [];
-        break;
-      case 'district':
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item = this.list['salespoint'].length > 0 ? this.list['salespoint'].filter(item => {
-            return id && id.length > 0 ? id[0] : id;
-          })[0] : {};
-          if (item && item.name && item.name !== 'all') {
-            this.dataService.showLoading(true);
-            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = res.data;
-              this.dataService.showLoading(false);
-              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-            this.dataService.showLoading(false);
-          }
-        } else {
-          this.list['district'] = [];
-          this.dataService.showLoading(false);
-        }
-
-        this.formFilter.get('district').setValue('');
-        this.formFilter.get('territory').setValue('');
-        this.list['territory'] = [];
-        break;
-      case 'territory':
-        // area = this.formFilter.get(selection).value;
-        if (id && id.length !== 0) {
-          item = this.list['district'].length > 0 ? this.list['district'].filter(item => {
-            return id && id.length > 0 ? id[0] : id;
-          })[0] : {};
-          if (item && item.name && item.name !== 'all') {
-            this.dataService.showLoading(true);
-            this.geotreeService.getChildFilterArea(fd).subscribe(res => {
-              // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
-              this.list[selection] = res.data;
-              this.dataService.showLoading(false);
-              // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-
-              // fd = null
-            });
-          } else {
-            this.list[selection] = [];
-            this.dataService.showLoading(false);
-          }
-        } else {
-          this.list['territory'] = [];
-          this.dataService.showLoading(false);
-        }
-
-        this.formFilter.get('territory').setValue('');
+        this.formCreateProposal.get('salespoint').setValue('');
         break;
 
       default:
@@ -545,340 +745,147 @@ export class PengaturanDsdComponent {
     }
   }
 
-  filteringGeotree(areaList) {
-    return areaList;
+  createArea(): FormGroup {
+    return this.formBuilder.group({
+      area: [this.proposalData.area_id, Validators.required],
+      salespoint: [""],
+      list_area: this.formBuilder.array(this.listLevelArea),
+      list_salespoint: this.formBuilder.array([]),
+    })
   }
 
-  checkAreaLocation(area, lastSelfArea) {
-    let lastLevelFromLogin = this.parseArea(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-    let areaAfterEndLevel = this.geotreeService.getNextLevel(lastLevelFromLogin);
-    let indexAreaAfterEndLevel = areaList.indexOf(areaAfterEndLevel);
-    let indexAreaSelected = areaList.indexOf(area.key);
-    let rawValues = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }));
-    let newLastSelfArea = []
-    // console.log('[checkAreaLocation:area]', area);
-    // console.log('[checkAreaLocation:lastLevelFromLogin]', lastLevelFromLogin);
-    // console.log('[checkAreaLocation:areaAfterEndLevel]', areaAfterEndLevel);
-    if (area.value !== 1) {
-      // console.log('[checkAreaLocation:list]', this.list[area.key]);
-      // console.log('[checkAreaLocation:indexAreaAfterEndLevel]', indexAreaAfterEndLevel);
-      // console.log('[checkAreaLocation:indexAreaSelected]', indexAreaSelected);
-      if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // let sameAreas = this.list[area.key].filter(ar => area.value.includes(ar.id));
-        let areaSelectedOnRawValues: any = rawValues.find(raw => raw.key === areaAfterEndLevel);
-        newLastSelfArea = this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)).map(ar => ar.parent_id).filter((v, i, a) => a.indexOf(v) === i);
-        // console.log('[checkAreaLocation:list:areaAfterEndLevel', this.list[areaAfterEndLevel].filter(ar => areaSelectedOnRawValues.value.includes(ar.id)), areaSelectedOnRawValues);
-        // console.log('[checkAreaLocation:newLastSelfArea]', newLastSelfArea);
+  addArea() {
+    let wilayah = this.formCreateProposal.controls['areas'] as FormArray;
+    wilayah.push(this.createArea());
+    const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
+    this.initArea(index);
+    this.generataList('salespoint', this.proposalData.area_id, index, 'render');
+  }
+
+  initArea(index) {
+    let wilayah = this.formCreateProposal.controls['areas'] as FormArray;
+    this.areaType.map(item => {
+      switch (item.type.trim()) {
+        case 'area':
+          wilayah.at(index).get('area').disable();
+          break;
+        case 'salespoint':
+          wilayah.at(index).get('salespoint').disable();
+          break;
       }
-    }
-
-    return newLastSelfArea;
+    })
   }
 
-  getTRSProposalList(body?) {
-    let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value }))
-      .filter((item: any) => item.key != "date_start" && item.key != "date_end" && item.key != "status" && item.value !== null && item.value !== "" && item.value.length !== 0);
-
-console.log("areaSelected");
-console.log(areaSelected);
-
-    this.pagination.area = areaSelected[areaSelected.length - 1].value;
-    // this.pagination.sort = "name";
-    // this.pagination.sort_type = "asc";
-
-    let areaList = ["national", "division", "region", "area", "salespoint", "district", "territory"];
-
-    // console.log('area_selected on ff list', areaSelected, this.list);
-    if (this.areaFromLogin[0].length === 1 && this.areaFromLogin[0][0].type === 'national' && this.pagination.area !== 1) {
-      this.pagination['after_level'] = true;
-    } else {
-
-      let lastSelectedArea: any = areaSelected[areaSelected.length - 1];
-      let indexAreaAfterEndLevel = areaList.indexOf(this.areaFromLogin[0][this.areaFromLogin[0].length - 1].type);
-      let indexAreaSelected = areaList.indexOf(lastSelectedArea.key);
-      let is_area_2 = false;
-
-      let self_area = this.areaFromLogin[0] ? this.areaFromLogin[0].map(area_1 => area_1.id) : [];
-      let last_self_area = [];
-      if (self_area.length > 0) {
-        last_self_area.push(self_area[self_area.length - 1]);
-      }
-
-      if (this.areaFromLogin[1]) {
-        let second_areas = this.areaFromLogin[1];
-        last_self_area = [
-          ...last_self_area,
-          second_areas[second_areas.length - 1].id
-        ];
-        self_area = [
-          ...self_area,
-          ...second_areas.map(area_2 => area_2.id).filter(area_2 => self_area.indexOf(area_2) === -1)
-        ];
-      }
-
-      let newLastSelfArea = this.checkAreaLocation(areaSelected[areaSelected.length - 1], last_self_area);
-
-      if (this.pagination['after_level']) delete this.pagination['after_level'];
-      this.pagination['self_area'] = self_area;
-      this.pagination['last_self_area'] = last_self_area;
-      let levelCovered = [];
-      if (this.areaFromLogin[0]) levelCovered = this.areaFromLogin[0].map(level => this.parseArea(level.type));
-      if (lastSelectedArea.value.length === 1 && this.areaFromLogin.length > 1) {
-        let oneAreaSelected = lastSelectedArea.value[0];
-        let findOnFirstArea = this.areaFromLogin[0].find(are => are.id === oneAreaSelected);
-        console.log('oneArea Selected', oneAreaSelected, findOnFirstArea);
-        if (findOnFirstArea) is_area_2 = false;
-        else is_area_2 = true;
-
-        console.log('last self area', last_self_area, is_area_2, levelCovered, levelCovered.indexOf(lastSelectedArea.key) !== -1, lastSelectedArea);
-        if (levelCovered.indexOf(lastSelectedArea.key) !== -1) {
-          // console.log('its hitted [levelCovered > -1]');
-          if (is_area_2) this.pagination['last_self_area'] = [last_self_area[1]];
-          else this.pagination['last_self_area'] = [last_self_area[0]];
-        } else {
-          // console.log('its hitted [other level]');
-          this.pagination['after_level'] = true;
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      } else if (indexAreaSelected >= indexAreaAfterEndLevel) {
-        // console.log('its hitted [other level other]');
-        this.pagination['after_level'] = true;
-        if (newLastSelfArea.length > 0) {
-          this.pagination['last_self_area'] = newLastSelfArea;
-        }
-      }
-    }
-
-    const page = this.dataService.getFromStorage("page");
-    //const sort_type = this.dataService.getFromStorage("sort_type");
-    //const sort = this.dataService.getFromStorage("sort");
-
-    this.pagination.page = page;
-    //this.pagination.sort_type = sort_type;
-    //this.pagination.sort = sort;
-
-    this.offsetPagination = page ? (page - 1) : 0;
-    //this.pagination['gsw'] = this.gsw.value;
-    this.pagination['start_date'] = moment(this.formFilter.get('date_start').value).format("YYYY-MM-DD");
-    this.pagination['end_date'] = moment(this.formFilter.get('date_end').value).format("YYYY-MM-DD");
-
-    //menghindari invalid
-    if (!this.formFilter.get('date_start').value) delete this.pagination['start_date'];
-    if (!this.formFilter.get('date_end').value) delete this.pagination['end_date'];
-
-    this.pagination['status'] = this.formFilter.get('status').value;
-    if (this.formFilter.get('status').value === 'all') this.pagination['status'] = null;
-
-    console.log("chahahaha");
-    console.log(this.pagination);
-    console.log(body);
-
-    this.TRSService.getProposal(this.pagination, body).subscribe(
-      res => {
-        console.log(res);
-        console.log("done");
-
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
-        this.onLoad = false;
-        this.loadingIndicator = false;
-        console.log(res);
-        // this.fuseSplashScreen.hide();
-      },
-      err => {
-        console.error(err);
-        this.onLoad = false;
-      }
-    );
-  }
-
-  onSelect(event, row) {
-    // this.selected.splice(0, this.selected.length);
-    // this.selected.push(...selected);
-    const index = this.selected.findIndex(item => item.id === row.id);
-
-    if (index >= 0) {
-      this.selected.splice(index, 1);
-    } else {
-      this.selected.push(row);
-    }
-
-    // this.onSelectWholesaler.emit(this.selected);
-  }
-
-  setPage(pageInfo, body?) {
-    this.offsetPagination = pageInfo.offset;
-    this.loadingIndicator = true;
-
-    if (this.pagination['search']) {
-      this.pagination.page = pageInfo.offset + 1;
-    } else {
-      this.dataService.setToStorage("page", pageInfo.offset + 1);
-      this.pagination.page = this.dataService.getFromStorage("page");
-    }
-
-    this.TRSService.getProposal(this.pagination, body).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.loadingIndicator = false;
-    });
-  }
-
-  onSort(event) {
-    this.pagination.sort = event.column.prop;
-    this.pagination.sort_type = event.newValue;
-    this.pagination.page = 1;
-    this.loadingIndicator = true;
-
-    this.dataService.setToStorage("page", this.pagination.page);
-    this.dataService.setToStorage("sort", event.column.prop);
-    this.dataService.setToStorage("sort_type", event.newValue);
-
-    this.TRSService.getProposal(this.pagination).subscribe(
-      res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
-        this.loadingIndicator = false;
-      },
-      err => {
-        this.loadingIndicator = false;
-      }
-    );
-  }
-
-  updateFilter(string, body?) {
-    this.loadingIndicator = true;
-    this.pagination.search = string;
-
-    if (string) {
-      this.pagination.page = 1;
-      this.offsetPagination = 0;
-    } else {
-      const page = this.dataService.getFromStorage("page");
-      this.pagination.page = page;
-      this.offsetPagination = page ? (page - 1) : 0;
-    }
-
-    this.TRSService.getProposal(this.pagination, body).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.loadingIndicator = false;
-    });
-  }
-
-  getDetailOrder(proposalID: any): void {
-    this.loadingIndicator = true;
-    console.log(proposalID);
-    this.TRSService.getProposalSummary(proposalID).subscribe(
-      async res => {
-        if (res.status == "success") {
-          res = res.data;
-          this.detailOrder = res;
-          
-          /*
-          let products = this.detailOrder && this.detailOrder.order_products ? [...this.detailOrder.order_products].filter(obj => obj.amount > 0) : [];
-          this.detailOrder.total = 0;
-
-          this.loadingIndicator = false;
-          this.onLoad = false;
-
-          await res.order_products.map((item: any, idx: number) => {
-            this.detailOrder.total = parseInt(this.detailOrder.total) + parseInt(item.total_price);
-          });
-          */
-
-          this.loadingIndicator = false;
-          console.log("print");
-          this.print();
-          
-        }
-      }, err => {
-        console.log('err', err);
-        this.loadingIndicator = false;
-      }
-    )
-  }
-
-  print() {
-    let bodyHtml = {
-      ...this.detailOrder,
-    };
-
-    let popupWin;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-    popupWin.document.open();
-    popupWin.document.write(this.generateTRS.html(bodyHtml));
-    popupWin.document.close();
-  }
-
-  goEdit(param?: any): void {
-    this.dataService.setToStorage('trs_program_code', param.program_code);
-    this.router.navigate(["tactical-retail-sales", "pengaturan-dsd", "edit", param.program_code]);
-  }
-
-  doNothing(param?: any): void {
+  async generataList(selection, id, index, type) {
+    this.areaIdNonTargetAudience = id;
+    let item: any;
+    let response: any;
+    let list: any;
+    let wilayah = this.formCreateProposal.controls['areas'] as FormArray;
     
-  }
 
-  goDetail(param?: any): void {
-    this.dataService.setToStorage('trs_program_code', param.program_code);
-    this.router.navigate(["tactical-retail-sales", "pengaturan-dsd", "detail", param.program_code]);
-  }
+    switch (selection) {
+      case 'salespoint':
+        item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
+      
+        response = await this.notificationService.getListOtherChildren({ parent_id: id }).toPromise();
+        list = wilayah.at(index).get(`list_${selection}`) as FormArray;
 
-  async exportProposal(context?, exportFileName?) {
-    this.dataService.showLoading(true);
-    const filename = (exportFileName) ? exportFileName : `Export_TRS_Proposal_${new Date().toLocaleString()}.xlsx`;
-    try {
-      const response = await this.TRSService.exportProposalNew(this.pagination,context).toPromise();
-      console.log('he', response.headers);
-      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
-      // this.downloadLink.nativeElement.href = response;
-      // this.downloadLink.nativeElement.click();
-      this.dataService.showLoading(false);
+        //clear hasil sebelumnya
+        while (list.length > 0) {
+          list.removeAt(list.length - 1);
+        }
 
-    } catch (error) {
-      this.handleError(error);
-      this.dataService.showLoading(false);
-      // throw error;
+        _.clone(response || []).map(item => {
+          list.push(this.formBuilder.group({ ...item, name: item.name }));
+        });
+        if (list.length > 0){
+          list.removeAt(0);
+        }
+
+        //editchan
+        wilayah.at(index).get('salespoint').setValue(this.proposalData.salespoint_id);
+
+        if (type !== 'render') {
+          wilayah.at(index).get('salespoint').setValue('');
+
+          this.selectedSalesPoint = "";
+          this.selectedExecutor = [];
+          this.selectedKecamatan = [];
+          this.selectedProduct = [];
+          this.formCreateProposal.get('executor_selected').setValue("");
+          this.formCreateProposal.get('kecamatan_selected').setValue("");
+          this.formCreateProposal.get('product_selected').setValue("");
+          this.formCreateProposal.get('custCode1').setValue("");
+          this.formCreateProposal.get('custName1').setValue("");
+          this.formCreateProposal.get('custCode2').setValue("");
+          this.formCreateProposal.get('custName2').setValue("");
+
+          this.formCreateProposal.get("startDate").setValue("");
+          this.formCreateProposal.get("endDate").setValue("");
+        }
+
+        this.selectedArea = id;
+        break;
+
+      case 'district':
+        this.selectedSalesPoint = id;
+
+        if (type !== 'render') {
+          this.selectedKecamatan = [];
+          this.formCreateProposal.get('kecamatan_selected').setValue("");
+          this.formCreateProposal.get('custCode1').setValue("");
+          this.formCreateProposal.get('custName1').setValue("");
+          this.formCreateProposal.get('custCode2').setValue("");
+          this.formCreateProposal.get('custName2').setValue("");
+
+          this.selectedExecutor = [];
+          this.formCreateProposal.get('executor_selected').setValue("");
+          this.formCreateProposal.get("startDate").setValue("");
+          this.formCreateProposal.get("endDate").setValue("");
+        }
+        break;
+  
+
+      default:
+        break;
     }
   }
-  downLoadFile(data: any, type: string, fileName: string) {
-    // It is necessary to create a new blob object with mime-type explicitly set
-    // otherwise only Chrome works like it should
-    var newBlob = new Blob([data], { type: type });
 
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
+  clearFormArray = (index, selection) => {
+    let wilayah = this.formCreateProposal.controls['areas'] as FormArray;
+    let list = wilayah.at(index).get(selection) as FormArray;
+    while (list.length > 0) {
+      list.removeAt(list.length - 1);
+    }
+  }
+
+  getToolTipData(value, array) {
+    if (value && array.length) {
+      let msg = array.filter(item => item.id === value)[0]['name'];
+      return msg;
+    } else {
+      return "";
+    }
+  }
+
+  findDuplicate(array) {
+    var object = {};
+    var result = [];
+
+    array.forEach(function (item) {
+      if (!object[item])
+        object[item] = 0;
+      object[item] += 1;
+    })
+
+    for (var prop in object) {
+      if (object[prop] >= 2) {
+        result.push(prop);
+      }
     }
 
-    // For other browsers: 
-    // Create a link pointing to the ObjectURL containing the blob.
-    const url = window.URL.createObjectURL(newBlob);
-
-    var link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    // this is necessary as link.click() does not work on the latest firefox
-    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-    setTimeout(function () {
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    }, 100);
+    return result;
   }
-  handleError(error) {
-    console.log('Here')
-    console.log(error)
 
-    if (!(error instanceof HttpErrorResponse)) {
-      error = error.rejection;
-    }
-    console.log(error);
-    // alert('Open console to see the error')
-  }
 }

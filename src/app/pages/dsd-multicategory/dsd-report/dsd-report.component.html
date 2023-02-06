@@ -11,6 +11,17 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
               fxLayoutGap.lt-md="0px">
 
+
+              <custom-select
+                [newListPeriode]="selectedTabs==0 && selectedChips==2 && listPeriode"
+                [selectedPeriode]="selectedPeriode"
+                (getSelectItem)="getSelectItemHandler($event)"
+                (getSelectDate)="getSelectItemHandler($event)"
+              >
+              </custom-select>
+
+
+
               <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
                 <mat-select placeholder="{{ls.locale.tactical_retail_sales.report_program_code}}" formControlName="programCode">
                   <mat-option value="" selected>All</mat-option>
