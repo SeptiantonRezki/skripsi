@@ -3598,6 +3598,29 @@ export const brConfig = {
       ]
     },
   },
+  dsd_multicategory: {
+    dsd_system_variable: [
+      {
+        type: "current",
+        url: "",
+        name: "DSD System Variable"
+      }
+    ],
+    dsd_report: [
+      {
+        type: "current",
+        url: "",
+        name: "DSD Report"
+      }
+    ],
+    pengaturan_dsd: [
+      {
+        type: "current",
+        url: "",
+        name: "Pengaturan DSD"
+      }
+    ],
+  },
   country_setup: {
     index: [
       {

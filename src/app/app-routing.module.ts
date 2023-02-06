@@ -202,6 +202,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'dsd-multicategory',
+    loadChildren: './pages/dsd-multicategory/dsd-multicategory.module#DSDMulticategoryModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   },

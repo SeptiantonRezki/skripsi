@@ -1,0 +1,192 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="TRS Proposal">
+    <div class="button-row" fxLayout="row">
+      <button (click)="exportProposal()" mat-raised-button type="button" class="">
+        <mat-icon>arrow_upward</mat-icon> Export XLSX
+      </button>
+      <button *ngIf="permission.buat" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/tactical-retail-sales','pengaturan-dsd','create']">
+        <mat-icon>add</mat-icon>{{ls.locale.tactical_retail_sales.proposal_add}}
+      </button>
+
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content" *ngIf="!onLoad">
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+    </div>
+    <div class="table-wrapper">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+
+        <h2 class="pl-8" *ngIf="!isShared">TRS Proposal</h2>
+
+        <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon>search</mat-icon>
+          <mat-form-field class="is-light tab-search">
+            <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <form [formGroup]="formFilter" autoComplete="off">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="is-light form-primary" style="display: none !important;">
+            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
+              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="10.5%" class="is-light form-primary">
+            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua Zona' :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="7%" class="is-light form-primary">
+            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
+                ? 'Semua Regional'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="7%" class="is-light form-primary">
+            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
+                'Semua Area'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="7%" class="is-light form-primary">
+            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
+              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
+                'all' ?
+                'Semua Salespoint'
+                :
+                item.code}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <div fxFlex="1%" class=""></div>
+
+          <mat-form-field fxFlex="7%" class="orders datepicker is-light">
+            <input matInput #date_start [matDatepicker]="date_start" (focus)="date_start.open()" placeholder="{{ls.locale.tactical_retail_sales.proposal_start_date}}"
+              formControlName="date_start" (dateChange)="setMinDate(formFilter.get('date_start').value)" readonly>
+            <button mat-button *ngIf="formFilter.get('date_start').value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="formFilter.get('date_start').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-datepicker-toggle matSuffix [for]="date_start">
+              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #date_start></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="7%" class="orders datepicker is-light">
+            <input matInput [matDatepicker]="date_end" (focus)="date_end.open()" [min]="minDate"
+              placeholder="{{ls.locale.tactical_retail_sales.proposal_end_date}}" formControlName="date_end" readonly>
+            <button mat-button *ngIf="formFilter.get('date_end').value" matSuffix mat-icon-button aria-label="Clear"
+              (click)="formFilter.get('date_end').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-datepicker-toggle matSuffix [for]="date_end">
+              <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #date_end></mat-datepicker>
+          </mat-form-field>
+
+          <div fxFlex="1%" class=""></div>
+
+          <mat-form-field fxFlex="10.5%" class="orders dropdown is-light form-primary">
+            <mat-select placeholder="{{ls.locale.tactical_retail_sales.proposal_status_trs_proposal}}" formControlName="status">
+              <mat-option *ngFor="let status of statusList" [value]="status.value">{{status.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </form>
+      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
+        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
+        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
+        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
+        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)" [selectionType]="'checkbox'"
+        [sorts]="[{prop: 'created_at', dir: 'desc'}]">
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_program_code}}" prop="program_code">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.program_code }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_area_name}}" prop="area_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.area_name }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_sales_office}}" prop="salespoint_name">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.salespoint_name }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_start_date}}" prop="start_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.start_date }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_end_date}}" prop="end_date">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.end_date }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_created}}" prop="created_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.created_at }}<br />{{row.created_by }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_modified}}" prop="updated_at">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.updated_at }}<br />{{row.updated_by }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_status}}" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.status }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [width]="200" [name]="ls.locale.tactical_retail_sales.proposal_action" headerClass="textright"
+          [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="" (click)="goDetail(row)" *ngIf="permission.lihat">
+                <mat-icon class="secondary-text">visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="" (click)="goEdit(row)" *ngIf="permission.ubah && row.status != 'finish' && row.status != 'cancel'">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" class="disabled" (click)="doNothing(row)" *ngIf="permission.ubah && (row.status == 'finish' || row.status == 'cancel')">
+                <mat-icon class="secondary-text">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="" (click)="getDetailOrder(row.program_code)">
+                <mat-icon class="secondary-text">assignment</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
