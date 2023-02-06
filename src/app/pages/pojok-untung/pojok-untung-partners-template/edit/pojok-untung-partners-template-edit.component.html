@@ -7,23 +7,22 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div class="ayo-middle py-24" fxLayout="column">
-        <!-- <form autocomplete="off" [formGroup]="formTemplatePartner"> -->
-        <form autocomplete="off">
+        <form autocomplete="off" [formGroup]="formTemplatePartner">
 
           <!-- Dropdownlist pilih partner -->
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
-              <mat-select placeholder="Pilih Partner">
-                <mat-option [value]="Shafwah">Shafwah</mat-option>
-                <mat-option [value]="BNI">BNI</mat-option>
-                <mat-option [value]="BRI">BRI</mat-option>
-                <mat-option [value]="Pegadaian">Pegadaian</mat-option>
-                <mat-option [value]="MitraAja">MitraAja</mat-option>
+              <mat-select placeholder="Pilih Partner" formControlName="partner_id">
+                <mat-option *ngFor="let item of partnerList" [value]="item.id">{{item.name}}</mat-option>
               </mat-select>
+              <mat-error
+                *ngIf="formTemplatePartner.controls['partner_id'].hasError('required') && formTemplatePartner.controls['partner_id'].touched">
+                Partner harus dipilih
+              </mat-error>
             </mat-form-field>
           </div>
 
-          <!-- START TEMPLATE PARTNER -->
+        <!-- START TEMPLATE PARTNER -->
           <div class="card">
             <div style="margin-bottom: 42px;">
               <div>
@@ -31,17 +30,17 @@
                 <div>
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
-                      <input matInput type="text" placeholder="Nama Template">
+                      <input matInput type="text" formControlName="name" placeholder="Nama Template">
                     </mat-form-field>
                   </div>
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
-                      <input matInput type="text" placeholder="Alias">
+                      <input matInput type="text" formControlName="alias" placeholder="Alias">
                     </mat-form-field>
                   </div>
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
-                      <input matInput type="text" placeholder="Catatan">
+                      <input matInput type="text" formControlName="info_detail" placeholder="Catatan">
                     </mat-form-field>
                   </div>
                 </div>
@@ -57,48 +56,55 @@
                     <h2 class="">Informasi General</h2>
                   </div>
 
-                  <div class="card-logo">
-                    <div fxLayout="column">
-                      <div class="mt-8 mb-8"><strong>Upload Logo</strong></div>
-                      <small>Besar file maksimal 100kb</small>
-                      <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
-                        <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="partner_info_icons"
-                          [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                          (fileChange)="changeImage($event, '1')">
-                          <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
-                            <span matPrefix>Pilih atau Tarik Logo disini
-                            </span>
+                  <div>
+                    <div style="margin-bottom: 42px;" formArrayName="info_general" *ngFor="let info of formTemplatePartner.get('info_general')['controls']; let i = index;">
+                      <div [formGroupName]="i">
+                        <div class="card-logo">
+                          <div fxLayout="column">
+                            <div class="mt-8 mb-8"><strong>Upload Logo</strong></div>
+                            <small>Besar file maksimal 100kb</small>
+                            <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
+                              <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="info_general_icons[i]"
+                                [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                                (fileChange)="changeImage($event, i, 'info_general')">
+                                <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
+                                  <span matPrefix>Pilih atau Tarik Logo disini
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div fxLayout="column" *ngIf="info_general_icon_urls[i]">
+                            <div class="" style="margin-top: 15px">
+                              <div>
+                                <img id="image" [src]='info_general_icon_urls[i]' width="120px" height="120px" />
+                                <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'info_general')">cancel_outline</mat-icon>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="mt-20">
+                          <div fxLayout="row" fxLayoutGap="50px" fxFlex="100">
+                            <mat-form-field class="is-light form-primary" fxFlex="50">
+                              <input matInput type="text" formControlName="info_general_title" placeholder="Judul Informasi">
+                            </mat-form-field>
+                            <div fxFlex="50"></div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <div fxLayout="row" fxLayoutGap="50px" fxFlex="100">
+                            <mat-form-field class="is-light form-primary" fxFlex="50">
+                              <input matInput type="text" formControlName="info_general_description" placeholder="Informasi">
+                            </mat-form-field>
+                            <mat-form-field class="is-light form-primary" fxFlex="50">
+                              <input matInput type="text" formControlName="info_general_link" placeholder="Link Informasi">
+                            </mat-form-field>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div fxLayout="column" *ngIf="partner_info_icon_urls">
-                      <div class="" style="margin-top: 15px">
-                        <div>
-                          <img id="image" [src]='partner_info_icon_urls' width="120px" height="120px" />
-                          <mat-icon style="cursor: pointer;" (click)="removeImage(i)">cancel_outline</mat-icon>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mt-12">
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="75">
-                      <mat-form-field class="is-light form-primary" fxFlex="50">
-                        <input matInput type="text" placeholder="Judul Informasi">
-                      </mat-form-field>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div fxLayout="row" fxLayoutGap="20px" fxFlex="75">
-                      <mat-form-field class="is-light form-primary" fxFlex="50">
-                        <input matInput type="text" placeholder="Informasi">
-                      </mat-form-field>
-                      <mat-form-field class="is-light form-primary" fxFlex="50">
-                        <input matInput type="text" placeholder="Link Informasi">
-                      </mat-form-field>
-                    </div>
+                    </div> 
                   </div>
                 </div>
                 <!--  -->
@@ -110,22 +116,19 @@
                   </div>
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
-                      <input matInput type="text" placeholder="Deskripsi">
+                      <input matInput type="text" formControlName="benefit_title" placeholder="Deskripsi">
                     </mat-form-field>
                   </div>
                   <div class="card">
-                    <!-- <div style="margin-bottom: 42px;" formArrayName="benefit" *ngFor="let ben of formTemplate.get('benefit')['controls']; let i = index;"> -->
-                    <div style="margin-bottom: 42px;">
-                      <!-- <div [formGroupName]="i"> -->
-                      <div>
+                    <div style="margin-bottom: 42px;" formArrayName="benefit" *ngFor="let ben of formTemplatePartner.get('benefit')['controls']; let i = index;">
+                      <div [formGroupName]="i">
                         <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
                           <div fxFlex="50">
                             <h3 class="">&nbsp;</h3>
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <!-- <button *ngIf="formTemplate.get('benefit').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')"> -->
-                            <button mat-raised-button color="primary" type="button">
+                            <button *ngIf="formTemplatePartner.get('benefit').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -133,31 +136,19 @@
                         <div>
                           <div fxLayout="row">
                             <div style="margin-right: 15px;">
-                              <!-- <h3>{{i+1}}.</h3> -->
-                              <h3>1.</h3>
+                              <h3>{{i+1}}.</h3>
                             </div>
                             <mat-form-field class="is-light form-primary" fxFlex="50">
-                              <!-- <input matInput type="text" formControlName="benefit_title" placeholder="Keuntungan"> -->
-                              <input matInput type="text" placeholder="Keuntungan">
+                              <input matInput type="text" formControlName="benefit_detail_title" placeholder="Keuntungan">
                             </mat-form-field>
                           </div>
-                          <!-- <textarea [froalaEditor]="options" formControlName="benefit_body" class="pb-4" fxFlex="100"></textarea> -->
-                          <textarea [froalaEditor]="options" class="pb-4" fxFlex="100"></textarea>
+                          <textarea [froalaEditor]="options" formControlName="benefit_detail_description" class="pb-4" fxFlex="100"></textarea>
                           <div>
                             <div fxLayout="column">
-                              <!-- <div class="mt-8 mb-8"><strong>Upload Icon Keuntungan {{i+1}}</strong></div> -->
-                              <div class="mt-8 mb-8"><strong>Upload Icon Keuntungan 1</strong></div>
+                              <div class="mt-8 mb-8"><strong>Upload Icon Keuntungan {{i+1}}</strong></div>
                               <small>Resolusi gambar 100x100px. File maks 100kb.</small>
                               <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
-                                <!-- <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="benefit_icons[i]"
-                                  [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                                  (fileChange)="changeImage($event, i, 'benefit')">
-                                  <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
-                                    <span matPrefix>Pilih atau Tarik Icon disini
-                                    </span>
-                                  </div>
-                                </div> -->
-                                <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="benefit_icons"
+                                <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="benefit_icons[i]"
                                   [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
                                   (fileChange)="changeImage($event, i, 'benefit')">
                                   <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
@@ -167,14 +158,11 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- <div fxLayout="column" *ngIf="benefit_icon_urls[i]"> -->
-                            <div fxLayout="column" *ngIf="benefit_icon_urls">
+                            <div fxLayout="column" *ngIf="benefit_icon_urls[i]">
                               <div class="" style="margin-top: 15px">
                                 <div>
-                                  <!-- <img id="image" [src]='benefit_icon_urls[i]' width="100px" height="100px" /> -->
-                                  <img id="image" [src]='benefit_icon_urls' width="100px" height="100px" />
-                                  <!-- <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'benefit')">cancel_outline</mat-icon> -->
-                                  <mat-icon style="cursor: pointer;">cancel_outline</mat-icon>
+                                  <img id="image" [src]='benefit_icon_urls[i]' width="100px" height="100px" />
+                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'benefit')">cancel_outline</mat-icon>
                                 </div>
                               </div>
                             </div>
@@ -183,8 +171,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <!-- <button mat-raised-button type="button" (click)="addBenefit()"> -->
-                      <button mat-raised-button type="button">
+                      <button mat-raised-button type="button" (click)="addBenefit()">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -199,22 +186,19 @@
                   </div>
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
-                      <input matInput type="text" placeholder="Deskripsi">
+                      <input matInput type="text" formControlName="step_title" placeholder="Deskripsi">
                     </mat-form-field>
                   </div>
                   <div class="card">
-                    <!-- <div style="margin-bottom: 42px;" formArrayName="step" *ngFor="let ben of formTemplate.get('step')['controls']; let i = index;"> -->
-                    <div style="margin-bottom: 42px;">
-                      <!-- <div [formGroupName]="i"> -->
-                      <div>
+                    <div style="margin-bottom: 42px;" formArrayName="step" *ngFor="let ste of formTemplatePartner.get('step')['controls']; let i = index;">
+                      <div [formGroupName]="i">
                         <div class="mb-8 data-option" fxLayout="row" fxLayoutAlign="space-between center">
                           <div fxFlex="50">
                             <h3 class="">&nbsp;</h3>
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <!-- <button *ngIf="formTemplate.get('step').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')"> -->
-                            <button mat-raised-button color="primary" type="button">
+                            <button *ngIf="formTemplatePartner.get('step').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -222,31 +206,19 @@
                         <div>
                           <div fxLayout="row">
                             <div style="margin-right: 15px;">
-                              <!-- <h3>{{i+1}}.</h3> -->
-                              <h3>1.</h3>
+                              <h3>Cara Daftar {{i+1}}</h3>
                             </div>
-                            <mat-form-field class="is-light form-primary" fxFlex="50">
-                              <!-- <input matInput type="text" formControlName="step_title" placeholder="Cara Daftar"> -->
-                              <input matInput type="text" placeholder="Cara Daftar">
-                            </mat-form-field>
+                            <!-- <mat-form-field class="is-light form-primary" fxFlex="50">
+                              <input matInput type="text" formControlName="step_detail_title" placeholder="Cara Daftar">
+                            </mat-form-field> -->
                           </div>
-                          <!-- <textarea [froalaEditor]="options" formControlName="step_body" class="pb-4" fxFlex="100"></textarea> -->
-                          <textarea [froalaEditor]="options" class="pb-4" fxFlex="100"></textarea>
+                          <textarea [froalaEditor]="options" formControlName="step_detail_content" class="pb-4" fxFlex="100"></textarea>
                           <div>
                             <div fxLayout="column">
-                              <!-- <div class="mt-8 mb-8"><strong>Upload Banner Cara Daftar {{i+1}}</strong></div> -->
-                              <div class="mt-8 mb-8"><strong>Upload Banner Cara Daftar 1</strong></div>
+                              <div class="mt-8 mb-8"><strong>Upload Banner Cara Daftar {{i+1}}</strong></div>
                               <small>Resolusi gambar 150x200px. File maks 1mb.</small>
                               <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
-                                <!-- <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="step_icons[i]"
-                                  [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                                  (fileChange)="changeImage($event, i, 'step')">
-                                  <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
-                                    <span matPrefix>Pilih atau Tarik Banner disini
-                                    </span>
-                                  </div>
-                                </div> -->
-                                <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="step_icons"
+                                <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="step_icons[i]"
                                   [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
                                   (fileChange)="changeImage($event, i, 'step')">
                                   <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
@@ -256,14 +228,11 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- <div fxLayout="column" *ngIf="step_icon_urls[i]"> -->
-                            <div fxLayout="column" *ngIf="step_icon_urls">
+                            <div fxLayout="column" *ngIf="step_icon_urls[i]">
                               <div class="" style="margin-top: 15px">
                                 <div>
-                                  <!-- <img id="image" [src]='step_icon_urls[i]' width="100px" height="100px" /> -->
-                                  <img id="image" [src]='step_icon_urls' width="100px" height="100px" />
-                                  <!-- <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'step')">cancel_outline</mat-icon> -->
-                                  <mat-icon style="cursor: pointer;">cancel_outline</mat-icon>
+                                  <img id="image" [src]='step_icon_urls[i]' width="100px" height="100px" />
+                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'step')">cancel_outline</mat-icon>
                                 </div>
                               </div>
                             </div>
@@ -272,8 +241,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <!-- <button mat-raised-button type="button" (click)="addStep()"> -->
-                      <button mat-raised-button type="button">
+                      <button mat-raised-button type="button" (click)="addStep()">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -281,28 +249,147 @@
                 </div>
                 <!--  -->
 
-                <!-- Agreement Text -->
+                <!-- Upload Banner -->
                 <div class="card">
                   <div fxLayout="row" fxLayoutAlign="start center">
-                    <h2 class="">Agreement Text</h2>
+                    <h2 class="">Upload Banner</h2>
                   </div>
-                  <div fxLayout="row">
-                    <mat-form-field class="is-light form-primary" fxFlex="100">
-                      <input matInput type="text" placeholder="Agreement Text">
-                    </mat-form-field>
+                  <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="space-between" fxFlex="75">
+                    <div>
+                      <div fxLayout="column">
+                        <h2>Gambar Banner 1</h2>
+                        <small>Besar file maksimal 2mb</small>
+                        <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                            [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                            (fileChange)="changeImage($event, '1')">
+                            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                              <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" *ngIf="imageUrl" class="pt-24">
+                        <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                          <div class="delete">
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('1')">cancel_outline</mat-icon>
+                          </div>
+                          <div>
+                            <img id="image" [src]='imageUrl' width="410px" height="410px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div fxLayout="column">
+                        <h2>Gambar Banner 2</h2>
+                        <small>Besar file maksimal 2mb</small>
+                        <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files2"
+                            [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                            (fileChange)="changeImage($event, '2')">
+                            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                              <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" *ngIf="imageUrl2" class="pt-24">
+                        <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                          <div class="delete">
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('2')">cancel_outline</mat-icon>
+                          </div>
+                          <div>
+                            <img id="image" [src]='imageUrl2' width="410px" height="410px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="space-between" fxFlex="75">
+                    <div>
+                      <div fxLayout="column">
+                        <h2>Gambar Banner 3</h2>
+                        <small>Besar file maksimal 2mb</small>
+                        <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files3"
+                            [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                            (fileChange)="changeImage($event, '3')">
+                            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                              <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" *ngIf="imageUrl3" class="pt-24">
+                        <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                          <div class="delete">
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('3')">cancel_outline</mat-icon>
+                          </div>
+                          <div>
+                            <img id="image" [src]='imageUrl3' width="410px" height="410px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div fxLayout="column">
+                        <h2>Gambar Banner 4</h2>
+                        <small>Besar file maksimal 2mb</small>
+                        <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                          <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files4"
+                            [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                            (fileChange)="changeImage($event, '4')">
+                            <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                              <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div fxLayout="column" *ngIf="imageUrl4" class="pt-24">
+                        <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                          <div class="delete">
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('4')">cancel_outline</mat-icon>
+                          </div>
+                          <div>
+                            <img id="image" [src]='imageUrl4' width="410px" height="410px" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <!--  -->
+                <!-- End Upload Banner -->
+
               </div>
             </div>
           </div>
-          <!-- END TEMPLATE PARTNER -->
-          
+
+          <!-- Agreement Text -->
+          <div class="card">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <h2 class="">Agreement Text</h2>
+            </div>
+            <div fxLayout="row">
+              <mat-form-field class="is-light form-primary" fxFlex="100">
+                <input matInput type="text" formControlName="agreement_text" placeholder="Agreement Text">
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- End Agreement Text -->
+        <!-- END TEMPLATE PARTNER -->
         </form>
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
         Simpan
       </button>
     </div>

@@ -847,6 +847,19 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
         delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing/${context.id}`
       },
+      pojok_untung_template: {
+        
+      },
+      pojok_untung_partners_list: {
+        
+      },
+      pojok_untung_partners_template: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-partner-id`,
+        get_partner_list : `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-list-by-type`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-id/${context.id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`
+      },
       sequencing: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
         show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,

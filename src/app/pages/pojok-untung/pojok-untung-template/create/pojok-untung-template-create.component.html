@@ -7,52 +7,67 @@
   <div class="content p-24">
     <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
       <div>
-        <!-- <form [formGroup]="formTemplatePojokUntung"> -->
-        <form>
+        <form [formGroup]="formTemplatePojokUntung">
           <div class="card">
             <div>
               <div fxLayout="row" fxLayoutAlign="start center">
                 <h2 class="">Informasi General</h2>
               </div>
-              <div fxLayout="row">
-                <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
-                  <input matInput type="text" placeholder="Judul Deskripsi">
-                </mat-form-field>
-              </div>
-              <div fxLayout="row">
-                <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
-                  <input matInput type="text" placeholder="Deskripsi">
-                </mat-form-field>
-              </div>
+              <div formArrayName="informasi_general" *ngFor="let info of formTemplatePojokUntung.get('informasi_general')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div fxLayout="row">
+                  <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                    <input matInput type="text" formControlName="title" placeholder="Judul Deskripsi">
+                  </mat-form-field>
+                  </div>
+                  <div fxLayout="row">
+                    <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                      <input matInput type="text" formControlName="description" placeholder="Deskripsi">
+                    </mat-form-field>
+                  </div>
 
-              <div fxLayout="row" fxLayout.xs="column">
-                <!-- <div formArrayName="desc_detail" *ngFor="let detail of formTemplatePojokUntung.get('desc_detail')['controls']; let i = index;">
-                  <div [formGroupName]="i"> -->
-                    <div fxLayout="row" fxFlex="50">
-                      <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="100">
-                        <input matInput type="text" placeholder="Detail Deskripsi">
-                      </mat-form-field>
+                  <div>
+                    <div formArrayName="description_detail" *ngFor="let detail of formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls; let i = index;">
+                      <div fxFlex="100">
+                        <div fxLayout="row">
+                          <div style="margin-right: 15px;">
+                            <h3>{{i+1}}.</h3>
+                          </div>
+                          <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="100">
+                            <input matInput [formControlName]="i" type="text" placeholder="Detail Deskripsi">
+                          </mat-form-field>
+                          <div fxLayout="row wrap" fxLayoutAlign="start center"
+                            fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                            <button [disabled]="formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls.length <= 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  <!-- </div>
-                </div> -->
-                <div fxLayoutAlign="start center" fxFlex="50">
-                  <!-- <button mat-raised-button type="button" (click)="addDescDetail()"> -->
-                  <button mat-raised-button type="button" (click)="addDescDetail()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
-              </div>
+                    <div fxLayoutAlign="start center">
+                      <button mat-raised-button type="button" (click)="addDescDetail()">
+                        <mat-icon>add</mat-icon>
+                        Tambah Detail Deskripsi
+                      </button>
+                    </div>
+                  </div>
 
-              <div fxLayout="row">
-                <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
-                  <input matInput type="text" placeholder="Catatan">
-                </mat-form-field>
+                  <div fxLayout="row" class="mt-24">
+                    <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                      <input matInput type="text" formControlName="notes" placeholder="Catatan">
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </form>
 
         <div class="card">
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <h2 class="">Upload Banner</h2>
+          </div>
           <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="space-between" fxFlex="75">
             <div>
               <div fxLayout="column">
@@ -170,9 +185,9 @@
           <div>
             <h2>Kisah Sukses SRC</h2>
             <div class="ayo-middle p-24" fxLayout="column">
-              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="fileStory"
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="story_image"
                 [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
-                (fileChange)="changeImage($event)">
+                (fileChange)="changeImage($event, i, 'story')">
                 <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
                   <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
                   <br>
@@ -182,13 +197,13 @@
                 </div>
               </div>
 
-              <div *ngIf="imageStory" class="pt-48">
+              <div *ngFor="let story_image_url of story_image_urls;let i = index" class="pt-48">
                 <div class="">
                   <div class="delete">
-                    <mat-icon style="cursor: pointer;" (click)="removeImage()">cancel_outline</mat-icon>
+                    <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'story')">cancel_outline</mat-icon>
                   </div>
                   <div class="image-sku">
-                    <img id="image" [src]='imageStory' />
+                    <img id="image" [src]="story_image_url" width="360px" height="160px"/>
                   </div>
                 </div>
               </div>
@@ -198,7 +213,7 @@
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
         Simpan
       </button>
     </div>

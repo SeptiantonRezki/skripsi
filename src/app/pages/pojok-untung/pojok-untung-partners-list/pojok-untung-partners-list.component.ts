@@ -13,13 +13,15 @@ export class PojokUntungPartnersListComponent implements OnInit {
   rows: any[] = [
     {
       id: 1,
-      name: "BPJS",
-      type: "Asuransi"
+      name: "Shafwah",
+      type: "Perjalanan",
+      status: "Aktif"
     },
     {
       id: 2,
       name: "BRI",
-      type: "Keuangan"
+      type: "Keuangan",
+      status: "Tidak Aktif"
     }
   ];
 
@@ -38,8 +40,8 @@ export class PojokUntungPartnersListComponent implements OnInit {
     this.router.navigate(["pojok-untung", "partners-list", "create"]);
   }
 
-  editPartner(): void {
-    this.router.navigate(["pojok-untung", "partners-list", "edit"]);
+  editPartner(param?: any): void {
+    this.router.navigate(["pojok-untung", "partners-list", "edit", param.id]);
   }
 
 }

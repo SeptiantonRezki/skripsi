@@ -35,7 +35,7 @@ const routes: Routes = [
   //   // canActivate: [PageGuard]
   // },
   // {
-  //   path: "template-pojok-untung/edit",
+  //   path: "template-pojok-untung/edit/:id",
   //   component: PojokUntungTemplateEditComponent,
   //   data: {
   //     breadcrumbs: brConfig.pojokuntung.templatePojokUntung.edit
@@ -59,7 +59,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "partners-list/edit",
+    path: "partners-list/edit/:id",
     component: PojokUntungPartnersListEditComponent,
     data: {
       breadcrumbs: brConfig.pojokuntung.partners.edit
@@ -83,7 +83,7 @@ const routes: Routes = [
     // canActivate: [PageGuard]
   },
   {
-    path: "partners-template/edit",
+    path: "partners-template/edit/:id",
     component: PojokUntungPartnersTemplateEditComponent,
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersTemplate.edit
