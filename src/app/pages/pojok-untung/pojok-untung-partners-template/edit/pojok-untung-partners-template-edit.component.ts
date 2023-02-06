@@ -365,7 +365,7 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
   submit() {
     if (this.formTemplatePartner.valid) {
       if (this.files || this.files2 || this.files3 || this.files4) {
-        // this.dataService.showLoading(true);
+        this.dataService.showLoading(true);
         if (this.files && this.files.name) {
           this.files = new File([this.files], this.files.name.split(" ").join("_"), {type: this.files.type});
         }

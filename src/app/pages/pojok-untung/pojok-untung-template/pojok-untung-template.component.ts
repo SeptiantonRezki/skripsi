@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { DataService } from 'app/services/data.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Router } from '@angular/router';
 
@@ -19,6 +20,7 @@ export class PojokUntungTemplateComponent implements OnInit {
   @ViewChild('table') table: DatatableComponent;
 
   constructor(
+    private dataService: DataService,
     private ls: LanguagesService,
     private router: Router,
     ) { }
@@ -31,8 +33,9 @@ export class PojokUntungTemplateComponent implements OnInit {
     this.router.navigate(["pojok-untung", "template-pojok-untung", "create"]);
   }
 
-  editTemplate(): void {
-    this.router.navigate(["pojok-untung", "template-pojok-untung", "edit"]);
+  editTemplate(param?: any): void {
+    this.dataService.setToStorage("edit_template_pojok_untung", param);
+    this.router.navigate(["pojok-untung", "template-pojok-untung", "edit", param.id]);
   }
 
 }

@@ -11,5 +11,15 @@ export class PojokUntungTemplateService extends BaseService {
   constructor(http: HttpClient) {
     super(http);
   }
+
+  get(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get');
+    return this.getApi(url, queryParams);
+  }
+
+  store(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'store');
+    return this.postApi(url, body);
+  }
   
 }

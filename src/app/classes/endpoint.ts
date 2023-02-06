@@ -848,7 +848,8 @@ export class Endpoint {
         delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing/${context.id}`
       },
       pojok_untung_template: {
-        
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`,
+        store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`
       },
       pojok_untung_partners_list: {
         
