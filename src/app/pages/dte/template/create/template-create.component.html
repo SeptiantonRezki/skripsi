@@ -601,9 +601,9 @@
                         <div fxFlex>{{'upc_code.upc_code_needed' | translate}}:</div>
                         <div fxLayout="row" fxFlex>
                           <mat-form-field fxFlex="100" class="question is-light">
-                            <input class="inputUPC" matInput 
+                            <input class="inputUPC" matInput
                             formControlName="upcCodeMax"
-                            type="number" min="1" 
+                            type="number" min="1"
                             onkeypress='return event.charCode >= 48 && event.charCode <= 57 ? (event.target.value.length === 0 && event.which ===48) ? false : true: false'>
                             <mat-error>
                               {{'upc_code.upc_code_needed_required' | translate}}
@@ -664,7 +664,7 @@
                                 [readonly]="checkIsRadioTypeWasOther(additional.value)">
                             </mat-form-field>
                           </div>
-                          
+
                           <ng-container *ngIf="item.get('typeSelection').value['value'] !== 'checkbox'">
                             <button
                               id="btnAddNext"
@@ -677,7 +677,7 @@
                                 add_circle
                               </mat-icon>
                             </button>
-  
+
                             <!-- SELECT NEXT QUESTION -->
                             <mat-form-field
                               fxFlex
@@ -695,7 +695,7 @@
                                   {{'global.button.finish' | translate}}</mat-option>
                               </mat-select>
                             </mat-form-field>
-  
+
                             <button
                               id="btnRemoveNext"
                               (click)="showNextQuestion(i, j)"
@@ -716,7 +716,7 @@
                           </button>
                         </div>
                       </div>
-                      
+
                       <div fxFlex="80" class="py-2" fxLayout="row" fxFlex="1 0 auto"
                         *ngIf="item.get('typeSelection').value['value'] == 'stock_check'">
                         <mat-icon id="checkboxDirectToBelanja" class="secondary-text direct-belanja" fxFlex="5"
@@ -766,7 +766,7 @@
                             add_circle
                           </mat-icon>
                         </button>
-  
+
                         <!-- SELECT NEXT QUESTION -->
                         <mat-form-field
                           fxFlex
@@ -784,7 +784,7 @@
                               {{'global.button.finish' | translate}}</mat-option>
                           </mat-select>
                         </mat-form-field>
-  
+
                         <button
                           id="btnRemoveNext"
                           fxFlex="none"
@@ -807,7 +807,7 @@
                 </div>
 
                 <div fxLayout="row wrap" fxLayout.lt-md="column" class="pb-24" fxLayoutGap="20px"
-                  fxLayoutGap.lt-md="0px" *ngIf="templateListImageIR[i]['ir_id']" style="margin-top: 25px;">
+                  fxLayoutGap.lt-md="0px" *ngIf="templateListImageIR[i]['ir_id'] || templateListImageIR[i]['ir_code']" style="margin-top: 25px;">
                   <div fxFlex="45" *ngIf="item.get('type').value !== 'stock_check_ir'">
                     <div class="banner-image-template-selected">
                       <div id="banner">
