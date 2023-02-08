@@ -11,6 +11,7 @@ import { PojokUntungPartnersListEditComponent } from './pojok-untung-partners-li
 import { PojokUntungPartnersTemplateComponent } from './pojok-untung-partners-template/pojok-untung-partners-template.component';
 import { PojokUntungPartnersTemplateCreateComponent } from './pojok-untung-partners-template/create/pojok-untung-partners-template-create.component';
 import { PojokUntungPartnersTemplateEditComponent } from './pojok-untung-partners-template/edit/pojok-untung-partners-template-edit.component';
+import { PojokUntungPartnersRegisteredComponent } from './pojok-untung-partners-registered/index/pojok-untung-partners-registered.component';
 
 const routes: Routes = [
   {
@@ -87,6 +88,14 @@ const routes: Routes = [
     component: PojokUntungPartnersTemplateEditComponent,
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersTemplate.edit
+    },
+    // canActivate: [PageGuard]
+  },
+  {
+    path: "registered-partners",
+    component: PojokUntungPartnersRegisteredComponent,
+    data: {
+      breadcrumbs: brConfig.pojokuntung.partnersRegistered.index
     },
     // canActivate: [PageGuard]
   }

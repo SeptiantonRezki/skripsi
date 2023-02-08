@@ -179,7 +179,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
       this.pagination.page = 1;
       this.offsetPagination = 0;
     } else {
-      const page = this.dataService.getFromStorage("page_pojok_untung");
+      const page = this.dataService.getFromStorage("page_pojok_untung_partners_template");
       this.pagination.page = page;
       this.offsetPagination = page ? (page - 1) : 0;
     }
@@ -263,4 +263,28 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     this.router.navigate(["pojok-untung", "partners-template", "edit", param.id]);
   }
 
+  deleteTemplate(id) {
+    this.id = id;
+    let data = {
+      titleDialog: "Hapus Template",
+      captionDialog: "Apakah anda yakin untuk menghapus template ini ?",
+      confirmCallback: this.confirmDelete.bind(this),
+      buttonText: ["Hapus", "Batal"]
+    };
+    this.dialogService.openCustomConfirmationDialog(data);
+  }
+
+  confirmDelete() {
+    this.PojokUntungPartnersTemplateService.delete({id: this.id}).subscribe(res => {
+      if (res.status) {
+        this.dialogService.brodcastCloseConfirmation();
+        this.getList(true);
+
+        this.dialogService.openSnackBar({ message: "Data Berhasil Dihapus" });
+      }
+    },
+    err => {
+      this.dialogService.openSnackBar({ message: err.error.message });
+    });
+  }
 }

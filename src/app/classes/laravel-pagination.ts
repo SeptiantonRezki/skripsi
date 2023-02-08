@@ -24,6 +24,7 @@ export class Page {
   payment_type: string;
   status_dashboard: string;
   partner_id: string;
+  partner_type_id: string;
   
   constructor() {
     this.per_page = 15;
@@ -44,6 +45,7 @@ export class Page {
     this.type_banner = '';
     this.is_valid = 0;
     this.partner_id = "";
+    this.partner_type_id = "";
   }
 
   public static renderPagination(pagination, response) {

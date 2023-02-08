@@ -3159,6 +3159,15 @@ export const brConfig = {
           name: "Ubah Template Partner"
         }
       ],
+    },
+    partnersRegistered: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Partner Teregistrasi"
+        }
+      ]
     }
   },
   virtualaccount: {
