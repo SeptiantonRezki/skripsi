@@ -215,14 +215,14 @@
                           <textarea [froalaEditor]="options" formControlName="step_detail_content" class="pb-4" fxFlex="100"></textarea>
                           <div>
                             <div fxLayout="column">
-                              <div class="mt-8 mb-8"><strong>Upload Banner Cara Daftar {{i+1}}</strong></div>
+                              <div class="mt-8 mb-8"><strong>Upload Image Cara Daftar {{i+1}}</strong></div>
                               <small>Resolusi gambar 150x200px. File maks 1mb.</small>
                               <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
                                 <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="step_icons[i]"
                                   [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
                                   (fileChange)="changeImage($event, i, 'step')">
                                   <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
-                                    <span matPrefix>Pilih atau Tarik Banner disini
+                                    <span matPrefix>Pilih atau Tarik Image disini
                                     </span>
                                   </div>
                                 </div>

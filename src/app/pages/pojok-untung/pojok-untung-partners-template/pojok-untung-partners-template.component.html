@@ -66,8 +66,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">
-              <!-- <button mat-icon-button color="primary" (click)="deleteTemplate(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center"> -->
-              <button mat-icon-button color="primary" fxLayoutAlign="center center">
+              <button mat-icon-button color="primary" (click)="deleteTemplate(row.id)" fxLayoutAlign="center center">
                 <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
                 <ng-template #showIcon>
                   <mat-icon>delete</mat-icon>

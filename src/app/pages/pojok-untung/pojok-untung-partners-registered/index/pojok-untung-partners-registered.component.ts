@@ -25,7 +25,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   pagination: Page = new Page();
   onLoad: boolean;
   offsetPagination: any;
-  defaultPartnerType: any[] = [{ id: '', name: "Semua Jenis Partner" }];
+  defaultPartnerType: any[] = [{ id: -9, name: "Semua Jenis Partner" }];
 
   keyUp = new Subject<string>();
 
@@ -35,7 +35,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   
   partnerTypeList: any[] = [
     {
-      id: '',
+      id: -9,
       name: "Semua Jenis Partner"
     },
     {
@@ -107,8 +107,8 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     if (string === 'search') {
       this.pagination.search = value;
     }
-    if (string === 'partner_type_id') {
-      this.pagination.partner_type_id = value;
+    if (string === 'partner_type') {
+      this.pagination.partner_type = value;
     }
 
     if (value) {
@@ -127,8 +127,8 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   }
 
   changeRegisteredPartnerType(param?: any){
-    // this.dataService.setToStorage("filter_partner", param);
-    this.updateFilter('partner_type_id', param);
+    // this.dataService.setToStorage("filter_partners_registered", param);
+    this.updateFilter('partner_type', param);
   }
 
   export() {
