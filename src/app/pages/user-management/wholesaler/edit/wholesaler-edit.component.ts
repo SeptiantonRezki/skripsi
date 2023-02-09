@@ -173,7 +173,7 @@ export class WholesalerEditComponent {
 
     this.formWs = this.formBuilder.group({
       name: ["", Validators.required],
-      email: ["", Validators.required],
+      email: [""],
       address: ["", Validators.required],
       gsw: [""],
       code: ["", Validators.required],

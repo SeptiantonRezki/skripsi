@@ -91,7 +91,7 @@ export class WholesalerCreateComponent {
 
     this.verticalStepperStep1 = this.formBuilder.group({
       name: ["", Validators.required],
-      email: ["", Validators.required],
+      email: [""],
       address: ["", Validators.required],
       business_code: ["", Validators.required],
     });
