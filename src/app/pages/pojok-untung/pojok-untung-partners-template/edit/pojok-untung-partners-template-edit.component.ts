@@ -7,6 +7,7 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 import { Config } from 'app/classes/config';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PojokUntungPartnersTemplateService } from 'app/services/pojok-untung/pojok-untung-partners-template.service';
+import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
 
 @Component({
   selector: 'app-pojok-untung-partners-template-edit',
@@ -17,33 +18,8 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
   formTemplatePartner: FormGroup;
   arr: FormArray;
   indexDelete: any;
-  // partnerList: Array<any> = [];
-  partnerList: Array<any> = [
-    {
-      id: 1,
-      name: "Shafwah"
-    },
-    {
-      id: 2,
-      name: "BRI"
-    },
-    {
-      id: 3,
-      name: "BNI"
-    },
-    {
-      id: 4,
-      name: "Pegadaian"
-    },
-    {
-      id: 5,
-      name: "BPJS Ketenagakerjaan"
-    },
-    {
-      id: 6,
-      name: "Anter Aja"
-    },
-  ];
+  partner_type: any = '-9';
+  partnerList: Array<any> = [];
   public options: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Penjelasan");
 
   imageUrl: any;
@@ -74,8 +50,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
-    private PojokUntungPartnersTemplateService: PojokUntungPartnersTemplateService
-  ) {
+    private PojokUntungPartnersTemplateService: PojokUntungPartnersTemplateService,
+    private PojokUntungPartnersListService: PojokUntungPartnersListService
+    ) {
     this.shortDetail = this.dataService.getFromStorage('edit_pojok_untung_partners_template');
    }
 
@@ -83,11 +60,11 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
     this.formTemplatePartner = this.formBuilder.group({
       partner_id: ["", Validators.required],
       name: ["", Validators.required],
-      alias: ["", Validators.required],
+      alias: [""],
       info_detail: [""],
-      agreement_text: ["", Validators.required],
-      benefit_title: ["", Validators.required],
-      step_title: ["", Validators.required],
+      agreement_text: [""],
+      benefit_title: [""],
+      step_title: [""],
       info_general: this.formBuilder.array([]),
       benefit: this.formBuilder.array([]),
       step: this.formBuilder.array([]),
@@ -97,9 +74,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
       banner_4: [],
     });
 
-    // this.PojokUntungPartnersTemplateService.getPartnerList({}).subscribe(res => {
-    //   this.partnerList = res.data
-    // }, err=> { })
+    this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
+      this.partnerList = res.data;
+    }, err=> { })
 
     this.getDetail();
   }
@@ -182,9 +159,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
 
   createInfoGeneralFormArray() {
     return this.formBuilder.group({
-      info_general_title: ["", Validators.required],
-      info_general_description: ["", Validators.required],
-      info_general_link: ["", Validators.required]
+      info_general_title: [""],
+      info_general_description: [""],
+      info_general_link: [""]
     })
   }
 
@@ -195,8 +172,8 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
 
   createBenefitFormArray() {
     return this.formBuilder.group({
-      benefit_detail_title: ["", Validators.required],
-      benefit_detail_description: ["", Validators.required],
+      benefit_detail_title: [""],
+      benefit_detail_description: [""],
     })
   }
 
@@ -207,8 +184,8 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
 
   createStepFormArray(): FormGroup {
     return this.formBuilder.group({
-      // step_detail_title: ["", Validators.required],
-      step_detail_content: ["", Validators.required],
+      // step_detail_title: [""],
+      step_detail_content: [""],
     })
   }
 
@@ -364,7 +341,7 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
 
   submit() {
     if (this.formTemplatePartner.valid) {
-      if (this.files || this.files2 || this.files3 || this.files4) {
+      // if (this.files || this.files2 || this.files3 || this.files4) {
         this.dataService.showLoading(true);
         if (this.files && this.files.name) {
           this.files = new File([this.files], this.files.name.split(" ").join("_"), {type: this.files.type});
@@ -427,12 +404,12 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
           this.router.navigate(['pojok-untung', 'partners-template']);
         })
 
-      } else {
-        this.dialogService.openSnackBar({
-          message: "Banner harus diisi minimal 1!"
-        });
-        commonFormValidator.validateAllFields(this.formTemplatePartner);
-      }
+      // } else {
+      //   this.dialogService.openSnackBar({
+      //     message: "Banner harus diisi minimal 1!"
+      //   });
+      //   commonFormValidator.validateAllFields(this.formTemplatePartner);
+      // }
     } else {
       this.dialogService.openSnackBar({
         message: "Silahkan lengkapi pengisian data!"

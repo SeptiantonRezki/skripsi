@@ -10,6 +10,7 @@ import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { DialogService } from 'app/services/dialog.service';
 import { PojokUntungPartnersTemplateService } from 'app/services/pojok-untung/pojok-untung-partners-template.service';
+import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
 
 @Component({
   selector: 'app-pojok-untung-partners-template',
@@ -25,76 +26,20 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
   pagination: Page = new Page();
   onLoad: boolean;
   offsetPagination: any;
-  defaultPartner: any[] = [{ id: '', name: "Semua Partner" }];
-
+  
   keyUp = new Subject<string>();
-
+  
   @ViewChild("activeCell")
   @ViewChild('table') table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
-
-  // partnerList: any[];
-  partnerList: any[] = [
-    {
-      id: '',
-      name: "Semua Partner"
-    },
-    {
-      id: 1,
-      name: "Shafwah"
-    },
-    {
-      id: 2,
-      name: "BRI"
-    },
-    {
-      id: 3,
-      name: "BNI"
-    },
-    {
-      id: 4,
-      name: "Pegadaian"
-    },
-    {
-      id: 5,
-      name: "BPJS Ketenagakerjaan"
-    },
-    {
-      id: 6,
-      name: "Anter Aja"
-    },
-  ];
+  
+  partner_type: any = '-9';
+  defaultPartner: any[] = [{ id: '', partner_name: "Semua Partner" }];
+  partnerList: any[];
+  
   id: any[];
   rows: any[];
-  // rows: any[] = [
-  //   {
-  //     id: 1,
-  //     name: "Pembukaan Rekening",
-  //     alias: "Buka Rekening",
-  //     partner_name: "BRI",
-  //     type: "Keuangan"
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Pengaktifan QRIS",
-  //     alias: "Aktifkan QRIS Statis",
-  //     partner_name: "BRI",
-  //     type: "Keuangan"
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Pendaftaran BPJSTK",
-  //     alias: "Daftra BPJSTK",
-  //     partner_name: "BPJS",
-  //     type: "Asuransi"
-  //   }
-  // ];
-
-  // templateControl = new FormControl();
-  // options: any[] = [];
-  // filteredOptions: Observable<any[]>;
-  // FILTER_BY: string = 'fullname'
-
+  
   permission: any;
   roles: PagesName = new PagesName();
 
@@ -104,19 +49,11 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private PojokUntungPartnersTemplateService: PojokUntungPartnersTemplateService,
+    private PojokUntungPartnersListService: PojokUntungPartnersListService,
     private dialogService: DialogService,
     ) {
       this.onLoad = true;
       // this.permission = this.roles.getRoles('principal.pojok_untung');
-
-      // this.getOptionText = this.getOptionText.bind(this);
-      // this.templateControl.valueChanges.debounceTime(400).subscribe(val => {
-      //   let query = (typeof val === 'object') ? val[this.FILTER_BY] : val;
-        
-      //   if (query.length >= 3) {
-      //     this.filteredOptions = this._filter(query);
-      //   }
-      // })
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -134,36 +71,13 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.formFilter.get('partner_list').setValue(this.defaultPartner[0].id);
-    // this.rows;
+    // this.formFilter.get('partner_list').setValue(this.defaultPartner[0].id);
+    this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
+      this.partnerList = this.defaultPartner.concat(res.data);
+    }, err=> { })
+
     this.getList(true);
   }
-
-  // private _filter(value: any): Observable<any[]> {
-  //   const filterValue = value.toLowerCase();
-  //   this.loadingIndicator = true;
-  //   this.loadingSearch = true;
-  //   return this.PojokUntungPartnersTemplateService.get({search: filterValue})
-  //     .pipe(
-  //       map(response => {
-  //         this.loadingIndicator = false;
-  //         this.loadingSearch = false;
-  //         return response.data.filter(option => {
-  //           if (!filterValue) return false;
-  //           return (option[this.FILTER_BY].toLowerCase().includes(filterValue) && filterValue);
-  //         })
-  //       }
-  //       )
-  //     )
-  // }
-
-  // getOptionText(option) {
-  //   return (option && option[this.FILTER_BY]) ? option[this.FILTER_BY] : '';
-  // }
-
-  // clear() {
-  //   this.templateControl.setValue('');
-  // }
 
   updateFilter(string, value) {
     this.loadingIndicator = true;

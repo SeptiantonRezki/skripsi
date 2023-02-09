@@ -13,7 +13,7 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select placeholder="Pilih Partner" formControlName="partner_id">
-                <mat-option *ngFor="let item of partnerList" [value]="item.id">{{item.name}}</mat-option>
+                <mat-option *ngFor="let item of partnerList" [value]="item.id">{{item.partner_name}}</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="formTemplatePartner.controls['partner_id'].hasError('required') && formTemplatePartner.controls['partner_id'].touched">
@@ -36,6 +36,10 @@
                   <div fxLayout="row">
                     <mat-form-field class="is-light form-primary" fxFlex="50">
                       <input matInput type="text" formControlName="alias" placeholder="Alias">
+                      <mat-error
+                        *ngIf="formTemplatePartner.controls['name'].hasError('required') && formTemplatePartner.controls['name'].touched">
+                        Nama Template harus diisi
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div fxLayout="row">
