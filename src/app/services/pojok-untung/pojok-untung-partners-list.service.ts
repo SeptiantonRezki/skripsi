@@ -12,4 +12,24 @@ export class PojokUntungPartnersListService extends BaseService {
     super(http);
   }
 
+  get(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get');
+    return this.getApi(url, queryParams);
+  }
+
+  show(context, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'show', context);
+    return this.getApi(url, queryParams);
+  }
+
+  store(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'store');
+    return this.postApi(url, body);
+  }
+
+  delete(context): Observable<any> {
+    const url = this.getUrl(this.namespace, 'delete', context);
+    return this.deleteApi(url);
+  }
+
 }
