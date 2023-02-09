@@ -48,7 +48,7 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   imageUrl2: any;
   imageUrl3: any;
   imageUrl4: any;
-  
+
   files: File;
   files2: File;
   files3: File;
@@ -70,6 +70,12 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initForm();
+
+    this.getDetail();
+  }
+
+  initForm() {
     this.formTemplatePojokUntung = this.formBuilder.group({
       informasi_general: this.formBuilder.array([]),
       banner_1: [],
@@ -77,63 +83,73 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
       banner_3: [],
       banner_4: [],
     });
-
-    this.getDetail();
   }
 
   getDetail() {
     this.dataService.showLoading(true);
     this.PojokUntungTemplateService.get().subscribe(res => {
-    this.detailTemplate = res.data;
+      this.detailTemplate = res.data[0] || res.data;
 
-    let informasiGeneralData = this.detailTemplate && this.detailTemplate.informasi_general;
+      let informasiGeneralData;
+      if (this.detailTemplate) {
+        if ((typeof this.detailTemplate.informasi_general) as string === 'string') {
+          informasiGeneralData = JSON.parse(this.detailTemplate.informasi_general);
+        } else {
+          informasiGeneralData = this.detailTemplate.informasi_general;
+        }
+      }
 
-    let informasi_general = this.formTemplatePojokUntung.get("informasi_general") as FormArray;
+      let informasi_general = this.formTemplatePojokUntung.get("informasi_general") as FormArray;
 
-    if (!informasiGeneralData || !informasiGeneralData.length) {
-      informasi_general.push(this.createInformasiGeneralFormArray());
-      return;
-    }
+      this.dataService.showLoading(false);
+      if (!informasiGeneralData || !informasiGeneralData.length) {
+        informasi_general.push(this.createInformasiGeneralFormArray());
+      } else {
+        informasiGeneralData.forEach((item, idx) => {
+          let description_detail_array = [];
+          if (item.description_detail && item.description_detail.length) {
+            description_detail_array = item.description_detail.map((item_detail) => {
+              return this.formBuilder.control(item_detail);
+            });
+          } else {
+            description_detail_array = [this.formBuilder.control('')];
+          };
 
-    informasiGeneralData.forEach((item, idx) => {
-      let description_detail_array = [];
-      if (item.description_detail && item.description_detail.length) {
-        description_detail_array = item.description_detail.map((item_detail) => {
-          return this.formBuilder.control(item_detail);
+          informasi_general.push(this.formBuilder.group({
+            title: item.title,
+            description: item.description,
+            description_detail: this.formBuilder.array(description_detail_array),
+            notes: item.notes
+          }));
+        });
+      }
+
+      this.formTemplatePojokUntung.get("banner_1").setValue(this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : [] : []);
+      this.formTemplatePojokUntung.get("banner_2").setValue(this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : [] : []);
+      this.formTemplatePojokUntung.get("banner_3").setValue(this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : [] : []);
+      this.formTemplatePojokUntung.get("banner_4").setValue(this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : [] : []);
+
+      this.files = this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : null : null;
+      this.files2 = this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : null : null;
+      this.files3 = this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : null : null;
+      this.files4 = this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : null : null;
+
+      this.imageUrl = this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : null : null;
+      this.imageUrl2 = this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : null : null;
+      this.imageUrl3 = this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : null : null;
+      this.imageUrl4 = this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : null : null;
+
+      if (this.detailTemplate.story && this.detailTemplate.story.length) {
+        this.detailTemplate.story.forEach((item, idx) => {
+          item.file_name ? ["undefined", "null"].indexOf(item.file_name) === -1 ? this.story_images.push(item.file_name) : [] : [];
+          item.file_name ? ["undefined", "null"].indexOf(item.file_name) === -1 ? this.story_image_urls.push(item.file_name) : [] : [];
+          // console.log('story images >>> ', this.story_images);
+          // console.log('story image urls >>> ', this.story_image_urls);
         });
       } else {
-        description_detail_array = [this.formBuilder.control('')];
-      };
-
-      informasi_general.push(this.formBuilder.group({
-        title: item.title,
-        description: item.description,
-        description_detail: this.formBuilder.array(description_detail_array),
-        notes: item.notes
-      }));
-    });
-
-    this.formTemplatePojokUntung.get("banner_1").setValue(this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : [] : []);
-    this.formTemplatePojokUntung.get("banner_2").setValue(this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : [] : []);
-    this.formTemplatePojokUntung.get("banner_3").setValue(this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : [] : []);
-    this.formTemplatePojokUntung.get("banner_4").setValue(this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : [] : []);
-
-    this.files = this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : null : null;
-    this.files2 = this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : null : null;
-    this.files3 = this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : null : null;
-    this.files4 = this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : null : null;
-
-    this.imageUrl = this.detailTemplate.banner_1 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_1) === -1 ? this.detailTemplate.banner_1 : null : null;
-    this.imageUrl2 = this.detailTemplate.banner_2 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_2) === -1 ? this.detailTemplate.banner_2 : null : null;
-    this.imageUrl3 = this.detailTemplate.banner_3 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_3) === -1 ? this.detailTemplate.banner_3 : null : null;
-    this.imageUrl4 = this.detailTemplate.banner_4 ? ["undefined", "null"].indexOf(this.detailTemplate.banner_4) === -1 ? this.detailTemplate.banner_4 : null : null;
-
-    this.detailTemplate.story.forEach((item, idx) => {
-      this.story_images.push(item.file_name);
-      this.story_image_urls.push(item.file_name);
-    });
-
-    this.dataService.showLoading(false);
+        this.story_images = [],
+        this.story_image_urls = []
+      }
     }, err => {
       this.dataService.showLoading(false);
     })
@@ -149,13 +165,14 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   }
 
   addDescDetail() {
-    this.arr = (this.formTemplatePojokUntung as any).controls['informasi_general'].controls[0].controls.description_detail.controls;
-    this.arr.push(this.formBuilder.control(''));
+    let arr;
+    arr = (this.formTemplatePojokUntung as any).controls['informasi_general'].controls[0].controls.description_detail;
+    arr.push(this.formBuilder.control(''));
   }
 
   deleteForm(idx: any) {
-    let form = (this.formTemplatePojokUntung as any).controls['informasi_general'].controls[0].controls.description_detail.controls;
-    form.splice(idx, 1);
+    let form = (this.formTemplatePojokUntung as any).controls['informasi_general'].controls[0].controls.description_detail;
+    form.removeAt(idx);
   }
 
   changeImage(evt: any, index: any, type?: string) {
@@ -194,10 +211,12 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
       return;
     }
 
-    this.story_images = [
-      ...this.story_images,
-      file
-    ]
+    if (type && type === 'story') {
+      this.story_images = [
+        ...this.story_images,
+        file
+      ]
+    }
 
     var myReader: FileReader = new FileReader();
 
@@ -276,7 +295,7 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
         }
 
         let fd = new FormData();
-        
+
         fd.append('id', this.detailTemplate.id);
         this.formTemplatePojokUntung.get('informasi_general').value.forEach((info, i) => {
           fd.append(`informasi_general[${i}][title]`, info.title);
@@ -288,9 +307,14 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
           })
         });
 
-        this.story_images.forEach((story_image, i) => {
-          fd.append(`story[${i}][file_name]`, story_image);
-        });
+        if (this.story_images.length) {
+          this.story_images.forEach((story_image, i) => {
+            fd.append(`story[${i}][file_name]`, story_image);
+          });
+        } else {
+          fd.append(`story[0][file_name]`, null);
+        }
+          
 
         fd.append('banner_1', this.files);
         fd.append('banner_2', this.files2);
@@ -302,6 +326,10 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
           this.dialogService.openSnackBar({
             message: this.ls.locale.notification.popup_notifikasi.text22
           });
+          this.initForm();
+          this.story_images = [];
+          this.story_image_urls = [];
+          this.getDetail();
         })
       } else {
         this.dialogService.openSnackBar({
