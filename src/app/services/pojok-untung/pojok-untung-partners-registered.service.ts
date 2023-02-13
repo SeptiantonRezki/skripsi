@@ -11,4 +11,14 @@ export class PojokUntungPartnersRegisteredService extends BaseService {
   constructor(http: HttpClient) {
     super(http);
   }
+
+  get(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get');
+    return this.getApi(url, queryParams);
+  }
+  
+  getPartnerType(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_partner_type_list');
+    return this.getApi(url, queryParams);
+  }
 }

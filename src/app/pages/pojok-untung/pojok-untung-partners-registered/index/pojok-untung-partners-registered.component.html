@@ -22,10 +22,22 @@
               </div>
           </div>
           <form [formGroup]="formFilter">
-            <div fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start center">
               <mat-form-field fxFlex="15" class="orders dropdown">
-                <mat-select formControlName="partner_type_list" (ngModelChange)="changeRegisteredPartnerType($event)">
-                  <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.name}}
+                <mat-select formControlName="partner_type" (valueChange)="changeFilteredData($event, 'partner_type')">
+                  <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="15" class="orders dropdown">
+                <mat-select formControlName="partner_id" (valueChange)="changeFilteredData($event, 'partner_id')">
+                  <mat-option [value]="item.id" *ngFor="let item of partnerIdList | partnerRegistered: formFilter.get('partner_type').value">{{item.partner_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="15" class="orders dropdown">
+                <mat-select formControlName="status" (valueChange)="changeFilteredData($event, 'status')">
+                  <mat-option [value]="item.id" *ngFor="let item of statusList">{{item.label}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -34,18 +46,26 @@
         </div>
       </div>
 
-      <ngx-datatable #table class="material" [rows]="rows" [columnMode]="'force'"
-        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable">
-        
-        <ngx-datatable-column name="Daftar Partner" prop="name">
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" (page)="setPage($event)" 
+        (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Retailer" prop="bisnis">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.name}}</span>
+            <span>{{row.bisnis}}</span>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Jenis Partner" prop="type">
+        <ngx-datatable-column name="Partner" prop="partner">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.type}}</span>
+            <span>{{row.partner}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jenis Partner" prop="partner_type">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.partner_type}}</span>
           </ng-template>
         </ngx-datatable-column>
 
