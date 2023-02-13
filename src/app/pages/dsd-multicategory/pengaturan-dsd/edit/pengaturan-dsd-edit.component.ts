@@ -1,24 +1,29 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { DataService } from 'app/services/data.service';
-import { DialogService } from 'app/services/dialog.service';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, Input, Output, EventEmitter } from "@angular/core";
+import { Page } from "app/classes/laravel-pagination";
+import { Subject, Observable, ReplaySubject } from "rxjs";
+import { DatatableComponent, SelectionType } from "@swimlane/ngx-datatable";
+import { Router } from "@angular/router";
+import { DialogService } from "app/services/dialog.service";
+import { DataService } from "app/services/data.service";
+import { DSDMulticategoryService } from "app/services/dsd-multicategory.service";
+import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
+import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { PagesName } from "app/classes/pages-name";
+import { HttpErrorResponse } from "@angular/common/http";
+import { GeotreeService } from "app/services/geotree.service";
+import { LanguagesService } from "app/services/languages/languages.service";
+import moment from 'moment';
+import { GenerateTRS } from "app/classes/generate-trs";
+
 import { NewSignService } from 'app/services/settings/new-sign.service';
-import { DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
-import { Page } from 'app/classes/laravel-pagination';
-import { Subject, Observable, ReplaySubject } from 'rxjs';
-import { GeotreeService } from 'app/services/geotree.service';
 import { NotificationService } from 'app/services/notification.service';
 import { RetailerService } from 'app/services/user-management/retailer.service';
 import * as _ from "lodash";
-import moment from 'moment';
-import { Router } from '@angular/router';
-import { DSDMulticategoryService } from "app/services/dsd-multicategory.service";
 import { PengaturanDsdExecutorComponent } from "../component/pengaturan-dsd-executor.component";
 import { PengaturanDsdKecamatanComponent } from "../component/pengaturan-dsd-kecamatan.component";
 import { PengaturanDsdProductComponent } from "../component/pengaturan-dsd-product.component";
 import { TrsCancelReasonComponent } from "../component/trs-cancel-reason.component";
 import { commonFormValidator } from 'app/classes/commonFormValidator';
-import { LanguagesService } from 'app/services/languages/languages.service';
 
 import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
 
@@ -47,6 +52,9 @@ export class PengaturanDsdEditComponent implements OnInit {
 
   keyUp = new Subject<string>();
   areaType: any[] = [];
+
+  permission: any;
+  roles: PagesName = new PagesName();
 
   // 2 geotree property
   endArea: String;
@@ -112,6 +120,7 @@ export class PengaturanDsdEditComponent implements OnInit {
     //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
     //let areas = this.dataService.getDecryptedProfile()['areas'] || [];
 
+    this.permission = this.roles.getRoles('principal.pengaturandsd');
     this.selected = [];
 
     this.list = {
@@ -158,7 +167,9 @@ export class PengaturanDsdEditComponent implements OnInit {
     };
 
     const thisURL = this.router.url;
-    this.trs_program_code = thisURL.split('/').pop();
+    //this.trs_program_code = thisURL.split('/').pop();
+    //CHANIF
+    this.trs_program_code = 'AMI2210003';
 
     this.dataService.showLoading(true);
     this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {

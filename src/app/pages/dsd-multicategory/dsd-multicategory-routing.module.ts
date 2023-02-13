@@ -22,7 +22,7 @@ const routes: Routes = [
     },
   },
   {
-    path: "pengaturan-dsd/edit/:id",
+    path: "pengaturan-dsd/edit",
     component: PengaturanDsdEditComponent,
     data: {
       breadcrumbs: brConfig.dsd_multicategory.pengaturan_dsd

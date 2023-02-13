@@ -32,7 +32,7 @@ import { MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
   templateUrl: './pengaturan-dsd.component.html',
   styleUrls: ['./pengaturan-dsd.component.scss']
 })
-export class PengaturanDsdComponent  implements OnInit {
+export class PengaturanDsdComponent implements OnInit {
   formCreateProposal: FormGroup;
   formFilter: FormGroup;
   onLoad: boolean;
@@ -52,6 +52,9 @@ export class PengaturanDsdComponent  implements OnInit {
 
   keyUp = new Subject<string>();
   areaType: any[] = [];
+
+  permission: any;
+  roles: PagesName = new PagesName();
 
   // 2 geotree property
   endArea: String;
@@ -117,6 +120,7 @@ export class PengaturanDsdComponent  implements OnInit {
     //HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
     //let areas = this.dataService.getDecryptedProfile()['areas'] || [];
 
+    this.permission = this.roles.getRoles('principal.pengaturandsd');
     this.selected = [];
 
     this.list = {
