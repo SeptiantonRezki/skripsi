@@ -25,7 +25,8 @@ export class PojokUntungPartnersListComponent implements OnInit {
   pagination: Page = new Page();
   onLoad: boolean;
   offsetPagination: any;
-  defaultPartnerType: any[] = [{ id: -9, name: "Semua Jenis Partner" }];
+  partner_type: any = '-9';
+  defaultPartnerType: any[] = [{ id: -9, label: "Semua Jenis Partner" }];
 
   keyUp = new Subject<string>();
 
@@ -34,28 +35,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
   activeCellTemp: TemplateRef<any>;
   
   id: any[];
-  partnerTypeList: any[] = [
-    {
-      id: -9,
-      name: "Semua Jenis Partner"
-    },
-    {
-      id: 1,
-      name: "Perjalanan"
-    },
-    {
-      id: 2,
-      name: "Asuransi"
-    },
-    {
-      id: 3,
-      name: "Keuangan"
-    },
-    {
-      id: 4,
-      name: "Logistik"
-    }
-  ];
+  partnerTypeList: any[];
 
   rows: any[];
 
@@ -87,7 +67,14 @@ export class PojokUntungPartnersListComponent implements OnInit {
 
   ngOnInit() {
     this.formFilter.get('partner_type_list').setValue(this.defaultPartnerType[0].id);
+    this.getPartnerTypeList();
     this.getList();
+  }
+
+  getPartnerTypeList() {
+    this.PojokUntungPartnersListService.getPartnerType({partner_type: this.partner_type}).subscribe(res => {
+      this.partnerTypeList = this.defaultPartnerType.concat(res.data);
+    }, err=> { })
   }
 
   updateFilter(string, value) {

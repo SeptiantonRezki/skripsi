@@ -18,7 +18,7 @@
             <div fxLayout="row" fxLayoutAlign="start center">
               <mat-form-field fxFlex="15" class="orders dropdown">
                 <mat-select formControlName="partner_type_list" (ngModelChange)="changePartnerType($event)">
-                  <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.name}}
+                  <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.label}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

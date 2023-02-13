@@ -32,4 +32,9 @@ export class PojokUntungPartnersListService extends BaseService {
     return this.deleteApi(url);
   }
 
+  getPartnerType(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'get_partner_type_list');
+    return this.getApi(url, queryParams);
+  }
+
 }

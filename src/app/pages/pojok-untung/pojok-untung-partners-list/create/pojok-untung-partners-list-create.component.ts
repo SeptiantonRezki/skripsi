@@ -22,24 +22,8 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
   partner_logo: File;
   partner_logo_url: any;
 
-  partnerTypeList: any[] = [
-    {
-      id: 1,
-      name: "Perjalanan"
-    },
-    {
-      id: 2,
-      name: "Asuransi"
-    },
-    {
-      id: 3,
-      name: "Keuangan"
-    },
-    {
-      id: 4,
-      name: "Logistik"
-    }
-  ];
+  partner_type: any = '-9';
+  partnerTypeList: any[];
 
   constructor(
     private router: Router,
@@ -59,6 +43,14 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
       content_title: [""],
       content_info: [""]
     });
+
+    this.getPartnerTypeList();
+  }
+
+  getPartnerTypeList() {
+    this.PojokUntungPartnersListService.getPartnerType({partner_type: this.partner_type}).subscribe(res => {
+      this.partnerTypeList = res.data;
+    }, err=> { })
   }
 
   changeImage(evt: any, index: any, type?: string) {

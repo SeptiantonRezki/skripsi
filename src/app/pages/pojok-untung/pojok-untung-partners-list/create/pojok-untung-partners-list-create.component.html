@@ -14,7 +14,7 @@
           <div fxLayout="row">
             <mat-form-field fxFlex="45" class="is-light form-primary">
               <mat-select formControlName="partner_type" placeholder="Jenis Partner">
-                <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.name}}
+                <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.label}}
                 </mat-option>
               </mat-select>
               <mat-error
