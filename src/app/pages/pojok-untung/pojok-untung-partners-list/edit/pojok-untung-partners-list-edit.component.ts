@@ -60,9 +60,9 @@ export class PojokUntungPartnersListEditComponent implements OnInit {
       partner_type: ["", Validators.required],
       partner_name: ["", Validators.required],
       // partner_alias: ["", Validators.required],
+      status: [""],
       content_title: [""],
-      content_info: [""],
-      status: [""]
+      content_info: [""]
     });
 
     this.getDetail();
@@ -72,13 +72,13 @@ export class PojokUntungPartnersListEditComponent implements OnInit {
     this.dataService.showLoading(true);
     this.PojokUntungPartnersListService.show({ id: this.shortDetail.id }).subscribe(res => {
       this.detailTemplate = res.data;
-      this.formPartner.get("partner_type").setValue(this.detailTemplate.partner_type);
-      this.formPartner.get("partner_name").setValue(this.detailTemplate.partner_name);
-      this.formPartner.get("status").setValue(this.detailTemplate.status);
-      this.formPartner.get("content_title").setValue(this.detailTemplate.content_title);
-      this.formPartner.get("content_info").setValue(this.detailTemplate.content_info);
-      this.partner_logo = this.detailTemplate.partner_icon;
-      this.partner_logo_url = this.detailTemplate.partner_icon;
+      this.formPartner.get("partner_type").setValue(this.detailTemplate.partner_type ? ["undefined", "null"].indexOf(this.detailTemplate.partner_type) === -1 ? this.detailTemplate.partner_type : null : null);
+      this.formPartner.get("partner_name").setValue(this.detailTemplate.partner_name ? ["undefined", "null"].indexOf(this.detailTemplate.partner_name) === -1 ? this.detailTemplate.partner_name : null : null);
+      this.formPartner.get("status").setValue(this.detailTemplate.status ? ["undefined", "null"].indexOf(this.detailTemplate.status) === -1 ? this.detailTemplate.status : null : null);
+      this.formPartner.get("content_title").setValue(this.detailTemplate.content_title ? ["undefined", "null"].indexOf(this.detailTemplate.content_title) === -1 ? this.detailTemplate.content_title : null : null);
+      this.formPartner.get("content_info").setValue(this.detailTemplate.content_info ? ["undefined", "null"].indexOf(this.detailTemplate.content_info) === -1 ? this.detailTemplate.content_info : null : null);
+      this.partner_logo = this.detailTemplate.partner_icon ? ["undefined", "null"].indexOf(this.detailTemplate.partner_icon) === -1 ? this.detailTemplate.partner_icon : null : null;
+      this.partner_logo_url = this.detailTemplate.partner_icon ? ["undefined", "null"].indexOf(this.detailTemplate.partner_icon) === -1 ? this.detailTemplate.partner_icon : null : null;
     });
     this.dataService.showLoading(false);
   }

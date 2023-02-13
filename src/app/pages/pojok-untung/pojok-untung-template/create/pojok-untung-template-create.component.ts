@@ -20,29 +20,6 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   arr: FormArray;
   indexDelete: any;
   detailTemplate: any;
-  // detailTemplate: any =
-  //   {
-  //     informasi_general: [
-  //       {
-  //         title: "Judul Info",
-  //         description: "Desc Info",
-  //         description_detail: ["detail 1", "detail 2", "detail 3"],
-  //         notes: "Notes"
-  //       }
-  //     ],
-  //     banner_1: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png",
-  //     banner_2: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png",
-  //     banner_3: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png",
-  //     banner_4: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png",
-  //     story: [
-  //       {
-  //         file_name: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png"
-  //       },
-  //       {
-  //         file_name: "https://assets.dev.src.id/2023/02/01/HRKm9zAPMwtjk4eCtkpkFZKSxqWBExCAgD9MKEYK.png"
-  //       }
-  //     ]
-  //   };
 
   imageUrl: any;
   imageUrl2: any;
@@ -119,7 +96,7 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
             title: item.title,
             description: item.description,
             description_detail: this.formBuilder.array(description_detail_array),
-            notes: item.notes
+            notes: item.notes ? ["undefined", "null"].indexOf(item.notes) === -1 ? item.notes : null : null
           }));
         });
       }

@@ -92,11 +92,11 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
 
       this.formTemplatePartner.get("partner_id").setValue(res.data.partner_id);
       this.formTemplatePartner.get("name").setValue(res.data.name);
-      this.formTemplatePartner.get("alias").setValue(res.data.alias);
-      this.formTemplatePartner.get("info_detail").setValue(res.data.info_detail);
-      this.formTemplatePartner.get("agreement_text").setValue(res.data.agreement_text);
-      this.formTemplatePartner.get("benefit_title").setValue(res.data.benefit_title);
-      this.formTemplatePartner.get("step_title").setValue(res.data.how_to_title);
+      this.formTemplatePartner.get("alias").setValue(res.data.alias ? ["undefined", "null"].indexOf(res.data.alias) === -1 ? res.data.alias : null : null);
+      this.formTemplatePartner.get("info_detail").setValue(res.data.info_detail ? ["undefined", "null"].indexOf(res.data.info_detail) === -1 ? res.data.info_detail : null : null);
+      this.formTemplatePartner.get("agreement_text").setValue(res.data.agreement_text ? ["undefined", "null"].indexOf(res.data.agreement_text) === -1 ? res.data.agreement_text : null : null);
+      this.formTemplatePartner.get("benefit_title").setValue(res.data.benefit_title ? ["undefined", "null"].indexOf(res.data.benefit_title) === -1 ? res.data.benefit_title : null : null);
+      this.formTemplatePartner.get("step_title").setValue(res.data.how_to_title ? ["undefined", "null"].indexOf(res.data.how_to_title) === -1 ? res.data.how_to_title : null : null);
       
       this.formTemplatePartner.get("banner_1").setValue(res.data.banner_1 ? ["undefined", "null"].indexOf(res.data.banner_1) === -1 ? res.data.banner_1 : [] : []);
       this.formTemplatePartner.get("banner_2").setValue(res.data.banner_2 ? ["undefined", "null"].indexOf(res.data.banner_2) === -1 ? res.data.banner_2 : [] : []);
@@ -117,9 +117,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
       let info_general = this.formTemplatePartner.get("info_general") as FormArray;
       infoGeneralData.map((item, idx) => {
         info_general.push(this.formBuilder.group({
-          info_general_title: item.title,
-          info_general_description: item.description,
-          info_general_link: item.link
+          info_general_title: item.title ? ["undefined", "null"].indexOf(item.title) === -1 ? item.title : null : null,
+          info_general_description: item.description ? ["undefined", "null"].indexOf(item.description) === -1 ? item.description : null : null,
+          info_general_link: item.link ? ["undefined", "null"].indexOf(item.link) === -1 ? item.link : null : null
         }));
         if (item.icon && ["undefined", "null"].indexOf(item.icon) === -1) {
           this.info_general_icons[idx] = item.icon;
@@ -130,8 +130,8 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
       let benefit = this.formTemplatePartner.get("benefit") as FormArray;
       benefitData.map((item, idx) => {
         benefit.push(this.formBuilder.group({
-          benefit_detail_title: item.title,
-          benefit_detail_description: item.description,
+          benefit_detail_title: item.title ? ["undefined", "null"].indexOf(item.title) === -1 ? item.title : null : null,
+          benefit_detail_description: item.description ? ["undefined", "null"].indexOf(item.description) === -1 ? item.description : null : null,
         }));
         if (item.icon && ["undefined", "null"].indexOf(item.icon) === -1) {
           this.benefit_icons[idx] = item.icon;
@@ -143,7 +143,7 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
       stepData.map((item, idx) => {
         step.push(this.formBuilder.group({
           // step_detail_title: item.title,
-          step_detail_content: item.content,
+          step_detail_content: item.content ? ["undefined", "null"].indexOf(item.content) === -1 ? item.content : null : null,
         }));
         if (item.icon && ["undefined", "null"].indexOf(item.icon) === -1) {
           this.step_icons[idx] = item.icon;
