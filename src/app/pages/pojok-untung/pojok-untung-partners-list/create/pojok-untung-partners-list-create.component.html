@@ -38,6 +38,10 @@
                 <mat-option [value]="1">Aktif</mat-option>
                 <mat-option [value]="0">Tidak Aktif</mat-option>
               </mat-select>
+              <mat-error
+                *ngIf="formPartner.controls['status'].hasError('required') && formPartner.controls['status'].touched">
+                Status harus diisi
+              </mat-error>
             </mat-form-field>
           </div>
 

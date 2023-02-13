@@ -55,9 +55,9 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
       partner_type: ["", Validators.required],
       partner_name: ["", Validators.required],
       // partner_alias: ["", Validators.required],
+      status: ["", Validators.required],
       content_title: [""],
-      content_info: [""],
-      status: [""]
+      content_info: [""]
     });
   }
 

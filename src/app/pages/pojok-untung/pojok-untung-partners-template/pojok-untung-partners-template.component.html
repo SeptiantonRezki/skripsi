@@ -46,7 +46,7 @@
 
         <ngx-datatable-column name="Alias" prop="alias">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.alias || '-'}}</span>
+            <span>{{row.alias ? row.alias !== 'null' ? row.alias : '-' : '-'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
