@@ -51,6 +51,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
     private PojokUntungPartnersListService: PojokUntungPartnersListService,
     ) {
       this.onLoad = true;
+      this.permission = this.roles.getRoles('principal.pojokuntung_partner');
       const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {

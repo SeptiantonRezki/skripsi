@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Config } from 'app/classes/config';
+import { PagesName } from 'app/classes/pages-name';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
 
@@ -25,6 +26,9 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
   partner_type: any = '-9';
   partnerTypeList: any[];
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -32,7 +36,9 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
     private PojokUntungPartnersListService: PojokUntungPartnersListService,
-  ) { }
+  ) { 
+    this.permission = this.roles.getRoles('principal.pojokuntung_partner');
+  }
 
   ngOnInit() {
     this.formPartner = this.formBuilder.group({
@@ -45,6 +51,10 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
     });
 
     this.getPartnerTypeList();
+
+    if (!this.permission.buat) {
+      this.formPartner.disable();
+    }
   }
 
   getPartnerTypeList() {

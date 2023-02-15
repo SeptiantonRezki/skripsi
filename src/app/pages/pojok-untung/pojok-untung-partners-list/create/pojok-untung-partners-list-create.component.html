@@ -84,7 +84,7 @@
 
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" *ngIf="permission?.buat">
         Simpan
       </button>
     </div>

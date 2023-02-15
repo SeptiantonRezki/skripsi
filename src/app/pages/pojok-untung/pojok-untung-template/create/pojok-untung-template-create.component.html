@@ -38,7 +38,7 @@
                           </mat-form-field>
                           <div fxLayout="row wrap" fxLayoutAlign="start center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <button [disabled]="formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls.length <= 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i)">
+                            <button [disabled]="formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls.length <= 1 || !permission?.ubah || !permission?.buat" mat-raised-button color="primary" type="button" (click)="deleteForm(i)">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -46,7 +46,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="start center">
-                      <button mat-raised-button type="button" (click)="addDescDetail()">
+                      <button mat-raised-button type="button" [disabled]="!permission?.ubah || !permission?.buat" (click)="addDescDetail()">
                         <mat-icon>add</mat-icon>
                         Tambah Detail Deskripsi
                       </button>
@@ -86,7 +86,7 @@
               </div>
               <div fxLayout="column" *ngIf="imageUrl" class="pt-24">
                 <div class="" style="margin-top: 15px;margin-bottom: 15px;">
-                  <div class="delete">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
                     <mat-icon style="cursor: pointer;" (click)="removeImage('1')">cancel_outline</mat-icon>
                   </div>
                   <div>
@@ -113,7 +113,7 @@
               </div>
               <div fxLayout="column" *ngIf="imageUrl2" class="pt-24">
                 <div class="" style="margin-top: 15px;margin-bottom: 15px;">
-                  <div class="delete">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
                     <mat-icon style="cursor: pointer;" (click)="removeImage('2')">cancel_outline</mat-icon>
                   </div>
                   <div>
@@ -142,7 +142,7 @@
               </div>
               <div fxLayout="column" *ngIf="imageUrl3" class="pt-24">
                 <div class="" style="margin-top: 15px;margin-bottom: 15px;">
-                  <div class="delete">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
                     <mat-icon style="cursor: pointer;" (click)="removeImage('3')">cancel_outline</mat-icon>
                   </div>
                   <div>
@@ -169,7 +169,7 @@
               </div>
               <div fxLayout="column" *ngIf="imageUrl4" class="pt-24">
                 <div class="" style="margin-top: 15px;margin-bottom: 15px;">
-                  <div class="delete">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
                     <mat-icon style="cursor: pointer;" (click)="removeImage('4')">cancel_outline</mat-icon>
                   </div>
                   <div>
@@ -199,7 +199,7 @@
 
               <div *ngFor="let story_image_url of story_image_urls;let i = index" class="pt-48">
                 <div class="">
-                  <div class="delete">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
                     <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'story')">cancel_outline</mat-icon>
                   </div>
                   <div class="image-sku">
@@ -213,7 +213,7 @@
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
+      <button mat-raised-button type="button" class="confirmation-button" *ngIf="permission?.ubah && permission?.buat" (click)="submit()">
         Simpan
       </button>
     </div>

@@ -25,7 +25,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.templatePojokUntung.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   // {
   //   path: "template-pojok-untung/create",
@@ -49,7 +49,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partners.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "partners-list/create",
@@ -57,7 +57,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partners.create
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "partners-list/edit/:id",
@@ -65,7 +65,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partners.edit
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "partners-template",
@@ -73,7 +73,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersTemplate.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "partners-template/create",
@@ -81,7 +81,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersTemplate.create
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "partners-template/edit/:id",
@@ -89,7 +89,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersTemplate.edit
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   },
   {
     path: "registered-partners",
@@ -97,7 +97,7 @@ const routes: Routes = [
     data: {
       breadcrumbs: brConfig.pojokuntung.partnersRegistered.index
     },
-    // canActivate: [PageGuard]
+    canActivate: [PageGuard]
   }
 ];
 

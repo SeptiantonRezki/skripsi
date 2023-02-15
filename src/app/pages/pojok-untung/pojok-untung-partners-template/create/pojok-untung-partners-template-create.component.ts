@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Config } from 'app/classes/config';
+import { PagesName } from 'app/classes/pages-name';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PojokUntungPartnersTemplateService } from 'app/services/pojok-untung/pojok-untung-partners-template.service';
 import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
@@ -42,6 +43,9 @@ export class PojokUntungPartnersTemplateCreateComponent implements OnInit {
   step_icons: File[] = [];
   step_icon_urls: any[] = [];
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -50,7 +54,9 @@ export class PojokUntungPartnersTemplateCreateComponent implements OnInit {
     private ls: LanguagesService,
     private PojokUntungPartnersTemplateService: PojokUntungPartnersTemplateService,
     private PojokUntungPartnersListService: PojokUntungPartnersListService
-    ) { }
+    ) { 
+    this.permission = this.roles.getRoles('principal.pojokuntung_template_partner');
+    }
 
   ngOnInit() {
     this.formTemplatePartner = this.formBuilder.group({
@@ -73,6 +79,10 @@ export class PojokUntungPartnersTemplateCreateComponent implements OnInit {
     this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
       this.partnerList = res.data;
     }, err=> { })
+
+    if (!this.permission.buat) {
+      this.formTemplatePartner.disable();
+    }
   }
 
   createInfoGeneralFormArray() {

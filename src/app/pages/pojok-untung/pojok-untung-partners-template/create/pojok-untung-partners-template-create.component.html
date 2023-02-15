@@ -132,7 +132,7 @@
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <button *ngIf="formTemplatePartner.get('benefit').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')">
+                            <button *ngIf="formTemplatePartner.get('benefit').value.length > 1 && permission?.buat" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -175,7 +175,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <button mat-raised-button type="button" (click)="addBenefit()">
+                      <button mat-raised-button type="button" (click)="addBenefit()" *ngIf="permission?.buat">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -202,7 +202,7 @@
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <button *ngIf="formTemplatePartner.get('step').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')">
+                            <button *ngIf="formTemplatePartner.get('step').value.length > 1 && permission?.buat" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -245,7 +245,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <button mat-raised-button type="button" (click)="addStep()">
+                      <button mat-raised-button type="button" (click)="addStep()" *ngIf="permission?.buat">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -393,7 +393,7 @@
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" *ngIf="permission?.buat">
         Simpan
       </button>
     </div>

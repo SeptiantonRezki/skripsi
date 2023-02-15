@@ -64,7 +64,7 @@
               <div class="" style="margin-top: 15px">
                 <div>
                   <img id="image" [src]='partner_logo_url' width="120px" height="120px" />
-                  <mat-icon style="cursor: pointer;" (click)="removeImage('1', 'partner')">cancel_outline</mat-icon>
+                  <mat-icon style="cursor: pointer;" (click)="removeImage('1', 'partner')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@
 
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" *ngIf="permission?.ubah">
         Simpan
       </button>
     </div>

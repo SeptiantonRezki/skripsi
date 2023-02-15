@@ -53,7 +53,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     private dialogService: DialogService,
     ) {
       this.onLoad = true;
-      // this.permission = this.roles.getRoles('principal.pojok_untung');
+      this.permission = this.roles.getRoles('principal.pojokuntung_template_partner');
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()

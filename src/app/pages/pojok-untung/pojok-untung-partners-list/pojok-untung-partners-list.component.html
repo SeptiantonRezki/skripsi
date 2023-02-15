@@ -26,7 +26,7 @@
           </form>
         </div>
         <div class="button-row" fxLayout="row" fxLayoutAlign="end center">
-          <button style="width: 170px;" mat-raised-button aria-label="add" type="button" (click)="addPartner()">
+          <button style="width: 170px;" mat-raised-button aria-label="add" type="button" (click)="addPartner()" [disabled]="!permission?.buat">
             <mat-icon>add</mat-icon>BUAT PARTNER
           </button>
         </div>
@@ -39,7 +39,8 @@
 
         <ngx-datatable-column name="Daftar Partner" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-name" (click)="editPartner(row)">{{row.partner_name}}</span>
+            <span class="row-name" (click)="editPartner(row)" *ngIf="permission?.ubah">{{row.partner_name}}</span>
+            <span *ngIf="!permission?.ubah">{{row.partner_name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -59,8 +60,7 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row pl-8">
-              <!-- <button mat-icon-button color="primary" (click)="deletePartner(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center"> -->
-              <button mat-icon-button color="primary" (click)="deletePartner(row.id)" fxLayoutAlign="center center">
+              <button mat-icon-button color="primary" (click)="deletePartner(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center">
                 <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
                 <ng-template #showIcon>
                   <mat-icon>delete</mat-icon>

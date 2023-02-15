@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Config } from 'app/classes/config';
+import { PagesName } from 'app/classes/pages-name';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PojokUntungTemplateService } from 'app/services/pojok-untung/pojok-untung-template.service';
 
@@ -37,6 +38,8 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
 
   validComboDrag: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -44,7 +47,9 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private ls: LanguagesService,
     private PojokUntungTemplateService: PojokUntungTemplateService,
-  ) { }
+  ) { 
+    this.permission = this.roles.getRoles('principal.pojokuntung_template');
+  }
 
   ngOnInit() {
     this.initForm();
@@ -126,6 +131,10 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
       } else {
         this.story_images = [],
         this.story_image_urls = []
+      }
+
+      if (!this.permission.ubah || !this.permission.buat) {
+        this.formTemplatePojokUntung.disable();
       }
     }, err => {
       this.dataService.showLoading(false);

@@ -39,25 +39,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   
   partnerTypeList: any[];
   partnerIdList: any[];
-  // statusList: any[];
-  statusList: any[] = [
-    {
-      id: '',
-      label: 'Semua Status'
-    },
-    {
-      id: 1,
-      label: 'On Progress'
-    },
-    {
-      id: 2,
-      label: 'Approved'
-    },
-    {
-      id: 3,
-      label: 'Declined'
-    }
-  ];
+  statusList: any[];
 
   rows: any[];
 
@@ -73,6 +55,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     private PojokUntungPartnersRegisteredService: PojokUntungPartnersRegisteredService,
     private PojokUntungPartnersListService: PojokUntungPartnersListService
     ) { 
+      this.permission = this.roles.getRoles('principal.pojokuntung_registered_partner');
       const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
       .flatMap(search => {

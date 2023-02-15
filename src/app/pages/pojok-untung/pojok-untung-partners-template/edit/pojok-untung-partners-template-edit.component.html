@@ -82,7 +82,7 @@
                             <div class="" style="margin-top: 15px">
                               <div>
                                 <img id="image" [src]='info_general_icon_urls[i]' width="120px" height="120px" />
-                                <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'info_general')">cancel_outline</mat-icon>
+                                <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'info_general')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                               </div>
                             </div>
                           </div>
@@ -132,7 +132,7 @@
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <button *ngIf="formTemplatePartner.get('benefit').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')">
+                            <button *ngIf="formTemplatePartner.get('benefit').value.length > 1 && permission?.ubah" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'benefit')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -166,7 +166,7 @@
                               <div class="" style="margin-top: 15px">
                                 <div>
                                   <img id="image" [src]='benefit_icon_urls[i]' width="100px" height="100px" />
-                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'benefit')">cancel_outline</mat-icon>
+                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'benefit')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                                 </div>
                               </div>
                             </div>
@@ -175,7 +175,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <button mat-raised-button type="button" (click)="addBenefit()">
+                      <button mat-raised-button type="button" (click)="addBenefit()" *ngIf="permission?.ubah">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -202,7 +202,7 @@
                           </div>
                           <div fxFlex="50" fxLayout="row wrap" fxLayoutAlign="end center"
                             fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
-                            <button *ngIf="formTemplatePartner.get('step').value.length > 1" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')">
+                            <button *ngIf="formTemplatePartner.get('step').value.length > 1 && permission?.ubah" mat-raised-button color="primary" type="button" (click)="deleteForm(i, 'step')">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -236,7 +236,7 @@
                               <div class="" style="margin-top: 15px">
                                 <div>
                                   <img id="image" [src]='step_icon_urls[i]' width="100px" height="100px" />
-                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'step')">cancel_outline</mat-icon>
+                                  <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'step')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                                 </div>
                               </div>
                             </div>
@@ -245,7 +245,7 @@
                       </div>
                     </div>
                     <div fxLayoutAlign="end center">
-                      <button mat-raised-button type="button" (click)="addStep()">
+                      <button mat-raised-button type="button" (click)="addStep()" *ngIf="permission?.ubah">
                         <mat-icon>add</mat-icon>
                       </button>
                     </div>
@@ -277,7 +277,7 @@
                       <div fxLayout="column" *ngIf="imageUrl" class="pt-24">
                         <div class="" style="margin-top: 15px;margin-bottom: 15px;">
                           <div class="delete">
-                            <mat-icon style="cursor: pointer;" (click)="removeImage('1')">cancel_outline</mat-icon>
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('1')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                           </div>
                           <div>
                             <img id="image" [src]='imageUrl' width="410px" height="410px" />
@@ -304,7 +304,7 @@
                       <div fxLayout="column" *ngIf="imageUrl2" class="pt-24">
                         <div class="" style="margin-top: 15px;margin-bottom: 15px;">
                           <div class="delete">
-                            <mat-icon style="cursor: pointer;" (click)="removeImage('2')">cancel_outline</mat-icon>
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('2')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                           </div>
                           <div>
                             <img id="image" [src]='imageUrl2' width="410px" height="410px" />
@@ -333,7 +333,7 @@
                       <div fxLayout="column" *ngIf="imageUrl3" class="pt-24">
                         <div class="" style="margin-top: 15px;margin-bottom: 15px;">
                           <div class="delete">
-                            <mat-icon style="cursor: pointer;" (click)="removeImage('3')">cancel_outline</mat-icon>
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('3')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                           </div>
                           <div>
                             <img id="image" [src]='imageUrl3' width="410px" height="410px" />
@@ -360,7 +360,7 @@
                       <div fxLayout="column" *ngIf="imageUrl4" class="pt-24">
                         <div class="" style="margin-top: 15px;margin-bottom: 15px;">
                           <div class="delete">
-                            <mat-icon style="cursor: pointer;" (click)="removeImage('4')">cancel_outline</mat-icon>
+                            <mat-icon style="cursor: pointer;" (click)="removeImage('4')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
                           </div>
                           <div>
                             <img id="image" [src]='imageUrl4' width="410px" height="410px" />
@@ -393,7 +393,7 @@
       </div>
     </div>
     <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
-      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()">
+      <button mat-raised-button type="button" class="confirmation-button" (click)="submit()" *ngIf="permission?.ubah">
         Simpan
       </button>
     </div>

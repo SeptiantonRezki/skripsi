@@ -5,6 +5,7 @@ import { DataService } from 'app/services/data.service';
 import { DialogService } from 'app/services/dialog.service';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Config } from 'app/classes/config';
+import { PagesName } from 'app/classes/pages-name';
 import { commonFormValidator } from 'app/classes/commonFormValidator';
 import { PojokUntungPartnersTemplateService } from 'app/services/pojok-untung/pojok-untung-partners-template.service';
 import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
@@ -44,6 +45,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
   shortDetail: any;
   detailTemplate: any;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   constructor(
     private router: Router,
     private dataService: DataService,
@@ -54,6 +58,7 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
     private PojokUntungPartnersListService: PojokUntungPartnersListService
     ) {
     this.shortDetail = this.dataService.getFromStorage('edit_pojok_untung_partners_template');
+    this.permission = this.roles.getRoles('principal.pojokuntung_template_partner');
    }
 
   ngOnInit() {
@@ -151,6 +156,9 @@ export class PojokUntungPartnersTemplateEditComponent implements OnInit {
         }
       });
 
+      if (!this.permission.ubah) {
+        this.formTemplatePartner.disable();
+      }
       this.dataService.showLoading(false);
     }, err => {
       this.dataService.showLoading(false);
