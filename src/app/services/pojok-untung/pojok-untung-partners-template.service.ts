@@ -17,11 +17,6 @@ export class PojokUntungPartnersTemplateService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
-  getPartnerList(context): Observable<any> {
-    const url = this.getUrl(this.namespace, 'get_partner_list', context);
-    return this.getApi(url);
-  }
-
   show(context, queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'show', context);
     return this.getApi(url, queryParams);

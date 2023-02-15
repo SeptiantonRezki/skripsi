@@ -72,11 +72,14 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
 
   ngOnInit() {
     // this.formFilter.get('partner_list').setValue(this.defaultPartner[0].id);
-    this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
-      this.partnerList = this.defaultPartner.concat(res.data);
-    }, err=> { })
-
+    this.getPartnerList();
     this.getList(true);
+  }
+
+  getPartnerList() {
+    this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
+      this.partnerList = this.defaultPartner.concat(res.data.data);
+    }, err=> { })
   }
 
   updateFilter(string, value) {
@@ -99,7 +102,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     }
     this.PojokUntungPartnersTemplateService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -122,7 +125,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     this.PojokUntungPartnersTemplateService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data ? res.data : [];
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -146,7 +149,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     this.PojokUntungPartnersTemplateService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -163,7 +166,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
     this.PojokUntungPartnersTemplateService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }

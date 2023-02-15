@@ -33,7 +33,7 @@ export class PojokUntungPartnersListService extends BaseService {
   }
 
   getPartnerType(queryParams?): Observable<any> {
-    const url = this.getUrl(this.namespace, 'get_partner_type_list');
+    const url = this.getUrl("pojok_untung_partners_type", 'get_partner_type');
     return this.getApi(url, queryParams);
   }
 

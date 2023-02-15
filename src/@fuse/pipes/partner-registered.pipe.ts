@@ -7,7 +7,7 @@ export class PartnerRegisteredFilterPipe implements PipeTransform {
       return partnerItems;
     }
     partnerItems = partnerItems.filter((item) => {
-      return item && item.partner_type && item.partner_type.id === partnerTypeId;
+      return item && item.partner_type === partnerTypeId;
     });
     partnerItems.unshift({ id: '', partner_name: 'Semua Partner' });
     return partnerItems;

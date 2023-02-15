@@ -34,8 +34,8 @@
 
       <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
         [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
-        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" (page)="setPage($event)" 
-        (sort)="onSort($event)">
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" 
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
 
         <ngx-datatable-column name="Daftar Partner" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">

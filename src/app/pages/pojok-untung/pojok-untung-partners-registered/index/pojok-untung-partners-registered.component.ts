@@ -94,7 +94,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
 
   getPartnerIdList() {
     this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
-      this.partnerIdList = this.defaultPartnerId.concat(res.data);
+      this.partnerIdList = this.defaultPartnerId.concat(res.data.data);
     }, err=> { })
   }
 
@@ -134,7 +134,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     }
     this.PojokUntungPartnersRegisteredService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -172,7 +172,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     this.PojokUntungPartnersRegisteredService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data ? res.data : [];
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -200,7 +200,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     this.PojokUntungPartnersRegisteredService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -221,7 +221,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     this.PojokUntungPartnersRegisteredService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }

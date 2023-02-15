@@ -98,7 +98,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
     }
     this.PojokUntungPartnersListService.get(this.pagination).subscribe(res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -125,7 +125,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
     this.PojokUntungPartnersListService.get(this.pagination).subscribe(
       res => {
         Page.renderPagination(this.pagination, res.data);
-        this.rows = res.data ? res.data : [];
+        this.rows = res.data ? res.data.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
       },
@@ -153,7 +153,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
     this.PojokUntungPartnersListService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }
@@ -174,7 +174,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
     this.PojokUntungPartnersListService.get(this.pagination).subscribe(
       res => {
       Page.renderPagination(this.pagination, res.data);
-      this.rows = res.data ? res.data : [];
+      this.rows = res.data ? res.data.data : [];
       this.loadingIndicator = false;
     });
   }

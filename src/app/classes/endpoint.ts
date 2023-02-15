@@ -851,16 +851,17 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`,
         store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`
       },
+      pojok_untung_partners_type: {
+        get_partner_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`
+      },
       pojok_untung_partners_list: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner/${context.id}`,
         store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner`,
         delete: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner/${context.id}`,
-        get_partner_type_list: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`
       },
       pojok_untung_partners_template: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-partner-id`,
-        get_partner_list : `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner`,
         show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-id/${context.id}`,
         create: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`,
         update: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`,
@@ -868,7 +869,6 @@ export class Endpoint {
       },
       pojok_untung_partners_registered: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration`,
-        get_partner_type_list: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`,
         get_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration_status`
       },
       sequencing: {

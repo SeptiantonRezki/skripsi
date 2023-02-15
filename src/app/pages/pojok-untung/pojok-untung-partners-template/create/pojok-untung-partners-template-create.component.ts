@@ -77,7 +77,7 @@ export class PojokUntungPartnersTemplateCreateComponent implements OnInit {
     });
 
     this.PojokUntungPartnersListService.get({partner_type: this.partner_type}).subscribe(res => {
-      this.partnerList = res.data;
+      this.partnerList = res.data.data;
     }, err=> { })
 
     if (!this.permission.buat) {
