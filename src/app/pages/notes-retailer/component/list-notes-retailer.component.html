@@ -43,31 +43,31 @@
 
         <ngx-datatable-column name="{{'notes_retailer.name' | translate}}" prop="name">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span>{{row.name}}</span>
+            <span id="cellName">{{row.name}}</span>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="{{'notes_retailer.description' | translate}}" prop="description">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span class="row-description" >{{row.description}}</span>
+            <span id="cellDescription" class="row-description" >{{row.description}}</span>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column [width]="90" name="{{'global.label.created_at' | translate}}" prop="start_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.start_date | date:'dd/MM/yyyy'}}
+            <span id="cellStartDate">{{row.start_date | date:'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
         <ngx-datatable-column [width]="90" name="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" prop="end_date">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.end_date | date:'dd/MM/yyyy'}}
+            <span id="cellEndDate">{{row.end_date | date:'dd/MM/yyyy'}}</span>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column name="{{'notes_retailer.status' | translate}}" prop="status">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <span *ngIf="row.status === 'inactive'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
-            <span *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
+            <span id="cellStatus" *ngIf="row.status === 'inactive'" class="text-boxed mat-red-700-bg">{{row.status}}</span>
+            <span id="cellStatus" *ngIf="row.status === 'active'" class="text-boxed mat-green-700-bg">{{row.status}}</span>
           </ng-template>
         </ngx-datatable-column> 
 
@@ -75,10 +75,10 @@
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
             style="justify-content: center !important">
             <div class="button-row" style="margin-left: -10px">
-              <button mat-icon-button color="" (click)="directEdit(row)" [routerLink]="['/notesretailer/notes-retailer-edit/'+ row.id +'']">
+              <button id="btnEdit" mat-icon-button color="" (click)="directEdit(row)" [routerLink]="['/notesretailer/notes-retailer-edit/'+ row.id +'']">
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
-              <button mat-icon-button color="primary" 
+              <button id="btnDelete" mat-icon-button color="primary" 
                (click)="deleteNotes(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
