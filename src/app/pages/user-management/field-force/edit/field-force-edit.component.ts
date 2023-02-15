@@ -36,6 +36,9 @@ export class FieldForceEditComponent {
   isDetail: boolean;
   initDetail: boolean = false;
 
+  isChecked = false;
+  checked: boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
@@ -64,13 +67,46 @@ export class FieldForceEditComponent {
     this.formUser = this.formBuilder.group({
       name: [{ value: "", disabled: this.isDetail }, Validators.required],
       username: [{ value: "", disabled: this.isDetail }, Validators.required],
+      email: [
+        { value: "", disabled: this.isDetail },
+        [
+        Validators.required,
+        Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ],
+      ],
       classification: [{ value: "", disabled: true }],
       areas: this.formBuilder.array([], Validators.required),
       type: [{ value: "", disabled: this.isDetail }, Validators.required],
       version: [{ value: "", disabled: true }],
       status: [{ value: true, disabled: this.isDetail }],
+      emailNotification: [{ value: true, disabled: this.isDetail }],
     });
+    // this.formUser.controls["email"].disable();
+
+    this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
+      if (value) {
+        this.formUser.controls["email"].enable()
+        // this.formUser.controls["email"].setValue("",this.isDetail);
+      } else {
+        this.formUser.controls["email"].disable();
+        // this.formUser.controls["email"].setValue(this.isDetail);
+      }
+    });
+
+
   }
+
+//   changeDisable() {
+//     console.log('ddfd');
+//     this.formUser.get("emailNotification").valueChanges.subscribe((value) =>{
+//     if (value) {
+//      this.formUser.controls['email'].enable() ;
+//     } else {
+//       this.formUser.controls['email'].disable() ;
+//     }
+     
+//   });
+// }
 
   getDetails() {
     this.fieldForcePrincipal
@@ -80,13 +116,18 @@ export class FieldForceEditComponent {
         const patchData = {
           name: data.fullname,
           username: data.username,
+          email: data.email,
           type: data.type,
           status: data.status === "active",
+          emailNotification: data.emailNotification === "active",
           classification: data.classification
             ? data.classification.toLowerCase()
             : null,
           version: data.version,
         };
+        // console.log(patchData);
+
+        
 
         const areas = Object.values(data.geotree).map((value) => value);
         this.addAreas(areas);
@@ -177,19 +218,26 @@ export class FieldForceEditComponent {
 
   submit() {
     if (!this.formUser.valid) {
+      this.dialogService.openSnackBar({ message: "Input data tida valid atau tidak sesuai" });
       commonFormValidator.markAllAsTouched(this.formUser);
       return;
     }
     let areas = this.formUser.get("areas") as FormArray;
+
     let body = {
       _method: "PUT",
       name: this.formUser.get("name").value,
       username: this.formUser.get("username").value,
+      email: this.formUser.get("email").value, // email field
       type: this.formUser.get("type").value,
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
+      emailNotification: this.formUser.get("emailNotification").value ? "active" : "inactive", // emailNotification field
+        
     };
+    // console.log(body);
+
     this.dataService.showLoading(true);
     this.fieldForcePrincipal
       .put(body, { fieldforce_id: this.pageId })

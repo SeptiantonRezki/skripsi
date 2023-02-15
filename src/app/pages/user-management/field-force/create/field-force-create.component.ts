@@ -32,6 +32,9 @@ export class FieldForceCreateComponent {
 
   locale: any;
 
+  isChecked = false;
+  checked: boolean;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
@@ -59,9 +62,36 @@ export class FieldForceCreateComponent {
       classification: [{ value: "", disabled: true }],
       areas: this.formBuilder.array([], Validators.required),
       type: ["", Validators.required],
+      email: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/), // belum bisa tertampil jika tidak sesuai
+        ],
+      ], // field email
       status: [true],
+      emailNotification: [false], // email notification
+    });
+    this.formUser.controls["email"].disable();
+
+    this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
+      if (value) {
+        this.formUser.controls["email"].enable();
+      } else {
+        this.formUser.controls["email"].disable();
+        this.formUser.controls["email"].setValue("");
+      }
     });
   }
+
+  // changeDisable() {
+  //   console.log("coba toggle");
+  //   if (this.formUser.controls["email"].disabled) {
+  //     this.formUser.controls["email"].enable();
+  //   } else {
+  //     this.formUser.controls["email"].disable();
+  //   }
+  // }
 
   setEvents() {
     this.formUser.get("type").valueChanges.subscribe((value: string) => {
@@ -142,10 +172,13 @@ export class FieldForceCreateComponent {
 
   submit() {
     if (!this.formUser.valid) {
+      this.dialogService.openSnackBar({ message: "Input data tida valid atau tidak sesuai" });
       commonFormValidator.markAllAsTouched(this.formUser);
       return;
     }
+
     let areas = this.formUser.get("areas") as FormArray;
+
     let body = {
       name: this.formUser.get("name").value,
       username: this.formUser.get("username").value,
@@ -153,7 +186,19 @@ export class FieldForceCreateComponent {
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
+      email: this.formUser.get("email").value, // email field
+      emailNotification: this.formUser.get("emailNotification").value
+        ? "active"
+        : "inactive", // emailNotification field
     };
+    // console.log(body);
+
+    if (this.formUser.get("emailNotification").value) {
+      body["email"] = this.formUser.get("email").value;
+    } else {
+      body["email"] = "";
+    }
+
     this.dataService.showLoading(true);
     this.fieldForcePrincipal.create(body).subscribe(
       () => {
