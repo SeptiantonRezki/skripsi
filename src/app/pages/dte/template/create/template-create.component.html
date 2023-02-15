@@ -5,7 +5,6 @@
       type="button">{{ls.locale.global.button.save}}</button> -->
   </page-content-header>
   <!-- / HEADER -->
-
   <div id="content" class="content p-24">
     <div fxLayout="row">
 
@@ -334,8 +333,8 @@
                 <div class="question-list" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="1 0 auto">
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
-                    <input id="namaProduk" matInput type="text" placeholder="{{'katalog_src.produk.text15' | translate}}" (input)="keyUp.next($event.target.value)"
-                      [formControl]="listProductSelected[i].product" [matAutocomplete]="auto">
+                    <input id="namaProduk" matInput placeholder="{{'katalog_src.produk.text15' | translate}}" (input)="keyUp.next($event.target.value)"
+                      [formControl]="listProductSelected[i].product">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                       <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
                         (onSelectionChange)="getProductObj($event, i)">
@@ -361,8 +360,7 @@
                   <!-- QUESTIONS TYPE -->
                   <div fxLayout="column" fxLayoutGap="24px" class="ml-auto">
                     <mat-form-field [id]="'btn-choice-answer-'+(i+1)" class="chooice is-light" fxFlex="30">
-                      <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)"
-                        (click)="selectForm('tipeQuestion')">
+                      <mat-select id="tipeQuestion" formControlName="type" (selectionChange)="changeType(item, i)" (click)="selectForm('tipeQuestion')">
                         <mat-select-trigger>
                           <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="100">
                             <div fxFlex="10">
@@ -374,8 +372,7 @@
                           </div>
                         </mat-select-trigger>
                         <ng-container>
-                          <mat-option *ngFor="let selection of listChoose" [value]="selection.value"
-                            [disabled]="checkWording(selection.name) === true">
+                          <mat-option *ngFor="let selection of listChoose" [value]="selection.value">
                             <mat-icon>{{selection.icon}}</mat-icon> {{selection.name}}
                           </mat-option>
                         </ng-container>
@@ -398,15 +395,16 @@
                       </mat-error>
                     </mat-form-field>
                   </div>
-                  <mat-checkbox [id]="'image_quality-'+(i)" formControlName="image_quality_detection"
+                  <mat-checkbox
+                    [id]="'image_quality-'+(i)"
+                    formControlName="image_quality_detection"
                     (change)="handleChangeImageDetection(i)"
                     *ngIf="item.get('type').value === 'image' || item.get('type').value === 'stock_check_ir' || item.get('type').value === 'planogram' || item.get('type').value === 'planogram_ir'"
                   >
                   {{'dte.template_tugas.image_quality_detection' | translate}}
                   </mat-checkbox>
                   <mat-checkbox *ngIf="item.get('type').value === 'upc'" formControlName="qrCode">{{'upc_code.qrcode' | translate}}</mat-checkbox>
-                  <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption'
-                    | translate}}</mat-checkbox>
+                  <mat-checkbox [id]="'encryption-'+(i)" formControlName="encryption">{{'dte.template_tugas.encryption' | translate}}</mat-checkbox>
                 </div>
 
                 <!-- NUMBER & FIELD -->
@@ -552,8 +550,9 @@
                 <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                   <ng-container *ngIf="checkWording(item.get('type').value)">
                     <mat-form-field fxFlex="50" class="opsi is-light" *ngIf="templateList[i]">
-                      <mat-select id="selectIR" (click)="selectForm()" placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item)">
-                        <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm">
+                      <mat-select id="selectIR" (click)="selectForm()" placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item, i)"
+                      formControlName="planogram_id">
+                        <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm.id">
                           {{ itm.name }}
                         </mat-option>
                       </mat-select>
@@ -935,6 +934,8 @@
             <app-background-misi
               (upload)="uploadImageBgMisi($event)"
               [judulMisi]="templateTaskForm.value.name"
+              [bgMisi]="templateTaskForm.value.background_image"
+              [colorFont]="templateTaskForm.value.background_font_color"
             ></app-background-misi>
           </div>
           <div *ngIf="isGuideline.value" class="mt-16">
@@ -942,6 +943,7 @@
             <app-background-misi
               (upload)="uploadImageGuideline($event)"
               isMultiple="5"
+              [currentFiles]="templateTaskForm.value.image_mechanism"
             ></app-background-misi>
           </div>
         </div>

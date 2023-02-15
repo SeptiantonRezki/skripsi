@@ -120,6 +120,8 @@ export class TemplateCreateComponent {
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
+  image_mechanism_list: any[] = [];
+  image_mechanism_text_list: any[] = [];
   saveData: Boolean;
   valueChange: Boolean;
   validComboDrag: boolean;
@@ -397,7 +399,7 @@ export class TemplateCreateComponent {
         // this.listKategoriToolbox = res.data;
       },
       (err) => {
-        console.log("err List Kategori Toolbox", err);
+        console.error("err List Kategori Toolbox", err);
       }
     );
   }
@@ -430,7 +432,7 @@ export class TemplateCreateComponent {
         // this.listTipeMisi = res.data;
       },
       (err) => {
-        console.log("err List Tipe Misi", err);
+        console.error("err List Tipe Misi", err);
       }
     );
   }
@@ -539,7 +541,7 @@ export class TemplateCreateComponent {
         // this.listKategoriMisi = res.data;
       },
       (err) => {
-        console.log("err List Kategori Misi", err);
+        console.error("err List Kategori Misi", err);
       }
     );
   }
@@ -572,7 +574,7 @@ export class TemplateCreateComponent {
         // this.listKategoriMisi = res.data;
       },
       (err) => {
-        console.log("err List Kategori Misi", err);
+        console.error("err List Kategori Misi", err);
       }
     );
   }
@@ -605,14 +607,9 @@ export class TemplateCreateComponent {
         if(!this.duplicateTask) this.initRejectedReason();
       },
       (err) => {
-        console.log("err List Alasan", err);
+        console.error("err List Alasan", err);
       }
     );
-  }
-
-
-  splitCheckList(template) {
-    console.log('template', template);
   }
 
   _filterSku(value): any[] {
@@ -662,9 +659,13 @@ export class TemplateCreateComponent {
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
     this.isDetailBanner = !!this.duplicateTask.image_detail;
-    if (this.duplicateTask.image_description.filter(i => i).length) {
-      this.imageContentTypeDefault = this.duplicateTask.image_description[0].content_image;
-      this.imageContentTypeBase64Child = this.duplicateTask.image_description[0].content_image;
+    if (this.duplicateTask.image_description) {
+      if (this.duplicateTask.image_description[0]) {
+        if (this.duplicateTask.image_description[0].content_image != null || this.duplicateTask.image_description[0].content_image !== undefined) {
+          this.imageContentTypeDefault = this.duplicateTask.image_description[0].content_image;
+          this.imageContentTypeBase64Child = this.duplicateTask.image_description[0].content_image;
+        }
+      }
     }
 
     this.templateTaskForm.get('kategori_toolbox').setValue(this.duplicateTask.task_toolbox_id);
@@ -678,50 +679,53 @@ export class TemplateCreateComponent {
     this.templateTaskForm.get('material').setValue(this.duplicateTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.duplicateTask['material_description'] ? this.duplicateTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.duplicateTask.image ? this.duplicateTask.image_url : '');
-    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? this.duplicateTask.video_url : '');
     this.templateTaskForm.get('background_image').setValue(this.duplicateTask.background_image ? this.duplicateTask.background_image_url : '');
     this.templateTaskForm.get('background_font_color').setValue(this.duplicateTask.background_font_color ? this.duplicateTask.background_font_color : '');
-    this.templateTaskForm.get('image_mechanism').setValue(Object.values(this.duplicateTask.task_template_image) || []);
     this.isBackgroundMisi.setValue(!!this.duplicateTask.background_image);
+    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? this.duplicateTask.video_url : '');
     this.frmIsBranching.setValue(!!this.duplicateTask.is_branching);
     this.shareable.setValue(!!this.duplicateTask.is_shareable);
     this.isIRTemplate.setValue(!!this.duplicateTask.is_ir_template);
     this.frmQuiz.setValue(this.duplicateTask.is_quiz ? 'quiz' : 'non-quiz');
+    this.templateTaskForm.get('image_mechanism').setValue(Object.values(this.duplicateTask.task_template_image) || []);
     this.isGuideline.setValue(!!Object.values(this.duplicateTask.task_template_image).length);
 
     if(this.duplicateTask['image_description'] === undefined){
-      this.duplicateTask['image_description'].map(item => ({
+      this.duplicateTask['image_description'].forEach(item => {
+        image_description.push(this.formBuilder.group({
+          content_type: '',
+          body: '',
+          title: '',
+          landing_page: '',
+          url_iframe: '',
+          imageDetailBanner: ''
+        }));
+      })
+    } else if (this.duplicateTask['image_description'] && !this.duplicateTask['image_description'][0]) {
+      image_description.push(this.formBuilder.group({
         content_type: '',
         body: '',
         title: '',
         landing_page: '',
         url_iframe: '',
         imageDetailBanner: ''
-      }))
-    } else if (this.duplicateTask['image_description'].filter(i => i).length) {
-      this.duplicateTask['image_description'].forEach(item => {
-
-        image_description.push(this.formBuilder.group({
-          content_type: item.content_type,
-          title: item.title,
-          body: item.body,
-          landing_page: item.landing_page,
-          url_iframe: item.url_iframe,
-          imageDetailBanner: item.imageDetailBanner
-        }));
-      });
-    } else {
-      image_description.push(this.formBuilder.group({
-        content_type: "",
-        title: "",
-        body: "",
-        landing_page: "",
-        url_iframe: "",
-        imageDetailBanner: ""
       }));
+    } else {
+      if (this.duplicateTask['image_description'] && Array.isArray(this.duplicateTask['image_description'])) {
+        this.duplicateTask['image_description'].map(item => {
+          image_description.push(this.formBuilder.group({
+            content_type: item.content_type,
+            body: item.body,
+            title: item.title,
+            landing_page: item.landing_page,
+            url_iframe: item.url_iframe,
+            imageDetailBanner: item.content_image
+          }));
+        });
+      }
     }
 
-    this.duplicateTask['questions'].forEach((item, index) => {
+    this.duplicateTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
         this.listProductSelected[index] = {
           product: new FormControl(item.stock_check_data.name)
@@ -786,7 +790,7 @@ export class TemplateCreateComponent {
         question: item.question,
         question_image: item['question_image'] ? item['question_image'] : '',
         question_video: item['question_video'] ? item['question_video'] : '',
-        type: item.type,
+        type: item.type === 'planogram' ? item.type + "_ir" : item.type,
         typeSelection: this.listChoose.filter(val => val.value === (item.type === 'planogram' ? item.type + "_ir" : item.type))[0],
         coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
         planogram_id: Number(item.planogram_id),
@@ -798,8 +802,8 @@ export class TemplateCreateComponent {
         stock_check_ir_list: item.stock_check_ir_list,
         question_image_detail: item.question_image_detail === '0',
         image_detail: false,
-        encryption: false,
-        image_quality_detection: false,
+        encryption: item.encryption ? item.encryption === "1" : false,
+        image_quality_detection: item.image_quality_detection ? item.image_quality_detection === "1" : false,
         blocker_submission: ["", Validators.required],
         // required: item.required,
         question_image_description: item.question_image_description === undefined ? [{
@@ -908,16 +912,16 @@ export class TemplateCreateComponent {
       }
     });
 
-
-    if (this.duplicateTask.material === 'no')
-      this.templateTaskForm.get('material_description').disable();
-    else
-      this.templateTaskForm.get('material_description').enable();
+    // if (this.duplicateTask.material === 'no')
+    //   this.templateTaskForm.get('material_description').disable();
+    // else
+    //   this.templateTaskForm.get('material_description').enable();
 
     this.duplicateTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     });
     this.templateTaskForm.get('ir_type').setValue(this.duplicateTask.ir_type);
+
   }
 
   addAdditional(idx) {
@@ -1455,10 +1459,12 @@ export class TemplateCreateComponent {
 
   onChangeDetailBannerQuestion(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
     if (event.checked) {
       questions.at(index).get('image_detail').setValue(true);
     } else {
       questions.at(index).get('image_detail').setValue(false);
+      question_image_description.reset();
     }
   }
   onChangeDetailBanner(event) {
@@ -1478,7 +1484,7 @@ export class TemplateCreateComponent {
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let questionsIsEmpty = [];
-      let questionVideoList = []
+      let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
 
       if (this.frmIsBranching.value) {
         let hasEmptyNext = false;
@@ -1507,7 +1513,7 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_mechanism: this.templateTaskForm.get('image_mechanism').value || [],
+        image_mechanism: new_image_mechanism || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1676,7 +1682,7 @@ export class TemplateCreateComponent {
                       resQuestionVideo => {
                         resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
                       }, err => {
-                        console.log(err.error);
+                        console.error(err.error);
                         reject(err);
                         this.dataService.showLoading(false);
                         return;
@@ -1692,7 +1698,7 @@ export class TemplateCreateComponent {
                       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                       this.router.navigate(['dte', 'template-task']);
                     }, err => {
-                      console.log(err.error)
+                      console.error(err.error)
                       this.dataService.showLoading(false);
                       return;
                     })
@@ -1705,7 +1711,7 @@ export class TemplateCreateComponent {
                     this.router.navigate(['dte', 'template-task']);
                   },
                   err => {
-                    console.log(err.error)
+                    console.error(err.error)
                     this.dataService.showLoading(false);
                     return;
                   }
@@ -1713,7 +1719,7 @@ export class TemplateCreateComponent {
               }
             },
             err => {
-              console.log(err.error)
+              console.error(err.error)
               this.dataService.showLoading(false);
               return;
             }
@@ -1728,7 +1734,7 @@ export class TemplateCreateComponent {
                   resQuestionVideo => {
                     resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
                   }, err => {
-                    console.log(err.error);
+                    console.error(err.error);
                     reject(err);
                     this.dataService.showLoading(false);
                     return;
@@ -1744,7 +1750,7 @@ export class TemplateCreateComponent {
                   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                   this.router.navigate(['dte', 'template-task']);
                 }, err => {
-                  console.log(err.error);
+                  console.error(err.error);
                   this.dataService.showLoading(false);
                   return;
                 })
@@ -1757,7 +1763,7 @@ export class TemplateCreateComponent {
                 this.router.navigate(['dte', 'template-task']);
               },
               err => {
-                console.log(err.error);
+                console.error(err.error);
                 this.dataService.showLoading(false);
                 return;
               }
@@ -1772,7 +1778,7 @@ export class TemplateCreateComponent {
             this.router.navigate(['dte', 'template-task']);
           },
           err => {
-            console.log(err.error);
+            console.error(err.error);
             this.dataService.showLoading(false);
             // this.dialogService.openSnackBar({ message: err.error.message });
           }
@@ -1848,8 +1854,75 @@ export class TemplateCreateComponent {
     }
   }
 
+  getImageData(file: any) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(file);
+    })
+  }
+
   uploadImageGuideline({images, forms}){
-    this.templateTaskForm.get('image_mechanism').setValue(forms);
+    const initialImages = Object.values(this.duplicateTask.task_template_image);
+
+    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
+
+    // this.templateTaskForm.get('image_mechanism').setValue(forms);
+
+    // memisahkan yang berubah dengan yang tidak
+    let imagesFile = [];
+    let newIndex = [];
+    let changedByTextIndex = [];
+    images.forEach((item: any, index) => {
+      if (item instanceof File) {
+        imagesFile.push(this.getImageData(item));
+        newIndex.push(index);
+      } else if (item.description !== forms[index].description) {
+        changedByTextIndex.push(index);
+      }
+    });
+
+    Promise.all(imagesFile)
+      .then((data) => data.map((item, idx) => {
+        if (changed[idx] && changed[idx].hasOwnProperty('id')) {
+          // EDIT
+          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
+        } else {
+          // ADD
+          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
+        }
+      }))
+      .then((data) => {
+        if (changed.length > data.length) {
+          const newDatas = [];
+
+          // HAPUS
+          changed.map((item, idx) => {
+            if (data[idx] && data[idx].hasOwnProperty('id')){
+              newDatas.push(data[idx]);
+            } else {
+              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
+            }
+          });
+
+          return newDatas;
+        } else return data
+      })
+      .then((data) => {
+        this.image_mechanism_list = data;
+      });
+
+    let newText = [];
+    changedByTextIndex.forEach(index => {
+      newText.push({
+        task_template_image_id: images[index].id,
+        file: "",
+        description: forms[index].description,
+      });
+    });
+    this.image_mechanism_text_list = newText;
   }
 
   onChangeGuideline(){
