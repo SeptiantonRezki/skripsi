@@ -68,7 +68,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
   ngOnInit() {
     this.formFilter.get('partner_type_list').setValue(this.defaultPartnerType[0].id);
     this.getPartnerTypeList();
-    this.getList();
+    this.getList(true);
   }
 
   getPartnerTypeList() {

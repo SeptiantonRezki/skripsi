@@ -93,8 +93,8 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     this.initFormFilter();
     this.getPartnerTypeList();
     this.getPartnerIdList();
-    // this.getStatusList();
-    this.getList();
+    this.getStatusList();
+    this.getList(true);
   }
 
   initFormFilter() {
@@ -115,11 +115,11 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     }, err=> { })
   }
 
-  // getStatusList() {
-  //   this.PojokUntungPartnersRegisteredService.getStatusList({}).subscribe(res => {
-  //     this.statusList = this.defaultStatus.concat(res.data);
-  //   }, err=> { })
-  // }
+  getStatusList() {
+    this.PojokUntungPartnersRegisteredService.getStatus({}).subscribe(res => {
+      this.statusList = this.defaultStatus.concat(res.data.status);
+    }, err=> { })
+  }
 
   updateFilter(string, value) {
     this.loadingIndicator = true;
@@ -134,7 +134,11 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
       this.pagination.partner_id = value;
     }
     if (string === 'status') {
-      this.pagination.status = value;
+      if (value === 0) {
+        this.pagination.status = '0';
+      } else {
+        this.pagination.status = value;
+      }
     }
 
     if (value) {
@@ -155,14 +159,14 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   changeFilteredData(param?: any, type?: any){
     if (type === 'partner_type') {
       this.formFilter.get('partner_id').setValue(this.defaultPartnerId[0].id, {emitEvent: false});
-      this.formFilter.get('status').setValue(this.defaultStatus[0].id, {emitEvent: false});
+      // this.formFilter.get('status').setValue(this.defaultStatus[0].id, {emitEvent: false});
       this.pagination.partner_id = '';
-      this.pagination.status = '';
+      // this.pagination.status = '';
     }
-    if (type === 'partner_id') {
-      this.formFilter.get('status').setValue(this.defaultStatus[0].id, {emitEvent: false});
-      this.pagination.status = '';
-    }
+    // if (type === 'partner_id') {
+    //   this.formFilter.get('status').setValue(this.defaultStatus[0].id, {emitEvent: false});
+    //   this.pagination.status = '';
+    // }
 
     // this.dataService.setToStorage("filter_partners_registered", param);
     this.updateFilter(type, param);

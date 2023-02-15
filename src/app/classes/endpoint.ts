@@ -868,7 +868,8 @@ export class Endpoint {
       },
       pojok_untung_partners_registered: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration`,
-        get_partner_type_list: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`
+        get_partner_type_list: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`,
+        get_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration_status`
       },
       sequencing: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
