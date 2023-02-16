@@ -1020,16 +1020,24 @@ export class TemplateCreateComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template) {
-    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
-    if (indexExist > -1) {
-      this.templateListImageIR[indexExist]['ir_id'] = selectedIR.value.id;
-      this.templateListImageIR[indexExist]['ir_code'] = selectedIR.value.code;
-      this.templateListImageIR[indexExist]['ir_name'] = selectedIR.value.name;
-      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
-      this.templateListImageIR[indexExist]['check_list'] = selectedIR.value.check_list ? JSON.parse(selectedIR.value.check_list) : [];
+  selectedImageIR(selectedIR, idx) {
+    let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
+    if (idx > -1 && indexTemplate > -1) {
+      this.templateListImageIR[idx]['item_id'] = idx + 1;
+      this.templateListImageIR[idx]['ir_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['ir_code'] = this.templateList[idx][indexTemplate].code;
+      this.templateListImageIR[idx]['ir_name'] = this.templateList[idx][indexTemplate].name;
+      this.templateListImageIR[idx]['image'] = this.templateList[idx][indexTemplate].image;
+      this.templateListImageIR[idx]['check_list'] = this.templateList[idx][indexTemplate].check_list ? JSON.parse(this.templateList[idx][indexTemplate].check_list) : [];
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name, check_list: JSON.parse(selectedIR.value.check_list) });
+      this.templateListImageIR.push({
+        item_id: idx + 1,
+        image: this.templateList[idx][indexTemplate].image,
+        ir_id: this.templateList[idx][indexTemplate].id,
+        ir_code: this.templateList[idx][indexTemplate].code,
+        ir_name: this.templateList[idx][indexTemplate].name,
+        check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : []
+      });
     }
   }
 
@@ -1301,6 +1309,7 @@ export class TemplateCreateComponent {
       content_typePertanyaan: 'static_page',
       image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
+      planogram_id: "",
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
         title: '',
