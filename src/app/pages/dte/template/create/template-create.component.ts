@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
-import { Observable, Subject, ReplaySubject } from "rxjs";
+import { Observable, Subject, ReplaySubject, of, from } from "rxjs";
 import { ProductService } from "app/services/sku-management/product.service";
 import { startWith, map } from "rxjs/operators";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
@@ -658,6 +658,7 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
+    const product = [];
     this.isDetailBanner = !!this.duplicateTask.image_detail;
     if (this.duplicateTask.image_description) {
       if (this.duplicateTask.image_description[0]) {
@@ -725,13 +726,25 @@ export class TemplateCreateComponent {
       }
     }
 
+    this.listProductSkuBank = this.duplicateTask.questions.map(i => i.stock_check_data);
+    this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+
     this.duplicateTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
         this.listProductSelected[index] = {
-          product: new FormControl(item.stock_check_data.name)
+          name: item.stock_check_data.name,
+          sku_id: item.stock_check_data.sku_id,
+          product: new FormControl({
+            name: item.stock_check_data.name,
+            sku_id: item.stock_check_data.sku_id,
+            directly: item.stock_check_data.directly
+          })
         };
 
+        this.product.setValue(item.stock_check_data.name)
+
         item.additional = ["Opsi 1"];
+        product.push(item.stock_check_data);
       }
 
       if (this.isIRTemplate.value) this.listChoose = [...this.listChooseWithIr]
@@ -1563,14 +1576,13 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
-            // required: item.required,
+            required: item.type === 'stock_check' ? 1 : null,
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,

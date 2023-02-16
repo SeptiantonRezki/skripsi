@@ -334,7 +334,7 @@
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
                     <input id="namaProduk" matInput placeholder="{{'katalog_src.produk.text15' | translate}}" (input)="keyUp.next($event.target.value)"
-                      [formControl]="listProductSelected[i].product">
+                      [formControl]="listProductSelected[i].product" type="text" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                       <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
                         (onSelectionChange)="getProductObj($event, i)">
