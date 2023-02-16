@@ -2031,5 +2031,4 @@ export class TemplateCreateComponent {
       return 'check_box_outline_blank';
     }
   }
-
 }
