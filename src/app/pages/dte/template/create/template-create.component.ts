@@ -307,7 +307,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
-      image_mechanism: [],
+      image_mechanism: [""],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -804,7 +804,7 @@ export class TemplateCreateComponent {
         image_detail: false,
         encryption: item.encryption ? item.encryption === "1" : false,
         image_quality_detection: item.image_quality_detection ? item.image_quality_detection === "1" : false,
-        blocker_submission: ["", Validators.required],
+        blocker_submission: [item.blocker_submission, Validators.required],
         // required: item.required,
         question_image_description: item.question_image_description === undefined ? [{
           content_type: '',
@@ -1555,7 +1555,7 @@ export class TemplateCreateComponent {
         }),
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "")) {
+          if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].product.value == null || this.listProductSelected[index].product.value == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
@@ -1864,7 +1864,7 @@ export class TemplateCreateComponent {
     })
   }
 
-  uploadImageGuideline({images, forms}){
+  uploadImageGuideline({ images, forms }) {
     const initialImages = Object.values(this.duplicateTask.task_template_image);
 
     const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
@@ -1881,7 +1881,10 @@ export class TemplateCreateComponent {
         newIndex.push(index);
       } else if (item.description !== forms[index].description) {
         changedByTextIndex.push(index);
-      }
+      } else {
+        imagesFile.push(this.templateTaskForm.value.image_mechanism[index].image_url);
+        newIndex.push(index);
+      };
     });
 
     Promise.all(imagesFile)
@@ -1925,7 +1928,7 @@ export class TemplateCreateComponent {
     this.image_mechanism_text_list = newText;
   }
 
-  onChangeGuideline(){
+  onChangieGuideline(){
     if (!this.isGuideline.value) {
       this.uploadImageGuideline({images: [], forms: []});
     }
