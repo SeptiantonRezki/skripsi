@@ -307,7 +307,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
-      image_mechanism: [""],
+      image_mechanism: [[]],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -1887,7 +1887,7 @@ export class TemplateCreateComponent {
     let changedByTextIndex = [];
     let imagesExisting = [];
 
-    if (this.templateTaskForm.value) {
+    if (this.templateTaskForm.value.image_mechanism) {
       const payload = {
         type: 'url',
         data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
@@ -1942,6 +1942,7 @@ export class TemplateCreateComponent {
       })
       .then((data) => {
         this.image_mechanism_list = [...this.image_mechanism_list, ...data];
+        // this.image_mechanism_list = data;
       });
 
     let newText = [];
@@ -1955,7 +1956,7 @@ export class TemplateCreateComponent {
     this.image_mechanism_text_list = newText;
   }
 
-  onChangieGuideline(){
+  onChangeGuideline(){
     if (!this.isGuideline.value) {
       this.uploadImageGuideline({images: [], forms: []});
     }
