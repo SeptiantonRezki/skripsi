@@ -23,7 +23,7 @@ export class PojokUntungPartnersListCreateComponent implements OnInit {
   partner_logo: File;
   partner_logo_url: any;
 
-  partner_type: any = '-9';
+  partner_type: any = -9;
   partnerTypeList: any[];
 
   permission: any;

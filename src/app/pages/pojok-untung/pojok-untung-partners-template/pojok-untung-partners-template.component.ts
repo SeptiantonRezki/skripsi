@@ -33,7 +33,7 @@ export class PojokUntungPartnersTemplateComponent implements OnInit {
   @ViewChild('table') table: DatatableComponent;
   activeCellTemp: TemplateRef<any>;
   
-  partner_type: any = '-9';
+  partner_type: any = -9;
   defaultPartner: any[] = [{ id: '', partner_name: "Semua Partner" }];
   partnerList: any[];
   

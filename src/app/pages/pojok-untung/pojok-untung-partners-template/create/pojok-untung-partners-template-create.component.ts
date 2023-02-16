@@ -19,7 +19,7 @@ export class PojokUntungPartnersTemplateCreateComponent implements OnInit {
   formTemplatePartner: FormGroup;
   arr: FormArray;
   indexDelete: any;
-  partner_type: any = '-9';
+  partner_type: any = -9;
   partnerList: Array<any> = [];
 
   public options: Object = Config.FROALA_CUSTOM_HEIGHT_PLACEHOLDER_CONFIG(100, "Penjelasan");

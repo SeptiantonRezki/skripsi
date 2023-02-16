@@ -25,7 +25,7 @@ export class PojokUntungPartnersListComponent implements OnInit {
   pagination: Page = new Page();
   onLoad: boolean;
   offsetPagination: any;
-  partner_type: any = '-9';
+  partner_type: any = -9;
   defaultPartnerType: any[] = [{ id: -9, label: "Semua Jenis Partner" }];
 
   keyUp = new Subject<string>();
