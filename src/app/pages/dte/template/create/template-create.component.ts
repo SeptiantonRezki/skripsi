@@ -1869,22 +1869,38 @@ export class TemplateCreateComponent {
 
     const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
 
-    // this.templateTaskForm.get('image_mechanism').setValue(forms);
-
     // memisahkan yang berubah dengan yang tidak
     let imagesFile = [];
     let newIndex = [];
     let changedByTextIndex = [];
+    let imagesExisting = [];
+
+    if (this.templateTaskForm.value) {
+      const payload = {
+        type: 'url',
+        data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
+      }
+      this.taskTemplateService.convertImage(payload).subscribe(res => {
+        console.log("response convert Image", res);
+        imagesExisting = res.data.map((item, index) => ({
+          task_template_image_id: "",
+          file: item.result,
+          description: this.templateTaskForm.value.image_mechanism[index].description
+        }));
+        this.image_mechanism_list = [
+          ...this.image_mechanism_list,
+          ...imagesExisting
+        ]
+      });
+    }
+
     images.forEach((item: any, index) => {
       if (item instanceof File) {
         imagesFile.push(this.getImageData(item));
         newIndex.push(index);
       } else if (item.description !== forms[index].description) {
         changedByTextIndex.push(index);
-      } else {
-        imagesFile.push(this.templateTaskForm.value.image_mechanism[index].image_url);
-        newIndex.push(index);
-      };
+      }
     });
 
     Promise.all(imagesFile)
@@ -1914,7 +1930,7 @@ export class TemplateCreateComponent {
         } else return data
       })
       .then((data) => {
-        this.image_mechanism_list = data;
+        this.image_mechanism_list = [...this.image_mechanism_list, ...data];
       });
 
     let newText = [];
