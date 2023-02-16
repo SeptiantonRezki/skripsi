@@ -1881,7 +1881,6 @@ export class TemplateCreateComponent {
         data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
       }
       this.taskTemplateService.convertImage(payload).subscribe(res => {
-        console.log("response convert Image", res);
         imagesExisting = res.data.map((item, index) => ({
           task_template_image_id: "",
           file: item.result,
