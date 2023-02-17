@@ -65,4 +65,9 @@ export class TemplateTaskService extends BaseService {
     const url = this.getUrl(this.namespace, 'put_delete_personalize', context);
     return this.deleteApi(url);
   }
+
+  convertImage(body): Observable<any> {
+    const url = this.getUrl(this.namespace, 'convert_image');
+    return this.postApi(url, body);
+  }
 }
