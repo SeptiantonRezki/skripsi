@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from 'app/services/dialog.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
+import { TemplateTaskService } from 'app/services/dte/template-task.service';
 
 @Component({
   selector: 'app-background-misi',
@@ -20,22 +21,25 @@ export class BackgroundMisiComponent implements OnInit {
   @Input() judulMisi: string;
   @Input() bgMisi: any;
   @Input() isDetail: any;
+  @Input() isDuplicate: boolean = false;
 
   @Input() isMultiple: any;
   selectedFiles: any;
   @Input() currentFiles: any = [];
   guidelineForm: FormGroup;
-  
+
   constructor(
     private dialogService: DialogService,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
+    private templateTaskService: TemplateTaskService,
   ) {}
 
   ngOnInit() {
     if (this.bgMisi) {
       this.isSize = true;
     }
+
     if (!this.colorFont) {
       this.colorFont = "#ffffff"
     }
@@ -56,7 +60,7 @@ export class BackgroundMisiComponent implements OnInit {
     });
 
     if (this.currentFiles) {
-      this.setValueGuideline(); 
+      this.setValueGuideline();
     }
   }
 
@@ -79,13 +83,13 @@ export class BackgroundMisiComponent implements OnInit {
       this.isSize = true;
       let reader = new FileReader();
       let file = this.files;
-      reader.readAsDataURL(file);      
+      reader.readAsDataURL(file);
 
       reader.onload = () => {
         this.bgMisi = reader.result;
         this.upload.emit({image: reader.result, color: this.colorFont});
       };
-      
+
     } else {
       if (this.bgMisi) {
         this.upload.emit({image: this.bgMisi, color: this.colorFont});
@@ -149,7 +153,7 @@ export class BackgroundMisiComponent implements OnInit {
   submitMultiple(){
     let guideline = this.guidelineForm.get('guideline') as FormArray;
     this.selectedFiles = [];
-    
+
     const newFile = [...this.currentFiles];
     newFile.forEach((file, idx) => {
       if (file instanceof File){
@@ -177,14 +181,44 @@ export class BackgroundMisiComponent implements OnInit {
     this.upload.emit({images: this.currentFiles, forms: this.guidelineForm.get('guideline').value});
   }
 
+  urlToBase64(images) {
+    const imagesUrl = images.map(i => i.image_url);
+    return new Promise((resolve, reject) => {
+      const payload = {
+        type: "url",
+        data_images: imagesUrl,
+      }
+      this.templateTaskService.convertImage(payload).subscribe(
+        (res) => {
+          const data = res.data.map((i, key) => ({ image_url: i, description: images[key].description}))
+          resolve(data);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    })
+  }
+
   setValueGuideline(){
     let guideline = this.guidelineForm.get('guideline') as FormArray;
 
-    this.currentFiles.forEach((item, idx) => {
-      guideline.push(this.formBuilder.group({
-        file: [item.image_url],
-        description: [item.description],
-      }));
-    });
+    if (this.isDuplicate) {
+      this.urlToBase64(this.currentFiles).then((data: any) => {
+        data.map(i => {
+          guideline.push(this.formBuilder.group({
+            file: [i.image_url.result],
+            description: [i.description],
+          }));
+        })
+      })
+    } else {
+      this.currentFiles.forEach((item, idx) => {
+        guideline.push(this.formBuilder.group({
+          file: [item.image_url],
+          description: [item.description],
+        }));
+      });
+    }
   };
 }

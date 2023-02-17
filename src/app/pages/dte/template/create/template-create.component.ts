@@ -1535,7 +1535,8 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_mechanism: new_image_mechanism || [],
+        // image_mechanism: new_image_mechanism || [],
+        image_mechanism: this.templateTaskForm.controls.image_mechanism.value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1885,85 +1886,95 @@ export class TemplateCreateComponent {
     })
   }
 
-  uploadImageGuideline({ images, forms }) {
-    const initialImages = Object.values(this.duplicateTask.task_template_image);
-
-    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
-
-    // memisahkan yang berubah dengan yang tidak
-    let imagesFile = [];
-    let newIndex = [];
-    let changedByTextIndex = [];
-    let imagesExisting = [];
-
-    if (this.templateTaskForm.value.image_mechanism) {
-      const payload = {
-        type: 'url',
-        data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
-      }
-      this.taskTemplateService.convertImage(payload).subscribe(res => {
-        imagesExisting = res.data.map((item, index) => ({
-          task_template_image_id: "",
-          file: item.result,
-          description: this.templateTaskForm.value.image_mechanism[index].description
-        }));
-        this.image_mechanism_list = [
-          ...this.image_mechanism_list,
-          ...imagesExisting
-        ]
-      });
-    }
-
-    images.forEach((item: any, index) => {
-      if (item instanceof File) {
-        imagesFile.push(this.getImageData(item));
-        newIndex.push(index);
-      } else if (item.description !== forms[index].description) {
-        changedByTextIndex.push(index);
-      }
-    });
-
-    Promise.all(imagesFile)
-      .then((data) => data.map((item, idx) => {
-        if (changed[idx] && changed[idx].hasOwnProperty('id')) {
-          // EDIT
-          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
-        } else {
-          // ADD
-          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
-        }
-      }))
-      .then((data) => {
-        if (changed.length > data.length) {
-          const newDatas = [];
-
-          // HAPUS
-          changed.map((item, idx) => {
-            if (data[idx] && data[idx].hasOwnProperty('id')){
-              newDatas.push(data[idx]);
-            } else {
-              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
-            }
-          });
-
-          return newDatas;
-        } else return data
-      })
-      .then((data) => {
-        this.image_mechanism_list = [...this.image_mechanism_list, ...data];
-        // this.image_mechanism_list = data;
-      });
-
-    let newText = [];
-    changedByTextIndex.forEach(index => {
-      newText.push({
-        task_template_image_id: images[index].id,
-        file: "",
-        description: forms[index].description,
-      });
-    });
-    this.image_mechanism_text_list = newText;
+  uploadImageGuideline({ forms, images }) {
+    // let mechanismList = [];
+    // forms.forEach(i => {
+    //   mechanismList.push(i.file);
+    //   this.image_mechanism_text_list.push(i.description);
+    // })
+    // this.image_mechanism_list = mechanismList;
+    this.templateTaskForm.controls.image_mechanism.setValue(forms);
   }
+
+  // uploadImageGuideline({ images, forms }) {
+  //   const initialImages = Object.values(this.duplicateTask.task_template_image);
+
+  //   const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
+
+  //   // memisahkan yang berubah dengan yang tidak
+  //   let imagesFile = [];
+  //   let newIndex = [];
+  //   let changedByTextIndex = [];
+  //   let imagesExisting = [];
+
+  //   if (this.templateTaskForm.value.image_mechanism) {
+  //     const payload = {
+  //       type: 'url',
+  //       data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
+  //     }
+  //     this.taskTemplateService.convertImage(payload).subscribe(res => {
+  //       imagesExisting = res.data.map((item, index) => ({
+  //         task_template_image_id: "",
+  //         file: item.result,
+  //         description: this.templateTaskForm.value.image_mechanism[index].description
+  //       }));
+  //       this.image_mechanism_list = [
+  //         ...this.image_mechanism_list,
+  //         ...imagesExisting
+  //       ]
+  //     });
+  //   }
+
+  //   images.forEach((item: any, index) => {
+  //     if (item instanceof File) {
+  //       imagesFile.push(this.getImageData(item));
+  //       newIndex.push(index);
+  //     } else if (item.description !== forms[index].description) {
+  //       changedByTextIndex.push(index);
+  //     }
+  //   });
+
+  //   Promise.all(imagesFile)
+  //     .then((data) => data.map((item, idx) => {
+  //       if (changed[idx] && changed[idx].hasOwnProperty('id')) {
+  //         // EDIT
+  //         return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
+  //       } else {
+  //         // ADD
+  //         return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
+  //       }
+  //     }))
+  //     .then((data) => {
+  //       if (changed.length > data.length) {
+  //         const newDatas = [];
+
+  //         // HAPUS
+  //         changed.map((item, idx) => {
+  //           if (data[idx] && data[idx].hasOwnProperty('id')){
+  //             newDatas.push(data[idx]);
+  //           } else {
+  //             newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
+  //           }
+  //         });
+
+  //         return newDatas;
+  //       } else return data
+  //     })
+  //     .then((data) => {
+  //       this.image_mechanism_list = [...this.image_mechanism_list, ...data];
+  //       // this.image_mechanism_list = data;
+  //     });
+
+  //   let newText = [];
+  //   changedByTextIndex.forEach(index => {
+  //     newText.push({
+  //       task_template_image_id: images[index].id,
+  //       file: "",
+  //       description: forms[index].description,
+  //     });
+  //   });
+  //   this.image_mechanism_text_list = newText;
+  // }
 
   onChangeGuideline(){
     if (!this.isGuideline.value) {

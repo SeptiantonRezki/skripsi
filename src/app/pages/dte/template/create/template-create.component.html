@@ -944,6 +944,7 @@
               (upload)="uploadImageGuideline($event)"
               isMultiple="5"
               [currentFiles]="templateTaskForm.value.image_mechanism"
+              [isDuplicate]="!!duplicateTask"
             ></app-background-misi>
           </div>
         </div>
