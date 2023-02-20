@@ -31,6 +31,9 @@ export class PengaturanDsdExecutorComponent {
   rows: any[] = [];
   temp: any[] = [];
 
+  allRowsSelected: boolean;
+  isSelected: boolean;
+
   selected: any[];
   selected_userid: any[];
   detailData: any;
@@ -86,6 +89,7 @@ export class PengaturanDsdExecutorComponent {
     this.profile = null;
     this.dataService.showLoading(false);
     this.disabled_exec = [];
+    this.allRowsSelected = false;
 
     console.log(this.detailData.area);
   }
@@ -113,6 +117,13 @@ export class PengaturanDsdExecutorComponent {
     let userid = execid.split('_');
     selected_userid.push()
     */
+  }
+
+  selectFn(allRowsSelected: boolean) {
+    // console.log('allRowsSelected_', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (!allRowsSelected) this.selected = [];
+    else this.selected.length = this.totalData;
   }
 
   onCheckboxChange(event: any, row: any) {

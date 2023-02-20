@@ -575,7 +575,7 @@ export class PengaturanDsdEditComponent implements OnInit {
       dialogConfig.data = {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
-        max: this.formCreateProposal.get('maxExecutor').value,
+        max: 100000,
         area: this.selectedArea,
         selected: this.selectedExecutor,
         program_code: this.trs_program_code,

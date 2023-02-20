@@ -2,7 +2,7 @@
   <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
       <div fxFlex fxLayout="row" fxLayoutAlign="start center">
-        <span>FIELD FORCE (MAX: {{detailData.max}})</span>
+        <span>PILIH EXECUTOR</span>
       </div>
     </div>
     <!-- CLOSE DIALOG BUTTON -->
@@ -15,17 +15,21 @@
   <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar  style="position: relative;">
     
     <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-      <mat-form-field fxFlex="25%" class="dropdown is-light form-primary">
+      <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
         <mat-select placeholder="Salespoint" formControlName="salespoint" (selectionChange)="changeSales($event)">
           <mat-option *ngFor="let sp of salespointList" [value]="sp">{{sp}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field fxFlex="25%" class="dropdown is-light form-primary">
+      <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
         <mat-select placeholder="District" formControlName="district" (selectionChange)="changeDistrict($event)">
           <mat-option *ngFor="let diss of districtList" [value]="diss">{{diss}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <div fxFlex="10%" class=""></div>
+      <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
+        <mat-select placeholder="Territory" formControlName="territory" (selectionChange)="changeDistrict($event)">
+          <mat-option *ngFor="let diss of districtList" [value]="diss">{{diss}}</mat-option>
+        </mat-select>
+      </mat-form-field>
       <div class="search-field" fxFlex="30%" class="dropdown is-light form-primary">
         <mat-icon>search</mat-icon>
         <mat-form-field class="is-light tab-search">
@@ -35,7 +39,6 @@
       </div>
     </div>
     <div style="margin-top: 20px;">
-      <span class="bintang">{{ls.locale.tactical_retail_sales.proposal_red}}</span> = {{ls.locale.tactical_retail_sales.proposal_red_explanation}}
     </div>
 
     <form autocomplete="off" [formGroup]="formExecutor" class="responsive spesial-exec" style="margin-top: 50px;">
@@ -45,21 +48,19 @@
         [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
         [sorts]="[{prop: 'fullname', dir: 'asc'}]" style="position: unset; display: unset;"
         >
+
         <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
           <ng-template ngx-datatable-header-template>
+            <mat-checkbox [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected);"></mat-checkbox>
           </ng-template>
 
-
-          <ng-template
-            ngx-datatable-cell-template
-            let-row="row"
-            let-value="value"
-            let-isSelected="isSelected"
-            let-onCheckboxChangeFn="onCheckboxChangeFn"
-          >
-            <mat-checkbox [checked]="isSelected" [disabled]="(checkDisabled || disabled_exec.includes(row.idUser) || row.isDisable) && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
+          <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn">
+            <mat-checkbox [checked]="isSelected" (change)="onCheckboxChangeFn($event)"
+              [disabled]="allRowsSelected" *ngIf="!allRowsSelected"></mat-checkbox>
+            <mat-checkbox [checked]="true" [disabled]="allRowsSelected" *ngIf="allRowsSelected"
+              class="mat-checkbox-all"></mat-checkbox>
           </ng-template>
-
         </ngx-datatable-column>
 
         <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_name}}" prop="fullname" [width]="200">

@@ -29,8 +29,7 @@
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                         matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
-                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
-                        [disabled] = "true">
+                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')">
                         <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
                           {{item.code}}
                         </mat-option>
@@ -45,8 +44,7 @@
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                         matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
-                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
-                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')">
                         <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                           {{item.name}}</mat-option>
                       </mat-select>
@@ -61,15 +59,15 @@
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="executor" (click)="modalExecutor()" 
-                    placeholder="{{ls.locale.tactical_retail_sales.proposal_executor}}">
+                  <input matInput type="text" formControlName="executor" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_executor}}" disabeld readonly>
                 </mat-form-field>
               </div>
 
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <mat-form-field fxFlex="90%" class="is-light form-primary">
-                  <input matInput type="text" formControlName="product" (click)="modalProduct()" 
-                    placeholder="{{ls.locale.tactical_retail_sales.proposal_product}}">
+                  <input matInput type="text" formControlName="product"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_product}}" disabeld readonly>
                 </mat-form-field>
               </div>
 
