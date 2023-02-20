@@ -26,8 +26,8 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
-        <mat-select placeholder="Territory" formControlName="territory" (selectionChange)="changeDistrict($event)">
-          <mat-option *ngFor="let diss of districtList" [value]="diss">{{diss}}</mat-option>
+        <mat-select placeholder="Territory" formControlName="territory" (selectionChange)="changeTerritory($event)">
+          <mat-option *ngFor="let diss of territoryList" [value]="diss">{{diss}}</mat-option>
         </mat-select>
       </mat-form-field>
       <div class="search-field" fxFlex="30%" class="dropdown is-light form-primary">

@@ -56,6 +56,7 @@ export class PengaturanDsdExecutorComponent {
 
   salespointList: any[];
   districtList: any[];
+  territoryList: any[];
   statusList: any[] = [
     { name: 'Semua', value: '' }, 
     { name: 'Dapat diassign di TRS program ini', value: 'bisa' },
@@ -65,6 +66,7 @@ export class PengaturanDsdExecutorComponent {
 
   filterSalespoint: any = "";
   filterDistrict: any = "";
+  filterTerritory: any = "";
   filterStatus: any = "";
   filterSearch: any = "";
 
@@ -113,6 +115,11 @@ export class PengaturanDsdExecutorComponent {
 
     this.disabled_exec = this.selected.map(a => a.idUser);
 
+    if (this.AllIDs.length == this.selected.length){
+      this.allRowsSelected = true;
+    } else {
+      this.allRowsSelected = false;
+    }
     /*
     let execid = this.selected['id'];
     let userid = execid.split('_');
@@ -127,6 +134,7 @@ export class PengaturanDsdExecutorComponent {
       this.selected = [];
     } 
     else {
+      this.selected = [];
       for (let index = 0; index < this.AllIDs.length; index++) {
         this.selected.push(this.AllIDs[index]);
       }
@@ -183,6 +191,13 @@ export class PengaturanDsdExecutorComponent {
 
   changeDistrict(e: any) {
     this.filterDistrict =  e.value.toLowerCase();
+    this.territoryList = this.rows.map(a => a.territory.trim());
+    this.territoryList = this.territoryList.filter((x, i, a) => a.indexOf(x) == i);
+    this.updateTable();
+  }
+
+  changeTerritory(e: any) {
+    this.filterTerritory =  e.value.toLowerCase();
     this.updateTable();
   }
 
@@ -204,6 +219,13 @@ export class PengaturanDsdExecutorComponent {
       const val = this.filterDistrict;
       temp = temp.filter(function (d) {
         return d.district.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterTerritory != ""){
+      const val = this.filterTerritory;
+      temp = temp.filter(function (d) {
+        return d.territory.toLowerCase().indexOf(val) !== -1;
       });
     }
 
