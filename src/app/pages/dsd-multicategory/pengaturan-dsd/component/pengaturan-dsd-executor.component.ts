@@ -35,6 +35,7 @@ export class PengaturanDsdExecutorComponent {
   isSelected: boolean;
 
   selected: any[];
+  AllIDs: any[];
   selected_userid: any[];
   detailData: any;
 
@@ -122,13 +123,17 @@ export class PengaturanDsdExecutorComponent {
   selectFn(allRowsSelected: boolean) {
     // console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
-    if (!allRowsSelected) this.selected = [];
-    else this.selected.length = this.totalData;
+    if (!allRowsSelected){
+      this.selected = [];
+    } 
+    else {
+      for (let index = 0; index < this.AllIDs.length; index++) {
+        this.selected.push(this.AllIDs[index]);
+      }
+    }
   }
 
   onCheckboxChange(event: any, row: any) {
-
-
     /*
     if (event) {
       const temp = [...this.selected];
@@ -153,7 +158,7 @@ export class PengaturanDsdExecutorComponent {
     if (this.selected.length > 0) {
       this.dialogRef.close(this.selected);
     } else {
-      this.dialogService.openSnackBar({ message: "Minimal pilih 1 !" }); // TODO
+      this.dialogService.openSnackBar({ message: "Minimal pilih 1 Executor !" }); // TODO
     }
   }
 
@@ -241,6 +246,7 @@ export class PengaturanDsdExecutorComponent {
     this.TRSService.getExecutor(request).subscribe(res => {
       this.loaded = true;
       this.rows = res.data;
+      this.AllIDs = res.data;
       this.temp = [...res.data];
       this.salespointList = this.rows.map(a => a.salespoint.trim());
       this.salespointList = this.salespointList.filter((x, i, a) => a.indexOf(x) == i);
