@@ -137,6 +137,10 @@ export class FieldForceIndexComponent {
         this.rows = res.data ? res.data : [];
         this.onLoad = false;
         this.loadingIndicator = false;
+
+        setTimeout(() => {
+          this.addObjectToTable();
+        }, 1000);
       },
       (err) => {
         console.error(err);
@@ -191,5 +195,25 @@ export class FieldForceIndexComponent {
         this.dialogService.openSnackBar({ message: err.error.message });
       }
     );
+  }
+
+  addObjectToTable(){
+    document.querySelector("datatable-body").id = "datatable-body";
+    const table = document.getElementById("tableFieldForce");
+
+    let header = table.querySelectorAll("datatable-header-cell");
+    for (let indexHeader = 0; indexHeader < header.length; indexHeader++) {
+      header[indexHeader].id = 'data-header';
+    }
+
+    let rows = table.querySelectorAll("datatable-row-wrapper");
+    for (let index = 0; index < rows.length; index++) {
+      rows[index].id = 'data-row';
+
+      let cells = rows[index].querySelectorAll("datatable-body-cell");
+      for (let indexCell = 0; indexCell < cells.length; indexCell++) {
+        cells[indexCell].id = 'data-cell';
+      }
+    }
   }
 }

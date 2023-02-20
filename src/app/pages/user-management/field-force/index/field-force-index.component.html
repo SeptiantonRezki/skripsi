@@ -85,6 +85,7 @@
       </div>
       <div *ngIf="!onLoad">
         <ngx-datatable
+          id="tableFieldForce"
           class="material"
           style="border-top: 1px solid #e3e3e3"
           [rows]="rows"
@@ -114,6 +115,7 @@
               let-value="value"
             >
               <span
+                id="cellName"
                 class="row-name"
                 [routerLink]="[
                   '/user-management',
@@ -128,28 +130,49 @@
           <ngx-datatable-column
             [name]="ls.locale.global.label.username"
             [sortable]="false"
-            prop="username"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            name="Classification"
-            [sortable]="false"
-            prop="classification"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            [name]="ls.locale.global.area.territory"
-            [sortable]="false"
-            prop="area_code"
-          ></ngx-datatable-column>
-          <ngx-datatable-column
-            [name]="ls.locale.field_force.app_version"
-            [sortable]="false"
-            prop="version"
           >
             <ng-template
               ngx-datatable-cell-template
               let-row="row"
               let-value="value"
-              >{{ row.version || "-" }}
+            >
+              <span id="cellUsername">{{ row.username }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            name="Classification"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span id="cellClassification">{{ row.classification }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [name]="ls.locale.global.area.territory"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span id="cellAreaCode">{{ row.area_code }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            [name]="ls.locale.field_force.app_version"
+            [sortable]="false"
+          >
+            <ng-template
+              ngx-datatable-cell-template
+              let-row="row"
+              let-value="value"
+            >
+              <span id="cellVersion">{{ row.version || "-" }}</span>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column
@@ -163,6 +186,7 @@
               let-value="value"
             >
               <div
+                id="cellStatus"
                 class="table-btn-label"
                 [ngClass]="
                   row.status === 'active' ? 'label-green' : 'label-red'
@@ -180,14 +204,13 @@
             width="180"
             [name]="ls.locale.global.label.last_login"
             [sortable]="false"
-            prop="last_login"
           >
             <ng-template
               ngx-datatable-cell-template
               let-row="row"
               let-value="value"
             >
-              {{ row.last_login | date: "dd/MM/yyyy HH:mm" }}
+              <span id="cellLastLogin">{{ row.last_login | date: "dd/MM/yyyy HH:mm" }}</span>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column
@@ -201,6 +224,7 @@
             >
               <div class="button-row" style="white-space: nowrap">
                 <button
+                  id="btnEdit"
                   mat-icon-button
                   color=""
                   matTooltip="Ubah"
@@ -215,6 +239,7 @@
                   <mat-icon class="secondary-text">edit</mat-icon>
                 </button>
                 <button
+                  id="btnDelete"
                   mat-icon-button
                   color="primary"
                   matTooltip="Hapus"
