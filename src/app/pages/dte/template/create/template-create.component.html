@@ -334,7 +334,7 @@
                   <mat-form-field fxFlex="68" class="question is-light"
                     *ngIf="item.get('typeSelection').value['value'] == 'stock_check' && listProductSelected[i].product">
                     <input id="namaProduk" matInput placeholder="{{'katalog_src.produk.text15' | translate}}" (input)="keyUp.next($event.target.value)"
-                      [formControl]="listProductSelected[i].product">
+                      [formControl]="listProductSelected[i].product" type="text" [matAutocomplete]="auto">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayProductName">
                       <mat-option *ngFor="let item of filteredSkuOptions | async" [value]="item"
                         (onSelectionChange)="getProductObj($event, i)">
@@ -550,7 +550,7 @@
                 <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                   <ng-container *ngIf="checkWording(item.get('type').value)">
                     <mat-form-field fxFlex="50" class="opsi is-light" *ngIf="templateList[i]">
-                      <mat-select id="selectIR" (click)="selectForm()" placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item, i)"
+                      <mat-select id="selectIR" (click)="selectForm()" placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, i)"
                       formControlName="planogram_id">
                         <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm.id">
                           {{ itm.name }}
@@ -944,6 +944,7 @@
               (upload)="uploadImageGuideline($event)"
               isMultiple="5"
               [currentFiles]="templateTaskForm.value.image_mechanism"
+              [isDuplicate]="!!duplicateTask"
             ></app-background-misi>
           </div>
         </div>

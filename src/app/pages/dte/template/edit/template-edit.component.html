@@ -522,7 +522,7 @@
                 <div class="border-bottom pb-24" fxLayout="row" fxLayoutAlign="space-between start" fxFlex="1 0 auto">
                   <ng-container *ngIf="checkWording(item.get('type').value)">
                     <mat-form-field fxFlex="50" class="opsi is-light" *ngIf="templateList[i]">
-                      <mat-select placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, item, i)"
+                      <mat-select placeholder="{{'dte.template_tugas.select_template' | translate}}" (selectionChange)="selectedImageIR($event, i)"
                         formControlName="planogram_id">
                         <mat-option *ngFor="let itm of templateList[i]; let t_i = index;" [value]="itm.id">
                           {{ itm.name }}

@@ -1055,9 +1055,7 @@ export class TemplateEditComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template, idx) {
-    console.log('selectedIR IR', selectedIR, template, idx);
-    // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
+  selectedImageIR(selectedIR, idx) {
     let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
     if (idx > -1 && indexTemplate > -1) {
       this.templateListImageIR[idx]['item_id'] = idx + 1;
@@ -1070,8 +1068,6 @@ export class TemplateEditComponent {
     } else {
       this.templateListImageIR.push({ item_id: idx + 1, image: this.templateList[idx][indexTemplate].image, ir_id: this.templateList[idx][indexTemplate].id, ir_code: this.templateList[idx][indexTemplate].code, ir_name: this.templateList[idx][indexTemplate].name, check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : [] });
     }
-
-    console.log('the ir', this.templateListImageIR[idx]);
   }
 
   onChangeTemplateIR(event) {

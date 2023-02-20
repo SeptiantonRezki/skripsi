@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
-import { Observable, Subject, ReplaySubject } from "rxjs";
+import { Observable, Subject, ReplaySubject, of, from } from "rxjs";
 import { ProductService } from "app/services/sku-management/product.service";
 import { startWith, map } from "rxjs/operators";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
@@ -307,7 +307,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
-      image_mechanism: [""],
+      image_mechanism: [[]],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -658,6 +658,7 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
+    const product = [];
     this.isDetailBanner = !!this.duplicateTask.image_detail;
     if (this.duplicateTask.image_description) {
       if (this.duplicateTask.image_description[0]) {
@@ -725,13 +726,25 @@ export class TemplateCreateComponent {
       }
     }
 
+    this.listProductSkuBank = this.duplicateTask.questions.map(i => i.stock_check_data);
+    this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+
     this.duplicateTask['questions'].map((item, index) => {
       if (item.type === 'stock_check') {
         this.listProductSelected[index] = {
-          product: new FormControl(item.stock_check_data.name)
+          name: item.stock_check_data.name,
+          sku_id: item.stock_check_data.sku_id,
+          product: new FormControl({
+            name: item.stock_check_data.name,
+            sku_id: item.stock_check_data.sku_id,
+            directly: item.stock_check_data.directly
+          })
         };
 
+        this.product.setValue(item.stock_check_data.name)
+
         item.additional = ["Opsi 1"];
+        product.push(item.stock_check_data);
       }
 
       if (this.isIRTemplate.value) this.listChoose = [...this.listChooseWithIr]
@@ -1007,16 +1020,24 @@ export class TemplateCreateComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template) {
-    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
-    if (indexExist > -1) {
-      this.templateListImageIR[indexExist]['ir_id'] = selectedIR.value.id;
-      this.templateListImageIR[indexExist]['ir_code'] = selectedIR.value.code;
-      this.templateListImageIR[indexExist]['ir_name'] = selectedIR.value.name;
-      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
-      this.templateListImageIR[indexExist]['check_list'] = selectedIR.value.check_list ? JSON.parse(selectedIR.value.check_list) : [];
+  selectedImageIR(selectedIR, idx) {
+    let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
+    if (idx > -1 && indexTemplate > -1) {
+      this.templateListImageIR[idx]['item_id'] = idx + 1;
+      this.templateListImageIR[idx]['ir_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['ir_code'] = this.templateList[idx][indexTemplate].code;
+      this.templateListImageIR[idx]['ir_name'] = this.templateList[idx][indexTemplate].name;
+      this.templateListImageIR[idx]['image'] = this.templateList[idx][indexTemplate].image;
+      this.templateListImageIR[idx]['check_list'] = this.templateList[idx][indexTemplate].check_list ? JSON.parse(this.templateList[idx][indexTemplate].check_list) : [];
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name, check_list: JSON.parse(selectedIR.value.check_list) });
+      this.templateListImageIR.push({
+        item_id: idx + 1,
+        image: this.templateList[idx][indexTemplate].image,
+        ir_id: this.templateList[idx][indexTemplate].id,
+        ir_code: this.templateList[idx][indexTemplate].code,
+        ir_name: this.templateList[idx][indexTemplate].name,
+        check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : []
+      });
     }
   }
 
@@ -1288,6 +1309,7 @@ export class TemplateCreateComponent {
       content_typePertanyaan: 'static_page',
       image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
+      planogram_id: "",
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
         title: '',
@@ -1531,7 +1553,8 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_mechanism: new_image_mechanism || [],
+        // image_mechanism: new_image_mechanism || [],
+        image_mechanism: this.templateTaskForm.controls.image_mechanism.value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
         video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
@@ -1581,14 +1604,13 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
-            // required: item.required,
+            required: item.type === 'stock_check' ? 1 : null,
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
@@ -1882,86 +1904,97 @@ export class TemplateCreateComponent {
     })
   }
 
-  uploadImageGuideline({ images, forms }) {
-    const initialImages = Object.values(this.duplicateTask.task_template_image);
-
-    const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
-
-    // memisahkan yang berubah dengan yang tidak
-    let imagesFile = [];
-    let newIndex = [];
-    let changedByTextIndex = [];
-    let imagesExisting = [];
-
-    if (this.templateTaskForm.value) {
-      const payload = {
-        type: 'url',
-        data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
-      }
-      this.taskTemplateService.convertImage(payload).subscribe(res => {
-        imagesExisting = res.data.map((item, index) => ({
-          task_template_image_id: "",
-          file: item.result,
-          description: this.templateTaskForm.value.image_mechanism[index].description
-        }));
-        this.image_mechanism_list = [
-          ...this.image_mechanism_list,
-          ...imagesExisting
-        ]
-      });
-    }
-
-    images.forEach((item: any, index) => {
-      if (item instanceof File) {
-        imagesFile.push(this.getImageData(item));
-        newIndex.push(index);
-      } else if (item.description !== forms[index].description) {
-        changedByTextIndex.push(index);
-      }
-    });
-
-    Promise.all(imagesFile)
-      .then((data) => data.map((item, idx) => {
-        if (changed[idx] && changed[idx].hasOwnProperty('id')) {
-          // EDIT
-          return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
-        } else {
-          // ADD
-          return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
-        }
-      }))
-      .then((data) => {
-        if (changed.length > data.length) {
-          const newDatas = [];
-
-          // HAPUS
-          changed.map((item, idx) => {
-            if (data[idx] && data[idx].hasOwnProperty('id')){
-              newDatas.push(data[idx]);
-            } else {
-              newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
-            }
-          });
-
-          return newDatas;
-        } else return data
-      })
-      .then((data) => {
-        this.image_mechanism_list = [...this.image_mechanism_list, ...data];
-      });
-
-    let newText = [];
-    changedByTextIndex.forEach(index => {
-      newText.push({
-        task_template_image_id: images[index].id,
-        file: "",
-        description: forms[index].description,
-      });
-    });
-    this.image_mechanism_text_list = newText;
+  uploadImageGuideline({ forms, images }) {
+    // let mechanismList = [];
+    // forms.forEach(i => {
+    //   mechanismList.push(i.file);
+    //   this.image_mechanism_text_list.push(i.description);
+    // })
+    // this.image_mechanism_list = mechanismList;
+    this.templateTaskForm.controls.image_mechanism.setValue(forms);
   }
 
-  onChangieGuideline(){
+  // uploadImageGuideline({ images, forms }) {
+  //   const initialImages = Object.values(this.duplicateTask.task_template_image);
+
+  //   const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
+
+  //   // memisahkan yang berubah dengan yang tidak
+  //   let imagesFile = [];
+  //   let newIndex = [];
+  //   let changedByTextIndex = [];
+  //   let imagesExisting = [];
+
+  //   if (this.templateTaskForm.value.image_mechanism) {
+  //     const payload = {
+  //       type: 'url',
+  //       data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
+  //     }
+  //     this.taskTemplateService.convertImage(payload).subscribe(res => {
+  //       imagesExisting = res.data.map((item, index) => ({
+  //         task_template_image_id: "",
+  //         file: item.result,
+  //         description: this.templateTaskForm.value.image_mechanism[index].description
+  //       }));
+  //       this.image_mechanism_list = [
+  //         ...this.image_mechanism_list,
+  //         ...imagesExisting
+  //       ]
+  //     });
+  //   }
+
+  //   images.forEach((item: any, index) => {
+  //     if (item instanceof File) {
+  //       imagesFile.push(this.getImageData(item));
+  //       newIndex.push(index);
+  //     } else if (item.description !== forms[index].description) {
+  //       changedByTextIndex.push(index);
+  //     }
+  //   });
+
+  //   Promise.all(imagesFile)
+  //     .then((data) => data.map((item, idx) => {
+  //       if (changed[idx] && changed[idx].hasOwnProperty('id')) {
+  //         // EDIT
+  //         return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
+  //       } else {
+  //         // ADD
+  //         return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
+  //       }
+  //     }))
+  //     .then((data) => {
+  //       if (changed.length > data.length) {
+  //         const newDatas = [];
+
+  //         // HAPUS
+  //         changed.map((item, idx) => {
+  //           if (data[idx] && data[idx].hasOwnProperty('id')){
+  //             newDatas.push(data[idx]);
+  //           } else {
+  //             newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
+  //           }
+  //         });
+
+  //         return newDatas;
+  //       } else return data
+  //     })
+  //     .then((data) => {
+  //       this.image_mechanism_list = [...this.image_mechanism_list, ...data];
+  //       // this.image_mechanism_list = data;
+  //     });
+
+  //   let newText = [];
+  //   changedByTextIndex.forEach(index => {
+  //     newText.push({
+  //       task_template_image_id: images[index].id,
+  //       file: "",
+  //       description: forms[index].description,
+  //     });
+  //   });
+  //   this.image_mechanism_text_list = newText;
+  // }
+
+  onChangeGuideline(){
     if (!this.isGuideline.value) {
       this.uploadImageGuideline({images: [], forms: []});
     }
