@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from "@angular/forms";
 import { FieldForceService } from "app/services/user-management/field-force.service";
 import { DialogService } from "app/services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -35,6 +35,8 @@ export class FieldForceCreateComponent {
   isChecked = false;
   checked: boolean;
 
+  emailNotification: boolean = true;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
@@ -53,6 +55,10 @@ export class FieldForceCreateComponent {
     this.createForm();
     this.addAreas();
     this.setEvents();
+
+    setTimeout(()=>{
+      this.emailNotification = false;
+    });
   }
 
   createForm() {
@@ -63,35 +69,36 @@ export class FieldForceCreateComponent {
       areas: this.formBuilder.array([], Validators.required),
       type: ["", Validators.required],
       email: [
-        "",
+        "", 
         [
           Validators.required,
-          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/), // belum bisa tertampil jika tidak sesuai
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/), 
         ],
       ], // field email
       status: [true],
       emailNotification: [false], // email notification
     });
+    
     this.formUser.controls["email"].disable();
 
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
+        this.emailNotification = true;
         this.formUser.controls["email"].enable();
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.required,
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ]);
       } else {
-        this.formUser.controls["email"].disable();
-        this.formUser.controls["email"].setValue("");
+        this.emailNotification = false;
+        // this.formUser.controls["email"].disable();
+        // this.formUser.controls["emailNotification"].setValue(false);
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ]);
       }
     });
   }
-
-  // changeDisable() {
-  //   console.log("coba toggle");
-  //   if (this.formUser.controls["email"].disabled) {
-  //     this.formUser.controls["email"].enable();
-  //   } else {
-  //     this.formUser.controls["email"].disable();
-  //   }
-  // }
 
   setEvents() {
     this.formUser.get("type").valueChanges.subscribe((value: string) => {
@@ -104,10 +111,14 @@ export class FieldForceCreateComponent {
           Validators.required,
         ]);
       } else {
+        this.formUser.get("email").disable();
+        this.formUser.get("email").setValue("");
+        this.formUser.get("emailNotification").setValue(false);
         this.formUser.get("classification").setValue("");
         this.formUser.get("classification").disable();
         commonFormValidator.validators(this.formUser, "classification");
       }
+
       this.limitLevel = level;
       this.resetAreas();
     });
@@ -172,7 +183,6 @@ export class FieldForceCreateComponent {
 
   submit() {
     if (!this.formUser.valid) {
-      this.dialogService.openSnackBar({ message: "Input data tida valid atau tidak sesuai" });
       commonFormValidator.markAllAsTouched(this.formUser);
       return;
     }
@@ -191,13 +201,6 @@ export class FieldForceCreateComponent {
         ? "active"
         : "inactive", // emailNotification field
     };
-    // console.log(body);
-
-    if (this.formUser.get("emailNotification").value) {
-      body["email"] = this.formUser.get("email").value;
-    } else {
-      body["email"] = "";
-    }
 
     this.dataService.showLoading(true);
     this.fieldForcePrincipal.create(body).subscribe(

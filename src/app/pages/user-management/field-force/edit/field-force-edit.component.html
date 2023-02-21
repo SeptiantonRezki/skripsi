@@ -100,11 +100,13 @@
             />
           </mat-form-field>
           <!-- start email field -->
-          <mat-form-field class="is-light form-primary">
+          <mat-form-field class="is-light form-primary"
+          *ngIf="formUser.get('type').value === 'field-force'">
             <input
               matInput
               formControlName="email"
               [placeholder]="locale.global.label.email"
+              [attr.disabled]="!emailNotification ? true : null"
             />
             <mat-error
               *ngIf="
@@ -135,7 +137,8 @@
                 : locale.global.label.inactive
             }}</mat-slide-toggle
           >
-          <mat-slide-toggle formControlName="emailNotification">
+          <mat-slide-toggle formControlName="emailNotification"
+          *ngIf="formUser.get('type').value === 'field-force'">
             {{ locale.global.messages.email_notification }}
             {{
               formUser.get("emailNotification").value

@@ -1,5 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+  AbstractControl,
+} from "@angular/forms";
 import { FieldForceService } from "app/services/user-management/field-force.service";
 import { DialogService } from "app/services/dialog.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -39,6 +45,8 @@ export class FieldForceEditComponent {
   isChecked = false;
   checked: boolean;
 
+  emailNotification: boolean = true;
+
   constructor(
     private formBuilder: FormBuilder,
     private fieldForcePrincipal: FieldForceService,
@@ -70,8 +78,8 @@ export class FieldForceEditComponent {
       email: [
         { value: "", disabled: this.isDetail },
         [
-        Validators.required,
-        Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+          Validators.required,
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ],
       ],
       classification: [{ value: "", disabled: true }],
@@ -81,32 +89,25 @@ export class FieldForceEditComponent {
       status: [{ value: true, disabled: this.isDetail }],
       emailNotification: [{ value: true, disabled: this.isDetail }],
     });
-    // this.formUser.controls["email"].disable();
 
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
-        this.formUser.controls["email"].enable()
-        // this.formUser.controls["email"].setValue("",this.isDetail);
+        this.emailNotification = true;
+        this.formUser.controls["email"].enable();
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.required,
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ]);
       } else {
-        this.formUser.controls["email"].disable();
-        // this.formUser.controls["email"].setValue(this.isDetail);
+        this.emailNotification = false;
+        // this.formUser.controls["email"].disable();
+        // this.formUser.controls["emailNotification"].setValue(false);
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ]);
       }
     });
-
-
   }
-
-//   changeDisable() {
-//     console.log('ddfd');
-//     this.formUser.get("emailNotification").valueChanges.subscribe((value) =>{
-//     if (value) {
-//      this.formUser.controls['email'].enable() ;
-//     } else {
-//       this.formUser.controls['email'].disable() ;
-//     }
-     
-//   });
-// }
 
   getDetails() {
     this.fieldForcePrincipal
@@ -125,9 +126,7 @@ export class FieldForceEditComponent {
             : null,
           version: data.version,
         };
-        // console.log(patchData);
-
-        
+        this.emailNotification = patchData.emailNotification;
 
         const areas = Object.values(data.geotree).map((value) => value);
         this.addAreas(areas);
@@ -142,16 +141,20 @@ export class FieldForceEditComponent {
       let level = "territory";
       if (value === "spv") level = "district";
       if (value === "asm") level = "area";
-      if (value === "field-force" && !this.isDetail) {
+      if (value === "field-force") {
         this.formUser.get("classification").enable();
         commonFormValidator.validators(this.formUser, "classification", [
           Validators.required,
         ]);
       } else {
+        this.formUser.get("email").disable();
+        this.formUser.get("email").setValue("");
+        this.formUser.get("emailNotification").setValue(false);
         this.formUser.get("classification").setValue("");
         this.formUser.get("classification").disable();
         commonFormValidator.validators(this.formUser, "classification");
       }
+
       this.limitLevel = level;
       if (this.initDetail) this.resetAreas();
     });
@@ -218,7 +221,6 @@ export class FieldForceEditComponent {
 
   submit() {
     if (!this.formUser.valid) {
-      this.dialogService.openSnackBar({ message: "Input data tida valid atau tidak sesuai" });
       commonFormValidator.markAllAsTouched(this.formUser);
       return;
     }
@@ -233,10 +235,10 @@ export class FieldForceEditComponent {
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
-      emailNotification: this.formUser.get("emailNotification").value ? "active" : "inactive", // emailNotification field
-        
+      emailNotification: this.formUser.get("emailNotification").value
+        ? "active"
+        : "inactive", // emailNotification field
     };
-    // console.log(body);
 
     this.dataService.showLoading(true);
     this.fieldForcePrincipal
