@@ -23,6 +23,8 @@ export class Page {
   delivery_courier_id: string;
   payment_type: string;
   status_dashboard: string;
+  partner_id: string;
+  partner_type: string;
   
   constructor() {
     this.per_page = 15;
@@ -42,6 +44,8 @@ export class Page {
     this.type = '';
     this.type_banner = '';
     this.is_valid = 0;
+    this.partner_id = "";
+    this.partner_type = "";
   }
 
   public static renderPagination(pagination, response) {

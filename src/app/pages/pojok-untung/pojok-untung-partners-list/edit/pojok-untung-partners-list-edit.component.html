@@ -1,0 +1,92 @@
+<div class="page-layout simple fullwidth" fxLayout="column">
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Buat Partner'"></page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 class="">Buat Partner</h2>
+      </div>
+
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formPartner">
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select formControlName="partner_type" placeholder="Jenis Partner">
+                <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.label}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formPartner.controls['partner_type'].hasError('required') && formPartner.controls['partner_type'].touched">
+                Jenis Partner harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <input matInput type="text" placeholder="Nama Partner" formControlName="partner_name">
+              <mat-error
+                *ngIf="formPartner.controls['partner_name'].hasError('required') && formPartner.controls['partner_name'].touched">
+                Nama Partner harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <mat-form-field fxFlex="45" class="is-light form-primary">
+              <mat-select placeholder="Status" formControlName="status">
+                <mat-option [value]="1">Aktif</mat-option>
+                <mat-option [value]="0">Tidak Aktif</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="formPartner.controls['status'].hasError('required') && formPartner.controls['status'].touched">
+                Status harus diisi
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="card-logo">
+            <div fxLayout="column">
+              <div class="mt-8 mb-8"><strong>Upload Logo</strong></div>
+              <small>Besar file maksimal 100kb</small>
+              <div class="ayo-middle" style="height: 35px;width: 200px;" fxLayout="column">
+                <div ngfDrop selectable="1" class="rectangle-sm" [(validDrag)]="validComboDrag" [(file)]="partner_logo"
+                  [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                  (fileChange)="changeImage($event, '1', 'partner')">
+                  <div class="p-4" fxLayout="column" fxLayoutAlign="center center">
+                    <span matPrefix>Pilih atau Tarik Logo disini
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="column" *ngIf="partner_logo_url">
+              <div class="" style="margin-top: 15px">
+                <div>
+                  <img id="image" [src]='partner_logo_url' width="120px" height="120px" />
+                  <mat-icon style="cursor: pointer;" (click)="removeImage('1', 'partner')" *ngIf="permission?.ubah">cancel_outline</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-desc">
+            <div fxLayout="row" class="mt-12">
+              <mat-form-field class="is-light form-primary" fxFlex="50">
+                <input matInput type="text" placeholder="Judul Deskripsi" formControlName="content_title">
+              </mat-form-field>
+            </div>
+            <textarea [froalaEditor]="options" class="pb-4" fxFlex="100" formControlName="content_info"></textarea>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()" *ngIf="permission?.ubah">
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>
