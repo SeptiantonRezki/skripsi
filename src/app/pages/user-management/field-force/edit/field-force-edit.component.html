@@ -101,7 +101,7 @@
           </mat-form-field>
           <!-- start email field -->
           <mat-form-field class="is-light form-primary"
-          *ngIf="formUser.get('type').value === 'field-force'">
+          [ngClass]="{'d-none': formUser.get('type').value !== 'field-force'}">
             <input
               matInput
               formControlName="email"

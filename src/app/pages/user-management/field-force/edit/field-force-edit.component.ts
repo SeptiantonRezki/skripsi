@@ -82,18 +82,18 @@ export class FieldForceEditComponent {
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ],
       ],
-      classification: [{ value: "", disabled: true }],
+      classification: [{ value: "", disabled: this.isDetail }],
       areas: this.formBuilder.array([], Validators.required),
       type: [{ value: "", disabled: this.isDetail }, Validators.required],
       version: [{ value: "", disabled: true }],
       status: [{ value: true, disabled: this.isDetail }],
-      emailNotification: [{ value: true, disabled: this.isDetail }],
+      emailNotification: [{ value: false, disabled: this.isDetail }],
     });
 
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
         this.emailNotification = true;
-        this.formUser.controls["email"].enable();
+        // this.formUser.controls["email"].enable();
         commonFormValidator.validators(this.formUser, "email", [
           Validators.required,
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
@@ -142,16 +142,25 @@ export class FieldForceEditComponent {
       if (value === "spv") level = "district";
       if (value === "asm") level = "area";
       if (value === "field-force") {
-        this.formUser.get("classification").enable();
-        commonFormValidator.validators(this.formUser, "classification", [
-          Validators.required,
+        if(!this.isDetail){
+          this.formUser.get("classification").enable();
+          commonFormValidator.validators(this.formUser, "classification", [
+            Validators.required,
+          ]);  
+        }else {
+          this.formUser.get("classification").disable();  
+          commonFormValidator.validators(this.formUser, "classification");
+        }
+        this.emailNotification = false;
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ]);
       } else {
-        this.formUser.get("email").disable();
-        this.formUser.get("email").setValue("");
-        this.formUser.get("emailNotification").setValue(false);
         this.formUser.get("classification").setValue("");
         this.formUser.get("classification").disable();
+        // this.formUser.get("email").disable();
+        this.formUser.get("email").setValue("");
+        this.formUser.get("emailNotification").setValue(false);
         commonFormValidator.validators(this.formUser, "classification");
       }
 

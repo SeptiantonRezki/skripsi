@@ -79,12 +79,12 @@ export class FieldForceCreateComponent {
       emailNotification: [false], // email notification
     });
     
-    this.formUser.controls["email"].disable();
+    // this.formUser.controls["email"].disable();
 
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
         this.emailNotification = true;
-        this.formUser.controls["email"].enable();
+        // this.formUser.controls["email"].enable();
         commonFormValidator.validators(this.formUser, "email", [
           Validators.required,
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
@@ -110,8 +110,12 @@ export class FieldForceCreateComponent {
         commonFormValidator.validators(this.formUser, "classification", [
           Validators.required,
         ]);
+        this.emailNotification = false;
+        commonFormValidator.validators(this.formUser, "email", [
+          Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
+        ]);
       } else {
-        this.formUser.get("email").disable();
+        // this.formUser.get("email").disable();
         this.formUser.get("email").setValue("");
         this.formUser.get("emailNotification").setValue(false);
         this.formUser.get("classification").setValue("");
