@@ -3060,6 +3060,116 @@ export const brConfig = {
       ]
     }
   },
+  pojokuntung: {
+    templatePojokUntung: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/template-pojok-untung",
+          name: "Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Template Pojok Untung"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/template-pojok-untung",
+          name: "Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Template Pojok Untung"
+        }
+      ],
+    },
+    partners: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Partner Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-list",
+          name: "Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Partner"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-list",
+          name: "Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Partner"
+        }
+      ],
+    },
+    partnersTemplate: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Template Partner Pojok Untung"
+        }
+      ],
+      create: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-template",
+          name: "Template Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Buat Template Partner"
+        }
+      ],
+      edit: [
+        {
+          type: "parent",
+          url: "/pojok-untung/partners-template",
+          name: "Template Partner Pojok Untung"
+        },
+        {
+          type: "current",
+          url: "",
+          name: "Ubah Template Partner"
+        }
+      ],
+    },
+    partnersRegistered: {
+      index: [
+        {
+          type: "current",
+          url: "",
+          name: "Partner Teregistrasi"
+        }
+      ]
+    }
+  },
   virtualaccount: {
     company: {
       index: [
