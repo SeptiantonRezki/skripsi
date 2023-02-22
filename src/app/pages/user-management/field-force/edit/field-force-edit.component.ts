@@ -93,15 +93,12 @@ export class FieldForceEditComponent {
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
         this.emailNotification = true;
-        // this.formUser.controls["email"].enable();
         commonFormValidator.validators(this.formUser, "email", [
           Validators.required,
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ]);
       } else {
         this.emailNotification = false;
-        // this.formUser.controls["email"].disable();
-        // this.formUser.controls["emailNotification"].setValue(false);
         commonFormValidator.validators(this.formUser, "email", [
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ]);
@@ -158,7 +155,6 @@ export class FieldForceEditComponent {
       } else {
         this.formUser.get("classification").setValue("");
         this.formUser.get("classification").disable();
-        // this.formUser.get("email").disable();
         this.formUser.get("email").setValue("");
         this.formUser.get("emailNotification").setValue(false);
         commonFormValidator.validators(this.formUser, "classification");

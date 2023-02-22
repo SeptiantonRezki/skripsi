@@ -92,7 +92,6 @@
               {{ locale.global.messages.mandatory_text }}
             </mat-error>
           </mat-form-field>
-          <!-- start email field -->
           <mat-form-field class="is-light form-primary"
           [ngClass]="{'d-none': formUser.get('type').value !== 'field-force'}">
             <input
@@ -119,7 +118,6 @@
               {{ locale.global.messages.email }}
             </mat-error>
           </mat-form-field>
-          <!-- end email field -->
         </div>
         <div fxFlex="100" class="row pb-32 pr-32">
           <mat-slide-toggle formControlName="status" class="pr-32">

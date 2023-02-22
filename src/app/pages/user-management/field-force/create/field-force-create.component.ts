@@ -74,25 +74,21 @@ export class FieldForceCreateComponent {
           Validators.required,
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/), 
         ],
-      ], // field email
+      ],
       status: [true],
-      emailNotification: [false], // email notification
+      emailNotification: [false],
     });
     
-    // this.formUser.controls["email"].disable();
 
     this.formUser.get("emailNotification").valueChanges.subscribe((value) => {
       if (value) {
         this.emailNotification = true;
-        // this.formUser.controls["email"].enable();
         commonFormValidator.validators(this.formUser, "email", [
           Validators.required,
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ]);
       } else {
         this.emailNotification = false;
-        // this.formUser.controls["email"].disable();
-        // this.formUser.controls["emailNotification"].setValue(false);
         commonFormValidator.validators(this.formUser, "email", [
           Validators.pattern(/@contracted.sampoerna.com$|@sampoerna.com$/),
         ]);
@@ -200,10 +196,10 @@ export class FieldForceCreateComponent {
       classification: this.formUser.get("classification").value,
       areas: areas.value.map(({ area_id }) => area_id[0]),
       status: this.formUser.get("status").value ? "active" : "inactive",
-      email: this.formUser.get("email").value, // email field
+      email: this.formUser.get("email").value,
       emailNotification: this.formUser.get("emailNotification").value
         ? "active"
-        : "inactive", // emailNotification field
+        : "inactive",
     };
 
     this.dataService.showLoading(true);
