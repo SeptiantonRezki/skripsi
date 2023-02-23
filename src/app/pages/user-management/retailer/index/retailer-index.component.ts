@@ -196,50 +196,50 @@ export class RetailerIndexComponent {
     await this.initAreaV2();
     this.getRetailerList();
 
-    this.status.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.status.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.version_retailer.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.version_retailer.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.version_cashier.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.version_cashier.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.access_cashier.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.access_cashier.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.retail_classification.valueChanges.subscribe(res => {
-      this.dataService.setToStorage('retail_classification', res);
-      this.getRetailerList();
-    })
+    // this.retail_classification.valueChanges.subscribe(res => {
+    //   this.dataService.setToStorage('retail_classification', res);
+    //   this.getRetailerList();
+    // })
 
-    this.chatbot.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.chatbot.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.gsr.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.gsr.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.gsm_pl.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.gsm_pl.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.pojok_bayar_validation.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.pojok_bayar_validation.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.bank_final_validation.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.bank_final_validation.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
-      this.getRetailerList();
-    });
+    // this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
+    //   this.getRetailerList();
+    // });
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
       if (res) {
@@ -1067,7 +1067,6 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
-    
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
