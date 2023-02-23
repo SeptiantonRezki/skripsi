@@ -27,10 +27,10 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   imageUrl3: any;
   imageUrl4: any;
 
-  files: File;
-  files2: File;
-  files3: File;
-  files4: File;
+  files: File | null = null;
+  files2: File | null = null;
+  files3: File | null = null;
+  files4: File | null = null;
 
   story_image: File;
   story_images: File[] = [];
@@ -70,7 +70,7 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
   getDetail() {
     this.dataService.showLoading(true);
     this.PojokUntungTemplateService.get().subscribe(res => {
-      this.detailTemplate = res.data[0] || res.data;
+      this.detailTemplate = res.data && (res.data[0] || res.data);
 
       let informasiGeneralData;
       if (this.detailTemplate) {
@@ -282,7 +282,7 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
 
         let fd = new FormData();
 
-        fd.append('id', this.detailTemplate.id);
+        fd.append('id', (this.detailTemplate && this.detailTemplate.id) || '1');
         this.formTemplatePojokUntung.get('informasi_general').value.forEach((info, i) => {
           fd.append(`informasi_general[${i}][title]`, info.title);
           fd.append(`informasi_general[${i}][description]`, info.description);
@@ -313,6 +313,16 @@ export class PojokUntungTemplateCreateComponent implements OnInit {
             message: this.ls.locale.notification.popup_notifikasi.text22
           });
           this.initForm();
+          this.imageUrl = null;
+          this.imageUrl2 = null;
+          this.imageUrl3 = null;
+          this.imageUrl4 = null;
+
+          this.files = null;
+          this.files2 = null;
+          this.files3 = null;
+          this.files4 = null;
+
           this.story_images = [];
           this.story_image_urls = [];
           this.getDetail();
