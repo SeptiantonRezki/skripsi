@@ -508,12 +508,14 @@ export class RetailerIndexComponent {
           this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
           this.dataService.showLoading(false);
         } else {
-          this.dataService.showLoading(true);
+          this.loadingIndicator = true
+          // this.dataService.showLoading(true);
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[this.parseArea(selection)] = res.data;
             // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
            
             // fd = null
           });
@@ -542,21 +544,25 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['region'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('region').setValue('');
           this.dataService.setToStorage('selected_region', '');
@@ -583,21 +589,25 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('area hitted', selection, item, this.list['region']);
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['area'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('area').setValue('');
         }
@@ -621,11 +631,13 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('item', item);
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -666,11 +678,13 @@ export class RetailerIndexComponent {
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['district'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('district').setValue('');
         }
@@ -700,11 +714,13 @@ export class RetailerIndexComponent {
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['territory'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
         }
         break;
@@ -1342,9 +1358,7 @@ export class RetailerIndexComponent {
   }
 
   updateFilter(string) {
-    this.loadingIndicator = true;
     this.pagination.search = string;
-
     if (string) {
       this.pagination.page = 1;
       this.offsetPagination = 0;
