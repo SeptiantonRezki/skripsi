@@ -87,9 +87,15 @@ export class PengaturanDsdEditComponent implements OnInit {
   selectedArea: any = [""];
   selectedSalesPoint: any = "";
 
+  selectedArea_code: any = "";
+  selectedSalesPoint_code: any = "";
+
   selectedExecutor: any = [];
   selectedKecamatan: any = [];
   selectedProduct: any = [];
+
+  executor_selected_array: any = [];
+  product_selected_array: any = [];
 
   imageSku: any;
   files: File;
@@ -167,94 +173,39 @@ export class PengaturanDsdEditComponent implements OnInit {
     };
 
     const thisURL = this.router.url;
-    //this.trs_program_code = thisURL.split('/').pop();
-    //CHANIF
-    this.trs_program_code = 'AMI2210003';
+    this.trs_program_code = thisURL.split('/').pop();
 
     this.dataService.showLoading(true);
     this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
+
       this.proposalData = resProposal.data;
 
-      if (this.proposalData.status == 'cancel' || this.proposalData.status == 'finish'){
-        this.dialogService.openSnackBar({
-          message: "Program tidak dapat diedit"
+      if (resProposal.status == 'empty'){
+        //alert("belum ada data tersimpan untuk sales point ini");
+        this.dataService.showLoading(false);
+        this.selectedArea = resProposal.area_id;
+        this.selectedSalesPoint = resProposal.salespoint_id;
+        this.proposalData.area_id = resProposal.area_id;
+        this.proposalData.salespoint_id= resProposal.salespoint_id;
+
+      } else {
+        this.formCreateProposal.patchValue({
+          executor_selected: this.proposalData.textarea_executors,
+          product_selected: this.proposalData.textarea_products,
         });
-        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+
+        this.selectedArea = this.proposalData.area_id;
+        this.selectedSalesPoint = this.proposalData.salespoint_id;
+
+        this.selectedExecutor = this.proposalData.selected_executors;
+        this.selectedProduct = this.proposalData.selected_products;
       }
 
-      this.formCreateProposal.patchValue({
-        startDate: this.proposalData.start_date,
-        endDate: this.proposalData.end_date,
-        geotagging: this.proposalData.geotag_flag,
-        custCode1: this.proposalData.customer1_code,
-        custName1: this.proposalData.customer1_name,
-        custCode2: this.proposalData.customer2_code,
-        custName2: this.proposalData.customer2_name,
-        maxExecutor: this.proposalData.max_executor,
-        flowingly: this.proposalData.flowingly,
-        background: this.proposalData.background,
-        objective: this.proposalData.objective,
-
-        executor_selected: this.proposalData.textarea_executors,
-        kecamatan_selected: this.proposalData.textarea_kecamatans,
-        product_selected: this.proposalData.textarea_products,
-        
-        /*
-        executor: [""],
-        kecamatan: [""],
-        product: [""],
-
-        //kanan
-        executor_selected: ["", Validators.required],
-        kecamatan_selected: ["", Validators.required],
-        product_selected: ["", Validators.required],
-        */
-
-      });
-
-      this.selectedArea = this.proposalData.area_id;
-      this.selectedSalesPoint = this.proposalData.salespoint_id;
-
-      this.selectedExecutor = this.proposalData.selected_executors;
-      this.selectedKecamatan = this.proposalData.selected_kecamatans;
-      this.selectedProduct = this.proposalData.selected_products;
-
-      console.log("this.proposalData.attachments");
-      console.log(this.proposalData.attachments);
-
-      // disable form
-      if(this.proposalData.status !== 'draft') {
-        //this.formDetailVoucher.disable();
-        //this.disableForm = true;
-      };
-      
-      // ============== SET END DATE ================
-      this.TRSService.getSysVar().subscribe((res) => {
-        res.data.forEach((item) => {
-          if (item.param === 'max_period') {
-            if (this.proposalData.status == 'ongoing'){
-            } else {
-              this.minDateProposal = new Date();
-              this.minMaxDateProposal = new Date();
-              this.maxDateProposal = new Date();
-
-              this.maxPeriodProposal = parseInt(item.value);
-
-              this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
-              this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
-              this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
-            }
-          }
-        });
-      }, err => {
-        console.log('err occured', err);
-        this.dataService.showLoading(false);
-      });
-
-      this.dataService.showLoading(false);
+      this.dataService.showLoading(true);
       this.TRSService.getAreaByUser(request).subscribe(res => {
         this.listLevelArea = res.data;
         this.addArea();
+        this.dataService.showLoading(false);
       }, err => {
         console.log('err occured', err);
         this.dataService.showLoading(false);
@@ -264,22 +215,6 @@ export class PengaturanDsdEditComponent implements OnInit {
       this.dataService.showLoading(false);
       console.log('err occured', err);
     })
-    
-    this.keyUpCust1.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        this.setCustName(res, 'custName1');
-      });
-
-    this.keyUpCust2.debounceTime(300)
-      .flatMap(key => {
-        return Observable.of(key).delay(300);
-      })
-      .subscribe(res => {
-        this.setCustName(res, 'custName2');
-      });
   }
 
   
@@ -562,8 +497,6 @@ export class PengaturanDsdEditComponent implements OnInit {
   modalExecutor() {
     if (this.selectedArea == ""){
       alert("Tunggu, data Area sedang di load");
-    } else if (this.formCreateProposal.get('startDate').value == null || this.formCreateProposal.get('endDate').value == null || this.formCreateProposal.get('endDate').value == ""){
-      alert("Tanggal Awal dan Tanggal Akhir wajib diisi");
     } else {
       const dialogConfig = new MatDialogConfig();
       const formCreateProposal = this.formCreateProposal.getRawValue();
@@ -597,59 +530,21 @@ export class PengaturanDsdEditComponent implements OnInit {
             result_id.push(item.id);
             
             if (item.territory != "" && item.territory != "-"){
-              result.push(item.fullname + " (" + item.territory.trim() + ")");
+              result.push(item.territory.trim() + " - " + item.fullname);
             } else {
               if (item.district == "" || item.district == "-"){
-                result.push(item.fullname + " (" + item.salespoint.trim() + ")");
+                result.push(item.salespoint.trim() + " - " + item.fullname);
               } else {
-                result.push(item.fullname + " (" + item.district.trim() + ")");
+                result.push(item.district.trim() + " - " + item.fullname);
               }
             }
           });
   
+          result = result.sort();
+
           this.selectedExecutor = result_id.join("__");
           this.formCreateProposal.get('executor_selected').setValue(result.join(", "));
-  
-          console.log(result);
-        }
-      });
-    }
-  }
-
-  modalKecamatan() {
-    if (this.selectedSalesPoint == ""){
-      alert("Pilih salespoint terlebih dahulu !");
-    } else {
-      const dialogConfig = new MatDialogConfig();
-      const formCreateProposal = this.formCreateProposal.getRawValue();
-  
-      dialogConfig.maxWidth = "90vw";
-      dialogConfig.disableClose = true;
-      dialogConfig.autoFocus = true;
-      dialogConfig.panelClass = 'scrumboard-card-dialog';
-      dialogConfig.data = {
-        password: 'P@ssw0rd',
-        IMPORT_FROM_METHOD: 'CREATE',
-        area: this.selectedSalesPoint,
-        selected: this.selectedKecamatan,
-        formCreateProposal,
-      };
-  
-      this.dialogRef = this.dialog.open(PengaturanDsdKecamatanComponent, dialogConfig);
-  
-      this.dialogRef.afterClosed().subscribe(response => {
-        // regency = kabupaten
-        // district = kecamatan
-        var result = [];
-        var result_id = [];
-        if (typeof response !== "undefined") {
-          response.forEach(function (item) {
-            result_id.push(item.id);
-            result.push(item.regency + " - " + item.district);
-          });
-  
-          this.selectedKecamatan = result_id.join("__");
-          this.formCreateProposal.get('kecamatan_selected').setValue(result.join(", "));
+          this.executor_selected_array = result;
   
           console.log(result);
         }
@@ -671,7 +566,7 @@ export class PengaturanDsdEditComponent implements OnInit {
       dialogConfig.data = {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
-        area: this.selectedArea,
+        area: this.selectedSalesPoint,
         selected: this.selectedProduct,
         formCreateProposal,
       };
@@ -687,8 +582,11 @@ export class PengaturanDsdEditComponent implements OnInit {
             result.push(item.code + " (" + item.name + ")");
           });
   
+          result = result.sort();
+
           this.selectedProduct = result_id.join("__");
           this.formCreateProposal.get('product_selected').setValue(result.join(", "));
+          this.product_selected_array = result;
   
           console.log(result);
         }
@@ -763,7 +661,7 @@ export class PengaturanDsdEditComponent implements OnInit {
     wilayah.push(this.createArea());
     const index = wilayah.length > 0 ? (wilayah.length - 1) : 0
     this.initArea(index);
-    this.generataList('salespoint', this.proposalData.area_id, index, 'render');
+    this.generataList('salespoint', this.proposalData.area_id, index, 'render', '');
   }
 
   initArea(index) {
@@ -780,14 +678,18 @@ export class PengaturanDsdEditComponent implements OnInit {
     })
   }
 
-  async generataList(selection, id, index, type) {
+  async generataList(selection, id, index, type, area_code) {
+
+    area_code = area_code.trim();
+    console.log("area_code");
+    console.log(area_code);
+
     this.areaIdNonTargetAudience = id;
     let item: any;
     let response: any;
     let list: any;
     let wilayah = this.formCreateProposal.controls['areas'] as FormArray;
     
-
     switch (selection) {
       case 'salespoint':
         item = wilayah.at(index).get('list_area').value.length > 0 ? wilayah.at(index).get('list_area').value.filter(item => item.id === id)[0] : {};
@@ -830,10 +732,16 @@ export class PengaturanDsdEditComponent implements OnInit {
         }
 
         this.selectedArea = id;
+        if (area_code == ''){
+          const thisURL = this.router.url;
+          area_code = thisURL.split('/').pop().split('_')[0];
+        }
+        this.selectedArea_code = area_code;
         break;
 
       case 'district':
         this.selectedSalesPoint = id;
+        this.selectedSalesPoint_code = area_code;
 
         if (type !== 'render') {
           this.selectedKecamatan = [];
@@ -848,6 +756,91 @@ export class PengaturanDsdEditComponent implements OnInit {
           this.formCreateProposal.get("startDate").setValue("");
           this.formCreateProposal.get("endDate").setValue("");
         }
+
+        this.trs_program_code = this.selectedArea_code+'_'+this.selectedSalesPoint_code;
+        
+        var str =  window.location.href;
+        var lastIndex = str.lastIndexOf("/");
+        var path = str.substring(0, lastIndex);
+        var new_path = path + "/" + this.trs_program_code;
+        
+        this.dataService.showLoading(true);
+        window.location.assign(new_path);
+
+        //document.location.href = newUrl;
+
+        /*
+        //KHUSUS DSD
+        this.trs_program_code = this.selectedArea_code+'_'+this.selectedSalesPoint_code;
+
+        this.dataService.showLoading(true);
+        this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
+
+          if (resProposal.status == 'empty'){
+            alert("belum ada data tersimpan untuk sales point ini");
+            this.dataService.showLoading(false);
+            
+          } else {
+            this.proposalData = resProposal.data;
+    
+            this.formCreateProposal.patchValue({
+              executor_selected: this.proposalData.textarea_executors,
+              kecamatan_selected: this.proposalData.textarea_kecamatans,
+              product_selected: this.proposalData.textarea_products,
+            });
+      
+            this.selectedArea = this.proposalData.area_id;
+            this.selectedSalesPoint = this.proposalData.salespoint_id;
+      
+            this.selectedExecutor = this.proposalData.selected_executors;
+            this.selectedProduct = this.proposalData.selected_products;
+  
+            // ============== SET END DATE ================
+            this.TRSService.getSysVar().subscribe((res) => {
+              res.data.forEach((item) => {
+                if (item.param === 'max_period') {
+                  if (this.proposalData.status == 'ongoing'){
+                  } else {
+                    this.minDateProposal = new Date();
+                    this.minMaxDateProposal = new Date();
+                    this.maxDateProposal = new Date();
+      
+                    this.maxPeriodProposal = parseInt(item.value);
+      
+                    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
+                    this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
+                    this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
+                  }
+                }
+              });
+            }, err => {
+              console.log('err occured', err);
+              this.dataService.showLoading(false);
+            });
+      
+            this.dataService.showLoading(false);
+  
+            let areas = this.dataService.getDecryptedProfile()['area_id'];
+            let request = {
+              level: 4, // area
+              area_id: areas
+            };
+  
+            this.TRSService.getAreaByUser(request).subscribe(res => {
+              this.listLevelArea = res.data;
+              this.addArea();
+            }, err => {
+              console.log('err occured', err);
+              this.dataService.showLoading(false);
+            });
+          }
+
+        }, err => {
+          this.dataService.showLoading(false);
+          console.log('err occured', err);
+        })
+        */
+
         break;
   
 

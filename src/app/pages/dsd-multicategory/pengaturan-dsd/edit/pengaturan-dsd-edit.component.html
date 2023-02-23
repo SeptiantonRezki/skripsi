@@ -22,8 +22,7 @@
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
                         matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
-                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection')" 
-                        [disabled] = "true">
+                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection', $event.source.triggerValue)" >
                         <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
                           {{item.code}}
                         </mat-option>
@@ -38,8 +37,7 @@
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
                         matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
-                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection')"
-                        [disabled] = "proposalData?.status == 'ongoing' || proposalData?.status == 'ready to execute'">
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection', $event.source.triggerValue)">
                         <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
                           {{item.name}}</mat-option>
                       </mat-select>
@@ -71,15 +69,14 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="mb-8">
-                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_selected_executor}}</label>
-                    <div fxLayout="row" >
-                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
-                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_selected_executor}}" formControlName="executor_selected" wrap="soft" [readonly]="true"></textarea>
-                      </div>
+                    <h4>Executor:</h4>
+                    <div *ngIf="executor_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of executor_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
                     </div>
-                    <mat-error *ngIf="formCreateProposal.controls['executor_selected'].hasError('required') && formCreateProposal.controls['executor_selected'].touched">
-                      {{ls.locale.tactical_retail_sales.proposal_executor}} {{ls.locale.tactical_retail_sales.proposal_must_be_choosen}}
-                    </mat-error>
                   </div>
                 </div>
               </div>
@@ -87,15 +84,14 @@
               <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                 <div fxFlex="90%" class="is-light form-primary">
                   <div fxLayout="column" class="mb-8">
-                    <label class="field-label">{{ls.locale.tactical_retail_sales.proposal_selected_product}}</label>
-                    <div fxLayout="row" >
-                      <div class="body-layout" fxFlex="100%" fxFlex.gt-sm="150" style="background-color: #ddd;">
-                        <textarea matInput class="body-text" placeholder="{{ls.locale.tactical_retail_sales.proposal_selected_product}}" formControlName="product_selected" wrap="soft" [readonly]="true"></textarea>
-                      </div>
+                    <h4>Product:</h4>
+                    <div *ngIf="product_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of product_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
                     </div>
-                    <mat-error *ngIf="formCreateProposal.controls['product_selected'].hasError('required') && formCreateProposal.controls['product_selected'].touched">
-                      {{ls.locale.tactical_retail_sales.proposal_product}} {{ls.locale.tactical_retail_sales.proposal_must_be_choosen}}
-                    </mat-error>
                   </div>
                 </div>
               </div>
