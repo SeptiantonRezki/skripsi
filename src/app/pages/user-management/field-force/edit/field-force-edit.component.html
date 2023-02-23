@@ -99,9 +99,35 @@
               [placeholder]="locale.field_force.app_version"
             />
           </mat-form-field>
+          <mat-form-field class="is-light form-primary"
+          [ngClass]="{'d-none': formUser.get('type').value !== 'field-force'}">
+            <input
+              matInput
+              formControlName="email"
+              [placeholder]="locale.global.label.email"
+              [attr.disabled]="!emailNotification ? true : null"
+            />
+            <mat-error
+              *ngIf="
+                formUser.get('email').hasError('required') &&
+                formUser.get('email').touched
+              "
+            >
+              {{ locale.global.label.email }}
+              {{ locale.global.messages.mandatory_text }}
+            </mat-error>
+            <mat-error
+              *ngIf="
+                formUser.get('email').hasError('pattern') &&
+                formUser.get('email').touched
+              "
+            >
+              {{ locale.global.messages.email }}
+            </mat-error>
+          </mat-form-field>
         </div>
-        <div fxFlex="100" class="pb-32">
-          <mat-slide-toggle formControlName="status">
+        <div fxFlex="100" class="row pb-32 pr-32">
+          <mat-slide-toggle formControlName="status" class="pr-32">
             {{ locale.global.label.status }}
             {{
               formUser.get("status").value
@@ -109,6 +135,15 @@
                 : locale.global.label.inactive
             }}</mat-slide-toggle
           >
+          <mat-slide-toggle formControlName="emailNotification"
+          *ngIf="formUser.get('type').value === 'field-force'">
+            {{ locale.global.messages.email_notification }}
+            {{
+              formUser.get("emailNotification").value
+                ? locale.global.label.active
+                : locale.global.label.inactive
+            }}
+          </mat-slide-toggle>
         </div>
       </form>
       <div
