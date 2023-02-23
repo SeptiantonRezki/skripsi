@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { DefaultUrlSerializer, UrlTree } from '@angular/router';
 import { DataTablePagerComponent as SuperDataTablePagerComponent } from '@swimlane/ngx-datatable';
 
+type pageActionType = 'next' | 'prev'
 @Component({
   selector: 'app-datatable-pager',
   template: `
@@ -54,11 +54,11 @@ import { DataTablePagerComponent as SuperDataTablePagerComponent } from '@swimla
 export class DataTablePagerComponent extends SuperDataTablePagerComponent {
   @Input() pagerLeftArrowIcon: string = 'datatable-icon-left';
   @Input() pagerRightArrowIcon: string = 'datatable-icon-right';
-  @Input() pagerPreviousIcon: string = 'icon-prev';
-  @Input() pagerNextIcon: string = 'icon-skip';
+  @Input() pagerPreviousIcon: string = 'datatable-icon-prev';
+  @Input() pagerNextIcon: string = 'datatable-icon-skip';
 
-  _nextPageUrl: string
-  _prevPageUrl: string
+  _nextPageUrl: string = ""
+  _prevPageUrl: string = ""
 
   @Input()
   set size(val: number) {
@@ -77,7 +77,6 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
   }
 
   get count(): number {
-    console.log(this._page)
     return this._count;
   }
 
@@ -116,37 +115,40 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
   pages: any;
 
   canPrevious(): boolean {
-    return !!this._prevPageUrl;
+    return !!this.prevPageUrl;
   }
 
   canNext(): boolean {
-    return !!this._nextPageUrl
-    // return this.page < this.totalPages;
+    return !!this.nextPageUrl
   }
 
   prevPage(): void {
-    this.selectPage(this.page - 1);
+    this.selectPage(this.page - 1, 'prev');
   }
 
   nextPage(): void {
-    this.selectPage(this.page + 1);
+    this.selectPage(this.page + 1, 'next');
   }
+  
+  selectPage(page: number, type?: pageActionType): void {
+    if (page !== this.page && page > 0) {
+      if ((type === 'next' && this._nextPageUrl) || (type === 'prev' && this._prevPageUrl) || page <= this.totalPages) {
+        this.page = page;
+        this.change.emit({
+          page
+        });
 
-  // @Input() selectPage: (page: number) => void;
-  selectPage(page: number): void {
-    if (page > 0 && page <= this.totalPages && page !== this.page) {
-      this.page = page;
-
-      this.change.emit({
-        page
-      });
+      }
     }
+    // if (page > 0 && page <= this.totalPages && page !== this.page) {
+    // }
   }
 
   @Input()
   set nextPageUrl(url: string) {
-    console.log(url)
+    
     this._nextPageUrl = url
+    this.calcPages()
   }
 
   get nextPageUrl(): string {
@@ -155,15 +157,14 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
 
   @Input()
   set prevPageUrl(url: string) {
-    console.log(url)
     this._prevPageUrl = url
   }
 
   get prevPageUrl(): string {
-    let test = new DefaultUrlSerializer()
-    console.log(test.parse(this._prevPageUrl).queryParams)
     return this._prevPageUrl
   }
+
+  @Input() setPage: ({ page }) => void
 
   calcPages(page?: number): any[] {
     const pages = [];
@@ -174,7 +175,15 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
 
     page = page || this.page;
 
-    if (isMaxSized) {
+    if (!this._count && this.nextPageUrl) {
+      if (this._nextPageUrl) {
+        endPage = page + 1
+        
+      }
+      if (this._prevPageUrl) {
+        startPage = page - 1
+      }
+    } else if (isMaxSized) {
       startPage = page - Math.floor(maxSize / 2);
       endPage = page + Math.floor(maxSize / 2);
 
@@ -193,7 +202,7 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
         text: <string><any>num
       });
     }
-
+    
     return pages;
   }
 }

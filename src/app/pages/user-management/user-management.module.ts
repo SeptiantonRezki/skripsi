@@ -161,7 +161,7 @@ import { StorePhotoTypesComponent } from './retailer/store-photo-types/store-pho
 import { DndModule } from "ngx-drag-drop";
 import { NgxDnDModule } from '@swimlane/ngx-dnd'
 import { StorePhotoTypeFormComponent } from "./retailer/store-photo-types/store-photo-type-form/store-photo-type-form.component";
-import { DataTablePagerComponent } from "./pager.component"
+import { DataTablePagerComponent } from "./retailer/index/pager-datatable/pager.component"
 
 export const MY_FORMATS = {
   parse: {

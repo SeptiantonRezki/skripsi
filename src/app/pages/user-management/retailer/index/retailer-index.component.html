@@ -691,17 +691,18 @@
             let-offset="offset"
             ngx-datatable-footer-template
           >
-            Showing: {{ curPage }} to {{ pageSize }} of {{ rowCount }}entries
+            Showing: {{ curPage }} to {{ pageSize }} of {{ pagination.total }} entries
 
             <app-datatable-pager
+              [nextPageUrl]="nextPageUrl"
+              [prevPageUrl]="prevPageUrl"
               [page]="curPage"
               [visiblePagesCount]="currentVisible"
               [size]="pageSize"
               [count]="pagination.total"
               [hidden]="false"
               (change)="setPage($event)"
-              [nextPageUrl]="nextPageUrl"
-              [prevPageUrl]="prevPageUrl"
+              [setPage]="setPage"
             >
             </app-datatable-pager>
           </ng-template>

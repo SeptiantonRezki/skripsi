@@ -18,679 +18,6 @@ import { LanguagesService } from 'app/services/languages/languages.service';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 
-const SAMPLE_DATA_SIMPLE_PAGINATION = {
-  "current_page": 1,
-  "data": [
-      {
-          "id": 0,
-          "name": "Prefix ID #1",
-          "code": "PRE00001",
-          "owner": "Prefix ID",
-          "classification": null,
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 0,
-          "touchpoint_name": null,
-          "user_id": null,
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 1,
-          "name": "KERI",
-          "code": "KERI1",
-          "owner": "SUKARDI SUKARDI SUKARDI SUKARDI",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 1,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3579,
-          "version_retailer": "2.50",
-          "version_cashier": "1.20",
-          "wholesaler_name": "Toko Cabang Mutiara",
-          "wholesaler_code": "WSWKND01",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 2,
-          "name": "JOG0029156",
-          "code": "JOG0029156",
-          "owner": "JOG0029156",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 0,
-          "gsm_pl": 1,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3580,
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0003081",
-          "wholesaler_code": "JOG0003081",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 3,
-          "name": "JOG0011394v",
-          "code": "JOG0011394",
-          "owner": "JOG0011394",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 1,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3581,
-          "version_retailer": "2.33",
-          "version_cashier": "1.20",
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 4,
-          "name": "JOG0015050",
-          "code": "JOG0015050",
-          "owner": "JOG0015050",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3582,
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "dev WS",
-          "wholesaler_code": "DEV900",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 5,
-          "name": "JOG0015035",
-          "code": "JOG0015035",
-          "owner": "JOG0015035",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3583,
-          "version_retailer": "2.21",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0006116",
-          "wholesaler_code": "JOG0006116",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 6,
-          "name": "JOG0015053",
-          "code": "JOG0015053",
-          "owner": "JOG0015053",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3584,
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "CAHAYA",
-          "wholesaler_code": "JOG0002167",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 7,
-          "name": "JOG0015753",
-          "code": "JOG0015753",
-          "owner": "JOG0015753",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3585,
-          "version_retailer": "2.00",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002734",
-          "wholesaler_code": "JOG0002734",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 8,
-          "name": "WIJAYA KUSUMA",
-          "code": "JOG0015738",
-          "owner": "FX MUJIONO MUJIONO",
-          "classification": "GT",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3586,
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 10,
-          "name": "JOG0017238",
-          "code": "JOG0017238",
-          "owner": "JOG0017238",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3588,
-          "version_retailer": "2.12",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 11,
-          "name": "JOG0017216",
-          "code": "JOG0017216",
-          "owner": "Dwi vitriani",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3589,
-          "version_retailer": "2.56",
-          "version_cashier": "1.23",
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 12,
-          "name": "JOG0017215",
-          "code": "JOG0017215",
-          "owner": "JOG0017215",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3590,
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 13,
-          "name": "JOG0018754",
-          "code": "JOG0018754",
-          "owner": "JOG0018754",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3591,
-          "version_retailer": "2.50",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 14,
-          "name": "JOG0027733",
-          "code": "JOG0027733",
-          "owner": "JOG0027733",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3592,
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "JOG0005970",
-          "wholesaler_code": "JOG0005970",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 15,
-          "name": "JOG0027761",
-          "code": "JOG0027761",
-          "owner": "JOG0027761",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3593,
-          "version_retailer": "2.12",
-          "version_cashier": null,
-          "wholesaler_name": "Toko Regretion",
-          "wholesaler_code": "NTT000212",
-          "status_indo": "aktif"
-      }
-  ],
-  "first_page_url": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer?page=1",
-  "from": 1,
-  "next_page_url": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer?page=2",
-  "path": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer",
-  "per_page": "15",
-  "prev_page_url": null,
-  "to": 15
-}
-
-const SAMPE_DATA_TOTAL_PAGE = {
-  "current_page": 1,
-  "data": [
-      {
-          "id": 0,
-          "name": "Prefix ID #1",
-          "code": "PRE00001",
-          "owner": "Prefix ID",
-          "classification": null,
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 0,
-          "touchpoint_name": null,
-          "user_id": null,
-          "country": "ID",
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 1,
-          "name": "KERI",
-          "code": "KERI1",
-          "owner": "SUKARDI SUKARDI SUKARDI SUKARDI",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 1,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3579,
-          "country": "ID",
-          "version_retailer": "2.50",
-          "version_cashier": "1.20",
-          "wholesaler_name": "Toko Cabang Mutiara",
-          "wholesaler_code": "WSWKND01",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 2,
-          "name": "JOG0029156",
-          "code": "JOG0029156",
-          "owner": "JOG0029156",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 0,
-          "gsm_pl": 1,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3580,
-          "country": "ID",
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0003081",
-          "wholesaler_code": "JOG0003081",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 3,
-          "name": "JOG0011394v",
-          "code": "JOG0011394",
-          "owner": "JOG0011394",
-          "classification": "SRC",
-          "src_classification": "",
-          "src_type": "",
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 1,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3581,
-          "country": "ID",
-          "version_retailer": "2.33",
-          "version_cashier": "1.20",
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 4,
-          "name": "JOG0015050",
-          "code": "JOG0015050",
-          "owner": "JOG0015050",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3582,
-          "country": "ID",
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "dev WS",
-          "wholesaler_code": "DEV900",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 5,
-          "name": "JOG0015035",
-          "code": "JOG0015035",
-          "owner": "JOG0015035",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3583,
-          "country": "ID",
-          "version_retailer": "2.21",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0006116",
-          "wholesaler_code": "JOG0006116",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 6,
-          "name": "JOG0015053",
-          "code": "JOG0015053",
-          "owner": "JOG0015053",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3584,
-          "country": "ID",
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "CAHAYA",
-          "wholesaler_code": "JOG0002167",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 7,
-          "name": "JOG0015753",
-          "code": "JOG0015753",
-          "owner": "JOG0015753",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3585,
-          "country": "ID",
-          "version_retailer": "2.00",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002734",
-          "wholesaler_code": "JOG0002734",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 8,
-          "name": "WIJAYA KUSUMA",
-          "code": "JOG0015738",
-          "owner": "FX MUJIONO MUJIONO",
-          "classification": "GT",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "inactive",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3586,
-          "country": "ID",
-          "version_retailer": "2.42",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "tidak aktif"
-      },
-      {
-          "id": 10,
-          "name": "JOG0017238",
-          "code": "JOG0017238",
-          "owner": "JOG0017238",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3588,
-          "country": "ID",
-          "version_retailer": "2.12",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 11,
-          "name": "JOG0017216",
-          "code": "JOG0017216",
-          "owner": "Dwi vitriani",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3589,
-          "country": "ID",
-          "version_retailer": "2.56",
-          "version_cashier": "1.23",
-          "wholesaler_name": null,
-          "wholesaler_code": null,
-          "status_indo": "aktif"
-      },
-      {
-          "id": 12,
-          "name": "JOG0017215",
-          "code": "JOG0017215",
-          "owner": "JOG0017215",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3590,
-          "country": "ID",
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 13,
-          "name": "JOG0018754",
-          "code": "JOG0018754",
-          "owner": "JOG0018754",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3591,
-          "country": "ID",
-          "version_retailer": "2.50",
-          "version_cashier": null,
-          "wholesaler_name": "JOG0002904",
-          "wholesaler_code": "JOG0002904",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 14,
-          "name": "JOG0027733",
-          "code": "JOG0027733",
-          "owner": "JOG0027733",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3592,
-          "country": "ID",
-          "version_retailer": null,
-          "version_cashier": null,
-          "wholesaler_name": "JOG0005970",
-          "wholesaler_code": "JOG0005970",
-          "status_indo": "aktif"
-      },
-      {
-          "id": 15,
-          "name": "JOG0027761",
-          "code": "JOG0027761",
-          "owner": "JOG0027761",
-          "classification": "SRC",
-          "src_classification": null,
-          "src_type": null,
-          "gsr_flag": 0,
-          "gsm_pl": 0,
-          "is_chat_bot": 0,
-          "status": "active",
-          "cashier": 1,
-          "touchpoint_name": null,
-          "user_id": 3593,
-          "country": "ID",
-          "version_retailer": "2.12",
-          "version_cashier": null,
-          "wholesaler_name": "Toko Regretion",
-          "wholesaler_code": "NTT000212",
-          "status_indo": "aktif"
-      }
-  ],
-  "first_page_url": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer?page=1",
-  "from": 1,
-  "last_page": 67041,
-  "last_page_url": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer?page=67041",
-  "next_page_url": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer?page=2",
-  "path": "http://businesses.api.dev.src.id/api/v1/business/principal/retailer",
-  "per_page": "15",
-  "prev_page_url": null,
-  "to": 15,
-  "total": 1005608
-}
 @Component({
   selector: 'app-retailer-index',
   templateUrl: './retailer-index.component.html',
@@ -1746,7 +1073,6 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
-    console.log(this.pagination)
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
@@ -1852,74 +1178,75 @@ export class RetailerIndexComponent {
     if (this.bank_final_validation.value === 'all') { delete this.pagination['bank_final_validation']; }
 
     this.loadingIndicator = true;
-    this.retailerService.get(this.pagination).subscribe(
-      res => {
-        console.log(this.pagination)
-        let result = SAMPE_DATA_TOTAL_PAGE
-        Page.renderPagination(this.pagination, result);
-        console.log(result.next_page_url)
+    try {
+      this.retailerService.get(this.pagination).subscribe(
+        res => {
+          Page.renderPagination(this.pagination, res);
 
-        this.nextPageUrl = result.next_page_url || ""
-        this.prevPageUrl = result.prev_page_url || ""
+          this.nextPageUrl = res.next_page_url || ""
+          this.prevPageUrl = res.prev_page_url || ""
 
-        this.rows = result.data;
-        this.onLoad = false;
+          this.rows = res.data;
+          this.onLoad = false;
 
-        this.dataService.setToStorage('zone', this.list['zone']);
-        if (this.list['region'].length > 0) {
-          this.dataService.setToStorage('region', this.list['region']);
-        }
-        if (this.list['area'].length > 0) {
-          this.dataService.setToStorage('area', this.list['area']);
-        }
-        if (this.list['salespoint'].length > 0) {
-          this.dataService.setToStorage('salespoint', this.list['salespoint']);
-        }
-        if (this.list['district'].length > 0) {
-          this.dataService.setToStorage('district', this.list['district']);
-        }
-        if (this.list['territory'].length > 0) {
-          this.dataService.setToStorage('territory', this.list['territory']);
-        }
+          this.dataService.setToStorage('zone', this.list['zone']);
+          if (this.list['region'].length > 0) {
+            this.dataService.setToStorage('region', this.list['region']);
+          }
+          if (this.list['area'].length > 0) {
+            this.dataService.setToStorage('area', this.list['area']);
+          }
+          if (this.list['salespoint'].length > 0) {
+            this.dataService.setToStorage('salespoint', this.list['salespoint']);
+          }
+          if (this.list['district'].length > 0) {
+            this.dataService.setToStorage('district', this.list['district']);
+          }
+          if (this.list['territory'].length > 0) {
+            this.dataService.setToStorage('territory', this.list['territory']);
+          }
 
-        if (this.formFilter.get('zone').value) {
-          this.dataService.setToStorage('selected_zone', this.formFilter.get('zone').value);
-        }
-        if (this.formFilter.get('region').value) {
-          this.dataService.setToStorage('selected_region', this.formFilter.get('region').value);
-        }
-        if (this.formFilter.get('area').value) {
-          this.dataService.setToStorage('selected_area', this.formFilter.get('area').value);
-        }
-        if (this.formFilter.get('salespoint').value) {
-          this.dataService.setToStorage('selected_salespoint', this.formFilter.get('salespoint').value);
-        }
-        if (this.formFilter.get('district').value) {
-          this.dataService.setToStorage('selected_district', this.formFilter.get('district').value);
-        }
-        if (this.formFilter.get('territory').value) {
-          this.dataService.setToStorage('selected_territory', this.formFilter.get('territory').value);
-        }
+          if (this.formFilter.get('zone').value) {
+            this.dataService.setToStorage('selected_zone', this.formFilter.get('zone').value);
+          }
+          if (this.formFilter.get('region').value) {
+            this.dataService.setToStorage('selected_region', this.formFilter.get('region').value);
+          }
+          if (this.formFilter.get('area').value) {
+            this.dataService.setToStorage('selected_area', this.formFilter.get('area').value);
+          }
+          if (this.formFilter.get('salespoint').value) {
+            this.dataService.setToStorage('selected_salespoint', this.formFilter.get('salespoint').value);
+          }
+          if (this.formFilter.get('district').value) {
+            this.dataService.setToStorage('selected_district', this.formFilter.get('district').value);
+          }
+          if (this.formFilter.get('territory').value) {
+            this.dataService.setToStorage('selected_territory', this.formFilter.get('territory').value);
+          }
 
-        this.retailerService.statusExportCashier({
-          area: this.pagination['area'],
-          retailer_id: this.selectedRetailer,
-          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
-        }).subscribe(res => {
-          console.log('Status Export :', res);
-          this.resultExport = res.data.result;
-          this.canRequestExport = res.data.can_request;
-        });
+          this.retailerService.statusExportCashier({
+            area: this.pagination['area'],
+            retailer_id: this.selectedRetailer,
+            classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+          }).subscribe(res => {
+            console.log('Status Export :', res);
+            this.resultExport = res.data.result;
+            this.canRequestExport = res.data.can_request;
+          });
 
-        this.loadingIndicator = false;
-        
-      },
-      err => {
-        console.error(err);
-        this.onLoad = false;
-        this.dataService.showLoading(false);
-      }
-    );
+          this.loadingIndicator = false;
+
+        },
+        err => {
+          console.error(err);
+          this.onLoad = false;
+          this.dataService.showLoading(false);
+        }
+      );
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   changePage(t) {
@@ -1974,14 +1301,14 @@ export class RetailerIndexComponent {
   }
 
   setPage(pageInfo) {
-    console.log(pageInfo)
-    this.offsetPagination = pageInfo;
+    let page = pageInfo.page
+    this.offsetPagination = page;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
-      this.pagination.page = pageInfo;
+      this.pagination.page = page;
     } else {
-      this.dataService.setToStorage('page', pageInfo);
+      this.dataService.setToStorage('page', page);
       this.pagination.page = this.dataService.getFromStorage('page');
     }
 
