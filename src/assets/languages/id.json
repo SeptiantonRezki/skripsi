@@ -480,6 +480,8 @@
       "geotree": "Geotree"
     },
     "messages": {
+      "email": "Email tidak terverifikasi, harap gunakan alamat email kantor!",
+      "email_notification": "Status email notifikasi SFP",
       "file_browse_label": "Tarik File kesini atau Pilih File",
       "file_unselected_warn": "Tidak ada File yang dipilih",
       "mandatory_text": "Harus diisi",
