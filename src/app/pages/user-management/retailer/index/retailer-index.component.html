@@ -692,12 +692,12 @@
             let-offset="offset"
             ngx-datatable-footer-template
           >
-            Showing: {{ curPage }} to {{ pageSize }} of {{ pagination.total }} entries
+            Showing: {{ rows.length }} entries
 
             <app-datatable-pager
               [nextPageUrl]="nextPageUrl"
               [prevPageUrl]="prevPageUrl"
-              [page]="curPage"
+              [page]="pagination.page"
               [visiblePagesCount]="currentVisible"
               [size]="pageSize"
               [count]="pagination.total"

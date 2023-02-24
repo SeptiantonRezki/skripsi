@@ -9,13 +9,6 @@ type pageActionType = 'next' | 'prev'
       <li [class.disabled]="!canPrevious()">
         <a
           href="javascript:void(0)"
-          (click)="selectPage(1)">
-          <i class="{{pagerPreviousIcon}}"></i>
-        </a>
-      </li>
-      <li [class.disabled]="!canPrevious()">
-        <a
-          href="javascript:void(0)"
           (click)="prevPage()">
           <i class="{{pagerLeftArrowIcon}}"></i>
         </a>
@@ -35,13 +28,6 @@ type pageActionType = 'next' | 'prev'
           href="javascript:void(0)"
           (click)="nextPage()">
           <i class="{{pagerRightArrowIcon}}"></i>
-        </a>
-      </li>
-      <li [class.disabled]="!canNext()">
-        <a
-          href="javascript:void(0)"
-          (click)="selectPage(totalPages)">
-          <i class="{{pagerNextIcon}}"></i>
         </a>
       </li>
     </ul>
@@ -174,16 +160,10 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
     const isMaxSized = maxSize < this.totalPages;
 
     page = page || this.page;
-
-    if (!this._count && this.nextPageUrl) {
-      if (this._nextPageUrl) {
-        endPage = page + 1
-        
-      }
-      if (this._prevPageUrl) {
-        startPage = page - 1
-      }
-    } else if (isMaxSized) {
+    console.log(page)
+    console.log(this.page)
+    console.log(maxSize, this.totalPages)
+    if (isMaxSized) {
       startPage = page - Math.floor(maxSize / 2);
       endPage = page + Math.floor(maxSize / 2);
 
@@ -195,7 +175,17 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
         endPage = this.totalPages;
       }
     }
+      
+    // Handle simple pagination, simple pagination doesn't have 'total' property
+    if (!this._count) {
+      pages.push({
+        number: page,
+        text: <string><any>page
+      })
+      return pages
+    }
 
+    // For normal pagination with 'total' property
     for (let num = startPage; num <= endPage; num++) {
       pages.push({
         number: num,

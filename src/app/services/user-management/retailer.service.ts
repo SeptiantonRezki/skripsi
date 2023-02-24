@@ -12,6 +12,7 @@ export class RetailerService extends BaseService {
   }
 
   get(queryParams?): Observable<any> {
+    console.log(queryParams.page)
     const url = this.getUrl(this.namespace, "get");
     return this.getApi(url, queryParams);
   }

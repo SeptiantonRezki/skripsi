@@ -1203,12 +1203,14 @@ export class RetailerIndexComponent {
     try {
       this.retailerService.get(this.pagination).subscribe(
         res => {
-          Page.renderPagination(this.pagination, res);
+          let result = {...res, page: page || 1}
 
-          this.nextPageUrl = res.next_page_url || ""
-          this.prevPageUrl = res.prev_page_url || ""
+          Page.renderPagination(this.pagination, result);
 
-          this.rows = res.data;
+          this.nextPageUrl = result.next_page_url || ""
+          this.prevPageUrl = result.prev_page_url || ""
+
+          this.rows = result.data;
           this.onLoad = false;
 
           this.dataService.setToStorage('zone', this.list['zone']);
@@ -1335,8 +1337,9 @@ export class RetailerIndexComponent {
     }
 
     this.retailerService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      let result = {...res, page: res.current_page || 1}
+      Page.renderPagination(this.pagination, result);
+      this.rows = result.data;
       this.loadingIndicator = false;
     });
   }
