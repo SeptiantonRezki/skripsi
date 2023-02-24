@@ -1200,10 +1200,17 @@ export class RetailerIndexComponent {
     if (this.bank_final_validation.value === 'all') { delete this.pagination['bank_final_validation']; }
 
     this.loadingIndicator = true;
+
+    // Exclue page param on search
+    if (this.pagination.search) {
+      this.pagination.page = null
+    }
+
     try {
       this.retailerService.get(this.pagination).subscribe(
         res => {
-          let result = {...res, page: page || 1}
+          // Pagination 'page' param will be set from response
+          let result = {...res, page: res.current_page || 1}
 
           Page.renderPagination(this.pagination, result);
 

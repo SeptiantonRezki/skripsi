@@ -160,9 +160,6 @@ export class DataTablePagerComponent extends SuperDataTablePagerComponent {
     const isMaxSized = maxSize < this.totalPages;
 
     page = page || this.page;
-    console.log(page)
-    console.log(this.page)
-    console.log(maxSize, this.totalPages)
     if (isMaxSized) {
       startPage = page - Math.floor(maxSize / 2);
       endPage = page + Math.floor(maxSize / 2);
