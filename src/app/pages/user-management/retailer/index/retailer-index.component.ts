@@ -643,11 +643,13 @@ export class RetailerIndexComponent {
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              // this.dataService.showLoading(false);
+              this.loadingIndicator = false
             }
           } else {
             this.list['salespoint'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('salespoint').setValue('');
         }
@@ -668,11 +670,13 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
@@ -703,11 +707,13 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
                 // fd = null
