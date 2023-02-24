@@ -1,10 +1,21 @@
-<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+<div
+  class="page-layout simple fullwidth"
+  fxLayout="column"
+  fusePerfectScrollbar
+>
   <!-- HEADER -->
   <page-content-header [contentTitle]="ls.locale.retailer.list.page_title">
     <div class="button-row" fxLayout="row">
-      <button *ngIf="this.ls.selectedLanguages != 'km'" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
-        [routerLink]="['/user-management','retailer','create']" [disabled]="ls.selectedLanguages == 'km'? true: null">
-        <mat-icon>add</mat-icon>{{ls.locale.global.button.add}}
+      <button
+        *ngIf="this.ls.selectedLanguages != 'km'"
+        style="width: 170px"
+        mat-raised-button
+        aria-label="Login"
+        type="button"
+        [routerLink]="['/user-management', 'retailer', 'create']"
+        [disabled]="ls.selectedLanguages == 'km' ? true : null"
+      >
+        <mat-icon>add</mat-icon>{{ ls.locale.global.button.add }}
       </button>
       <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
     </div>
@@ -12,157 +23,358 @@
   <!-- / HEADER -->
 
   <div class="content p-24" *ngIf="!onLoad">
-    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-      style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+    <div
+      fxLayout="row wrap"
+      fxLayout.lt-md="column"
+      fxLayoutGap="20px"
+      fxLayoutGap.lt-md="10px"
+      style="background-color: #585858"
+      fxLayoutAlign="end center"
+      class="p-16 export"
+    >
       <a #downloadLink></a>
       <a #downloadBankLink></a>
       <!-- <button mat-raised-button type="button" color="primary">
         Kelola ls.locale.global.label.cashier_access
       </button> disabled tiket CDE-2572-dissable-mass-upload -->
-      <button *ngIf="permission.databank" (click)="downloadBankAccount()" mat-raised-button type="button" class="is-danger">
+      <button
+        *ngIf="permission.databank"
+        (click)="downloadBankAccount()"
+        mat-raised-button
+        type="button"
+        class="is-danger"
+      >
         <mat-icon>arrow_downward</mat-icon> Download Bank Account
       </button>
-      <button mat-raised-button type="button" class="is-danger" (click)="import()">
+      <button
+        mat-raised-button
+        type="button"
+        class="is-danger"
+        (click)="import()"
+      >
         <mat-icon>arrow_downward</mat-icon> Import XLS
       </button>
-      <button *ngIf="canRequestExport == true && resultExport == null && permission.export" (click)="export()" mat-raised-button type="button" class="is-danger">
+      <button
+        *ngIf="
+          canRequestExport == true && resultExport == null && permission.export
+        "
+        (click)="export()"
+        mat-raised-button
+        type="button"
+        class="is-danger"
+      >
         <mat-icon>arrow_upward</mat-icon> Request Export XLS
       </button>
-      <button *ngIf="canRequestExport == false && permission.export" mat-raised-button type="button" class="is-disabled">
-        <mat-spinner [diameter]="22" style="float: left; margin-top: 8px; margin-right: 8px"></mat-spinner> Requesting Export
+      <button
+        *ngIf="canRequestExport == false && permission.export"
+        mat-raised-button
+        type="button"
+        class="is-disabled"
+      >
+        <mat-spinner
+          [diameter]="22"
+          style="float: left; margin-top: 8px; margin-right: 8px"
+        ></mat-spinner>
+        Requesting Export
       </button>
-      <button *ngIf="resultExport != null && permission.export" (click)="download()" mat-raised-button type="button" class="is-danger">
+      <button
+        *ngIf="resultExport != null && permission.export"
+        (click)="download()"
+        mat-raised-button
+        type="button"
+        class="is-danger"
+      >
         <mat-icon>arrow_downward</mat-icon> Download XLS
       </button>
-      <mat-icon *ngIf="canRequestExport == false && permission.export" matTooltip="{{ls.locale.retailer.excel_download_info}}" class="info-icon">info</mat-icon>
+      <mat-icon
+        *ngIf="canRequestExport == false && permission.export"
+        matTooltip="{{ ls.locale.retailer.excel_download_info }}"
+        class="info-icon"
+        >info</mat-icon
+      >
     </div>
     <div class="table-wrapper">
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
-        <h2 class="pl-8">{{ls.locale.retailer.list.page_title}}</h2>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        class="top-table pt-8"
+      >
+        <h2 class="pl-8">{{ ls.locale.retailer.list.page_title }}</h2>
         <div class="search-field" fxLayout="row" fxLayoutAlign="center center">
           <mat-icon>search</mat-icon>
           <mat-form-field class="is-light tab-search">
-            <input matInput placeholder="{{ls.locale.global.label.search}}" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+            <input
+              matInput
+              placeholder="{{ ls.locale.global.label.search }}"
+              (keyup)="keyUp.next($event.target.value)"
+              autocomplete="off"
+            />
           </mat-form-field>
         </div>
       </div>
       <form [formGroup]="formFilter" autoComplete="off">
-        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-
+        <div
+          fxLayout="row wrap"
+          fxLayout.lt-md="column"
+          class="px-24 pt-16"
+          fxLayoutGap="20px"
+          fxLayoutGap.lt-md="0px"
+        >
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.national' | translate}}" formControlName="national">
-              <mat-option *ngFor="let item of listLevelArea" [value]="item.id">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.national' | translate }}"
+              formControlName="national"
+            >
+              <mat-option
+                *ngFor="let item of listLevelArea"
+                [value]="item.id"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.zone' | translate}}" formControlName="zone" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['zone'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua
-                Zona' :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.zone' | translate }}"
+              formControlName="zone"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['zone'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Zona"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.regional' | translate}}" formControlName="region" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['region'])" [value]="item.id">{{item.name === 'all'
-                ? 'Semua
-                Regional'
-                :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.regional' | translate }}"
+              formControlName="region"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['region'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Regional"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['area'])" [value]="item.id">{{item.name === 'all' ?
-                'Semua
-                Area'
-                :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.area' | translate }}"
+              formControlName="area"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['area'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Area"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['salespoint'])" [value]="item.id">{{item.name ===
-                'all' ?
-                'Semua
-                Salespoint'
-                :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.salespoint' | translate }}"
+              formControlName="salespoint"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['salespoint'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Salespoint"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.district' | translate}}" formControlName="district" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['district'])" [value]="item.id">{{item.name ===
-                'all' ? 'Semua
-                District'
-                :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.district' | translate }}"
+              formControlName="district"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['district'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                District"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="12%" class="is-light form-primary">
-            <mat-select placeholder="{{'global.area.territory' | translate}}" formControlName="territory" multiple>
-              <mat-option *ngFor="let item of filteringGeotree(list['territory'])" [value]="item.id">{{item.name ===
-                'all' ? 'Semua
-                Territori'
-                :
-                item.code}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.area.territory' | translate }}"
+              formControlName="territory"
+              multiple
+            >
+              <mat-option
+                *ngFor="let item of filteringGeotree(list['territory'])"
+                [value]="item.id"
+                >{{
+                  item.name === "all"
+                    ? "Semua
+                Territori"
+                    : item.code
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
         </div>
-        <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
-          style="margin-bottom: 25px;">
+        <div
+          fxLayout="row wrap"
+          fxLayout.lt-md="column"
+          class="px-24 pt-16"
+          fxLayoutGap="20px"
+          fxLayoutGap.lt-md="0px"
+          style="margin-bottom: 25px"
+        >
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.apps_version_ayo_toko' | translate}}" [formControl]="version_retailer">
-              <mat-option *ngFor="let item of listVersionsRetailer" [value]="item.version">{{item.version}}</mat-option>
+            <mat-select
+              placeholder="{{
+                'retailer.list.apps_version_ayo_toko' | translate
+              }}"
+              [formControl]="version_retailer"
+            >
+              <mat-option
+                *ngFor="let item of listVersionsRetailer"
+                [value]="item.version"
+                >{{ item.version }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.apps_version_ayo_cashier' | translate}}" [formControl]="version_cashier">
-              <mat-option *ngFor="let item of listVersionsCashier" [value]="item.version">{{item.version}}</mat-option>
+            <mat-select
+              placeholder="{{
+                'retailer.list.apps_version_ayo_cashier' | translate
+              }}"
+              [formControl]="version_cashier"
+            >
+              <mat-option
+                *ngFor="let item of listVersionsCashier"
+                [value]="item.version"
+                >{{ item.version }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'global.label.status' | translate}}" [formControl]="status">
-              <mat-option *ngFor="let item of listStatus" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.label.status' | translate }}"
+              [formControl]="status"
+            >
+              <mat-option
+                *ngFor="let item of listStatus"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{ls.locale.global.label.cashier_access}}" [formControl]="access_cashier">
-              <mat-option *ngFor="let item of listAccessCashier" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ ls.locale.global.label.cashier_access }}"
+              [formControl]="access_cashier"
+            >
+              <mat-option
+                *ngFor="let item of listAccessCashier"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'global.label.classification' | translate}}" [formControl]="retail_classification">
-              <mat-option *ngFor="let item of retailClassification" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.label.classification' | translate }}"
+              [formControl]="retail_classification"
+            >
+              <mat-option
+                *ngFor="let item of retailClassification"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'global.label.chat_bot' | translate}}" [formControl]="chatbot">
-              <mat-option *ngFor="let item of listStatusChatBot" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'global.label.chat_bot' | translate }}"
+              [formControl]="chatbot"
+            >
+              <mat-option
+                *ngFor="let item of listStatusChatBot"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
 
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.gsr' | translate}}" [formControl]="gsr">
-              <mat-option *ngFor="let item of listGSR" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'retailer.list.gsr' | translate }}"
+              [formControl]="gsr"
+            >
+              <mat-option *ngFor="let item of listGSR" [value]="item.value">{{
+                item.name
+              }}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.gsm_pl' | translate}}" [formControl]="gsm_pl">
-              <mat-option *ngFor="let item of listGSM" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{ 'retailer.list.gsm_pl' | translate }}"
+              [formControl]="gsm_pl"
+            >
+              <mat-option *ngFor="let item of listGSM" [value]="item.value">{{
+                item.name
+              }}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.pojok_bayar_validation' | translate}}" [formControl]="pojok_bayar_validation">
-              <mat-option *ngFor="let item of listPojokBayar" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{
+                'retailer.list.pojok_bayar_validation' | translate
+              }}"
+              [formControl]="pojok_bayar_validation"
+            >
+              <mat-option
+                *ngFor="let item of listPojokBayar"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field fxFlex="16" class="is-light form-primary">
-            <mat-select placeholder="{{'retailer.list.bank_account_validation' | translate}}" [formControl]="bank_final_validation">
-              <mat-option *ngFor="let item of listBankFinalValidation" [value]="item.value">{{item.name}}</mat-option>
+            <mat-select
+              placeholder="{{
+                'retailer.list.bank_account_validation' | translate
+              }}"
+              [formControl]="bank_final_validation"
+            >
+              <mat-option
+                *ngFor="let item of listBankFinalValidation"
+                [value]="item.value"
+                >{{ item.name }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <div style="padding-top: 1em">
@@ -176,12 +388,26 @@
           </div>
         </div>
       </form>
-      <ngx-datatable class="material" style="border-top: 1px solid #e3e3e3" [rows]="rows"
-        [loadingIndicator]="loadingIndicator" [columnMode]="'force'" [headerHeight]="48" [footerHeight]="56"
-        [rowHeight]="'auto'" [scrollbarH]="true" [offset]="offsetPagination" [reorderable]="reorderable"
-        [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" [externalSorting]="true"
-        (page)="setPage($event)" (sort)="onSort($event)" (select)="onSelect($event)">
-
+      <ngx-datatable
+        class="material"
+        style="border-top: 1px solid #e3e3e3"
+        [rows]="rows"
+        [loadingIndicator]="loadingIndicator"
+        [columnMode]="'force'"
+        [headerHeight]="48"
+        [footerHeight]="56"
+        [rowHeight]="'auto'"
+        [scrollbarH]="true"
+        [offset]="offsetPagination"
+        [count]="pagination.total"
+        [reorderable]="reorderable"
+        [limit]="pagination.per_page"
+        [externalPaging]="false"
+        [externalSorting]="true"
+        (page)="setPage($event)"
+        (sort)="onSort($event)"
+        (select)="onSelect($event)"
+      >
         <!-- <ngx-datatable-column [width]="48" [canAutoResize]="false" [sortable]="true">
             <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
               let-selectFn="selectFn">
@@ -192,88 +418,218 @@
               <mat-checkbox [checked]="isSelected"></mat-checkbox>
             </ng-template>
           </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <mat-checkbox [checked]="selectedRetailer.includes(row.id)" (change)="onSelectedRetailer($event, row)">
+        <ngx-datatable-column
+          [width]="68"
+          [canAutoResize]="false"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            <mat-checkbox
+              [checked]="selectedRetailer.includes(row.id)"
+              (change)="onSelectedRetailer($event, row)"
+            >
             </mat-checkbox>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.global.label.store_name }}" prop="name">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            <a class="direct-edit" (click)="directDetail(row)">{{row.name}} </a>
+        <ngx-datatable-column
+          name="{{ ls.locale.global.label.store_name }}"
+          prop="name"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            <a class="direct-edit" (click)="directDetail(row)"
+              >{{ row.name }}
+            </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}" prop="code" summary-template="activeCell">
+        <ngx-datatable-column
+          name="{{ ls.locale.manajemen_barang_sku.manajemen_koin.text7 }}"
+          prop="code"
+          summary-template="activeCell"
+        >
         </ngx-datatable-column>
-        <ngx-datatable-column name="{{ ls.locale.global.label.owner_name }}" prop="owner">
+        <ngx-datatable-column
+          name="{{ ls.locale.global.label.owner_name }}"
+          prop="owner"
+        >
           <!-- <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
             <a class="direct-edit" (click)="directEdit(row)">{{row.owner}} </a>
           </ng-template> -->
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.call_objective.text10 }}" prop="classification" summary-template="activeCell">
+        <ngx-datatable-column
+          name="{{ ls.locale.call_objective.text10 }}"
+          prop="classification"
+          summary-template="activeCell"
+        >
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.call_objective.text11 }}" prop="src_classification" summary-template="activeCell">
+        <ngx-datatable-column
+          name="{{ ls.locale.call_objective.text11 }}"
+          prop="src_classification"
+          summary-template="activeCell"
+        >
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{ ls.locale.call_objective.text12 }}" prop="src_type" summary-template="activeCell">
+        <ngx-datatable-column
+          name="{{ ls.locale.call_objective.text12 }}"
+          prop="src_type"
+          summary-template="activeCell"
+        >
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="{{'retailer.list.gsr' | translate}}" prop="gsr_flag" summary-template="activeCell">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.gsr_flag === 1 ? 'On' : 'Off'}}
+        <ngx-datatable-column
+          name="{{ 'retailer.list.gsr' | translate }}"
+          prop="gsr_flag"
+          summary-template="activeCell"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            {{ row.gsr_flag === 1 ? "On" : "Off" }}
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="{{'retailer.list.gsm_pl' | translate}}" prop="gsm_pl" summary-template="activeCell">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.gsm_pl === 1 ? 'On' : 'Off'}}
-          </ng-template>
-        </ngx-datatable-column>
-
-        <ngx-datatable-column name="{{ ls.locale.wholesaler.text2 }}" prop="wholesaler_code" summary-template="activeCell" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_code || '-'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="{{ ls.locale.global.menu.wholesaler }}" prop="wholesaler_name" summary-template="activeCell" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.wholesaler_name || '-'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="{{'retailer.list.apps_version_ayo_toko' | translate}}" prop="version_retailer" summary-template="activeCell"
-          [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_retailer || '-'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="{{ ls.locale.global.label.chat_bot }}" prop="is_chat_bot" summary-template="activeCell" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.is_chat_bot === 1 ? 'On' : 'Off'}}
-          </ng-template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="{{'retailer.list.apps_version_ayo_cashier' | translate}}" prop="version_cashier" summary-template="activeCell"
-          [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">{{row.version_cashier || '-'}}
+        <ngx-datatable-column
+          name="{{ 'retailer.list.gsm_pl' | translate }}"
+          prop="gsm_pl"
+          summary-template="activeCell"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            {{ row.gsm_pl === 1 ? "On" : "Off" }}
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="120" name="{{ ls.locale.global.label.status }}" prop="status">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <ngx-datatable-column
+          name="{{ ls.locale.wholesaler.text2 }}"
+          prop="wholesaler_code"
+          summary-template="activeCell"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            >{{ row.wholesaler_code || "-" }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="{{ ls.locale.global.menu.wholesaler }}"
+          prop="wholesaler_name"
+          summary-template="activeCell"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            >{{ row.wholesaler_name || "-" }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="{{ 'retailer.list.apps_version_ayo_toko' | translate }}"
+          prop="version_retailer"
+          summary-template="activeCell"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            >{{ row.version_retailer || "-" }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="{{ ls.locale.global.label.chat_bot }}"
+          prop="is_chat_bot"
+          summary-template="activeCell"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
+            {{ row.is_chat_bot === 1 ? "On" : "Off" }}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column
+          name="{{ 'retailer.list.apps_version_ayo_cashier' | translate }}"
+          prop="version_cashier"
+          summary-template="activeCell"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            >{{ row.version_cashier || "-" }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="120"
+          name="{{ ls.locale.global.label.status }}"
+          prop="status"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
             <div class="name-container">
-              <p class="status text-truncate h6 p-4 status-order"
-                [ngClass]="row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{ row.status == 'active' ? ls.locale.global.label.active : ls.locale.global.label.inactive }}
+              <p
+                class="status text-truncate h6 p-4 status-order"
+                [ngClass]="
+                  row.status == 'active' ? 'mat-green-800-bg' : 'mat-red-900-bg'
+                "
+              >
+                {{
+                  row.status == "active"
+                    ? ls.locale.global.label.active
+                    : ls.locale.global.label.inactive
+                }}
               </p>
             </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [width]="120" name="{{ls.locale.global.label.cashier_access}}" prop="cashier">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <ngx-datatable-column
+          [width]="120"
+          name="{{ ls.locale.global.label.cashier_access }}"
+          prop="cashier"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+          >
             <div class="name-container">
-              <p class="status text-truncate h6 p-4 status-order"
-                [ngClass]="row.cashier == 1 ? 'mat-green-800-bg' : 'mat-red-900-bg'">
-                {{ row.cashier == 0 ? ls.locale.dte.pengatur_jadwal_program.text33 : ls.locale.dte.pengatur_jadwal_program.text32 }}
+              <p
+                class="status text-truncate h6 p-4 status-order"
+                [ngClass]="
+                  row.cashier == 1 ? 'mat-green-800-bg' : 'mat-red-900-bg'
+                "
+              >
+                {{
+                  row.cashier == 0
+                    ? ls.locale.dte.pengatur_jadwal_program.text33
+                    : ls.locale.dte.pengatur_jadwal_program.text32
+                }}
               </p>
             </div>
           </ng-template>
@@ -295,19 +651,63 @@
               </div>
             </ng-template>
           </ngx-datatable-column> -->
-        <ngx-datatable-column [width]="100" name="{{ ls.locale.global.label.action }}" headerClass="textright" [sortable]="false">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
-            style="justify-content: center !important">
+        <ngx-datatable-column
+          [width]="100"
+          name="{{ ls.locale.global.label.action }}"
+          headerClass="textright"
+          [sortable]="false"
+        >
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            style="justify-content: center !important"
+          >
             <div class="button-row pl-8">
-              <button mat-icon-button *ngIf="!permission?.ubah" color="" (click)="directDetail(row)">
+              <button
+                mat-icon-button
+                *ngIf="!permission?.ubah"
+                color=""
+                (click)="directDetail(row)"
+              >
                 <mat-icon class="secondary-text">assignment</mat-icon>
               </button>
-              <button mat-icon-button *ngIf="permission?.ubah" color="" (click)="directEdit(row)">
+              <button
+                mat-icon-button
+                *ngIf="permission?.ubah"
+                color=""
+                (click)="directEdit(row)"
+              >
                 <mat-icon class="secondary-text">edit</mat-icon>
               </button>
             </div>
           </ng-template>
         </ngx-datatable-column>
+        <ngx-datatable-footer>
+          <ng-template
+            let-rowCount="rowCount"
+            let-pageSize="pageSize"
+            let-selectedCount="selectedCount"
+            let-curPage="curPage"
+            let-offset="offset"
+            ngx-datatable-footer-template
+          >
+            Showing: {{ rows.length }} entries
+
+            <app-datatable-pager
+              [nextPageUrl]="nextPageUrl"
+              [prevPageUrl]="prevPageUrl"
+              [page]="pagination.page"
+              [visiblePagesCount]="currentVisible"
+              [size]="pageSize"
+              [count]="pagination.total"
+              [hidden]="false"
+              (change)="setPage($event)"
+              [setPage]="setPage"
+            >
+            </app-datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
       </ngx-datatable>
     </div>
   </div>
