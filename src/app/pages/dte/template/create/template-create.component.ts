@@ -683,7 +683,7 @@ export class TemplateCreateComponent {
     this.templateTaskForm.get('background_image').setValue(this.duplicateTask.background_image ? this.duplicateTask.background_image_url : '');
     this.templateTaskForm.get('background_font_color').setValue(this.duplicateTask.background_font_color ? this.duplicateTask.background_font_color : '');
     this.isBackgroundMisi.setValue(!!this.duplicateTask.background_image);
-    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? this.duplicateTask.video_url : '');
+    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? `https://assets.dev.src.id/${this.duplicateTask.video}` : '');
     this.frmIsBranching.setValue(!!this.duplicateTask.is_branching);
     this.shareable.setValue(!!this.duplicateTask.is_shareable);
     this.isIRTemplate.setValue(!!this.duplicateTask.is_ir_template);
@@ -1538,7 +1538,7 @@ export class TemplateCreateComponent {
         // image_mechanism: new_image_mechanism || [],
         image_mechanism: this.templateTaskForm.controls.image_mechanism.value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
-        video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
+        video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value.replace('https://assets.dev.src.id/', '') : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
@@ -1598,7 +1598,7 @@ export class TemplateCreateComponent {
             encryption: item.encryption ? 1 : 0,
             image_quality_detection: item.image_quality_detection ? 1 : 0,
             blocker_submission: item.blocker_submission || "",
-            question_video: item.question_video || '',
+            question_video: item.question_video.replace('https://assets.dev.src.id/', '') || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
                 let tmpung = {
