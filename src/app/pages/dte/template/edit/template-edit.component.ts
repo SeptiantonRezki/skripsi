@@ -352,14 +352,14 @@ export class TemplateEditComponent {
         for (let index = 0; index < inputTag.length; index++) {
           inputTag[index].id = "search-"+form;
         }
-        
+
         let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
         if (matOption) {
           for (let index = 0; index < matOption.length; index++) {
             matOption[index].id = 'options';
           }
         }
-      }      
+      }
     } else {    // untuk option saja
       const matOption = document.querySelectorAll('mat-option');
       for (let index = 0; index < matOption.length; index++) {
@@ -717,7 +717,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('background_image').setValue(this.detailTask.background_image ? this.detailTask.background_image_url : '');
     this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
     this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
-    this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
+    this.templateTaskForm.get('video').setValue(this.detailTask.video ? `https://assets.dev.src.id/${this.detailTask.video}` : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching == 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
@@ -886,7 +886,7 @@ export class TemplateEditComponent {
         upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : "",
         qrCode: item.qrcode_on_off
       }));
-      
+
       this.handleChangeImageDetection(index);
 
       this.allQuestionList.push({
@@ -1046,7 +1046,7 @@ export class TemplateEditComponent {
 
   handleChangeImageDetection(index): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (questions.at(index).get("image_quality_detection").value) {
       questions.at(index).get("blocker_submission").enable();
     } else {
@@ -1090,7 +1090,7 @@ export class TemplateEditComponent {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
       questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
@@ -1632,7 +1632,7 @@ export class TemplateEditComponent {
           // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason),
-        rejected_reason_ids: rejected_reason.map(item => 
+        rejected_reason_ids: rejected_reason.map(item =>
           (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
         ),
         is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
@@ -1838,8 +1838,8 @@ export class TemplateEditComponent {
   }
 
   uploadImageBgMisi(e: any){
-    this.templateTaskForm.get('background_image').setValue(e.image);    
-    this.templateTaskForm.get('background_font_color').setValue(e.color);    
+    this.templateTaskForm.get('background_image').setValue(e.image);
+    this.templateTaskForm.get('background_font_color').setValue(e.color);
     console.log('update => ', this.templateTaskForm);
   }
 
@@ -1881,7 +1881,7 @@ export class TemplateEditComponent {
         changedByTextIndex.push(index);
       }
     });
-    
+
     Promise.all(imagesFile)
       .then((data) => data.map((item, idx) => {
         if (changed[idx] && changed[idx].hasOwnProperty('id')) {
