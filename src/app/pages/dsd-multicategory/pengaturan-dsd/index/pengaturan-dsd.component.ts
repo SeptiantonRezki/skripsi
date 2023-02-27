@@ -405,22 +405,15 @@ export class PengaturanDsdComponent implements OnInit {
 
           this.selectedSalesPoint = "";
           this.selectedExecutor = [];
-          this.selectedKecamatan = [];
           this.selectedProduct = [];
           this.formCreateProposal.get('executor_selected').setValue("");
-          this.formCreateProposal.get('kecamatan_selected').setValue("");
           this.formCreateProposal.get('product_selected').setValue("");
-          this.formCreateProposal.get('custCode1').setValue("");
-          this.formCreateProposal.get('custName1').setValue("");
-          this.formCreateProposal.get('custCode2').setValue("");
-          this.formCreateProposal.get('custName2').setValue("");
-
-          this.formCreateProposal.get("startDate").setValue("");
-          this.formCreateProposal.get("endDate").setValue("");
         }
 
         this.selectedArea = id;
         this.selectedArea_code = area_code;
+
+        /*
         break;
 
       case 'district':
@@ -428,27 +421,19 @@ export class PengaturanDsdComponent implements OnInit {
         this.selectedSalesPoint_code = area_code;
 
         if (type !== 'render') {
-          this.selectedKecamatan = [];
-          this.formCreateProposal.get('kecamatan_selected').setValue("");
-          this.formCreateProposal.get('custCode1').setValue("");
-          this.formCreateProposal.get('custName1').setValue("");
-          this.formCreateProposal.get('custCode2').setValue("");
-          this.formCreateProposal.get('custName2').setValue("");
-
           this.selectedExecutor = [];
           this.formCreateProposal.get('executor_selected').setValue("");
-          this.formCreateProposal.get("startDate").setValue("");
-          this.formCreateProposal.get("endDate").setValue("");
         }
+        */
 
         //KHUSUS DSD
-        this.trs_program_code = this.selectedArea_code+'_'+this.selectedSalesPoint_code;
+        this.trs_program_code = this.selectedArea_code;
 
         this.dataService.showLoading(true);
         this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
 
           if (resProposal.status == 'empty'){
-            alert("belum ada data tersimpan untuk sales point ini");
+            alert("belum ada data tersimpan untuk area ini");
             this.dataService.showLoading(false);
             
           } else {
@@ -456,39 +441,14 @@ export class PengaturanDsdComponent implements OnInit {
     
             this.formCreateProposal.patchValue({
               executor_selected: this.proposalData.textarea_executors,
-              kecamatan_selected: this.proposalData.textarea_kecamatans,
               product_selected: this.proposalData.textarea_products,
             });
       
             this.selectedArea = this.proposalData.area_id;
-            this.selectedSalesPoint = this.proposalData.salespoint_id;
       
             this.selectedExecutor = this.proposalData.selected_executors;
             this.selectedProduct = this.proposalData.selected_products;
-  
-            // ============== SET END DATE ================
-            this.TRSService.getSysVar().subscribe((res) => {
-              res.data.forEach((item) => {
-                if (item.param === 'max_period') {
-                  if (this.proposalData.status == 'ongoing'){
-                  } else {
-                    this.minDateProposal = new Date();
-                    this.minMaxDateProposal = new Date();
-                    this.maxDateProposal = new Date();
-      
-                    this.maxPeriodProposal = parseInt(item.value);
-      
-                    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
-                    this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
-                    this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
-                  }
-                }
-              });
-            }, err => {
-              console.log('err occured', err);
-              this.dataService.showLoading(false);
-            });
-      
+        
             this.dataService.showLoading(false);
   
             let areas = this.dataService.getDecryptedProfile()['area_id'];

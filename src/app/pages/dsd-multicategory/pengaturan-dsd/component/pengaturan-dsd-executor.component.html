@@ -68,7 +68,7 @@
 
         <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_name}}" prop="fullname" [width]="200">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.fullname}} <span class="bintang" *ngIf="row.isDisable">({{row.disableProgramCode}})</span>
+            {{row.fullname}}
           </ng-template>
         </ngx-datatable-column>
 

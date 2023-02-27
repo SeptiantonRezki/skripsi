@@ -138,27 +138,13 @@ export class PengaturanDsdEditComponent implements OnInit {
 
     this.formCreateProposal = this.formBuilder.group({
       areas: this.formBuilder.array([]),
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      geotagging: ['wajib', Validators.required],
-      custCode1: ["", Validators.required],
-      custName1: ["", Validators.required],
-      custCode2: [""],
-      custName2: [""],
-      maxExecutor: [1, Validators.required],      
-      flowingly: [""],
       
       executor: [""],
-      kecamatan: [""],
       product: [""],
 
       //kanan
       executor_selected: ["", Validators.required],
-      kecamatan_selected: ["", Validators.required],
       product_selected: ["", Validators.required],
-
-      background: ["", Validators.required],
-      objective: ["", Validators.required],
 
       area: [""],
       salespoint: [""],
@@ -181,7 +167,8 @@ export class PengaturanDsdEditComponent implements OnInit {
       this.proposalData = resProposal.data;
 
       if (resProposal.status == 'empty'){
-        //alert("belum ada data tersimpan untuk sales point ini");
+        alert("belum ada data tersimpan untuk area ini");
+
         this.dataService.showLoading(false);
         this.selectedArea = resProposal.area_id;
         this.selectedSalesPoint = resProposal.salespoint_id;
@@ -249,26 +236,6 @@ export class PengaturanDsdEditComponent implements OnInit {
     this.deleteFile.push(id);
   }
 
-  setMinDate(param?: any): void {
-    this.formCreateProposal.get("endDate").setValue("");
-    this.minMaxDateProposal = param;
-    console.log("kaaaa");
-    console.log(this.maxPeriodProposal);
-    this.maxDateProposal = moment(param).add(parseInt(this.maxPeriodProposal), 'd');
-
-    this.selectedExecutor = [];
-    this.selectedKecamatan = [];
-    this.formCreateProposal.get('executor_selected').setValue("");
-    this.formCreateProposal.get('kecamatan_selected').setValue("");
-  }
-
-  dateChanged(): void {
-    this.selectedExecutor = [];
-    this.selectedKecamatan = [];
-    this.formCreateProposal.get('executor_selected').setValue("");
-    this.formCreateProposal.get('kecamatan_selected').setValue("");
-  }
-
   submit(mode) {
     console.log("qqqq");
     if (this.formCreateProposal.valid) {
@@ -276,7 +243,6 @@ export class PengaturanDsdEditComponent implements OnInit {
       let fd = new FormData();
       //fd.append('program_code', "XXX_Coba1"); generate di backend saja
       fd.append('area_id', this.selectedArea);
-      fd.append('salespoint_id', this.selectedSalesPoint);
       
       fd.append('executors', this.selectedExecutor);
       fd.append('products', this.selectedProduct);
@@ -286,7 +252,7 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         });
-        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
+        location.reload();
       }, err => {
         this.dataService.showLoading(false);
       })
@@ -297,149 +263,6 @@ export class PengaturanDsdEditComponent implements OnInit {
         message: "Silahkan lengkapi pengisian data!"
       });
       commonFormValidator.validateAllFields(this.formCreateProposal);
-    }
-  }
-
-  submitnew(mode) {
-    console.log("submitnew");
-    if (this.formCreateProposal.valid) {
-      this.dataService.showLoading(true);
-      let fd = new FormData();
-      //fd.append('program_code', "XXX_Coba1"); generate di backend saja
-      fd.append('start_date', moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"));
-      fd.append('end_date', moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"));
-      fd.append('area_id', this.selectedArea);
-      fd.append('salespoint_id', this.selectedSalesPoint);
-
-      fd.append('customer1_code', this.formCreateProposal.get('custCode1').value);
-      fd.append('customer1_name', this.formCreateProposal.get('custName1').value);
-      fd.append('customer2_code', this.formCreateProposal.get('custCode2').value);
-      fd.append('customer2_name', this.formCreateProposal.get('custName2').value);
-      
-      fd.append('background', this.formCreateProposal.get('background').value);
-      fd.append('objective', this.formCreateProposal.get('objective').value);
-      fd.append('max_executor', this.formCreateProposal.get('maxExecutor').value);
-      fd.append('flowingly', this.formCreateProposal.get('flowingly').value.trim());
-      
-      fd.append('geotag_flag', this.formCreateProposal.get('geotagging').value);
-
-      fd.append('executors', this.selectedExecutor);
-      fd.append('kecamatans', this.selectedKecamatan);
-      fd.append('products', this.selectedProduct);
-
-      if (this.deleteFile.length > 0){
-        fd.append('remove_files', this.deleteFile.join("__"));
-      }
-      
-      fd.append('status', 'ongoing');
-
-      this.fileList.map(imgr => {
-        fd.append('files[]', imgr)
-      })
-
-      if (mode == 1){
-        let sisa_attchments = this.proposalData.attachments.length - this.deleteFile.length;
-
-        if ((sisa_attchments < 1 && this.fileList.length == 0) || this.formCreateProposal.get('flowingly').value.trim() == ""){
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({
-            message: "Nomor Flowingly dan Attach File wajib diisi !"
-          });
-        } else {
-          console.log("submit bisa dilakukan");
-
-          this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
-            this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({
-              message: this.ls.locale.notification.popup_notifikasi.text22
-            });
-            this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
-          }, err => {
-            this.dataService.showLoading(false);
-          })
-        }
-      } else {
-        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
-          this.dataService.showLoading(false);
-          this.dialogService.openSnackBar({
-            message: this.ls.locale.notification.popup_notifikasi.text22
-          });
-          this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
-        }, err => {
-          this.dataService.showLoading(false);
-        })
-      }
-    } else {
-      this.dataService.showLoading(false);
-      this.dialogService.openSnackBar({
-        message: "Silahkan lengkapi pengisian data!"
-      });
-      commonFormValidator.validateAllFields(this.formCreateProposal);
-    }
-  }
-
-  batal(){
-    var result = confirm("Jika kembali, semua data yang sudah diisi akan hilang. Yakin akan kembali ke TRS List?");
-    if (result) {
-      this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
-    }
-  }
-
-  cancel(){
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.maxWidth = "90vw";
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.panelClass = 'scrumboard-card-dialog';
-    dialogConfig.data = {
-      password: 'P@ssw0rd',
-      IMPORT_FROM_METHOD: 'CREATE',
-      program_code: this.trs_program_code
-    };
-
-    this.dialogRef = this.dialog.open(TrsCancelReasonComponent, dialogConfig);
-
-    this.dialogRef.afterClosed().subscribe(response => {
-        
-      console.log("kakakaka");
-      console.log(response);
-      if (response == 'success'){
-        this.router.navigate(['/dsd-multicategory', 'pengaturan-dsd']);
-      }
-    });
-  }
-
-  setCustName(id, component_name): void {
-    if (true) {
-      if (id.length >= 10) {
-        if (this.selectedSalesPoint == ""){
-          alert("Pilih salespoint terlebih dahulu !");
-        } else {
-          let custCode1 = this.formCreateProposal.get('custCode1').value;
-          let custCode2 = this.formCreateProposal.get('custCode2').value;
-          if (custCode1.toUpperCase() == custCode2.toUpperCase()){
-            alert('Customer tidak boleh sama');
-          } else {
-            id = id+"__"+this.selectedSalesPoint;
-            this.dataService.showLoading(true);
-            this.TRSService.getCustName(id.toUpperCase()).subscribe(res => {
-              this.dataService.showLoading(false);
-              if (res.status ==  'success'){
-                this.formCreateProposal.get(component_name).setValue(res.data.name);
-              } else {
-                alert(res.message);
-                this.formCreateProposal.get(component_name).setValue("");
-              }
-            }, err => {
-              this.dataService.showLoading(false);
-              console.log('err occured', err);
-            })
-          }
-        }
-      } else {
-        this.formCreateProposal.get(component_name).setValue("");
-      }
     }
   }
 
@@ -462,8 +285,6 @@ export class PengaturanDsdEditComponent implements OnInit {
         selected: this.selectedExecutor,
         program_code: this.trs_program_code,
         formCreateProposal,
-        start_date: moment(this.formCreateProposal.get('startDate').value).format("YYYY-MM-DD"),
-        end_date: moment(this.formCreateProposal.get('endDate').value).format("YYYY-MM-DD"),
       };
   
       this.dialogRef = this.dialog.open(PengaturanDsdExecutorComponent, dialogConfig);
@@ -658,34 +479,33 @@ export class PengaturanDsdEditComponent implements OnInit {
           list.removeAt(0);
         }
 
-        //editchan
-        wilayah.at(index).get('salespoint').setValue(this.proposalData.salespoint_id);
-
-        if (type !== 'render') {
-          wilayah.at(index).get('salespoint').setValue('');
-
-          this.selectedSalesPoint = "";
-          this.selectedExecutor = [];
-          this.selectedKecamatan = [];
-          this.selectedProduct = [];
-          this.formCreateProposal.get('executor_selected').setValue("");
-          this.formCreateProposal.get('kecamatan_selected').setValue("");
-          this.formCreateProposal.get('product_selected').setValue("");
-          this.formCreateProposal.get('custCode1').setValue("");
-          this.formCreateProposal.get('custName1').setValue("");
-          this.formCreateProposal.get('custCode2').setValue("");
-          this.formCreateProposal.get('custName2').setValue("");
-
-          this.formCreateProposal.get("startDate").setValue("");
-          this.formCreateProposal.get("endDate").setValue("");
-        }
-
         this.selectedArea = id;
         if (area_code == ''){
           const thisURL = this.router.url;
-          area_code = thisURL.split('/').pop().split('_')[0];
+          area_code = thisURL.split('/').pop();
         }
+
         this.selectedArea_code = area_code;
+        this.trs_program_code = this.selectedArea_code;
+
+        if (type !== 'render') {
+          this.selectedSalesPoint = "";
+          this.selectedExecutor = [];
+          this.selectedProduct = [];
+          this.formCreateProposal.get('executor_selected').setValue("");
+          this.formCreateProposal.get('product_selected').setValue("");
+
+
+          var str =  window.location.href;
+          var lastIndex = str.lastIndexOf("/");
+          var path = str.substring(0, lastIndex);
+          var new_path = path + "/" + this.trs_program_code;
+          
+          this.dataService.showLoading(true);
+          window.location.assign(new_path);
+        
+        }
+        /*
         break;
 
       case 'district':
@@ -693,102 +513,20 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.selectedSalesPoint_code = area_code;
 
         if (type !== 'render') {
-          this.selectedKecamatan = [];
-          this.formCreateProposal.get('kecamatan_selected').setValue("");
-          this.formCreateProposal.get('custCode1').setValue("");
-          this.formCreateProposal.get('custName1').setValue("");
-          this.formCreateProposal.get('custCode2').setValue("");
-          this.formCreateProposal.get('custName2').setValue("");
-
           this.selectedExecutor = [];
           this.formCreateProposal.get('executor_selected').setValue("");
-          this.formCreateProposal.get("startDate").setValue("");
-          this.formCreateProposal.get("endDate").setValue("");
         }
 
         this.trs_program_code = this.selectedArea_code+'_'+this.selectedSalesPoint_code;
         
-        var str =  window.location.href;
-        var lastIndex = str.lastIndexOf("/");
-        var path = str.substring(0, lastIndex);
-        var new_path = path + "/" + this.trs_program_code;
-        
-        this.dataService.showLoading(true);
-        window.location.assign(new_path);
+        */
+
+
+
 
         //document.location.href = newUrl;
 
-        /*
-        //KHUSUS DSD
-        this.trs_program_code = this.selectedArea_code+'_'+this.selectedSalesPoint_code;
-
-        this.dataService.showLoading(true);
-        this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
-
-          if (resProposal.status == 'empty'){
-            alert("belum ada data tersimpan untuk sales point ini");
-            this.dataService.showLoading(false);
-            
-          } else {
-            this.proposalData = resProposal.data;
-    
-            this.formCreateProposal.patchValue({
-              executor_selected: this.proposalData.textarea_executors,
-              kecamatan_selected: this.proposalData.textarea_kecamatans,
-              product_selected: this.proposalData.textarea_products,
-            });
-      
-            this.selectedArea = this.proposalData.area_id;
-            this.selectedSalesPoint = this.proposalData.salespoint_id;
-      
-            this.selectedExecutor = this.proposalData.selected_executors;
-            this.selectedProduct = this.proposalData.selected_products;
   
-            // ============== SET END DATE ================
-            this.TRSService.getSysVar().subscribe((res) => {
-              res.data.forEach((item) => {
-                if (item.param === 'max_period') {
-                  if (this.proposalData.status == 'ongoing'){
-                  } else {
-                    this.minDateProposal = new Date();
-                    this.minMaxDateProposal = new Date();
-                    this.maxDateProposal = new Date();
-      
-                    this.maxPeriodProposal = parseInt(item.value);
-      
-                    this.minDateProposal.setDate(this.minDateProposal.getDate()+1);
-                    this.minMaxDateProposal = this.formCreateProposal.get('startDate').value; 
-                    this.maxDateProposal = moment(this.formCreateProposal.get('startDate').value).add(parseInt(this.maxPeriodProposal), 'd');          
-                  }
-                }
-              });
-            }, err => {
-              console.log('err occured', err);
-              this.dataService.showLoading(false);
-            });
-      
-            this.dataService.showLoading(false);
-  
-            let areas = this.dataService.getDecryptedProfile()['area_id'];
-            let request = {
-              level: 4, // area
-              area_id: areas
-            };
-  
-            this.TRSService.getAreaByUser(request).subscribe(res => {
-              this.listLevelArea = res.data;
-              this.addArea();
-            }, err => {
-              console.log('err occured', err);
-              this.dataService.showLoading(false);
-            });
-          }
-
-        }, err => {
-          this.dataService.showLoading(false);
-          console.log('err occured', err);
-        })
-        */
 
         break;
   

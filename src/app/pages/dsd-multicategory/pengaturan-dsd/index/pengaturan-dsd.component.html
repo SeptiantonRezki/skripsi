@@ -40,6 +40,8 @@
                       </mat-error>
                     </mat-form-field>
                   </div>
+
+                  <!--
                   <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
                     <mat-form-field fxFlex="90%" class="is-light form-primary">
                       <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
@@ -54,6 +56,8 @@
                       </mat-error>
                     </mat-form-field>
                   </div>
+                  -->
+
                 </div>
               </div>
 
@@ -123,6 +127,37 @@
                   </div>
                 </div>
               </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <h4>Executor:</h4>
+                    <div *ngIf="executor_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of executor_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <h4>Product:</h4>
+                    <div *ngIf="product_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of product_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
             </div>
           </div>
         </div>
