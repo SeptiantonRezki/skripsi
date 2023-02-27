@@ -323,7 +323,7 @@ export class RetailerEditComponent {
       commonFormValidator.parseFormChanged(this.formRetailer, this.formdataErrors);
     });
     this.dataService.showLoading(true);
-    if (this.dataService.getFromStorage('country_retailer') === 'ID') {
+    if (localStorage.getItem("user_country") === 'id') {
       this.showQuery = this.retailerService.show_v2({ retailer_id: this.idRetailer });
     } else {
       this.showQuery = this.retailerService.show({ retailer_id: this.idRetailer });
