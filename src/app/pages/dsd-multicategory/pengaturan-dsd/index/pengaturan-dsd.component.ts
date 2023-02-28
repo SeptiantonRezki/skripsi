@@ -93,6 +93,9 @@ export class PengaturanDsdComponent implements OnInit {
   selectedKecamatan: any = [];
   selectedProduct: any = [];
 
+  executor_selected_array: any = [];
+  product_selected_array: any = [];
+
   imageSku: any;
   files: File;
   fileList: Array<File> = [];
@@ -438,32 +441,16 @@ export class PengaturanDsdComponent implements OnInit {
             
           } else {
             this.proposalData = resProposal.data;
-    
-            this.formCreateProposal.patchValue({
-              executor_selected: this.proposalData.textarea_executors,
-              product_selected: this.proposalData.textarea_products,
-            });
       
             this.selectedArea = this.proposalData.area_id;
       
             this.selectedExecutor = this.proposalData.selected_executors;
             this.selectedProduct = this.proposalData.selected_products;
         
+            this.executor_selected_array = JSON.parse(this.proposalData.textarea_executors);
+            this.product_selected_array = JSON.parse(this.proposalData.textarea_products);
+
             this.dataService.showLoading(false);
-  
-            let areas = this.dataService.getDecryptedProfile()['area_id'];
-            let request = {
-              level: 4, // area
-              area_id: areas
-            };
-  
-            this.TRSService.getAreaByUser(request).subscribe(res => {
-              this.listLevelArea = res.data;
-              this.addArea();
-            }, err => {
-              console.log('err occured', err);
-              this.dataService.showLoading(false);
-            });
           }
 
         }, err => {

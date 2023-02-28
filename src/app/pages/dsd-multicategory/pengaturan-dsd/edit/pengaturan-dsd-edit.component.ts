@@ -142,10 +142,6 @@ export class PengaturanDsdEditComponent implements OnInit {
       executor: [""],
       product: [""],
 
-      //kanan
-      executor_selected: ["", Validators.required],
-      product_selected: ["", Validators.required],
-
       area: [""],
       salespoint: [""],
     })
@@ -173,19 +169,22 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.selectedArea = resProposal.area_id;
         this.selectedSalesPoint = resProposal.salespoint_id;
         this.proposalData.area_id = resProposal.area_id;
-        this.proposalData.salespoint_id= resProposal.salespoint_id;
 
       } else {
+        /*
         this.formCreateProposal.patchValue({
           executor_selected: this.proposalData.textarea_executors,
           product_selected: this.proposalData.textarea_products,
         });
+        */
 
         this.selectedArea = this.proposalData.area_id;
-        this.selectedSalesPoint = this.proposalData.salespoint_id;
 
         this.selectedExecutor = this.proposalData.selected_executors;
         this.selectedProduct = this.proposalData.selected_products;
+
+        this.executor_selected_array = (JSON.parse(this.proposalData.textarea_executors)).sort();
+        this.product_selected_array = (JSON.parse(this.proposalData.textarea_products)).sort();
       }
 
       this.dataService.showLoading(true);
@@ -252,7 +251,7 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.dialogService.openSnackBar({
           message: this.ls.locale.notification.popup_notifikasi.text22
         });
-        location.reload();
+        //location.reload();
       }, err => {
         this.dataService.showLoading(false);
       })
@@ -313,7 +312,6 @@ export class PengaturanDsdEditComponent implements OnInit {
           result = result.sort();
 
           this.selectedExecutor = result_id.join("__");
-          this.formCreateProposal.get('executor_selected').setValue(result.join(", "));
           this.executor_selected_array = result;
   
           console.log(result);
@@ -336,7 +334,7 @@ export class PengaturanDsdEditComponent implements OnInit {
       dialogConfig.data = {
         password: 'P@ssw0rd',
         IMPORT_FROM_METHOD: 'CREATE',
-        area: this.selectedSalesPoint,
+        area: this.selectedArea,
         selected: this.selectedProduct,
         formCreateProposal,
       };
@@ -355,7 +353,6 @@ export class PengaturanDsdEditComponent implements OnInit {
           result = result.sort();
 
           this.selectedProduct = result_id.join("__");
-          this.formCreateProposal.get('product_selected').setValue(result.join(", "));
           this.product_selected_array = result;
   
           console.log(result);
@@ -489,12 +486,13 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.trs_program_code = this.selectedArea_code;
 
         if (type !== 'render') {
+          /*
           this.selectedSalesPoint = "";
           this.selectedExecutor = [];
           this.selectedProduct = [];
           this.formCreateProposal.get('executor_selected').setValue("");
           this.formCreateProposal.get('product_selected').setValue("");
-
+          */
 
           var str =  window.location.href;
           var lastIndex = str.lastIndexOf("/");
