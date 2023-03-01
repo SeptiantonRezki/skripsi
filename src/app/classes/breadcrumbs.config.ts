@@ -3809,4 +3809,13 @@ export const brConfig = {
       }
     ]
   }
+  area_configuration: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Area Configuration"
+      }
+    ]
+  },
 };

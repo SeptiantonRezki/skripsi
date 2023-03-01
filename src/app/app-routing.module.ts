@@ -212,6 +212,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'control-tower',
+    loadChildren: './pages/control-tower/control-tower.module#ControlTowerModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: './pages/404/error-404.module#Error404Module'
   },

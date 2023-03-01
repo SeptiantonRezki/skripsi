@@ -233,7 +233,7 @@ export class PagesName {
       "/tactical-retail-sales/trs-proposal/detail": "principal.trsproposal.lihat",
       "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
       "/tactical-retail-sales/trs-report": "principal.trsreport.lihat",
-      
+
       "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
       "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
       "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
@@ -247,6 +247,8 @@ export class PagesName {
       "/user-management/retailer-image-verification/store-photo-types/create": "principal.retailer.submenu.edit_verifikasi_foto",
       "/user-management/retailer-image-verification/store-photo-types/edit/": "principal.retailer.submenu.edit_verifikasi_foto",
       "/user-management/retailer-image-verification/store-photo-types/detail/": "principal.retailer.submenu.edit_verifikasi_foto",
+
+      "/control-tower/area-configuration": "principal.areaconfiguration.lihat"
     };
     return PAGES[name];
   }

@@ -67,6 +67,7 @@ export class Endpoint {
         get: `${AYO_API_SERVICE(SERVER.area)}/api/v1/general/content/area`,
         export: `${AYO_API}/api/principal/area/export`,
         import: `${AYO_API}/api/principal/area/import`,
+        importFromAreaConfiguration: `${AYO_API}/api/principal/area/import-area-configuration`,
       },
       callObjective: {
         get: `${AYO_API_SERVICE(SERVER.business)}/api/v1/business/principal/call-objective`,
