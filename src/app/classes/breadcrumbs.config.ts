@@ -3808,7 +3808,7 @@ export const brConfig = {
         name: "Ubah Jenis Foto"
       }
     ]
-  }
+  },
   area_configuration: {
     index: [
       {
@@ -3817,5 +3817,5 @@ export const brConfig = {
         name: "Area Configuration"
       }
     ]
-  },
+  }
 };
