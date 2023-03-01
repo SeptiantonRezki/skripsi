@@ -26,4 +26,9 @@ export class PojokUntungPartnersRegisteredService extends BaseService {
     const url = this.getUrl(this.namespace, 'get_status');
     return this.getApi(url, queryParams);
   }
+
+  exportPartner(queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'export');
+    return this.getBlobAsJsonApi(url, queryParams);
+  }
 }

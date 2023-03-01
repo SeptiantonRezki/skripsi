@@ -9,6 +9,7 @@ import {map, startWith, debounceTime, distinctUntilChanged, switchMap} from 'rxj
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
 import { DialogService } from 'app/services/dialog.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PojokUntungPartnersRegisteredService } from 'app/services/pojok-untung/pojok-untung-partners-registered.service';
 import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
 
@@ -26,7 +27,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   pagination: Page = new Page();
   onLoad: boolean;
   offsetPagination: any;
-  partner_type: any = '-9';
+  partner_type: any = -9;
   defaultPartnerType: any[] = [{ id: -9, label: "Semua Jenis Partner" }];
   defaultPartnerId: any[] = [{ id: '', partner_name: "Semua Partner" }];
   defaultStatus: any[] = [{ id: '', label: "Semua Status" }];
@@ -226,8 +227,68 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     });
   }
 
-  export() {
-    console.log('export done!');
+  async export() {
+    this.dataService.showLoading(true);
+    let fd = {
+      partner_type: this.pagination.partner_type ? this.pagination.partner_type !== '-9' ? this.pagination.partner_type : -9 : -9,
+      partner_id: this.pagination.partner_id ? this.pagination.partner_id : null,
+      status: this.pagination.status ? this.pagination.status : null,
+      search: this.pagination.search ? this.pagination.search : null
+    }
+    try {
+      const response = await this.PojokUntungPartnersRegisteredService.exportPartner(fd).toPromise();
+      // console.log('he', response.headers);
+      this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", `Export_Registered_Partner_${new Date().toLocaleString()}.xls`);
+      // this.downLoadFile(response, "data:text/csv;charset=utf-8", `Export_Registered_Partner_${new Date().toLocaleString()}.csv`);
+      // this.downloadLink.nativeElement.href = response;
+      // this.downloadLink.nativeElement.click();
+      this.dataService.showLoading(false);
+
+    } catch (error) {
+      this.handleError(error);
+      this.dataService.showLoading(false);
+      // throw error;
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName: string) {
+    // It is necessary to create a new blob object with mime-type explicitly set
+    // otherwise only Chrome works like it should
+    var newBlob = new Blob([data], { type: type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers: 
+    // Create a link pointing to the ObjectURL containing the blob.
+    const url = window.URL.createObjectURL(newBlob);
+
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
+
+  handleError(error) {
+    // console.log('Here')
+    console.log(error)
+
+    if (!(error instanceof HttpErrorResponse)) {
+      error = error.rejection;
+    }
+    console.log(error);
+    // alert('Open console to see the error')
   }
 
 }
