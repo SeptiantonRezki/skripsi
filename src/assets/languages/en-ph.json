@@ -470,6 +470,8 @@
       "geotree": "Geotree"
     },
     "messages": {
+      "email": "Email not certified, please use office email address!",
+      "email_notification":"SFP notification email status",
       "file_browse_label": "Drag a File Here or Select a File",
       "file_unselected_warn": "No File Selected",
       "mandatory_text": "Required Field",

@@ -37,3 +37,23 @@ export class ExcludeArrayPipe implements PipeTransform {
     return result;
   }
 }
+
+@Pipe({name: "dateRange"})
+export class DateRangePipe implements PipeTransform {
+
+  transform(value: number, ...args: any[]) {
+      
+    const format = args.length ? args[0] : null;
+      const defaultValue = args.length > 1 ? args[1] : '';
+      const isRaw = args.length > 2 ? args[2] : false;
+
+      if(value === 0) return defaultValue;
+
+      const date = moment();
+      const from = moment(date).subtract(value, 'd').format(format);
+      const now = moment().format(format);
+      const result = isRaw ? {from, to: now} : `${from} - ${now}`;
+      
+      return result;
+  }
+}

@@ -1,0 +1,183 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Buat Spin The Wheel Mitra Setup">
+    <!-- <button
+      id="btn-create-trade"
+      style="width: 170px"
+      (click)="submit()"
+      mat-raised-button
+      type="button"
+    >
+      <mat-icon>save</mat-icon> {{ "global.button.edit" | translate }}
+    </button> -->
+  </page-content-header>
+  <!-- / HEADER -->
+  <div class="content p-24" *ngIf="!onLoad">
+    <div class="table-wrapper">
+      <div class="ayo-middle py-24" fxLayout="column">
+        <form autocomplete="off" [formGroup]="formIcon" fxLayout="row" fxLayoutGap="16px" >
+          <div fxFlex="50%">
+            <div class="grey-box">
+              <p style=" font-style: italic; font-weight: bold; text-align: center;">
+                Floating Icon AYO SRC Toko Home Page
+              </p>
+              <div class="px-24">
+                <div
+                  ngfDrop
+                  selectable="1"
+                  class="rectangle-16"
+                  [(validDrag)]="validComboDrag"
+                  [(file)]="files"
+                  accept=".jpg, .gif, .png"
+                  [class.invalid-drag]="validComboDrag === false"
+                  [class.valid-drag]="validComboDrag"
+                  (fileChange)="changeImage($event)"
+                  [(invalidDrag)]="isDetail"
+                  [fileDropDisabled]="isDetail"
+                >
+                  <div
+                    class="p-24"
+                    fxLayout="column"
+                    fxLayoutAlign="center center"
+                  >
+                    <mat-icon
+                      style="width: 48px; height: 48px; font-size: 48px"
+                      >add_photo_alternate_outline</mat-icon
+                    >
+                    <br />
+                    <span matPrefix>Tarik Gambar Kesini</span>
+                  </div>
+                </div>
+              </div>
+              <p style="font-weight: bold; text-align: center">Preview</p>
+              <div style="text-align: center" *ngIf="imageConverted">
+                <img
+                  [src]="imageConverted"
+                  alt="Preview Image"
+                  width="200px"
+                  height="100px"
+                />
+              </div>
+              <p
+                style="
+                  font-style: italic;
+                  font-weight: bold;
+                  text-align: center;
+                "
+              >
+                Floating Icon AYO SRC Toko Home Page
+              </p>
+              <mat-error *ngIf="imageValidationMsg !== ''">
+                <mat-error style="text-align: center;">
+                  {{imageValidationMsg}}
+                </mat-error>
+              </mat-error>
+            </div>
+
+            <div class="confirm pt-24 pb-24 px-24" *ngIf="!isDetail">
+              <button
+                id="btn-simpan"
+                mat-raised-button
+                type="button"
+                class="confirmation-button"
+                fxFlex="20"
+                (click)="submit()"
+              >
+                {{ ls.locale.global.button.save }}
+              </button>
+            </div>
+
+          </div>
+          <div fxFlex="1"></div>
+          <div fxFlex="50%">
+            <h2 class="px-24">Setup {{ 'notification.text' | translate }}</h2>
+            <div fxLayout="row" class="px-24">
+              <mat-form-field fxFlex class="is-light form-primary">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Judul"
+                  formControlName="title"
+                  name="title"
+                />
+                <mat-error
+                  *ngIf="formIcon.controls['title'].hasError('required') && formIcon.controls['title'].touched">
+                  {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" class="px-24">
+              <mat-form-field fxFlex class="is-light form-primary">
+                <textarea
+                  matInput
+                  type="text"
+                  placeholder="Deskripsi Push Notifikasi"
+                  formControlName="content"
+                  name="content"
+                ></textarea>
+                <mat-error
+                  *ngIf="formIcon.controls['content'].hasError('required') && formIcon.controls['content'].touched">
+                  {{'dte.coin_disbursement.text12' | translate}} {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" class="px-24" fxLayoutGap="24px">
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <input matInput [matDatepicker]="dari" (focus)="dari.open()" formControlName="started_at"
+                  [min]="minDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text15}}" readonly>
+                <mat-error *ngFor="let validation of validationMsg.started_at">
+                  <mat-error *ngIf="checkValidation('started_at', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
+                <mat-datepicker-toggle matSuffix [for]="dari">
+                  <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #dari></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <input matInput [matDatepicker]="sampai" (focus)="sampai.open()" formControlName="ended_at"
+                  [min]="formIcon.get('started_at').value || minDate" placeholder="{{ls.locale.manajemen_barang_sku.manajemen_koin.text16}}" readonly>
+                <mat-error *ngFor="let validation of validationMsg.ended_at">
+                  <mat-error *ngIf="checkValidation('ended_at', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
+                <mat-datepicker-toggle matSuffix [for]="sampai">
+                  <mat-icon matDatepickerToggleIcon class="s-24">date_range</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker #sampai></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" class="px-24" fxLayoutGap="24px">
+              <mat-form-field fxFlex="50" class="is-light form-primary" id="start_time">
+                <input matInput formControlName="at" placeholder="Set Waktu"
+                  [ngxTimepicker]="fullTime1" [format]="24" readonly/>
+                <mat-error *ngFor="let validation of validationMsg.at">
+                  <mat-error *ngIf="checkValidation('at', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+              </mat-form-field>
+              <mat-form-field fxFlex="50" class="is-light form-primary">
+                <mat-select placeholder="Interval Program" formControlName="day"
+                  [compareWith]="isChecked" [multiple]="true" >
+                  <mat-option *ngFor="let i of dayList" [value]="i">{{
+                    i[0].toUpperCase() + i.substring(1)
+                  }}</mat-option>
+                </mat-select>
+                <mat-error *ngFor="let validation of validationMsg.day">
+                  <mat-error *ngIf="checkValidation('day', validation)">
+                    {{validation.message}}
+                  </mat-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

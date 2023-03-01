@@ -35,6 +35,8 @@ import {
   MatSlideToggleModule,
   MatRadioModule,
   MatMenuModule,
+  MatCardModule,
+  MatTableModule,
 } from "@angular/material";
 
 import { MomentDateAdapter } from "@angular/material-moment-adapter";
@@ -151,6 +153,15 @@ import { TierPriceDialogComponent } from './retailer/orders-rrp/detail/tier-pric
 import { CancelConfirmationDialogComponent } from './retailer/orders-rrp/detail/cancel-confirmation-dialog/cancel-confirmation-dialog.component';
 import { NgxMaterialTimepicker24HoursFaceComponent } from "ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component";
 import { PreviewImagePaymentComponent } from './retailer/orders-rrp/detail/preview-image-payment/preview-image-payment.component';
+import { StorePhotoVerificationComponent } from './retailer/store-photo-verification/store-photo-verification.component';
+import { PopupImageComponent } from "app/components/popup-image/popup-image.component";
+import { DialogRejectReasonComponent } from './retailer/store-photo-verification/components/dialog-reject-reason/dialog-reject-reason.component';
+import { WidgetStorePhotoCounterComponent } from './retailer/store-photo-verification/components/widget-store-photo-counter/widget-store-photo-counter.component';
+import { StorePhotoTypesComponent } from './retailer/store-photo-types/store-photo-types.component';
+import { DndModule } from "ngx-drag-drop";
+import { NgxDnDModule } from '@swimlane/ngx-dnd'
+import { StorePhotoTypeFormComponent } from "./retailer/store-photo-types/store-photo-type-form/store-photo-type-form.component";
+import { DataTablePagerComponent } from "./retailer/index/pager-datatable/pager.component"
 
 export const MY_FORMATS = {
   parse: {
@@ -197,6 +208,10 @@ export const MY_FORMATS = {
     MatRadioModule,
     MatMenuModule,
     NgxMaterialTimepickerModule,
+    MatCardModule,
+    DndModule,
+    MatTableModule,
+    NgxDnDModule,
   ],
   exports: [
     FieldForceIndexComponent,
@@ -330,11 +345,18 @@ export const MY_FORMATS = {
     InfoBoardEditComponent,
     DialogProcessComponentIB,
     DialogProcessSaveIBComponent,
+    StorePhotoTypeFormComponent,
     OrdersRrpComponent,
     OrdersRrpDetailComponent,
     TierPriceDialogComponent,
     CancelConfirmationDialogComponent,
     PreviewImagePaymentComponent,
+    StorePhotoVerificationComponent,
+    PopupImageComponent,
+    DialogRejectReasonComponent,
+    WidgetStorePhotoCounterComponent,
+    StorePhotoTypesComponent,
+    DataTablePagerComponent
   ],
   entryComponents: [
     ImportAccessCashierDialogComponent,
@@ -354,7 +376,10 @@ export const MY_FORMATS = {
     ImportAudiencePersonalizeInfoBoardComponent,
     DialogProcessComponentIB,
     DialogProcessSaveIBComponent,
-    PreviewImagePaymentComponent
+    PreviewImagePaymentComponent,
+    PopupImageComponent,
+    DialogRejectReasonComponent,
+
   ],
   providers: [
     // PendingChangesGuard,

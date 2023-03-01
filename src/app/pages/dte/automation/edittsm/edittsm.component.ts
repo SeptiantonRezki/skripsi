@@ -109,6 +109,9 @@ export class EdittsmComponent implements OnInit {
       skus: this.formBuilder.array([])
     });
 
+    console.log("ex_coin_per_sku",this.detailAutomation.extra_coin_sku);
+    console.log("max_qty_per_sku",this.detailAutomation.max_qty_order);
+
     if (this.detailAutomation.type === 'e-order' && (!this.detailAutomation.barcode || this.detailAutomation.barcode.length === 0)) {
       console.log('is empty create one');
       let skus = this.formAutomation.get('skus') as FormArray;
@@ -135,11 +138,15 @@ export class EdittsmComponent implements OnInit {
     if (this.detailAutomation.type === 'e-order') {
       let skus = this.formAutomation.get('skus') as FormArray;
       if (this.detailAutomation.barcode) {
-        this.detailAutomation.barcode.map(bc => {
+        this.detailAutomation.barcode.map((bc,index) => {
+          let ex_coin_per_sku_val = this.detailAutomation.extra_coin_sku[index] ? this.detailAutomation.extra_coin_sku[index] : null;
+          let max_qty_per_order_val = this.detailAutomation.max_qty_order[index]==10000 ? null : this.detailAutomation.max_qty_order[index];
           const formItem = this.formBuilder.group({
             formSku: bc,
             formFilterSku: new ReplaySubject<any[]>(1),
-            filteredSku: new ReplaySubject<any[]>(1)
+            filteredSku: new ReplaySubject<any[]>(1),
+            ex_coin_per_sku: ex_coin_per_sku_val,
+            max_qty_per_order: max_qty_per_order_val
           });
 
           formItem.controls['formFilterSku'].value.next(bc);
@@ -284,7 +291,9 @@ export class EdittsmComponent implements OnInit {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [""],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -295,7 +304,7 @@ export class EdittsmComponent implements OnInit {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
+
       alert(error);
     })
     formItem
@@ -391,7 +400,19 @@ export class EdittsmComponent implements OnInit {
           if (barcodes && barcodes.length > 0) {
             const bcsFiltered = barcodes.filter(val => {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
-            }).map(val => val.formSku);
+            }).map(val => {
+                //enhancement challenge 17/11/22
+                // if(this.ls.selectedLanguages.includes('ph')===true){
+                //   return {
+                //     sku: val.formSku,
+                //     ex_coin_per_sku: val.ex_coin_per_sku,
+                //     max_qty_per_order: val.max_qty_per_order
+                //   }
+                // }else{
+                  return val.formSku
+                // }
+                //end
+            });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;
@@ -400,6 +421,42 @@ export class EdittsmComponent implements OnInit {
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
             }
+
+            //enhancement challenge 17/11/22
+            if(this.ls.selectedLanguages.includes('ph')===true){
+              const exCoinPerSku = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.ex_coin_per_sku
+                //end
+              });
+
+              if (exCoinPerSku.length > 0) {
+                body['extra_coin_sku'] = exCoinPerSku;
+              }
+
+              if (exCoinPerSku.length === 0) {
+                delete body['extra_coin_sku'];
+              }
+
+              const maxQtyPerOrder = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.max_qty_per_order ? val.max_qty_per_order : 10000
+                //end
+              });
+
+              if (maxQtyPerOrder.length > 0) {
+                body['max_qty_order'] = maxQtyPerOrder;
+              }
+
+              if (maxQtyPerOrder.length === 0) {
+                delete body['max_qty_order'];
+              }
+            }
+            //end
           } else {
             if (body['barcode']) delete body['barcode'];
           }

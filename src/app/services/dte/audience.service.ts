@@ -49,6 +49,11 @@ export class AudienceService extends BaseService {
     return this.getApi(url, queryParams);
   }
 
+  getListRetailerForAudienceList(body?, queryParams?): Observable<any> {
+    const url = this.getUrl(this.namespace, 'list_retailer');
+    return this.postApi(url, body, queryParams);
+  }
+
   getListRetailerSelected(context, queryParams): Observable<any> {
     const url = this.getUrl(this.namespace, 'detail', context);
     return this.getApi(url, queryParams);
@@ -106,7 +111,7 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "show_preview_import");
     return this.postApi(url, body, queryParams);
   }
-  
+
   requestImportExcel(body?): Observable<any> {
     const url = this.getUrl(this.namespace, "request_import");
     return this.postApi(url, body);
@@ -145,7 +150,7 @@ export class AudienceService extends BaseService {
     const url = this.getUrl(this.namespace, "show_status");
     return this.getApi(url, queryParams);
   }
-  
+
   // Personalize
   getPersonalize(queryParams?): Observable<any> {
     const url = this.getUrl(this.namespace, 'get_post_personalize');

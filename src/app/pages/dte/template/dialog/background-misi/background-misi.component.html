@@ -164,24 +164,24 @@
       </div>
     </div>
     <form name="form" [formGroup]="guidelineForm" (keydown.enter)="$event.preventDefault();">
-      <div *ngIf="currentFiles.length" class="pt-24 pb-24 guideline__wrapper">
-        <div formArrayName="guideline" *ngFor="let item of currentFiles; let index = index">
+
+        <div formArrayName="guideline" *ngFor="let item of guidelineForm.get('guideline').controls; let index = index">
           <div [formGroupName]="index" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
             <div class="guideline__container">
               <div *ngIf="!isDetail">
                 <mat-icon style="cursor: pointer;" (click)="removeImageGuideline(index)">cancel_outline</mat-icon>
               </div>
-              <img [src]="item.image_url" class="guidelineBanner" alt="guideline">
+              <img [src]="item.get('file').value" class="guidelineBanner" alt="guideline">
             </div>
             <div class="guideline__deskripsi">
               <mat-form-field class="example-full-width guideline__deskripsi" appearance="fill">
                 <mat-label>{{'global.label.description' | translate}}</mat-label>
-                <textarea matInput formControlName="description" (input)="keyDescription.next($event.target.value)" placeholder="{{'global.label.description' | translate}}"></textarea>
+                <textarea matInput formControlName="description" placeholder="{{'global.label.description' | translate}}"></textarea>
               </mat-form-field>
             </div>
           </div>
         </div>
-      </div>
+
     </form>
 
   </div>

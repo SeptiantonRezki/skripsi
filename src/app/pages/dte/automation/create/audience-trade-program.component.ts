@@ -236,7 +236,7 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
+
       alert(error);
     })
     formItem
@@ -271,7 +271,9 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [""],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      // ex_coin_per_sku: [null, Validators.required],
+      // max_qty_per_order: [null]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -282,7 +284,6 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
       alert(error);
     })
     formItem
@@ -379,7 +380,16 @@ export class AudienceTradeProgramComponent implements OnInit, OnDestroy {
           if (barcodes && barcodes.length > 0) {
             const bcsFiltered = barcodes.filter(val => {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
-            }).map(val => val.formSku);
+            }).map(val =>{
+              // //enhancement challenge 17/11/22
+              // return {
+              //   sku: val.formSku,
+              //   ex_coin_per_sku: val.ex_coin_per_sku,
+              //   max_qty_per_order: val.max_qty_per_order
+              // }
+              // // end
+              return val.formSku
+            });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;

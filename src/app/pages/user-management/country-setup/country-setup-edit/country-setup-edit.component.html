@@ -7,7 +7,7 @@
     <div class="ayo-main-wrapper mat-white-bg p-0" fxLayout="column">
 
       <div class="mat-white-bg p-24" fxLayout="column">
-        
+
         <form [formGroup]="formCountry">
 
           <!-- <div class="ayo-top" fxLayout="row" fxLayoutAlign="space-between center">
@@ -97,7 +97,7 @@
               </div>
 
               <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between" [formGroup]="formCountry.get('currencies')">
-                
+
                 <mat-form-field fxFlex="45" class="is-light">
                   <input matInput placeholder="{{ls.locale.country_setup.decimal_separator}}" type="text" formControlName="decimal_separator">
                   <mat-error *ngIf="formCountry.get('currencies').controls['decimal_separator'].hasError('required') && formCountry.get('currencies').controls['decimal_separator'].touched ">
@@ -113,7 +113,7 @@
                 </mat-form-field>
 
               </div>
-              
+
               <h2>{{ls.locale.country_setup.point}}</h2>
               <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="number" placeholder="{{ls.locale.country_setup.point}}" formControlName="point_valuation">
@@ -133,13 +133,14 @@
                 </mat-error>
               </mat-form-field>
             </div>
-          
+
           </div>
           <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between">
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.country_setup.access_retailer}}</h2>
               <recursive-slide-toggle [items]="formCountry.get('access_menu').get('abilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('access_menu').get('abilities')" [fullAccess]="formCountry.get('access_menu').get('abilities').at(0)"></recursive-slide-toggle>
-              <div fxLayout="column" fxFlex="45">
+              <!-- <div fxLayout="column" fxFlex="45"> -->
+              <div fxLayout="column">
                 <h2>{{ls.locale.country_setup.customer_service}}</h2>
                 <div *ngFor="let item of formCountry.get('customer_service').controls; let i=index;">
                   <div fxFlex="100" [formGroup]="item" fxLayout="column">
@@ -173,7 +174,7 @@
                 </div>
               </div>
               <!-- Force logout edit option -->
-              <div fxLayout="column" fxFlex="45">
+              <div fxLayout="column">
                 <h2>Force Logout </h2>
                 <div *ngFor="let item of formCountry.get('force_logout_service').controls; let i=index;">
                   <div fxFlex="100" [formGroup]="item" fxLayout="column">
@@ -222,12 +223,23 @@
                   </div>
                 </div>
               </div>
+              <div fxLayout="column" *ngIf="formCountry.get('code').value=='PH'">
+                <h2>DSR Account</h2>
+                <div *ngFor="let item of formCountry.get('dsr_setting').controls; let i=index;">
+                  <div fxFlex="100" [formGroup]="item" fxLayout="column">
+                    <div fxFlex="100" fxLayoutAlign="space-between">
+                      <label for="">Enable Self Service Registration</label>
+                      <mat-slide-toggle class="example-margin" [color]="'primary'" formControlName="dsr_ssr"></mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            
+
             <div fxLayout="column" fxFlex="45">
               <h2>{{ls.locale.global.label.category}}</h2>
               <recursive-slide-toggle [items]="formCountry.get('categories_menu').get('cabilities')['controls']" [depth]="0" [horizontal]="horizontal" [parent]="formCountry.get('categories_menu').get('cabilities')" [fullAccess]="formCountry.get('categories_menu').get('cabilities').at(0)"></recursive-slide-toggle>
-            </div>  
+            </div>
           </div>
           <div class="ayo-middle pt-24" fxLayout="row wrap" fxLayoutGap="10px" fxLayoutAlign="space-between" >
             <!-- <div fxLayout="column" fxFlex="45" class ="widthfixcs">

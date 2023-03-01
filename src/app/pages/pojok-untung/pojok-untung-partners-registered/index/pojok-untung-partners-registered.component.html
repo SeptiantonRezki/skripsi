@@ -1,0 +1,94 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Daftar Partner Teregistrasi'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="table-wrapper">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+        <a #downloadLink></a>
+        <button (click)="export()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_upward</mat-icon> Export
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="top-table pt-8">
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="15px" fxLayoutGap.lt-md="0px">
+          <div class="search-field-template" fxLayout="row" fxLayoutAlign="center center">
+              <input class="textbox-search" matInput placeholder="Cari" (keyup)="keyUp.next($event.target.value)" autocomplete="off">
+              <div class="icon-search">
+                <mat-icon class="mat-icon-search">search</mat-icon>
+              </div>
+          </div>
+          <form [formGroup]="formFilter">
+            <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start center">
+              <mat-form-field fxFlex="15" class="orders dropdown">
+                <mat-select formControlName="partner_type" (valueChange)="changeFilteredData($event, 'partner_type')">
+                  <mat-option [value]="item.id" *ngFor="let item of partnerTypeList">{{item.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="15" class="orders dropdown">
+                <mat-select formControlName="partner_id" (valueChange)="changeFilteredData($event, 'partner_id')">
+                  <mat-option [value]="item.id" *ngFor="let item of partnerIdList | partnerRegistered: formFilter.get('partner_type').value">{{item.partner_name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field fxFlex="15" class="orders dropdown">
+                <mat-select formControlName="status" (valueChange)="changeFilteredData($event, 'status')">
+                  <mat-option [value]="item.id" *ngFor="let item of statusList">{{item.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [reorderable]="reorderable"
+        [offset]="offsetPagination" [count]="pagination.total" [limit]="pagination.per_page" [externalPaging]="true" 
+        [externalSorting]="true" (page)="setPage($event)" (sort)="onSort($event)">
+
+        <ngx-datatable-column name="Retailer" prop="bisnis">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.bisnis}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Partner" prop="partner">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.partner}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Jenis Partner" prop="jenis_partner">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.jenis_partner}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" prop="status">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <span>{{row.status}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column [width]="98" name="Tindakan" headerClass="textright" [sortable]="false">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"
+            style="justify-content: center !important">
+            <div class="button-row pl-8">
+              <button mat-icon-button color="primary" (click)="deletePartner(row.id)" [disabled]="!permission?.hapus" fxLayoutAlign="center center">
+                <mat-spinner *ngIf="onDeleting == row.id; else showIcon" color="primary" diameter="20"></mat-spinner>
+                <ng-template #showIcon>
+                  <mat-icon>delete</mat-icon>
+                </ng-template>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

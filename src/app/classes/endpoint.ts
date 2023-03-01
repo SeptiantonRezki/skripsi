@@ -310,6 +310,7 @@ export class Endpoint {
         stock_check_ir: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/template/ir/stock_check`,
         get_create_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized`,
         put_delete_personalize: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/template-personalized/${context.template_id}`,
+        convert_image: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/image/base64`,
       },
       trade_program: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/creator`,
@@ -848,6 +849,30 @@ export class Endpoint {
         update: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing`,
         delete: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/template_financing/${context.id}`
       },
+      pojok_untung_template: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`,
+        store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung`
+      },
+      pojok_untung_partners_type: {
+        get_partner_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/partner-type`
+      },
+      pojok_untung_partners_list: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner/${context.id}`,
+        store: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/partner/${context.id}`,
+      },
+      pojok_untung_partners_template: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-partner-id`,
+        show: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-by-id/${context.id}`,
+        create: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`,
+        update: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-save`,
+        delete: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/service/business/pojokuntung/partner-template-delete/${context.id}`
+      },
+      pojok_untung_partners_registered: {
+        get: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration`,
+        get_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/pojok-untung/list/registration_status`
+      },
       sequencing: {
         get: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing`,
         show: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/${type_api}/sequencing/${context.sequencing_id}`,
@@ -1171,6 +1196,7 @@ export class Endpoint {
         get_category_menus: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/categoryproduct`,
         get_option_country: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/list-country`,
         get_force_logout_data: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/force-logout-data/${context.id}`,
+        get_dsr_ssr: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/master-config/PH`,
         get_timezones: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/principal/countries/timezones`,
       },
       language_setup: {
@@ -1200,6 +1226,8 @@ export class Endpoint {
         export: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/${type_api}/dte/spin/audience/request-export`,
         save_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
         get_pushnotif: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/push-notif`,
+        get_config_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/config-spin-mitra`,
+        manage_spin_mitra: `${AYO_API_SERVICE(SERVER.task)}/api/v1/task/principal/spin-the-wheel/manage-config-spin-mitra`,
       },
       tactical_retail_sales: {
         sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/sysvar`,
@@ -1265,6 +1293,21 @@ export class Endpoint {
         get_step: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/get-status-orders`,
         update_hours: `${AYO_API_SERVICE(SERVER.user)}/api/v1/user/general/mitra-notification/update-status-order/${context.id}`
       },
+      store_photo_verification: {
+        calculation_result: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/detail-total`,
+        list_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get`,
+        post_verify_store_verification: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/verify`,
+        list_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/get`,
+        post_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/create`,
+        delete_reject_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/reason/delete/${context.id}`,
+        delete_store_photo_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/delete/${context.id}`,
+        list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get`,
+        list_detail_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/get-detail`,
+        list_admin: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/retailer/get-admin`,
+        update_sort_list_type: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/update-urutan`,
+        update_store_photo_type_publish_status: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/${type_api}/foto-toko/image-type/publish`,
+        export_image_type: `${AYO_API_SERVICE(SERVER.export)}/api/v1/export/principal/foto-toko/image-type/retailer/request-export`,
+      }
     };
     return ENDPOINT[namespace] && ENDPOINT[namespace][key];
   }

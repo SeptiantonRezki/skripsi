@@ -1431,3 +1431,125 @@ a {
 .mat-tooltip {
   font-size: 14px !important;
 }
+.mat-card {
+  &.rounded {
+    border-radius: 8px !important;
+  }
+}
+mat-form-field.min-150 {
+  min-width: 150 !important;
+  padding-bottom: 8px !important;
+  &.dropdown {
+    .mat-form-field-infix {
+      border: 1px solid;
+      border-radius: 1px;
+      padding: 8px;
+      min-width: 150px;
+      border-color: #ececec;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 0.8em;
+    }
+  }
+
+  &.datepicker {
+    .mat-form-field-flex {
+      border: 1px solid #ececec;
+      max-height: 38px;
+      padding: 8px;
+      min-width: 150px;
+    }
+
+    .mat-form-field-infix {
+      padding: 0;
+      border-top: 0;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-input-placeholder {
+      padding-top: 20px;
+      box-sizing: border-box;
+    }
+
+    .mat-input-element {
+      font-size: 0.8em !important;
+      font-weight: normal !important;
+      padding-bottom: 1px !important;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    // .mat-form-field-label-wrapper {
+    //   display: none;
+    // }
+
+    .mat-input-ripple.mat-form-field-ripple {
+      background-color: transparent;
+    }
+
+    .mat-form-field-can-float {
+      display: block;
+    }
+  }
+
+  &.status-active {
+    .mat-form-field-infix {
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 3px 10px;
+      min-width: 100px;
+      width: 100px !important;
+      border-color: green;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 0.8em;
+      color: green;
+    }
+  }
+  &.status-nonactive {
+    .mat-form-field-infix {
+      border: 1px solid;
+      border-radius: 5px;
+      padding: 3px 10px;
+      min-width: 100px;
+      width: 100px !important;
+      border-color:red;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+
+    .mat-select-value-text {
+      font-size: 0.8em;
+      color: red;
+    }
+  }
+}

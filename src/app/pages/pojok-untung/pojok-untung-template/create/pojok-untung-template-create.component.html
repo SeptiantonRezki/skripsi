@@ -1,0 +1,221 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header [contentTitle]="'Template Pojok Untung'">
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-white-bg" fxLayout="column">
+      <div>
+        <form [formGroup]="formTemplatePojokUntung">
+          <div class="card">
+            <div>
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="">Informasi General</h2>
+              </div>
+              <div formArrayName="informasi_general" *ngFor="let info of formTemplatePojokUntung.get('informasi_general')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div fxLayout="row">
+                  <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                    <input matInput type="text" formControlName="title" placeholder="Judul Deskripsi">
+                  </mat-form-field>
+                  </div>
+                  <div fxLayout="row">
+                    <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                      <input matInput type="text" formControlName="description" placeholder="Deskripsi">
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <div formArrayName="description_detail" *ngFor="let detail of formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls; let i = index;">
+                      <div fxFlex="100">
+                        <div fxLayout="row">
+                          <div style="margin-right: 15px;">
+                            <h3>{{i+1}}.</h3>
+                          </div>
+                          <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="100">
+                            <input matInput [formControlName]="i" type="text" placeholder="Detail Deskripsi">
+                          </mat-form-field>
+                          <div fxLayout="row wrap" fxLayoutAlign="start center"
+                            fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0px">
+                            <button [disabled]="formTemplatePojokUntung.controls.informasi_general.controls[0].controls.description_detail.controls.length <= 1 || !permission?.ubah || !permission?.buat" mat-raised-button color="primary" type="button" (click)="deleteForm(i)">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayoutAlign="start center">
+                      <button mat-raised-button type="button" [disabled]="!permission?.ubah || !permission?.buat" (click)="addDescDetail()">
+                        <mat-icon>add</mat-icon>
+                        Tambah Detail Deskripsi
+                      </button>
+                    </div>
+                  </div>
+
+                  <div fxLayout="row" class="mt-24">
+                    <mat-form-field class="is-light form-primary" style="margin-right: 15px;" fxFlex="50">
+                      <input matInput type="text" formControlName="notes" placeholder="Catatan">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="card">
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <h2 class="">Upload Banner</h2>
+          </div>
+          <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="space-between" fxFlex="75">
+            <div>
+              <div fxLayout="column">
+                <h2>Gambar Banner 1</h2>
+                <small>Besar file maksimal 2mb</small>
+                <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files"
+                    [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event, '1')">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" *ngIf="imageUrl" class="pt-24">
+                <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
+                    <mat-icon style="cursor: pointer;" (click)="removeImage('1')">cancel_outline</mat-icon>
+                  </div>
+                  <div>
+                    <img id="image" [src]='imageUrl' width="410px" height="410px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <div fxLayout="column">
+                <h2>Gambar Banner 2</h2>
+                <small>Besar file maksimal 2mb</small>
+                <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files2"
+                    [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event, '2')">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" *ngIf="imageUrl2" class="pt-24">
+                <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
+                    <mat-icon style="cursor: pointer;" (click)="removeImage('2')">cancel_outline</mat-icon>
+                  </div>
+                  <div>
+                    <img id="image" [src]='imageUrl2' width="410px" height="410px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div fxLayout="row" fxLayoutGap="20px" fxLayout.xs="column" fxLayoutAlign="space-between" fxFlex="75">
+            <div>
+              <div fxLayout="column">
+                <h2>Gambar Banner 3</h2>
+                <small>Besar file maksimal 2mb</small>
+                <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files3"
+                    [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event, '3')">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" *ngIf="imageUrl3" class="pt-24">
+                <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
+                    <mat-icon style="cursor: pointer;" (click)="removeImage('3')">cancel_outline</mat-icon>
+                  </div>
+                  <div>
+                    <img id="image" [src]='imageUrl3' width="410px" height="410px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <div fxLayout="column">
+                <h2>Gambar Banner 4</h2>
+                <small>Besar file maksimal 2mb</small>
+                <div class="ayo-middle" style="height: 70px;width: 400px;" fxLayout="column">
+                  <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="files4"
+                    [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                    (fileChange)="changeImage($event, '4')">
+                    <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                      <span matPrefix>Pilih atau Tarik Gambar Banner disini
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="column" *ngIf="imageUrl4" class="pt-24">
+                <div class="" style="margin-top: 15px;margin-bottom: 15px;">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
+                    <mat-icon style="cursor: pointer;" (click)="removeImage('4')">cancel_outline</mat-icon>
+                  </div>
+                  <div>
+                    <img id="image" [src]='imageUrl4' width="410px" height="410px" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div>
+            <h2>Kisah Sukses SRC</h2>
+            <div class="ayo-middle p-24" fxLayout="column">
+              <div ngfDrop selectable="1" class="rectangle-16" [(validDrag)]="validComboDrag" [(file)]="story_image"
+                [accept]="'image/*'" [class.invalid-drag]="validComboDrag===false" [class.valid-drag]="validComboDrag"
+                (fileChange)="changeImage($event, i, 'story')">
+                <div class="p-24" fxLayout="column" fxLayoutAlign="center center">
+                  <mat-icon style="width: 48px;height: 48px;font-size: 48px;">add_photo_alternate_outline</mat-icon>
+                  <br>
+                  <span matPrefix [innerHTML]="'Tarik gambar kesini atau pilih file'">
+                  </span>
+                  <span matPrefix>Besar file maksimum 2mb</span>
+                </div>
+              </div>
+
+              <div *ngFor="let story_image_url of story_image_urls;let i = index" class="pt-48">
+                <div class="">
+                  <div class="delete" *ngIf="permission?.ubah && permission?.buat">
+                    <mat-icon style="cursor: pointer;" (click)="removeImage(i, 'story')">cancel_outline</mat-icon>
+                  </div>
+                  <div class="image-sku">
+                    <img id="image" [src]="story_image_url" width="360px" height="160px"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm pt-24 pb-24" fxLayout="row" fxLayoutGap="20px">
+      <button mat-raised-button type="button" class="confirmation-button" *ngIf="permission?.ubah && permission?.buat" (click)="submit()">
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>

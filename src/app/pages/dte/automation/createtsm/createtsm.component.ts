@@ -28,6 +28,11 @@ export class CreatetsmComponent implements OnInit {
     { name: 'Referral Code', value: 'referral_code' }
   ];
 
+  // listDSRCanParticipate: any[] = [
+  //   { name: 'No', value: 0 },
+  //   { name: 'Yes', value: 1 },
+  // ];
+
   filteredTradeProgram: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   tradePrograms: any[];
   public filterTradeProgram: FormControl = new FormControl();
@@ -76,7 +81,7 @@ export class CreatetsmComponent implements OnInit {
    }
 
   ngOnInit() {
-    
+
     this.formAutomation = this.formBuilder.group({
       automation: ['e-order', Validators.required],
       jenis_tantangan: ['default'],
@@ -92,7 +97,8 @@ export class CreatetsmComponent implements OnInit {
       extra_coin: [0],
       brand_combination: ["or"],
       notif: [""],
-      skus: this.formBuilder.array([this.createFormSkusd()])
+      skus: this.formBuilder.array([this.createFormSkusd()]),
+      // dsr_can_participate: [0, Validators.required]
     });
 
     this.audienceTradeProgramService.getTradePrograms().subscribe(res => {
@@ -196,7 +202,9 @@ export class CreatetsmComponent implements OnInit {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [""],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -207,7 +215,7 @@ export class CreatetsmComponent implements OnInit {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
+
       alert(error);
     })
     formItem
@@ -241,7 +249,9 @@ export class CreatetsmComponent implements OnInit {
     const formItem = this.formBuilder.group({
       formSku: [""],
       formFilterSku: [""],
-      filteredSku: [new ReplaySubject<any[]>(1)]
+      filteredSku: [new ReplaySubject<any[]>(1)],
+      ex_coin_per_sku: [0, [Validators.required, Validators.max(10000), Validators.min(0)]],
+      max_qty_per_order: [1, [Validators.max(10000), Validators.min(1)]]
     });
     let value = new ReplaySubject<any[]>(1);
     this.audienceTradeProgramService.getListSku({ search: '1' }).subscribe((res: any) => {
@@ -252,7 +262,7 @@ export class CreatetsmComponent implements OnInit {
         // console.log('resnew35', this.formAutomation.get('skus').value);
         formItem.controls['filteredSku'].value.next(res.data);
     }, error => {
-      
+
       alert(error);
     })
     formItem
@@ -349,7 +359,19 @@ export class CreatetsmComponent implements OnInit {
           if (barcodes && barcodes.length > 0) {
             const bcsFiltered = barcodes.filter(val => {
               return (val.formSku && val.formSku !== '' && val.formSku !== null);
-            }).map(val => val.formSku);
+            }).map(val => {
+                //enhancement challenge 17/11/22
+                // if(this.ls.selectedLanguages.includes('ph')===true){
+                //   return {
+                //     sku: val.formSku,
+                //     ex_coin_per_sku: val.ex_coin_per_sku,
+                //     max_qty_per_order: val.max_qty_per_order
+                //   }
+                // }else{
+                  return val.formSku
+                // }
+                //end
+            });
             // console.log('bcsFiltered', bcsFiltered, barcodes);
             if (bcsFiltered.length > 0) {
               body['barcode'] = bcsFiltered;
@@ -358,6 +380,40 @@ export class CreatetsmComponent implements OnInit {
             if (bcsFiltered.length === 0) {
               delete body['barcode'];
             }
+
+            if(this.ls.selectedLanguages.includes('ph')===true){
+              const exCoinPerSku = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.ex_coin_per_sku
+                //end
+              });
+
+              if (exCoinPerSku.length > 0) {
+                body['extra_coin_sku'] = exCoinPerSku;
+              }
+
+              if (exCoinPerSku.length === 0) {
+                delete body['extra_coin_sku'];
+              }
+
+              const maxQtyPerOrder = barcodes.filter(val => {
+                return (val.formSku && val.formSku !== '' && val.formSku !== null);
+              }).map(val => {
+                //enhancement challenge 17/11/22
+                  return val.max_qty_per_order ? val.max_qty_per_order : 10000
+                //end
+              });
+
+              if (maxQtyPerOrder.length > 0) {
+                body['max_qty_order'] = maxQtyPerOrder;
+              }
+
+              if (maxQtyPerOrder.length === 0) {
+                delete body['max_qty_order'];
+              }
+            }
           } else {
             if (body['barcode']) delete body['barcode'];
           }
@@ -365,6 +421,8 @@ export class CreatetsmComponent implements OnInit {
           if (this.formAutomation.get('jenis_tantangan').value === 'extra_coin') {
             body['coin_extra'] = this.formAutomation.get('extra_coin').value;
           }
+
+          // body['dsr_can_participate'] = this.formAutomation.get('dsr_can_participate').value
           break;
         case 'coupon':
           body['coupon_total'] = this.formAutomation.get('coupon_total').value

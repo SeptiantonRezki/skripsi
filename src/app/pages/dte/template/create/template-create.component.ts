@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { TemplateTaskService } from "../../../../services/dte/template-task.service";
 import { DataService } from "../../../../services/data.service";
 import * as _ from 'underscore';
-import { Observable, Subject, ReplaySubject } from "rxjs";
+import { Observable, Subject, ReplaySubject, of, from } from "rxjs";
 import { ProductService } from "app/services/sku-management/product.service";
 import { startWith, map } from "rxjs/operators";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
@@ -120,6 +120,8 @@ export class TemplateCreateComponent {
   @ViewChild("autosize")
   autosize: CdkTextareaAutosize;
 
+  image_mechanism_list: any[] = [];
+  image_mechanism_text_list: any[] = [];
   saveData: Boolean;
   valueChange: Boolean;
   validComboDrag: boolean;
@@ -180,7 +182,7 @@ export class TemplateCreateComponent {
   ]
 
   listAnswerKeys: any[] = [];
-  
+
   pageName = this.translate.instant('dte.template_tugas.text1');
   titleParam = { entity: this.pageName };
   questionParam = this.translate.instant('dte.template_tugas.text10');
@@ -305,7 +307,7 @@ export class TemplateCreateComponent {
       image: [""],
       background_image: [""],
       background_font_color: [""],
-      image_mechanism: [],
+      image_mechanism: [[]],
       video: [""],
       material: false,
       material_description: ["", Validators.required],
@@ -353,14 +355,14 @@ export class TemplateCreateComponent {
         for (let index = 0; index < inputTag.length; index++) {
           inputTag[index].id = "search-"+form;
         }
-        
+
         let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
         if (matOption) {
           for (let index = 0; index < matOption.length; index++) {
             matOption[index].id = 'options';
           }
         }
-      }      
+      }
     } else {    // untuk option saja
       const matOption = document.querySelectorAll('mat-option');
       for (let index = 0; index < matOption.length; index++) {
@@ -392,13 +394,12 @@ export class TemplateCreateComponent {
     this.pagination.status = 'active';
     this.pengaturanAttributeMisiService.getToolbox(this.pagination).subscribe(
       (res) => {
-        // console.log("res trade listKategoriToolbox", res);
         this.listKategoriToolbox = res.data.data;
         this.filteredLKT.next(this.listKategoriToolbox.slice());
         // this.listKategoriToolbox = res.data;
       },
       (err) => {
-        console.log("err List Kategori Toolbox", err);
+        console.error("err List Kategori Toolbox", err);
       }
     );
   }
@@ -426,13 +427,12 @@ export class TemplateCreateComponent {
     this.pagination.status = 'active';
     this.pengaturanAttributeMisiService.getTipeMisi(this.pagination).subscribe(
       (res) => {
-        // console.log("res trade List Tipe Misi", res);
         this.listTipeMisi = res.data.data;
         this.filteredLTM.next(this.listTipeMisi.slice());
         // this.listTipeMisi = res.data;
       },
       (err) => {
-        console.log("err List Tipe Misi", err);
+        console.error("err List Tipe Misi", err);
       }
     );
   }
@@ -487,11 +487,9 @@ export class TemplateCreateComponent {
   }
 
   imagesContentTypeQuestionChild(image, index) {
-    console.log('index', index);
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let question_image_description = questions.at(index).get('question_image_description').value as FormArray;
     question_image_description[0].changeImageDetailQuestionChild = true;
-    // console.log('question_image_description', question_image_description);
     var file: File = image;
     var myReader: FileReader = new FileReader();
 
@@ -499,8 +497,6 @@ export class TemplateCreateComponent {
       // this.imageContentTypeBase64QuestionChild = myReader.result;
       question_image_description[0].question_image_detail_photo = myReader.result;
     };
-    // console.log('change', question_image_description.get('changeImageDetailQuestionChild'));
-    // console.log('change', question_image_description.at(index).get('question_image_detail_photo'));
     myReader.readAsDataURL(file);
   }
   deleteImg() {
@@ -540,13 +536,12 @@ export class TemplateCreateComponent {
     this.pagination.status = 'active';
     this.pengaturanAttributeMisiService.getKategoriMisi(this.pagination).subscribe(
       (res) => {
-        // console.log("res Kategori Misi", res);
         this.listKategoriMisi = res.data.data;
         this.filteredLKM.next(this.listKategoriMisi.slice());
         // this.listKategoriMisi = res.data;
       },
       (err) => {
-        console.log("err List Kategori Misi", err);
+        console.error("err List Kategori Misi", err);
       }
     );
   }
@@ -574,13 +569,12 @@ export class TemplateCreateComponent {
     this.pagination.status = 'active';
     this.pengaturanAttributeMisiService.getProject(this.pagination).subscribe(
       (res) => {
-        // console.log("res Kategori Misi", res);
         this.listProjectMisi = res.data.data;
         this.filteredProject.next(this.listProjectMisi.slice());
         // this.listKategoriMisi = res.data;
       },
       (err) => {
-        console.log("err List Kategori Misi", err);
+        console.error("err List Kategori Misi", err);
       }
     );
   }
@@ -610,17 +604,12 @@ export class TemplateCreateComponent {
       (res) => {
         this.listReason = res.data;
         this.filteredReason.next(this.listReason.slice());
-        this.initRejectedReason();
+        if(!this.duplicateTask) this.initRejectedReason();
       },
       (err) => {
-        console.log("err List Alasan", err);
+        console.error("err List Alasan", err);
       }
     );
-  }
-
-
-  splitCheckList(template) {
-    console.log('template', template);
   }
 
   _filterSku(value): any[] {
@@ -637,7 +626,6 @@ export class TemplateCreateComponent {
   }
 
   getListProduct(param?): void {
-    console.log(param);
     if (param.length >= 3) {
       this.productService.getProductSkuBank(param).subscribe(res => {
         this.listProductSkuBank = res.data ? res.data.data : [];
@@ -651,7 +639,6 @@ export class TemplateCreateComponent {
 
   getProductObj(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    console.log('event', event, index);
     if (event.source.selected) {
       questions.at(index).get('question').setValue(`Apakah Anda Memiliki stok ${event.source.value.name} ?`)
       questions.at(index).get('question_image').setValue(event.source.value.image ? event.source.value.image_url : "");
@@ -671,6 +658,16 @@ export class TemplateCreateComponent {
     let questions = this.templateTaskForm.get('questions') as FormArray;
     let rejected = this.templateTaskForm.get('rejected_reason_choices') as FormArray;
     let image_description = this.templateTaskForm.get('image_description') as FormArray;
+    const product = [];
+    this.isDetailBanner = !!this.duplicateTask.image_detail;
+    if (this.duplicateTask.image_description) {
+      if (this.duplicateTask.image_description[0]) {
+        if (this.duplicateTask.image_description[0].content_image != null || this.duplicateTask.image_description[0].content_image !== undefined) {
+          this.imageContentTypeDefault = this.duplicateTask.image_description[0].content_image;
+          this.imageContentTypeBase64Child = this.duplicateTask.image_description[0].content_image;
+        }
+      }
+    }
 
     this.templateTaskForm.get('kategori_toolbox').setValue(this.duplicateTask.task_toolbox_id);
     this.templateTaskForm.get('tipe_misi').setValue(this.duplicateTask.task_toolbox_type_id);
@@ -683,58 +680,261 @@ export class TemplateCreateComponent {
     this.templateTaskForm.get('material').setValue(this.duplicateTask.material === 'yes' ? true : false);
     this.templateTaskForm.get('material_description').setValue(this.duplicateTask['material_description'] ? this.duplicateTask['material_description'] : 'Jenis Material');
     this.templateTaskForm.get('image').setValue(this.duplicateTask.image ? this.duplicateTask.image_url : '');
-    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? this.duplicateTask.video_url : '');
-    this.duplicateTask['questions'].map(item => {
+    this.templateTaskForm.get('background_image').setValue(this.duplicateTask.background_image ? this.duplicateTask.background_image_url : '');
+    this.templateTaskForm.get('background_font_color').setValue(this.duplicateTask.background_font_color ? this.duplicateTask.background_font_color : '');
+    this.isBackgroundMisi.setValue(!!this.duplicateTask.background_image);
+    this.templateTaskForm.get('video').setValue(this.duplicateTask.video ? `https://assets.dev.src.id/${this.duplicateTask.video}` : '');
+    this.frmIsBranching.setValue(!!this.duplicateTask.is_branching);
+    this.shareable.setValue(!!this.duplicateTask.is_shareable);
+    this.isIRTemplate.setValue(!!this.duplicateTask.is_ir_template);
+    this.frmQuiz.setValue(this.duplicateTask.is_quiz ? 'quiz' : 'non-quiz');
+    this.templateTaskForm.get('image_mechanism').setValue(Object.values(this.duplicateTask.task_template_image) || []);
+    this.isGuideline.setValue(!!Object.values(this.duplicateTask.task_template_image).length);
+
+    if(this.duplicateTask['image_description'] === undefined){
+      this.duplicateTask['image_description'].forEach(item => {
+        image_description.push(this.formBuilder.group({
+          content_type: '',
+          body: '',
+          title: '',
+          landing_page: '',
+          url_iframe: '',
+          imageDetailBanner: ''
+        }));
+      })
+    } else if (this.duplicateTask['image_description'] && !this.duplicateTask['image_description'][0]) {
+      image_description.push(this.formBuilder.group({
+        content_type: '',
+        body: '',
+        title: '',
+        landing_page: '',
+        url_iframe: '',
+        imageDetailBanner: ''
+      }));
+    } else {
+      if (this.duplicateTask['image_description'] && Array.isArray(this.duplicateTask['image_description'])) {
+        this.duplicateTask['image_description'].map(item => {
+          image_description.push(this.formBuilder.group({
+            content_type: item.content_type,
+            body: item.body,
+            title: item.title,
+            landing_page: item.landing_page,
+            url_iframe: item.url_iframe,
+            imageDetailBanner: item.content_image
+          }));
+        });
+      }
+    }
+
+    this.listProductSkuBank = this.duplicateTask.questions.map(i => i.stock_check_data);
+    this.filteredSkuOptions = this.product.valueChanges.pipe(startWith(""), map(value => this._filterSku(value)));
+
+    this.duplicateTask['questions'].map((item, index) => {
+      if (item.type === 'stock_check') {
+        this.listProductSelected[index] = {
+          name: item.stock_check_data.name,
+          sku_id: item.stock_check_data.sku_id,
+          product: new FormControl({
+            name: item.stock_check_data.name,
+            sku_id: item.stock_check_data.sku_id,
+            directly: item.stock_check_data.directly
+          })
+        };
+
+        this.product.setValue(item.stock_check_data.name)
+
+        item.additional = ["Opsi 1"];
+        product.push(item.stock_check_data);
+      }
+
+      if (this.isIRTemplate.value) this.listChoose = [...this.listChooseWithIr]
+      else this.listChoose = [...this.listChooseOriginal]
+
+      let modificationType = item.type === 'planogram' ? item.type + "_ir" : item.type;
+      let ir_id = null;
+
+      if (modificationType.includes("_ir")) {
+        let typeService = modificationType.includes("planogram") ? "getPlanogramIRTemplates" : "getStockCheckIRTemplates";
+        this.taskTemplateService[typeService]().subscribe(results => {
+          this.templateList[index] = results.data.data;
+          if (this.templateListImageIR[index]['ir_name'] && modificationType === 'stock_check_ir') {
+            let dataTemplate = this.templateList[index].find(tl => tl.code === this.templateListImageIR[index]['ir_code']);
+            if (dataTemplate) {
+              ir_id = dataTemplate['id'];
+              questions.at(index).get('planogram_id').setValue(dataTemplate['id']);
+              this.templateListImageIR[index]['id'] = dataTemplate['id'];
+            }
+          }
+        });
+        if (modificationType === 'planogram_ir') {
+          this.templateListImageIR.push({
+            item_id: index + 1,
+            id: Number(item.planogram_id),
+            image: item.planogram_image,
+            ir_id: Number(item.planogram_id),
+            ir_name: item.planogram_name,
+          });
+        } else {
+          this.templateListImageIR.push({
+            item_id: index + 1,
+            id: item.stock_check_ir_id,
+            ir_id: item.stock_check_ir_id,
+            ir_code: item.stock_check_ir_id,
+            ir_name: item.stock_check_ir_name,
+            check_list: item.stock_check_ir_list,
+            image: item.stock_check_ir_image,
+          });
+        }
+
+      } else {
+        this.templateList.push([]);
+        this.templateListImageIR.push({ item_id: index + 1 });
+      }
+
+      if (item.question_answer && this.duplicateTask.is_quiz === 1) {
+        let answerKey = item.question_answer.map(answer => {
+          return item.additional.findIndex(addt => addt === answer);
+        })
+        this.listAnswerKeys.push(answerKey);
+      }
+
       questions.push(this.formBuilder.group({
         id: item.id,
         question: item.question,
         question_image: item['question_image'] ? item['question_image'] : '',
         question_video: item['question_video'] ? item['question_video'] : '',
-        type: item.type,
-        typeSelection: this.listChoose.filter(val => val.value === item.type)[0],
-        image_detail: false,
-        encryption: false,
-        image_quality_detection: false,
-        blocker_submission: ["", Validators.required],
-        // required: item.required,
-        question_image_description: this.formBuilder.array(item.question_image_description.map(item => {
-          return this.formBuilder.group({
-            content_typePertanyaan: '',
-            title: '',
-            body: '',
-            landing_page: '',
-            url_iframe: '',
-            question_image_detail_photo: [''],
-            changeImageDetailQuestionChild: false,
-          });
-        })),
+        type: item.type === 'planogram' ? item.type + "_ir" : item.type,
+        typeSelection: this.listChoose.filter(val => val.value === (item.type === 'planogram' ? item.type + "_ir" : item.type))[0],
         coin: [0, this.frmQuiz.value === 'quiz' ? Validators.required : null],
+        planogram_id: Number(item.planogram_id),
+        planogram_image: item.planogram_image,
+        planogram_name: item.planogram_name,
+        stock_check_ir_id: item.stock_check_ir_id,
+        stock_check_ir_code: item.stock_check_ir_code,
+        stock_check_ir_name: item.stock_check_ir_name,
+        stock_check_ir_list: item.stock_check_ir_list,
+        question_image_detail: item.question_image_detail === '0',
+        image_detail: false,
+        encryption: item.encryption ? item.encryption === "1" : false,
+        image_quality_detection: item.image_quality_detection ? item.image_quality_detection === "1" : false,
+        blocker_submission: [item.blocker_submission, Validators.required],
+        // required: item.required,
+        question_image_description: item.question_image_description === undefined ? [{
+          content_type: '',
+          title: '',
+          body: '',
+          landing_page: '',
+          url_iframe: '',
+          question_image_detail_photo: [''],
+          changeImageDetailQuestionChild: false
+        }]
+          : item.question_image_description[0] === null ?
+            this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: '',
+                title: '',
+                landing_page: '',
+                body: '',
+                url_iframe: '',
+                question_image_detail_photo: [''],
+                changeImageDetailQuestionChild: false
+              });
+            }
+            ))
+            : this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: item.content_type,
+                title: item.title,
+                body: item.body,
+                landing_page: item.landing_page,
+                url_iframe: item.url_iframe,
+                question_image_detail_photo: item.content_image,
+                changeImageDetailQuestionChild: item.content_image !== undefined ? true : false
+              });
+            })),
+        required: item.required,
         additional: this.formBuilder.array(
-          item.additional.map(item => {
-            return this.formBuilder.group({ option: item, next_question: '' })
+          item.additional.map((itm, idx) => {
+            return this.formBuilder.group({ option: itm, next_question: item.possibilities && item.possibilities.length > 0 && item.possibilities[idx] ? item.possibilities[idx].next : '' })
           })
-        )
+        ),
+        upcCodeMax:item.max_upc_code ? [item.max_upc_code, Validators.required] : "",
+        upcCoin:item.upc_coin_conversion? [item.upc_coin_conversion, Validators.required] : "",
+        upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : "",
+        qrCode: item.qrcode_on_off
       }))
+
+      this.handleChangeImageDetection(index);
+
+      this.allQuestionList.push({
+        id: item.id,
+        question: item.question,
+        is_next_question: item.is_next_question === 1 ? true : false,
+        question_image_description: item.question_image_description === undefined ? [{
+          content_type: '',
+          title: '',
+          body: '',
+          landing_page: '',
+          url_iframe: '',
+          question_image_detail_photo: [''],
+          changeImageDetailQuestionChild: false
+        }]
+          : item.question_image_description[0] === null ?
+            this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: '',
+                title: '',
+                landing_page: '',
+                body: '',
+                url_iframe: '',
+                question_image_detail_photo: [''],
+                changeImageDetailQuestionChild: false
+              });
+            }
+            ))
+            : this.formBuilder.array(item.question_image_description.map(item => {
+              return this.formBuilder.group({
+                content_type: item.content_type,
+                title: item.title,
+                body: item.body,
+                landing_page: item.landing_page,
+                url_iframe: item.url_iframe,
+                question_image_detail_photo: item.content_image,
+                changeImageDetailQuestionChild: item.content_image !== undefined ? true : false
+              });
+            })),
+        possibilities: item.possibilities && item.possibilities.map(pb => ({
+          ...pb,
+          isBranching: pb.next !== null ? true : false
+        }))
+      });
+
+      this.listDirectBelanja[index] = item.type === 'stock_check' ? item.stock_check_data.directly : false;
+      if (item.question_image_description !== undefined) {
+        if (item.question_image_description[0] != null) {
+          if (item.question_image_description[0].content_image !== null || item.question_image_description[0].content_image !== undefined) {
+            this.filesQuestionChild = item.question_image_description[0].content_image;
+            this.imageContentTypeBase64QuestionChild = item.question_image_description[0].content_image;
+          }
+        }
+      }
+      if (item.question_image_detail === '0') {
+        this.isDetailBannerPertanyaan = false;
+      } else {
+        this.isDetailBannerPertanyaan = true;
+      }
     });
-    this.duplicateTask['image_description'].map(item => {
-      image_description.push(this.formBuilder.group({
-        content_type: item.content_type,
-        title: item.title,
-        body: item.body,
-        landing_page: item.landing_page,
-        url_iframe: item.url_iframe,
-        imageDetailBanner: item.imageDetailBanner
-      }));
-    });
-    if (this.duplicateTask.material === 'no')
-      this.templateTaskForm.get('material_description').disable();
-    else
-      this.templateTaskForm.get('material_description').enable();
+
+    // if (this.duplicateTask.material === 'no')
+    //   this.templateTaskForm.get('material_description').disable();
+    // else
+    //   this.templateTaskForm.get('material_description').enable();
 
     this.duplicateTask['rejected_reason_choices'].map(item => {
       return rejected.push(this.formBuilder.group({ reason: item }))
     });
     this.templateTaskForm.get('ir_type').setValue(this.duplicateTask.ir_type);
+
   }
 
   addAdditional(idx) {
@@ -790,7 +990,7 @@ export class TemplateCreateComponent {
     if (questionsIdx !== undefined && additionalIdx !== undefined && event.target.value === "") {
       let questions = this.templateTaskForm.get(type) as FormArray;
       let additional = questions.at(questionsIdx).get('additional') as FormArray;
-      additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
+      additional.at(additionalIdx).get('opiion').setValue(text + (additionalIdx + 1));
       additional.at(additionalIdx).get('next_question').setValue('');
       return;
       // return additional.at(additionalIdx).get('option').setValue(text + (additionalIdx + 1));
@@ -811,7 +1011,7 @@ export class TemplateCreateComponent {
 
   handleChangeImageDetection(index): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (questions.at(index).get("image_quality_detection").value) {
       questions.at(index).get("blocker_submission").enable();
     } else {
@@ -820,24 +1020,28 @@ export class TemplateCreateComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template) {
-    console.log('selectedIR IR', selectedIR, template);
-    let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === template.value.id);
-    if (indexExist > -1) {
-      this.templateListImageIR[indexExist]['ir_id'] = selectedIR.value.id;
-      this.templateListImageIR[indexExist]['ir_code'] = selectedIR.value.code;
-      this.templateListImageIR[indexExist]['ir_name'] = selectedIR.value.name;
-      this.templateListImageIR[indexExist]['image'] = selectedIR.value.image;
-      this.templateListImageIR[indexExist]['check_list'] = selectedIR.value.check_list ? JSON.parse(selectedIR.value.check_list) : [];
+  selectedImageIR(selectedIR, idx) {
+    let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
+    if (idx > -1 && indexTemplate > -1) {
+      this.templateListImageIR[idx]['item_id'] = idx + 1;
+      this.templateListImageIR[idx]['ir_id'] = this.templateList[idx][indexTemplate].id;
+      this.templateListImageIR[idx]['ir_code'] = this.templateList[idx][indexTemplate].code;
+      this.templateListImageIR[idx]['ir_name'] = this.templateList[idx][indexTemplate].name;
+      this.templateListImageIR[idx]['image'] = this.templateList[idx][indexTemplate].image;
+      this.templateListImageIR[idx]['check_list'] = this.templateList[idx][indexTemplate].check_list ? JSON.parse(this.templateList[idx][indexTemplate].check_list) : [];
     } else {
-      this.templateListImageIR.push({ item_id: template.value.id, image: selectedIR.value.image, ir_id: selectedIR.value.id, ir_code: selectedIR.value.code, ir_name: selectedIR.value.name, check_list: JSON.parse(selectedIR.value.check_list) });
+      this.templateListImageIR.push({
+        item_id: idx + 1,
+        image: this.templateList[idx][indexTemplate].image,
+        ir_id: this.templateList[idx][indexTemplate].id,
+        ir_code: this.templateList[idx][indexTemplate].code,
+        ir_name: this.templateList[idx][indexTemplate].name,
+        check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : []
+      });
     }
-
-    console.log('template image IR', this.templateListImageIR);
   }
 
   onChangeTemplateIR(event) {
-    console.log('the event dude!!!', event);
     if (event.checked) {
       this.listChoose = [...this.listChooseWithIr]
       this.listAnswerKeys = [];
@@ -856,7 +1060,7 @@ export class TemplateCreateComponent {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
       questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
@@ -882,7 +1086,6 @@ export class TemplateCreateComponent {
       let typeService = item.value.type.includes("planogram") ? "getPlanogramIRTemplates" : "getStockCheckIRTemplates";
       // if (item.value.type.includes("planogram")) { }
       this.taskTemplateService[typeService]().subscribe(results => {
-        console.log('result ir', results);
         this.templateList[idx] = results.data.data;
       });
     }
@@ -915,7 +1118,7 @@ export class TemplateCreateComponent {
             this.allQuestionList[idx]['possibilities'].push({ key: this.translate.instant('global.label.opsi_index', {index: index + 2}), next: '', isBranching: false });
           }
         }
-        
+
         additional.push(this.formBuilder.group({ option: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next_question: '' }))
         this.allQuestionList[idx]['possibilities'].push({ key: `${this.translate.instant('dte.template_tugas.other_explain')} (${this.checkWordingRadioFreeType(type)})`, next: '', isBranching: false });
       } else {
@@ -1039,7 +1242,6 @@ export class TemplateCreateComponent {
     }
 
     let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
-    console.log('hax next onchange', hasNext);
     this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
     if (referenceQIdx.next) {
       let referenceHasNext = this.allQuestionList[referenceQIdx.next]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
@@ -1062,7 +1264,6 @@ export class TemplateCreateComponent {
       let hasNext = this.allQuestionList[qIdx]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
       if (referenceQIdx.next) {
         let referenceHasNext = this.allQuestionList[referenceQIdx.next]['possibilities'].filter(ps => !!ps.next && ps.next !== "" && ps.next != "-99");
-        console.log('on show Next Question', referenceHasNext, referenceQIdx, this.allQuestionList[referenceQIdx.index]);
         this.questionHasNext[referenceQIdx.next] = referenceHasNext.length > 0 ? true : false;
       }
       this.questionHasNext[this.allQuestionList[qIdx].id] = hasNext.length > 0 ? true : false;
@@ -1080,14 +1281,12 @@ export class TemplateCreateComponent {
         ...allNexts,
         ...qData
       ];
-      // console.log('data', qData, q);
       // if (qData.length > 0) {
       //   this.questionHasNext[q.id] = true;
       // } else {
       //   this.questionHasNext[q.id] = false;
       // }
     });
-    console.log('all next', allNexts);
     this.filteredNext = [...allNexts];
     let filteredNext = allNexts.map(nxt => nxt.next).filter((elem, index, self) => {
       return index === self.indexOf(elem);
@@ -1110,6 +1309,7 @@ export class TemplateCreateComponent {
       content_typePertanyaan: 'static_page',
       image_detail: false,
       additional: this.formBuilder.array([this.createAdditional()]),
+      planogram_id: "",
       question_image_description: this.formBuilder.array([this.formBuilder.group({
         content_typePertanyaan: '',
         title: '',
@@ -1190,7 +1390,6 @@ export class TemplateCreateComponent {
 
   checkIsIRExist() {
     let rawValue = this.templateTaskForm.getRawValue();
-    console.log('value raw', rawValue);
     let isIR = rawValue['questions'].map(tp => tp.type).find(typ => typ.includes("_ir"));
     // if (isIR) this.isIRTemplate.setValue(true);
     // else this.isIRTemplate.setValue(false);
@@ -1206,7 +1405,6 @@ export class TemplateCreateComponent {
       ]
     }));
     if (allPossibilities.indexOf(idQuestion) > -1) {
-      console.log('ada cuk')
       return true
     }
 
@@ -1224,8 +1422,8 @@ export class TemplateCreateComponent {
     const type = questions.at(idx1).get('type').value;
 
     if (this.frmQuiz.value === 'quiz') {
-      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
-      if (isAnswerIsExist > -1) {
+      let isAnswerIsExist = this.listAnswerKeys.length && this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (this.listAnswerKeys.length && isAnswerIsExist > -1) {
         this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
         if (selectionValue && selectionValue === 'checkbox') {
           this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
@@ -1274,7 +1472,6 @@ export class TemplateCreateComponent {
       caption: '',
       thumb: question_image_description[0].question_image_detail_photo
     };
-    console.log('album', [album]);
 
     this._lightbox.open([album], 0);
   }
@@ -1284,10 +1481,12 @@ export class TemplateCreateComponent {
 
   onChangeDetailBannerQuestion(event, index) {
     let questions = this.templateTaskForm.get('questions') as FormArray;
+    let question_image_description = questions.at(index).get('question_image_description') as FormArray;
     if (event.checked) {
       questions.at(index).get('image_detail').setValue(true);
     } else {
       questions.at(index).get('image_detail').setValue(false);
+      question_image_description.reset();
     }
   }
   onChangeDetailBanner(event) {
@@ -1297,7 +1496,7 @@ export class TemplateCreateComponent {
       this.isDetailBanner = false;
     }
   }
-  
+
   async submit() {
     if (this.templateTaskForm.valid) {
       this.dataService.showLoading(true);
@@ -1307,7 +1506,7 @@ export class TemplateCreateComponent {
       let rejected_reason: any[] = this.templateTaskForm.get('rejected_reason_choices').value;
       let image_description: any[] = this.templateTaskForm.get('image_description').value;
       let questionsIsEmpty = [];
-      let questionVideoList = []
+      let new_image_mechanism = [...this.image_mechanism_text_list, ...this.image_mechanism_list];
 
       if (this.frmIsBranching.value) {
         let hasEmptyNext = false;
@@ -1318,6 +1517,24 @@ export class TemplateCreateComponent {
         if (hasEmptyNext) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
+      if (this.frmQuiz.value === 'quiz') {
+        let isEmpty = true;
+
+        if (this.listAnswerKeys.length && this.listAnswerKeys.length === questions.length) {
+          const isFilled = this.listAnswerKeys.map(key => {
+            if (!key.length) return false;
+            return key.every(val => val > -1);
+          });
+          isEmpty = isFilled.some(val => val === false);
+        }
+
+        if (isEmpty) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: this.translate.instant("dte.template_tugas.answer_key")+" "+ this.translate.instant("global.messages.mandatory_text")});
           return;
         }
       }
@@ -1336,9 +1553,10 @@ export class TemplateCreateComponent {
         image: this.templateTaskForm.get('image').value ? this.templateTaskForm.get('image').value : '',
         background_image: this.templateTaskForm.get('background_image').value ? this.templateTaskForm.get('background_image').value : '',
         background_font_color: this.templateTaskForm.get('background_font_color').value ? this.templateTaskForm.get('background_font_color').value : '',
-        image_mechanism: this.templateTaskForm.get('image_mechanism').value || [],
+        // image_mechanism: new_image_mechanism || [],
+        image_mechanism: this.templateTaskForm.controls.image_mechanism.value || [],
         image_detail: this.isDetailBanner ? 1 : 0,
-        video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value : '',
+        video: this.templateTaskForm.get('video').value ? this.templateTaskForm.get('video').value.replace('https://assets.dev.src.id/', '') : '',
         is_branching: this.frmIsBranching.value ? 1 : 0,
         is_shareable: this.shareable.value ? 1 : 0,
         is_ir_template: this.isIRTemplate.value ? 1 : 0,
@@ -1378,8 +1596,7 @@ export class TemplateCreateComponent {
         }),
         questions: questions.map((item, index) => {
           // if (item.question_image) {
-          console.log('fioter', this.filteredNext);
-          if (item.type === 'stock_check' && this.listProductSelected[index].sku_id == null || this.listProductSelected[index].sku_id == "") {
+          if (item.type === 'stock_check' && (this.listProductSelected[index] && this.listProductSelected[index].product.value == null || this.listProductSelected[index].product.value == "")) {
             questionsIsEmpty.push({ qId: item.id });
           }
           let isNext = this.filteredNext.find(nxt => nxt.next == item.id);
@@ -1387,20 +1604,19 @@ export class TemplateCreateComponent {
             id: item.id,
             question: item.question,
             type: item.type,
-            required: item.type === 'stock_check' ? 1 : null,
             is_child: isNext ? 1 : 0,
             is_next_question: (this.questionHasNext[item.id] === true ? 1 : 0),
             possibilities: (this.frmIsBranching.value) ? this.allQuestionList[index]['possibilities'].map((pos, idx) => ({
               key: item.additional[idx].option,
               next: this.frmIsBranching ? pos.next === "" ? null : pos.next : null
             })) : [],
-            // required: item.required,
+            required: item.type === 'stock_check' ? 1 : null,
             question_image: item.question_image || '',
             question_image_detail: item.image_detail ? 1 : 0,
             encryption: item.encryption ? 1 : 0,
             image_quality_detection: item.image_quality_detection ? 1 : 0,
             blocker_submission: item.blocker_submission || "",
-            question_video: item.question_video || '',
+            question_video: item.question_video.replace('https://assets.dev.src.id/', '') || '',
             question_image_description: item.question_image_description.map((tmp, index) => {
               if (tmp.content_typePertanyaan === 'image' && item.image_detail) {
                 let tmpung = {
@@ -1471,12 +1687,12 @@ export class TemplateCreateComponent {
           return mockup;
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason),
-        rejected_reason_ids: rejected_reason.map(item => 
+        rejected_reason_ids: rejected_reason.map(item =>
           (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
         ),
         ir_type: this.templateTaskForm.get('ir_type').value,
       }
-      
+
       if (questionsIsEmpty.length > 0) {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({ message: this.translate.instant('dte.template_tugas.complete_question_message') });
@@ -1490,7 +1706,6 @@ export class TemplateCreateComponent {
         return;
       }
 
-      console.log('ini masuk body', body.questions);
       if (this.templateTaskForm.get('video').value && this.videoMaster || this.questionVideo.length > 0) {
         if (this.videoMaster) {
           let bodyMasterVideo = new FormData();
@@ -1507,7 +1722,7 @@ export class TemplateCreateComponent {
                       resQuestionVideo => {
                         resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
                       }, err => {
-                        console.log(err.error);
+                        console.error(err.error);
                         reject(err);
                         this.dataService.showLoading(false);
                         return;
@@ -1523,7 +1738,7 @@ export class TemplateCreateComponent {
                       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                       this.router.navigate(['dte', 'template-task']);
                     }, err => {
-                      console.log(err.error)
+                      console.error(err.error)
                       this.dataService.showLoading(false);
                       return;
                     })
@@ -1536,7 +1751,7 @@ export class TemplateCreateComponent {
                     this.router.navigate(['dte', 'template-task']);
                   },
                   err => {
-                    console.log(err.error)
+                    console.error(err.error)
                     this.dataService.showLoading(false);
                     return;
                   }
@@ -1544,7 +1759,7 @@ export class TemplateCreateComponent {
               }
             },
             err => {
-              console.log(err.error)
+              console.error(err.error)
               this.dataService.showLoading(false);
               return;
             }
@@ -1559,7 +1774,7 @@ export class TemplateCreateComponent {
                   resQuestionVideo => {
                     resolve(body.questions[qv.idx].question_video = resQuestionVideo.data);
                   }, err => {
-                    console.log(err.error);
+                    console.error(err.error);
                     reject(err);
                     this.dataService.showLoading(false);
                     return;
@@ -1575,7 +1790,7 @@ export class TemplateCreateComponent {
                   this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
                   this.router.navigate(['dte', 'template-task']);
                 }, err => {
-                  console.log(err.error);
+                  console.error(err.error);
                   this.dataService.showLoading(false);
                   return;
                 })
@@ -1588,7 +1803,7 @@ export class TemplateCreateComponent {
                 this.router.navigate(['dte', 'template-task']);
               },
               err => {
-                console.log(err.error);
+                console.error(err.error);
                 this.dataService.showLoading(false);
                 return;
               }
@@ -1603,7 +1818,7 @@ export class TemplateCreateComponent {
             this.router.navigate(['dte', 'template-task']);
           },
           err => {
-            console.log(err.error);
+            console.error(err.error);
             this.dataService.showLoading(false);
             // this.dialogService.openSnackBar({ message: err.error.message });
           }
@@ -1613,7 +1828,7 @@ export class TemplateCreateComponent {
     } else {
       commonFormValidator.validateAllFields(this.templateTaskForm);
       const questions = this.templateTaskForm.get('questions') as FormArray;
-      
+
       if (this.templateTaskForm.controls['name'].invalid || this.templateTaskForm.controls['description'].invalid || this.templateTaskForm.controls['material_description'].invalid)
         return this.dialogService.openSnackBar({ message: this.translate.instant('global.label.please_complete_data') });
 
@@ -1665,9 +1880,8 @@ export class TemplateCreateComponent {
   }
 
   uploadImageBgMisi(e: any){
-    this.templateTaskForm.get('background_image').setValue(e.image);    
-    this.templateTaskForm.get('background_font_color').setValue(e.color);    
-    console.log('update => ', this.templateTaskForm);
+    this.templateTaskForm.get('background_image').setValue(e.image);
+    this.templateTaskForm.get('background_font_color').setValue(e.color);
   }
 
   onChangeBgMisi(){
@@ -1680,9 +1894,105 @@ export class TemplateCreateComponent {
     }
   }
 
-  uploadImageGuideline({images, forms}){
-    this.templateTaskForm.get('image_mechanism').setValue(forms);
+  getImageData(file: any) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(file);
+    })
   }
+
+  uploadImageGuideline({ forms, images }) {
+    // let mechanismList = [];
+    // forms.forEach(i => {
+    //   mechanismList.push(i.file);
+    //   this.image_mechanism_text_list.push(i.description);
+    // })
+    // this.image_mechanism_list = mechanismList;
+    this.templateTaskForm.controls.image_mechanism.setValue(forms);
+  }
+
+  // uploadImageGuideline({ images, forms }) {
+  //   const initialImages = Object.values(this.duplicateTask.task_template_image);
+
+  //   const changed = initialImages.filter((obj1:any) => !images.some((obj2:any) => obj1.id === obj2.id));
+
+  //   // memisahkan yang berubah dengan yang tidak
+  //   let imagesFile = [];
+  //   let newIndex = [];
+  //   let changedByTextIndex = [];
+  //   let imagesExisting = [];
+
+  //   if (this.templateTaskForm.value.image_mechanism) {
+  //     const payload = {
+  //       type: 'url',
+  //       data_images: this.templateTaskForm.value.image_mechanism.map(item => item.image_url)
+  //     }
+  //     this.taskTemplateService.convertImage(payload).subscribe(res => {
+  //       imagesExisting = res.data.map((item, index) => ({
+  //         task_template_image_id: "",
+  //         file: item.result,
+  //         description: this.templateTaskForm.value.image_mechanism[index].description
+  //       }));
+  //       this.image_mechanism_list = [
+  //         ...this.image_mechanism_list,
+  //         ...imagesExisting
+  //       ]
+  //     });
+  //   }
+
+  //   images.forEach((item: any, index) => {
+  //     if (item instanceof File) {
+  //       imagesFile.push(this.getImageData(item));
+  //       newIndex.push(index);
+  //     } else if (item.description !== forms[index].description) {
+  //       changedByTextIndex.push(index);
+  //     }
+  //   });
+
+  //   Promise.all(imagesFile)
+  //     .then((data) => data.map((item, idx) => {
+  //       if (changed[idx] && changed[idx].hasOwnProperty('id')) {
+  //         // EDIT
+  //         return {task_template_image_id: changed[idx]['id'], file: item, description: forms[newIndex[idx]].description };
+  //       } else {
+  //         // ADD
+  //         return {task_template_image_id: "", file: item, description: forms[newIndex[idx]].description};
+  //       }
+  //     }))
+  //     .then((data) => {
+  //       if (changed.length > data.length) {
+  //         const newDatas = [];
+
+  //         // HAPUS
+  //         changed.map((item, idx) => {
+  //           if (data[idx] && data[idx].hasOwnProperty('id')){
+  //             newDatas.push(data[idx]);
+  //           } else {
+  //             newDatas.push({task_template_image_id : item['id'], file: "", description: ""});
+  //           }
+  //         });
+
+  //         return newDatas;
+  //       } else return data
+  //     })
+  //     .then((data) => {
+  //       this.image_mechanism_list = [...this.image_mechanism_list, ...data];
+  //       // this.image_mechanism_list = data;
+  //     });
+
+  //   let newText = [];
+  //   changedByTextIndex.forEach(index => {
+  //     newText.push({
+  //       task_template_image_id: images[index].id,
+  //       file: "",
+  //       description: forms[index].description,
+  //     });
+  //   });
+  //   this.image_mechanism_text_list = newText;
+  // }
 
   onChangeGuideline(){
     if (!this.isGuideline.value) {
@@ -1707,7 +2017,6 @@ export class TemplateCreateComponent {
   }
 
   onDirectBelanja(idx) {
-    console.log(this.listDirectBelanja, idx);
     this.listDirectBelanja[idx] = !this.listDirectBelanja[idx];
   }
 
@@ -1788,5 +2097,4 @@ export class TemplateCreateComponent {
       return 'check_box_outline_blank';
     }
   }
-
 }

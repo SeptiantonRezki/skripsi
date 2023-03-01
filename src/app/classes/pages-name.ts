@@ -43,6 +43,14 @@ export class PagesName {
       "/user-management/panel-partnership/edit/": "principal.partnership.ubah",
       "/user-management/panel-partnership/detail/": "principal.partnership.lihat",
       "/user-management/call-to-action": "principal.call-to-action.lihat",
+      "/pojok-untung/template-pojok-untung": "principal.pojokuntung_template.lihat",
+      "/pojok-untung/partners-list": "principal.pojokuntung_partner.lihat",
+      "/pojok-untung/partners-list/create": "principal.pojokuntung_partner.lihat",
+      "/pojok-untung/partners-list/edit/": "principal.pojokuntung_partner.lihat",
+      "/pojok-untung/partners-template": "principal.pojokuntung_template_partner.lihat",
+      "/pojok-untung/partners-template/create": "principal.pojokuntung_template_partner.lihat",
+      "/pojok-untung/partners-template/edit/": "principal.pojokuntung_template_partner.lihat",
+      "/pojok-untung/registered-partners": "principal.pojokuntung_registered_partner.lihat",
       "/advertisement/banner": "principal.spanduk.lihat",
       "/advertisement/banner/create": "principal.spanduk.buat",
       "/advertisement/banner/edit": "principal.spanduk.ubah",
@@ -152,6 +160,9 @@ export class PagesName {
       "/dte/check-image-planogram/create": "principal.dte_image_recognition_check_image_planogram.buat",
       "/dte/check-image-planogram/detail/": "principal.dte_image_recognition_check_image_planogram.lihat",
 
+      "/payment-gateway/qris": "principal.approval_qris.lihat",
+      "/payment-gateway/cashier": "principal.payment_option.lihat",
+
       "/settings/access": "principal.akses.lihat",
       "/settings/access/create": "principal.akses.buat",
       "/settings/access/edit/": "principal.akses.ubah",
@@ -231,6 +242,11 @@ export class PagesName {
       "/content-management/privacy/edit": "principal.kebijakanprivasi.ubah",
       "/content-management/keyword-management": "principal.keywordmanagement.lihat",
       "/content-management/keyword-management/create": "principal.keywordmanagement.buat",
+      "/user-management/retailer-image-verification": "principal.retailer.submenu.lihat_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/create": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/edit/": "principal.retailer.submenu.edit_verifikasi_foto",
+      "/user-management/retailer-image-verification/store-photo-types/detail/": "principal.retailer.submenu.edit_verifikasi_foto",
 
       "/control-tower/area-configuration": "principal.areaconfiguration.lihat"
     };

@@ -352,14 +352,14 @@ export class TemplateEditComponent {
         for (let index = 0; index < inputTag.length; index++) {
           inputTag[index].id = "search-"+form;
         }
-        
+
         let matOption = selectSearch.parentElement.querySelectorAll('mat-option');
         if (matOption) {
           for (let index = 0; index < matOption.length; index++) {
             matOption[index].id = 'options';
           }
         }
-      }      
+      }
     } else {    // untuk option saja
       const matOption = document.querySelectorAll('mat-option');
       for (let index = 0; index < matOption.length; index++) {
@@ -717,7 +717,7 @@ export class TemplateEditComponent {
     this.templateTaskForm.get('background_image').setValue(this.detailTask.background_image ? this.detailTask.background_image_url : '');
     this.templateTaskForm.get('background_font_color').setValue(this.detailTask.background_font_color ? this.detailTask.background_font_color : '');
     this.isBackgroundMisi.setValue(this.detailTask.background_image ? true : false);
-    this.templateTaskForm.get('video').setValue(this.detailTask.video ? this.detailTask.video_url : '');
+    this.templateTaskForm.get('video').setValue(this.detailTask.video ? `https://assets.dev.src.id/${this.detailTask.video}` : '');
     this.frmIsBranching.setValue(this.detailTask.is_branching == 1 ? true : false);
     this.shareable.setValue(this.detailTask.is_shareable == 1 ? true : false);
     this.isIRTemplate.setValue(this.detailTask.is_ir_template == 1 ? true : false);
@@ -817,7 +817,6 @@ export class TemplateEditComponent {
         this.templateList.push([]);
         this.templateListImageIR.push({ item_id: index + 1 });
       }
-      console.log('cek item', item.question_image_description);
       if (item.question_answer && this.detailTask.is_quiz === 1) {
         let answerKey = item.question_answer.map(answer => {
           return item.additional.findIndex(addt => addt === answer);
@@ -887,7 +886,7 @@ export class TemplateEditComponent {
         upcBrandFamily: item.code_brand && item.name_brand ? [{id:item.code_brand, name:item.name_brand}, Validators.required] : "",
         qrCode: item.qrcode_on_off
       }));
-      
+
       this.handleChangeImageDetection(index);
 
       this.allQuestionList.push({
@@ -1047,7 +1046,7 @@ export class TemplateEditComponent {
 
   handleChangeImageDetection(index): void {
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (questions.at(index).get("image_quality_detection").value) {
       questions.at(index).get("blocker_submission").enable();
     } else {
@@ -1056,9 +1055,7 @@ export class TemplateEditComponent {
     }
   }
 
-  selectedImageIR(selectedIR, template, idx) {
-    console.log('selectedIR IR', selectedIR, template, idx);
-    // let indexExist = this.templateListImageIR.findIndex(tlir => tlir.item_id === selectedIR.value);
+  selectedImageIR(selectedIR, idx) {
     let indexTemplate = this.templateList[idx].findIndex(tl => tl.id === selectedIR.value);
     if (idx > -1 && indexTemplate > -1) {
       this.templateListImageIR[idx]['item_id'] = idx + 1;
@@ -1071,8 +1068,6 @@ export class TemplateEditComponent {
     } else {
       this.templateListImageIR.push({ item_id: idx + 1, image: this.templateList[idx][indexTemplate].image, ir_id: this.templateList[idx][indexTemplate].id, ir_code: this.templateList[idx][indexTemplate].code, ir_name: this.templateList[idx][indexTemplate].name, check_list: this.templateList[idx][indexTemplate].check_list ? JSON.parse(selectedIR.value.check_list) : [] });
     }
-
-    console.log('the ir', this.templateListImageIR[idx]);
   }
 
   onChangeTemplateIR(event) {
@@ -1095,7 +1090,7 @@ export class TemplateEditComponent {
 
   handleChangeUPC(index, enable:boolean){
     let questions = this.templateTaskForm.get('questions') as FormArray;
-    
+
     if (enable) {
       questions.at(index).get("upcCodeMax").enable();
       questions.at(index).get("upcCodeMax").setValidators([Validators.required]);
@@ -1404,8 +1399,8 @@ export class TemplateEditComponent {
     const type = questions.at(idx1).get('type').value;
 
     if (this.frmQuiz.value === 'quiz') {
-      let isAnswerIsExist = this.listAnswerKeys[idx1].findIndex(key => key === idx2);
-      if (isAnswerIsExist > -1) {
+      let isAnswerIsExist = this.listAnswerKeys.length && this.listAnswerKeys[idx1].findIndex(key => key === idx2);
+      if (this.listAnswerKeys.length && isAnswerIsExist > -1) {
         this.listAnswerKeys[idx1].splice(isAnswerIsExist, 1);
         if (selectionValue && selectionValue === 'checkbox') {
           this.listAnswerKeys[idx1] = this.listAnswerKeys[idx1].map(answer => {
@@ -1457,6 +1452,24 @@ export class TemplateEditComponent {
         if (hasEmptyNext) {
           this.dataService.showLoading(false);
           this.dialogService.openSnackBar({ message: "Bidang isian Next Question Possibility wajib diisi" });
+          return;
+        }
+      }
+
+      if (this.frmQuiz.value === 'quiz') {
+        let isEmpty = true;
+
+        if (this.listAnswerKeys.length && this.listAnswerKeys.length === questions.length) {
+          const isFilled = this.listAnswerKeys.map(key => {
+            if (!key.length) return false;
+            return key.every(val => val > -1);
+          });
+          isEmpty = isFilled.some(val => val === false);
+        }
+
+        if (isEmpty) {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({ message: this.translate.instant("dte.template_tugas.answer_key")+" "+ this.translate.instant("global.messages.mandatory_text")});
           return;
         }
       }
@@ -1619,7 +1632,7 @@ export class TemplateEditComponent {
           // }
         }),
         rejected_reason_choices: rejected_reason.map(item => item.reason),
-        rejected_reason_ids: rejected_reason.map(item => 
+        rejected_reason_ids: rejected_reason.map(item =>
           (this.listReason.filter(list => list.name.toUpperCase() === item.reason.toUpperCase()))[0].id
         ),
         is_quiz: this.frmQuiz.value === 'quiz' ? 1 : 0,
@@ -1825,8 +1838,8 @@ export class TemplateEditComponent {
   }
 
   uploadImageBgMisi(e: any){
-    this.templateTaskForm.get('background_image').setValue(e.image);    
-    this.templateTaskForm.get('background_font_color').setValue(e.color);    
+    this.templateTaskForm.get('background_image').setValue(e.image);
+    this.templateTaskForm.get('background_font_color').setValue(e.color);
     console.log('update => ', this.templateTaskForm);
   }
 
@@ -1868,7 +1881,7 @@ export class TemplateEditComponent {
         changedByTextIndex.push(index);
       }
     });
-    
+
     Promise.all(imagesFile)
       .then((data) => data.map((item, idx) => {
         if (changed[idx] && changed[idx].hasOwnProperty('id')) {

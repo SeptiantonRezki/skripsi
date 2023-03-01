@@ -1,0 +1,31 @@
+mat-form-field.min-150.dropdown {
+    padding-bottom: 0px !important;
+    &.select-date-dropdown .mat-form-field-infix {
+        // color: transparent !important;
+        border-radius: 8px !important;
+    }
+
+}
+
+.custom-option {
+    line-height: 18px !important;
+    height: 57px !important;
+    border-bottom: solid 1px #dbdbdb;
+}
+mat-option {
+    &.custom-option.mat-option.mat-option-disabled {
+        color: rgba(black, 0.87);
+        cursor: pointer;
+    }
+}
+.mat-select-content{
+    min-width: 300px;
+    min-height: 350px;
+}
+.custom-select .mat-select-placeholder {
+    color: rgba(black, 0.87) !important;
+    font-size: .8em;
+}
+.select-date-dropdown .mat-form-field-label {
+    visibility: hidden;
+}

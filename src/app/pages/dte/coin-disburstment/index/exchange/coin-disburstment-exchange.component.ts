@@ -778,7 +778,6 @@ export class CoinDisburstmentExchangeComponent implements OnInit, OnDestroy {
       
       this.dataService.showLoading(false);
     } catch (error) {
-      alert(this.translate.instant('dte.coin_disbursement.download_list_failed'))
       this.dataService.showLoading(false);
       throw error;
     }

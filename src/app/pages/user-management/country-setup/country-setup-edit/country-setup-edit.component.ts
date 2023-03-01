@@ -29,6 +29,7 @@ export class CountrySetupEditComponent implements OnInit {
   timezones: any[];
   listApps: any[] = [{ name: 'Retailer', value: 'retailer' }];
   forceLogoutinfo: any;
+  dsrData: any[];
   constructor(
     private router: Router,
     private ls: LanguagesService,
@@ -89,6 +90,11 @@ export class CountrySetupEditComponent implements OnInit {
           version_message: [],
         })
       ]),
+      dsr_setting: formBuilder.array([
+        formBuilder.group({
+          dsr_ssr:[(this.country.dsr_setting) ? this.country.dsr_setting.dsr_ssr : false]
+        })
+      ]),
     })
 
     const customerService = this.formCountry.get('customer_service') as FormArray;
@@ -101,7 +107,7 @@ export class CountrySetupEditComponent implements OnInit {
         customerService.at(0).get('whatsapp_number').setValidators([]);
       }
       customerService.at(0).get('whatsapp_number').updateValueAndValidity();
-      
+
     });
      const forceLogoutService = this.formCountry.get('force_logout_service') as FormArray;
      forceLogoutService.at(0).get('force_logout_status').valueChanges.subscribe(val => {
@@ -109,7 +115,7 @@ export class CountrySetupEditComponent implements OnInit {
         forceLogoutService.at(0).get('version_number').setValidators(Validators.required);
         forceLogoutService.at(0).get('apk_type').setValidators(Validators.required);
         forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
-      } 
+      }
       else {
         // forceLogoutService.at(0).get('version_number').setValue(null);
         forceLogoutService.at(0).get('version_number').setValidators([]);
@@ -130,7 +136,7 @@ export class CountrySetupEditComponent implements OnInit {
       this.oncAccessMenuChange(menus);
     });
       //console.log(this.formCountry.getRawValue());
- 
+
   }
 
   ngOnInit() {
@@ -158,7 +164,7 @@ export class CountrySetupEditComponent implements OnInit {
     }, err => {
 
     })
-     // build recursive toggle for categories 
+     // build recursive toggle for categories
     this.countrySetupService.getRetailerCategoryMenus().subscribe(({data}) => {
       const cflatMasterAbilities = this.cflatenedAbilities(data, (item) => item.value, (item) => item.name, this.ACCESS_MENU_MAX_DEPTH );
       const cfiltered = cflatMasterAbilities.map( item => {
@@ -196,7 +202,7 @@ export class CountrySetupEditComponent implements OnInit {
           forceLogoutService.at(0).get('version_message').setValue(data.message);
           forceLogoutService.at(0).get('version_message').setValidators([Validators.maxLength(150) ,Validators.required]);
           forceLogoutService.at(0).get('version_message').updateValueAndValidity();
-        }        
+        }
         forceLogoutService.at(0).get('apk_type').setValue(data.type);
         if (data.status == 'active') {
           const forcelogoutval = true;
@@ -210,9 +216,29 @@ export class CountrySetupEditComponent implements OnInit {
         forceLogoutService.at(0).get('version_message').updateValueAndValidity();
         forceLogoutService.at(0).get('apk_type').updateValueAndValidity();
       } else {
-        
+
       }
-    
+
+    })
+
+    //get dsr registration setup
+    this.countrySetupService.getDsrSSR({ country: this.country.country_code }).subscribe(({data}) => {
+        if(data){
+            this.dsrData = data;
+            this.dsrData = this.dsrData.filter(v=>v.name=="dsr_ssr");
+            if(this.dsrData.length>0){
+              const dsrSetting = this.formCountry.get('dsr_setting') as FormArray;
+              if(this.dsrData[0].values=='active'){
+                const dsr_ssr_value = true;
+                dsrSetting.at(0).get('dsr_ssr').setValue(dsr_ssr_value);
+                dsrSetting.at(0).get('dsr_ssr').updateValueAndValidity();
+                return true;
+              }else{
+                dsrSetting.at(0).get('dsr_ssr').setValue(false);
+              }
+            }
+
+        }
     })
     this.getTimezones();
   }
@@ -255,7 +281,7 @@ export class CountrySetupEditComponent implements OnInit {
     let menus = this.formCountry.get('categories_menu').get('cabilities') as FormArray;
     this.recursecCheck(menus.controls, checked);
     //console.log(this.formCountry.getRawValue());
-    
+
   }
 
   toggleFullAccess(checked) {
@@ -268,7 +294,7 @@ export class CountrySetupEditComponent implements OnInit {
   }
   recurseCheck(items, checked) {
     items.map( (item: FormGroup) => {
-        
+
       if(item.get('title').value !== 'full_access') {
         item.get('checked').setValue(checked, {emitEvent: false});
         const childs = item.get('children') as FormArray;
@@ -319,13 +345,13 @@ export class CountrySetupEditComponent implements OnInit {
           if(i.children && i.children.length) {
             recurseChecked(i.children, _checked);
           }
-        });  
+        });
       }
 
     };
 
     recurseChecked(menusWithoutFullaccess, allChecked);
-    
+
   }
   oncAccessMenuChange(menus) {
     const menusWithoutFullaccess = menus.filter(item => item.title !== 'full_access');
@@ -349,13 +375,13 @@ export class CountrySetupEditComponent implements OnInit {
           if(i.children && i.children.length) {
             recurseChecked(i.children, _checked);
           }
-        });  
+        });
       }
 
     };
 
     recurseChecked(menusWithoutFullaccess, allChecked);
-    
+
   }
 
   setAbilities(values, form: FormArray, depth = 0) {
@@ -410,7 +436,7 @@ export class CountrySetupEditComponent implements OnInit {
         }
       }
     }
-    
+
     function findParent(possibleParents, possibleChild) {
       let found = false
       for (let i = 0; i < possibleParents.length; i++) {
@@ -422,7 +448,7 @@ export class CountrySetupEditComponent implements OnInit {
           possibleParents[i].count = possibleParents[i].children.length
           return true
         } else if (possibleParents[i].children) found = findParent(possibleParents[i].children, possibleChild)
-      } 
+      }
       return found;
     }
 
@@ -439,19 +465,19 @@ export class CountrySetupEditComponent implements OnInit {
       }
       return index < original.length - 1 ? initial : initial.nested
     }, {nested: [], left: []})
-    
+
    return nested;
 
   }
 
   getAbilitiesByType(menus, type) {
-    
+
     const data = _.find(menus, (item) => item.type === type);
     if(data && data.abilities) {
       //console.log(data.abilities);
       return data.abilities;
     }
-   
+
     return [];
 
   }
@@ -466,7 +492,7 @@ export class CountrySetupEditComponent implements OnInit {
         }
         else{
           if(item.country!== null && item.country.includes(country_code)){
-            
+
             Object.assign(item,{checked:true})
             if (depth == 0) {
               flatitems.push(item)
@@ -491,7 +517,7 @@ export class CountrySetupEditComponent implements OnInit {
     recurse(menus);
 
     return flatitems;
-    
+
   };
   flatenedAbilities(abilities, parseTitle: Function, parseName: Function,  maxDepth = 0): any[] {
     const flatitems = [];
@@ -499,10 +525,10 @@ export class CountrySetupEditComponent implements OnInit {
 
     const recurse = (items, depth = 0, parentId = null) => {
       items.map((item, i) => {
-        
+
         id += 1;
         const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: id, parent_id: parentId};
-        
+
         flatitems.push(menu);
 
         if(item.children && maxDepth > depth) {
@@ -522,10 +548,10 @@ export class CountrySetupEditComponent implements OnInit {
 
     const recurse = (items, depth = 0, parentId = null) => {
       items.map((item, i) => {
-        
+
         id += 1;
         const menu = {title: parseTitle(item), name: parseName(item), depth: depth, id: item.id, parent_id: parentId, country: item.country};
-        
+
         flatitems.push(menu);
 
         if(item.children && maxDepth > depth) {
@@ -556,7 +582,7 @@ export class CountrySetupEditComponent implements OnInit {
   getAbilities(menus, child) {
 
     menus.map(item => {
-      
+
       if(item.checked) {
         item.children = this.getAbilities(item.children, []);
 
@@ -585,7 +611,7 @@ export class CountrySetupEditComponent implements OnInit {
   }
 
   submit() {
-    
+
     this.dataService.showLoading(true);
 
     let body = this.formCountry.getRawValue();
@@ -614,15 +640,24 @@ export class CountrySetupEditComponent implements OnInit {
         ...body.force_logout_service,
       ]
     }
-    
-    console.log(body.force_logout_service);
+
+    body.master_config=[
+      {
+        name:"dsr_ssr",
+        values:body.dsr_setting[0].dsr_ssr,
+        country:body.code,
+      }
+    ]
+
+    // console.log(body.force_logout_service);
+    console.log(body);
+
     this.countrySetupService.update(body, {id: this.country.id}).subscribe(res => {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({ message: this.ls.locale.notification.popup_notifikasi.text22 });
       this.router.navigate(["user-management", "countries"]);
-
     }, err => {
-      
+
       this.dataService.showLoading(false);
 
     });

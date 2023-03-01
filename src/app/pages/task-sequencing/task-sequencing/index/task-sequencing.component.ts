@@ -51,7 +51,6 @@ export class TaskSequencingComponent implements OnInit {
     this.selected = []
 
     this.permission = this.roles.getRoles('principal.task_sequencing');
-    console.log(this.permission);
 
     const observable = this.keyUp.debounceTime(1000)
       .distinctUntilChanged()
@@ -67,7 +66,6 @@ export class TaskSequencingComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    console.log(arguments);
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }

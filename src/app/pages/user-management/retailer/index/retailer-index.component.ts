@@ -72,6 +72,12 @@ export class RetailerIndexComponent {
   chatbot: FormControl = new FormControl('');
   retail_classification: FormControl = new FormControl('');
 
+  public currentPageLimit: number = 10;
+  public currentVisible: number = 3;
+  public nextPageUrl: string
+  public prevPageUrl: string
+
+
   listStatus: any[] = [{ name: this.ls.locale.global.label.all_status, value: '-1' }, { name: this.ls.locale.global.label.active_status, value: 'active' }, { name: this.ls.locale.global.label.inactive_status, value: 'inactive' }];
   listAccessCashier: any[] = [{ name: this.ls.locale.global.label.all_access_cashier, value: '-1' }, { name: this.ls.locale.dte.pengatur_jadwal_program.text32, value: 1 }, { name: this.ls.locale.dte.pengatur_jadwal_program.text33, value: 0 }];
   listStatusChatBot: any[] = [
@@ -196,50 +202,50 @@ export class RetailerIndexComponent {
     await this.initAreaV2();
     this.getRetailerList();
 
-    this.status.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.status.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.version_retailer.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.version_retailer.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.version_cashier.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.version_cashier.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.access_cashier.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    })
+    // this.access_cashier.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // })
 
-    this.retail_classification.valueChanges.subscribe(res => {
-      this.dataService.setToStorage('retail_classification', res);
-      this.getRetailerList();
-    })
+    // this.retail_classification.valueChanges.subscribe(res => {
+    //   this.dataService.setToStorage('retail_classification', res);
+    //   this.getRetailerList();
+    // })
 
-    this.chatbot.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.chatbot.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.gsr.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.gsr.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.gsm_pl.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.gsm_pl.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.pojok_bayar_validation.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.pojok_bayar_validation.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.bank_final_validation.valueChanges.subscribe(res => {
-      this.getRetailerList();
-    });
+    // this.bank_final_validation.valueChanges.subscribe(res => {
+    //   this.getRetailerList();
+    // });
 
-    this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
-      this.getRetailerList();
-    });
+    // this.formFilter.valueChanges.debounceTime(1000).subscribe((res) => {
+    //   this.getRetailerList();
+    // });
     this.formFilter.get('zone').valueChanges.subscribe(res => {
       console.log('zone', res);
       if (res) {
@@ -502,12 +508,14 @@ export class RetailerIndexComponent {
           this.formFilter.get('zone').setValue(this.dataService.getFromStorage('selected_zone'));
           this.dataService.showLoading(false);
         } else {
-          this.dataService.showLoading(true);
+          this.loadingIndicator = true
+          // this.dataService.showLoading(true);
           this.geotreeService.getChildFilterArea(fd).subscribe(res => {
             // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
             this.list[this.parseArea(selection)] = res.data;
             // this.list[this.parseArea(selection)] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
            
             // fd = null
           });
@@ -536,21 +544,25 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['region'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('region').setValue('');
           this.dataService.setToStorage('selected_region', '');
@@ -577,21 +589,25 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('area hitted', selection, item, this.list['region']);
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['area'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('area').setValue('');
         }
@@ -615,21 +631,25 @@ export class RetailerIndexComponent {
             })[0] : {};
             console.log('item', item);
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              // this.dataService.showLoading(false);
+              this.loadingIndicator = false
             }
           } else {
             this.list['salespoint'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('salespoint').setValue('');
         }
@@ -650,21 +670,25 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['district'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
           this.formFilter.get('district').setValue('');
         }
@@ -683,22 +707,26 @@ export class RetailerIndexComponent {
               return id && id.length > 0 ? id[0] : id;
             })[0] : {};
             if (item && item.name && item.name !== 'all') {
-              this.dataService.showLoading(true);
+              this.loadingIndicator = true
+              // this.dataService.showLoading(true);
               this.geotreeService.getChildFilterArea(fd).subscribe(res => {
                 // this.list[selection] = needFilter ? res.filter(ar => this.area_id_list.includes(Number(ar.id))) : res;
                 this.list[selection] = res.data;
-                this.dataService.showLoading(false);
+                this.loadingIndicator = false
+                // this.dataService.showLoading(false);
                 // this.list[selection] = expectedArea.length > 0 ? res.data.filter(dt => expectedArea.map(eArea => eArea.id).includes(dt.id)) : res.data;
 
                 // fd = null
               });
             } else {
               this.list[selection] = [];
-              this.dataService.showLoading(false);
+              this.loadingIndicator = false
+              // this.dataService.showLoading(false);
             }
           } else {
             this.list['territory'] = [];
-            this.dataService.showLoading(false);
+            this.loadingIndicator = false
+            // this.dataService.showLoading(false);
           }
         }
         break;
@@ -1067,7 +1095,6 @@ export class RetailerIndexComponent {
   }
 
   getRetailerList() {
-    
     let areaSelected = Object.entries(this.formFilter.getRawValue()).map(([key, value]) => ({ key, value })).filter((item: any) => item.value !== null && item.value !== '' && item.value.length !== 0);
     this.pagination.area = areaSelected[areaSelected.length - 1].value;
     // this.pagination.sort = "name";
@@ -1173,69 +1200,89 @@ export class RetailerIndexComponent {
     if (this.bank_final_validation.value === 'all') { delete this.pagination['bank_final_validation']; }
 
     this.loadingIndicator = true;
-    this.retailerService.get(this.pagination).subscribe(
-      res => {
-        Page.renderPagination(this.pagination, res);
-        this.rows = res.data;
-        this.onLoad = false;
 
-        this.dataService.setToStorage('zone', this.list['zone']);
-        if (this.list['region'].length > 0) {
-          this.dataService.setToStorage('region', this.list['region']);
-        }
-        if (this.list['area'].length > 0) {
-          this.dataService.setToStorage('area', this.list['area']);
-        }
-        if (this.list['salespoint'].length > 0) {
-          this.dataService.setToStorage('salespoint', this.list['salespoint']);
-        }
-        if (this.list['district'].length > 0) {
-          this.dataService.setToStorage('district', this.list['district']);
-        }
-        if (this.list['territory'].length > 0) {
-          this.dataService.setToStorage('territory', this.list['territory']);
-        }
+    // Exclue page param on search
+    if (this.pagination.search) {
+      this.pagination.page = null
+    }
 
-        if (this.formFilter.get('zone').value) {
-          this.dataService.setToStorage('selected_zone', this.formFilter.get('zone').value);
-        }
-        if (this.formFilter.get('region').value) {
-          this.dataService.setToStorage('selected_region', this.formFilter.get('region').value);
-        }
-        if (this.formFilter.get('area').value) {
-          this.dataService.setToStorage('selected_area', this.formFilter.get('area').value);
-        }
-        if (this.formFilter.get('salespoint').value) {
-          this.dataService.setToStorage('selected_salespoint', this.formFilter.get('salespoint').value);
-        }
-        if (this.formFilter.get('district').value) {
-          this.dataService.setToStorage('selected_district', this.formFilter.get('district').value);
-        }
-        if (this.formFilter.get('territory').value) {
-          this.dataService.setToStorage('selected_territory', this.formFilter.get('territory').value);
-        }
+    try {
+      this.retailerService.get(this.pagination).subscribe(
+        res => {
+          // Pagination 'page' param will be set from response
+          let result = {...res, page: res.current_page || 1}
 
-        this.retailerService.statusExportCashier({
-          area: this.pagination['area'],
-          retailer_id: this.selectedRetailer,
-          classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
-        }).subscribe(res => {
-          console.log('Status Export :', res);
-          this.resultExport = res.data.result;
-          this.canRequestExport = res.data.can_request;
-        });
+          Page.renderPagination(this.pagination, result);
 
-        this.loadingIndicator = false;
-        
-      },
-      err => {
-        console.error(err);
-        this.onLoad = false;
-        this.dataService.showLoading(false);
-      }
-    );
+          this.nextPageUrl = result.next_page_url || ""
+          this.prevPageUrl = result.prev_page_url || ""
+
+          this.rows = result.data;
+          this.onLoad = false;
+
+          this.dataService.setToStorage('zone', this.list['zone']);
+          if (this.list['region'].length > 0) {
+            this.dataService.setToStorage('region', this.list['region']);
+          }
+          if (this.list['area'].length > 0) {
+            this.dataService.setToStorage('area', this.list['area']);
+          }
+          if (this.list['salespoint'].length > 0) {
+            this.dataService.setToStorage('salespoint', this.list['salespoint']);
+          }
+          if (this.list['district'].length > 0) {
+            this.dataService.setToStorage('district', this.list['district']);
+          }
+          if (this.list['territory'].length > 0) {
+            this.dataService.setToStorage('territory', this.list['territory']);
+          }
+
+          if (this.formFilter.get('zone').value) {
+            this.dataService.setToStorage('selected_zone', this.formFilter.get('zone').value);
+          }
+          if (this.formFilter.get('region').value) {
+            this.dataService.setToStorage('selected_region', this.formFilter.get('region').value);
+          }
+          if (this.formFilter.get('area').value) {
+            this.dataService.setToStorage('selected_area', this.formFilter.get('area').value);
+          }
+          if (this.formFilter.get('salespoint').value) {
+            this.dataService.setToStorage('selected_salespoint', this.formFilter.get('salespoint').value);
+          }
+          if (this.formFilter.get('district').value) {
+            this.dataService.setToStorage('selected_district', this.formFilter.get('district').value);
+          }
+          if (this.formFilter.get('territory').value) {
+            this.dataService.setToStorage('selected_territory', this.formFilter.get('territory').value);
+          }
+
+          this.retailerService.statusExportCashier({
+            area: this.pagination['area'],
+            retailer_id: this.selectedRetailer,
+            classification: this.retail_classification.value && this.retail_classification.value != 'all' ? [this.retail_classification.value] : []
+          }).subscribe(res => {
+            console.log('Status Export :', res);
+            this.resultExport = res.data.result;
+            this.canRequestExport = res.data.can_request;
+          });
+
+          this.loadingIndicator = false;
+
+        },
+        err => {
+          console.error(err);
+          this.onLoad = false;
+          this.dataService.showLoading(false);
+        }
+      );
+    } catch (err) {
+      console.log(err)
+    }
   }
 
+  changePage(t) {
+    this.getRetailerList()
+  }
   downloadBankAccount() {
     let data = {
       titleDialog: "Download Bank Account",
@@ -1285,19 +1332,21 @@ export class RetailerIndexComponent {
   }
 
   setPage(pageInfo) {
-    this.offsetPagination = pageInfo.offset;
+    let page = pageInfo.page
+    this.offsetPagination = page;
     this.loadingIndicator = true;
 
     if (this.pagination['search']) {
-      this.pagination.page = pageInfo.offset + 1;
+      this.pagination.page = page;
     } else {
-      this.dataService.setToStorage('page', pageInfo.offset + 1);
+      this.dataService.setToStorage('page', page);
       this.pagination.page = this.dataService.getFromStorage('page');
     }
 
     this.retailerService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
+      let result = {...res, page: res.current_page || 1}
+      Page.renderPagination(this.pagination, result);
+      this.rows = result.data;
       this.loadingIndicator = false;
     });
   }
@@ -1325,9 +1374,7 @@ export class RetailerIndexComponent {
   }
 
   updateFilter(string) {
-    this.loadingIndicator = true;
     this.pagination.search = string;
-
     if (string) {
       this.pagination.page = 1;
       this.offsetPagination = 0;
@@ -1337,11 +1384,11 @@ export class RetailerIndexComponent {
       this.offsetPagination = page ? (page - 1) : 0;
     }
 
-    this.retailerService.get(this.pagination).subscribe(res => {
-      Page.renderPagination(this.pagination, res);
-      this.rows = res.data;
-      this.loadingIndicator = false;
-    });
+    // this.retailerService.get(this.pagination).subscribe(res => {
+    //   Page.renderPagination(this.pagination, res);
+    //   this.rows = res.data;
+    //   this.loadingIndicator = false;
+    // });
   }
 
   deleteWholesaler(id): void {

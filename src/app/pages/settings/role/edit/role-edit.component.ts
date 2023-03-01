@@ -125,7 +125,14 @@ export class RoleEditComponent {
         retailerPhoneNumberToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.phone_number_view' }),
         retailerRekeningToggleView = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko_view' }),
         retailerPhoneNumberToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.phone_number' }),
-        retailerRekeningToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko' });
+        retailerRekeningToggle = retailerMenu && _.find(retailerMenu.value, { value: 'principal.retailer.submenu.rekening_toko' }),
+
+        verifikasiFotoMenu = _.find(retailerRole.menu, item => _.find(item.value, {value: 'principal.retailer.submenu.lihat_verifikasi_foto'})),
+        viewVerifFotoToggle = verifikasiFotoMenu && _.find(verifikasiFotoMenu.value, {value: 'principal.retailer.submenu.lihat_verifikasi_foto'}),
+        verifFotoToggle = verifikasiFotoMenu && _.find(verifikasiFotoMenu.value, {value: 'principal.retailer.submenu.verifikasi_foto'}),
+        editVerifFotoToggle = verifikasiFotoMenu && _.find(verifikasiFotoMenu.value, {value: 'principal.retailer.submenu.edit_verifikasi_foto'});
+        
+        console.log({verifikasiFotoMenu});
 
       if (wholesalerExportToggle && wholesalerViewToggle && wholesalerViewToggle.status == false) {
         wholesalerExportToggle.disabled = true;
@@ -174,6 +181,14 @@ export class RoleEditComponent {
         phoneDOBToggle.status = false;
         phoneDOBToggle.disabled = true;
       }
+
+      if(viewVerifFotoToggle.status == false) {
+        verifFotoToggle.status = false;
+        verifFotoToggle.disabled = true;
+        editVerifFotoToggle.status = false;
+        editVerifFotoToggle.disabled = true;
+      }
+      
 
       this.onLoad = false;
       this.initArea();
@@ -777,6 +792,24 @@ export class RoleEditComponent {
       }
     }
     // End Customer Feature
+
+    // Start Verifikasi Foto
+    if(targetItem.value === 'principal.retailer.submenu.lihat_verifikasi_foto') {
+      const verifToggle = targetItems.value.find(item => item.value === 'principal.retailer.submenu.verifikasi_foto');
+      const editToggle = targetItems.value.find(item => item.value === 'principal.retailer.submenu.edit_verifikasi_foto');
+      
+      verifToggle.status = !event.checked ? false : true;
+      verifToggle.disabled = !event.checked ? true : false;
+      editToggle.status = !event.checked ? false : true;
+      editToggle.disabled = !event.checked ? true : false;
+      
+    }
+    if(targetItem.value === 'principal.retailer.submenu.verifikasi_foto') {
+      const editToggle = targetItems.value.find(item => item.value === 'principal.retailer.submenu.edit_verifikasi_foto');
+      editToggle.status = !event.checked ? false : true;
+      editToggle.disabled = !event.checked ? true : false;
+      
+    }
   }
 
   getCountry() {

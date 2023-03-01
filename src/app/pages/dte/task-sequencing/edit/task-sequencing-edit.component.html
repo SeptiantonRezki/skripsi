@@ -102,29 +102,67 @@
 
             <h3 class="h3"><strong>{{'dte.task_sequencing.text13' | translate}}</strong></h3>
 
-            <mat-form-field fxFlex="100" class="is-light">
-              <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
-                placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" formControlName="start_date" [readonly]="data?.is_editable === 0">
-              <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
-              </mat-datepicker-toggle>
-              <mat-datepicker #start_date [disabled]="data?.is_editable === 0"></mat-datepicker>
-              <mat-error class="mt-8 px-24"
-                *ngIf="taskSequenceForm.controls['start_date'].hasError('required') && taskSequenceForm.controls['start_date'].touched">
-                {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
-              </mat-error>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input id="start-date" matInput (focus)="start_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="start_date"
+                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text15' | translate}}" formControlName="start_date" [readonly]="data?.is_editable === 0">
+                <mat-datepicker-toggle matSuffix [for]="start_date" [disabled]="data?.is_editable === 0">
+                </mat-datepicker-toggle>
+                <mat-datepicker #start_date [disabled]="data?.is_editable === 0"></mat-datepicker>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="taskSequenceForm.controls['start_date'].hasError('required') && taskSequenceForm.controls['start_date'].touched">
+                  {{'manajemen_barang_sku.manajemen_koin.text15' | translate}} {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex class="is-light form-primary" id="start_time">
+                <input matInput formControlName="start_time" placeholder="{{
+                    'notification.popup_notifikasi.text8' | translate
+                  }}" [ngxTimepicker]="start_time" [format]="24" readonly />
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #start_time></ngx-material-timepicker>
+                <mat-error>
+                  {{ ls.locale.notification.popup_notifikasi.text8 }}
+                  {{ "global.messages.mandatory_text" | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="100" class="is-light">
-              <input id="end-date" matInput (focus)="end_date.open()" [max]="maxDate" [min]="minDate" [matDatepicker]="end_date"
-                placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}" formControlName="end_date" [readonly]="data?.is_editable === 0">
-              <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
-              </mat-datepicker-toggle>
-              <mat-datepicker #end_date [disabled]="data?.is_editable === 0"></mat-datepicker>
-              <mat-error class="mt-8 px-24"
-                *ngIf="taskSequenceForm.controls['end_date'].hasError('required') && taskSequenceForm.controls['end_date'].touched">
-                {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
-              </mat-error>
-            </mat-form-field>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <mat-form-field fxFlex="100" class="is-light">
+                <input
+                  id="end-date"
+                  matInput
+                  (focus)="end_date.open()"
+                  [max]="maxDate"
+                  [min]="taskSequenceForm.get('start_date').value"
+                  [disabled]="!taskSequenceForm.get('start_date').value"
+                  [matDatepicker]="end_date"
+                  placeholder="{{'manajemen_barang_sku.manajemen_koin.text16' | translate}}"
+                  formControlName="end_date"
+                  [readonly]="data?.is_editable === 0"
+                >
+                <mat-datepicker-toggle matSuffix [for]="end_date" [disabled]="data?.is_editable === 0">
+                </mat-datepicker-toggle>
+                <mat-datepicker #end_date [disabled]="data?.is_editable === 0"></mat-datepicker>
+                <mat-error class="mt-8 px-24"
+                  *ngIf="taskSequenceForm.controls['end_date'].hasError('required') && taskSequenceForm.controls['end_date'].touched">
+                  {{'manajemen_barang_sku.manajemen_koin.text16' | translate}} {{'global.messages.mandatory_text' | translate}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex class="is-light form-primary" id="end_time">
+                <input matInput formControlName="end_time" placeholder="{{
+                    'notification.popup_notifikasi.text10' | translate
+                  }}" [ngxTimepicker]="end_time" [format]="24"
+                  [disabled]="!taskSequenceForm.get('start_date').value" readonly />
+                <mat-icon matSuffix>access_time</mat-icon>
+                <ngx-material-timepicker #end_time></ngx-material-timepicker>
+                <mat-error>
+                  {{ ls.locale.notification.popup_notifikasi.text10 }}
+                  {{ "global.messages.mandatory_text" | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
             <button id="{{isDetail ? 'btn-detail' : 'btn-edit'}}" mat-raised-button type="button" class="confirmation-button" fxFlex="20" (click)="submit()"
               [disabled]="taskSequenceForm.controls['name'].invalid || taskSequenceForm.controls['trade_creator_id'].invalid || taskSequenceForm.controls['trade_audience_group_id'].invalid || taskSequenceForm.controls['start_date'].invalid || taskSequenceForm.controls['end_date'].invalid"
               [routerLink]="['/dte','mission-builder',(isDetail ? 'detail' : 'edit')]">

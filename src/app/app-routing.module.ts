@@ -135,6 +135,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: "pojok-untung",
+    loadChildren: "./pages/pojok-untung/pojok-untung.module#PojokUntungModule",
+    canActivate: [AuthGuard]
+  },
+  {
     path: "virtual-account",
     loadChildren: "./pages/virtual-account/virtual-account.module#VirtualAccountModule",
     canActivate: [AuthGuard]
@@ -199,6 +204,11 @@ const appRoutes: Routes = [
   {
     path: 'tactical-retail-sales',
     loadChildren: './pages/tactical-retail-sales/tactical-retail-sales.module#TacticalRetailSalesModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'payment-gateway',
+    loadChildren: './pages/payment-gateway/payment-gateway.module#PaymentGatewayModule',
     canActivate: [AuthGuard]
   },
   {

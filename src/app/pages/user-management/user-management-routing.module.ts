@@ -72,6 +72,9 @@ import { CTAExternalWebComponent } from "./cta/external-web/external-web.compone
 import { InfoBoardComponent } from "./info-board/index/info-board.component";
 import { InfoBoardCreateComponent } from "./info-board/create/info-board-create.component";
 import { InfoBoardEditComponent } from "./info-board/edit/info-board-edit.component";
+import { StorePhotoVerificationComponent } from "./retailer/store-photo-verification/store-photo-verification.component";
+import { StorePhotoTypesComponent } from "./retailer/store-photo-types/store-photo-types.component";
+import { StorePhotoTypeFormComponent } from "./retailer/store-photo-types/store-photo-type-form/store-photo-type-form.component";
 
 const routes: Routes = [
   {
@@ -270,6 +273,43 @@ const routes: Routes = [
     canActivate: [PageGuard]
   },
   {
+    path: "retailer-image-verification",
+    component: StorePhotoVerificationComponent,
+    data: {
+      breadcrumbs: brConfig.store_photo_verification.index
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer-image-verification/store-photo-types",
+    component: StorePhotoTypesComponent,
+    data: {
+      breadcrumbs: brConfig.store_photo_verification.store_photo_type
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/create",
+    component: StorePhotoTypeFormComponent,
+    data: {
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/edit/:id",
+    component: StorePhotoTypeFormComponent,
+    data: {
+    },
+    canActivate: [PageGuard]
+  },
+  {
+    path: "retailer-image-verification/store-photo-types/detail/:id",
+    component: StorePhotoTypeFormComponent,
+    data: {
+    },
+    canActivate: [PageGuard]
+  },
+  {
     path: "rrp-retailer",
     component: OrdersRrpComponent,
     data: {
@@ -287,6 +327,22 @@ const routes: Routes = [
     //   listLevel: ListLevelResolver
     // },
     canActivate: [PageGuard]
+  },
+  {
+    path: "retailer/store-photo-verifications",
+    component: StorePhotoVerificationComponent,
+    data: {
+
+    },
+    canActivate: []
+  },
+  {
+    path: "retailer/store-photo-types",
+    component: StorePhotoTypesComponent,
+    data: {
+
+    },
+    canActivate: []
   },
   {
     path: "customer",
