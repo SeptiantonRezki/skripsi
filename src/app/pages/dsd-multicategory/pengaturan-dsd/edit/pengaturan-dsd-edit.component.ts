@@ -171,6 +171,7 @@ export class PengaturanDsdEditComponent implements OnInit {
         this.proposalData.area_id = resProposal.area_id;
 
       } else {
+        console.log('lalalalala');
         /*
         this.formCreateProposal.patchValue({
           executor_selected: this.proposalData.textarea_executors,
@@ -189,6 +190,24 @@ export class PengaturanDsdEditComponent implements OnInit {
 
       this.dataService.showLoading(true);
       this.TRSService.getAreaByUser(request).subscribe(res => {
+
+        let array_area = res.data.map(function (obj) {
+          return obj.id;
+        });
+        if (array_area.includes(this.selectedArea)){
+
+        } else {
+          alert('Anda tidak memiliki akses untuk merubah area ini');
+
+          var str =  window.location.href;
+          var lastIndex = str.lastIndexOf("/");
+          var path = str.substring(0, lastIndex);
+          lastIndex = path.lastIndexOf("/");
+          path = path.substring(0, lastIndex);
+
+          window.location.assign(path);
+        }
+
         this.listLevelArea = res.data;
         this.addArea();
         this.dataService.showLoading(false);
@@ -238,24 +257,30 @@ export class PengaturanDsdEditComponent implements OnInit {
   submit(mode) {
     console.log("qqqq");
     if (this.formCreateProposal.valid) {
-      this.dataService.showLoading(true);
-      let fd = new FormData();
-      //fd.append('program_code', "XXX_Coba1"); generate di backend saja
-      fd.append('area_id', this.selectedArea);
-      
-      fd.append('executors', this.selectedExecutor);
-      fd.append('products', this.selectedProduct);
-
-      this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+      if (this.selectedExecutor.length > 0 && this.selectedProduct.length > 0){
+        this.dataService.showLoading(true);
+        let fd = new FormData();
+        //fd.append('program_code', "XXX_Coba1"); generate di backend saja
+        fd.append('area_id', this.selectedArea);
+        
+        fd.append('executors', this.selectedExecutor);
+        fd.append('products', this.selectedProduct);
+  
+        this.TRSService.putProposalDetail(fd, this.trs_program_code).subscribe(res => {
+          this.dataService.showLoading(false);
+          this.dialogService.openSnackBar({
+            message: this.ls.locale.notification.popup_notifikasi.text22
+          });
+          //location.reload();
+        }, err => {
+          this.dataService.showLoading(false);
+        })
+      } else {
         this.dataService.showLoading(false);
         this.dialogService.openSnackBar({
-          message: this.ls.locale.notification.popup_notifikasi.text22
+          message: "Executor dan Product wajib dipilih minimal 1"
         });
-        //location.reload();
-      }, err => {
-        this.dataService.showLoading(false);
-      })
-      
+      }
     } else {
       this.dataService.showLoading(false);
       this.dialogService.openSnackBar({
