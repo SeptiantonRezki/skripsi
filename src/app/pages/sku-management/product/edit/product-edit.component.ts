@@ -447,6 +447,7 @@ export class ProductEditComponent {
           this.formProductGroup.disable();
           this.formProductGroup.get("subCategory").enable();
           this.formProductGroup.get("category").enable();
+          this.formProductGroup.get("upc").enable();
         }
       })
     } catch (ex) {
