@@ -131,13 +131,21 @@ export class PengaturanDsdExecutorComponent {
     // console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (!allRowsSelected){
-      this.selected = [];
+      let forDeletion = this.rows;
+      this.selected = this.selected.filter(item => !this.rows.includes(item))
     } 
     else {
       this.selected = [];
+      /*
+      // INI UNTUK SEMUA, FILTER GAK NGEFEK
       for (let index = 0; index < this.AllIDs.length; index++) {
         this.selected.push(this.AllIDs[index]);
       }
+      */
+      for (let index = 0; index < this.rows.length; index++) {
+        this.selected.push(this.rows[index]);
+      }
+      ;
     }
   }
 
@@ -182,8 +190,13 @@ export class PengaturanDsdExecutorComponent {
     this.filterSalespoint = e.value.toLowerCase();
 
     if (this.multiSales){
+      this.filterDistrict =  '';
+      this.filterTerritory =  '';
+
       this.districtList = this.rows.map(a => a.district.trim());
       this.districtList = this.districtList.filter((x, i, a) => a.indexOf(x) == i);
+      this.territoryList = this.rows.map(a => a.territory.trim());
+      this.territoryList = this.territoryList.filter((x, i, a) => a.indexOf(x) == i);
     }
 
     this.updateTable();
@@ -191,6 +204,8 @@ export class PengaturanDsdExecutorComponent {
 
   changeDistrict(e: any) {
     this.filterDistrict =  e.value.toLowerCase();
+    
+    this.filterTerritory =  '';
     this.territoryList = this.rows.map(a => a.territory.trim());
     this.territoryList = this.territoryList.filter((x, i, a) => a.indexOf(x) == i);
     this.updateTable();
