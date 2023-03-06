@@ -193,28 +193,33 @@ export class PengaturanDsdExecutorComponent {
   changeSales(e: any) {
     this.allRowsSelected = false;
     this.filterSalespoint = e.value.toLowerCase();
+    this.updateTable();
 
     if (this.multiSales){
       this.filterDistrict =  '';
       this.filterTerritory =  '';
 
+      this.districtList = [];
       this.districtList = this.rows.map(a => a.district.trim());
+
+      console.log("districtList");
+      console.log(this.districtList);
+      console.log(this.rows);
+
       this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
       this.territoryList = [];
     }
-
-    this.updateTable();
   }
 
   changeDistrict(e: any) {
     this.allRowsSelected = false;
-    this.allRowsSelected = false;
     this.filterDistrict =  e.value.toLowerCase();
-    
+    this.updateTable();
+
     this.filterTerritory =  '';
+    this.territoryList = [];
     this.territoryList = this.rows.map(a => a.territory.trim());
     this.territoryList = (["-"]).concat(this.territoryList.filter((x, i, a) => a.indexOf(x) == i));
-    this.updateTable();
   }
 
   changeTerritory(e: any) {
@@ -229,7 +234,7 @@ export class PengaturanDsdExecutorComponent {
     //filterSearch: any = "";
     let temp = this.temp;
 
-    if (this.filterSalespoint != ""){
+    if (this.filterSalespoint != "" && this.filterSalespoint != "-"){
       const val = this.filterSalespoint;
       temp = temp.filter(function (d) {
         return d.salespoint.toLowerCase().indexOf(val) !== -1;
@@ -292,15 +297,16 @@ export class PengaturanDsdExecutorComponent {
       this.AllIDs = res.data;
       this.temp = [...res.data];
       this.salespointList = this.rows.map(a => a.salespoint.trim());
-      this.salespointList = this.salespointList.filter((x, i, a) => a.indexOf(x) == i);
+      this.salespointList = (["-"]).concat(this.salespointList.filter((x, i, a) => a.indexOf(x) == i));
 
+      /*
       if (this.salespointList.length == 1){
-        this.districtList = this.rows.map(a => a.district.trim());
-        this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
         this.multiSales = false;
       } else if (this.salespointList.length > 1){
-        this.multiSales = true;
+        
       }
+      */
+      this.multiSales = true;
 
       if (this.detailData.selected != ""){
         let IDselected = (this.detailData.selected).split('__');
