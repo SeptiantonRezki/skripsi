@@ -115,7 +115,7 @@ export class PengaturanDsdExecutorComponent {
 
     this.disabled_exec = this.selected.map(a => a.idUser);
 
-    if (this.AllIDs.length == this.selected.length){
+    if (this.rows.length == this.selected.length){
       this.allRowsSelected = true;
     } else {
       this.allRowsSelected = false;
@@ -131,8 +131,12 @@ export class PengaturanDsdExecutorComponent {
     // console.log('allRowsSelected_', allRowsSelected);
     this.allRowsSelected = allRowsSelected;
     if (!allRowsSelected){
+      this.selected = [];
+
+      /*
       let forDeletion = this.rows;
-      this.selected = this.selected.filter(item => !this.rows.includes(item))
+      this.selected = this.selected.filter(item => !this.rows.includes(item));
+      */
     } 
     else {
       this.selected = [];
@@ -187,6 +191,7 @@ export class PengaturanDsdExecutorComponent {
   }
 
   changeSales(e: any) {
+    this.allRowsSelected = false;
     this.filterSalespoint = e.value.toLowerCase();
 
     if (this.multiSales){
@@ -194,20 +199,21 @@ export class PengaturanDsdExecutorComponent {
       this.filterTerritory =  '';
 
       this.districtList = this.rows.map(a => a.district.trim());
-      this.districtList = this.districtList.filter((x, i, a) => a.indexOf(x) == i);
-      this.territoryList = this.rows.map(a => a.territory.trim());
-      this.territoryList = this.territoryList.filter((x, i, a) => a.indexOf(x) == i);
+      this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
+      this.territoryList = [];
     }
 
     this.updateTable();
   }
 
   changeDistrict(e: any) {
+    this.allRowsSelected = false;
+    this.allRowsSelected = false;
     this.filterDistrict =  e.value.toLowerCase();
     
     this.filterTerritory =  '';
     this.territoryList = this.rows.map(a => a.territory.trim());
-    this.territoryList = this.territoryList.filter((x, i, a) => a.indexOf(x) == i);
+    this.territoryList = (["-"]).concat(this.territoryList.filter((x, i, a) => a.indexOf(x) == i));
     this.updateTable();
   }
 
@@ -230,14 +236,14 @@ export class PengaturanDsdExecutorComponent {
       });
     }
 
-    if (this.filterDistrict != ""){
+    if (this.filterDistrict != "" && this.filterDistrict != "-"){
       const val = this.filterDistrict;
       temp = temp.filter(function (d) {
         return d.district.toLowerCase().indexOf(val) !== -1;
       });
     }
 
-    if (this.filterTerritory != ""){
+    if (this.filterTerritory != "" && this.filterTerritory != "-"){
       const val = this.filterTerritory;
       temp = temp.filter(function (d) {
         return d.territory.toLowerCase().indexOf(val) !== -1;
@@ -290,7 +296,7 @@ export class PengaturanDsdExecutorComponent {
 
       if (this.salespointList.length == 1){
         this.districtList = this.rows.map(a => a.district.trim());
-        this.districtList = this.districtList.filter((x, i, a) => a.indexOf(x) == i);
+        this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
         this.multiSales = false;
       } else if (this.salespointList.length > 1){
         this.multiSales = true;
@@ -307,12 +313,12 @@ export class PengaturanDsdExecutorComponent {
 
         this.disabled_exec = this.selected.map(a => a.idUser);
 
-        if(this.selected.length >= this.detailData.max){
-          //alert("jumlah executor sudah sesuai, jangan memilih lagi !");
-          this.checkDisabled = true;
-        } else if(this.selected.length < this.detailData.max){
-          this.checkDisabled = false;
+        if (this.rows.length == this.selected.length){
+          this.allRowsSelected = true;
+        } else {
+          this.allRowsSelected = false;
         }
+        
       }
 
       this.dataService.showLoading(false);
