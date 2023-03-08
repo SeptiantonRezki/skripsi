@@ -198,6 +198,15 @@
                       </mat-radio-button>
                     </mat-radio-group>
                   </div>
+
+                  <div fxLayout="column" *ngIf="permission.lihat_pemilihan_produk || permission.ubah_pemilihan_produk">
+                    <strong>Produk DSD</strong>
+                    <mat-radio-group formControlName="is_product_dsd" class="radio-group" [disabled]="!permission.ubah_pemilihan_produk">
+                      <mat-radio-button class="radio-button" *ngFor="let item of produkDSD" [value]="item.value">
+                        {{item.name}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
                 </div>
 
                 <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
