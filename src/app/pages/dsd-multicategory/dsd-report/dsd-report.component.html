@@ -11,36 +11,31 @@
             <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px"
               fxLayoutGap.lt-md="0px">
 
-
-              <custom-select
-                [newListPeriode]="selectedTabs==0 && selectedChips==2 && listPeriode"
-                [selectedPeriode]="selectedPeriode"
-                (getSelectItem)="getSelectItemHandler($event)"
-                (getSelectDate)="getSelectItemHandler($event)"
-              >
-              </custom-select>
-
-
-
               <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
-                <mat-select placeholder="{{ls.locale.tactical_retail_sales.report_program_code}}" formControlName="programCode">
+                <mat-select placeholder="Nama REE" formControlName="nama_ree">
                   <mat-option value="" selected>All</mat-option>
                   <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field fxFlex="20%" class="datepicker is-light">
-                <input matInput #date_filter [matDatepicker]="date_filter" (focus)="date_filter.open()"
-                  placeholder="{{ls.locale.tactical_retail_sales.report_date}}" formControlName="date_filter">
-                <button mat-button *ngIf="formFilterReport.get('date_filter').value" matSuffix mat-icon-button
-                  aria-label="Clear" (click)="formFilterReport.get('date_filter').setValue('')">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <mat-datepicker-toggle matSuffix [for]="date_filter">
-                  <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
-                </mat-datepicker-toggle>
-                <mat-datepicker #date_filter></mat-datepicker>
+              <mat-form-field fxFlex="20%" class="dropdown is-light form-primary">
+                <mat-select placeholder="Brand" formControlName="brand">
+                  <mat-option value="" selected>All</mat-option>
+                  <mat-option *ngFor="let sp of filter1List" [value]="sp.program_code">{{sp.program_code}}</mat-option>
+                </mat-select>
               </mat-form-field>
+
+              <div fxFlex="30%">
+                <custom-select
+                  [newListPeriode]="selectedTabs==0 && selectedChips==2 && listPeriode"
+                  [selectedPeriode]="selectedPeriode"
+                  (getSelectItem)="getSelectItemHandler($event)"
+                  (getSelectDate)="getSelectItemHandler($event)"
+                >
+                </custom-select>
+              </div>
+
+
 
               <button mat-raised-button type="button" class="confirmation-button" fxFlex="20" style="height: 45px;"
                 (click)="filterReport1()">
@@ -50,7 +45,7 @@
           </form>
 
 
-          <h2 class="pl-16">Single Journey</h2>
+          <h2 class="pl-16">Pesanan per Pelanggan</h2>
           <div class="button-row" fxLayout="row-reverse">
             <button (click)="exportTotal()" mat-raised-button type="button" class="" *ngIf="permission.export">
               <mat-icon>arrow_upward</mat-icon> Export XLSX
@@ -64,11 +59,153 @@
             [externalPaging]="true" [externalSorting]="true" (page)="setTotalSinglePage($event)"
             (sort)="onTotalSingleSort($event)">
 
-            <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_program_code}}" prop="program_code" [width]="200">
+            <ngx-datatable-column name="Kode Pesanan" prop="program_code" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.program_code}}</span>
               </ng-template>
             </ngx-datatable-column>
+            <ngx-datatable-column name="Kode Customer" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nama Toko" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Zone" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Regional" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Area" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Sales Point" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="District" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Territory" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            						
+
+
+
+            <ngx-datatable-column name="Tipe Pelanggan" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Alamat" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nomor Ponsel" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Metode Pengiriman" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Metode Pembayaran" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Tanggal Pesanan Dibuat" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Tanggal Pesanan Dikirim" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Tanggal Status Pesanan Diterima" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Tanggal Pesanan Terakhir Diperbaharui" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status Pesanan" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Pesanan Dibuat Oleh" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Nominal Pemesanan" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nominal Diskon" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nominal Voucher" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nominal Akhir" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="VAT (%)" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nominal VAT" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nominal Akhir + VAT" prop="program_code" [width]="200">
+              <ng-template ngx-datatable-cell-template let-row="row">
+                <span>{{row.program_code}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            
+
+
+
+
             <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.report_journey_date}}" prop="tgl_journey" [width]="200">
               <ng-template ngx-datatable-cell-template let-row="row">
                 <span>{{row.tgl_journey}}</span>
@@ -94,7 +231,7 @@
 
           <hr />
 
-          <h2 class="pl-16">Multiple Journey</h2>
+          <h2 class="pl-16">Pesanan per Produk</h2>
           <ngx-datatable class="material" [rows]="totalMultipleTableData.rows"
             [loadingIndicator]="totalMultipleTableData.loadingIndicator" [columnMode]="'force'"
             [offset]="totalMultipleTableData.offsetPagination" [headerHeight]="48" [footerHeight]="56"

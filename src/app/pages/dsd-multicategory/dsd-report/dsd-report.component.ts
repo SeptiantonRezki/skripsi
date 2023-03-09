@@ -188,7 +188,7 @@ export class DsdReportComponent implements OnInit {
       programCode: new FormControl(),
       date_filter: ""
     });
-    this.formFilterReport.get("date_filter").setValue(new Date());
+    //this.formFilterReport.get("date_filter").setValue(new Date());
 
     this.summaryVisitFilter = this.formBuilder.group({
       group: new FormControl("Daily"),
@@ -331,7 +331,7 @@ export class DsdReportComponent implements OnInit {
   filterReport1(){
     let param = {
       program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
-      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
+      //date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     };
     console.log(param);
 
@@ -386,7 +386,7 @@ export class DsdReportComponent implements OnInit {
       const response = await this.TRSService.exportTotalPerBrand(this.totalSingleTableData.pagination,
         {
           program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
-          date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
+          //date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
         }).toPromise();
       this.downLoadFile(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
       this.dataService.showLoading(false);
@@ -401,7 +401,7 @@ export class DsdReportComponent implements OnInit {
     this.TRSService.totalPerBrand(this.totalSingleTableData.pagination, {
       is_single: true,
       program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
-      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
+      //date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalSingle res', res);
@@ -448,7 +448,7 @@ export class DsdReportComponent implements OnInit {
     this.TRSService.totalPerBrand(this.totalMultipleTableData.pagination, {
       is_single: false,
       program_code: this.formFilterReport.get('programCode').value == null? '': this.formFilterReport.get('programCode').value,
-      date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
+      //date_filter: this.formFilterReport.get('date_filter').value == ''?'':moment(this.formFilterReport.get('date_filter').value).format("YYYYMMDD"),
     }).subscribe(
       async res => {
         console.log('aleapi refreshTotalMultiple res', res);
