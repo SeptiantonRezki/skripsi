@@ -26,6 +26,15 @@
               </mat-form-field>
 
               <mat-form-field fxFlex="100" class="is-light">
+                <input matInput type="email" [placeholder]="ls.locale.global.label.email"
+                  formControlName="email">
+                <mat-error
+                  *ngIf="verticalStepperStep1.controls['email'].hasError('required') && verticalStepperStep1.controls['email'].touched ">
+                  {{ls.locale.global.label.email}}{{ ls.locale.global.messages.mandatory_text }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field fxFlex="100" class="is-light">
                 <input matInput type="text" [placeholder]="ls.locale.global.label.store_address"
                   formControlName="address">
                 <mat-error

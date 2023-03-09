@@ -145,6 +145,12 @@
         <ngx-datatable-column [name]="ls.locale.wholesaler.ws_code" prop="code" summary-template="activeCell">
         </ngx-datatable-column>
 
+        <ngx-datatable-column [minWidth]="200" name="Email" prop="email">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.email ? row.email : '-'}}
+          </ng-template>
+        </ngx-datatable-column>
+
         <!-- TOKO MITRA CABANG -->
         <ngx-datatable-column [name]="ls.locale.wholesaler.text3" prop="is_branch" [sortable]="false">
           <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
