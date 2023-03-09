@@ -237,7 +237,7 @@ export class PagesName {
       "/dsd-multicategory/pengaturan-dsd": "principal.dsdpengaturan.lihat",
       "/dsd-multicategory/dsd-system-variable": "principal.dsdvariable.lihat",
       "/dsd-multicategory/dsd-report": "principal.dsdreport.lihat",
-      
+
       "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
       "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
       "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
@@ -251,6 +251,7 @@ export class PagesName {
       "/user-management/retailer-image-verification/store-photo-types/create": "principal.retailer.submenu.edit_verifikasi_foto",
       "/user-management/retailer-image-verification/store-photo-types/edit/": "principal.retailer.submenu.edit_verifikasi_foto",
       "/user-management/retailer-image-verification/store-photo-types/detail/": "principal.retailer.submenu.edit_verifikasi_foto",
+
     };
     return PAGES[name];
   }
