@@ -3831,5 +3831,14 @@ export const brConfig = {
         name: "Ubah Jenis Foto"
       }
     ]
+  },
+  area_configuration: {
+    index: [
+      {
+        type: "current",
+        url: "",
+        name: "Area Configuration"
+      }
+    ]
   }
 };

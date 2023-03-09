@@ -252,6 +252,7 @@ export class PagesName {
       "/user-management/retailer-image-verification/store-photo-types/edit/": "principal.retailer.submenu.edit_verifikasi_foto",
       "/user-management/retailer-image-verification/store-photo-types/detail/": "principal.retailer.submenu.edit_verifikasi_foto",
 
+      "/control-tower/area-configuration": "principal.areaconfiguration.lihat"
     };
     return PAGES[name];
   }
