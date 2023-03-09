@@ -1,0 +1,88 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="m-0" fxFlex="1 0 auto" fxLayout="row">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <span>{{ls.locale.tactical_retail_sales.proposal_regency_district}}</span>
+      </div>
+    </div>
+    <!-- CLOSE DIALOG BUTTON -->
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close Dialog" [disabled]="uploading">
+      <mat-icon>close</mat-icon>
+    </button>
+    <!-- / CLOSE DIALOG BUTTON -->
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar  style="position: relative;">
+
+    <div fxLayout="row wrap" fxLayout.lt-md="column" class="px-24 pt-16" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+      <mat-form-field fxFlex="30%" class="dropdown is-light form-primary">
+        <mat-select placeholder="{{ls.locale.tactical_retail_sales.proposal_regency}}" formControlName="kabupaten" (selectionChange)="changeKab($event)">
+          <mat-option *ngFor="let sp of kabupatenList" [value]="sp">{{sp}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div fxFlex="20%" class=""></div>
+      <div class="search-field" fxFlex="40%" class="dropdown is-light form-primary">
+        <mat-icon>search</mat-icon>
+        <mat-form-field class="is-light tab-search">
+          <input matInput [placeholder]="ls.locale.global.label.search" (keyup)="updateFilter($event)"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <form autocomplete="off" [formGroup]="formExecutor" class="responsive spesial-kec" style="margin-top: 50px;">
+      <div *ngIf="loaded" style="padding-bottom: 40px;">
+        <ngx-datatable class="material" [rows]="rows" [loadingIndicator]="loadingIndicator" [columnMode]="'force'"
+        [headerHeight]="48" [footerHeight]="56" [rowHeight]="'auto'" [scrollbarH]="true" [externalSorting]="false"
+        [selectAllRowsOnPage]="false" [selected]="selected" [selectionType]="'checkbox'" [rowIdentity]="getId" (select)="onSelect($event)"
+        style="position: unset; display: unset;">
+        <ngx-datatable-column [width]="68" [canAutoResize]="false" [sortable]="false">
+          <ng-template ngx-datatable-header-template>
+          </ng-template>
+
+
+          <ng-template
+            ngx-datatable-cell-template
+            let-row="row"
+            let-value="value"
+            let-isSelected="isSelected"
+            let-onCheckboxChangeFn="onCheckboxChangeFn"
+          >
+            <mat-checkbox [checked]="isSelected" [disabled]="checkDisabled && !isSelected" (change)="onCheckboxChangeFn($event); onCheckboxChange($event, row);"></mat-checkbox>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_regency}}" prop="regency">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.regency}}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ls.locale.tactical_retail_sales.proposal_district}}" prop="district">
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            {{row.district}}
+          </ng-template>
+        </ngx-datatable-column>
+
+      </ngx-datatable>
+      </div>
+    </form>
+
+
+
+
+
+  </div>
+
+  <div class="border-top">
+    <div class="p-16">
+      <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
+        <button type="button" style="margin-right: 20px;background-color:#dc1e2d; color: #fff;" mat-raised-button color="primary" (click)="submit()"
+          [disabled]="rows.length === 0">{{ls.locale.tactical_retail_sales.save}}</button>
+        <button type="button" mat-raised-button color="secondary" (click)="dialogRef.close()"
+          [disabled]="uploading">{{ls.locale.tactical_retail_sales.cancel}}</button>
+      </div>
+    </div>
+  </div>
+</div>

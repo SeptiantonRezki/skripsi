@@ -1,0 +1,142 @@
+<div class="page-layout simple fullwidth" fxLayout="column" fusePerfectScrollbar>
+  <!-- HEADER -->
+  <page-content-header contentTitle="Pengaturan DSD">
+    <div class="button-row" fxLayout="row">
+      <button *ngIf="permission.ubah" style="width: 170px;" mat-raised-button aria-label="Login" type="button"
+        [routerLink]="['/dsd-multicategory','pengaturan-dsd','edit',trs_program_code]">
+        <mat-icon>edit</mat-icon> Ubah
+      </button>
+      <!-- <button style="width: 170px;" mat-raised-button aria-label="Login" type="button" class="is-danger">HAPUS</button> -->
+    </div>
+  </page-content-header>
+  <!-- / HEADER -->
+
+  <div class="content p-24">
+    <div class="ayo-main-wrapper mat-bg-white">
+      <form autocomplete="off" [formGroup]="formCreateProposal">
+        <div fxLayout="row" class="px-24" fxLayoutAlign="space-between center">
+          <h2 class="">Pengaturan DSD</h2>
+        </div>
+
+        <div class="ayo-middle pt-8" fxLayout="column">
+          <div class="mt-8" fxLayout="row wrap" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+            <div fxFlex="45%">
+              <!-- SISI KIRI -->
+
+              <div formArrayName="areas" *ngFor="let wil of formCreateProposal.get('areas')['controls']; let i = index;">
+                <div [formGroupName]="i">
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.area' | translate}}" formControlName="area"
+                        matTooltip="{{getToolTipData(wil.get('area').value, wil.controls['list_area'].value)}}"
+                        (selectionChange)="generataList('salespoint', wil.get('area').value, i, 'selection', $event.source.triggerValue)">
+                        <mat-option *ngFor="let item of wil.controls['list_area'].value" [value]="item.id">
+                          {{item.code}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['area'].hasError('required') && wil.controls['area'].touched">
+                        {{'global.area.area' | translate}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <!--
+                  <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                    <mat-form-field fxFlex="90%" class="is-light form-primary">
+                      <mat-select placeholder="{{'global.area.salespoint' | translate}}" formControlName="salespoint"
+                        matTooltip="{{getToolTipData(wil.get('salespoint').value, wil.controls['list_salespoint'].value)}}"
+                        (selectionChange)="generataList('district', wil.get('salespoint').value, i, 'selection', $event.source.triggerValue)" >
+                        <mat-option *ngFor="let item of wil.controls['list_salespoint'].value" [value]="item.id">
+                          {{item.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="wil.controls['salespoint'].hasError('required') && wil.controls['salespoint'].touched">
+                        {{'global.area.salespoint' | translate}} {{ls.locale.tactical_retail_sales.proposal_must_be_filled}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  -->
+
+                </div>
+              </div>
+
+              <!--
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="executor" 
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_executor}}" disabeld readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary">
+                  <input matInput type="text" formControlName="product"
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_product}}" disabeld readonly>
+                </mat-form-field>
+              </div>
+              -->
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData?.created_by" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_created}}">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData?.created_at" readonly>
+                </mat-form-field>
+              </div>
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly static">
+                  <input matInput type="text" [value]="proposalData?.updated_by" readonly
+                    placeholder="{{ls.locale.tactical_retail_sales.proposal_modified}}">
+                </mat-form-field>
+              </div>
+              <div class="px-24" style="margin-top:0 !important;" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <mat-form-field fxFlex="90%" class="is-light form-primary readonly hung">
+                  <input matInput type="text" [value]="proposalData?.updated_at" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxFlex="45%" class="is-light form-primary">
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <h4>Executor:</h4>
+                    <div *ngIf="executor_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of executor_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 px-24" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px" fxLayoutGap.lt-md="0px">
+                <div fxFlex="90%" class="is-light form-primary">
+                  <div fxLayout="column" class="mb-8">
+                    <h4>Product:</h4>
+                    <div *ngIf="product_selected_array">
+                      <ul class="pl-16 m-0" fxLayout="column" fxLayoutAlign="start start">
+                        <li *ngFor="let item of product_selected_array">
+                          {{ item }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

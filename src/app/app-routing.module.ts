@@ -207,6 +207,11 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'dsd-multicategory',
+    loadChildren: './pages/dsd-multicategory/dsd-multicategory.module#DSDMulticategoryModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'payment-gateway',
     loadChildren: './pages/payment-gateway/payment-gateway.module#PaymentGatewayModule',
     canActivate: [AuthGuard]

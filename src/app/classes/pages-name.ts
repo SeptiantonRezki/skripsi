@@ -234,6 +234,10 @@ export class PagesName {
       "/tactical-retail-sales/trs-system-variable": "principal.trssystemvariable.ubah",
       "/tactical-retail-sales/trs-report": "principal.trsreport.lihat",
 
+      "/dsd-multicategory/pengaturan-dsd": "principal.dsdpengaturan.lihat",
+      "/dsd-multicategory/dsd-system-variable": "principal.dsdvariable.lihat",
+      "/dsd-multicategory/dsd-report": "principal.dsdreport.lihat",
+
       "/content-management/terms-and-condition": "principal.syaratketentuan.lihat",
       "/content-management/terms-and-condition/create": "principal.syaratketentuan.buat",
       "/content-management/terms-and-condition/edit": "principal.syaratketentuan.ubah",
