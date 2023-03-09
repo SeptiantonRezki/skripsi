@@ -8,6 +8,7 @@ import { DialogService } from "../../../../services/dialog.service";
 import { ProductService } from "../../../../services/sku-management/product.service";
 import { commonFormValidator } from "app/classes/commonFormValidator";
 import { MatChipInputEvent, MatSelectChange, MatSelect, MatDialogConfig, MatDialog } from "@angular/material";
+import { PagesName } from "app/classes/pages-name";
 
 import moment from 'moment';
 import { takeUntil } from "rxjs/operators";
@@ -56,6 +57,9 @@ export class ProductCreateComponent {
   dialogRef: any;
   showLoading: Boolean;
 
+  permission: any;
+  roles: PagesName = new PagesName();
+
   keyUp = new Subject<string>();
   statusProduk: any[] = [
     { name: this.translate.instant('global.label.active'), status: "active" },
@@ -79,6 +83,11 @@ export class ProductCreateComponent {
   statusUPC: any[] = [
     { name: this.translate.instant('global.label.yes'), status: 1 },
     { name: this.translate.instant('global.label.no'), status: 0 }
+  ];
+
+  produkDSD: any[] = [
+    { name: this.translate.instant('global.label.yes'), value: 1 },
+    { name: this.translate.instant('global.label.no'), value: 0 }
   ];
 
   filteredSkuOptions: Observable<string[]>;
@@ -127,6 +136,8 @@ export class ProductCreateComponent {
     this.filteredBrand.next(this.listBrand.slice());
     this.filteredSubCategory.next(this.listSubCategory.slice());
 
+    this.permission = this.roles.getRoles('principal.pengaturandsd');
+    
     this.formProductErrors = {
       name: {},
       // alias: [],
@@ -281,6 +292,7 @@ export class ProductCreateComponent {
       upc: [0, Validators.required],
       description: [""],
       product_desc: [""],
+      is_product_dsd: [false],
     });
   }
 
@@ -687,6 +699,7 @@ export class ProductCreateComponent {
           barcode: this.formProductGroup.get("barcode").value,
           packaging_id: this.formProductGroup.get("packaging").value,
           status: this.formProductGroup.get("status").value,
+          is_product_dsd: this.formProductGroup.get("is_product_dsd").value === true ? "1" : "0",
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
@@ -710,6 +723,7 @@ export class ProductCreateComponent {
         // fd.append("sub_category_id", body.sub_category_id);
         fd.append("packaging_id", body.packaging_id);
         fd.append("status", body.status);
+        fd.append("is_product_dsd", body.is_product_dsd);
         fd.append("is_promo_src", body.is_promo_src);
         fd.append("priority_product", body.priority_product);
         fd.append("upc", body.upc);

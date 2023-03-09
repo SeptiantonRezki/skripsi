@@ -33,6 +33,7 @@ import { ngfModule } from "angular-file";
 import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
 import { TranslateModule } from "@ngx-translate/core";
 import { SelectDateDropdownComponent } from './select-date-dropdown/select-date-dropdown.component';
+import { CustomSelectComponent } from './custom-select/custom-select.component';
 // import { SearchProductBarcodeComponent } from './search-product-barcode/search-product-barcode.component';
 
 @NgModule({
@@ -51,6 +52,7 @@ import { SelectDateDropdownComponent } from './select-date-dropdown/select-date-
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     ngfModule,
+    MatDatepickerModule,
     // MatAutocompleteModule,
     TranslateModule.forChild(),
     MatDatepickerModule,
@@ -68,6 +70,7 @@ import { SelectDateDropdownComponent } from './select-date-dropdown/select-date-
     SearchProductBarcodeComponent,
     ImportAudienceComponent,
     SelectDateDropdownComponent,
+    CustomSelectComponent,
     // SearchProductBarcodeComponent,
   ],
   exports: [
@@ -82,6 +85,7 @@ import { SelectDateDropdownComponent } from './select-date-dropdown/select-date-
     SearchProductBarcodeComponent,
     ImportAudienceComponent,
     SelectDateDropdownComponent,
+    CustomSelectComponent,
     // SearchProductBarcodeComponent
   ],
   entryComponents: [

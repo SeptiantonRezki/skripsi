@@ -1,0 +1,337 @@
+import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { DialogService } from 'app/services/dialog.service';
+import { AudienceService } from 'app/services/dte/audience.service';
+import { DataService } from 'app/services/data.service';
+import { Page } from 'app/classes/laravel-pagination';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { Subject, forkJoin } from 'rxjs';
+import { PagesName } from 'app/classes/pages-name';
+import { IdbService } from 'app/services/idb.service';
+import { DSDMulticategoryService } from "app/services/dsd-multicategory.service";
+import { LanguagesService } from 'app/services/languages/languages.service';
+import { TranslateService } from '@ngx-translate/core';
+
+@Component({
+  templateUrl: './pengaturan-dsd-executor.component.html',
+  styleUrls: ['./pengaturan-dsd-executor.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class PengaturanDsdExecutorComponent {
+
+  formExecutor: FormGroup;
+  formFilter: FormGroup;
+
+  loaded: Boolean;
+  loadingIndicator = false;
+  reorderable = true;
+  onLoad: boolean;
+
+  rows: any[] = [];
+  temp: any[] = [];
+
+  allRowsSelected: boolean;
+  isSelected: boolean;
+
+  selected: any[];
+  AllIDs: any[];
+  selected_userid: any[];
+  detailData: any;
+
+  selectedMitra: any[] = [];
+  profile: any;
+
+  previewData: any = {
+    is_valid: 0,
+    preview_id: null,
+    preview_task_id: null,
+    total_selected: 0,
+  };
+
+  totalData: number = 0;
+  checkDisabled: boolean = false;
+
+  disabled_exec: any;
+
+  salespointList: any[];
+  districtList: any[];
+  territoryList: any[];
+  statusList: any[] = [
+    { name: 'Semua', value: '' }, 
+    { name: 'Dapat diassign di TRS program ini', value: 'bisa' },
+    { name: 'Sudah diassign di TRS program ini', value: 'sedang' },
+    { name: 'Sudah diassign di TRS program lain', value: 'lain' },
+  ];
+
+  filterSalespoint: any = "";
+  filterDistrict: any = "";
+  filterTerritory: any = "";
+  filterStatus: any = "";
+  filterSearch: any = "";
+
+  multiSales: boolean = true;
+
+  @ViewChild('table') table: DatatableComponent;
+
+  constructor(
+    public dialogRef: MatDialogRef<PengaturanDsdExecutorComponent>,
+    public dialog: MatDialog,
+    private dialogService: DialogService,
+    private formBuilder: FormBuilder,
+    private audienceService: AudienceService,
+    private dataService: DataService,
+    private TRSService: DSDMulticategoryService,
+    private idbService: IdbService,
+    private ls: LanguagesService,
+    @Inject(MAT_DIALOG_DATA) data: any,
+    private translate: TranslateService,
+  ) {
+    this.selected = [];
+    this.detailData = data;
+    this.profile = null;
+    this.dataService.showLoading(false);
+    this.disabled_exec = [];
+    this.allRowsSelected = false;
+
+    console.log(this.detailData.area);
+  }
+
+  ngOnInit() {
+    this.formExecutor = this.formBuilder.group({
+    });
+
+    this.aturPanelMitra();
+  }
+
+  getId(row) {
+    return row.id;
+  }
+
+  onSelect({ selected }) {
+    // console.log(arguments);
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+
+    this.disabled_exec = this.selected.map(a => a.idUser);
+
+    if (this.rows.length == this.selected.length){
+      this.allRowsSelected = true;
+    } else {
+      this.allRowsSelected = false;
+    }
+    /*
+    let execid = this.selected['id'];
+    let userid = execid.split('_');
+    selected_userid.push()
+    */
+  }
+
+  selectFn(allRowsSelected: boolean) {
+    // console.log('allRowsSelected_', allRowsSelected);
+    this.allRowsSelected = allRowsSelected;
+    if (!allRowsSelected){
+      this.selected = [];
+
+      /*
+      let forDeletion = this.rows;
+      this.selected = this.selected.filter(item => !this.rows.includes(item));
+      */
+    } 
+    else {
+      this.selected = [];
+      /*
+      // INI UNTUK SEMUA, FILTER GAK NGEFEK
+      for (let index = 0; index < this.AllIDs.length; index++) {
+        this.selected.push(this.AllIDs[index]);
+      }
+      */
+      for (let index = 0; index < this.rows.length; index++) {
+        this.selected.push(this.rows[index]);
+      }
+      ;
+    }
+  }
+
+  onCheckboxChange(event: any, row: any) {
+    /*
+    if (event) {
+      const temp = [...this.selected];
+      const selectedItem = { ...this.selected.filter((s: any) => s.id === row.id)[0] };
+      const indexFind = this.selected.findIndex((i: any) => i.id === row.id);
+      selectedItem['isHub'] = event.checked;
+      if (indexFind !== -1) {
+        temp[indexFind] = selectedItem;
+        this.selected = temp;
+      }
+    }
+    */
+    if(this.selected.length >= this.detailData.max){
+      //alert("jumlah executor sudah sesuai, jangan memilih lagi !");
+      this.checkDisabled = true;
+    } else if(this.selected.length < this.detailData.max){
+      this.checkDisabled = false;
+    }
+  }
+
+  submit() {
+    if (this.selected.length > 0) {
+      this.dialogRef.close(this.selected);
+    } else {
+      this.dialogService.openSnackBar({ message: "Minimal pilih 1 Executor !" }); // TODO
+    }
+  }
+
+  updateFilter(event) {
+    console.log("keyup");
+    const val = event.target.value.toLowerCase();
+    this.filterSearch = val;
+
+    this.updateTable();
+  }
+
+  changeSales(e: any) {
+    this.allRowsSelected = false;
+    this.filterSalespoint = e.value.toLowerCase();
+    this.updateTable();
+
+    if (this.multiSales){
+      this.filterDistrict =  '';
+      this.filterTerritory =  '';
+
+      this.districtList = [];
+      this.districtList = this.rows.map(a => a.district.trim());
+
+      console.log("districtList");
+      console.log(this.districtList);
+      console.log(this.rows);
+
+      this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
+      this.territoryList = [];
+    }
+  }
+
+  changeDistrict(e: any) {
+    this.allRowsSelected = false;
+    this.filterDistrict =  e.value.toLowerCase();
+    this.updateTable();
+
+    this.filterTerritory =  '';
+    this.territoryList = [];
+    this.territoryList = this.rows.map(a => a.territory.trim());
+    this.territoryList = (["-"]).concat(this.territoryList.filter((x, i, a) => a.indexOf(x) == i));
+  }
+
+  changeTerritory(e: any) {
+    this.filterTerritory =  e.value.toLowerCase();
+    this.updateTable();
+  }
+
+  updateTable(){
+    //filterSalespoint: any = "";
+    //filterDistrict: any = "";
+    //filterStatus: any = "";
+    //filterSearch: any = "";
+    let temp = this.temp;
+
+    if (this.filterSalespoint != "" && this.filterSalespoint != "-"){
+      const val = this.filterSalespoint;
+      temp = temp.filter(function (d) {
+        return d.salespoint.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterDistrict != "" && this.filterDistrict != "-"){
+      const val = this.filterDistrict;
+      temp = temp.filter(function (d) {
+        return d.district.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterTerritory != "" && this.filterTerritory != "-"){
+      const val = this.filterTerritory;
+      temp = temp.filter(function (d) {
+        return d.territory.toLowerCase().indexOf(val) !== -1;
+      });
+    }
+
+    if (this.filterStatus != ""){
+      temp = temp.filter(function (d) {
+        return d.status.toLowerCase().indexOf(this.filterStatus) !== -1;
+      });
+    }
+
+    if (this.filterSearch != ""){
+      const val = this.filterSearch;
+      temp = temp.filter(function (d) {
+        return d.fullname.toLowerCase().indexOf(val) !== -1 ||
+               d.username.toLowerCase().indexOf(val) !== -1 ||
+               d.salespoint.toLowerCase().indexOf(val) !== -1 ||
+               d.district.toLowerCase().indexOf(val) !== -1 ||
+               d.territory.toLowerCase().indexOf(val) !== -1 || 
+               !val;
+      });
+    }
+
+    // update the rows
+    this.rows = temp;
+  }
+
+  aturPanelMitra() {
+    this.selectedMitra = [];
+    //this.onSelect({ selected: [] });
+
+    this.dataService.showLoading(true);
+
+    let request = {
+      level: 6,
+      area_id: this.detailData.area,
+      program_code: this.detailData.program_code,
+      start_date: this.detailData.start_date,
+      end_date: this.detailData.end_date,
+    };
+
+    this.TRSService.getExecutor(request).subscribe(res => {
+      this.loaded = true;
+      this.rows = res.data;
+      this.AllIDs = res.data;
+      this.temp = [...res.data];
+      this.salespointList = this.rows.map(a => a.salespoint.trim());
+      this.salespointList = (["-"]).concat(this.salespointList.filter((x, i, a) => a.indexOf(x) == i));
+
+      /*
+      if (this.salespointList.length == 1){
+        this.multiSales = false;
+      } else if (this.salespointList.length > 1){
+        
+      }
+      */
+      this.multiSales = true;
+
+      if (this.detailData.selected != ""){
+        let IDselected = (this.detailData.selected).split('__');
+
+        for (let index = 0; index < this.rows.length; index++) {
+          if (IDselected.includes(this.rows[index].id)){
+            this.selected.push(this.rows[index]);
+          }
+        }
+
+        this.disabled_exec = this.selected.map(a => a.idUser);
+
+        if (this.rows.length == this.selected.length){
+          this.allRowsSelected = true;
+        } else {
+          this.allRowsSelected = false;
+        }
+        
+      }
+
+      this.dataService.showLoading(false);
+
+    }, err => {
+      console.log('err occured', err);
+      this.dataService.showLoading(false);
+    })
+  }
+}

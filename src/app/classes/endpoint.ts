@@ -1264,6 +1264,42 @@ export class Endpoint {
         report_filter_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_2`,
         report_filter_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/tactical-retail-sales/report_filter_3`,
       },
+      dsd_multicategory: {
+        sysvar: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/sysvar`,
+        proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/proposal`,
+        proposal_detail: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/proposal/${context.id}`,
+        cancel_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/cancel_proposal/${context.id}`,
+        customer_name: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/getcustname/${context.id}`,
+
+        list_executor: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/list_executor`,
+        list_kecamatan: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/list_kecamatan`,
+        list_product: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/list_product`,
+        master_reason: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/master_reason`,
+
+        list_area: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/list_area`,
+        list_area_by_user: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/list_area_by_user`,
+
+        export_proposal: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/proposal_export/data?area=${context.area_id}`,
+        export_proposal_new: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/proposal_export/list`,
+
+        proposal_summary: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/proposal_summary/${context.id}`,
+
+        total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/total-per-brand`,
+        summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/summary-visit`,
+        weekly_summary_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/weekly-summary-visit`,
+        detail_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/detail-visit`,
+        stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/stock-movement`,
+        stock_movement_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/stock-movement-2`,
+        stock_movement_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/stock-movement-3`,
+
+        export_total_per_brand: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/export-total-per-brand`,
+        export_visit: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/export-visit`,
+        export_stock_movement: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/export-stock-movement`,
+
+        report_filter_1: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/report_filter_1`,
+        report_filter_2: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/report_filter_2`,
+        report_filter_3: `${AYO_API_SERVICE(SERVER.business)}/api/v2/business/principal/dsd-multicategory/report_filter_3`,
+      },
       keyword: {
         get: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited`,
         put: `${AYO_API_SERVICE(SERVER.product)}/api/v1/product/principal/prohibited/${context.id}`,

@@ -1,0 +1,132 @@
+.custom-select {
+    position: relative;
+    .custom-select__background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        display: none;
+    }
+    .custom-select__background--active {
+        display: block;
+    }
+    .custom-select__input {
+        height: 50px;
+        border-radius: 10px;
+        border: 1px solid #DDDDDD;
+        padding: 0 20px 0 25px;
+        position: relative;
+        width: 428px;
+        overflow: hidden;
+        z-index: 2;
+        .custom-select__input-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #AAAAAA;
+            font-size: 16px;
+        }
+    }
+    .custom-select__panel {
+        min-height: 70px;
+        min-width: 544px;
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        top: 60px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+        .custom-select__panel-content {
+            position: relative;
+            min-height: 70px;
+            .custom-select__panel-content-line {
+                border-top: 1px solid #DDDDDD;
+                position: absolute;
+                top: 0;
+                left: 25px;
+                right: 25px;
+            }
+            button {
+                width: 100%;
+                min-height: 70px;
+                padding: 0 25px;
+                .custom-select__panel-content-inner {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .custom-select__panel-content-inner__text {
+                        text-align: left;
+                        line-height: normal;
+                        .custom-select__panel-content-inner__text-top {
+                            color: #666666;
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+                        .custom-select__panel-content-inner__text-bottom {
+                            color: #AAAAAA;
+                            margin-top: 3px;
+                        }
+                    }
+                    .custom-select__panel-content-inner__toggle {
+                        height: 24px;
+                        width: 24px;
+                        border-radius: 50%;
+                        border: 1px solid #AAAAAA;
+                        position: relative;
+                        &--active::after {
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%,-50%);
+                            border-radius: 50%;
+                            height: 16px;
+                            width: 16px;
+                            background: linear-gradient(180deg, #D4302F 0%, #EA7979 100%);
+                        }
+                    }
+                }
+            }
+        }
+        .custom-select__panel-content-footer {
+            min-height: 70px;
+            padding: 0 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .custom-select__panel-content-footer__datepicker {
+                .custom-select__panel-content-footer__datepicker-inner {
+                    position: relative;
+                    width: fit-content;
+                    input {
+                     border: 1px solid #DDDDDD;
+                     border-radius: 10px;
+                     padding: 15px 35px 15px 25px;
+                     width: 228px;
+                    }
+                    img {
+                     position: absolute;
+                     right: 16px;
+                     top: 50%;
+                     transform: translateY(-50%);
+                     cursor: pointer;
+                    }
+                } 
+            }
+            .custom-select__panel-content-footer__hypen {
+                border-top: 1px solid #AAAAAA;
+                width: 9px;
+            }
+        }
+    }
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar .mat-calendar-content .mat-calendar-body .mat-calendar-body-label {
+    display: none;
+}
