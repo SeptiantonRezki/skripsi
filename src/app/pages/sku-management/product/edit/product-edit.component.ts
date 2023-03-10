@@ -1176,8 +1176,7 @@ export class ProductEditComponent {
           upc: this.formProductGroup.get("upc").value,
           description: (this.formProductGroup.get("description").value === null || this.formProductGroup.get("description").value === 'null')? "" : this.formProductGroup.get("description").value,
           product_desc: (this.formProductGroup.get("product_desc").value === null || this.formProductGroup.get("product_desc").value === 'null')? "" : this.formProductGroup.get("product_desc").value,
-          //sorry to comment it, this line causing error
-          //product_conversion_rule: (this.formProductGroup.get("product_conversion_rule").value === null || this.formProductGroup.get("product_conversion_rule").value === 'null')? "" : this.formProductGroup.get("product_conversion_rule").value,
+          product_conversion_rule: (this.formProductGroup.get("product_conversion_rule").value === null || this.formProductGroup.get("product_conversion_rule").value === 'null')? "" : this.formProductGroup.get("product_conversion_rule").value,
         };
 
         let fd = new FormData();
@@ -1187,8 +1186,7 @@ export class ProductEditComponent {
         fd.append("upc", body.upc);
         fd.append("description", body.description);
         fd.append("product_desc", body.product_desc);
-        //sorry to comment it, this line causing error
-          //fd.append("product_conversion_rule", body.product_conversion_rule);
+        fd.append("product_conversion_rule", body.product_conversion_rule);
 
         if (body.barcode) fd.append("barcode", body.barcode);
 
