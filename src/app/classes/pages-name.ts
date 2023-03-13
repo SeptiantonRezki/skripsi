@@ -300,6 +300,13 @@ export class PagesName {
     if (name.indexOf("src_katalog_coin") > -1) {
       roles['approval'] = filterPermission.filter(item => item.indexOf('approval') >= 0)[0]
     }
+
+    //["principal.pengaturandsd.lihat_pemilihan_produk","principal.pengaturandsd.ubah_pemilihan_produk"]
+    if (name.indexOf("pengaturandsd") >= 0) {
+      roles["lihat_pemilihan_produk"] = filterPermission.filter((item) => item.indexOf("lihat_pemilihan_produk") >= 0)[0];
+      roles["ubah_pemilihan_produk"] = filterPermission.filter((item) => item.indexOf("ubah_pemilihan_produk") >= 0)[0];
+    }
+
     const submenus = filterPermission.filter(item => item.indexOf('submenu') >= 0);
     if (Array.isArray(submenus)) {
       submenus.map((value) => {
