@@ -155,6 +155,8 @@ export class ProductEditComponent {
     this.filteredCategory.next(this.listCategory.slice());
 
     this.permission = this.roles.getRoles('principal.pengaturandsd');
+
+    console.log(this.permission);
     
     this.formProductErrors = {
       name: {},
@@ -271,13 +273,14 @@ export class ProductEditComponent {
         this.formProductGroup.get("brand").setValue(res.data.brand_id);
         this.formProductGroup.get("packaging").setValue(res.data.packaging_id);
         this.formProductGroup.get("status").setValue(res.data.status);
-        this.formProductGroup.get("is_product_dsd").setValue(res.data.is_product_dsd === 1 ? true : false);
+        this.formProductGroup.get("is_product_dsd").setValue(res.data.is_product_dsd);
         this.formProductGroup.get("upc").setValue(res.data.upc);
         this.formProductGroup.get("priority_product").setValue(res.data.priority_product);
         this.formProductGroup.get("is_promo_src").setValue(res.data.is_promo_src === 1 ? true : false);
         this.formProductGroup.get("is_paylater").setValue(res.data.is_paylater === 1 ? true : false);
         this.formProductGroup.get("description").setValue(res.data.description);
         this.formProductGroup.get("product_desc").setValue(res.data.product_desc);
+        this.formProductGroup.get("product_conversion_rule").setValue(res.data.product_conversion_rule);
         if (res && res.data.status_pin_up) {
           this.formProductGroup.get('status_pin_up').setValue(res.data.status_pin_up);
           if (res.data.start_date_pin_up) this.formProductGroup.get('start_date_pin_up').setValue(new Date(res.data.start_date_pin_up));
@@ -459,6 +462,7 @@ export class ProductEditComponent {
           this.formProductGroup.disable();
           this.formProductGroup.get("subCategory").enable();
           this.formProductGroup.get("category").enable();
+          this.formProductGroup.get("upc").enable();
         }
       })
     } catch (ex) {
@@ -1037,7 +1041,8 @@ export class ProductEditComponent {
       upc: [0, Validators.required],
       description: [""],
       product_desc: [""],
-      is_product_dsd: [false],
+      product_conversion_rule: [""],
+      is_product_dsd: ["0"],
     });
   }
 
@@ -1169,7 +1174,7 @@ export class ProductEditComponent {
           barcode: this.formProductGroup.get("barcode").value,
           packaging_id: this.formProductGroup.get("packaging").value,
           status: this.formProductGroup.get("status").value,
-          is_product_dsd: this.formProductGroup.get("is_product_dsd").value === true ? "1" : "0",
+          is_product_dsd: this.formProductGroup.get("is_product_dsd").value,
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
@@ -1273,6 +1278,8 @@ export class ProductEditComponent {
               });
             }
 
+
+
             product.listProdukPrivateLabel.map((itemPL, index) => {
               listProdukPrivateLabel.push({
                 packaging: itemPL.packaging,
@@ -1297,6 +1304,25 @@ export class ProductEditComponent {
               fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
               fd.append(`product_prices[${listProdukPrivateLabel.length === 1 ? 0 : listProdukPrivateLabel.length + 1}][price_type]`, itemPL.tipe);
             });
+
+            if (body.is_product_dsd == "1" && listProdukPrivateLabel.length == 0){
+              alert("Harga kanvas harus ada karena produk DSD");
+              return;
+            } else if (body.is_product_dsd == "1" && listProdukPrivateLabel.length > 0){
+              let jumlah_kanvas = 0;
+              let list_type = listProdukPrivateLabel.map(item => item.tipe);
+
+              (listProdukPrivateLabel.map(item => item.tipe)).forEach(function (tipe) {
+                if (tipe == "Kanvas"){
+                  jumlah_kanvas++;
+                }
+              });
+
+              if (jumlah_kanvas < 1){
+                alert("Harga kanvas harus ada karena produk DSD");
+                return;
+              }
+            } 
 
             if (listProdukPrivateLabel.length > 0) {
               let primaryNamePackaging = this.findDuplicate(listProdukPrivateLabel.map(item => item.packaging.toLowerCase()));
