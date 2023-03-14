@@ -193,33 +193,36 @@ export class PengaturanDsdExecutorComponent {
   changeSales(e: any) {
     this.allRowsSelected = false;
     this.filterSalespoint = e.value.toLowerCase();
-    this.updateTable();
-
+    
     if (this.multiSales){
       this.filterDistrict =  '';
       this.filterTerritory =  '';
 
+      this.updateTable();
+
       this.districtList = [];
       this.districtList = this.rows.map(a => a.district.trim());
-
-      console.log("districtList");
-      console.log(this.districtList);
-      console.log(this.rows);
-
       this.districtList = (["-"]).concat(this.districtList.filter((x, i, a) => a.indexOf(x) == i));
+      
       this.territoryList = [];
     }
+
+
   }
 
   changeDistrict(e: any) {
     this.allRowsSelected = false;
     this.filterDistrict =  e.value.toLowerCase();
-    this.updateTable();
-
+    
     this.filterTerritory =  '';
     this.territoryList = [];
+
+    this.updateTable();
+
     this.territoryList = this.rows.map(a => a.territory.trim());
     this.territoryList = (["-"]).concat(this.territoryList.filter((x, i, a) => a.indexOf(x) == i));
+
+
   }
 
   changeTerritory(e: any) {

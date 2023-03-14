@@ -436,6 +436,17 @@ export class PengaturanDsdComponent implements OnInit {
         this.TRSService.getProposalDetail(this.trs_program_code).subscribe(resProposal => {
 
           if (resProposal.status == 'empty'){
+
+            this.proposalData = undefined;
+      
+            this.selectedArea = 0;
+      
+            this.selectedExecutor = [];
+            this.selectedProduct = [];
+        
+            this.executor_selected_array = [];
+            this.product_selected_array = [];
+
             alert("belum ada data tersimpan untuk area ini");
             this.dataService.showLoading(false);
             
