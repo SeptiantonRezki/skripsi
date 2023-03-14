@@ -60,8 +60,10 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column name="Harga" prop="code">
-          <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-            {{row.price}}
+          <ng-template ngx-datatable-cell-template let-row="row" let-value="value"  style="justify-content: center !important">
+            <div style="float: right;width: 100px;text-align: right;">
+              {{row.price | rupiahFormater}}
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
