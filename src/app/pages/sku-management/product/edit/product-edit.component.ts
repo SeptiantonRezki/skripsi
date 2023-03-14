@@ -1260,6 +1260,8 @@ export class ProductEditComponent {
           let _areas = [];
           let areas = [];
 
+          let is_error = false;
+
           productAreas.map((product, idx) => {
             let obj = Object.entries(product).map(([key, value]) => ({ key, value }))
             for (const val of this.typeArea) {
@@ -1277,8 +1279,6 @@ export class ProductEditComponent {
                 })
               });
             }
-
-
 
             product.listProdukPrivateLabel.map((itemPL, index) => {
               listProdukPrivateLabel.push({
@@ -1307,6 +1307,7 @@ export class ProductEditComponent {
 
             if (body.is_product_dsd == "1" && listProdukPrivateLabel.length == 0){
               alert("Harga kanvas harus ada karena produk DSD");
+              is_error = true;
               return;
             } else if (body.is_product_dsd == "1" && listProdukPrivateLabel.length > 0){
               let jumlah_kanvas = 0;
@@ -1320,6 +1321,7 @@ export class ProductEditComponent {
 
               if (jumlah_kanvas < 1){
                 alert("Harga kanvas harus ada karena produk DSD");
+                is_error = true;
                 return;
               }
             } 
@@ -1329,15 +1331,18 @@ export class ProductEditComponent {
               if (primaryNamePackaging.length > 0) {
                 this.dialogService.openSnackBar({ message: `Terdapat nama kemasan yang sama "${primaryNamePackaging}", nama kemasan tidak boleh sama!` });
                 this.loadingIndicator = false;
-
                 return;
               }
             } else {
               this.dialogService.openSnackBar({ message: `Kemasan dan Harga Produk belum ditambahkan` });
-
               return;
             }
-          })
+          });
+
+          if(is_error){
+            return;
+          }
+
           const rates = this.formProductGroup.get('special_rate')['controls']['rates'].getRawValue();
 
 

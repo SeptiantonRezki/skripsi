@@ -292,7 +292,8 @@ export class ProductCreateComponent {
       upc: [0, Validators.required],
       description: [""],
       product_desc: [""],
-      is_product_dsd: [false],
+      product_conversion_rule: [""],
+      is_product_dsd: ["0"],
     });
   }
 
@@ -699,13 +700,14 @@ export class ProductCreateComponent {
           barcode: this.formProductGroup.get("barcode").value,
           packaging_id: this.formProductGroup.get("packaging").value,
           status: this.formProductGroup.get("status").value,
-          is_product_dsd: this.formProductGroup.get("is_product_dsd").value === true ? "1" : "0",
+          is_product_dsd: this.formProductGroup.get("is_product_dsd").value,
           is_promo_src: this.formProductGroup.get("is_promo_src").value === true ? "1" : "0",
           is_private_label: this.formProductGroup.get("is_private_label").value === true ? "1" : "0",
           is_paylater: this.formProductGroup.get("is_paylater").value === true ? "1" : "0",
           upc: this.formProductGroup.get("upc").value,
-          description: this.formProductGroup.get("description").value,
-          product_desc: this.formProductGroup.get("product_desc").value,
+          description: (this.formProductGroup.get("description").value === null || this.formProductGroup.get("description").value === 'null')? "" : this.formProductGroup.get("description").value,
+          product_desc: (this.formProductGroup.get("product_desc").value === null || this.formProductGroup.get("product_desc").value === 'null')? "" : this.formProductGroup.get("product_desc").value,
+          product_conversion_rule: (this.formProductGroup.get("product_conversion_rule").value === null || this.formProductGroup.get("product_conversion_rule").value === 'null')? "" : this.formProductGroup.get("product_conversion_rule").value,
           // is_promo_src: this.formProductGroup.get("jenisproduk").value == "promo_src" ? "1" : "0",
           // is_private_label: this.formProductGroup.get("jenisproduk").value == "private_label" ? "1" : "0",
 
@@ -729,6 +731,7 @@ export class ProductCreateComponent {
         fd.append("upc", body.upc);
         fd.append("description", body.description);
         fd.append("product_desc", body.product_desc);
+        fd.append("product_conversion_rule", body.product_conversion_rule);
 
         if (this.formProductGroup.get('status_pin_up').value && this.formProductGroup.get('status_pin_up').value == 1) {
           fd.append('status_pin_up', this.formProductGroup.get('status_pin_up').value);
@@ -762,6 +765,8 @@ export class ProductCreateComponent {
           });
         }
         let grandIndex = 0;
+        let is_error = false;
+        let ada_kanvas = false;
         areas.map((areaItem, i) => {
           if (body.is_private_label == "1") {
             let listProdukPrivateLabel = [];
@@ -791,8 +796,33 @@ export class ProductCreateComponent {
 
               fd.append(`product_prices[${grandIndex}][price_discount_expires_at]`, itemPL.price_discount_expires_at ? itemPL.price_discount_expires_at : "");
               fd.append(`product_prices[${grandIndex}][price_type]`, itemPL.tipe);
+
+              if (itemPL.tipe == "Kanvas"){
+                ada_kanvas = true;
+              }
             });
 
+            if (body.is_product_dsd == "1" && listProdukPrivateLabel.length == 0){
+              alert("Harga kanvas harus ada karena produk DSD");
+              is_error = true;
+              return;
+            } else if (body.is_product_dsd == "1" && listProdukPrivateLabel.length > 0){
+              let jumlah_kanvas = 0;
+              let list_type = listProdukPrivateLabel.map(item => item.tipe);
+
+              (listProdukPrivateLabel.map(item => item.tipe)).forEach(function (tipe) {
+                if (tipe == "Kanvas"){
+                  jumlah_kanvas++;
+                }
+              });
+
+              if (jumlah_kanvas < 1){
+                alert("Harga kanvas harus ada karena produk DSD");
+                is_error = true;
+                return;
+              }
+            } 
+            
             if (listProdukPrivateLabel.length > 0) {
               // listProdukPrivateLabel.map((item, index) => {
 
@@ -816,7 +846,11 @@ export class ProductCreateComponent {
             fd.append(`areas[${i}][start_date]`, moment(value.areas[i].start_date).format("YYYY-MM-DD"));
             fd.append(`areas[${i}][end_date]`, moment(value.areas[i].end_date).format("YYYY-MM-DD"));
           }
-        })
+        });
+
+        if(is_error){
+          return;
+        }
 
         body.alias.map(item => {
           fd.append("alias[]", item);
