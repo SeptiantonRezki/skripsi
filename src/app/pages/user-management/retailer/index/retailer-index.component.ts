@@ -92,7 +92,8 @@ export class RetailerIndexComponent {
     { name: 'IMO', value: 'IMO' },
     { name: 'LAMP/HOP', value: 'LAMP/HOP' },
     { name: 'GT', value: 'GT' },
-    { name: 'KA', value: 'KA' }
+    { name: 'KA', value: 'KA' },
+    { name: 'RRP', value: 'RRP' },
   ];
 
   gsr: FormControl = new FormControl('');
