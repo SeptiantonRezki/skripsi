@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input, EventEmitter } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { LanguagesService } from 'app/services/languages/languages.service';
 import { Router } from '@angular/router';
 import { Page } from 'app/classes/laravel-pagination';
 import { Subject, Observable } from 'rxjs';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import {map, startWith, debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
 import { DataService } from 'app/services/data.service';
 import { PagesName } from 'app/classes/pages-name';
@@ -12,6 +12,8 @@ import { DialogService } from 'app/services/dialog.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PojokUntungPartnersRegisteredService } from 'app/services/pojok-untung/pojok-untung-partners-registered.service';
 import { PojokUntungPartnersListService } from 'app/services/pojok-untung/pojok-untung-partners-list.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { PojokUntungPartnersRegisteredImportDialogComponent } from '../pojok-untung-partners-registered-import-dialog/pojok-untung-partners-registered-import-dialog.component';
 
 @Component({
   selector: 'app-pojok-untung-partners-registered',
@@ -31,6 +33,7 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   defaultPartnerType: any[] = [{ id: -9, label: "Semua Jenis Partner" }];
   defaultPartnerId: any[] = [{ id: '', partner_name: "Semua Partner" }];
   defaultStatus: any[] = [{ id: '', label: "Semua Status" }];
+  formImportRegistered: FormGroup;
 
   keyUp = new Subject<string>();
 
@@ -47,6 +50,13 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
   permission: any;
   roles: PagesName = new PagesName();
 
+  selected: any[] = [];
+  dialogRef: any;
+  onRowsSelected = new EventEmitter<any>();
+  dataType: any;
+  loaded: Boolean;
+
+
   constructor(
     private ls: LanguagesService,
     private router: Router,
@@ -54,24 +64,25 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     private dataService: DataService,
     private dialogService: DialogService,
     private PojokUntungPartnersRegisteredService: PojokUntungPartnersRegisteredService,
-    private PojokUntungPartnersListService: PojokUntungPartnersListService
-    ) { 
-      this.permission = this.roles.getRoles('principal.pojokuntung_registered_partner');
-      const observable = this.keyUp.debounceTime(1000)
-      .distinctUntilChanged()
-      .flatMap(search => {
-        return Observable.of(search).delay(500);
-      })
-      .subscribe(data => {
-        this.updateFilter('search', data);
-      });
-    
-      this.formFilter = this.formBuilder.group({
-        partner_type: '',
-        partner_id: '',
-        status: ''
-      });
-    }
+    private PojokUntungPartnersListService: PojokUntungPartnersListService,
+    private dialog: MatDialog,
+  ) { 
+    this.permission = this.roles.getRoles('principal.pojokuntung_registered_partner');
+    const observable = this.keyUp.debounceTime(1000)
+    .distinctUntilChanged()
+    .flatMap(search => {
+      return Observable.of(search).delay(500);
+    })
+    .subscribe(data => {
+      this.updateFilter('search', data);
+    });
+  
+    this.formFilter = this.formBuilder.group({
+      partner_type: '',
+      partner_id: '',
+      status: ''
+    });
+  }
 
   ngOnInit() {
     this.initFormFilter();
@@ -79,6 +90,15 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     this.getPartnerIdList();
     this.getStatusList();
     this.getList(true);
+    // this.initImportRegistered();
+
+    // this.formImportRegistered.get('partner_id')
+    //   .valueChanges
+    //   .subscribe(res => {
+    //     if (res && this.loaded) {
+    //       this.loaded = false;
+    //     }
+    //   })
   }
 
   initFormFilter() {
@@ -278,6 +298,46 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
       window.URL.revokeObjectURL(url);
       link.remove();
     }, 100);
+  }
+
+  getId(row) {
+    return row ? row.id : row;
+  }
+
+  // initImportRegistered() {
+  //   this.formImportRegistered = this.formBuilder.group({
+  //     partner: ["", Validators.required],
+  //     registration_status: ["", Validators.required, Validators.pattern(/Not Approve$|Approved$|On Progress$/)],
+  //   });
+  // }
+
+  onSelect({ selected }) {
+    // console.log(arguments);
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...selected);
+    this.onRowsSelected.emit({ isSelected: true, data: selected });
+  }
+
+  import(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'scrumboard-card-dialog';
+    // dialogConfig.data = {
+      // type: 'partner_registered',
+      // status: this.formImportRegistered.get('registration_status').value,
+      // registration_status: this.dataType === "Not Approve" ? 0 : this.dataType === "Approved" ? 1 : this.dataType === "On Progress" ? 2 : null
+    // };
+
+    this.dialogRef = this.dialog.open(PojokUntungPartnersRegisteredImportDialogComponent, dialogConfig);
+
+    this.dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.onSelect({ selected: response });
+        this.dialogService.openSnackBar({ message: this.ls.locale.global.messages.text8 });
+      }
+    });
   }
 
   handleError(error) {

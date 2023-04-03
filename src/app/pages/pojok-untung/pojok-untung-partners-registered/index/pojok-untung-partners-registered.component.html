@@ -7,8 +7,11 @@
   <div class="content p-24">
     <div class="table-wrapper">
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
-        style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
-        <a #downloadLink></a>
+      style="background-color: #585858;" fxLayoutAlign="end center" class="p-16 export">
+      <a #downloadLink></a>
+        <button (click)="import()" mat-raised-button type="button" class="is-danger">
+          <mat-icon>arrow_downward</mat-icon> Import XLSX
+        </button>
         <button (click)="export()" mat-raised-button type="button" class="is-danger">
           <mat-icon>arrow_upward</mat-icon> Export
         </button>

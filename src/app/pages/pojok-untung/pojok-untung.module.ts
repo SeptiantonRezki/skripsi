@@ -44,6 +44,7 @@ import { PojokUntungPartnersTemplateCreateComponent } from './pojok-untung-partn
 import { PojokUntungPartnersTemplateEditComponent } from './pojok-untung-partners-template/edit/pojok-untung-partners-template-edit.component';
 import { PojokUntungPartnersRegisteredComponent } from './pojok-untung-partners-registered/index/pojok-untung-partners-registered.component';
 import { PartnerRegisteredFilterPipe } from '@fuse/pipes/partner-registered.pipe';
+import { PojokUntungPartnersRegisteredImportDialogComponent } from './pojok-untung-partners-registered/pojok-untung-partners-registered-import-dialog/pojok-untung-partners-registered-import-dialog.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -99,7 +100,7 @@ export const MY_FORMATS = {
     FroalaViewModule.forRoot(),
     PojokUntungRoutingModule
   ],
-  declarations: [PojokUntungTemplateComponent, PojokUntungPartnersListComponent, PojokUntungTemplateCreateComponent, PojokUntungTemplateEditComponent, PojokUntungPartnersTemplateComponent, PojokUntungPartnersListCreateComponent, PojokUntungPartnersListEditComponent, PojokUntungPartnersTemplateCreateComponent, PojokUntungPartnersTemplateEditComponent, PojokUntungPartnersRegisteredComponent, PartnerRegisteredFilterPipe],
+  declarations: [PojokUntungTemplateComponent, PojokUntungPartnersListComponent, PojokUntungTemplateCreateComponent, PojokUntungTemplateEditComponent, PojokUntungPartnersTemplateComponent, PojokUntungPartnersListCreateComponent, PojokUntungPartnersListEditComponent, PojokUntungPartnersTemplateCreateComponent, PojokUntungPartnersTemplateEditComponent, PojokUntungPartnersRegisteredComponent, PartnerRegisteredFilterPipe, PojokUntungPartnersRegisteredImportDialogComponent],
   providers: [
     {
       provide: DateAdapter,
@@ -110,6 +111,6 @@ export const MY_FORMATS = {
     RupiahFormaterPipe, PageGuard,
   ],
   exports: [],
-  entryComponents: []
+  entryComponents: [PojokUntungPartnersRegisteredImportDialogComponent]
 })
 export class PojokUntungModule { }
