@@ -73,6 +73,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
           },
           (err) => {
             this.dataService.showLoading(false);
+            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
           }
         );
       },
@@ -104,7 +105,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
         if (this.rows.length > 0) {
           this.dialogRef.close(this.rows);
         } else {
-          this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+          this.dialogService.openSnackBar({ message: "Semua row tidak valid." });
         }
       },
       (err) => {

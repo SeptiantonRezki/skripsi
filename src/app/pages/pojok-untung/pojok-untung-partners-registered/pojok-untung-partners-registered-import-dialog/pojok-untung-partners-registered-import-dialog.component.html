@@ -30,7 +30,6 @@
     </div>
     <br>
     <div class="">
-      <!-- <small>Total Row Valid : {{rows ? validData : '-'}}</small> -->
     </div>
     <div class="responsive">
       <table class="table">
@@ -38,35 +37,35 @@
           <tr>
             <th nowrap>Partner Name</th>
             <th nowrap>Partner Type</th>  
-            <th nowrap>Business Name<th>
+            <th nowrap>Business Name</th>
             <th nowrap>Registration Status</th>
-            <!-- <th nowrap>valid</th> -->
-            <th nowrap>Description</th>
+            <th nowrap>Valid</th>
+            <th nowrap>Alasan Tidak Valid</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows" [ngClass]="{'invalid-row': (!['Approved', 'Not Approved', 'On Progress'].includes(item.registered_status))}">
+          <tr *ngFor="let item of rows" [ngClass]="{'invalid-row': !['OK'].includes(item.status_data)}">
             <td nowrap>
-              {{ item.partner_name ? item.partner_name : '-' }}
+              {{ item.nama_partner ? item.nama_partner : '-' }}
             </td>
             <td nowrap>
-              {{ item.partner_type_name ? item.partner_type_name : '-' }}
+              {{ item.jenis_partner ? item.jenis_partner : '-' }}
             </td>
             <td nowrap>
-              {{ item.bisnis ? item.bisnis : '-' }}
+              {{ item.nama_toko ? item.nama_toko : '-' }}
             </td>
             <td nowrap>
-              {{ item.registered_status ? item.registered_status : '-' }}
+              {{ item.status_text ? item.status_text : '-' }}
             </td>
             <!-- <td nowrap>
-              {{ (item.valid) ? 'Ya' : 'Tidak' }}
+              {{ (item.status_data) ? 'Ya' : 'Tidak' }}
             </td> -->
             <td nowrap>
-              {{ item.description ? item.description : "-" }}
+              {{ item.status_data ? item.status_data : '-' }}
             </td>
-            <!-- <td *ngIf="!checkTableData(tableData)">
-              {{ (item.valid) ? 'Ya' : 'Tidak' }}
-            </td> -->
+            <td nowrap>
+              {{ item.status_data ? item.keterangan : '-' }}
+            </td>
           </tr>
           <tr *ngIf="rows.length === 0">
             <td style="text-align:center" colspan="10">
