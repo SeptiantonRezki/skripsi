@@ -41,4 +41,9 @@ export class PojokUntungPartnersRegisteredService extends BaseService {
     const url = this.getUrl(this.namespace, "preview");
     return this.postApi(url, body);
   }
+
+  submitImport(body?): Observable<any> {
+    const url = this.getUrl(this.namespace, "submit_import");
+    return this.postApi(url, body);
+  }
 }

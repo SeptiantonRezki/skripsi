@@ -25,7 +25,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
   validData: any[];
   dialogData: any;
 
-  typeTargeted: string;
+  typeTargeted: string; 
   // payload: any;
 
   constructor(
@@ -37,7 +37,6 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
     private ls: LanguagesService,
     @Inject(MAT_DIALOG_DATA) data
   ) {
-    console.log("data:", data);
     this.rows = [];
     this.dataService.showLoading(false);
     this.dialogData = data;
@@ -91,11 +90,35 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
   }
 
   submit() {
-    if (this.rows.length > 0) {
-      this.dialogRef.close(this.rows);
-    } else {
-      this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
-    }
+    this.files = undefined;
+    // this.files = event;
+
+    let submit = new FormData();
+
+    this.partnerRegisteredService.submitImport(submit).subscribe(
+      (res) => {
+        console.log("log submit: ",res)
+        this.rows = res.data;
+        
+        this.dataService.showLoading(false);
+        if (this.rows.length > 0) {
+          this.dialogRef.close(this.rows);
+        } else {
+          this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
+        }
+      },
+      (err) => {
+        this.dataService.showLoading(false);
+        this.files = undefined;
+
+        if (err.status === 404 || err.status === 500)
+          this.dialogService.openSnackBar({
+            message:
+              "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.",
+          });
+      }
+    )
+    
   }
 }
 function checkTypo(rows: any[]) {
