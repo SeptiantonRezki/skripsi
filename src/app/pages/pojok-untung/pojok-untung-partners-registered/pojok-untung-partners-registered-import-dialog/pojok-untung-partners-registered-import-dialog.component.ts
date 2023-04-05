@@ -25,7 +25,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
   validData: any[];
   dialogData: any;
 
-  typeTargeted: string; 
+  typeTargeted: string;
   // payload: any;
 
   constructor(
@@ -42,15 +42,13 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
     this.dialogData = data;
   }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   preview(event) {
     this.files = undefined;
     this.files = event;
 
-    console.log("files info", this.files);
+    // console.log("files info", this.files);
 
     if (this.files.name.indexOf(".xlsx") === -1) {
       this.dialogService.openSnackBar({ message: "Ekstensi File wajib XLSX!" });
@@ -67,13 +65,16 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
         let fdd = new FormData();
         this.partnerRegisteredService.previewImport(fdd).subscribe(
           (preview) => {
-            console.log("preview res", preview);
+            // console.log("preview res", preview);
             this.rows = preview.data;
             this.dataService.showLoading(false);
           },
           (err) => {
             this.dataService.showLoading(false);
-            this.dialogService.openSnackBar({ message: "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda." });
+            this.dialogService.openSnackBar({
+              message:
+                "Upload gagal, file yang diupload tidak sesuai. Mohon periksa kembali file Anda.",
+            });
           }
         );
       },
@@ -91,26 +92,28 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
   }
 
   submit() {
-    this.files = undefined;
-    // this.files = event;
-
-    let submit = new FormData();
-
-    this.partnerRegisteredService.submitImport(submit).subscribe(
+    this.partnerRegisteredService.submitImport().subscribe(
       (res) => {
-        console.log("log submit: ",res)
-        this.rows = res.data;
-        
-        this.dataService.showLoading(false);
-        if (this.rows.length > 0) {
+
+        // console.log("log submit: ", res)
+        if (res.status == true) {
+          // console.log("log submit: ",res)
+          this.dataService.showLoading(false);
           this.dialogRef.close(this.rows);
+
+          this.dialogService.openSnackBar({ message: res.message });
+
+          setTimeout(() => {
+            this.dialogService.openSnackBar({ message: "Data Success : " + res.success + ", Data Failed : " + res.failed });
+          }, 1000);
+
         } else {
-          this.dialogService.openSnackBar({ message: "Semua row tidak valid." });
+          this.dialogService.openSnackBar({ message: "Semua row tidak valid " });
         }
+
       },
       (err) => {
         this.dataService.showLoading(false);
-        this.files = undefined;
 
         if (err.status === 404 || err.status === 500)
           this.dialogService.openSnackBar({
@@ -119,9 +122,6 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
           });
       }
     )
-    
+
   }
-}
-function checkTypo(rows: any[]) {
-  throw new Error("Function not implemented.");
 }

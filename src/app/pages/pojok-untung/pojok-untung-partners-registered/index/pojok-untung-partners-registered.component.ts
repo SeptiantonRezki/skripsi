@@ -300,16 +300,10 @@ export class PojokUntungPartnersRegisteredComponent implements OnInit {
     }, 100);
   }
 
-  getId(row) {
-    return row ? row.id : row;
-  }
-
-  // initImportRegistered() {
-  //   this.formImportRegistered = this.formBuilder.group({
-  //     partner: ["", Validators.required],
-  //     registration_status: ["", Validators.required, Validators.pattern(/Not Approve$|Approved$|On Progress$/)],
-  //   });
+  // getId(row) {
+  //   return row ? row.id : row;
   // }
+
 
   onSelect({ selected }) {
     // console.log(arguments);

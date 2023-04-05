@@ -44,7 +44,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of rows" [ngClass]="{'invalid-row': !['OK'].includes(item.status_data)}">
+          <tr *ngFor="let item of rows" 
+          [ngClass]="{'invalid-row': item.status_data !== 'OK'}">
             <td nowrap>
               {{ item.nama_partner ? item.nama_partner : '-' }}
             </td>
