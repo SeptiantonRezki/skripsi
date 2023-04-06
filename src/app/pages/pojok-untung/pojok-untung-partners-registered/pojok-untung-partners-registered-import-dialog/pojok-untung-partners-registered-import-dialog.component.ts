@@ -101,7 +101,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
           this.dataService.showLoading(false);
           this.dialogRef.close(this.rows);
 
-          this.dialogService.openSnackBar({ message: res.message });
+          // this.dialogService.openSnackBar({ message: res.message });
 
           setTimeout(() => {
             this.dialogService.openSnackBar({ message: "Data Success : " + res.success + ", Data Failed : " + res.failed });
