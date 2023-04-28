@@ -35,6 +35,7 @@
       <table class="table">
         <thead>
           <tr>
+            <th nowrap>Business Code</th>
             <th nowrap>Partner Name</th>
             <th nowrap>Partner Type</th>  
             <th nowrap>Business Name</th>
@@ -47,6 +48,9 @@
           <tr *ngFor="let item of rows" 
           [ngClass]="{'invalid-row': item.status_data !== 'OK'}">
             <td nowrap>
+              {{ item.code ? item.code : '-' }}
+            </td>
+            <td nowrap>
               {{ item.nama_partner ? item.nama_partner : '-' }}
             </td>
             <td nowrap>
@@ -58,9 +62,6 @@
             <td nowrap>
               {{ item.status_text ? item.status_text : '-' }}
             </td>
-            <!-- <td nowrap>
-              {{ (item.status_data) ? 'Ya' : 'Tidak' }}
-            </td> -->
             <td nowrap>
               {{ item.status_data ? item.status_data : '-' }}
             </td>
@@ -83,7 +84,7 @@
       <div fxFlexLayout="row" fxLayoutAlign="start center" fxLayout.lt-md="row" fxLayoutGap="20px"
         fxLayoutGap.lt-md="10px" fxFlex="1 0 auto">
         <button type="button" mat-raised-button color="primary" (click)="submit()"
-          [disabled]="(rows.length === 0)">{{ls.locale.global.button.send}}</button>
+          [disabled]="(rows.length === 0 || !isValidData)">{{ls.locale.global.button.send}}</button>
         <button type="button" mat-stroked-button color="primary" (click)="dialogRef.close()"
           [disabled]="uploading">Batal</button>
       </div>

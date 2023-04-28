@@ -27,6 +27,7 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
 
   typeTargeted: string;
   // payload: any;
+  isValidData: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<PojokUntungPartnersRegisteredImportDialogComponent>,
@@ -68,6 +69,9 @@ export class PojokUntungPartnersRegisteredImportDialogComponent
             // console.log("preview res", preview);
             this.rows = preview.data;
             this.dataService.showLoading(false);
+
+            // set isValidData based on status_data value
+            this.isValidData = this.rows.every((row) => row.status_data === "OK");
           },
           (err) => {
             this.dataService.showLoading(false);
